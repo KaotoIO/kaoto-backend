@@ -1,0 +1,33 @@
+name: "Documentation"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate-docs:
+    name: 🔧 Generate and Publish Docs
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+
+    steps:
+      - name: 🏠 Checkout repository
+        uses: actions/checkout@v2
+      - name: ⛏️ Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: npm install
+      - run: mkdir docs
+      - run: npm run docs
+      - run: mv docs/api-reference.html docs/index.html
+      - run: sudo apt-get install xdot
+      - run: dot -Tsvg docs/class-diagram-api.dot -o docs/class-diagram-api.svg
+      - run: dot -Tsvg docs/class-diagram-model.dot -o docs/class-diagram-model.svg
+      - name: 🚀 deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
