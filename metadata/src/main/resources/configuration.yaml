@@ -1,0 +1,2 @@
+catalog:
+  class: io.zimara.backend.metadata.catalog

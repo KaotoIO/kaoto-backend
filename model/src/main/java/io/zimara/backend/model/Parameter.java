@@ -22,4 +22,11 @@ public interface Parameter {
      * Default value, if there is any
      */
     public Object getDefault();
+    /*
+     * 🐱property description: String
+     *
+     * Helping text describing the parameter
+     */
+    public String getDescription();
+
 }

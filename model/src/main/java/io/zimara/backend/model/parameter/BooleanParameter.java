@@ -11,19 +11,26 @@ public class BooleanParameter implements Parameter {
 
     private String label;
     private Boolean defaultValue;
+    private String description;
 
     public BooleanParameter(String label) {
         this.label = label;
         this.defaultValue = false;
     }
-    public BooleanParameter(String label, Boolean defaultValue) {
+    public BooleanParameter(String label, Boolean defaultValue, String description) {
         this.label = label;
         this.defaultValue = defaultValue;
+        this.description = description;
     }
 
     @Override
     public Boolean getDefault() {
         return this.defaultValue;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
     }
 
     @Override
