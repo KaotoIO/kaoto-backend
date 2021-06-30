@@ -15,6 +15,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class KameletParseCatalog implements ParseCatalog {
             }
         } catch (GitAPIException e) {
             log.error(e, e);
-        } catch (Throwable e) {
+        } catch (IOException e) {
             log.error(e, e);
         } finally {
             log.trace("Cleaning up resources.");
