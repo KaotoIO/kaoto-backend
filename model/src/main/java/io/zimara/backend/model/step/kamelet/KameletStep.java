@@ -118,25 +118,21 @@ public class KameletStep implements Step {
                     final var title = definitions.get("title").toString();
                     var description = definitions.getOrDefault("description", title).toString();
                     String value = null;
-                    if(definitions.containsKey("default")) {
+                    if (definitions.containsKey("default")) {
                         value = definitions.get("default").toString();
                     }
 
-                    try {
-                        switch (definitions.get("type").toString()) {
-                            case "integer":
-                                p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
-                                break;
-                            case "boolean":
-                                p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
-                                break;
-                            default:
-                                p = new TextParameter(title, value, description);
-                        }
-                        this.parameters.add(p);
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
+                    switch (definitions.get("type").toString()) {
+                        case "integer":
+                            p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
+                            break;
+                        case "boolean":
+                            p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
+                            break;
+                        default:
+                            p = new TextParameter(title, value, description);
                     }
+                    this.parameters.add(p);
                 }
             }
         }

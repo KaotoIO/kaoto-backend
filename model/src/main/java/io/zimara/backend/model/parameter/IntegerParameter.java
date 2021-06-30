@@ -7,35 +7,22 @@ import io.zimara.backend.model.Parameter;
  * 🐱inherits Parameter
  * Parameter of type numeric integer.
  */
-public class IntegerParameter implements Parameter {
+public class IntegerParameter extends AbstractParameter {
 
-    private String label;
-    private Integer defaultValue;
-    private String description;
+    private final Integer defaultValue;
 
     public IntegerParameter(String label) {
-        this.label = label;
-        this.defaultValue = 0;
+        this(label, 0, "");
     }
+
     public IntegerParameter(String label, Integer defaultValue, String description) {
-        this.label = label;
+        super(label, description);
         this.defaultValue = defaultValue;
-        this.description = description;
     }
 
     @Override
     public Integer getDefault() {
         return this.defaultValue;
-    }
-
-    @Override
-    public String getDescription() {
-        return this.description;
-    }
-
-    @Override
-    public String getLabel() {
-        return this.label;
     }
 
     @Override

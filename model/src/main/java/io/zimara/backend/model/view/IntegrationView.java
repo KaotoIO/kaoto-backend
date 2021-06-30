@@ -4,6 +4,7 @@ import io.zimara.backend.model.Step;
 import io.zimara.backend.model.View;
 
 import java.util.List;
+
 /**
  * 🐱class IntegrationView
  * 🐱inherits View
@@ -21,8 +22,8 @@ public class IntegrationView implements View {
      *
      * List of Steps on this integration
      */
-    private List<Step> steps;
-    private String name;
+    private final List<Step> steps;
+    private final String name;
 
     @Override
     public String getType() {

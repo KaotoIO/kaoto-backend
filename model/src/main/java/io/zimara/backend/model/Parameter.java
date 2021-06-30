@@ -1,4 +1,5 @@
 package io.zimara.backend.model;
+
 /**
  * 🐱class Parameter
  * Represents a parameter on a form.
@@ -9,24 +10,27 @@ public interface Parameter {
      *
      * Human name for the view
      */
-    public String getLabel();
+    String getLabel();
+
     /*
      * 🐱property type: String
      *
      * Type of parameter: text, integer, float, boolean,...
      */
-    public String getType();
+    String getType();
+
     /*
      * 🐱property default: String
      *
      * Default value, if there is any
      */
-    public Object getDefault();
+    Object getDefault();
+
     /*
      * 🐱property description: String
      *
      * Helping text describing the parameter
      */
-    public String getDescription();
+    String getDescription();
 
 }

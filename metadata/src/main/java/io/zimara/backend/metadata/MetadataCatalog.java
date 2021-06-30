@@ -8,8 +8,12 @@ import java.util.List;
 public interface MetadataCatalog {
 
     Step searchStepByID(String ID);
+
     Step searchStepByName(String connectionName);
+
     Collection<Step> searchStepsByName(String connectionName);
+
     boolean store(List<Step> steps);
+
     Collection<Step> getAll();
 }

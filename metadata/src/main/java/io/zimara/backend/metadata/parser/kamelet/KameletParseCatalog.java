@@ -27,8 +27,8 @@ public class KameletParseCatalog implements ParseCatalog {
     @LoggerName("KameletParseCatalog")
     private Logger log = Logger.getLogger(KameletParseCatalog.class);
 
-    private Yaml yaml = new Yaml(new Constructor(KameletStep.class));
-    private Future<List<Step>> steps;
+    private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
+    private final Future<List<Step>> steps;
 
     public KameletParseCatalog(String url, String tag) {
         steps = Future.future(listPromise -> {
@@ -40,34 +40,37 @@ public class KameletParseCatalog implements ParseCatalog {
         List<Step> stepList = Collections.synchronizedList(new ArrayList<>());
         try {
             //clone git repository
-            Path repository = Files.createTempDirectory("kamelet-catalog");
-            repository.toFile().deleteOnExit();
+            File file = Files.createTempDirectory("kamelet-catalog").toFile();
+            file.setReadable(true, true);
+            file.setWritable(true, true);
+            file.setExecutable(false);
+            file.deleteOnExit();
 
             Git.cloneRepository()
                     .setCloneSubmodules(true)
                     .setURI(url)
-                    .setDirectory(repository.toFile())
+                    .setDirectory(file)
                     .setBranch(tag)
                     .setTagOption(TagOpt.FETCH_TAGS)
                     .call();
 
             //parse all the files
-            for (File f : repository.toFile().listFiles()) {
+            for (File f : file.listFiles()) {
                 this.parseKamelet(f, stepList);
             }
             //cleanup resources
-            repository.toFile().delete();
+            file.delete();
         } catch (GitAPIException e) {
-            e.printStackTrace();
+            log.error(e, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e, e);
         }
         return stepList;
     }
 
     @Override
-    public List<Step> parse() {
-        return Collections.unmodifiableList(steps.result());
+    public Future<List<Step>> parse() {
+        return steps;
     }
 
     private void parseKamelet(File file, List<Step> steps) {
@@ -76,7 +79,7 @@ public class KameletParseCatalog implements ParseCatalog {
                 try {
                     kameletStepPromise.complete(yaml.load(new FileReader(file)));
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    log.error(e, e);
                 }
             });
             steps.add(step.result());
