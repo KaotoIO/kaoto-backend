@@ -52,7 +52,7 @@ public class GetViews {
 
     private List<Step> extractSteps() {
         List<Step> steps = new ArrayList<>();
-        Iterator<Step> it = Catalog.getCatalog().getAll().iterator();
+        Iterator<Step> it = Catalog.getReadOnlyCatalog().getAll().iterator();
 
         Step s = it.next();
         while (it.hasNext() && s.getType() != "source") {

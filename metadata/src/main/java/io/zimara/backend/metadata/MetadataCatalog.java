@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MetadataCatalog {
 
-    Step searchStepByID(String ID);
+    Step searchStepByID(String id);
 
     Step searchStepByName(String connectionName);
 

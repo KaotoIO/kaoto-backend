@@ -15,9 +15,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,21 +29,23 @@ public class KameletParseCatalog implements ParseCatalog {
     private final Future<List<Step>> steps;
 
     public KameletParseCatalog(String url, String tag) {
+        log.trace("Nuevo kamelet katalog in " + url);
         steps = Future.future(listPromise -> {
+            log.trace("Warming up catalog");
             listPromise.complete(cloneRepoAndParse(url, tag));
         });
     }
 
     private List<Step> cloneRepoAndParse(String url, String tag) {
         List<Step> stepList = Collections.synchronizedList(new ArrayList<>());
+        File file = null;
         try {
-            //clone git repository
-            File file = Files.createTempDirectory("kamelet-catalog").toFile();
+            log.trace("Creating temporary folder.");
+            file = Files.createTempDirectory("kamelet-catalog").toFile();
             file.setReadable(true, true);
             file.setWritable(true, true);
-            file.setExecutable(false);
-            file.deleteOnExit();
 
+            log.trace("Cloning git repository.");
             Git.cloneRepository()
                     .setCloneSubmodules(true)
                     .setURI(url)
@@ -54,16 +54,19 @@ public class KameletParseCatalog implements ParseCatalog {
                     .setTagOption(TagOpt.FETCH_TAGS)
                     .call();
 
-            //parse all the files
+            log.trace("Parsing all kamelet files in the folder.");
             for (File f : file.listFiles()) {
                 this.parseKamelet(f, stepList);
             }
-            //cleanup resources
-            file.delete();
         } catch (GitAPIException e) {
             log.error(e, e);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             log.error(e, e);
+        } finally {
+            log.trace("Cleaning up resources.");
+            if (file != null) {
+                file.delete();
+            }
         }
         return stepList;
     }
@@ -77,6 +80,7 @@ public class KameletParseCatalog implements ParseCatalog {
         if (isYAML(file)) {
             Future<KameletStep> step = Future.future(kameletStepPromise -> {
                 try {
+                    log.trace("Parsing " + file.getAbsolutePath());
                     kameletStepPromise.complete(yaml.load(new FileReader(file)));
                 } catch (FileNotFoundException e) {
                     log.error(e, e);

@@ -22,9 +22,9 @@ public class CatalogCollection implements MetadataCatalog {
     }
 
     @Override
-    public Step searchStepByID(String ID) {
+    public Step searchStepByID(String id) {
         for (MetadataCatalog c : catalogs) {
-            Step s = c.searchStepByID(ID);
+            Step s = c.searchStepByID(id);
             if (s != null) {
                 return s;
             }
@@ -35,7 +35,7 @@ public class CatalogCollection implements MetadataCatalog {
     @Override
     public Step searchStepByName(String connectionName) {
         for (MetadataCatalog c : catalogs) {
-            Step s = c.searchStepByName(connectionName);
+            var s = c.searchStepByName(connectionName);
             if (s != null) {
                 return s;
             }

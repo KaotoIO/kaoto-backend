@@ -26,19 +26,19 @@ public class GetStep {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
     public Step stepById(@PathParam("id") String id) {
-        return Catalog.getCatalog().searchStepByID(id);
+        return Catalog.getReadOnlyCatalog().searchStepByID(id);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
     public Collection<Step> stepsByName(@PathParam("name") String name) {
-        return Catalog.getCatalog().searchStepsByName(name);
+        return Catalog.getReadOnlyCatalog().searchStepsByName(name);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Step> allSteps() {
-        return Catalog.getCatalog().getAll();
+        return Catalog.getReadOnlyCatalog().getAll();
     }
 }

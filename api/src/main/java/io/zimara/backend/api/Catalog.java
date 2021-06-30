@@ -6,18 +6,19 @@ import io.zimara.backend.metadata.parser.kamelet.KameletParseCatalog;
 
 public class Catalog {
 
-    private static final ReadOnlyCatalog catalog;
+    private Catalog() {}
+
+    private static final ReadOnlyCatalog readOnlyCatalog;
 
     static {
-        KameletParseCatalog kameletParser = null;
-        kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.2.1");
+        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.2.1");
 
         InMemoryCatalog c = new InMemoryCatalog();
         c.store(kameletParser.parse().result());
-        catalog = new ReadOnlyCatalog(c);
+        readOnlyCatalog = new ReadOnlyCatalog(c);
     }
 
-    public static ReadOnlyCatalog getCatalog() {
-        return catalog;
+    public static ReadOnlyCatalog getReadOnlyCatalog() {
+        return readOnlyCatalog;
     }
 }

@@ -17,13 +17,16 @@ public class InMemoryCatalog implements MetadataCatalog {
 
     @Override
     public boolean store(List<Step> steps) {
+        if(steps == null) {
+            return false;
+        }
         metadataCatalog = Collections.synchronizedMap(steps.stream().parallel().collect(Collectors.toMap(Step::getID, step -> step)));
         return true;
     }
 
     @Override
-    public Step searchStepByID(String ID) {
-        return metadataCatalog.get(ID);
+    public Step searchStepByID(String id) {
+        return metadataCatalog.get(id);
     }
 
     @Override
