@@ -7,6 +7,7 @@ import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,6 +28,7 @@ import java.util.List;
  * ```
  */
 @Path("/view")
+@ApplicationScoped
 public class GetViews {
 
     @LoggerName("GetViews")

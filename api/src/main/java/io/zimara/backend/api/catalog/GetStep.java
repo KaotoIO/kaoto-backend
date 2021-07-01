@@ -5,6 +5,7 @@ import io.zimara.backend.api.Catalog;
 import io.zimara.backend.model.Step;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,6 +18,7 @@ import java.util.Collection;
  * This endpoint will return a list of steps based on the parameters.
  */
 @Path("/step")
+@ApplicationScoped
 public class GetStep {
 
     @LoggerName("GetStep")
