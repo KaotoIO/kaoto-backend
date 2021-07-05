@@ -6,7 +6,8 @@ import io.zimara.backend.metadata.parser.kamelet.KameletParseCatalog;
 
 public class Catalog {
 
-    private Catalog() {}
+    private Catalog() {
+    }
 
     private static final ReadOnlyCatalog readOnlyCatalog;
 

@@ -17,7 +17,7 @@ public class InMemoryCatalog implements MetadataCatalog {
 
     @Override
     public boolean store(List<Step> steps) {
-        if(steps == null) {
+        if (steps == null) {
             return false;
         }
         metadataCatalog = Collections.synchronizedMap(steps.stream().parallel().collect(Collectors.toMap(Step::getID, step -> step)));

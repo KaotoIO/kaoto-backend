@@ -1,7 +1,5 @@
 package io.zimara.backend.model.parameter;
 
-import io.zimara.backend.model.Parameter;
-
 /**
  * 🐱class BooleanParameter
  * 🐱inherits Parameter

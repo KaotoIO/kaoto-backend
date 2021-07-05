@@ -2,7 +2,6 @@ package io.zimara.backend.metadata.parser.kamelet;
 
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
 import io.zimara.backend.model.Step;
-import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
