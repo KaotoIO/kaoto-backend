@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-class GetViewsTest {
+class ViewResourceTest {
 
     @Test
     void testHelloEndpoint() {

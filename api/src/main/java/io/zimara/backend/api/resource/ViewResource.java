@@ -1,9 +1,6 @@
-package io.zimara.backend.api.view;
+package io.zimara.backend.api.resource;
 
-import io.quarkus.arc.log.LoggerName;
 import io.smallrye.mutiny.Multi;
-import io.zimara.backend.api.Catalog;
-import io.zimara.backend.model.Step;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
 import org.jboss.logging.Logger;
@@ -14,10 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -32,9 +25,9 @@ import java.util.stream.Stream;
  */
 @Path("/view")
 @ApplicationScoped
-public class GetViews {
+public class ViewResource {
 
-    final Logger log = Logger.getLogger(GetViews.class);
+    final Logger log = Logger.getLogger(ViewResource.class);
 
     /*
      * 🐱method views:

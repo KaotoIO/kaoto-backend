@@ -1,9 +1,7 @@
-package io.zimara.backend.api.catalog;
+package io.zimara.backend.api.resource;
 
-import io.quarkus.arc.log.LoggerName;
 import io.zimara.backend.api.Catalog;
 import io.zimara.backend.model.Step;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
@@ -19,7 +17,7 @@ import java.util.Collection;
  */
 @Path("/step")
 @ApplicationScoped
-public class GetStep {
+public class StepResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
