@@ -1,5 +1,6 @@
 package io.zimara.backend.metadata.parser.kamelet;
 
+import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
 import io.zimara.backend.model.Step;
 import org.jboss.logging.Logger;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@QuarkusTest
 class KameletParseCatalogTest {
 
     private Logger log = Logger.getLogger(KameletParseCatalogTest.class);

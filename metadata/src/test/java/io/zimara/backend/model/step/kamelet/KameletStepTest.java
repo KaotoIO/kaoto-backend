@@ -1,10 +1,12 @@
 package io.zimara.backend.model.step.kamelet;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+@QuarkusTest
 class KameletStepTest {
 
     @Test
