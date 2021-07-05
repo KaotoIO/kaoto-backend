@@ -1,9 +1,11 @@
 package io.zimara.backend.metadata.parser.kamelet;
 
-import io.quarkus.arc.log.LoggerName;
-import io.vertx.core.Future;
 import io.zimara.backend.metadata.ParseCatalog;
+import io.zimara.backend.model.Parameter;
 import io.zimara.backend.model.Step;
+import io.zimara.backend.model.parameter.BooleanParameter;
+import io.zimara.backend.model.parameter.IntegerParameter;
+import io.zimara.backend.model.parameter.TextParameter;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -20,26 +22,25 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class KameletParseCatalog implements ParseCatalog {
 
-    @LoggerName("KameletParseCatalog")
     private Logger log = Logger.getLogger(KameletParseCatalog.class);
 
     private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
-    private final Future<List<Step>> steps;
+    private final CompletableFuture<List<Step>> steps = new CompletableFuture<>();
 
     public KameletParseCatalog(String url, String tag) {
-        log.trace("Nuevo kamelet katalog in " + url);
-        steps = Future.future(listPromise -> {
-            log.trace("Warming up catalog");
-            listPromise.complete(cloneRepoAndParse(url, tag));
-        });
+        log.trace("Warming up kamelet catalog in " + url);
+        steps.completeAsync(() -> cloneRepoAndParse(url, tag));
     }
 
     private List<Step> cloneRepoAndParse(String url, String tag) {
         List<Step> stepList = Collections.synchronizedList(new ArrayList<>());
         File file = null;
+        List<CompletableFuture<Step>> futureSteps = new ArrayList<>();
         try {
             log.trace("Creating temporary folder.");
             file = Files.createTempDirectory("kamelet-catalog").toFile();
@@ -57,7 +58,14 @@ public class KameletParseCatalog implements ParseCatalog {
 
             log.trace("Parsing all kamelet files in the folder.");
             for (File f : file.listFiles()) {
-                this.parseKamelet(f, stepList);
+                if (isYAML(f)) {
+                    CompletableFuture<Step> step =
+                            CompletableFuture.supplyAsync(() -> parseFile(f))
+                                    .thenApply(this::extractSpec)
+                                    .thenApply(this::extractMetadata);
+                    step.thenAccept(s -> stepList.add(s));
+                    futureSteps.add(step);
+                }
             }
         } catch (GitAPIException e) {
             log.error(e, e);
@@ -69,28 +77,97 @@ public class KameletParseCatalog implements ParseCatalog {
                 file.delete();
             }
         }
+
+        CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
         return stepList;
+
+    }
+
+    private KameletStep parseFile(File f) {
+        try {
+            return yaml.load(new FileReader(f));
+        } catch (FileNotFoundException e) {
+            log.error(e, e);
+        }
+
+        return null;
+    }
+
+    private KameletStep extractMetadata(KameletStep step) {
+        if (step.getMetadata().containsKey("name")) {
+            step.setId(step.getMetadata().get("name").toString());
+            step.setName(step.getMetadata().get("name").toString());
+        }
+
+        if (step.getMetadata().containsKey("labels")) {
+            Map<String, Object> labels = (Map<String, Object>) step.getMetadata().get("labels");
+            if (labels.containsKey("camel.apache.org/kamelet.type")) {
+                step.setKameletType(labels.get("camel.apache.org/kamelet.type").toString());
+            }
+        }
+
+        if (step.getMetadata().containsKey("annotations")) {
+            Map<String, Object> labels = (Map<String, Object>) step.getMetadata().get("annotations");
+            if (labels.containsKey("camel.apache.org/kamelet.group")) {
+                step.setGroup(labels.get("camel.apache.org/kamelet.group").toString());
+            }
+            if (labels.containsKey("camel.apache.org/kamelet.icon")) {
+                step.setIcon(labels.get("camel.apache.org/kamelet.icon").toString());
+            }
+        }
+
+        step.setMetadata(null);
+
+        return step;
+    }
+
+    private KameletStep extractSpec(KameletStep step) {
+        if (step.getSpec().containsKey("definition")) {
+            Map<String, Object> definition = (Map<String, Object>) step.getSpec().get("definition");
+            if (definition.containsKey("title")) {
+                step.setTitle(definition.get("title").toString());
+            }
+
+            if (definition.containsKey("description")) {
+                step.setDescription(definition.get("description").toString());
+            }
+
+            if (definition.containsKey("properties")) {
+                Map<String, Object> properties = (Map<String, Object>) definition.get("properties");
+                step.setParameters(new ArrayList<>());
+
+                for (Map.Entry<String, Object> property : properties.entrySet()) {
+                    Map<String, Object> definitions = (Map<String, Object>) property.getValue();
+                    Parameter p;
+                    final var title = definitions.get("title").toString();
+                    var description = definitions.getOrDefault("description", title).toString();
+                    String value = null;
+                    if (definitions.containsKey("default")) {
+                        value = definitions.get("default").toString();
+                    }
+
+                    switch (definitions.get("type").toString()) {
+                        case "integer":
+                            p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
+                            break;
+                        case "boolean":
+                            p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
+                            break;
+                        default:
+                            p = new TextParameter(title, value, description);
+                    }
+                    step.getParameters().add(p);
+                }
+            }
+        }
+        step.setSpec(null);
+
+        return step;
     }
 
     @Override
-    public Future<List<Step>> parse() {
+    public CompletableFuture<List<Step>> parse() {
         return steps;
-    }
-
-    private void parseKamelet(File file, List<Step> steps) {
-        if (isYAML(file)) {
-            Future<KameletStep> step = Future.future(kameletStepPromise -> {
-                try {
-                    log.trace("Parsing " + file.getAbsolutePath());
-                    kameletStepPromise.complete(yaml.load(new FileReader(file)));
-                } catch (FileNotFoundException e) {
-                    log.error(e, e);
-                }
-            });
-            steps.add(step.result());
-        } else {
-            log.debug("Skipping " + file.getAbsolutePath());
-        }
     }
 
     private boolean isYAML(File file) {

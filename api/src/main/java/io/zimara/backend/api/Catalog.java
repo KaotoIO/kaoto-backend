@@ -11,10 +11,10 @@ public class Catalog {
     private static final ReadOnlyCatalog readOnlyCatalog;
 
     static {
-        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.2.1");
+        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");
 
         InMemoryCatalog c = new InMemoryCatalog();
-        c.store(kameletParser.parse().result());
+        kameletParser.parse().thenApply(steps -> c.store(steps));
         readOnlyCatalog = new ReadOnlyCatalog(c);
     }
 

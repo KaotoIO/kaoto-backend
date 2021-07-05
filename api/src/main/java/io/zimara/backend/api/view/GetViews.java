@@ -1,6 +1,7 @@
 package io.zimara.backend.api.view;
 
 import io.quarkus.arc.log.LoggerName;
+import io.smallrye.mutiny.Multi;
 import io.zimara.backend.api.Catalog;
 import io.zimara.backend.model.Step;
 import io.zimara.backend.model.View;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * 🐱class GetView
@@ -31,8 +34,7 @@ import java.util.List;
 @ApplicationScoped
 public class GetViews {
 
-    @LoggerName("GetViews")
-    private final Logger log = Logger.getLogger(GetViews.class);
+    final Logger log = Logger.getLogger(GetViews.class);
 
     /*
      * 🐱method views:
@@ -42,30 +44,16 @@ public class GetViews {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<View> views(@QueryParam("yaml") String yaml) {
-        List<View> views = new ArrayList<>();
-
-        List<Step> steps = extractSteps();
-        var integrationView = new IntegrationView(steps, "test view");
-        views.add(integrationView);
-
-        return views;
+    public Multi<View> views(@QueryParam("yaml") String yaml) {
+        return Multi.createFrom().items(extractViews());
     }
 
-    private List<Step> extractSteps() {
-        List<Step> steps = new ArrayList<>();
-        Iterator<Step> it = Catalog.getReadOnlyCatalog().getAll().iterator();
+    private Stream<View> extractViews() {
+        Stream.Builder<View> viewStream = Stream.builder();
 
-        Step s = it.next();
-        while (it.hasNext() && s.getType() != "source") {
-            it.next();
-        }
-        steps.add(s);
-        while (it.hasNext() && s.getType() == "source") {
-            it.next();
-        }
-        steps.add(s);
+        viewStream.add(new IntegrationView(null, "test view"));
 
-        return steps;
+        return viewStream.build();
     }
+
 }

@@ -21,9 +21,6 @@ import java.util.Collection;
 @ApplicationScoped
 public class GetStep {
 
-    @LoggerName("GetStep")
-    private final Logger log = Logger.getLogger(GetStep.class);
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")

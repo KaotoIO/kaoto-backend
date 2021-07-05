@@ -1,25 +1,34 @@
 package io.zimara.backend.metadata.parser.kamelet;
 
-import io.quarkus.arc.log.LoggerName;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
-import org.eclipse.jgit.api.errors.GitAPIException;
+import io.zimara.backend.model.Step;
+import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.util.List;
 
 class KameletParseCatalogTest {
 
-    @LoggerName("KameletParseCatalogTest")
     private Logger log = Logger.getLogger(KameletParseCatalogTest.class);
 
     @Test
-    void getSteps() throws GitAPIException, IOException {
+    void getSteps() {
         KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.2.1");
-
         InMemoryCatalog catalog = new InMemoryCatalog();
-        Assertions.assertTrue(catalog.store(kameletParser.parse().result()));
-        Assertions.assertEquals(51, catalog.getAll().size());
+
+        List<Step> steps = kameletParser.parse().join();
+        Assertions.assertTrue(catalog.store(steps));
+        Assertions.assertEquals(51, steps.size());
+        Assertions.assertEquals(steps.size(), catalog.getAll().size());
+
+        String name = "ftp-source";
+        Step step = catalog.searchStepByName(name);
+        Assertions.assertNotNull(step);
+        Assertions.assertEquals(name, step.getID());
+        Assertions.assertEquals(name, step.getName());
+        Assertions.assertEquals("KAMELET", step.getSubType());
+        Assertions.assertEquals("CONNECTOR", step.getType());
     }
 }

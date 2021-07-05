@@ -7,11 +7,11 @@ public abstract class AbstractParameter implements Parameter {
     private final String label;
     private String description;
 
-    public AbstractParameter(String label) {
+    AbstractParameter(String label) {
         this.label = label;
     }
 
-    public AbstractParameter(String label, String description) {
+    AbstractParameter(String label, String description) {
         this.label = label;
         this.description = description;
     }

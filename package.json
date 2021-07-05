@@ -2,9 +2,10 @@
   "scripts": {
     "docs": "npm run docs-api && npm run docs-uml",
     "docs-api": "leafdoc -t leafdoc-templates/plain -o docs/api-reference.html -c \"\uD83D\uDC31\" */src/main/java/ -e true -x .java",
-    "docs-uml": "npm run docs-uml-api && npm run docs-uml-model",
+    "docs-uml": "npm run docs-uml-api && npm run docs-uml-model && npm run docs-uml-metadata",
     "docs-uml-api": "leafdoc -t leafdoc-templates/graphviz-class-diagram -o docs/class-diagram-api.dot -c \"\uD83D\uDC31\" api/src/main/java -x .java",
-    "docs-uml-model": "leafdoc -t leafdoc-templates/graphviz-class-diagram -o docs/class-diagram-model.dot -c \"\uD83D\uDC31\" model/src/main/java -x .java"
+    "docs-uml-model": "leafdoc -t leafdoc-templates/graphviz-class-diagram -o docs/class-diagram-model.dot -c \"\uD83D\uDC31\" model/src/main/java -x .java",
+    "docs-uml-metadata": "leafdoc -t leafdoc-templates/graphviz-class-diagram -o docs/class-diagram-model.dot -c \"\uD83D\uDC31\" metadata/src/main/java -x .java"
   },
   "dependencies": {
     "leafdoc": "^2.2.1"

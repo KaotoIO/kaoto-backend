@@ -1,10 +1,10 @@
 package io.zimara.backend.metadata;
 
-import io.vertx.core.Future;
 import io.zimara.backend.model.Step;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface ParseCatalog {
-    Future<List<Step>> parse();
+    CompletableFuture<List<Step>> parse();
 }
