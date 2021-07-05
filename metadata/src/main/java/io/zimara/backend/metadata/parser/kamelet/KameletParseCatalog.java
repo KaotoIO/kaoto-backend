@@ -15,7 +15,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -63,106 +62,133 @@ public class KameletParseCatalog implements ParseCatalog {
                             CompletableFuture.supplyAsync(() -> parseFile(f))
                                     .thenApply(this::extractSpec)
                                     .thenApply(this::extractMetadata);
-                    step.thenAccept(s -> stepList.add(s));
+                    step.thenAccept(stepList::add);
                     futureSteps.add(step);
                 }
             }
-        } catch (GitAPIException e) {
-            log.error(e, e);
-        } catch (IOException e) {
-            log.error(e, e);
+            CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
+        } catch (GitAPIException | IOException e) {
+            log.error("Error trying to clone repository.", e);
         } finally {
             log.trace("Cleaning up resources.");
             if (file != null) {
-                file.delete();
+                if (!file.delete()) {
+                    log.error("We couldn't cleanup and remove the cloned repository.");
+                }
             }
         }
 
-        CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
         return stepList;
 
     }
 
     private KameletStep parseFile(File f) {
-        try {
-            return yaml.load(new FileReader(f));
-        } catch (FileNotFoundException e) {
-            log.error(e, e);
+        try (FileReader fr = new FileReader(f)) {
+            return yaml.load(fr);
+        } catch (IOException e) {
+            log.error("File not found, but a moment ago it was there.", e);
         }
-
         return null;
     }
 
     private KameletStep extractMetadata(KameletStep step) {
-        if (step.getMetadata().containsKey("name")) {
-            step.setId(step.getMetadata().get("name").toString());
-            step.setName(step.getMetadata().get("name").toString());
-        }
-
-        if (step.getMetadata().containsKey("labels")) {
-            Map<String, Object> labels = (Map<String, Object>) step.getMetadata().get("labels");
-            if (labels.containsKey("camel.apache.org/kamelet.type")) {
-                step.setKameletType(labels.get("camel.apache.org/kamelet.type").toString());
+        try {
+            final var name = "name";
+            if (step.getMetadata().containsKey(name)) {
+                step.setId(step.getMetadata().get(name).toString());
+                step.setName(step.getMetadata().get(name).toString());
             }
-        }
 
-        if (step.getMetadata().containsKey("annotations")) {
-            Map<String, Object> labels = (Map<String, Object>) step.getMetadata().get("annotations");
-            if (labels.containsKey("camel.apache.org/kamelet.group")) {
-                step.setGroup(labels.get("camel.apache.org/kamelet.group").toString());
+            final var labels = "labels";
+            if (step.getMetadata().containsKey(labels)) {
+                Map<String, Object> labelsMap = (Map<String, Object>) step.getMetadata().get(labels);
+                final var type = "camel.apache.org/kamelet.type";
+                if (labelsMap.containsKey(type)) {
+                    step.setKameletType(labelsMap.get(type).toString());
+                }
             }
-            if (labels.containsKey("camel.apache.org/kamelet.icon")) {
-                step.setIcon(labels.get("camel.apache.org/kamelet.icon").toString());
-            }
-        }
 
-        step.setMetadata(null);
+            final var annotations = "annotations";
+            if (step.getMetadata().containsKey(annotations)) {
+                Map<String, Object> annotationsMap = (Map<String, Object>) step.getMetadata().get(annotations);
+
+                final var group = "camel.apache.org/kamelet.group";
+                if (annotationsMap.containsKey(group)) {
+                    step.setGroup(annotationsMap.get(group).toString());
+                }
+
+                final var icon = "camel.apache.org/kamelet.icon";
+                if (annotationsMap.containsKey(icon)) {
+                    step.setIcon(annotationsMap.get(icon).toString());
+                }
+            }
+        } catch (Exception e) {
+            log.error(e, e);
+        } finally {
+            step.setMetadata(null);
+        }
 
         return step;
     }
 
     private KameletStep extractSpec(KameletStep step) {
-        if (step.getSpec().containsKey("definition")) {
-            Map<String, Object> definition = (Map<String, Object>) step.getSpec().get("definition");
-            if (definition.containsKey("title")) {
-                step.setTitle(definition.get("title").toString());
-            }
+        try {
+            final var definitionLabel = "definition";
+            if (step.getSpec().containsKey(definitionLabel)) {
+                Map<String, Object> definition = (Map<String, Object>) step.getSpec().get(definitionLabel);
+                if (definition.containsKey("title")) {
+                    step.setTitle(definition.get("title").toString());
+                }
 
-            if (definition.containsKey("description")) {
-                step.setDescription(definition.get("description").toString());
-            }
+                if (definition.containsKey("description")) {
+                    step.setDescription(definition.get("description").toString());
+                }
 
-            if (definition.containsKey("properties")) {
-                Map<String, Object> properties = (Map<String, Object>) definition.get("properties");
-                step.setParameters(new ArrayList<>());
-
-                for (Map.Entry<String, Object> property : properties.entrySet()) {
-                    Map<String, Object> definitions = (Map<String, Object>) property.getValue();
-                    Parameter p;
-                    final var title = definitions.get("title").toString();
-                    var description = definitions.getOrDefault("description", title).toString();
-                    String value = null;
-                    if (definitions.containsKey("default")) {
-                        value = definitions.get("default").toString();
-                    }
-
-                    switch (definitions.get("type").toString()) {
-                        case "integer":
-                            p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
-                            break;
-                        case "boolean":
-                            p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
-                            break;
-                        default:
-                            p = new TextParameter(title, value, description);
-                    }
-                    step.getParameters().add(p);
+                if (definition.containsKey("properties")) {
+                    parseParameters(step, definition);
                 }
             }
+        } catch (Exception e) {
+            log.error(e, e);
+        } finally {
+            step.setSpec(null);
         }
-        step.setSpec(null);
 
         return step;
+    }
+
+    private void parseParameters(KameletStep step, Map<String, Object> definition) {
+        Map<String, Object> properties = (Map<String, Object>) definition.get("properties");
+        step.setParameters(new ArrayList<>());
+
+        for (Map.Entry<String, Object> property : properties.entrySet()) {
+            Map<String, Object> definitions = (Map<String, Object>) property.getValue();
+            Parameter p;
+            final var title = definitions.get("title").toString();
+            var description = definitions.getOrDefault("description", title).toString();
+            String value = null;
+            if (definitions.containsKey("default")) {
+                value = definitions.get("default").toString();
+            }
+
+            p = getParameter(definitions, title, description, value);
+            step.getParameters().add(p);
+        }
+    }
+
+    private Parameter getParameter(Map<String, Object> definitions, String title, String description, String value) {
+        Parameter p;
+        switch (definitions.get("type").toString()) {
+            case "integer":
+                p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
+                break;
+            case "boolean":
+                p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
+                break;
+            default:
+                p = new TextParameter(title, value, description);
+        }
+        return p;
     }
 
     @Override
