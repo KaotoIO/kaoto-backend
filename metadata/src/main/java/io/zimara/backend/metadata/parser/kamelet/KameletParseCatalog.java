@@ -13,11 +13,16 @@ import org.eclipse.jgit.transport.TagOpt;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,9 +31,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class KameletParseCatalog implements ParseCatalog {
 
-    private Logger log = Logger.getLogger(KameletParseCatalog.class);
+    Logger log = Logger.getLogger(KameletParseCatalog.class);
 
-    private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
     private final CompletableFuture<List<Step>> steps = new CompletableFuture<>();
 
     public KameletParseCatalog(String url, String tag) {
@@ -39,7 +43,7 @@ public class KameletParseCatalog implements ParseCatalog {
     private List<Step> cloneRepoAndParse(String url, String tag) {
         List<Step> stepList = Collections.synchronizedList(new ArrayList<>());
         File file = null;
-        List<CompletableFuture<Step>> futureSteps = new ArrayList<>();
+        final List<CompletableFuture<Step>> futureSteps = new ArrayList<>();
         try {
             log.trace("Creating temporary folder.");
             file = Files.createTempDirectory("kamelet-catalog").toFile();
@@ -55,43 +59,108 @@ public class KameletParseCatalog implements ParseCatalog {
                     .setTagOption(TagOpt.FETCH_TAGS)
                     .call();
 
-            log.trace("Parsing all kamelet files in the folder.");
-            for (File f : file.listFiles()) {
-                if (isYAML(f)) {
-                    CompletableFuture<Step> step =
-                            CompletableFuture.supplyAsync(() -> parseFile(f))
-                                    .thenApply(this::extractSpec)
-                                    .thenApply(this::extractMetadata);
-                    step.thenAccept(stepList::add);
-                    futureSteps.add(step);
-                }
-            }
-            CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
         } catch (GitAPIException | IOException e) {
             log.error("Error trying to clone repository.", e);
-        } finally {
-            log.trace("Cleaning up resources.");
-            if (file != null) {
-                if (!file.delete()) {
-                    log.error("We couldn't cleanup and remove the cloned repository.");
-                }
-            }
+        }
+
+        try {
+            log.trace("Parsing all kamelet files in the folder.");
+            Files.walkFileTree(file.getAbsoluteFile().toPath(), new ProcessFile(stepList, futureSteps));
+            CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
+            Files.delete(file.getAbsoluteFile().toPath());
+        } catch (IOException e) {
+            log.error("Error trying to parse kamelet catalog.", e);
         }
 
         return stepList;
 
     }
 
+    @Override
+    public CompletableFuture<List<Step>> parse() {
+        return steps;
+    }
+
+}
+
+class ProcessFile implements FileVisitor<Path> {
+
+    private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
+    private List<Step> stepList;
+    private List<CompletableFuture<Step>> futureSteps;
+    Logger log = Logger.getLogger(ProcessFile.class);
+
+    ProcessFile(List<Step> stepList, List<CompletableFuture<Step>> futureSteps) {
+        this.stepList = stepList;
+        this.futureSteps = futureSteps;
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+        final var name = dir.toFile().getName();
+        if(name.equalsIgnoreCase("test")
+                || name.equalsIgnoreCase(".git")
+                || name.equalsIgnoreCase(".github")
+                || name.equalsIgnoreCase("docs")
+                || name.equalsIgnoreCase("script")) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+
+        log.trace("Visiting '" + name + "'");
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFile(final Path file, BasicFileAttributes attrs) {
+
+        File f = file.toFile();
+
+        if (isYAML(f)) {
+            CompletableFuture<Step> step =
+                    CompletableFuture.supplyAsync(() -> parseFile(f))
+                            .thenApply(this::extractSpec)
+                            .thenApply(this::extractMetadata);
+            step.thenRun(() -> {
+                try {
+                    Files.delete(file);
+                } catch (IOException e) {
+                    log.error(e, e);
+                }
+            });
+            step.thenAccept(stepList::add);
+            futureSteps.add(step);
+        }
+
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) {
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+        return FileVisitResult.CONTINUE;
+    }
+
+    private boolean isYAML(File file) {
+        return (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) && !file.getName().startsWith(".");
+    }
+
     private KameletStep parseFile(File f) {
         try (FileReader fr = new FileReader(f)) {
             return yaml.load(fr);
-        } catch (IOException e) {
-            log.error("File not found, but a moment ago it was there.", e);
+        } catch (IOException | YAMLException e) {
+            log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
         }
         return null;
     }
 
     private KameletStep extractMetadata(KameletStep step) {
+        if(step.getMetadata() == null) {
+            return step;
+        }
         try {
             final var name = "name";
             if (step.getMetadata().containsKey(name)) {
@@ -132,6 +201,10 @@ public class KameletParseCatalog implements ParseCatalog {
     }
 
     private KameletStep extractSpec(KameletStep step) {
+        if(step.getSpec() == null) {
+            return step;
+        }
+
         try {
             final var definitionLabel = "definition";
             if (step.getSpec().containsKey(definitionLabel)) {
@@ -164,13 +237,9 @@ public class KameletParseCatalog implements ParseCatalog {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
             Map<String, Object> definitions = (Map<String, Object>) property.getValue();
             Parameter p;
-            final var title = definitions.get("title").toString();
+            final var title = definitions.getOrDefault("title", "unknown").toString();
             var description = definitions.getOrDefault("description", title).toString();
-            String value = null;
-            if (definitions.containsKey("default")) {
-                value = definitions.get("default").toString();
-            }
-
+            String value = definitions.getOrDefault("default", "").toString();
             p = getParameter(definitions, title, description, value);
             step.getParameters().add(p);
         }
@@ -190,14 +259,4 @@ public class KameletParseCatalog implements ParseCatalog {
         }
         return p;
     }
-
-    @Override
-    public CompletableFuture<List<Step>> parse() {
-        return steps;
-    }
-
-    private boolean isYAML(File file) {
-        return (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) && !file.getName().startsWith(".");
-    }
-
 }
