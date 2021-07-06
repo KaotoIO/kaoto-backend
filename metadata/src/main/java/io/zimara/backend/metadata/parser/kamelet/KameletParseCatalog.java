@@ -68,7 +68,7 @@ public class KameletParseCatalog implements ParseCatalog {
             Files.walkFileTree(file.getAbsoluteFile().toPath(), new ProcessFile(stepList, futureSteps));
             CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
             Files.delete(file.getAbsoluteFile().toPath());
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error("Error trying to parse kamelet catalog.", e);
         }
 
