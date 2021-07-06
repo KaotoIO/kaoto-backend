@@ -85,6 +85,7 @@ public class KameletParseCatalog implements ParseCatalog {
 
 class ProcessFile implements FileVisitor<Path> {
 
+    public static final String PROPERTIES = "properties";
     private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
     private List<Step> stepList;
     private List<CompletableFuture<Step>> futureSteps;
@@ -209,15 +210,17 @@ class ProcessFile implements FileVisitor<Path> {
             final var definitionLabel = "definition";
             if (step.getSpec().containsKey(definitionLabel)) {
                 Map<String, Object> definition = (Map<String, Object>) step.getSpec().get(definitionLabel);
-                if (definition.containsKey("title")) {
-                    step.setTitle(definition.get("title").toString());
+                final var title = "title";
+                if (definition.containsKey(title)) {
+                    step.setTitle(definition.get(title).toString());
                 }
 
-                if (definition.containsKey("description")) {
-                    step.setDescription(definition.get("description").toString());
+                final var description = "description";
+                if (definition.containsKey(description)) {
+                    step.setDescription(definition.get(description).toString());
                 }
 
-                if (definition.containsKey("properties")) {
+                if (definition.containsKey(PROPERTIES)) {
                     parseParameters(step, definition);
                 }
             }
@@ -231,7 +234,7 @@ class ProcessFile implements FileVisitor<Path> {
     }
 
     private void parseParameters(KameletStep step, Map<String, Object> definition) {
-        Map<String, Object> properties = (Map<String, Object>) definition.get("properties");
+        Map<String, Object> properties = (Map<String, Object>) definition.get(PROPERTIES);
         step.setParameters(new ArrayList<>());
 
         for (Map.Entry<String, Object> property : properties.entrySet()) {
