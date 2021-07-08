@@ -77,13 +77,18 @@
     <h2>Api</h2>
     <a target="_blank" href="./class-diagram.svg-api" ><img width="500px" src="./class-diagram-api.svg"/></a>
 
-	<h2 id='getview'>GetView</h2>
+	<h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
-<p>This endpoint will return a list of steps based on the parameters.
-This endpoint will return a list of views based on the parameters.
+<p>This endpoint will return steps based on the parameters.</p>
+
+
+</section>
+<h2 id='viewresource'>ViewResource</h2>
+<section class='namespace'>
+<p>This endpoint will return a list of views based on the parameters.
 &lt;p&gt;</p>
 
-<h3 id='getview-example'>Usage example</h3>
+<h3 id='viewresource-example'>Usage example</h3>
 
 <section>
 
@@ -97,7 +102,7 @@ This endpoint will return a list of views based on the parameters.
 </section>
 
 
-<h3 id='getview-method'>Methods</h3>
+<h3 id='viewresource-method'>Methods</h3>
 
 <section>
 
@@ -109,7 +114,7 @@ This endpoint will return a list of views based on the parameters.
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='getview-views:'>
+	<tr id='viewresource-views:'>
 		<td><code><b>views:</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td>Based on the YAML provided, offer a list of possible views</td>
@@ -141,6 +146,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code>String</code></td>
 		<td>Human name for the view</td>
 	</tr>
+	<tr id='parameter-id'>
+		<td><code><b>id</b>
+		<td><code>String</code></td>
+		<td>Identifier of the parameter</td>
+	</tr>
 	<tr id='parameter-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
@@ -155,6 +165,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code><b>description</b>
 		<td><code>String</code></td>
 		<td>Helping text describing the parameter</td>
+	</tr>
+	<tr id='parameter-value'>
+		<td><code><b>value</b>
+		<td><code>String</code></td>
+		<td>Actual value of this parameter. Used when describing a configured element.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -255,6 +270,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code>String</code></td>
 		<td>Human name for the view</td>
 	</tr>
+	<tr id='booleanparameter-id'>
+		<td><code><b>id</b>
+		<td><code>String</code></td>
+		<td>Identifier of the parameter</td>
+	</tr>
 	<tr id='booleanparameter-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
@@ -269,6 +289,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code><b>description</b>
 		<td><code>String</code></td>
 		<td>Helping text describing the parameter</td>
+	</tr>
+	<tr id='booleanparameter-value'>
+		<td><code><b>value</b>
+		<td><code>String</code></td>
+		<td>Actual value of this parameter. Used when describing a configured element.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -301,6 +326,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code>String</code></td>
 		<td>Human name for the view</td>
 	</tr>
+	<tr id='integerparameter-id'>
+		<td><code><b>id</b>
+		<td><code>String</code></td>
+		<td>Identifier of the parameter</td>
+	</tr>
 	<tr id='integerparameter-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
@@ -315,6 +345,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code><b>description</b>
 		<td><code>String</code></td>
 		<td>Helping text describing the parameter</td>
+	</tr>
+	<tr id='integerparameter-value'>
+		<td><code><b>value</b>
+		<td><code>String</code></td>
+		<td>Actual value of this parameter. Used when describing a configured element.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -347,6 +382,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code>String</code></td>
 		<td>Human name for the view</td>
 	</tr>
+	<tr id='textparameter-id'>
+		<td><code><b>id</b>
+		<td><code>String</code></td>
+		<td>Identifier of the parameter</td>
+	</tr>
 	<tr id='textparameter-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
@@ -361,6 +401,11 @@ This endpoint will return a list of views based on the parameters.
 		<td><code><b>description</b>
 		<td><code>String</code></td>
 		<td>Helping text describing the parameter</td>
+	</tr>
+	<tr id='textparameter-value'>
+		<td><code><b>value</b>
+		<td><code>String</code></td>
+		<td>Actual value of this parameter. Used when describing a configured element.</td>
 	</tr>
 </tbody></table>
 </section>

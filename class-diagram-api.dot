@@ -2,8 +2,14 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
-"GetView" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>GetView</B></TD></TR>
+"StepResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepResource</B></TD></TR>
+	
+</TABLE>>]
+
+
+"ViewResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewResource</B></TD></TR>
 	<TR><TD><I>Usage example</I><BR/>
 
 </TD></TR>
