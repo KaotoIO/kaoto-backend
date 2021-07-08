@@ -16,13 +16,13 @@ class KameletParseCatalogTest {
 
     @Test
     void getSteps() {
-        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.2.1");
+        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");
         InMemoryCatalog catalog = new InMemoryCatalog();
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertTrue(catalog.store(steps));
-        Assertions.assertEquals(51, steps.size());
-        Assertions.assertEquals(steps.size(), catalog.getAll().size());
+        Assertions.assertEquals(234, steps.size());
+        Assertions.assertEquals(117, catalog.getAll().size());
 
         String name = "ftp-source";
         Step step = catalog.searchStepByName(name);

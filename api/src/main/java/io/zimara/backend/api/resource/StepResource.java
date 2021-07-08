@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
- * 🐱class GetView
- * This endpoint will return a list of steps based on the parameters.
+ * 🐱class StepResource
+ * This endpoint will return steps based on the parameters.
  */
 @Path("/step")
 @ApplicationScoped

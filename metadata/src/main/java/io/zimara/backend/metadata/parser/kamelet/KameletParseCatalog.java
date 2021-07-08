@@ -43,7 +43,7 @@ public class KameletParseCatalog implements ParseCatalog {
     private List<Step> cloneRepoAndParse(String url, String tag) {
         List<Step> stepList = Collections.synchronizedList(new ArrayList<>());
         File file = null;
-        final List<CompletableFuture<Step>> futureSteps = new ArrayList<>();
+        final List<CompletableFuture<KameletStep>> futureSteps = new ArrayList<>();
         try {
             log.trace("Creating temporary folder.");
             file = Files.createTempDirectory("kamelet-catalog").toFile();
@@ -67,7 +67,6 @@ public class KameletParseCatalog implements ParseCatalog {
             log.trace("Parsing all kamelet files in the folder.");
             Files.walkFileTree(file.getAbsoluteFile().toPath(), new ProcessFile(stepList, futureSteps));
             CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
-            Files.delete(file.getAbsoluteFile().toPath());
         } catch (IOException | NullPointerException e) {
             log.error("Error trying to parse kamelet catalog.", e);
         }
@@ -88,10 +87,10 @@ class ProcessFile implements FileVisitor<Path> {
     public static final String PROPERTIES = "properties";
     private final Yaml yaml = new Yaml(new Constructor(KameletStep.class));
     private List<Step> stepList;
-    private List<CompletableFuture<Step>> futureSteps;
+    private List<CompletableFuture<KameletStep>> futureSteps;
     Logger log = Logger.getLogger(ProcessFile.class);
 
-    ProcessFile(List<Step> stepList, List<CompletableFuture<Step>> futureSteps) {
+    ProcessFile(List<Step> stepList, List<CompletableFuture<KameletStep>> futureSteps) {
         this.stepList = stepList;
         this.futureSteps = futureSteps;
     }
@@ -99,7 +98,7 @@ class ProcessFile implements FileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
         final var name = dir.toFile().getName();
-        if(name.equalsIgnoreCase("test")
+        if (name.equalsIgnoreCase("test")
                 || name.equalsIgnoreCase(".git")
                 || name.equalsIgnoreCase(".github")
                 || name.equalsIgnoreCase("docs")
@@ -117,17 +116,18 @@ class ProcessFile implements FileVisitor<Path> {
         File f = file.toFile();
 
         if (isYAML(f)) {
-            CompletableFuture<Step> step =
-                    CompletableFuture.supplyAsync(() -> parseFile(f))
-                            .thenApply(this::extractSpec)
-                            .thenApply(this::extractMetadata);
-            step.thenRun(() -> {
-                try {
-                    Files.delete(file);
-                } catch (IOException e) {
-                    log.error(e, e);
-                }
-            });
+            CompletableFuture<KameletStep> step =
+                    CompletableFuture.supplyAsync(() -> parseFile(f));
+            step
+                    .exceptionally(e -> {
+                        log.error("Error parsing file '" + f.getName() + "'");
+                        step.completeExceptionally(e);
+                        return null;
+                    });
+
+            step
+                    .thenApply(this::extractSpec)
+                    .thenApply(this::extractMetadata);
             step.thenAccept(stepList::add);
             futureSteps.add(step);
         }
@@ -141,7 +141,7 @@ class ProcessFile implements FileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
@@ -150,16 +150,16 @@ class ProcessFile implements FileVisitor<Path> {
     }
 
     private KameletStep parseFile(File f) {
+        log.trace("Parsing '" + f.getName() + "'");
         try (FileReader fr = new FileReader(f)) {
             return yaml.load(fr);
         } catch (IOException | YAMLException e) {
-            log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
+            throw new RuntimeException("Error parsing '" + f.getAbsolutePath() + "'", e);
         }
-        return null;
     }
 
     private KameletStep extractMetadata(KameletStep step) {
-        if(step.getMetadata() == null) {
+        if (step == null || step.getMetadata() == null) {
             return step;
         }
         try {
@@ -202,7 +202,7 @@ class ProcessFile implements FileVisitor<Path> {
     }
 
     private KameletStep extractSpec(KameletStep step) {
-        if(step.getSpec() == null) {
+        if (step == null || step.getSpec() == null) {
             return step;
         }
 
@@ -252,13 +252,13 @@ class ProcessFile implements FileVisitor<Path> {
         Parameter p;
         switch (definitions.get("type").toString()) {
             case "integer":
-                p = new IntegerParameter(title, (value != null ? Integer.valueOf(value) : null), description);
+                p = new IntegerParameter(title, title, (value != null ? Integer.valueOf(value) : null), description);
                 break;
             case "boolean":
-                p = new BooleanParameter(title, (value != null ? Boolean.valueOf(value) : null), description);
+                p = new BooleanParameter(title, title, (value != null ? Boolean.valueOf(value) : null), description);
                 break;
             default:
-                p = new TextParameter(title, value, description);
+                p = new TextParameter(title, title, value, description);
         }
         return p;
     }

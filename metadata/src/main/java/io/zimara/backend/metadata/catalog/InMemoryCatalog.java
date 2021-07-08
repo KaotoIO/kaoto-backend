@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class InMemoryCatalog implements MetadataCatalog {
@@ -20,7 +21,9 @@ public class InMemoryCatalog implements MetadataCatalog {
         if (steps == null) {
             return false;
         }
-        metadataCatalog = Collections.synchronizedMap(steps.stream().parallel().collect(Collectors.toMap(Step::getID, step -> step)));
+        final Collector<Step, ?, Map<String, Step>> stepMapCollector =
+                Collectors.toMap(Step::getID, step -> step, (a, b) -> a);
+        metadataCatalog = Collections.synchronizedMap(steps.stream().parallel().collect(stepMapCollector));
         return true;
     }
 

@@ -10,11 +10,11 @@ public class TextParameter extends AbstractParameter {
     private final String defaultValue;
 
     public TextParameter(String label) {
-        this(label, "", "");
+        this(label, label, "", "");
     }
 
-    public TextParameter(String label, String defaultValue, String description) {
-        super(label, description);
+    public TextParameter(String id, String label, String defaultValue, String description) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
     }
 

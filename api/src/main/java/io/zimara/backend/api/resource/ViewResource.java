@@ -1,9 +1,9 @@
 package io.zimara.backend.api.resource;
 
-import io.smallrye.mutiny.Multi;
+import io.zimara.backend.api.service.KameletBindingParserService;
+import io.zimara.backend.api.service.ParserService;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
@@ -11,10 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 🐱class GetView
+ * 🐱class ViewResource
  * This endpoint will return a list of views based on the parameters.
  * <p>
  * 🐱example
@@ -27,7 +28,13 @@ import java.util.stream.Stream;
 @ApplicationScoped
 public class ViewResource {
 
-    final Logger log = Logger.getLogger(ViewResource.class);
+    private List<ParserService> parsers = new ArrayList<>();
+
+    public ViewResource() {
+        //This should be autowired, perhaps?
+        //jandex
+        parsers.add(new KameletBindingParserService());
+    }
 
     /*
      * 🐱method views:
@@ -37,16 +44,13 @@ public class ViewResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Multi<View> views(@QueryParam("yaml") String yaml) {
-        return Multi.createFrom().items(extractViews());
+    public List<View> views(@QueryParam("yaml") String yaml) {
+        List<View> views = new ArrayList<>();
+        for (var parser : parsers) {
+            if (parser.appliesTo(yaml)) {
+                views.add(new IntegrationView(parser.parse(yaml), parser.getIdentifier()));
+            }
+        }
+        return views;
     }
-
-    private Stream<View> extractViews() {
-        Stream.Builder<View> viewStream = Stream.builder();
-
-        viewStream.add(new IntegrationView(null, "test view"));
-
-        return viewStream.build();
-    }
-
 }

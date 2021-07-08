@@ -10,11 +10,11 @@ public class IntegerParameter extends AbstractParameter {
     private final Integer defaultValue;
 
     public IntegerParameter(String label) {
-        this(label, 0, "");
+        this(label, label, 0, "");
     }
 
-    public IntegerParameter(String label, Integer defaultValue, String description) {
-        super(label, description);
+    public IntegerParameter(String id, String label, Integer defaultValue, String description) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
     }
 

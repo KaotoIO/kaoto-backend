@@ -10,11 +10,11 @@ public class BooleanParameter extends AbstractParameter {
     private final Boolean defaultValue;
 
     public BooleanParameter(String label) {
-        this(label, false, "");
+        this(label, label, false, "");
     }
 
-    public BooleanParameter(String label, Boolean defaultValue, String description) {
-        super(label, description);
+    public BooleanParameter(String id, String label, Boolean defaultValue, String description) {
+        super(id, label, description);
         this.defaultValue = defaultValue;
     }
 

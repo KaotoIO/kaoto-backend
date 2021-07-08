@@ -15,5 +15,13 @@ spec:
       accessToken: "your own"
       accessTokenSecret: "your own"
   sink:
-    uri: "log:info"
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: kafka-sink
+    properties:
+      brokers: "The Brokers"
+      password: "The Password"
+      topic: "The Topic Names"
+      username: "The Username"
 

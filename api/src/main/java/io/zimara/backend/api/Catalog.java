@@ -9,17 +9,22 @@ public class Catalog {
     private Catalog() {
     }
 
-    private static final ReadOnlyCatalog readOnlyCatalog;
+    private static InMemoryCatalog c = new InMemoryCatalog();
+    private final static ReadOnlyCatalog readOnlyCatalog = new ReadOnlyCatalog(c);
+    private static Boolean warmedUp = false;
 
     static {
-        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");
-
-        InMemoryCatalog c = new InMemoryCatalog();
-        kameletParser.parse().thenApply(steps -> c.store(steps));
-        readOnlyCatalog = new ReadOnlyCatalog(c);
+        new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0")
+                .parse()
+                .thenApply(steps -> c.store(steps))
+                .thenApply(complete -> warmedUp = complete);
     }
 
     public static ReadOnlyCatalog getReadOnlyCatalog() {
         return readOnlyCatalog;
+    }
+
+    public static Boolean isWarmedUp() {
+        return warmedUp;
     }
 }
