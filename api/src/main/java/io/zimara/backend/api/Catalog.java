@@ -12,7 +12,7 @@ public class Catalog {
     }
 
     private static InMemoryCatalog c = new InMemoryCatalog();
-    private final static ReadOnlyCatalog readOnlyCatalog = new ReadOnlyCatalog(c);
+    private static final ReadOnlyCatalog readOnlyCatalog = new ReadOnlyCatalog(c);
     private static Boolean warmedUp = false;
     private static Logger log = Logger.getLogger(Catalog.class);
 

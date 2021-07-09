@@ -78,7 +78,7 @@ public class KameletBindingParserService implements ParserService {
     }
 
     @Override
-    public Boolean appliesTo(String yaml) {
+    public boolean appliesTo(String yaml) {
         return yaml.contains("kind: KameletBinding");
     }
 

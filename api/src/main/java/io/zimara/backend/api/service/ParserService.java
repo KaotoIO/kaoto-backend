@@ -10,6 +10,6 @@ public interface ParserService {
 
     String getIdentifier();
 
-    Boolean appliesTo(String yaml);
+    boolean appliesTo(String yaml);
 
 }

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class InMemoryCatalog implements MetadataCatalog {
         }
         final Collector<Step, ?, Map<String, Step>> stepMapCollector =
                 Collectors.toMap(Step::getID, step -> step, (a, b) -> a);
-        metadataCatalog = Collections.synchronizedMap(steps.stream().filter(s -> s != null).parallel().collect(stepMapCollector));
+        metadataCatalog = Collections.synchronizedMap(steps.stream().filter(Objects::nonNull).parallel().collect(stepMapCollector));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
         return true;
