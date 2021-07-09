@@ -1,11 +1,9 @@
-package io.zimara.backend.api;
+package io.zimara.backend.api.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.resource.ViewResource;
-import io.zimara.backend.metadata.catalog.InMemoryCatalog;
+import io.zimara.backend.api.Catalog;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
-import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,11 +26,8 @@ class ViewResourceTest {
     }
 
     @Test
-    void testViewEndpoint() throws InterruptedException {
-        //wait for catalog warm up
-        while(!Catalog.isWarmedUp()) {
-            Thread.sleep(500);
-        }
+    void testViewEndpoint() {
+        Catalog.waitForWarmUp().join();
 
         given()
                 .when().queryParam("yaml", binding).get("/view")
@@ -41,11 +36,8 @@ class ViewResourceTest {
     }
 
     @Test
-    void testParseYaml()  throws InterruptedException {
-        //wait for catalog warm up
-        while(!Catalog.isWarmedUp()) {
-            Thread.sleep(500);
-        }
+    void testParseYaml() {
+        Catalog.waitForWarmUp().join();
 
         ViewResource vr = new ViewResource();
         List<View> views = vr.views(binding);
