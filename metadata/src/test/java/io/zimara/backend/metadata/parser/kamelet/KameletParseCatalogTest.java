@@ -12,8 +12,6 @@ import java.util.List;
 @QuarkusTest
 class KameletParseCatalogTest {
 
-    private Logger log = Logger.getLogger(KameletParseCatalogTest.class);
-
     @Test
     void getSteps() {
         KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");

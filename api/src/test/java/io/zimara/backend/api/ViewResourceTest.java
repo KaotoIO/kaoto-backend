@@ -2,8 +2,10 @@ package io.zimara.backend.api;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.resource.ViewResource;
+import io.zimara.backend.metadata.catalog.InMemoryCatalog;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,11 @@ class ViewResourceTest {
 
     @Test
     void testViewEndpoint() throws InterruptedException {
+        //wait for catalog warm up
+        while(!Catalog.isWarmedUp()) {
+            Thread.sleep(500);
+        }
+
         given()
                 .when().queryParam("yaml", binding).get("/view")
                 .then()
@@ -37,7 +44,7 @@ class ViewResourceTest {
     void testParseYaml()  throws InterruptedException {
         //wait for catalog warm up
         while(!Catalog.isWarmedUp()) {
-            Thread.sleep(200);
+            Thread.sleep(500);
         }
 
         ViewResource vr = new ViewResource();

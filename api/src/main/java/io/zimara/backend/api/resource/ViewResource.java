@@ -4,6 +4,7 @@ import io.zimara.backend.api.service.KameletBindingParserService;
 import io.zimara.backend.api.service.ParserService;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ViewResource {
 
     private List<ParserService> parsers = new ArrayList<>();
+    private Logger log = Logger.getLogger(ViewResource.class);
 
     public ViewResource() {
         //This should be autowired, perhaps?
@@ -47,7 +49,9 @@ public class ViewResource {
     public List<View> views(@QueryParam("yaml") String yaml) {
         List<View> views = new ArrayList<>();
         for (var parser : parsers) {
+            log.trace("Using " + parser.getIdentifier());
             if (parser.appliesTo(yaml)) {
+                log.trace("Applying " + parser.getIdentifier());
                 views.add(new IntegrationView(parser.parse(yaml), parser.getIdentifier()));
             }
         }

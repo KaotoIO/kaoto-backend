@@ -2,6 +2,7 @@ package io.zimara.backend.metadata.catalog;
 
 import io.zimara.backend.metadata.MetadataCatalog;
 import io.zimara.backend.model.Step;
+import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class InMemoryCatalog implements MetadataCatalog {
 
     private Map<String, Step> metadataCatalog = new HashMap<>();
+    private Logger log = Logger.getLogger(InMemoryCatalog.class);
 
     @Override
     public boolean store(List<Step> steps) {
@@ -23,7 +25,9 @@ public class InMemoryCatalog implements MetadataCatalog {
         }
         final Collector<Step, ?, Map<String, Step>> stepMapCollector =
                 Collectors.toMap(Step::getID, step -> step, (a, b) -> a);
-        metadataCatalog = Collections.synchronizedMap(steps.stream().parallel().collect(stepMapCollector));
+        metadataCatalog = Collections.synchronizedMap(steps.stream().filter(s -> s != null).parallel().collect(stepMapCollector));
+        log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
+
         return true;
     }
 
