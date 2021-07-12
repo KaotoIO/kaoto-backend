@@ -2,21 +2,21 @@ package io.zimara.backend.model.parameter;
 
 import io.zimara.backend.model.Parameter;
 
-public abstract class AbstractParameter implements Parameter {
+public class AbstractParameter<T> implements Parameter<T> {
 
     private final String label;
-    private String description;
-    private String id;
-    private Object value;
+    private final String description;
+    private final String id;
+    private final String type;
+    private T value;
+    private final T defaultValue;
 
-    AbstractParameter(String label) {
-        this.label = label;
-    }
-
-    AbstractParameter(String id, String label, String description) {
+    public AbstractParameter(String id, String label, String description, T defaultValue, String type) {
         this.id = id;
         this.label = label;
         this.description = description;
+        this.defaultValue = defaultValue;
+        this.type = type;
     }
 
     @Override
@@ -35,12 +35,22 @@ public abstract class AbstractParameter implements Parameter {
     }
 
     @Override
-    public void setValue(Object value) {
+    public void setValue(T value) {
         this.value = value;
     }
+
     @Override
-    public Object getValue() {
+    public T getValue() {
         return this.value;
     }
 
+    @Override
+    public T getDefault() {
+        return this.defaultValue;
+    }
+
+    @Override
+    public String getType() {
+        return this.type;
+    }
 }

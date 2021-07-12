@@ -4,7 +4,7 @@ package io.zimara.backend.model;
  * 🐱class Parameter
  * Represents a parameter on a form.
  */
-public interface Parameter {
+public interface Parameter<T> {
     /*
      * 🐱property label: String
      *
@@ -31,7 +31,7 @@ public interface Parameter {
      *
      * Default value, if there is any
      */
-    Object getDefault();
+    T getDefault();
 
     /*
      * 🐱property description: String
@@ -46,7 +46,7 @@ public interface Parameter {
      *
      * Actual value of this parameter. Used when describing a configured element.
      */
-    void setValue(Object value);
+    void setValue(T value);
 
-    Object getValue();
+    T getValue();
 }

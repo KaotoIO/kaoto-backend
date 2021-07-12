@@ -3,9 +3,7 @@ package io.zimara.backend.metadata.parser.kamelet;
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.model.Parameter;
 import io.zimara.backend.model.Step;
-import io.zimara.backend.model.parameter.BooleanParameter;
-import io.zimara.backend.model.parameter.IntegerParameter;
-import io.zimara.backend.model.parameter.TextParameter;
+import io.zimara.backend.model.parameter.AbstractParameter;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -250,13 +248,13 @@ class ProcessFile implements FileVisitor<Path> {
         Parameter p;
         switch (definitions.get("type").toString()) {
             case "integer":
-                p = new IntegerParameter(title, title, (value != null ? Integer.valueOf(value) : null), description);
+                p = new AbstractParameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
                 break;
             case "boolean":
-                p = new BooleanParameter(title, title, (value != null ? Boolean.valueOf(value) : null), description);
+                p = new AbstractParameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
                 break;
             default:
-                p = new TextParameter(title, title, value, description);
+                p = new AbstractParameter<>(title, title, description, value, definitions.get("type").toString());
         }
         return p;
     }
