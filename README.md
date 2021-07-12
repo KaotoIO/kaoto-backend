@@ -2,6 +2,9 @@
 
 This is the backend companion of the Zimara project.
 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ZimaraIO_zimara-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=ZimaraIO_zimara-backend)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ZimaraIO_zimara-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=ZimaraIO_zimara-backend)
+
 ## Building
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
