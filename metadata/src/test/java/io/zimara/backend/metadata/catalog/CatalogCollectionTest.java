@@ -64,7 +64,7 @@ class CatalogCollectionTest {
     @Test
     void store() {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            catalogCollection.store(Collections.emptyList());
+            catalogCollection.store(null);
         });
     }
 
