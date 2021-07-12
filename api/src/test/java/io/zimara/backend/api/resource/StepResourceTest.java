@@ -1,5 +1,6 @@
 package io.zimara.backend.api.resource;
 
+import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.Catalog;
 import io.zimara.backend.model.Step;
 import org.junit.jupiter.api.Assertions;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
+@QuarkusTest
 class StepResourceTest {
 
     public static final String INFINISPAN_SOURCE = "infinispan-source";
