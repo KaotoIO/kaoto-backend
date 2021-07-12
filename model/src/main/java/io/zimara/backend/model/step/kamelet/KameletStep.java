@@ -175,10 +175,7 @@ public class KameletStep implements Step {
         if (!getKameletType().equals(that.getKameletType())) return false;
         if (getGroup() != null ? !getGroup().equals(that.getGroup()) : that.getGroup() != null) return false;
         if (!getTitle().equals(that.getTitle())) return false;
-        if (!getDescription().equals(that.getDescription())) return false;
-        if (getMetadata() != null ? !getMetadata().equals(that.getMetadata()) : that.getMetadata() != null)
-            return false;
-        return getSpec() != null ? getSpec().equals(that.getSpec()) : that.getSpec() == null;
+        return getDescription().equals(that.getDescription());
     }
 
     @Override
@@ -193,8 +190,6 @@ public class KameletStep implements Step {
         result = 31 * result + (getGroup() != null ? getGroup().hashCode() : 0);
         result = 31 * result + getTitle().hashCode();
         result = 31 * result + getDescription().hashCode();
-        result = 31 * result + (getMetadata() != null ? getMetadata().hashCode() : 0);
-        result = 31 * result + (getSpec() != null ? getSpec().hashCode() : 0);
         return result;
     }
 }
