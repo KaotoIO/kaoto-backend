@@ -7,6 +7,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ *
+ * 🐱class CatalogCollection
+ *
+ * Joins a list of catalogs.
+ *
+ * When those catalogs are updated, the content of this collection changes too.
+ * As each catalog have their own ID constraints, there may be more than one
+ * connector with the same ID on this collection of catalogs.
+ */
 public class CatalogCollection implements MetadataCatalog {
 
     private final List<MetadataCatalog> catalogs;
