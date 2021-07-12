@@ -159,4 +159,42 @@ public class KameletStep implements Step {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KameletStep)) return false;
+
+        KameletStep that = (KameletStep) o;
+
+        if (!id.equals(that.id)) return false;
+        if (!getName().equals(that.getName())) return false;
+        if (getIcon() != null ? !getIcon().equals(that.getIcon()) : that.getIcon() != null) return false;
+        if (!getParameters().equals(that.getParameters())) return false;
+        if (!getApiVersion().equals(that.getApiVersion())) return false;
+        if (!getKind().equals(that.getKind())) return false;
+        if (!getKameletType().equals(that.getKameletType())) return false;
+        if (getGroup() != null ? !getGroup().equals(that.getGroup()) : that.getGroup() != null) return false;
+        if (!getTitle().equals(that.getTitle())) return false;
+        if (!getDescription().equals(that.getDescription())) return false;
+        if (getMetadata() != null ? !getMetadata().equals(that.getMetadata()) : that.getMetadata() != null)
+            return false;
+        return getSpec() != null ? getSpec().equals(that.getSpec()) : that.getSpec() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + (getIcon() != null ? getIcon().hashCode() : 0);
+        result = 31 * result + getParameters().hashCode();
+        result = 31 * result + getApiVersion().hashCode();
+        result = 31 * result + getKind().hashCode();
+        result = 31 * result + getKameletType().hashCode();
+        result = 31 * result + (getGroup() != null ? getGroup().hashCode() : 0);
+        result = 31 * result + getTitle().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + (getMetadata() != null ? getMetadata().hashCode() : 0);
+        result = 31 * result + (getSpec() != null ? getSpec().hashCode() : 0);
+        return result;
+    }
 }
