@@ -35,7 +35,7 @@ public class Catalog {
         return warmedUp;
     }
 
-    public static CompletableFuture waitForWarmUp() {
+    public static CompletableFuture<Void> waitForWarmUp() {
         return waitingForWarmUp;
     }
 
@@ -55,6 +55,7 @@ public class Catalog {
      * @param catalogs
      */
     private static void warmUpCatalog(List<ParseCatalog> catalogs) {
+        log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
 
         for(var catalog : catalogs) {
@@ -62,7 +63,8 @@ public class Catalog {
         }
 
         waitingForWarmUp = CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0]));
-        waitingForWarmUp.thenAccept(complete -> warmedUp = true);
+        waitingForWarmUp.thenAccept(complete -> warmedUp = true)
+                        .thenRun(() -> log.debug("Catalog warmed up."));
     }
 
     private static CompletableFuture<Boolean> addCatalog(ParseCatalog catalog) {
