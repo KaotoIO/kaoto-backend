@@ -42,6 +42,7 @@ class CatalogCollectionTest {
     void searchStepByID() {
         Assertions.assertNotNull(catalogCollection.searchStepByID("id-1"));
         Assertions.assertNotNull(catalogCollection.searchStepByID("id-3"));
+        Assertions.assertNull(catalogCollection.searchStepByID("non-existent"));
     }
 
     @Test

@@ -38,4 +38,13 @@ class KameletParseCatalogTest {
             Assertions.assertNotNull(p.getDefault());
         }
     }
+
+    @Test
+    void wrongUrlSilentlyFails() {
+        KameletParseCatalog kameletParser = new KameletParseCatalog("https://nothing/wrong/url.git", "");
+
+        List<Step> steps = kameletParser.parse().join();
+        Assertions.assertNotNull(steps);
+        Assertions.assertEquals(0, steps.size());
+    }
 }
