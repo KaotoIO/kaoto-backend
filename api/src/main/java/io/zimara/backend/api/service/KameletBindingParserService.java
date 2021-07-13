@@ -7,6 +7,7 @@ import io.zimara.backend.model.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,12 +16,15 @@ import java.util.Map;
 
 public class KameletBindingParserService implements ParserService {
 
-    private final Yaml yaml = new Yaml();
+    private final Yaml yaml = new Yaml(new SafeConstructor());
     private String identifier = "Kamelet Binding";
     private Logger log = Logger.getLogger(KameletBindingParserService.class);
 
     @Override
     public List<Step> parse(String input) {
+        if(!appliesTo(input)) {
+            throw new IllegalArgumentException("Wrong format provided. This is not parseable by " + getIdentifier());
+        }
 
         List<Step> steps = new ArrayList<>(2);
         Map<String, Object> parsed = yaml.load(input);
