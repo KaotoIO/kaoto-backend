@@ -14,12 +14,14 @@
         <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.testTarget>${maven.compiler.target}</maven.compiler.testTarget>
+        <maven.compiler.testSource>${maven.compiler.source}</maven.compiler.testSource>
 
         <!-- Quarkus version -->
-        <quarkus-plugin.version>2.0.0.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>2.0.2.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.0.0.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.0.2.Final</quarkus.platform.version>
 
         <!-- SonarCloud analysis -->
         <sonar.projectKey>ZimaraIO_zimara-backend</sonar.projectKey>
