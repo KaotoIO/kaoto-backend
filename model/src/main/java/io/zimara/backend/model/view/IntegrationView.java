@@ -10,7 +10,7 @@ import java.util.List;
  * 🐱inherits View
  * Represents an integration view, composed by steps.
  */
-public class IntegrationView implements View {
+public class IntegrationView extends View {
 
     public IntegrationView(List<Step> steps, String name) {
         this.steps = steps;
