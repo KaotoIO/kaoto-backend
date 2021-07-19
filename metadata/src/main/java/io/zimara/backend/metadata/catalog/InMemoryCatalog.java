@@ -25,7 +25,7 @@ public class InMemoryCatalog implements MetadataCatalog {
             return false;
         }
         final Collector<Step, ?, Map<String, Step>> stepMapCollector =
-                Collectors.toMap(Step::getID, step -> step, (a, b) -> a);
+                Collectors.toMap(Step::getId, step -> step, (a, b) -> a);
         metadataCatalog = Collections.synchronizedMap(steps.stream().filter(Objects::nonNull).parallel().collect(stepMapCollector));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 

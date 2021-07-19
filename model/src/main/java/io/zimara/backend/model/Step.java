@@ -14,7 +14,7 @@ public abstract class Step {
      *
      * Unique identifier for this step in our whole Zimara environment
      */
-    public abstract String getID();    /*
+    public abstract String getId();    /*
      * 🐱property name: String
      *
      * This represents the first part of the camel connection string.

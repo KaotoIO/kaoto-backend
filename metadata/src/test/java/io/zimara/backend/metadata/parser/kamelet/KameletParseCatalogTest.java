@@ -25,7 +25,7 @@ class KameletParseCatalogTest {
         String name = "ftp-source";
         KameletStep step = (KameletStep) catalog.searchStepByName(name);
         Assertions.assertNotNull(step);
-        Assertions.assertEquals(name, step.getID());
+        Assertions.assertEquals(name, step.getId());
         Assertions.assertEquals(name, step.getName());
         Assertions.assertEquals("KAMELET", step.getSubType());
         Assertions.assertEquals("CONNECTOR", step.getType());

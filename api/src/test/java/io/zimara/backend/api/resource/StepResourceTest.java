@@ -19,7 +19,7 @@ class StepResourceTest {
         Catalog.waitForWarmUp().join();
         Step s = stepResource.stepById(INFINISPAN_SOURCE);
         Assertions.assertNotNull(s);
-        Assertions.assertEquals(INFINISPAN_SOURCE, s.getID());
+        Assertions.assertEquals(INFINISPAN_SOURCE, s.getId());
     }
 
     @Test
@@ -29,7 +29,7 @@ class StepResourceTest {
         for (Step s : steps) {
             Assertions.assertNotNull(s);
             Assertions.assertEquals(INFINISPAN_SOURCE, s.getName());
-            Assertions.assertEquals(INFINISPAN_SOURCE, s.getID());
+            Assertions.assertEquals(INFINISPAN_SOURCE, s.getId());
         }
     }
 
