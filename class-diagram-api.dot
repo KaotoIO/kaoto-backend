@@ -8,8 +8,8 @@ digraph ClassDiagram {
 </TABLE>>]
 
 
-"ViewResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewResource</B></TD></TR>
+"ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
 	<TR><TD><I>Usage example</I><BR/>
 
 </TD></TR>
