@@ -1,4 +1,4 @@
-package io.zimara.backend.api.service;
+package io.zimara.backend.api.service.parser;
 
 import io.zimara.backend.model.Step;
 

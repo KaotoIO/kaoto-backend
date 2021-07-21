@@ -1,51 +1,28 @@
-package io.zimara.backend.api.resource;
+package io.zimara.backend.api.service.viewdefinitions;
 
-import io.zimara.backend.api.service.KameletBindingParserService;
-import io.zimara.backend.api.service.ParserService;
+import io.zimara.backend.api.service.parser.KameletBindingParserService;
+import io.zimara.backend.api.service.parser.ParserService;
 import io.zimara.backend.model.View;
 import io.zimara.backend.model.view.IntegrationView;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 🐱class ViewResource
- * This endpoint will return a list of views based on the parameters.
- * <p>
- * 🐱example
- * <p>
- * ```
- * YAML
- * ```
- */
-@Path("/view")
 @ApplicationScoped
-public class ViewResource {
+public class ViewDefinitionService {
 
     private List<ParserService> parsers = new ArrayList<>();
-    private Logger log = Logger.getLogger(ViewResource.class);
+    private Logger log = Logger.getLogger(ViewDefinitionService.class);
 
-    public ViewResource() {
+    public ViewDefinitionService() {
         //This should be autowired, perhaps?
         //jandex
         parsers.add(new KameletBindingParserService());
     }
 
-    /*
-     * 🐱method views:
-     * 🐱param yaml: String
-     *
-     * Based on the YAML provided, offer a list of possible views
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public List<View> views(@QueryParam("yaml") String yaml) {
         List<View> views = new ArrayList<>();
         for (var parser : parsers) {
