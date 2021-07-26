@@ -1,9 +1,10 @@
 package io.zimara.backend.api.resource;
 
-import io.zimara.backend.api.Catalog;
+import io.zimara.backend.api.metadata.Catalog;
 import io.zimara.backend.model.Step;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,23 +20,26 @@ import java.util.Collection;
 @ApplicationScoped
 public class StepResource {
 
+    @Inject
+    Catalog catalog;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
     public Step stepById(@PathParam("id") String id) {
-        return Catalog.getReadOnlyCatalog().searchStepByID(id);
+        return catalog.getReadOnlyCatalog().searchStepByID(id);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
     public Collection<Step> stepsByName(@PathParam("name") String name) {
-        return Catalog.getReadOnlyCatalog().searchStepsByName(name);
+        return catalog.getReadOnlyCatalog().searchStepsByName(name);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Step> allSteps() {
-        return Catalog.getReadOnlyCatalog().getAll();
+        return catalog.getReadOnlyCatalog().getAll();
     }
 }

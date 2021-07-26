@@ -7,6 +7,7 @@ import io.zimara.backend.model.view.IntegrationView;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,9 @@ public class ViewDefinitionService {
     private List<ParserService> parsers = new ArrayList<>();
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
 
-    public ViewDefinitionService() {
-        //This should be autowired, perhaps?
-        //jandex
-        parsers.add(new KameletBindingParserService());
+    @Inject
+    public void setKameletBindingParserService(KameletBindingParserService kameletBindingParserService) {
+        parsers.add(kameletBindingParserService);
     }
 
     public List<View> views(@QueryParam("yaml") String yaml) {

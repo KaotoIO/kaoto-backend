@@ -1,4 +1,4 @@
-package io.zimara.backend.api;
+package io.zimara.backend.api.metadata;
 
 import io.zimara.backend.metadata.MetadataCatalog;
 import io.zimara.backend.metadata.ParseCatalog;
@@ -7,14 +7,16 @@ import io.zimara.backend.metadata.catalog.ReadOnlyCatalog;
 import io.zimara.backend.metadata.parser.kamelet.KameletParseCatalog;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@ApplicationScoped
 public class Catalog {
 
-
-    private Catalog() {
+    public Catalog() {
+        warmUpCatalog(loadParsers());
     }
 
     private static InMemoryCatalog c = new InMemoryCatalog();
@@ -23,19 +25,15 @@ public class Catalog {
     private static Logger log = Logger.getLogger(Catalog.class);
     private static CompletableFuture<Void> waitingForWarmUp;
 
-    static {
-        warmUpCatalog(loadParsers());
-    }
-
-    public static MetadataCatalog getReadOnlyCatalog() {
+    public MetadataCatalog getReadOnlyCatalog() {
         return readOnlyCatalog;
     }
 
-    public static Boolean isWarmedUp() {
+    public Boolean isWarmedUp() {
         return warmedUp;
     }
 
-    public static CompletableFuture<Void> waitForWarmUp() {
+    public CompletableFuture<Void> waitForWarmUp() {
         return waitingForWarmUp;
     }
 
@@ -44,7 +42,7 @@ public class Catalog {
      *
      * @return
      */
-    private static List<ParseCatalog> loadParsers() {
+    private List<ParseCatalog> loadParsers() {
         List<ParseCatalog> catalogs = new ArrayList<>();
         catalogs.add(new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0"));
         return catalogs;
@@ -54,7 +52,7 @@ public class Catalog {
      * Add all steps from the parsers into the catalog
      * @param catalogs
      */
-    private static void warmUpCatalog(List<ParseCatalog> catalogs) {
+    private void warmUpCatalog(List<ParseCatalog> catalogs) {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
 

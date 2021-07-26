@@ -1,22 +1,39 @@
 package io.zimara.backend.api.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.Catalog;
+import io.zimara.backend.api.metadata.Catalog;
 import io.zimara.backend.model.Step;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import java.util.Collection;
 
 @QuarkusTest
 class StepResourceTest {
 
     public static final String INFINISPAN_SOURCE = "infinispan-source";
-    private StepResource stepResource = new StepResource();
+    private StepResource stepResource;
+    private Catalog catalog;
+
+    @Inject
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    @Inject
+    public void setStepResource(StepResource stepResource) {
+        this.stepResource = stepResource;
+    }
+
+    @BeforeEach
+    void ensureCatalog() {
+        catalog.waitForWarmUp().join();
+    }
 
     @Test
     void stepById() {
-        Catalog.waitForWarmUp().join();
         Step s = stepResource.stepById(INFINISPAN_SOURCE);
         Assertions.assertNotNull(s);
         Assertions.assertEquals(INFINISPAN_SOURCE, s.getId());
@@ -24,7 +41,6 @@ class StepResourceTest {
 
     @Test
     void stepsByName() {
-        Catalog.waitForWarmUp().join();
         Collection<Step> steps = stepResource.stepsByName(INFINISPAN_SOURCE);
         for (Step s : steps) {
             Assertions.assertNotNull(s);
@@ -35,9 +51,8 @@ class StepResourceTest {
 
     @Test
     void allSteps() {
-        Catalog.waitForWarmUp().join();
         Collection<Step> steps = stepResource.allSteps();
         Assertions.assertNotNull(steps);
-        Assertions.assertEquals(Catalog.getReadOnlyCatalog().getAll().size(), steps.size());
+        Assertions.assertEquals(catalog.getReadOnlyCatalog().getAll().size(), steps.size());
     }
 }

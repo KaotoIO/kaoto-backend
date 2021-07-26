@@ -1,6 +1,6 @@
 package io.zimara.backend.api.service.parser;
 
-import io.zimara.backend.api.Catalog;
+import io.zimara.backend.api.metadata.Catalog;
 import io.zimara.backend.metadata.MetadataCatalog;
 import io.zimara.backend.model.Parameter;
 import io.zimara.backend.model.Step;
@@ -9,16 +9,22 @@ import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@ApplicationScoped
 public class KameletBindingParserService implements ParserService {
 
     private final Yaml yaml = new Yaml(new SafeConstructor());
     private String identifier = "Kamelet Binding";
     private Logger log = Logger.getLogger(KameletBindingParserService.class);
+
+    @Inject
+    Catalog catalog;
 
     @Override
     public List<Step> parse(String input) {
@@ -44,18 +50,17 @@ public class KameletBindingParserService implements ParserService {
 
     private Step processStep(Map<String, Object> source) {
         Step step = null;
-        MetadataCatalog catalog = Catalog.getReadOnlyCatalog();
 
         if (source.containsKey("uri")) {
             log.trace("Found uri component.");
             String uri = source.get("uri").toString();
-            step = catalog.searchStepByName(uri.substring(0, uri.indexOf(":")));
+            step = catalog.getReadOnlyCatalog().searchStepByName(uri.substring(0, uri.indexOf(":")));
         } else if (source.containsKey("ref")) {
             log.trace("Found ref component.");
             Map<String, Object> ref = (Map<String, Object>) source.getOrDefault("ref", Collections.emptyMap());
             Map<String, Object> properties = (Map<String, Object>) source.getOrDefault("properties", Collections.emptyMap());
 
-            step = catalog.searchStepByName(ref.get("name").toString());
+            step = catalog.getReadOnlyCatalog().searchStepByName(ref.get("name").toString());
             log.trace("Found step " + step.getName());
 
             for (Map.Entry<String, Object> c : properties.entrySet()) {
