@@ -183,7 +183,7 @@ public class KameletStep extends Step {
         int result = id.hashCode();
         result = 31 * result + getName().hashCode();
         result = 31 * result + (getIcon() != null ? getIcon().hashCode() : 0);
-        result = 31 * result + getParameters().hashCode();
+        result = 31 * result + (getParameters() != null ? getParameters().hashCode() : 0);
         result = 31 * result + getApiVersion().hashCode();
         result = 31 * result + getKind().hashCode();
         result = 31 * result + getKameletType().hashCode();
