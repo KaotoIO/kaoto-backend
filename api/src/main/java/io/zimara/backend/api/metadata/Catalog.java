@@ -26,7 +26,10 @@ public class Catalog {
     private static CompletableFuture<Void> waitingForWarmUp;
 
     public MetadataCatalog getReadOnlyCatalog() {
-        return readOnlyCatalog;
+        if(warmedUp) {
+            return readOnlyCatalog;
+        }
+        else throw new RuntimeException("Catalog still warming up.");
     }
 
     public Boolean isWarmedUp() {

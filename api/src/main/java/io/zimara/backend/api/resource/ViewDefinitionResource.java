@@ -54,7 +54,8 @@ public class ViewDefinitionResource {
         log.error("Error processing views definitions.", x);
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Error processing views definitions." + x.getClass())
+                .entity("Error processing views definitions: " + x.getMessage())
+                .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
     }
 
@@ -63,7 +64,8 @@ public class ViewDefinitionResource {
         log.error("Error trying to return YAML.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Couldn't parse the YAML provided." + x.getClass())
+                .entity("Couldn't parse the YAML provided: " + x.getMessage())
+                .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
     }
 
