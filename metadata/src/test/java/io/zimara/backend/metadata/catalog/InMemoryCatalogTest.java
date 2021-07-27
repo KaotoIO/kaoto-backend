@@ -1,7 +1,7 @@
 package io.zimara.backend.metadata.catalog;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,12 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @QuarkusTest
 class InMemoryCatalogTest {
 
-    private final InMemoryCatalog catalog = new InMemoryCatalog();
+    private final InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
     @Test
     void store() {

@@ -1,7 +1,6 @@
 package io.zimara.backend.model.view;
 
-import io.zimara.backend.model.Step;
-import io.zimara.backend.model.View;
+import io.zimara.backend.model.step.Step;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ public class IntegrationView extends View {
     public IntegrationView(List<Step> steps, String name) {
         this.steps = steps;
         this.name = name;
+        this.id = name;
     }
 
     /*
@@ -24,6 +24,7 @@ public class IntegrationView extends View {
      */
     private final List<Step> steps;
     private final String name;
+    private String id;
 
     @Override
     public String getType() {
@@ -33,6 +34,11 @@ public class IntegrationView extends View {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     public List<Step> getSteps() {

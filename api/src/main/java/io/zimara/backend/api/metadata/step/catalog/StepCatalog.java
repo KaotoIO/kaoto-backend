@@ -1,10 +1,11 @@
-package io.zimara.backend.api.metadata;
+package io.zimara.backend.api.metadata.step.catalog;
 
 import io.zimara.backend.metadata.MetadataCatalog;
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
 import io.zimara.backend.metadata.catalog.ReadOnlyCatalog;
-import io.zimara.backend.metadata.parser.kamelet.KameletParseCatalog;
+import io.zimara.backend.metadata.parser.step.kamelet.KameletParseCatalog;
+import io.zimara.backend.model.step.Step;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -13,19 +14,19 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @ApplicationScoped
-public class Catalog {
+public class StepCatalog {
 
-    public Catalog() {
+    public StepCatalog() {
         warmUpCatalog(loadParsers());
     }
 
-    private static InMemoryCatalog c = new InMemoryCatalog();
-    private static final MetadataCatalog readOnlyCatalog = new ReadOnlyCatalog(c);
+    private static InMemoryCatalog<Step> c = new InMemoryCatalog<>();
+    private static final MetadataCatalog<Step> readOnlyCatalog = new ReadOnlyCatalog<>(c);
     private static Boolean warmedUp = false;
-    private static Logger log = Logger.getLogger(Catalog.class);
+    private static Logger log = Logger.getLogger(StepCatalog.class);
     private static CompletableFuture<Void> waitingForWarmUp;
 
-    public MetadataCatalog getReadOnlyCatalog() {
+    public MetadataCatalog<Step> getReadOnlyCatalog() {
         if(warmedUp) {
             return readOnlyCatalog;
         }
@@ -45,8 +46,8 @@ public class Catalog {
      *
      * @return
      */
-    private List<ParseCatalog> loadParsers() {
-        List<ParseCatalog> catalogs = new ArrayList<>();
+    private List<ParseCatalog<Step>> loadParsers() {
+        List<ParseCatalog<Step>> catalogs = new ArrayList<>();
         catalogs.add(new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0"));
         return catalogs;
     }
@@ -55,7 +56,7 @@ public class Catalog {
      * Add all steps from the parsers into the catalog
      * @param catalogs
      */
-    private void warmUpCatalog(List<ParseCatalog> catalogs) {
+    private void warmUpCatalog(List<ParseCatalog<Step>> catalogs) {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
 
@@ -68,7 +69,7 @@ public class Catalog {
                         .thenRun(() -> log.debug("Catalog warmed up."));
     }
 
-    private static CompletableFuture<Boolean> addCatalog(ParseCatalog catalog) {
+    private static CompletableFuture<Boolean> addCatalog(ParseCatalog<Step> catalog) {
         CompletableFuture<Boolean> res = new CompletableFuture<>();
         catalog.parse()
                 .thenApply(steps -> c.store(steps))

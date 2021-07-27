@@ -1,19 +1,19 @@
 package io.zimara.backend.metadata;
 
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.Metadata;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface MetadataCatalog {
+public interface MetadataCatalog<T extends Metadata > {
 
-    Step searchStepByID(String id);
+    T searchStepByID(String id);
 
-    Step searchStepByName(String connectionName);
+    T searchStepByName(String name);
 
-    Collection<Step> searchStepsByName(String connectionName);
+    Collection<T> searchStepsByName(String name);
 
-    boolean store(List<Step> steps);
+    boolean store(List<T> steps);
 
-    Collection<Step> getAll();
+    Collection<T> getAll();
 }

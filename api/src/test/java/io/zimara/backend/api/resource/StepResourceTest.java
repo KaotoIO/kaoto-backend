@@ -1,8 +1,8 @@
 package io.zimara.backend.api.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.metadata.Catalog;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
+import io.zimara.backend.model.step.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +15,10 @@ class StepResourceTest {
 
     public static final String INFINISPAN_SOURCE = "infinispan-source";
     private StepResource stepResource;
-    private Catalog catalog;
+    private StepCatalog catalog;
 
     @Inject
-    public void setCatalog(Catalog catalog) {
+    public void setCatalog(StepCatalog catalog) {
         this.catalog = catalog;
     }
 

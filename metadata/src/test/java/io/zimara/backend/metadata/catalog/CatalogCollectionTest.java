@@ -1,7 +1,7 @@
 package io.zimara.backend.metadata.catalog;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,25 +12,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @QuarkusTest
 class CatalogCollectionTest {
 
     public static final String CONNECTOR_2 = "connector-2";
-    private static CatalogCollection catalogCollection = new CatalogCollection();
+    private static CatalogCollection<Step> catalogCollection = new CatalogCollection<>();
 
     @BeforeAll
     static void before() {
         List<Step> steps = new ArrayList<>();
 
-        InMemoryCatalog ic = new InMemoryCatalog();
+        InMemoryCatalog<Step> ic = new InMemoryCatalog<>();
         steps.add(new KameletStep("id-1", "connector-1", "icon", Collections.emptyList()));
         steps.add(new KameletStep("id-2", CONNECTOR_2, "icon", Collections.emptyList()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
 
-        ic = new InMemoryCatalog();
+        ic = new InMemoryCatalog<>();
         steps.clear();
         steps.add(new KameletStep("id-2", CONNECTOR_2, "icon", Collections.emptyList()));
         steps.add(new KameletStep("id-3", CONNECTOR_2, "icon", Collections.emptyList()));
@@ -77,7 +75,7 @@ class CatalogCollectionTest {
 
     @Test
     void readOnlyWrapper() {
-        ReadOnlyCatalog readOnlyCatalog = new ReadOnlyCatalog(catalogCollection);
+        ReadOnlyCatalog<Step> readOnlyCatalog = new ReadOnlyCatalog<>(catalogCollection);
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             readOnlyCatalog.addCatalog(catalogCollection);

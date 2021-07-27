@@ -1,20 +1,13 @@
 package io.zimara.backend.model;
 
-/**
- * 🐱class Step
- * Represents a step inside an integration
- */
-public abstract class Step {
-
-    public Step(){
-
-    }
+public interface Metadata {
     /*
      * 🐱property ID: String
      *
      * Unique identifier for this step in our whole Zimara environment
      */
-    public abstract String getId();    /*
+    public abstract String getId();
+    /*
      * 🐱property name: String
      *
      * This represents the first part of the camel connection string.
@@ -29,12 +22,4 @@ public abstract class Step {
      * Type of step: transformation, connector
      */
     public abstract String getType();
-
-    /*
-     * 🐱property subtype: String
-     *
-     * If we need a subtype like kamelet connector, camel connector,...
-     */
-    public abstract String getSubType();
-
 }

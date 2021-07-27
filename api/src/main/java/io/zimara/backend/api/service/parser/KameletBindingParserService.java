@@ -1,9 +1,8 @@
 package io.zimara.backend.api.service.parser;
 
-import io.zimara.backend.api.metadata.Catalog;
-import io.zimara.backend.metadata.MetadataCatalog;
+import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
 import io.zimara.backend.model.Parameter;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -17,14 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
-public class KameletBindingParserService implements ParserService {
+public class KameletBindingParserService implements ParserService<Step> {
 
     private final Yaml yaml = new Yaml(new SafeConstructor());
     private String identifier = "Kamelet Binding";
     private Logger log = Logger.getLogger(KameletBindingParserService.class);
 
     @Inject
-    Catalog catalog;
+    StepCatalog catalog;
 
     @Override
     public List<Step> parse(String input) {

@@ -2,7 +2,7 @@ package io.zimara.backend.api.service.viewdefinitions;
 
 import io.zimara.backend.api.service.parser.KameletBindingParserService;
 import io.zimara.backend.api.service.parser.ParserService;
-import io.zimara.backend.model.View;
+import io.zimara.backend.model.view.View;
 import io.zimara.backend.model.view.IntegrationView;
 import org.jboss.logging.Logger;
 

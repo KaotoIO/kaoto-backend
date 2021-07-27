@@ -1,8 +1,8 @@
-package io.zimara.backend.metadata.parser.kamelet;
+package io.zimara.backend.metadata.parser.step.kamelet;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class KameletParseCatalogTest {
     @Test
     void getSteps() {
         KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");
-        InMemoryCatalog catalog = new InMemoryCatalog();
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertTrue(catalog.store(steps));

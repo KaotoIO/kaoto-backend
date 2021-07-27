@@ -2,7 +2,7 @@ package io.zimara.backend.api.resource;
 
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.metadata.Catalog;
+import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ViewDefinitionResourceTest {
     private static String binding = "";
 
     @Inject
-    Catalog catalog;
+    StepCatalog catalog;
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {

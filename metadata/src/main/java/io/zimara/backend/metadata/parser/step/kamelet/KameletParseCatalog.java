@@ -1,9 +1,9 @@
-package io.zimara.backend.metadata.parser.kamelet;
+package io.zimara.backend.metadata.parser.step.kamelet;
 
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.model.Parameter;
-import io.zimara.backend.model.Step;
 import io.zimara.backend.model.parameter.AbstractParameter;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class KameletParseCatalog implements ParseCatalog {
+public class KameletParseCatalog implements ParseCatalog<Step> {
 
     Logger log = Logger.getLogger(KameletParseCatalog.class);
 

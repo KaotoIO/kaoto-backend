@@ -1,7 +1,7 @@
 package io.zimara.backend.api.resource;
 
-import io.zimara.backend.api.metadata.Catalog;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
+import io.zimara.backend.model.step.Step;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ import java.util.Collection;
 public class StepResource {
 
     @Inject
-    Catalog catalog;
+    StepCatalog catalog;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

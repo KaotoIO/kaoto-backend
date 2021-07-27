@@ -1,7 +1,7 @@
 package io.zimara.backend.metadata.catalog;
 
 import io.zimara.backend.metadata.MetadataCatalog;
-import io.zimara.backend.model.Step;
+import io.zimara.backend.model.Metadata;
 import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
@@ -14,18 +14,18 @@ import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class InMemoryCatalog implements MetadataCatalog {
+public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
-    private Map<String, Step> metadataCatalog = new HashMap<>();
+    private Map<String, T> metadataCatalog = new HashMap<>();
     private Logger log = Logger.getLogger(InMemoryCatalog.class);
 
     @Override
-    public boolean store(List<Step> steps) {
+    public boolean store(List<T> steps) {
         if (steps == null) {
             return false;
         }
-        final Collector<Step, ?, Map<String, Step>> stepMapCollector =
-                Collectors.toMap(Step::getId, step -> step, (a, b) -> a);
+        final Collector<T, ?, Map<String, T>> stepMapCollector =
+                Collectors.toMap(T::getId, step -> step, (a, b) -> a);
         metadataCatalog = Collections.synchronizedMap(steps.stream().filter(Objects::nonNull).parallel().collect(stepMapCollector));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
@@ -33,13 +33,13 @@ public class InMemoryCatalog implements MetadataCatalog {
     }
 
     @Override
-    public Step searchStepByID(String id) {
+    public T searchStepByID(String id) {
         return metadataCatalog.get(id);
     }
 
     @Override
-    public Step searchStepByName(String name) {
-        for (Map.Entry<String, Step> entry : metadataCatalog.entrySet()) {
+    public T searchStepByName(String name) {
+        for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
             if (name.equalsIgnoreCase(entry.getValue().getName())) {
                 return entry.getValue();
             }
@@ -48,10 +48,10 @@ public class InMemoryCatalog implements MetadataCatalog {
     }
 
     @Override
-    public Collection<Step> searchStepsByName(String name) {
-        Collection<Step> steps = new ArrayList<>();
+    public Collection<T> searchStepsByName(String name) {
+        Collection<T> steps = new ArrayList<>();
 
-        for (Map.Entry<String, Step> entry : metadataCatalog.entrySet()) {
+        for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
             if (name.equalsIgnoreCase(entry.getValue().getName())) {
                 steps.add(entry.getValue());
             }
@@ -61,7 +61,7 @@ public class InMemoryCatalog implements MetadataCatalog {
     }
 
     @Override
-    public Collection<Step> getAll() {
+    public Collection<T> getAll() {
         return Collections.unmodifiableCollection(this.metadataCatalog.values());
     }
 }

@@ -1,7 +1,7 @@
 package io.zimara.backend.api.resource;
 
 import io.zimara.backend.api.service.viewdefinitions.ViewDefinitionService;
-import io.zimara.backend.model.View;
+import io.zimara.backend.model.view.View;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
