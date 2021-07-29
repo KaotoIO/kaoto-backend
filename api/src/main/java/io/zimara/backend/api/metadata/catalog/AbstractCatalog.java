@@ -13,20 +13,20 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractCatalog<T extends Metadata> {
 
-    public AbstractCatalog() {
+    AbstractCatalog() {
         warmUpCatalog(loadParsers());
     }
 
     private InMemoryCatalog<T> c = new InMemoryCatalog<>();
     private final MetadataCatalog<T> readOnlyCatalog = new ReadOnlyCatalog<>(c);
-    private Boolean warmedUp = false;
+    private boolean warmedUp = false;
     private static Logger log = Logger.getLogger(AbstractCatalog.class);
     private CompletableFuture<Void> waitingForWarmUp;
 
     public MetadataCatalog<T> getReadOnlyCatalog() {
         if (warmedUp) {
             return readOnlyCatalog;
-        } else throw new RuntimeException("Catalog still warming up.");
+        } else throw new CatalogWarmingUpException("Catalog still warming up.");
     }
 
     public Boolean isWarmedUp() {

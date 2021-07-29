@@ -16,7 +16,7 @@ public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor
 
     protected List<T> metadataList;
     protected List<CompletableFuture<T>> futureMetadata;
-    Logger log = Logger.getLogger(YamlProcessFile.class);
+    private Logger log = Logger.getLogger(YamlProcessFile.class);
 
     public YamlProcessFile(List<T> metadataList, List<CompletableFuture<T>> futureMetadata) {
         this.metadataList = metadataList;
