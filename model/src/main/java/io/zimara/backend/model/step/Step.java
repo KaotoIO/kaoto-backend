@@ -6,11 +6,7 @@ import io.zimara.backend.model.Metadata;
  * 🐱class Step
  * Represents a step inside an integration
  */
-public abstract class Step implements Metadata {
-
-    public Step(){
-
-    }
+public interface Step extends Metadata {
 
     /*
      * 🐱property subtype: String

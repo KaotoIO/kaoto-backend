@@ -40,7 +40,7 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
             file.setWritable(true, true);
 
             log.trace("Cloning git repository.");
-            var git = Git.cloneRepository()
+            Git.cloneRepository()
                     .setCloneSubmodules(true)
                     .setURI(url)
                     .setDirectory(file)

@@ -11,7 +11,7 @@ import java.util.Map;
  * 🐱inherits Step
  * Represents a Kamelet step inside an integration
  */
-public class KameletStep extends Step {
+public class KameletStep implements Step {
 
     public KameletStep(String id, String name, String icon, List<Parameter> parameters) {
         this.id = id;
