@@ -3,7 +3,6 @@ package io.zimara.backend.metadata.parser.view;
 import io.zimara.backend.metadata.parser.GithubParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.view.ViewDefinition;
-import io.zimara.backend.model.view.integration.IntegrationViewDefinition;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -36,9 +35,9 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
     }
 
     @Override
-    public IntegrationViewDefinition parseFile(File f) {
+    public ViewDefinition parseFile(File f) {
         try (FileReader fr = new FileReader(f)) {
-            Yaml yaml = new Yaml(new Constructor(IntegrationViewDefinition.class));
+            Yaml yaml = new Yaml(new Constructor(ViewDefinition.class));
             return yaml.load(fr);
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);

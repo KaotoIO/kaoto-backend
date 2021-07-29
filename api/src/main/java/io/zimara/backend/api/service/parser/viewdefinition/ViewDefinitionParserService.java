@@ -4,7 +4,6 @@ import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.zimara.backend.api.service.parser.ViewParserService;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.view.ViewDefinition;
-import io.zimara.backend.model.view.integration.IntegrationViewDefinition;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -26,7 +25,7 @@ public class ViewDefinitionParserService implements ViewParserService<ViewDefini
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
 
         for(var v : catalog.getReadOnlyCatalog().getAll()) {
-            IntegrationViewDefinition clone = new IntegrationViewDefinition(v);
+            ViewDefinition clone = new ViewDefinition(v);
             clone.setSteps(steps);
             viewDefinitions.add(clone);
         }
