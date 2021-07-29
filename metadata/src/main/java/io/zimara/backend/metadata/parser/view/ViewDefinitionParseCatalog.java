@@ -41,10 +41,8 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
             return yaml.load(fr);
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
-        } catch (Throwable e) {
-            log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
-            throw e;
         }
+
         return null;
     }
 }

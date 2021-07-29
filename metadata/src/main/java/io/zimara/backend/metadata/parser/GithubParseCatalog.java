@@ -34,6 +34,7 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
         try {
             log.trace("Creating temporary folder.");
             file = Files.createTempDirectory("kamelet-catalog").toFile();
+            file.setExecutable(true, true);
             file.setReadable(true, true);
             file.setWritable(true, true);
 
@@ -52,7 +53,9 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
 
         try {
             log.trace("Parsing all kamelet files in the folder.");
-            Files.walkFileTree(file.getAbsoluteFile().toPath(), getFileVisitor(metadataList, futureMetadatas));
+            if(file != null) {
+                Files.walkFileTree(file.getAbsoluteFile().toPath(), getFileVisitor(metadataList, futureMetadatas));
+            }
             CompletableFuture.allOf(futureMetadatas.toArray(new CompletableFuture[0])).join();
         } catch (IOException | NullPointerException e) {
             log.error("Error trying to parse kamelet catalog.", e);

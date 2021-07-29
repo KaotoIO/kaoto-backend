@@ -37,7 +37,7 @@ public class KameletParseCatalog extends GithubParseCatalog<Step> {
 class KameletFileProcessor extends YamlProcessFile<Step> {
 
     public static final String PROPERTIES = "properties";
-    Logger log = Logger.getLogger(KameletFileProcessor.class);
+    private Logger log = Logger.getLogger(KameletFileProcessor.class);
 
     KameletFileProcessor(List<Step> stepList, List<CompletableFuture<Step>> futureSteps) {
         super(stepList, futureSteps);
