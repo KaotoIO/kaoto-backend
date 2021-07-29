@@ -1,6 +1,6 @@
 package io.zimara.backend.api.resource;
 
-import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
+import io.zimara.backend.api.service.step.StepService;
 import io.zimara.backend.model.step.Step;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
@@ -23,26 +23,26 @@ import java.util.Collection;
 public class StepResource {
 
     @Inject
-    StepCatalog catalog;
+    StepService stepService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
     public Step stepById(@PathParam("id") String id) {
-        return catalog.getReadOnlyCatalog().searchStepByID(id);
+        return stepService.stepById(id);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
     public Collection<Step> stepsByName(@PathParam("name") String name) {
-        return catalog.getReadOnlyCatalog().searchStepsByName(name);
+        return stepService.stepsByName(name);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Step> allSteps() {
-        return catalog.getReadOnlyCatalog().getAll();
+        return stepService.allSteps();
     }
 
 

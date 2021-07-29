@@ -1,10 +1,10 @@
 package io.zimara.backend.api.service.parser;
 
-import io.zimara.backend.model.Metadata;
+import io.zimara.backend.model.step.Step;
 
 import java.util.List;
 
-public interface ParserService<T extends Metadata> {
+public interface StepParserService<T extends Step> {
 
     List<T> parse(String yaml);
 

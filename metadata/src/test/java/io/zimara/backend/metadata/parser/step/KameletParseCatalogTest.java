@@ -1,4 +1,4 @@
-package io.zimara.backend.metadata.parser.step.kamelet;
+package io.zimara.backend.metadata.parser.step;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;

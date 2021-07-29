@@ -1,13 +1,11 @@
-package io.zimara.backend.metadata.parser.step.kamelet;
+package io.zimara.backend.metadata.parser.step;
 
-import io.zimara.backend.metadata.ParseCatalog;
+import io.zimara.backend.metadata.parser.GithubParseCatalog;
+import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.Parameter;
 import io.zimara.backend.model.parameter.AbstractParameter;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.transport.TagOpt;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -17,96 +15,32 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-public class KameletParseCatalog implements ParseCatalog<Step> {
-
-    Logger log = Logger.getLogger(KameletParseCatalog.class);
-
-    private final CompletableFuture<List<Step>> steps = new CompletableFuture<>();
+public class KameletParseCatalog extends GithubParseCatalog<Step> {
 
     public KameletParseCatalog(String url, String tag) {
-        log.trace("Warming up kamelet catalog in " + url);
-        steps.completeAsync(() -> cloneRepoAndParse(url, tag));
-    }
-
-    private List<Step> cloneRepoAndParse(String url, String tag) {
-        List<Step> stepList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
-        final List<CompletableFuture<KameletStep>> futureSteps = Collections.synchronizedList(new CopyOnWriteArrayList<>());
-
-        File file = null;
-        try {
-            log.trace("Creating temporary folder.");
-            file = Files.createTempDirectory("kamelet-catalog").toFile();
-            file.setReadable(true, true);
-            file.setWritable(true, true);
-
-            log.trace("Cloning git repository.");
-            Git.cloneRepository()
-                    .setCloneSubmodules(true)
-                    .setURI(url)
-                    .setDirectory(file)
-                    .setBranch(tag)
-                    .setTagOption(TagOpt.FETCH_TAGS)
-                    .call();
-
-        } catch (GitAPIException | IOException e) {
-            log.error("Error trying to clone repository.", e);
-        }
-
-        try {
-            log.trace("Parsing all kamelet files in the folder.");
-            Files.walkFileTree(file.getAbsoluteFile().toPath(), new ProcessFile(stepList, futureSteps));
-            CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0])).join();
-        } catch (IOException | NullPointerException e) {
-            log.error("Error trying to parse kamelet catalog.", e);
-        }
-
-        return stepList;
-
+        super(url, tag);
     }
 
     @Override
-    public CompletableFuture<List<Step>> parse() {
-        return steps;
+    protected KameletFileProcessor getFileVisitor(List<Step> metadataList, List<CompletableFuture<Step>> futureMetadata) {
+        return new KameletFileProcessor(metadataList, futureMetadata);
     }
-
 }
 
-class ProcessFile implements FileVisitor<Path> {
+class KameletFileProcessor extends YamlProcessFile<Step> {
 
     public static final String PROPERTIES = "properties";
-    private List<Step> stepList;
-    private List<CompletableFuture<KameletStep>> futureSteps;
-    Logger log = Logger.getLogger(ProcessFile.class);
+    Logger log = Logger.getLogger(KameletFileProcessor.class);
 
-    ProcessFile(List<Step> stepList, List<CompletableFuture<KameletStep>> futureSteps) {
-        this.stepList = stepList;
-        this.futureSteps = futureSteps;
-    }
-
-    @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-        final var name = dir.toFile().getName();
-        if (name.equalsIgnoreCase("test")
-                || name.equalsIgnoreCase(".git")
-                || name.equalsIgnoreCase(".github")
-                || name.equalsIgnoreCase("docs")
-                || name.equalsIgnoreCase("script")) {
-            return FileVisitResult.SKIP_SUBTREE;
-        }
-
-        log.trace("Visiting '" + name + "'");
-        return FileVisitResult.CONTINUE;
+    KameletFileProcessor(List<Step> stepList, List<CompletableFuture<Step>> futureSteps) {
+        super(stepList, futureSteps);
     }
 
     @Override
@@ -115,35 +49,22 @@ class ProcessFile implements FileVisitor<Path> {
         File f = file.toFile();
 
         if (isYAML(f)) {
-            CompletableFuture<KameletStep> step =
+            CompletableFuture<Step> step =
                     CompletableFuture.supplyAsync(() -> parseFile(f));
 
             step.thenRun(() -> log.trace(f.getName() + " parsed, now generating step."));
             step
                     .thenApply(this::extractSpec)
                     .thenApply(this::extractMetadata)
-                    .thenAccept(stepList::add);
-            futureSteps.add(step);
+                    .thenAccept(metadataList::add);
+            futureMetadata.add(step);
         }
 
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) {
-        return FileVisitResult.CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-        return FileVisitResult.CONTINUE;
-    }
-
-    private boolean isYAML(File file) {
-        return (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) && !file.getName().startsWith(".");
-    }
-
-    private KameletStep parseFile(File f) {
+    public KameletStep parseFile(File f) {
         try (FileReader fr = new FileReader(f)) {
             Yaml yaml = new Yaml(new Constructor(KameletStep.class));
             return yaml.load(fr);
@@ -197,7 +118,8 @@ class ProcessFile implements FileVisitor<Path> {
         return step;
     }
 
-    private KameletStep extractSpec(KameletStep step) {
+    private KameletStep extractSpec(Step s) {
+        KameletStep step = (KameletStep) s;
         if (step == null || step.getSpec() == null) {
             return step;
         }
@@ -245,17 +167,10 @@ class ProcessFile implements FileVisitor<Path> {
     }
 
     private Parameter getParameter(Map<String, Object> definitions, String title, String description, String value) {
-        Parameter p;
-        switch (definitions.get("type").toString()) {
-            case "integer":
-                p = new AbstractParameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
-                break;
-            case "boolean":
-                p = new AbstractParameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
-                break;
-            default:
-                p = new AbstractParameter<>(title, title, description, value, definitions.get("type").toString());
-        }
-        return p;
+        return switch (definitions.get("type").toString()) {
+            case "integer" -> new AbstractParameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
+            case "boolean" -> new AbstractParameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
+            default -> new AbstractParameter<>(title, title, description, value, definitions.get("type").toString());
+        };
     }
 }

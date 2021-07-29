@@ -1,7 +1,7 @@
 package io.zimara.backend.api.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
+import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.model.step.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

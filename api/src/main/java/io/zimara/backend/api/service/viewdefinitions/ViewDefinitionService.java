@@ -1,9 +1,10 @@
 package io.zimara.backend.api.service.viewdefinitions;
 
-import io.zimara.backend.api.service.parser.KameletBindingParserService;
-import io.zimara.backend.api.service.parser.ParserService;
-import io.zimara.backend.model.view.View;
-import io.zimara.backend.model.view.IntegrationView;
+import io.zimara.backend.api.service.parser.StepParserService;
+import io.zimara.backend.api.service.parser.ViewParserService;
+import io.zimara.backend.api.service.parser.step.KameletBindingStepParserService;
+import io.zimara.backend.model.step.Step;
+import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,23 +16,34 @@ import java.util.List;
 @ApplicationScoped
 public class ViewDefinitionService {
 
-    private List<ParserService> parsers = new ArrayList<>();
+    private List<StepParserService<Step>> stepParsers = new ArrayList<>();
+    private List<ViewParserService<ViewDefinition>> viewParsers = new ArrayList<>();
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
 
     @Inject
-    public void setKameletBindingParserService(KameletBindingParserService kameletBindingParserService) {
-        parsers.add(kameletBindingParserService);
+    public void setKameletBindingParserService(KameletBindingStepParserService kameletBindingParserService) {
+        stepParsers.add(kameletBindingParserService);
     }
 
-    public List<View> views(@QueryParam("yaml") String yaml) {
-        List<View> views = new ArrayList<>();
-        for (var parser : parsers) {
-            log.trace("Using " + parser.getIdentifier());
-            if (parser.appliesTo(yaml)) {
-                log.trace("Applying " + parser.getIdentifier());
-                views.add(new IntegrationView(parser.parse(yaml), parser.getIdentifier()));
+    @Inject
+    public void setViewParser(ViewParserService<ViewDefinition> viewParser) {
+        viewParsers.add(viewParser);
+    }
+
+    public List<ViewDefinition> views(@QueryParam("yaml") String yaml) {
+        List<ViewDefinition> viewDefinitions = new ArrayList<>();
+        for (var stepParser : stepParsers) {
+            if (stepParser.appliesTo(yaml)) {
+                log.trace("Applying " + stepParser.getIdentifier());
+                final var steps = stepParser.parse(yaml);
+                for(var viewParser : viewParsers) {
+                    if(viewParser.appliesTo(steps)) {
+                        log.trace("Using " + viewParser.getIdentifier());
+                        viewDefinitions.addAll(viewParser.parse(steps, viewParser.getIdentifier()));
+                    }
+                }
             }
         }
-        return views;
+        return viewDefinitions;
     }
 }

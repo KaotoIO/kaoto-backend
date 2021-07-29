@@ -2,7 +2,8 @@ package io.zimara.backend.api.resource;
 
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import io.zimara.backend.api.metadata.step.catalog.StepCatalog;
+import io.zimara.backend.api.metadata.catalog.StepCatalog;
+import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,20 +20,24 @@ import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 @TestHTTPEndpoint(ViewDefinitionResource.class)
-class ViewDefinitionResourceTest {
+class ViewDefinitionDefinitionResourceTest {
     private static String binding = "";
 
     @Inject
-    StepCatalog catalog;
+    StepCatalog stepCatalog;
+
+    @Inject
+    ViewDefinitionCatalog viewCatalog;
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(ViewDefinitionResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
+        binding = Files.readString(Path.of(ViewDefinitionDefinitionResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
     }
 
     @BeforeEach
     void ensureCatalog() {
-        catalog.waitForWarmUp().join();
+        stepCatalog.waitForWarmUp().join();
+        viewCatalog.waitForWarmUp().join();
     }
 
     @Test
@@ -42,8 +47,8 @@ class ViewDefinitionResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body("rows.size()", is(1),
-                        "[0].name", is("twitter-search-source-binding"),
-                        "[0].type", is("INTEGRATION"),
+                        "[0].name", is("testview"),
+                        "[0].type", is("integrationview"),
                         "[0].steps.size()", is(2));
     }
 

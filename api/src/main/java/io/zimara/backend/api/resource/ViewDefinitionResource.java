@@ -1,7 +1,7 @@
 package io.zimara.backend.api.resource;
 
 import io.zimara.backend.api.service.viewdefinitions.ViewDefinitionService;
-import io.zimara.backend.model.view.View;
+import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
@@ -44,7 +44,7 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
-    public List<View> views(@QueryParam("yaml") String yaml) {
+    public List<ViewDefinition> views(@QueryParam("yaml") String yaml) {
         return viewDefinitionService.views(yaml);
     }
 
