@@ -21,7 +21,8 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
 
     private final CompletableFuture<List<T>> metadata = new CompletableFuture<>();
 
-    public GithubParseCatalog(String url, String tag) {
+
+     protected GithubParseCatalog(String url, String tag) {
         log.trace("Warming up kamelet catalog in " + url);
         metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
     }
@@ -39,7 +40,7 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
             file.setWritable(true, true);
 
             log.trace("Cloning git repository.");
-            Git.cloneRepository()
+            var git = Git.cloneRepository()
                     .setCloneSubmodules(true)
                     .setURI(url)
                     .setDirectory(file)
