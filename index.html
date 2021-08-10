@@ -282,11 +282,12 @@ It may or may not be the same as the ID depending on the type of step.</td>
 
 
 </section>
-<h2 id='view'>View</h2>
+<h2 id='viewdefinition'>ViewDefinition</h2>
 <section class='namespace'>
 <p>Represents a possible view the frontend can use to view data and metadata.</p>
+<p>It may have some constraints on when this view can be used.</p>
 
-<h3 id='view-property'>Properties</h3>
+<h3 id='viewdefinition-property'>Properties</h3>
 
 <section>
 
@@ -298,30 +299,69 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='view-steps'>
+	<tr id='viewdefinition-steps'>
 		<td><code><b>steps</b>
 		<td><code>List<Step></code></td>
-		<td>List of Steps on this integration.</td>
+		<td>List of Steps on this view. Usually used on integrations views.</td>
 	</tr>
-	<tr id='view-name'>
+	<tr id='viewdefinition-name'>
 		<td><code><b>name</b>
 		<td><code>String</code></td>
-		<td>Human understandable name of this view.</td>
+		<td>Human understandable name of this view. Used for labelling, title,...</td>
 	</tr>
-	<tr id='view-type'>
+	<tr id='viewdefinition-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
 		<td>Type of view. This helps the user interface to choose which visualization to use.</td>
 	</tr>
-	<tr id='view-id'>
+	<tr id='viewdefinition-id'>
 		<td><code><b>id</b>
 		<td><code>String</code></td>
 		<td>Unique identifier for this view.</td>
 	</tr>
-	<tr id='view-properties'>
+	<tr id='viewdefinition-properties'>
 		<td><code><b>properties</b>
 		<td><code>Map<String, String></code></td>
-		<td>Properties useful for the user interface to visualize this view definition.</td>
+		<td>Properties useful for the user interface to visualize this view definition.
+<p>List of constraints on when to use this view. All mandatory constraints must be fulfilled.
+If there are optional constraints, at least one of them should be fulfilled.</p></td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='viewdefinitionconstraint'>ViewDefinitionConstraint</h2>
+<section class='namespace'>
+<p>Represents a constraint on when to use a view definition.</p>
+
+<h3 id='viewdefinitionconstraint-property'>Properties</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitionconstraint-mandatory'>
+		<td><code><b>mandatory</b>
+		<td><code>boolean</code></td>
+		<td>Is this a mandatory constraint or an optional?</td>
+	</tr>
+	<tr id='viewdefinitionconstraint-operation'>
+		<td><code><b>operation</b>
+		<td><code>ConstraintOperation</code></td>
+		<td>Operation defining this constraint (contains, greater than,...)</td>
+	</tr>
+	<tr id='viewdefinitionconstraint-parameter'>
+		<td><code><b>parameter</b>
+		<td><code>String</code></td>
+		<td>Parameter of the constraint (number of steps, identifier of step,...)</td>
 	</tr>
 </tbody></table>
 </section>
