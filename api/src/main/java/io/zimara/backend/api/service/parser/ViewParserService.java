@@ -11,6 +11,6 @@ public interface ViewParserService<T extends ViewDefinition> {
 
     String getIdentifier();
 
-    boolean appliesTo(List<Step> yaml);
+    boolean appliesTo(List<Step> steps, ViewDefinition viewDefinition);
 
 }

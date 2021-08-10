@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 🐱class View
+ * 🐱class ViewDefinition
  * Represents a possible view the frontend can use to view data and metadata.
+ *
+ * It may have some constraints on when this view can be used.
  */
 public class ViewDefinition implements Metadata {
 
@@ -26,13 +28,13 @@ public class ViewDefinition implements Metadata {
     /*
      * 🐱property steps: List<Step>
      *
-     * List of Steps on this integration.
+     * List of Steps on this view. Usually used on integrations views.
      */
     private List<Step> steps = null;
     /*
      * 🐱property name: String
      *
-     * Human understandable name of this view.
+     * Human understandable name of this view. Used for labelling, title,...
      */
     private String name = null;
 
@@ -42,6 +44,7 @@ public class ViewDefinition implements Metadata {
      * Type of view. This helps the user interface to choose which visualization to use.
      */
     private String type = null;
+
     /*
      * 🐱property id: String
      *
@@ -55,6 +58,14 @@ public class ViewDefinition implements Metadata {
      * Properties useful for the user interface to visualize this view definition.
      */
     private Map<String, String> properties = null;
+
+    /*
+     * 🐱property properties: List<ViewDefinitionConstraint>
+     *
+     * List of constraints on when to use this view. All mandatory constraints must be fulfilled.
+     * If there are optional constraints, at least one of them should be fulfilled.
+     */
+    private List<ViewDefinitionConstraint> constraints = null;
 
     @Override
     public String getType() {
@@ -97,6 +108,14 @@ public class ViewDefinition implements Metadata {
 
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    public List<ViewDefinitionConstraint> getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(List<ViewDefinitionConstraint> constraints) {
+        this.constraints = constraints;
     }
 
     @Override

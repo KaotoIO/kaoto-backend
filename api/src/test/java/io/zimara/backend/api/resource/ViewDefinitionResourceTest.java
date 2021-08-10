@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 @TestHTTPEndpoint(ViewDefinitionResource.class)
-class ViewDefinitionDefinitionResourceTest {
+class ViewDefinitionResourceTest {
     private static String binding = "";
 
     @Inject
@@ -31,7 +31,7 @@ class ViewDefinitionDefinitionResourceTest {
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(ViewDefinitionDefinitionResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
+        binding = Files.readString(Path.of(ViewDefinitionResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
     }
 
     @BeforeEach
@@ -47,7 +47,7 @@ class ViewDefinitionDefinitionResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body("rows.size()", is(1),
-                        "[0].name", is("testview"),
+                        "[0].name", is("Kamelet Binding"),
                         "[0].type", is("integrationview"),
                         "[0].steps.size()", is(2));
     }

@@ -36,12 +36,11 @@ public class ViewDefinitionService {
             if (stepParser.appliesTo(yaml)) {
                 log.trace("Applying " + stepParser.getIdentifier());
                 final var steps = stepParser.parse(yaml);
-                for(var viewParser : viewParsers) {
-                    if(viewParser.appliesTo(steps)) {
-                        log.trace("Using " + viewParser.getIdentifier());
-                        viewDefinitions.addAll(viewParser.parse(steps, viewParser.getIdentifier()));
-                    }
+                for (var viewParser : viewParsers) {
+                    log.trace("Using " + viewParser.getIdentifier());
+                    viewDefinitions.addAll(viewParser.parse(steps, viewParser.getIdentifier()));
                 }
+
             }
         }
         return viewDefinitions;

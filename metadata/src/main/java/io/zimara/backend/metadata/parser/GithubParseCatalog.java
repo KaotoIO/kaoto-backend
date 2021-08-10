@@ -57,7 +57,7 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
             if(file != null) {
                 Files.walkFileTree(file.getAbsoluteFile().toPath(), getFileVisitor(metadataList, futureMetadatas));
             }
-            
+
             CompletableFuture.allOf(futureMetadatas.toArray(new CompletableFuture[0])).join();
         } catch (IOException | NullPointerException e) {
             log.error("Error trying to parse catalog.", e);
