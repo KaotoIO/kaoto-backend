@@ -2,9 +2,65 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
-"CatalogCollection" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>CatalogCollection</B></TD></TR>
+"Metadata" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Metadata</B></TD></TR>
+	<TR><TD><I>Properties</I><BR/>
+ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"Parameter" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Parameter</B></TD></TR>
+	<TR><TD><I>Properties</I><BR/>
+label:String<BR align="left" />id:String<BR align="left" />type:String<BR align="left" />default:String<BR align="left" />description:String<BR align="left" />value:String<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"Step" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Step</B></TD></TR>
+	<TR><TD><I>Properties</I><BR/>
+subtype:String<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"KameletStep" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletStep</B></TD></TR>
 	
+</TABLE>>]
+
+	"KameletStep" -> "Step"
+
+"ViewDefinition" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinition</B></TD></TR>
+	<TR><TD><I>Properties</I><BR/>
+steps:List&lt;Step&gt;<BR align="left" />name:String<BR align="left" />type:String<BR align="left" />id:String<BR align="left" />properties:Map&lt;String, String&gt;<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"ViewDefinitionConstraint" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionConstraint</B></TD></TR>
+	<TR><TD><I>Properties</I><BR/>
+mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left" />parameter:String<BR align="left" />
+
+</TD></TR>
+
+
 </TABLE>>]
 
 
