@@ -1,5 +1,9 @@
 package io.zimara.backend.model;
 
+/**
+ * 🐱class Metadata
+ * Common class for all metadata.
+ */
 public interface Metadata {
     /*
      * 🐱property ID: String
