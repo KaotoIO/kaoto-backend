@@ -53,13 +53,14 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
         }
 
         try {
-            log.trace("Parsing all kamelet files in the folder.");
+            log.trace("Parsing all files in the folder.");
             if(file != null) {
                 Files.walkFileTree(file.getAbsoluteFile().toPath(), getFileVisitor(metadataList, futureMetadatas));
             }
+            
             CompletableFuture.allOf(futureMetadatas.toArray(new CompletableFuture[0])).join();
         } catch (IOException | NullPointerException e) {
-            log.error("Error trying to parse kamelet catalog.", e);
+            log.error("Error trying to parse catalog.", e);
         }
 
         return metadataList;
