@@ -46,7 +46,7 @@ class ViewDefinitionResourceTest {
                 .when().queryParam("yaml", binding).contentType("text/yaml").post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .body("rows.size()", is(1),
+                .body("rows.size()", is(2),
                         "[0].name", is("Kamelet Binding"),
                         "[0].type", is("integrationview"),
                         "[0].steps.size()", is(2));
