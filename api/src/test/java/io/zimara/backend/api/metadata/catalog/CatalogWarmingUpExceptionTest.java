@@ -9,17 +9,17 @@ import javax.inject.Inject;
 @QuarkusTest
 class CatalogWarmingUpExceptionTest {
     @Inject
-    ViewDefinitionCatalog viewCatalog;
+    StepCatalog catalog;
 
     @Test
     void warmUp() {
         Assertions.assertThrows(CatalogWarmingUpException.class, () -> {
-            viewCatalog.getReadOnlyCatalog();
+            catalog.getReadOnlyCatalog();
         });
 
-        viewCatalog.waitForWarmUp().join();
+        catalog.waitForWarmUp().join();
 
-        Assertions.assertNotNull(viewCatalog.getReadOnlyCatalog());
+        Assertions.assertNotNull(catalog.getReadOnlyCatalog());
     }
 
 }

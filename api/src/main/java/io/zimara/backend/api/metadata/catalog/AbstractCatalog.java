@@ -29,10 +29,6 @@ public abstract class AbstractCatalog<T extends Metadata> {
         } else throw new CatalogWarmingUpException("Catalog still warming up.");
     }
 
-    public Boolean isWarmedUp() {
-        return warmedUp;
-    }
-
     public CompletableFuture<Void> waitForWarmUp() {
         return waitingForWarmUp;
     }
