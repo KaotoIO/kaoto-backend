@@ -134,6 +134,44 @@ connector with the same ID on this collection of catalogs.</p>
 
 
 </section>
+<h2 id='metadata'>Metadata</h2>
+<section class='namespace'>
+<p>Common class for all metadata.</p>
+
+<h3 id='metadata-property'>Properties</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='metadata-id'>
+		<td><code><b>ID</b>
+		<td><code>String</code></td>
+		<td>Unique identifier for this step in our whole Zimara environment</td>
+	</tr>
+	<tr id='metadata-name'>
+		<td><code><b>name</b>
+		<td><code>String</code></td>
+		<td>This represents the first part of the camel connection string.
+It may or may not be the same as the ID depending on the type of step.</td>
+	</tr>
+	<tr id='metadata-type'>
+		<td><code><b>type</b>
+		<td><code>String</code></td>
+		<td>Type of step: transformation, connector</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 <h2 id='parameter'>Parameter</h2>
 <section class='namespace'>
 <p>Represents a parameter on a form.</p>
@@ -202,52 +240,10 @@ connector with the same ID on this collection of catalogs.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='step-id'>
-		<td><code><b>ID</b>
-		<td><code>String</code></td>
-		<td>Unique identifier for this step in our whole Zimara environment</td>
-	</tr>
-	<tr id='step-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of step: transformation, connector</td>
-	</tr>
 	<tr id='step-subtype'>
 		<td><code><b>subtype</b>
 		<td><code>String</code></td>
 		<td>If we need a subtype like kamelet connector, camel connector,...</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
-<h2 id='view'>View</h2>
-<section class='namespace'>
-<p>Represents a possible view the frontend can use to view data and metadata.</p>
-
-<h3 id='view-property'>Properties</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='view-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of the view. It could be an integration view, a connector view,...</td>
-	</tr>
-	<tr id='view-name'>
-		<td><code><b>name</b>
-		<td><code>String</code></td>
-		<td>Human name for the view</td>
 	</tr>
 </tbody></table>
 </section>
@@ -274,16 +270,6 @@ connector with the same ID on this collection of catalogs.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='kameletstep-id'>
-		<td><code><b>ID</b>
-		<td><code>String</code></td>
-		<td>Unique identifier for this step in our whole Zimara environment</td>
-	</tr>
-	<tr id='kameletstep-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of step: transformation, connector</td>
-	</tr>
 	<tr id='kameletstep-subtype'>
 		<td><code><b>subtype</b>
 		<td><code>String</code></td>
@@ -296,11 +282,11 @@ connector with the same ID on this collection of catalogs.</p>
 
 
 </section>
-<h2 id='integrationview'>IntegrationView</h2>
+<h2 id='view'>View</h2>
 <section class='namespace'>
-<p>Represents an integration view, composed by steps.</p>
+<p>Represents a possible view the frontend can use to view data and metadata.</p>
 
-<h3 id='integrationview-property'>Properties</h3>
+<h3 id='view-property'>Properties</h3>
 
 <section>
 
@@ -312,40 +298,34 @@ connector with the same ID on this collection of catalogs.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='integrationview-steps'>
+	<tr id='view-steps'>
 		<td><code><b>steps</b>
 		<td><code>List<Step></code></td>
-		<td>List of Steps on this integration</td>
+		<td>List of Steps on this integration.</td>
 	</tr>
-</tbody></table>
-</section>
-
-<details>
-	<summary>Properties inherited from <a href='#view'>View</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='integrationview-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of the view. It could be an integration view, a connector view,...</td>
-	</tr>
-	<tr id='integrationview-name'>
+	<tr id='view-name'>
 		<td><code><b>name</b>
 		<td><code>String</code></td>
-		<td>Human name for the view</td>
+		<td>Human understandable name of this view.</td>
+	</tr>
+	<tr id='view-type'>
+		<td><code><b>type</b>
+		<td><code>String</code></td>
+		<td>Type of view. This helps the user interface to choose which visualization to use.</td>
+	</tr>
+	<tr id='view-id'>
+		<td><code><b>id</b>
+		<td><code>String</code></td>
+		<td>Unique identifier for this view.</td>
+	</tr>
+	<tr id='view-properties'>
+		<td><code><b>properties</b>
+		<td><code>Map<String, String></code></td>
+		<td>Properties useful for the user interface to visualize this view definition.</td>
 	</tr>
 </tbody></table>
 </section>
-</div>
-</details>
+
 
 
 </section>
