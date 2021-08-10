@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ViewParserService<T extends ViewDefinition> {
 
-    List<T> parse(List<Step> steps, String id);
+    List<T> parse(List<Step> steps);
 
     String getIdentifier();
 

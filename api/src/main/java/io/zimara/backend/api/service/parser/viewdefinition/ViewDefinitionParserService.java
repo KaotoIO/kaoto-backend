@@ -18,7 +18,7 @@ public class ViewDefinitionParserService implements ViewParserService<ViewDefini
     ViewDefinitionCatalog catalog;
 
     @Override
-    public List<ViewDefinition> parse(List<Step> steps, String id) {
+    public List<ViewDefinition> parse(List<Step> steps) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
 
         for (var v : catalog.getReadOnlyCatalog().getAll()) {
