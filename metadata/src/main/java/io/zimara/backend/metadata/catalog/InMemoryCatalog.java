@@ -14,6 +14,14 @@ import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * 🐱class InMemoryCatalog
+ * 🐱inherits MetadataCatalog
+ *
+ * Basic catalog implementation useful for testing and small instances.
+ *
+ */
 public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     private Map<String, T> metadataCatalog = new HashMap<>();

@@ -12,6 +12,14 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ *
+ * 🐱class YamlProcessFile
+ * 🐱relationship dependsOn GithubParseCatalog
+ *
+ * Helper class to walk around YAML files to parse Metadata objects.
+ *
+ */
 public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor<Path> {
 
     protected List<T> metadataList;

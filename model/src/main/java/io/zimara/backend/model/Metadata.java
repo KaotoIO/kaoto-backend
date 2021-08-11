@@ -2,6 +2,8 @@ package io.zimara.backend.model;
 
 /**
  * 🐱class Metadata
+ * 🐱aka List[Metadata]
+ *
  * Common class for all metadata. Used to simplify the implementation of catalogs.
  */
 public interface Metadata {

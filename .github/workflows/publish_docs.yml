@@ -21,11 +21,9 @@ jobs:
           node-version: "14"
       - run: npm install
       - run: mkdir docs
+      - run: sudo apt-get install xdot
       - run: npm run docs
       - run: mv docs/api-reference.html docs/index.html
-      - run: sudo apt-get install xdot
-      - run: dot -Tsvg docs/class-diagram-api.dot -o docs/class-diagram-api.svg
-      - run: dot -Tsvg docs/class-diagram-model.dot -o docs/class-diagram-model.svg
       - name: 🚀 deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

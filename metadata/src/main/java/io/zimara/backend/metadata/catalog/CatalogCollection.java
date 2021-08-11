@@ -11,8 +11,10 @@ import java.util.List;
 /**
  *
  * 🐱class CatalogCollection
+ * 🐱inherits MetadataCatalog
  *
- * Joins a list of catalogs.
+ *
+ * Joins a list of metadata catalogs.
  *
  * When those catalogs are updated, the content of this collection changes too.
  * As each catalog have their own ID constraints, there may be more than one

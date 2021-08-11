@@ -21,6 +21,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ *
+ * 🐱class KameletParseCatalog
+ * 🐱inherits GithubParseCatalog
+ * 🐱relationship dependsOn KameletStep
+ *
+ * Reads and parses a kamelet catalog. Extracts all the kamelet definitions it can find and generate a kamelet step for each one.
+ *
+ */
 public class KameletParseCatalog extends GithubParseCatalog<Step> {
 
     public KameletParseCatalog(String url, String tag) {

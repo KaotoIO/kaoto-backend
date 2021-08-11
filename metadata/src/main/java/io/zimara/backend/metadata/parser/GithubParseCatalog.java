@@ -15,6 +15,15 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ *
+ * 🐱class GithubParseCatalog
+ * 🐱inherits ParseCatalog
+ *
+ * Abstract implementation that downloads a git repository and walks through all the files
+ * parsing them and preparing elements to add to a catalog.
+ *
+ */
 public abstract class GithubParseCatalog<T extends Metadata> implements ParseCatalog<T> {
 
     Logger log = Logger.getLogger(GithubParseCatalog.class);
@@ -72,6 +81,16 @@ public abstract class GithubParseCatalog<T extends Metadata> implements ParseCat
         return metadata;
     }
 
+    /*
+     * 🐱method getFileVisitor : YamlProcessFile
+     * 🐱param metadataList: List[Metadata]
+     * 🐱param futureMetadata: List[CompletableFuture[]]
+     *
+     *
+     * Returns the helper class based on YamlProcessFile to process the files found on the repository.
+     * This needs to be implemented.
+     *
+     */
     protected abstract YamlProcessFile<T> getFileVisitor(List<T> metadataList, List<CompletableFuture<T>> futureMetadata);
 
 }
