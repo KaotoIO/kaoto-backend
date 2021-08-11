@@ -48,6 +48,11 @@ group:String<BR align="left" />title:String<BR align="left" />description:String
 
 	"KameletStep" -> "Step"
 
+		"Parameter" -> "KameletStep" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..n"
+		
+		]
 "ViewDefinition" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinition</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
@@ -60,6 +65,11 @@ steps:List[Step]<BR align="left" />properties:Map[String, String]<BR align="left
 
 	"ViewDefinition" -> "Metadata"
 
+		"ViewDefinitionConstraint" -> "ViewDefinition" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..n"
+		
+		]
 "ViewDefinitionConstraint" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionConstraint</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
