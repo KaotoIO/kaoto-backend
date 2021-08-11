@@ -1,15 +1,8 @@
 package io.zimara.backend.model.view;
 
 /**
- * 🐱miniclass ConstraintOperation (ViewDefinition)
+ * 🐱miniclass ConstraintOperation (ViewDefinitionConstraint)
  *
- * Type of constraint operation.
- *  CONTAINS_STEP_IDENTIFIER
- *  CONTAINS_STEP_NAME
- *  CONTAINS_STEP_TYPE
- *  SIZE_GREATER_THAN
- *  SIZE_SMALLER_THAN
- *  SIZE_EQUALS
  */
 public enum ConstraintOperation {
     /**

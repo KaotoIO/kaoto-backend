@@ -1,6 +1,6 @@
 package io.zimara.backend.model.step.kamelet;
 
-import io.zimara.backend.model.Parameter;
+import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
 
 import java.util.List;

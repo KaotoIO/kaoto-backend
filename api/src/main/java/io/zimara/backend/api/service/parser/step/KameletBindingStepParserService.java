@@ -2,7 +2,7 @@ package io.zimara.backend.api.service.parser.step;
 
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.api.service.parser.StepParserService;
-import io.zimara.backend.model.Parameter;
+import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;

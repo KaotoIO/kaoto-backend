@@ -2,8 +2,7 @@ package io.zimara.backend.metadata.parser.step;
 
 import io.zimara.backend.metadata.parser.GithubParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
-import io.zimara.backend.model.Parameter;
-import io.zimara.backend.model.parameter.AbstractParameter;
+import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
@@ -168,9 +167,9 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
 
     private Parameter getParameter(Map<String, Object> definitions, String title, String description, String value) {
         return switch (definitions.get("type").toString()) {
-            case "integer" -> new AbstractParameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
-            case "boolean" -> new AbstractParameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
-            default -> new AbstractParameter<>(title, title, description, value, definitions.get("type").toString());
+            case "integer" -> new Parameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
+            case "boolean" -> new Parameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
+            default -> new Parameter<>(title, title, description, value, definitions.get("type").toString());
         };
     }
 }

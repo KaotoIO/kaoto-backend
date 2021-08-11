@@ -9,10 +9,11 @@ import java.util.Map;
 /**
  * 🐱class ViewDefinition
  * 🐱inherits Metadata
+ * 🐱compositionOf ViewDefinitionConstraint
  * 🐱dependsOn ViewDefinitionConstraint
  * 🐱dependsOn Step
  * 🐱aka List[ViewDefinition]
- * Represents a possible view the frontend can use to view data and metadata.
+ * Represents a possible view the frontend can use to show data and metadata.
  *
  * It may have some constraints on when this view can be used.
  */

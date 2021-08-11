@@ -1,8 +1,8 @@
 package io.zimara.backend.model.view;
 
 /**
- * 🐱miniclass ViewDefinitionConstraint (ViewDefinition)
- * 🐱associated ConstraintOperation
+ * 🐱class ViewDefinitionConstraint
+ * 🐱compositionOf ConstraintOperation
  * 🐱aka List[ViewDefinitionConstraint]
  *
  * Represents a constraint on when to use a view definition.
