@@ -79,30 +79,154 @@
     <p>(click to enlarge)</p>
 
 
-	<h2 id='stepresource'>StepResource</h2>
+	<h2 id='abstractcatalog'>AbstractCatalog</h2>
+<section class='namespace'>
+<p>Abstract implementation of an ApplicationScoped catalog. This will be the base of the beans
+that can be injected in the different services and resources.</p>
+
+<h3 id='abstractcatalog-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='abstractcatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
+	</tr>
+	<tr id='abstractcatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean
+<p>This may be autowired by jandex?</p></td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='stepcatalog'>StepCatalog</h2>
+<section class='namespace'>
+<p>This is a singleton that will contain all catalogs with steps.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepcatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
+	</tr>
+	<tr id='stepcatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean
+<p>This may be autowired by jandex?</p></td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
+
+</section>
+<h2 id='viewdefinitioncatalog'>ViewDefinitionCatalog</h2>
+<section class='namespace'>
+<p>This is a singleton that will contain all catalogs with viewdefinitions.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitioncatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
+	</tr>
+	<tr id='viewdefinitioncatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean
+<p>This may be autowired by jandex?</p></td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
+
+</section>
+<h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
 <p>This endpoint will return steps based on the parameters.</p>
+
+<h3 id='stepresource-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepresource-stepbyid'>
+		<td><code><b>stepById</b>(<nobr>&lt;String&gt; <i>id</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>Step</a></code></td>
+		<td>Returns the first step identified by the parameter.</td>
+	</tr>
+	<tr id='stepresource-stepsbyname'>
+		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps identified by the name.</td>
+	</tr>
+	<tr id='stepresource-allsteps'>
+		<td><code><b>allSteps</b>()</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps.</td>
+	</tr>
+</tbody></table>
+</section>
+
 
 
 </section>
 <h2 id='viewdefinitionresource'>ViewDefinitionResource</h2>
 <section class='namespace'>
-<p>This endpoint will return a list of views based on the parameters.
-&lt;p&gt;</p>
-
-<h3 id='viewdefinitionresource-example'>Usage example</h3>
-
-<section>
-
-
-
-<p>&lt;p&gt;</p>
-<pre><code>YAML
-</code></pre>
-
-
-</section>
-
+<p>This endpoint will return a list of views based on the parameters.</p>
 
 <h3 id='viewdefinitionresource-method'>Methods</h3>
 
@@ -120,6 +244,133 @@
 		<td><code><b>views:</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td>Based on the YAML provided, offer a list of possible views</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='stepparserservice'>StepParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all step parsers.</p>
+
+<h3 id='stepparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Based on the YAML provided, offer a list of steps defined on it, if any</td>
+	</tr>
+	<tr id='stepparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if this parser knows how to parse the provided string</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='viewparserservice'>ViewParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all viewDefinition parsers.</p>
+
+<h3 id='viewparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
+	</tr>
+	<tr id='viewparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the viewDefinition applies to the steps</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='stepservice'>StepService</h2>
+<section class='namespace'>
+
+<h3 id='stepservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepservice-stepbyid'>
+		<td><code><b>stepById</b>(<nobr>&lt;String&gt; <i>id</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>Step</a></code></td>
+		<td>Returns the first step identified by the parameter.</td>
+	</tr>
+	<tr id='stepservice-stepsbyname'>
+		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps identified by the name.</td>
+	</tr>
+	<tr id='stepservice-allsteps'>
+		<td><code><b>allSteps</b>()</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='viewdefinitionservice'>ViewDefinitionService</h2>
+<section class='namespace'>
+<p>This endpoint will return a list of views based on the parameters.</p>
+
+<h3 id='viewdefinitionservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitionservice-views'>
+		<td><code><b>views</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>Based on the provided yaml, offer a list of compatible ViewDefinitions.</td>
 	</tr>
 </tbody></table>
 </section>

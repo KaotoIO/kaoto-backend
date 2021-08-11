@@ -2,19 +2,76 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
-"StepResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>StepResource</B></TD></TR>
-	
-</TABLE>>]
-
-
-"ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
-	<TR><TD><I>Usage example</I><BR/>
+"AbstractCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>AbstractCatalog</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+waitForWarmUp():CompletableFuture
+<BR align="left" />
+loadParsers():List[ParseCatalog]
+<BR align="left" />
 
 </TD></TR>
 
-<TR><TD><I>Methods</I><BR/>
+
+</TABLE>>]
+
+
+		"AbstractCatalog" -> "MetadataCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"StepCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"StepCatalog" -> "AbstractCatalog"
+
+		"StepCatalog" -> "Step" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"ViewDefinitionCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"ViewDefinitionCatalog" -> "AbstractCatalog"
+
+		"ViewDefinitionCatalog" -> "ViewDefinition" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"StepResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+stepById(&lt;String&gt; id):Step
+<BR align="left" />
+stepsByName(&lt;String&gt; name):List[Step]
+<BR align="left" />
+allSteps():List[Step]
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"StepService" -> "StepResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
 views:(&lt;String&gt; yaml):
 <BR align="left" />
 
@@ -24,6 +81,96 @@ views:(&lt;String&gt; yaml):
 </TABLE>>]
 
 
+		"ViewDefinitionService" -> "ViewDefinitionResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"StepParserService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepParserService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+parse(&lt;String&gt; yaml):List[Step]
+<BR align="left" />
+appliesTo(&lt;String&gt; yaml):boolean
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"StepParserService" -> "Step" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"ViewParserService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewParserService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
+<BR align="left" />
+appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"ViewParserService" -> "ViewDefinition" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"StepService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+stepById(&lt;String&gt; id):Step
+<BR align="left" />
+stepsByName(&lt;String&gt; name):List[Step]
+<BR align="left" />
+allSteps():List[Step]
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"StepCatalog" -> "StepService" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"ViewDefinitionService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+views(&lt;String&gt; yaml):List[ViewDefinition]
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"ViewDefinitionService" -> "StepParserService" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+		"ViewDefinitionService" -> "ViewParserService" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
 "MetadataCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>MetadataCatalog</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
