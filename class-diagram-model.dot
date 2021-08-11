@@ -16,7 +16,7 @@ ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="
 "Parameter" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Parameter</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-label:String<BR align="left" />id:String<BR align="left" />type:String<BR align="left" />default:String<BR align="left" />description:String<BR align="left" />value:String<BR align="left" />
+description:String<BR align="left" />label:String<BR align="left" />id:String<BR align="left" />value:String<BR align="left" />default:String<BR align="left" />type:String<BR align="left" />
 
 </TD></TR>
 
@@ -34,10 +34,16 @@ subtype:String<BR align="left" />
 
 </TABLE>>]
 
+	"Step" -> "Metadata"
 
 "KameletStep" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>KameletStep</B></TD></TR>
-	
+	<TR><TD><I>Properties</I><BR/>
+group:String<BR align="left" />title:String<BR align="left" />description:String<BR align="left" />kameletType:String<BR align="left" />apiVersion:String<BR align="left" />kind:String<BR align="left" />spec:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />
+
+</TD></TR>
+
+
 </TABLE>>]
 
 	"KameletStep" -> "Step"
@@ -45,13 +51,14 @@ subtype:String<BR align="left" />
 "ViewDefinition" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinition</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-steps:List&lt;Step&gt;<BR align="left" />name:String<BR align="left" />type:String<BR align="left" />id:String<BR align="left" />properties:Map&lt;String, String&gt;<BR align="left" />
+steps:List[Step]<BR align="left" />properties:Map[String, String]<BR align="left" />constraints:List[ViewDefinitionConstraint]<BR align="left" />
 
 </TD></TR>
 
 
 </TABLE>>]
 
+	"ViewDefinition" -> "Metadata"
 
 "ViewDefinitionConstraint" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionConstraint</B></TD></TR>

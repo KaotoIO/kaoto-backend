@@ -138,7 +138,7 @@ connector with the same ID on this collection of catalogs.</p>
 </section>
 <h2 id='metadata'>Metadata</h2>
 <section class='namespace'>
-<p>Common class for all metadata.</p>
+<p>Common class for all metadata. Used to simplify the implementation of catalogs.</p>
 
 <h3 id='metadata-property'>Properties</h3>
 
@@ -176,7 +176,7 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </section>
 <h2 id='parameter'>Parameter</h2>
 <section class='namespace'>
-<p>Represents a parameter on a form.</p>
+<p>Represents a parameter of a step in an integration. These parameters could be used on the UI to configure the step.</p>
 
 <h3 id='parameter-property'>Properties</h3>
 
@@ -190,6 +190,11 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
+	<tr id='parameter-description'>
+		<td><code><b>description</b>
+		<td><code>String</code></td>
+		<td>Helping text describing the parameter</td>
+	</tr>
 	<tr id='parameter-label'>
 		<td><code><b>label</b>
 		<td><code>String</code></td>
@@ -200,25 +205,20 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<td><code>String</code></td>
 		<td>Identifier of the parameter</td>
 	</tr>
-	<tr id='parameter-type'>
-		<td><code><b>type</b>
+	<tr id='parameter-value'>
+		<td><code><b>value</b>
 		<td><code>String</code></td>
-		<td>Type of parameter: text, integer, float, boolean,...</td>
+		<td>Actual value of this parameter. Used when describing a configured element.</td>
 	</tr>
 	<tr id='parameter-default'>
 		<td><code><b>default</b>
 		<td><code>String</code></td>
 		<td>Default value, if there is any</td>
 	</tr>
-	<tr id='parameter-description'>
-		<td><code><b>description</b>
+	<tr id='parameter-type'>
+		<td><code><b>type</b>
 		<td><code>String</code></td>
-		<td>Helping text describing the parameter</td>
-	</tr>
-	<tr id='parameter-value'>
-		<td><code><b>value</b>
-		<td><code>String</code></td>
-		<td>Actual value of this parameter. Used when describing a configured element.</td>
+		<td>Type of parameter: text, integer, float, boolean,...</td>
 	</tr>
 </tbody></table>
 </section>
@@ -228,7 +228,7 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </section>
 <h2 id='step'>Step</h2>
 <section class='namespace'>
-<p>Represents a step inside an integration</p>
+<p>Represents a step inside an integration.</p>
 
 <h3 id='step-property'>Properties</h3>
 
@@ -245,11 +245,43 @@ It may or may not be the same as the ID depending on the type of step.</td>
 	<tr id='step-subtype'>
 		<td><code><b>subtype</b>
 		<td><code>String</code></td>
-		<td>If we need a subtype like kamelet connector, camel connector,...</td>
+		<td>Specifies the subtype (kamelet connector, camel connector,...)</td>
 	</tr>
 </tbody></table>
 </section>
 
+<details>
+	<summary>Properties inherited from <a href='#metadata'>Metadata</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='step-id'>
+		<td><code><b>ID</b>
+		<td><code>String</code></td>
+		<td>Unique identifier for this step in our whole Zimara environment</td>
+	</tr>
+	<tr id='step-name'>
+		<td><code><b>name</b>
+		<td><code>String</code></td>
+		<td>This represents the first part of the camel connection string.
+It may or may not be the same as the ID depending on the type of step.</td>
+	</tr>
+	<tr id='step-type'>
+		<td><code><b>type</b>
+		<td><code>String</code></td>
+		<td>Type of step: transformation, connector</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
 
 
 </section>
@@ -257,8 +289,65 @@ It may or may not be the same as the ID depending on the type of step.</td>
 <section class='namespace'>
 <p>Represents a Kamelet step inside an integration</p>
 
-<h3 id=''>Properties</h3>
+<h3 id='kameletstep-property'>Properties</h3>
 
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='kameletstep-group'>
+		<td><code><b>group</b>
+		<td><code>String</code></td>
+		<td>Kamelet group that identifies and classifies inside the kamelet world.</td>
+	</tr>
+	<tr id='kameletstep-title'>
+		<td><code><b>title</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-description'>
+		<td><code><b>description</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-kamelettype'>
+		<td><code><b>kameletType</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-apiversion'>
+		<td><code><b>apiVersion</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-kind'>
+		<td><code><b>kind</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-spec'>
+		<td><code><b>spec</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-parameters'>
+		<td><code><b>parameters</b>
+		<td><code><a href='#parameter'>List[Parameter]</a></code></td>
+		<td></td>
+	</tr>
+	<tr id='kameletstep-icon'>
+		<td><code><b>icon</b>
+		<td><code>String</code></td>
+		<td></td>
+	</tr>
+</tbody></table>
+</section>
 
 <details>
 	<summary>Properties inherited from <a href='#step'>Step</a></summary>
@@ -275,7 +364,39 @@ It may or may not be the same as the ID depending on the type of step.</td>
 	<tr id='kameletstep-subtype'>
 		<td><code><b>subtype</b>
 		<td><code>String</code></td>
-		<td>If we need a subtype like kamelet connector, camel connector,...</td>
+		<td>Specifies the subtype (kamelet connector, camel connector,...)</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+<details>
+	<summary>Properties inherited from <a href='#metadata'>Metadata</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='kameletstep-id'>
+		<td><code><b>ID</b>
+		<td><code>String</code></td>
+		<td>Unique identifier for this step in our whole Zimara environment</td>
+	</tr>
+	<tr id='kameletstep-name'>
+		<td><code><b>name</b>
+		<td><code>String</code></td>
+		<td>This represents the first part of the camel connection string.
+It may or may not be the same as the ID depending on the type of step.</td>
+	</tr>
+	<tr id='kameletstep-type'>
+		<td><code><b>type</b>
+		<td><code>String</code></td>
+		<td>Type of step: transformation, connector</td>
 	</tr>
 </tbody></table>
 </section>
@@ -286,7 +407,7 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </section>
 <h2 id='viewdefinition'>ViewDefinition</h2>
 <section class='namespace'>
-<p>Represents a possible view the frontend can use to view data and metadata.</p>
+<p>Represents a possible view the frontend can use to show data and metadata.</p>
 <p>It may have some constraints on when this view can be used.</p>
 
 <h3 id='viewdefinition-property'>Properties</h3>
@@ -303,34 +424,55 @@ It may or may not be the same as the ID depending on the type of step.</td>
 	</thead><tbody>
 	<tr id='viewdefinition-steps'>
 		<td><code><b>steps</b>
-		<td><code>List<Step></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
 		<td>List of Steps on this view. Usually used on integrations views.</td>
-	</tr>
-	<tr id='viewdefinition-name'>
-		<td><code><b>name</b>
-		<td><code>String</code></td>
-		<td>Human understandable name of this view. Used for labelling, title,...</td>
-	</tr>
-	<tr id='viewdefinition-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of view. This helps the user interface to choose which visualization to use.</td>
-	</tr>
-	<tr id='viewdefinition-id'>
-		<td><code><b>id</b>
-		<td><code>String</code></td>
-		<td>Unique identifier for this view.</td>
 	</tr>
 	<tr id='viewdefinition-properties'>
 		<td><code><b>properties</b>
-		<td><code>Map<String, String></code></td>
-		<td>Properties useful for the user interface to visualize this view definition.
-<p>List of constraints on when to use this view. All mandatory constraints must be fulfilled.
-If there are optional constraints, at least one of them should be fulfilled.</p></td>
+		<td><code>Map[String, String]</code></td>
+		<td>Properties useful for the user interface to visualize this view definition.</td>
+	</tr>
+	<tr id='viewdefinition-constraints'>
+		<td><code><b>constraints</b>
+		<td><code><a href='#viewdefinitionconstraint'>List[ViewDefinitionConstraint]</a></code></td>
+		<td>List of constraints on when to use this view. All mandatory constraints must be fulfilled.
+If there are optional constraints, at least one of them should be fulfilled.</td>
 	</tr>
 </tbody></table>
 </section>
 
+<details>
+	<summary>Properties inherited from <a href='#metadata'>Metadata</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinition-id'>
+		<td><code><b>ID</b>
+		<td><code>String</code></td>
+		<td>Unique identifier for this step in our whole Zimara environment</td>
+	</tr>
+	<tr id='viewdefinition-name'>
+		<td><code><b>name</b>
+		<td><code>String</code></td>
+		<td>This represents the first part of the camel connection string.
+It may or may not be the same as the ID depending on the type of step.</td>
+	</tr>
+	<tr id='viewdefinition-type'>
+		<td><code><b>type</b>
+		<td><code>String</code></td>
+		<td>Type of step: transformation, connector</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
 
 
 </section>
@@ -357,7 +499,7 @@ If there are optional constraints, at least one of them should be fulfilled.</p>
 	</tr>
 	<tr id='viewdefinitionconstraint-operation'>
 		<td><code><b>operation</b>
-		<td><code>ConstraintOperation</code></td>
+		<td><code><a href='#constraintoperation'>ConstraintOperation</a></code></td>
 		<td>Operation defining this constraint (contains, greater than,...)</td>
 	</tr>
 	<tr id='viewdefinitionconstraint-parameter'>
@@ -369,6 +511,64 @@ If there are optional constraints, at least one of them should be fulfilled.</p>
 </section>
 
 
+<h2 id='constraintoperation'></h2>
+<section class='namespace'>
+
+<h3 id='constraintoperation-option'>ConstraintOperation</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Option</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='constraintoperation-contains_step_identifier'>
+		<td><code><b>CONTAINS_STEP_IDENTIFIER</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the list of steps in the integration contains a step with this identifier.</td>
+	</tr>
+	<tr id='constraintoperation-contains_step_name'>
+		<td><code><b>CONTAINS_STEP_NAME</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the list of steps in the integration contains a step with this identifier.</td>
+	</tr>
+	<tr id='constraintoperation-contains_step_type'>
+		<td><code><b>CONTAINS_STEP_TYPE</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the list of steps in the integration contains a step with this name.</td>
+	</tr>
+	<tr id='constraintoperation-size_greater_than'>
+		<td><code><b>SIZE_GREATER_THAN</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the size of the list of steps is greater than this number.</td>
+	</tr>
+	<tr id='constraintoperation-size_smaller_than'>
+		<td><code><b>SIZE_SMALLER_THAN</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the size of the list of steps is smaller than this number.</td>
+	</tr>
+	<tr id='constraintoperation-size_equals'>
+		<td><code><b>SIZE_EQUALS</b></code></td>
+		<td><code>String</code>
+		<td><code></code></td>
+		<td>True if the size of the list of steps is equals to this number.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 
 </section>
 
