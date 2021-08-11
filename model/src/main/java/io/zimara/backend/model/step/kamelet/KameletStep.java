@@ -9,6 +9,7 @@ import java.util.Map;
 /**
  * 🐱class KameletStep
  * 🐱inherits Step
+ * 🐱relationship compositionOf Parameter, 0..n
  * Represents a Kamelet step inside an integration
  */
 public class KameletStep implements Step {

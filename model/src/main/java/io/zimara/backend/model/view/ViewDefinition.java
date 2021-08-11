@@ -9,9 +9,7 @@ import java.util.Map;
 /**
  * 🐱class ViewDefinition
  * 🐱inherits Metadata
- * 🐱compositionOf ViewDefinitionConstraint
- * 🐱dependsOn ViewDefinitionConstraint
- * 🐱dependsOn Step
+ * 🐱relationship compositionOf ViewDefinitionConstraint, 0..n
  * 🐱aka List[ViewDefinition]
  * Represents a possible view the frontend can use to show data and metadata.
  *
