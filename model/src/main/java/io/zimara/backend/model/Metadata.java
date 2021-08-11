@@ -2,7 +2,7 @@ package io.zimara.backend.model;
 
 /**
  * 🐱class Metadata
- * Common class for all metadata.
+ * Common class for all metadata. Used to simplify the implementation of catalogs.
  */
 public interface Metadata {
     /*

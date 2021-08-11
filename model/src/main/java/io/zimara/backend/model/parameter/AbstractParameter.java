@@ -2,6 +2,12 @@ package io.zimara.backend.model.parameter;
 
 import io.zimara.backend.model.Parameter;
 
+/**
+ * 🐱class AbstractParameter
+ * 🐱miniclass AbstractParameter (Parameter)
+ * 🐱inherits Parameter
+ * Implements common parameter actions
+ */
 public class AbstractParameter<T> implements Parameter<T> {
 
     private final String label;

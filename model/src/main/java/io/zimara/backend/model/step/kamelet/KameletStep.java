@@ -39,6 +39,11 @@ public class KameletStep implements Step {
     private Map<String, Object> metadata;
     private Map<String, Object> spec;
 
+    /*
+     * 🐱property group: String
+     *
+     * Kamelet group that identifies and classifies inside the kamelet world.
+     */
     public String getGroup() {
         return group;
     }
@@ -47,6 +52,10 @@ public class KameletStep implements Step {
         this.group = group;
     }
 
+    /*
+     * 🐱property title: String
+     *
+     */
     public String getTitle() {
         return title;
     }
@@ -55,6 +64,10 @@ public class KameletStep implements Step {
         this.title = title;
     }
 
+    /*
+     * 🐱property description: String
+     *
+     */
     public String getDescription() {
         return description;
     }
@@ -63,6 +76,10 @@ public class KameletStep implements Step {
         this.description = description;
     }
 
+    /*
+     * 🐱property kameletType: String
+     *
+     */
     public String getKameletType() {
         return kameletType;
     }
@@ -71,6 +88,10 @@ public class KameletStep implements Step {
         this.kameletType = kameletType;
     }
 
+    /*
+     * 🐱property apiVersion: String
+     *
+     */
     public String getApiVersion() {
         return apiVersion;
     }
@@ -79,6 +100,10 @@ public class KameletStep implements Step {
         this.apiVersion = apiVersion;
     }
 
+    /*
+     * 🐱property kind: String
+     *
+     */
     public String getKind() {
         return kind;
     }
@@ -87,6 +112,10 @@ public class KameletStep implements Step {
         this.kind = kind;
     }
 
+    /*
+     * 🐱property spec: String
+     *
+     */
     public void setSpec(Map<String, Object> spec) {
         this.spec = spec;
     }
@@ -119,10 +148,18 @@ public class KameletStep implements Step {
         return this.id;
     }
 
+    /*
+     * 🐱property parameters: List[Parameter]
+     *
+     */
     public List<Parameter> getParameters() {
         return parameters;
     }
 
+    /*
+     * 🐱property icon: String
+     *
+     */
     public String getIcon() {
         return icon;
     }

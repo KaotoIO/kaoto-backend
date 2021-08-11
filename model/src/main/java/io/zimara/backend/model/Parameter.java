@@ -2,7 +2,9 @@ package io.zimara.backend.model;
 
 /**
  * 🐱class Parameter
- * Represents a parameter on a form.
+ * 🐱aka List[Parameter]
+ *
+ * Represents a parameter of a step in an integration. This parameters could be used on the UI to configure the step.
  */
 public interface Parameter<T> {
     /*
@@ -40,13 +42,12 @@ public interface Parameter<T> {
      */
     String getDescription();
 
+    void setValue(T value);
 
     /*
      * 🐱property value: String
      *
      * Actual value of this parameter. Used when describing a configured element.
      */
-    void setValue(T value);
-
     T getValue();
 }
