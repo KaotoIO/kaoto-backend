@@ -18,13 +18,10 @@ import java.util.List;
 
 /**
  * 🐱class ViewDefinitionResource
+ * 🐱relationship compositionOf ViewDefinitionService, 0..1
+ *
  * This endpoint will return a list of views based on the parameters.
- * <p>
- * 🐱example
- * <p>
- * ```
- * YAML
- * ```
+ *
  */
 @Path("/viewdefinition")
 @ApplicationScoped

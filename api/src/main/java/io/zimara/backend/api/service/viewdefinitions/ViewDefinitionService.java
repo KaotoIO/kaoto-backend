@@ -13,6 +13,14 @@ import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 🐱class ViewDefinitionService
+ * 🐱relationship dependsOn StepParserService
+ * 🐱relationship dependsOn ViewParserService
+ *
+ * This endpoint will return a list of views based on the parameters.
+ *
+ */
 @ApplicationScoped
 public class ViewDefinitionService {
 
@@ -30,6 +38,12 @@ public class ViewDefinitionService {
         viewParsers.add(viewParser);
     }
 
+    /*
+     * 🐱method views: List[ViewDefinition]
+     * 🐱param yaml: String
+     *
+     * Based on the provided yaml, offer a list of compatible ViewDefinitions.
+     */
     public List<ViewDefinition> views(@QueryParam("yaml") String yaml) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var stepParser : stepParsers) {

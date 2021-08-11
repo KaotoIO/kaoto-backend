@@ -8,6 +8,15 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * 🐱class ViewDefinitionCatalog
+ * 🐱relationship dependsOn ViewDefinition
+ * 🐱inherits AbstractCatalog
+ *
+ * This is a singleton that will contain all catalogs with viewdefinitions.
+ *
+ */
 @ApplicationScoped
 public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
 

@@ -8,6 +8,15 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * 🐱class StepCatalog
+ * 🐱relationship dependsOn Step
+ * 🐱inherits AbstractCatalog
+ *
+ * This is a singleton that will contain all catalogs with steps.
+ *
+ */
 @ApplicationScoped
 public class StepCatalog extends AbstractCatalog<Step> {
 

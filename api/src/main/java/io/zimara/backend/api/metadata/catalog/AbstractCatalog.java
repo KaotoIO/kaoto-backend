@@ -11,6 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ *
+ * 🐱class AbstractCatalog
+ * 🐱relationship dependsOn MetadataCatalog
+ *
+ * Abstract implementation of an ApplicationScoped catalog. This will be the base of the beans
+ * that can be injected in the different services and resources.
+ *
+ */
 public abstract class AbstractCatalog<T extends Metadata> {
 
     AbstractCatalog() {
@@ -28,23 +37,25 @@ public abstract class AbstractCatalog<T extends Metadata> {
             return readOnlyCatalog;
         } else throw new CatalogWarmingUpException("Catalog still warming up.");
     }
-
+    /*
+     * 🐱method waitForWarmUp : CompletableFuture
+     *
+     * Completable reference to when the loadParsers method finishes.
+     */
     public CompletableFuture<Void> waitForWarmUp() {
         return waitingForWarmUp;
     }
 
-    /**
-     * This may be autowired by jandex?
+    /*
+     * 🐱method loadParsers : List[ParseCatalog]
      *
-     * @return
+     * Loads all the catalogs into the bean
+     *
+     *  This may be autowired by jandex?
      */
     abstract List<ParseCatalog<T>> loadParsers();
 
-    /**
-     * Add all steps from the parsers into the catalog
-     *
-     * @param catalogs
-     */
+    //Add all steps from the parsers into the catalog
     private void warmUpCatalog(List<ParseCatalog<T>> catalogs) {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();

@@ -16,6 +16,8 @@ import java.util.Collection;
 
 /**
  * 🐱class StepResource
+ * 🐱relationship compositionOf StepService, 0..1
+ *
  * This endpoint will return steps based on the parameters.
  */
 @Path("/step")
@@ -25,6 +27,14 @@ public class StepResource {
     @Inject
     StepService stepService;
 
+
+    /*
+     * 🐱method stepById : Step
+     * 🐱param id: String
+     *
+     *  Returns the first step identified by the parameter.
+     *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
@@ -32,6 +42,13 @@ public class StepResource {
         return stepService.stepById(id);
     }
 
+    /*
+     * 🐱method stepsByName : List[Step]
+     * 🐱param name: String
+     *
+     *  Returns all the steps identified by the name.
+     *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
@@ -39,6 +56,12 @@ public class StepResource {
         return stepService.stepsByName(name);
     }
 
+    /*
+     * 🐱method allSteps : List[Step]
+     *
+     *  Returns all the steps.
+     *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Step> allSteps() {
