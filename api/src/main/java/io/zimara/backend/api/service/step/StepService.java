@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 /**
  *
- * 🐱class StepService
+ * 🐱miniclass StepService (StepResource)
  * 🐱relationship compositionOf StepCatalog, 0..1
  *
  */

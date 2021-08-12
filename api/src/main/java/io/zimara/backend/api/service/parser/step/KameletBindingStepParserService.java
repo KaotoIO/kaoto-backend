@@ -16,6 +16,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 🐱miniclass KameletBindingStepParserService (StepParserService)
+ *
+ */
 @ApplicationScoped
 public class KameletBindingStepParserService implements StepParserService<Step> {
 

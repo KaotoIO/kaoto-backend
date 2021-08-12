@@ -11,6 +11,12 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 🐱miniclass ViewDefinitionParserService (ViewParserService)
+ * 🐱relationship compositionOf ViewDefinitionCatalog, 0..1
+ *
+ *
+ */
 @ApplicationScoped
 public class ViewDefinitionParserService implements ViewParserService<ViewDefinition> {
 

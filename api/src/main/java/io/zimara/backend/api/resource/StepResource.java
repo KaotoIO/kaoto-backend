@@ -16,7 +16,7 @@ import java.util.Collection;
 
 /**
  * 🐱class StepResource
- * 🐱relationship compositionOf StepService, 0..1
+ * 🐱relationship dependsOn StepCatalog
  *
  * This endpoint will return steps based on the parameters.
  */

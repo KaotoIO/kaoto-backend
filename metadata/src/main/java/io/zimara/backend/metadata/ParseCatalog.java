@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class ParseCatalog
- * 🐱relationship dependsOn Metadata
  *
  * Load and warm up catalog utility.
  *

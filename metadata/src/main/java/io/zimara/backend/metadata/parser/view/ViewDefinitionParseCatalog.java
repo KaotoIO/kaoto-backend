@@ -18,7 +18,6 @@ import java.util.concurrent.CompletableFuture;
  *
  * 🐱class ViewDefinitionParseCatalog
  * 🐱inherits GithubParseCatalog
- * 🐱relationship dependsOn ViewDefinition
  *
  * Reads and parses a view definition catalog. Extracts all the view definitions it can find and generate a ViewDefinition for each one.
  *
