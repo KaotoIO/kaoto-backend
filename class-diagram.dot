@@ -29,12 +29,6 @@ loadParsers():List[ParseCatalog]
 
 	"StepCatalog" -> "AbstractCatalog"
 
-		"StepCatalog" -> "Step" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "ViewDefinitionCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionCatalog</B></TD></TR>
 	
@@ -42,12 +36,6 @@ loadParsers():List[ParseCatalog]
 
 	"ViewDefinitionCatalog" -> "AbstractCatalog"
 
-		"ViewDefinitionCatalog" -> "ViewDefinition" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "StepResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -64,9 +52,10 @@ allSteps():List[Step]
 </TABLE>>]
 
 
-		"StepService" -> "StepResource" [dir=both; arrowhead=diamond; arrowtail=none
+		"StepResource" -> "StepCatalog" [
+		arrowhead=open, style=dashed
 		
-		, taillabel="0..1"
+		
 		
 		]
 "ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
@@ -124,27 +113,6 @@ appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boole
 		arrowhead=open, style=dashed
 		
 		
-		
-		]
-"StepService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>StepService</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-stepById(&lt;String&gt; id):Step
-<BR align="left" />
-stepsByName(&lt;String&gt; name):List[Step]
-<BR align="left" />
-allSteps():List[Step]
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"StepCatalog" -> "StepService" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..1"
 		
 		]
 "ViewDefinitionService" [ label = <<TABLE CELLSPACING="0">
@@ -207,12 +175,6 @@ parse():CompletableFuture[List[T]]
 </TABLE>>]
 
 
-		"ParseCatalog" -> "Metadata" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "CatalogCollection" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>CatalogCollection</B></TD></TR>
 	
@@ -266,12 +228,6 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 
 	"KameletParseCatalog" -> "GithubParseCatalog"
 
-		"KameletParseCatalog" -> "KameletStep" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "ViewDefinitionParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParseCatalog</B></TD></TR>
 	
@@ -279,12 +235,6 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 
 	"ViewDefinitionParseCatalog" -> "GithubParseCatalog"
 
-		"ViewDefinitionParseCatalog" -> "ViewDefinition" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "Metadata" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Metadata</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
