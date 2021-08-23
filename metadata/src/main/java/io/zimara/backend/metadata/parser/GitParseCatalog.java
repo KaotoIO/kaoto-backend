@@ -2,13 +2,11 @@ package io.zimara.backend.metadata.parser;
 
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.model.Metadata;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.transport.TagOpt;
 import org.jboss.logging.Logger;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,13 +65,9 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
                 log.trace("Found " + futureMetadatas.size() + " elements.");
                 CompletableFuture.allOf(futureMetadatas.toArray(new CompletableFuture[0])).join();
 
-            } catch (InvalidRemoteException e) {
-                log.error("Error trying to clone repository.", e);
-            } catch (TransportException e) {
-                log.error("Error trying to clone repository.", e);
             } catch (GitAPIException e) {
                 log.error("Error trying to clone repository.", e);
-            } catch (IOException | NullPointerException e) {
+            } catch (IOException e) {
                 log.error("Error trying to parse catalog.", e);
             }
 

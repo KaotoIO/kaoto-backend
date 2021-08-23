@@ -66,7 +66,7 @@ public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         return FileVisitResult.CONTINUE;
     }
 
