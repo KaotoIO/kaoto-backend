@@ -78,31 +78,46 @@ public class ViewDefinitionParserService implements ViewParserService<ViewDefini
                 res = steps.size() < Integer.valueOf(c.getParameter());
                 break;
             case CONTAINS_STEP_IDENTIFIER:
-                for (Step s : steps) {
-                    if (s.getId().equalsIgnoreCase(c.getParameter())) {
-                        res = true;
-                        break;
-                    }
-                }
+                res = containsStepIdentifier(steps, c, res);
                 break;
             case CONTAINS_STEP_NAME:
-                for (Step s : steps) {
-                    if (s.getName().equalsIgnoreCase(c.getParameter())) {
-                        res = true;
-                        break;
-                    }
-                }
+                res = containsStepName(steps, c, res);
                 break;
             case CONTAINS_STEP_TYPE:
-                for (Step s : steps) {
-                    if (s.getType().equalsIgnoreCase(c.getParameter()) || s.getSubType().equalsIgnoreCase(c.getParameter())) {
-                        res = true;
-                        break;
-                    }
-                }
+                res = containsStepType(steps, c, res);
                 break;
         }
 
+        return res;
+    }
+
+    private boolean containsStepIdentifier(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+        for (Step s : steps) {
+            if (s.getId().equalsIgnoreCase(c.getParameter())) {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
+    private boolean containsStepName(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+        for (Step s : steps) {
+            if (s.getName().equalsIgnoreCase(c.getParameter())) {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
+    private boolean containsStepType(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+        for (Step s : steps) {
+            if (s.getType().equalsIgnoreCase(c.getParameter()) || s.getSubType().equalsIgnoreCase(c.getParameter())) {
+                res = true;
+                break;
+            }
+        }
         return res;
     }
 

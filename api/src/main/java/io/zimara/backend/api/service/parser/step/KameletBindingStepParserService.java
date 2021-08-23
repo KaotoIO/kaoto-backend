@@ -18,7 +18,6 @@ import java.util.Map;
 
 /**
  * 🐱miniclass KameletBindingStepParserService (StepParserService)
- *
  */
 @ApplicationScoped
 public class KameletBindingStepParserService implements StepParserService<Step> {
@@ -32,7 +31,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     @Override
     public List<Step> parse(String input) {
-        if(!appliesTo(input)) {
+        if (!appliesTo(input)) {
             throw new IllegalArgumentException("Wrong format provided. This is not parseable by " + getIdentifier());
         }
 
@@ -73,21 +72,26 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
             step = catalog.getReadOnlyCatalog().searchStepByName(ref.get("name").toString());
 
-            if(step != null) {
+            if (step != null) {
                 log.trace("Found step " + step.getName());
-
-                for (Map.Entry<String, Object> c : properties.entrySet()) {
-                    for (Parameter p : ((KameletStep) step).getParameters()) {
-                        if (p.getId().equalsIgnoreCase(c.getKey())) {
-                            p.setValue(c.getValue());
-                            break;
-                        }
-                    }
-                }
+                setValuesOnParameters(step, properties);
             }
         }
 
         return step;
+    }
+
+    private void setValuesOnParameters(Step step, Map<String, Object> properties) {
+
+        for (Map.Entry<String, Object> c : properties.entrySet()) {
+            for (Parameter p : ((KameletStep) step).getParameters()) {
+                if (p.getId().equalsIgnoreCase(c.getKey())) {
+                    p.setValue(c.getValue());
+                    break;
+                }
+            }
+        }
+
     }
 
     private void processMetadata(Map<String, Object> parsed, Map<String, Object> empty) {
