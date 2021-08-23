@@ -1,6 +1,6 @@
 package io.zimara.backend.metadata.parser.view;
 
-import io.zimara.backend.metadata.parser.GithubParseCatalog;
+import io.zimara.backend.metadata.parser.GitParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
@@ -17,12 +17,12 @@ import java.util.concurrent.CompletableFuture;
 /**
  *
  * 🐱class ViewDefinitionParseCatalog
- * 🐱inherits GithubParseCatalog
+ * 🐱inherits GitParseCatalog
  *
  * Reads and parses a view definition catalog. Extracts all the view definitions it can find and generate a ViewDefinition for each one.
  *
  */
-public class ViewDefinitionParseCatalog extends GithubParseCatalog<ViewDefinition> {
+public class ViewDefinitionParseCatalog extends GitParseCatalog<ViewDefinition> {
 
     public ViewDefinitionParseCatalog(String url, String tag) {
         super(url, tag);

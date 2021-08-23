@@ -17,21 +17,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
- * 🐱class GithubParseCatalog
+ * 🐱class GitParseCatalog
  * 🐱inherits ParseCatalog
  *
  * Abstract implementation that downloads a git repository and walks through all the files
  * parsing them and preparing elements to add to a catalog.
  *
  */
-public abstract class GithubParseCatalog<T extends Metadata> implements ParseCatalog<T> {
+public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalog<T> {
 
-    Logger log = Logger.getLogger(GithubParseCatalog.class);
+    Logger log = Logger.getLogger(GitParseCatalog.class);
 
     private final CompletableFuture<List<T>> metadata = new CompletableFuture<>();
 
 
-     protected GithubParseCatalog(String url, String tag) {
+     protected GitParseCatalog(String url, String tag) {
         log.trace("Warming up kamelet catalog in " + url);
         metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
     }

@@ -1,6 +1,6 @@
 package io.zimara.backend.metadata.parser.step;
 
-import io.zimara.backend.metadata.parser.GithubParseCatalog;
+import io.zimara.backend.metadata.parser.GitParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
@@ -24,12 +24,12 @@ import java.util.concurrent.CompletableFuture;
 /**
  *
  * 🐱class KameletParseCatalog
- * 🐱inherits GithubParseCatalog
+ * 🐱inherits GitParseCatalog
  *
  * Reads and parses a kamelet catalog. Extracts all the kamelet definitions it can find and generate a kamelet step for each one.
  *
  */
-public class KameletParseCatalog extends GithubParseCatalog<Step> {
+public class KameletParseCatalog extends GitParseCatalog<Step> {
 
     public KameletParseCatalog(String url, String tag) {
         super(url, tag);
