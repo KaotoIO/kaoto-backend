@@ -49,6 +49,13 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     private void processSpec(List<Step> steps, Map<String, Object> parsed, Map<String, Object> empty) {
         Map<String, Object> spec = (Map<String, Object>) parsed.getOrDefault("spec", empty);
         steps.add(processStep((Map<String, Object>) spec.getOrDefault("source", empty)));
+
+        List<Map<String, Object>> intermediatesteps = (List<Map<String, Object>>) spec.getOrDefault("steps", empty);
+
+        for (Map<String, Object> intermediatestep : intermediatesteps) {
+            steps.add(processStep(intermediatestep));
+        }
+
         steps.add(processStep((Map<String, Object>) spec.getOrDefault("sink", empty)));
     }
 
@@ -65,13 +72,16 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             Map<String, Object> properties = (Map<String, Object>) source.getOrDefault("properties", Collections.emptyMap());
 
             step = catalog.getReadOnlyCatalog().searchStepByName(ref.get("name").toString());
-            log.trace("Found step " + step.getName());
 
-            for (Map.Entry<String, Object> c : properties.entrySet()) {
-                for (Parameter p : ((KameletStep) step).getParameters()) {
-                    if (p.getId().equalsIgnoreCase(c.getKey())) {
-                        p.setValue(c.getValue());
-                        break;
+            if(step != null) {
+                log.trace("Found step " + step.getName());
+
+                for (Map.Entry<String, Object> c : properties.entrySet()) {
+                    for (Parameter p : ((KameletStep) step).getParameters()) {
+                        if (p.getId().equalsIgnoreCase(c.getKey())) {
+                            p.setValue(c.getValue());
+                            break;
+                        }
                     }
                 }
             }

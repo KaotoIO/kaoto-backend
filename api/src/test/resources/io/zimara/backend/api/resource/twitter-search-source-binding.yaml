@@ -14,6 +14,17 @@ spec:
       apiKeySecret: "your own"
       accessToken: "your own"
       accessTokenSecret: "your own"
+  steps:
+    -
+      ref:
+        kind: Kamelet
+        apiVersion: camel.apache.org/v1alpha1
+        name: aws-translate-action
+    -
+      ref:
+        kind: Kamelet
+        apiVersion: camel.apache.org/v1alpha1
+        name: avro-deserialize-action
   sink:
     ref:
       kind: Kamelet

@@ -46,6 +46,6 @@ class ViewDefinitionParserServiceTest {
 
         steps.add(new KameletStep());
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(1, views.size());
+        Assertions.assertEquals(2, views.size());
     }
 }

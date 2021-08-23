@@ -42,14 +42,14 @@ class ViewDefinitionResourceTest {
 
     @Test
     void testViews() {
-        given()
+        var res = given()
                 .when().queryParam("yaml", binding).contentType("text/yaml").post()
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .body("rows.size()", is(2),
-                        "[0].name", is("Kamelet Binding"),
-                        "[0].type", is("integrationview"),
-                        "[0].steps.size()", is(2));
+                .statusCode(Response.Status.OK.getStatusCode());
+        res.body("rows.size()", is(2),
+                "[0].name", is("Kamelet Binding"),
+                "[0].type", is("integrationview"),
+                "[0].steps.size()", is(4));
     }
 
     @Test
