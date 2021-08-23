@@ -196,8 +196,8 @@ parse():CompletableFuture[List[T]]
 
 	"ReadOnlyCatalog" -> "CatalogCollection"
 
-"GithubParseCatalog" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>GithubParseCatalog</B></TD></TR>
+"GitParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>GitParseCatalog</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
 getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]]&gt; futureMetadata):YamlProcessFile
 <BR align="left" />
@@ -207,7 +207,7 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 
 </TABLE>>]
 
-	"GithubParseCatalog" -> "ParseCatalog"
+	"GitParseCatalog" -> "ParseCatalog"
 
 "YamlProcessFile" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>YamlProcessFile</B></TD></TR>
@@ -215,7 +215,7 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 </TABLE>>]
 
 
-		"YamlProcessFile" -> "GithubParseCatalog" [
+		"YamlProcessFile" -> "GitParseCatalog" [
 		arrowhead=open, style=dashed
 		
 		
@@ -226,14 +226,14 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 	
 </TABLE>>]
 
-	"KameletParseCatalog" -> "GithubParseCatalog"
+	"KameletParseCatalog" -> "GitParseCatalog"
 
 "ViewDefinitionParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParseCatalog</B></TD></TR>
 	
 </TABLE>>]
 
-	"ViewDefinitionParseCatalog" -> "GithubParseCatalog"
+	"ViewDefinitionParseCatalog" -> "GitParseCatalog"
 
 "Metadata" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Metadata</B></TD></TR>

@@ -602,12 +602,12 @@ connector with the same ID on this collection of catalogs.</p>
 
 
 </section>
-<h2 id='githubparsecatalog'>GithubParseCatalog</h2>
+<h2 id='gitparsecatalog'>GitParseCatalog</h2>
 <section class='namespace'>
 <p>Abstract implementation that downloads a git repository and walks through all the files
 parsing them and preparing elements to add to a catalog.</p>
 
-<h3 id='githubparsecatalog-method'>Methods</h3>
+<h3 id='gitparsecatalog-method'>Methods</h3>
 
 <section>
 
@@ -619,7 +619,7 @@ parsing them and preparing elements to add to a catalog.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='githubparsecatalog-getfilevisitor'>
+	<tr id='gitparsecatalog-getfilevisitor'>
 		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
 		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
 		<td>Returns the helper class based on YamlProcessFile to process the files found on the repository.
@@ -640,7 +640,7 @@ This needs to be implemented.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='githubparsecatalog-parse'>
+	<tr id='gitparsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
 		<td>Load all the source data, parse it and return a completable list of elements to add to a catalog.</td>
@@ -666,7 +666,7 @@ This needs to be implemented.</td>
 
 
 <details>
-	<summary>Methods inherited from <a href='#githubparsecatalog'>GithubParseCatalog</a></summary>
+	<summary>Methods inherited from <a href='#gitparsecatalog'>GitParseCatalog</a></summary>
 	<div class='accordion-content'><section>
 
 
@@ -719,7 +719,7 @@ This needs to be implemented.</td>
 
 
 <details>
-	<summary>Methods inherited from <a href='#githubparsecatalog'>GithubParseCatalog</a></summary>
+	<summary>Methods inherited from <a href='#gitparsecatalog'>GitParseCatalog</a></summary>
 	<div class='accordion-content'><section>
 
 

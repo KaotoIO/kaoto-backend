@@ -257,19 +257,19 @@
 <path fill="none" stroke="black" d="M1670,-534.3C1670,-501.17 1670,-428.25 1670,-388.55"/>
 <polygon fill="none" stroke="black" points="1673.5,-388.52 1670,-378.52 1666.5,-388.52 1673.5,-388.52"/>
 </g>
-<!-- GithubParseCatalog -->
+<!-- GitParseCatalog -->
 <g id="node17" class="node">
-<title>GithubParseCatalog</title>
+<title>GitParseCatalog</title>
 <polygon fill="none" stroke="black" points="2318,-558.5 2318,-579.5 3120,-579.5 3120,-558.5 2318,-558.5"/>
-<text text-anchor="start" x="2639" y="-566.3" font-family="Times,serif" font-weight="bold" font-size="14.00">GithubParseCatalog</text>
+<text text-anchor="start" x="2654.5" y="-566.3" font-family="Times,serif" font-weight="bold" font-size="14.00">GitParseCatalog</text>
 <polygon fill="none" stroke="black" points="2318,-524.5 2318,-558.5 3120,-558.5 3120,-524.5 2318,-524.5"/>
 <text text-anchor="start" x="2687.5" y="-545.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
 <text text-anchor="start" x="2321" y="-531.3" font-family="Times,serif" font-size="14.00">getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]]&gt; futureMetadata):YamlProcessFile</text>
 <polygon fill="none" stroke="black" points="2317,-524 2317,-581 3121,-581 3121,-524 2317,-524"/>
 </g>
-<!-- GithubParseCatalog&#45;&gt;ParseCatalog -->
+<!-- GitParseCatalog&#45;&gt;ParseCatalog -->
 <g id="edge14" class="edge">
-<title>GithubParseCatalog&#45;&gt;ParseCatalog</title>
+<title>GitParseCatalog&#45;&gt;ParseCatalog</title>
 <path fill="none" stroke="black" d="M2719,-519.7C2719,-487.82 2719,-438.56 2719,-403.48"/>
 <polygon fill="none" stroke="black" points="2722.5,-403.09 2719,-393.09 2715.5,-403.09 2722.5,-403.09"/>
 </g>
@@ -280,9 +280,9 @@
 <text text-anchor="start" x="2463" y="-699.3" font-family="Times,serif" font-weight="bold" font-size="14.00">YamlProcessFile</text>
 <polygon fill="none" stroke="black" points="2458.5,-691 2458.5,-714 2595.5,-714 2595.5,-691 2458.5,-691"/>
 </g>
-<!-- YamlProcessFile&#45;&gt;GithubParseCatalog -->
+<!-- YamlProcessFile&#45;&gt;GitParseCatalog -->
 <g id="edge15" class="edge">
-<title>YamlProcessFile&#45;&gt;GithubParseCatalog</title>
+<title>YamlProcessFile&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M2549.4,-684.23C2578.77,-661.6 2631.1,-621.25 2669.89,-591.35"/>
 <polygon fill="black" stroke="black" points="2677.95,-585.14 2672.78,-594.81 2673.99,-588.19 2670.03,-591.25 2670.03,-591.25 2670.03,-591.25 2673.99,-588.19 2667.29,-587.68 2677.95,-585.14 2677.95,-585.14"/>
 </g>
@@ -293,9 +293,9 @@
 <text text-anchor="start" x="2634" y="-699.3" font-family="Times,serif" font-weight="bold" font-size="14.00">KameletParseCatalog</text>
 <polygon fill="none" stroke="black" points="2629.5,-691 2629.5,-714 2808.5,-714 2808.5,-691 2629.5,-691"/>
 </g>
-<!-- KameletParseCatalog&#45;&gt;GithubParseCatalog -->
+<!-- KameletParseCatalog&#45;&gt;GitParseCatalog -->
 <g id="edge16" class="edge">
-<title>KameletParseCatalog&#45;&gt;GithubParseCatalog</title>
+<title>KameletParseCatalog&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" d="M2719,-684.23C2719,-662.54 2719,-624.6 2719,-595.16"/>
 <polygon fill="none" stroke="black" points="2722.5,-595.14 2719,-585.14 2715.5,-595.14 2722.5,-595.14"/>
 </g>
@@ -306,9 +306,9 @@
 <text text-anchor="start" x="2847" y="-699.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionParseCatalog</text>
 <polygon fill="none" stroke="black" points="2843,-691 2843,-714 3071,-714 3071,-691 2843,-691"/>
 </g>
-<!-- ViewDefinitionParseCatalog&#45;&gt;GithubParseCatalog -->
+<!-- ViewDefinitionParseCatalog&#45;&gt;GitParseCatalog -->
 <g id="edge17" class="edge">
-<title>ViewDefinitionParseCatalog&#45;&gt;GithubParseCatalog</title>
+<title>ViewDefinitionParseCatalog&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" d="M2929.23,-684.23C2892.52,-661.41 2826.87,-620.58 2778.67,-590.6"/>
 <polygon fill="none" stroke="black" points="2780.22,-587.45 2769.88,-585.14 2776.53,-593.39 2780.22,-587.45"/>
 </g>
