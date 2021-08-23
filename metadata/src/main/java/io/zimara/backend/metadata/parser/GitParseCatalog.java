@@ -41,13 +41,18 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
         List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMetadatas = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
+        File file = null;
         try {
             log.trace("Creating temporary folder.");
-            File file = Files.createTempDirectory("zimara-catalog").toFile();
+            file = Files.createTempDirectory("zimara-catalog").toFile();
             file.setExecutable(true, true);
             file.setReadable(true, true);
             file.setWritable(true, true);
+        } catch (IOException e) {
+            log.error("Error trying to create temporary directory.", e);
+        }
 
+        if (file != null) {
             log.trace("Cloning git repository.");
             try (Git git = Git.cloneRepository()
                     .setCloneSubmodules(true)
@@ -70,12 +75,13 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
                 log.error("Error trying to clone repository.", e);
             } catch (IOException | NullPointerException e) {
                 log.error("Error trying to parse catalog.", e);
-            } finally {
-                FileUtils.deleteDirectory(file);
             }
 
-        } catch (IOException e) {
-            log.error("Error trying to create temporary directory.", e);
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch (IOException e) {
+                log.error("Error cleaning up catalog.", e);
+            }
         }
 
         return metadataList;
