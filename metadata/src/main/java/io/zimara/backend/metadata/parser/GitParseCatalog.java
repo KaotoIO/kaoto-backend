@@ -39,7 +39,7 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
 
     private List<T> cloneRepoAndParse(String url, String tag) {
         List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
-        final List<CompletableFuture<T>> futureMetadatas = Collections.synchronizedList(new CopyOnWriteArrayList<>());
+        final List<CompletableFuture<Void>> futureMetadatas = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         try {
             log.trace("Creating temporary folder.");
@@ -97,7 +97,7 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
      *
      */
     protected abstract YamlProcessFile<T> getFileVisitor
-    (List<T> metadataList, List<CompletableFuture<T>> futureMetadata);
+    (List<T> metadataList, List<CompletableFuture<Void>> futureMetadata);
 
 }
 

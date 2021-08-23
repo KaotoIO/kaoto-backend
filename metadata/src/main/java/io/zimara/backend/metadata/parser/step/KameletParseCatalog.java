@@ -13,9 +13,6 @@ import org.yaml.snakeyaml.error.YAMLException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +33,7 @@ public class KameletParseCatalog extends GitParseCatalog<Step> {
     }
 
     @Override
-    protected KameletFileProcessor getFileVisitor(List<Step> metadataList, List<CompletableFuture<Step>> futureMetadata) {
+    protected KameletFileProcessor getFileVisitor(List<Step> metadataList, List<CompletableFuture<Void>> futureMetadata) {
         return new KameletFileProcessor(metadataList, futureMetadata);
     }
 }
@@ -46,35 +43,18 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
     public static final String PROPERTIES = "properties";
     private Logger log = Logger.getLogger(KameletFileProcessor.class);
 
-    KameletFileProcessor(List<Step> stepList, List<CompletableFuture<Step>> futureSteps) {
+    KameletFileProcessor(List<Step> stepList, List<CompletableFuture<Void>> futureSteps) {
         super(stepList, futureSteps);
-    }
-
-    @Override
-    public FileVisitResult visitFile(final Path file, BasicFileAttributes attrs) {
-
-        File f = file.toFile();
-
-        if (isYAML(f)) {
-            CompletableFuture<Step> step =
-                    CompletableFuture.supplyAsync(() -> parseFile(f));
-
-            step.thenRun(() -> log.trace(f.getName() + " parsed, now generating step."));
-            step
-                    .thenApply(this::extractSpec)
-                    .thenApply(this::extractMetadata)
-                    .thenAccept(metadataList::add);
-            futureMetadata.add(step);
-        }
-
-        return FileVisitResult.CONTINUE;
     }
 
     @Override
     public KameletStep parseFile(File f) {
         try (FileReader fr = new FileReader(f)) {
             Yaml yaml = new Yaml(new Constructor(KameletStep.class));
-            return yaml.load(fr);
+            KameletStep step = yaml.load(fr);
+            extractSpec(step);
+            extractMetadata(step);
+            return step;
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
         }

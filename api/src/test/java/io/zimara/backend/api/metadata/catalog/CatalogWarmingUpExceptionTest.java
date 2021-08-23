@@ -8,11 +8,11 @@ import javax.inject.Inject;
 
 @QuarkusTest
 class CatalogWarmingUpExceptionTest {
-    @Inject
-    StepCatalog catalog;
 
     @Test
     void warmUp() {
+        StepCatalog catalog = new StepCatalog();
+
         Assertions.assertThrows(CatalogWarmingUpException.class, () -> {
             catalog.getReadOnlyCatalog();
         });

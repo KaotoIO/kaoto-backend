@@ -23,10 +23,10 @@ import java.util.concurrent.CompletableFuture;
 public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor<Path> {
 
     protected List<T> metadataList;
-    protected List<CompletableFuture<T>> futureMetadata;
+    protected List<CompletableFuture<Void>> futureMetadata;
     private Logger log = Logger.getLogger(YamlProcessFile.class);
 
-    protected YamlProcessFile(List<T> metadataList, List<CompletableFuture<T>> futureMetadata) {
+    protected YamlProcessFile(List<T> metadataList, List<CompletableFuture<Void>> futureMetadata) {
         this.metadataList = metadataList;
         this.futureMetadata = futureMetadata;
     }
@@ -52,12 +52,8 @@ public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor
         File f = file.toFile();
 
         if (isYAML(f)) {
-            CompletableFuture<T> metadata =
-                    CompletableFuture.supplyAsync(() -> parseFile(f));
-
+            CompletableFuture<Void> metadata = CompletableFuture.runAsync(() -> metadataList.add(parseFile(f)));
             metadata.thenRun(() -> log.trace(f.getName() + " parsed, now generating metadata."));
-            metadata
-                    .thenAccept(metadataList::add);
             futureMetadata.add(metadata);
         }
 

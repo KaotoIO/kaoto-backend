@@ -29,7 +29,7 @@ public class ViewDefinitionParseCatalog extends GitParseCatalog<ViewDefinition> 
     }
 
     @Override
-    protected YamlProcessFile<ViewDefinition> getFileVisitor(List<ViewDefinition> metadataList, List<CompletableFuture<ViewDefinition>> futureMetadata) {
+    protected YamlProcessFile<ViewDefinition> getFileVisitor(List<ViewDefinition> metadataList, List<CompletableFuture<Void>> futureMetadata) {
         return new ViewDefinitionProcessFile(metadataList, futureMetadata);
     }
 }
@@ -38,7 +38,7 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
 
     Logger log = Logger.getLogger(ViewDefinitionProcessFile.class);
 
-    public ViewDefinitionProcessFile(List<ViewDefinition> metadataList, List<CompletableFuture<ViewDefinition>> futureMetadata) {
+    public ViewDefinitionProcessFile(List<ViewDefinition> metadataList, List<CompletableFuture<Void>> futureMetadata) {
         super(metadataList, futureMetadata);
     }
 
