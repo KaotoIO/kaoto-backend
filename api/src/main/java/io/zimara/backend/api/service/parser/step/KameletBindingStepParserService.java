@@ -37,15 +37,14 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
         List<Step> steps = new ArrayList<>(2);
         Map<String, Object> parsed = yaml.load(input);
-        Map<String, Object> empty = Collections.emptyMap();
 
-        processMetadata(parsed, empty);
-        processSpec(steps, parsed, empty);
+        processMetadata(parsed, Collections.emptyMap());
+        processSpec(steps, parsed, Collections.emptyList());
 
         return steps;
     }
 
-    private void processSpec(List<Step> steps, Map<String, Object> parsed, Map<String, Object> empty) {
+    private void processSpec(List<Step> steps, Map<String, Object> parsed, List<Map<String, Object>> empty) {
         Map<String, Object> spec = (Map<String, Object>) parsed.getOrDefault("spec", empty);
         steps.add(processStep((Map<String, Object>) spec.getOrDefault("source", empty)));
 
