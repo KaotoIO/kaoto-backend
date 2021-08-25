@@ -145,7 +145,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
             Map<String, Object> definitions = (Map<String, Object>) property.getValue();
             Parameter p;
-            final var title = definitions.getOrDefault("title", "unknown").toString();
+            final var title = property.getKey();
             var description = definitions.getOrDefault("description", title).toString();
             String value = definitions.getOrDefault("default", "").toString();
             p = getParameter(definitions, title, description, value);

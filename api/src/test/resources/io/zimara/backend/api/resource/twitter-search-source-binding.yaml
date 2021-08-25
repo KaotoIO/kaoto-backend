@@ -31,8 +31,8 @@ spec:
       apiVersion: camel.apache.org/v1alpha1
       name: kafka-sink
     properties:
-      brokers: "The Brokers"
       password: "The Password"
+      brokers: "The Brokers"
       topic: "The Topic Names"
       username: "The Username"
 
