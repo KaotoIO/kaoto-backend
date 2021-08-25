@@ -36,6 +36,23 @@ loadParsers():List[ParseCatalog]
 
 	"ViewDefinitionCatalog" -> "AbstractCatalog"
 
+"DeploymentResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+yaml(&lt;DeploymentResourceYamlRequest&gt; steps):String
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
 "StepResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -75,6 +92,24 @@ views:(&lt;String&gt; yaml):
 		, taillabel="0..1"
 		
 		]
+"DeploymentResourceYamlRequest" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentResourceYamlRequest</B></TD></TR>
+	
+</TABLE>>]
+
+
+"DeploymentService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
 "StepParserService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepParserService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -239,6 +274,36 @@ getFileVisitor(&lt;List[Metadata]&gt; metadataList, &lt;List[CompletableFuture[]
 	<TR><TD><B>Metadata</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
 ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"KameletBinding" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBinding</B></TD></TR>
+	<TR><TD><I>Usage example</I><BR/>
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"KameletBindingSpec" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBindingSpec</B></TD></TR>
+	<TR><TD><I>Usage example</I><BR/>
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"KameletBindingStep" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBindingStep</B></TD></TR>
+	<TR><TD><I>Usage example</I><BR/>
 
 </TD></TR>
 

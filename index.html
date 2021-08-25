@@ -187,6 +187,35 @@ that can be injected in the different services and resources.</p>
 
 
 </section>
+<h2 id='deploymentresource'>DeploymentResource</h2>
+<section class='namespace'>
+<p>&lt;p&gt;
+This endpoint will return the yaml needed to deploy the related integration and the
+endpoints to interact with deployments.</p>
+
+<h3 id='deploymentresource-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentresource-yaml'>
+		<td><code><b>yaml</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Based on the steps provided, offer a yaml deployment</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 <h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
 <p>This endpoint will return steps based on the parameters.</p>
@@ -280,6 +309,38 @@ that can be injected in the different services and resources.</p>
 		<td><code><b>views:</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td>Based on the YAML provided, offer a list of possible views</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</h2>
+<section class='namespace'>
+
+
+</section>
+<h2 id='deploymentservice'>DeploymentService</h2>
+<section class='namespace'>
+<p>This endpoint will return a list of views based on the parameters.</p>
+
+<h3 id='deploymentservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentservice-yaml'>
+		<td><code><b>yaml</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Based on the provided steps, return a valid yaml string to deploy</td>
 	</tr>
 </tbody></table>
 </section>
@@ -798,6 +859,138 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<td>Type of step: transformation, connector</td>
 	</tr>
 </tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='kameletbinding'>KameletBinding</h2>
+<section class='namespace'>
+<p>Represents a Kamelet binding that can be deployed
+&lt;p&gt;</p>
+
+<h3 id='kameletbinding-example'>Usage example</h3>
+
+<section>
+
+
+
+<h2>&lt;p&gt;
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+name: twitter-search-source-binding
+spec:
+source:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: twitter-search-source
+properties:
+keywords: &quot;Apache Camel&quot;
+apiKey: &quot;your own&quot;
+apiKeySecret: &quot;your own&quot;
+accessToken: &quot;your own&quot;
+accessTokenSecret: &quot;your own&quot;
+steps:</h2>
+<h2>ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: aws-translate-action</h2>
+<p>ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: avro-deserialize-action
+sink:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: kafka-sink
+properties:
+brokers: &quot;The Brokers&quot;
+password: &quot;The Password&quot;
+topic: &quot;The Topic Names&quot;
+username: &quot;The Username&quot;</p>
+
+
+</section>
+
+
+
+</section>
+<h2 id='kameletbindingspec'>KameletBindingSpec</h2>
+<section class='namespace'>
+
+<h3 id='kameletbindingspec-example'>Usage example</h3>
+
+<section>
+
+
+
+<p>spec:
+source:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: twitter-search-source
+properties:
+keywords: &quot;Apache Camel&quot;
+apiKey: &quot;your own&quot;
+apiKeySecret: &quot;your own&quot;
+accessToken: &quot;your own&quot;
+accessTokenSecret: &quot;your own&quot;
+steps:
+-
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: aws-translate-action
+-
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: avro-deserialize-action
+sink:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: kafka-sink
+properties:
+brokers: &quot;The Brokers&quot;
+password: &quot;The Password&quot;
+topic: &quot;The Topic Names&quot;
+username: &quot;The Username&quot;</p>
+
+
+</section>
+
+
+
+</section>
+<h2 id='kameletbindingstep'>KameletBindingStep</h2>
+<section class='namespace'>
+
+<h3 id='kameletbindingstep-example'>Usage example</h3>
+
+<section>
+
+
+
+<p>ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: twitter-search-source
+properties:
+keywords: &quot;Apache Camel&quot;
+apiKey: &quot;your own&quot;
+apiKeySecret: &quot;your own&quot;
+accessToken: &quot;your own&quot;
+accessTokenSecret: &quot;your own&quot;
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: twitter-search-source</p>
+
+
 </section>
 
 
