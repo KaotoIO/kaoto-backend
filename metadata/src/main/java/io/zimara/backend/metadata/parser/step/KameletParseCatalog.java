@@ -77,6 +77,18 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
                 final var type = "camel.apache.org/kamelet.type";
                 if (labelsMap.containsKey(type)) {
                     step.setKameletType(labelsMap.get(type).toString());
+                    switch (step.getKameletType().toLowerCase()) {
+                        case "source":
+                            step.setType("START");
+                            break;
+                        case "sink":
+                            step.setType("END");
+                            break;
+                        default:
+                            step.setType("MIDDLE");
+                            break;
+
+                    }
                 }
             }
 

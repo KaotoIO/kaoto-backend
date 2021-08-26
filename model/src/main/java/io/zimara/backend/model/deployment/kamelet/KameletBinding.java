@@ -6,46 +6,48 @@ import java.util.Map;
 /**
  * 🐱class KameletBinding
  * Represents a Kamelet binding that can be deployed
- * <p>
+ *
  * 🐱example
- * <p>
- * apiVersion: camel.apache.org/v1alpha1
- * kind: KameletBinding
- * metadata:
- * name: twitter-search-source-binding
- * spec:
- * source:
- * ref:
- * kind: Kamelet
- * apiVersion: camel.apache.org/v1alpha1
- * name: twitter-search-source
- * properties:
- * keywords: "Apache Camel"
- * apiKey: "your own"
- * apiKeySecret: "your own"
- * accessToken: "your own"
- * accessTokenSecret: "your own"
- * steps:
- * -
- * ref:
- * kind: Kamelet
- * apiVersion: camel.apache.org/v1alpha1
- * name: aws-translate-action
- * -
- * ref:
- * kind: Kamelet
- * apiVersion: camel.apache.org/v1alpha1
- * name: avro-deserialize-action
- * sink:
- * ref:
- * kind: Kamelet
- * apiVersion: camel.apache.org/v1alpha1
- * name: kafka-sink
- * properties:
- * brokers: "The Brokers"
- * password: "The Password"
- * topic: "The Topic Names"
- * username: "The Username"
+ *
+ ```
+ apiVersion: camel.apache.org/v1alpha1
+ kind: KameletBinding
+ metadata:
+    name: twitter-search-source-binding
+ spec:
+     source:
+         ref:
+             kind: Kamelet
+             apiVersion: camel.apache.org/v1alpha1
+             name: twitter-search-source
+         properties:
+             keywords: "Apache Camel"
+             apiKey: "your own"
+             apiKeySecret: "your own"
+             accessToken: "your own"
+             accessTokenSecret: "your own"
+     steps:
+         -
+             ref:
+                 kind: Kamelet
+                 apiVersion: camel.apache.org/v1alpha1
+                 name: aws-translate-action
+         -
+             ref:
+                 kind: Kamelet
+                 apiVersion: camel.apache.org/v1alpha1
+                 name: avro-deserialize-action
+     sink:
+         ref:
+             kind: Kamelet
+             apiVersion: camel.apache.org/v1alpha1
+             name: kafka-sink
+         properties:
+             brokers: "The Brokers"
+             password: "The Password"
+             topic: "The Topic Names"
+             username: "The Username"
+```
  */
 public class KameletBinding {
     private String apiVersion = "camel.apache.org/v1alpha1";

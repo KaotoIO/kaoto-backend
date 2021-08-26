@@ -28,6 +28,7 @@ public class KameletStep implements Step {
     private String id;
     private String name;
     private String icon;
+    private String type = "MIDDLE";
     private List<Parameter> parameters;
 
     private String apiVersion;
@@ -131,7 +132,7 @@ public class KameletStep implements Step {
 
     @Override
     public String getType() {
-        return "CONNECTOR";
+        return type;
     }
 
     @Override
@@ -171,6 +172,9 @@ public class KameletStep implements Step {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setIcon(String icon) {

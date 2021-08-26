@@ -1,12 +1,14 @@
 package io.zimara.backend.model.deployment.kamelet;
 
 /**
- * 🐱class KameletBindingStep
+ * 🐱class KameletBindingStepRef
  *
  * 🐱example
+ * ```
  *       kind: Kamelet
  *       apiVersion: camel.apache.org/v1alpha1
  *       name: twitter-search-source
+ * ```
  */
 public class KameletBindingStepRef {
 

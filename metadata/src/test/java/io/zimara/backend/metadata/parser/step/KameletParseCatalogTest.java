@@ -28,7 +28,7 @@ class KameletParseCatalogTest {
         Assertions.assertEquals(name, step.getId());
         Assertions.assertEquals(name, step.getName());
         Assertions.assertEquals("KAMELET", step.getSubType());
-        Assertions.assertEquals("CONNECTOR", step.getType());
+        Assertions.assertEquals("START", step.getType());
         Assertions.assertNotNull(step.getParameters());
         Assertions.assertEquals(8, step.getParameters().size());
         for (var p : step.getParameters()) {

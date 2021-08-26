@@ -7,6 +7,7 @@ import java.util.Map;
  * 🐱class KameletBindingStep
  *
  * 🐱example
+ *     ```
  *     ref:
  *       kind: Kamelet
  *       apiVersion: camel.apache.org/v1alpha1
@@ -17,6 +18,7 @@ import java.util.Map;
  *       apiKeySecret: "your own"
  *       accessToken: "your own"
  *       accessTokenSecret: "your own"
+ *       ```
  */
 public class KameletBindingStep {
     private KameletBindingStepRef ref;
