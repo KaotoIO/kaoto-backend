@@ -102,7 +102,7 @@ class ViewDefinitionParserServiceTest {
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
         viewDefinitionConstraint.setOperation(ConstraintOperation.CONTAINS_STEP_TYPE);
-        viewDefinitionConstraint.setParameter("CONNECTOR");
+        viewDefinitionConstraint.setParameter("KAMELET");
         view.getConstraints().add(viewDefinitionConstraint);
         Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
         
