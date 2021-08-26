@@ -877,8 +877,7 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </section>
 <h2 id='kameletbinding'>KameletBinding</h2>
 <section class='namespace'>
-<p>Represents a Kamelet binding that can be deployed
-&lt;p&gt;</p>
+<p>Represents a Kamelet binding that can be deployed</p>
 
 <h3 id='kameletbinding-example'>Usage example</h3>
 
@@ -886,42 +885,44 @@ It may or may not be the same as the ID depending on the type of step.</td>
 
 
 
-<h2>&lt;p&gt;
-apiVersion: camel.apache.org/v1alpha1
+<pre><code>apiVersion: camel.apache.org/v1alpha1
 kind: KameletBinding
 metadata:
-name: twitter-search-source-binding
+   name: twitter-search-source-binding
 spec:
-source:
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: twitter-search-source
-properties:
-keywords: &quot;Apache Camel&quot;
-apiKey: &quot;your own&quot;
-apiKeySecret: &quot;your own&quot;
-accessToken: &quot;your own&quot;
-accessTokenSecret: &quot;your own&quot;
-steps:</h2>
-<h2>ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: aws-translate-action</h2>
-<p>ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: avro-deserialize-action
-sink:
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: kafka-sink
-properties:
-brokers: &quot;The Brokers&quot;
-password: &quot;The Password&quot;
-topic: &quot;The Topic Names&quot;
-username: &quot;The Username&quot;</p>
+    source:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: twitter-search-source
+        properties:
+            keywords: &quot;Apache Camel&quot;
+            apiKey: &quot;your own&quot;
+            apiKeySecret: &quot;your own&quot;
+            accessToken: &quot;your own&quot;
+            accessTokenSecret: &quot;your own&quot;
+    steps:
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: aws-translate-action
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: avro-deserialize-action
+    sink:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: kafka-sink
+        properties:
+            brokers: &quot;The Brokers&quot;
+            password: &quot;The Password&quot;
+            topic: &quot;The Topic Names&quot;
+            username: &quot;The Username&quot;
+</code></pre>
 
 
 </section>
@@ -938,39 +939,40 @@ username: &quot;The Username&quot;</p>
 
 
 
-<p>spec:
-source:
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: twitter-search-source
-properties:
-keywords: &quot;Apache Camel&quot;
-apiKey: &quot;your own&quot;
-apiKeySecret: &quot;your own&quot;
-accessToken: &quot;your own&quot;
-accessTokenSecret: &quot;your own&quot;
-steps:
--
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: aws-translate-action
--
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: avro-deserialize-action
-sink:
-ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: kafka-sink
-properties:
-brokers: &quot;The Brokers&quot;
-password: &quot;The Password&quot;
-topic: &quot;The Topic Names&quot;
-username: &quot;The Username&quot;</p>
+<pre><code>spec:
+    source:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: twitter-search-source
+       properties:
+            keywords: &quot;Apache Camel&quot;
+            apiKey: &quot;your own&quot;
+            apiKeySecret: &quot;your own&quot;
+            accessToken: &quot;your own&quot;
+        accessTokenSecret: &quot;your own&quot;
+    steps:
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: aws-translate-action
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: avro-deserialize-action
+    sink:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: kafka-sink
+       properties:
+            brokers: &quot;The Brokers&quot;
+            password: &quot;The Password&quot;
+            topic: &quot;The Topic Names&quot;
+            username: &quot;The Username&quot;
+</code></pre>
 
 
 </section>
@@ -987,19 +989,37 @@ username: &quot;The Username&quot;</p>
 
 
 
-<p>ref:
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: twitter-search-source
-properties:
-keywords: &quot;Apache Camel&quot;
-apiKey: &quot;your own&quot;
-apiKeySecret: &quot;your own&quot;
-accessToken: &quot;your own&quot;
-accessTokenSecret: &quot;your own&quot;
-kind: Kamelet
-apiVersion: camel.apache.org/v1alpha1
-name: twitter-search-source</p>
+<pre><code>    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: twitter-search-source
+    properties:
+      keywords: &quot;Apache Camel&quot;
+      apiKey: &quot;your own&quot;
+      apiKeySecret: &quot;your own&quot;
+      accessToken: &quot;your own&quot;
+      accessTokenSecret: &quot;your own&quot;
+      ```</code></pre>
+
+
+</section>
+
+
+
+</section>
+<h2 id='kameletbindingstepref'>KameletBindingStepRef</h2>
+<section class='namespace'>
+
+<h3 id='kameletbindingstepref-example'>Usage example</h3>
+
+<section>
+
+
+
+<pre><code>      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: twitter-search-source
+</code></pre>
 
 
 </section>

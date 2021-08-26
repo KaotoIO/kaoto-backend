@@ -311,6 +311,16 @@ ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="
 </TABLE>>]
 
 
+"KameletBindingStepRef" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBindingStepRef</B></TD></TR>
+	<TR><TD><I>Usage example</I><BR/>
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
 "Parameter" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Parameter</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
