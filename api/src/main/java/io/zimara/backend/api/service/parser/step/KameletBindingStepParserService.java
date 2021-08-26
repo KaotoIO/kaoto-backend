@@ -49,7 +49,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         Map<String, Object> spec = (Map<String, Object>) parsed.getOrDefault("spec", empty);
         steps.add(processStep((Map<String, Object>) spec.getOrDefault("source", empty)));
 
-        List<Map<String, Object>> intermediatesteps = (List<Map<String, Object>>) spec.getOrDefault("steps", empty);
+        List<Map<String, Object>> intermediatesteps = (List<Map<String, Object>>) spec.getOrDefault("steps", Collections.emptyList());
 
         for (Map<String, Object> intermediatestep : intermediatesteps) {
             steps.add(processStep(intermediatestep));
