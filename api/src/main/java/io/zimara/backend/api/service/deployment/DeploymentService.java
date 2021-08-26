@@ -1,27 +1,18 @@
 package io.zimara.backend.api.service.deployment;
 
-import io.zimara.backend.api.service.parser.StepParserService;
-import io.zimara.backend.api.service.parser.ViewParserService;
-import io.zimara.backend.api.service.parser.step.KameletBindingStepParserService;
 import io.zimara.backend.model.deployment.kamelet.KameletBinding;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
-import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.QueryParam;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 🐱class DeploymentService

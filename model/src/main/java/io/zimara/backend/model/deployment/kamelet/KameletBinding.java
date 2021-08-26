@@ -1,10 +1,6 @@
 package io.zimara.backend.model.deployment.kamelet;
 
-import io.zimara.backend.model.parameter.Parameter;
-import io.zimara.backend.model.step.Step;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

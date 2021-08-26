@@ -9,13 +9,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *
  * 🐱class CatalogCollection
  * 🐱inherits MetadataCatalog
- *
- *
+ * <p>
+ * <p>
  * Joins a list of metadata catalogs.
- *
+ * <p>
  * When those catalogs are updated, the content of this collection changes too.
  * As each catalog have their own ID constraints, there may be more than one
  * connector with the same ID on this collection of catalogs.

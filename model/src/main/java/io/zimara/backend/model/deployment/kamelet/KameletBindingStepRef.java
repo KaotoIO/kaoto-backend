@@ -1,8 +1,5 @@
 package io.zimara.backend.model.deployment.kamelet;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 🐱class KameletBindingStep
  *

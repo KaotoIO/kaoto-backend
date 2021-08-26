@@ -55,7 +55,7 @@ class CatalogCollectionTest {
         Collection<Step> step = catalogCollection.searchStepsByName(CONNECTOR_2);
         Assertions.assertNotNull(step);
         Assertions.assertEquals(3, step.size());
-        for(Step s : step) {
+        for (Step s : step) {
             Assertions.assertEquals(CONNECTOR_2, s.getName());
         }
     }

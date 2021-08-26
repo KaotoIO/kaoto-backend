@@ -4,12 +4,10 @@ import io.zimara.backend.metadata.MetadataCatalog;
 import io.zimara.backend.model.Metadata;
 
 /**
- *
  * 🐱class ReadOnlyCatalog
  * 🐱inherits CatalogCollection
- *
+ * <p>
  * A Catalog Collection we make sure it can't be modified.
- *
  */
 public class ReadOnlyCatalog<T extends Metadata> extends CatalogCollection<T> {
 

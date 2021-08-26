@@ -31,7 +31,7 @@ class KameletParseCatalogTest {
         Assertions.assertEquals("CONNECTOR", step.getType());
         Assertions.assertNotNull(step.getParameters());
         Assertions.assertEquals(8, step.getParameters().size());
-        for(var p : step.getParameters()) {
+        for (var p : step.getParameters()) {
             Assertions.assertNotNull(p.getType());
             Assertions.assertNotNull(p.getLabel());
             Assertions.assertNotNull(p.getId());

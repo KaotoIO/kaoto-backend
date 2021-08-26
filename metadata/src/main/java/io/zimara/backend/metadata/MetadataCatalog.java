@@ -6,15 +6,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *
  * 🐱class MetadataCatalog
  * 🐱relationship dependsOn Metadata
- *
- *
+ * <p>
+ * <p>
  * All metadata catalogs implements this interface. Helper to unify catalog handling implementation.
- *
  */
-public interface MetadataCatalog<T extends Metadata > {
+public interface MetadataCatalog<T extends Metadata> {
 
     /*
      * 🐱method searchStepByID : Metadata

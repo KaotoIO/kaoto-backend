@@ -15,12 +15,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- *
  * 🐱class ViewDefinitionParseCatalog
  * 🐱inherits GitParseCatalog
- *
+ * <p>
  * Reads and parses a view definition catalog. Extracts all the view definitions it can find and generate a ViewDefinition for each one.
- *
  */
 public class ViewDefinitionParseCatalog extends GitParseCatalog<ViewDefinition> {
 

@@ -1,7 +1,5 @@
 package io.zimara.backend.model.deployment.kamelet;
 
-import io.zimara.backend.model.step.Step;
-
 import java.util.ArrayList;
 import java.util.List;
 

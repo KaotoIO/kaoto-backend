@@ -2,7 +2,6 @@ package io.zimara.backend.api.resource;
 
 import io.zimara.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.zimara.backend.api.service.deployment.DeploymentService;
-import io.zimara.backend.model.step.Step;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
