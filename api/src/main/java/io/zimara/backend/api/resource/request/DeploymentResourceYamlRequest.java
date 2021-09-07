@@ -1,6 +1,5 @@
 package io.zimara.backend.api.resource.request;
 
-import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 
 /**

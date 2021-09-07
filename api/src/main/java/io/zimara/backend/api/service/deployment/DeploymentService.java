@@ -4,7 +4,6 @@ import io.zimara.backend.model.deployment.kamelet.KameletBinding;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
-import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -12,13 +11,11 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.io.StringWriter;
 
 /**
  * 🐱class DeploymentService
  *
  * This endpoint will return a list of views based on the parameters.
- *
  */
 @ApplicationScoped
 public class DeploymentService {
@@ -39,7 +36,7 @@ public class DeploymentService {
 
         spec.setSource(createKameletBindingStep(steps[0]));
 
-        for(int i = 1; i < steps.length - 1; i++) {
+        for (int i = 1; i < steps.length - 1; i++) {
             spec.getSteps().add(createKameletBindingStep(steps[i]));
         }
 
@@ -61,8 +58,8 @@ public class DeploymentService {
         ref.setName(step.getName());
         kameletStep.setRef(ref);
 
-        for(var p : step.getParameters()){
-            if(p.getValue() != null) {
+        for (var p : step.getParameters()) {
+            if (p.getValue() != null) {
                 kameletStep.getProperties().put(p.getId(), p.getValue().toString());
             }
         }
