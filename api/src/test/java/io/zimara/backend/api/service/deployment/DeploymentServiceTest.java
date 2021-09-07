@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 @QuarkusTest
 class DeploymentServiceTest {
@@ -53,15 +54,44 @@ class DeploymentServiceTest {
     @Test
     void yaml() {
         List<ViewDefinition> views = viewDefinitionService.views(binding);
-
         String res = deploymentService.yaml("twitter-search-source-binding", views.get(0).getSteps().toArray(new KameletStep[0]));
-
-        Representer representer = new Representer();
-        representer.getPropertyUtils().setAllowReadOnlyProperties(true);
-
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class), representer);
-        var expected = yaml.load(binding);
-        String expectedStr = yaml.dump(expected);
+        String expectedStr ="apiVersion: camel.apache.org/v1alpha1\n" +
+                "kind: KameletBinding\n" +
+                "metadata:\n" +
+                "  name: twitter-search-source-binding\n" +
+                "spec:\n" +
+                "  sink:\n" +
+                "    properties:\n" +
+                "      password: The Password\n" +
+                "      brokers: The Brokers\n" +
+                "      topic: The Topic Names\n" +
+                "      username: The Username\n" +
+                "    ref:\n" +
+                "      apiVersion: camel.apache.org/v1alpha1\n" +
+                "      kind: Kamelet\n" +
+                "      name: kafka-sink\n" +
+                "  source:\n" +
+                "    properties:\n" +
+                "      keywords: Apache Camel\n" +
+                "      apiKey: your own\n" +
+                "      apiKeySecret: your own\n" +
+                "      accessToken: your own\n" +
+                "      accessTokenSecret: your own\n" +
+                "    ref:\n" +
+                "      apiVersion: camel.apache.org/v1alpha1\n" +
+                "      kind: Kamelet\n" +
+                "      name: twitter-search-source\n" +
+                "  steps:\n" +
+                "  - properties: {}\n" +
+                "    ref:\n" +
+                "      apiVersion: camel.apache.org/v1alpha1\n" +
+                "      kind: Kamelet\n" +
+                "      name: aws-translate-action\n" +
+                "  - properties: {}\n" +
+                "    ref:\n" +
+                "      apiVersion: camel.apache.org/v1alpha1\n" +
+                "      kind: Kamelet\n" +
+                "      name: avro-deserialize-action\n";
 
         Assertions.assertEquals(expectedStr, res);
     }

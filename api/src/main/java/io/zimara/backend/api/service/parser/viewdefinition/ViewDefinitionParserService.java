@@ -39,11 +39,6 @@ public class ViewDefinitionParserService implements ViewParserService<ViewDefini
     }
 
     @Override
-    public String getIdentifier() {
-        return "DEFAULT-VIEW-PARSER";
-    }
-
-    @Override
     public boolean appliesTo(List<Step> steps, ViewDefinition viewDefinition) {
         if (viewDefinition.getConstraints() == null || viewDefinition.getConstraints().isEmpty()) {
             return true;

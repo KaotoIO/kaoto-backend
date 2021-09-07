@@ -8,12 +8,12 @@ package io.zimara.backend.model.parameter;
  */
 public class Parameter<T> {
 
-    private final String label;
-    private final String description;
-    private final String id;
-    private final String type;
+    private String label;
+    private String description;
+    private String id;
+    private String type;
     private T value;
-    private final T defaultValue;
+    private T defaultValue;
 
     public Parameter(String id, String label, String description, T defaultValue, String type) {
         this.id = id;
@@ -21,6 +21,9 @@ public class Parameter<T> {
         this.description = description;
         this.defaultValue = defaultValue;
         this.type = type;
+    }
+
+    public Parameter() {
     }
 
     /*

@@ -15,16 +15,16 @@ import java.util.Map;
  *
  * It may have some constraints on when this view can be used.
  */
-public class ViewDefinition implements Metadata {
+public class ViewDefinition extends Metadata {
 
     public ViewDefinition() {
 
     }
 
     public ViewDefinition(ViewDefinition v) {
-        this.id = v.getId();
-        this.name = v.getName();
-        this.type = v.getType();
+        setId(v.getId());
+        setName(v.getName());
+        setType(v.getType());
     }
 
     /*
@@ -34,9 +34,6 @@ public class ViewDefinition implements Metadata {
      */
     private List<Step> steps = null;
 
-    private String name = null;
-    private String type = null;
-    private String id = null;
 
     /*
      * 🐱property properties: Map[String, String]
@@ -52,33 +49,6 @@ public class ViewDefinition implements Metadata {
      * If there are optional constraints, at least one of them should be fulfilled.
      */
     private List<ViewDefinitionConstraint> constraints = null;
-
-    @Override
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public List<Step> getSteps() {
         return steps;
@@ -108,9 +78,9 @@ public class ViewDefinition implements Metadata {
     public String toString() {
         return "ViewDefinition{" +
                 "steps=" + steps +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", id='" + id + '\'' +
+                ", name='" + getName() + '\'' +
+                ", type='" + getType() + '\'' +
+                ", id='" + getId() + '\'' +
                 ", properties=" + properties +
                 '}';
     }

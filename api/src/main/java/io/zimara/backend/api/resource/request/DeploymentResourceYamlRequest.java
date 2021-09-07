@@ -1,6 +1,7 @@
 package io.zimara.backend.api.resource.request;
 
 import io.zimara.backend.model.step.Step;
+import io.zimara.backend.model.step.kamelet.KameletStep;
 
 /**
  * 🐱class DeploymentResourceYamlRequest
@@ -17,15 +18,15 @@ public class DeploymentResourceYamlRequest {
         this.name = name;
     }
 
-    public Step[] getSteps() {
+    public KameletStep[] getSteps() {
         return steps;
     }
 
-    public void setSteps(Step[] steps) {
+    public void setSteps(KameletStep[] steps) {
         this.steps = steps;
     }
 
-    private Step[] steps;
+    private KameletStep[] steps;
 
 
 }

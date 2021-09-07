@@ -12,23 +12,23 @@ import java.util.Map;
  * 🐱relationship compositionOf Parameter, 0..n
  * Represents a Kamelet step inside an integration
  */
-public class KameletStep implements Step {
+public class KameletStep extends Step {
 
     public KameletStep(String id, String name, String icon, List<Parameter> parameters) {
-        this.id = id;
-        this.name = name;
-        this.icon = icon;
-        this.parameters = parameters;
+        this();
+        setId(id);
+        setName(name);
+        setType("MIDDLE");
+        setIcon(icon);
+        setParameters(parameters);
     }
 
     public KameletStep() {
         super();
+        setSubType("KAMELET");
     }
 
-    private String id;
-    private String name;
     private String icon;
-    private String type = "MIDDLE";
     private List<Parameter> parameters;
 
     private String apiVersion;
@@ -130,25 +130,6 @@ public class KameletStep implements Step {
         return spec;
     }
 
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public String getSubType() {
-        return "KAMELET";
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getId() {
-        return this.id;
-    }
 
     /*
      * 🐱property parameters: List[Parameter]
@@ -166,17 +147,6 @@ public class KameletStep implements Step {
         return icon;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setIcon(String icon) {
         this.icon = icon;
     }
@@ -192,9 +162,9 @@ public class KameletStep implements Step {
     @Override
     public String toString() {
         return "KameletStep{" + '\n' +
-                "  id='" + id + '\'' + '\n' +
-                ", name='" + name + '\'' + '\n' +
-                ", icon='" + icon + '\'' + '\n' +
+                "  id='" + getId() + '\'' + '\n' +
+                ", name='" + getName() + '\'' + '\n' +
+                ", icon='" + getIcon() + '\'' + '\n' +
                 ", parameters=" + parameters + '\n' +
                 ", type=" + kameletType + '\n' +
                 ", metadata=" + metadata + '\n' +
@@ -208,7 +178,7 @@ public class KameletStep implements Step {
 
         KameletStep that = (KameletStep) o;
 
-        if (!id.equals(that.id)) return false;
+        if (!getId().equals(that.getId())) return false;
         if (!getName().equals(that.getName())) return false;
         if (getIcon() != null ? !getIcon().equals(that.getIcon()) : that.getIcon() != null) return false;
         if (!getParameters().equals(that.getParameters())) return false;
@@ -222,7 +192,7 @@ public class KameletStep implements Step {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = getId().hashCode();
         result = 31 * result + getName().hashCode();
         result = 31 * result + (getIcon() != null ? getIcon().hashCode() : 0);
         result = 31 * result + (getParameters() != null ? getParameters().hashCode() : 0);

@@ -1,5 +1,6 @@
 package io.zimara.backend.api.resource;
 
+import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.model.step.Step;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 
 @QuarkusTest
+@TestHTTPEndpoint(StepResource.class)
 class StepResourceTest {
 
     public static final String INFINISPAN_SOURCE = "infinispan-source";

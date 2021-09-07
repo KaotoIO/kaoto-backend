@@ -33,17 +33,17 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String yaml(String name, Step[] steps) {
+    public String yaml(String name, KameletStep[] steps) {
 
         KameletBindingSpec spec = new KameletBindingSpec();
 
-        spec.setSource(createKameletBindingStep((KameletStep) steps[0]));
+        spec.setSource(createKameletBindingStep(steps[0]));
 
         for(int i = 1; i < steps.length - 1; i++) {
-            spec.getSteps().add(createKameletBindingStep((KameletStep) steps[i]));
+            spec.getSteps().add(createKameletBindingStep(steps[i]));
         }
 
-        spec.setSink(createKameletBindingStep((KameletStep) steps[steps.length - 1]));
+        spec.setSink(createKameletBindingStep(steps[steps.length - 1]));
 
         KameletBinding binding = new KameletBinding(name, spec);
 
@@ -51,10 +51,7 @@ public class DeploymentService {
         representer.getPropertyUtils().setAllowReadOnlyProperties(true);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), representer);
-
-        StringWriter writer = new StringWriter();
-        yaml.dump(binding, writer);
-        return writer.toString();
+        return yaml.dumpAsMap(binding);
     }
 
     private KameletBindingStep createKameletBindingStep(KameletStep step) {

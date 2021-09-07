@@ -21,8 +21,6 @@ public interface ViewParserService<T extends ViewDefinition> {
      */
     List<T> parse(List<Step> steps);
 
-    String getIdentifier();
-
     /*
      * 🐱method appliesTo: boolean
      * 🐱param steps: List[Step]

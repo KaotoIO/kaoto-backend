@@ -8,13 +8,21 @@ import io.zimara.backend.model.Metadata;
  * 🐱inherits Metadata
  * Represents a step inside an integration.
  */
-public interface Step extends Metadata {
+public class Step extends Metadata {
+
+    private String subType = null;
 
     /*
      * 🐱property subtype: String
      *
      * Specifies the subtype (kamelet connector, camel connector,...)
      */
-    public abstract String getSubType();
+    public String getSubType() {
+        return this.subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
 
 }

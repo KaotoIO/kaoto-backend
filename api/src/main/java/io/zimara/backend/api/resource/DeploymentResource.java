@@ -48,7 +48,7 @@ public class DeploymentResource {
     public Response mapException(Exception x) {
         log.error("Error processing deployment.", x);
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        return Response.status(Response.Status.BAD_REQUEST)
                 .entity("Error processing deployment: " + x.getMessage())
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();

@@ -23,7 +23,6 @@ import java.util.Map;
 public class KameletBindingStepParserService implements StepParserService<Step> {
 
     private final Yaml yaml = new Yaml(new SafeConstructor());
-    private String identifier = "Kamelet Binding";
     private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
 
     @Inject
@@ -32,7 +31,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     @Override
     public List<Step> parse(String input) {
         if (!appliesTo(input)) {
-            throw new IllegalArgumentException("Wrong format provided. This is not parseable by " + getIdentifier());
+            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
         }
 
         List<Step> steps = new ArrayList<>(2);
@@ -43,6 +42,18 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         processSpec(steps, parsed, empty);
 
         return steps;
+    }
+
+    @Override
+    public String getIdentifier(String input) {
+        if (!appliesTo(input)) {
+            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
+        }
+
+        Map<String, Object> parsed = yaml.load(input);
+        Map<String, Object> empty = Collections.emptyMap();
+
+        return processMetadata(parsed, empty);
     }
 
     private void processSpec(List<Step> steps, Map<String, Object> parsed, Map<String, Object> empty) {
@@ -94,14 +105,9 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     }
 
-    private void processMetadata(Map<String, Object> parsed, Map<String, Object> empty) {
+    private String processMetadata(Map<String, Object> parsed, Map<String, Object> empty) {
         Map<String, Object> metadata = (Map<String, Object>) parsed.getOrDefault("metadata", empty);
-        identifier = metadata.getOrDefault("name", identifier).toString();
-    }
-
-    @Override
-    public String getIdentifier() {
-        return this.identifier;
+        return metadata.getOrDefault("name", "untitled").toString();
     }
 
     @Override
