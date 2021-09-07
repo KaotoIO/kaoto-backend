@@ -5,7 +5,6 @@ import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.zimara.backend.model.step.kamelet.KameletStep;
-import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -19,9 +18,6 @@ import javax.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class DeploymentService {
-
-    private Logger log = Logger.getLogger(DeploymentService.class);
-
 
     /*
      * 🐱method yaml: String
