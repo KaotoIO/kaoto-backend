@@ -18,10 +18,10 @@
         <maven.compiler.testSource>${maven.compiler.source}</maven.compiler.testSource>
 
         <!-- Quarkus version -->
-        <quarkus-plugin.version>2.0.2.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.0.2.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.2.2.Final</quarkus.platform.version>
+        <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
 
         <!-- SonarCloud analysis -->
         <sonar.projectKey>ZimaraIO_zimara-backend</sonar.projectKey>
@@ -72,6 +72,53 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.14.0</version>
+                <executions>
+                    <execution>
+                        <id>PMD Check</id>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>cpd-check</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <failOnViolation>false</failOnViolation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.45.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>Check Style</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <suppressionsLocation>checkstyle-suppresions.xml</suppressionsLocation>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <consoleOutput>true</consoleOutput>
+                            <violationSeverity>warning</violationSeverity>
+                            <failOnViolation>false</failOnViolation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -115,16 +162,16 @@
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <version>3.2.0</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <version>4.2.3</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-pmd-plugin</artifactId>
-                        <version>3.14.0</version>
+                        <executions>
+                            <execution>
+                                <id>Dependency Analysis</id>
+                                <goals>
+                                    <goal>analyze</goal>
+                                    <goal>analyze-dep-mgt</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
