@@ -20,8 +20,6 @@ public interface StepParserService<T extends Step> {
      */
     List<T> parse(String yaml);
 
-    String getIdentifier(String yaml);
-
     /*
      * 🐱method appliesTo: boolean
      * 🐱param yaml: String

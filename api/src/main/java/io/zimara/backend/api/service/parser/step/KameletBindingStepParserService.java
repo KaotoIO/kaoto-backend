@@ -44,18 +44,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
         return steps;
     }
-
-    @Override
-    public String getIdentifier(String input) {
-        if (!appliesTo(input)) {
-            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
-        }
-
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
-        KameletBinding binding = yaml.load(input);
-        return processMetadata(binding.getMetadata());
-    }
-
+    
     private void processSpec(List<Step> steps, KameletBindingSpec spec) {
         steps.add(processStep(spec.getSource()));
 
