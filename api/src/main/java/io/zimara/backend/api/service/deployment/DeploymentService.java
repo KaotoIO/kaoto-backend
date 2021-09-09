@@ -1,23 +1,29 @@
 package io.zimara.backend.api.service.deployment;
 
-import io.zimara.backend.model.deployment.kamelet.KameletBinding;
-import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
-import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
-import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
+import io.zimara.backend.api.service.parser.DeploymentParserService;
+import io.zimara.backend.api.service.parser.deployment.KameletBindingDeploymentParserService;
 import io.zimara.backend.model.step.Step;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 🐱class DeploymentService
- *
+ * <p>
  * This endpoint will return a list of views based on the parameters.
  */
 @ApplicationScoped
 public class DeploymentService {
+
+    private List<DeploymentParserService> parsers = new ArrayList<>();
+
+    @Inject
+    public void setKameletBindingParserService(KameletBindingDeploymentParserService kameletBindingParserService) {
+        parsers.add(kameletBindingParserService);
+    }
 
     /*
      * 🐱method yaml: String
@@ -26,40 +32,16 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String yaml(String name, Step[] steps) {
+    public String yaml(String name, Step[] stepArray) {
 
-        KameletBindingSpec spec = new KameletBindingSpec();
+        List<Step> steps = Arrays.asList(stepArray);
 
-        spec.setSource(createKameletBindingStep(steps[0]));
-
-        for (int i = 1; i < steps.length - 1; i++) {
-            spec.getSteps().add(createKameletBindingStep(steps[i]));
-        }
-
-        spec.setSink(createKameletBindingStep(steps[steps.length - 1]));
-
-        KameletBinding binding = new KameletBinding(name, spec);
-
-        Representer representer = new Representer();
-        representer.getPropertyUtils().setAllowReadOnlyProperties(true);
-
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class), representer);
-        return yaml.dumpAsMap(binding);
-    }
-
-    private KameletBindingStep createKameletBindingStep(Step step) {
-        KameletBindingStep kameletStep = new KameletBindingStep();
-
-        KameletBindingStepRef ref = new KameletBindingStepRef();
-        ref.setName(step.getName());
-        kameletStep.setRef(ref);
-
-        for (var p : step.getParameters()) {
-            if (p.getValue() != null) {
-                kameletStep.getProperties().put(p.getId(), p.getValue().toString());
+        for (DeploymentParserService parser : parsers) {
+            if (parser.appliesTo(steps)) {
+                return parser.parse(name, steps);
             }
         }
 
-        return kameletStep;
+        return "";
     }
 }
