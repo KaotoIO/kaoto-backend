@@ -92,12 +92,6 @@ views:(&lt;String&gt; yaml):
 		, taillabel="0..1"
 		
 		]
-"DeploymentResourceYamlRequest" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentResourceYamlRequest</B></TD></TR>
-	
-</TABLE>>]
-
-
 "DeploymentService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -110,12 +104,12 @@ yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
 </TABLE>>]
 
 
-"ViewParserService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewParserService</B></TD></TR>
+"DeploymentGeneratorService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentGeneratorService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
 parse(&lt;String&gt; name, &lt;List[Step]&gt; steps):String
 <BR align="left" />
-appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
+appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
 
 </TD></TR>
@@ -124,13 +118,7 @@ appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boole
 </TABLE>>]
 
 
-		"ViewParserService" -> "ViewDefinition" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-		"ViewParserService" -> "ViewDefinition" [
+		"DeploymentGeneratorService" -> "Step" [
 		arrowhead=open, style=dashed
 		
 		
@@ -174,7 +162,27 @@ views(&lt;String&gt; yaml):List[ViewDefinition]
 		
 		
 		]
-		"ViewDefinitionService" -> "ViewParserService" [
+		"ViewDefinitionService" -> "ViewDefinitionParserService" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"ViewDefinitionParserService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionParserService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
+<BR align="left" />
+appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"ViewDefinitionParserService" -> "ViewDefinition" [
 		arrowhead=open, style=dashed
 		
 		

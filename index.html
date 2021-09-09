@@ -214,6 +214,37 @@ endpoints to interact with deployments.</p>
 </section>
 
 
+<h2 id='deploymentresourceyamlrequest'></h2>
+<section class='namespace'>
+
+<h3 id='deploymentresourceyamlrequest-property'>DeploymentResourceYamlRequest</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentresourceyamlrequest-name'>
+		<td><code><b>name</b>
+		<td><code>String</code></td>
+		<td>Name of the integration</td>
+	</tr>
+	<tr id='deploymentresourceyamlrequest-steps'>
+		<td><code><b>steps</b>
+		<td><code><a href='#kameletstep'>KameletStep[]</a></code></td>
+		<td>steps of the integration</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 
 </section>
 <h2 id='stepresource'>StepResource</h2>
@@ -316,11 +347,6 @@ endpoints to interact with deployments.</p>
 
 
 </section>
-<h2 id='deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</h2>
-<section class='namespace'>
-
-
-</section>
 <h2 id='deploymentservice'>DeploymentService</h2>
 <section class='namespace'>
 <p>&lt;p&gt;
@@ -349,12 +375,11 @@ This endpoint will return a list of views based on the parameters.</p>
 
 
 </section>
-<h2 id='viewparserservice'>ViewParserService</h2>
+<h2 id='deploymentgeneratorservice'>DeploymentGeneratorService</h2>
 <section class='namespace'>
-<p>Generic interface for all viewDefinition parsers.</p>
-<p>Generic interface for all viewDefinition parsers.</p>
+<p>Generic interface to generate yaml deployments</p>
 
-<h3 id='viewparserservice-method'>Methods</h3>
+<h3 id='deploymentgeneratorservice-method'>Methods</h3>
 
 <section>
 
@@ -366,24 +391,22 @@ This endpoint will return a list of views based on the parameters.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='viewparserservice-parse'>
+	<tr id='deploymentgeneratorservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the list of steps, returns the yaml to deploy it.
-If applies, the name will be the name used on the integration deployed.
-<p>Based on the list of steps, offer a list of compatible ViewDefinitions.</p></td>
+If applies, the name will be the name used on the integration deployed.</td>
 	</tr>
-	<tr id='viewparserservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+	<tr id='deploymentgeneratorservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Check if the parser applies to the steps
-<p>Check if the viewDefinition applies to the steps</p></td>
+		<td>Check if the parser applies to the steps</td>
 	</tr>
 </tbody></table>
 </section>
 
 
-<h2 id='viewdefinitionparserservice'></h2>
+<h2 id='kameletbindingdeploymentgeneratorservice'></h2>
 <section class='namespace'>
 
 
@@ -452,6 +475,43 @@ If applies, the name will be the name used on the integration deployed.
 </section>
 
 
+
+</section>
+<h2 id='viewdefinitionparserservice'>ViewDefinitionParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all viewDefinition parsers.</p>
+
+<h3 id='viewdefinitionparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitionparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
+	</tr>
+	<tr id='viewdefinitionparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the viewDefinition applies to the steps</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+<h2 id='genericviewdefinitionparserservice'></h2>
+<section class='namespace'>
+
+
+</section>
 
 </section>
 <h2 id='metadatacatalog'>MetadataCatalog</h2>
