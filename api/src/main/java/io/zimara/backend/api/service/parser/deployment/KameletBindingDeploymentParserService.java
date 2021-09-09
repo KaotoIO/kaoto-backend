@@ -21,6 +21,9 @@ public class KameletBindingDeploymentParserService implements DeploymentParserSe
 
     @Override
     public String parse(String name, List<Step> steps) {
+        if (!appliesTo(steps)) {
+            return "";
+        }
 
         KameletBindingSpec spec = new KameletBindingSpec();
 
@@ -48,9 +51,11 @@ public class KameletBindingDeploymentParserService implements DeploymentParserSe
         ref.setName(step.getName());
         kameletStep.setRef(ref);
 
-        for (var p : step.getParameters()) {
-            if (p.getValue() != null) {
-                kameletStep.getProperties().put(p.getId(), p.getValue().toString());
+        if(step.getParameters() != null) {
+            for (var p : step.getParameters()) {
+                if (p.getValue() != null) {
+                    kameletStep.getProperties().put(p.getId(), p.getValue().toString());
+                }
             }
         }
 
@@ -64,7 +69,7 @@ public class KameletBindingDeploymentParserService implements DeploymentParserSe
         }
 
         for (Step s : steps) {
-            if (s.getSubType().equalsIgnoreCase("KAMELET")) {
+            if ("KAMELET".equalsIgnoreCase(s.getSubType())) {
                 return true;
             }
         }

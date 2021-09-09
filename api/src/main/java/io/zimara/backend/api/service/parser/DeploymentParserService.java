@@ -1,7 +1,6 @@
 package io.zimara.backend.api.service.parser;
 
 import io.zimara.backend.model.step.Step;
-import io.zimara.backend.model.view.ViewDefinition;
 
 import java.util.List;
 
