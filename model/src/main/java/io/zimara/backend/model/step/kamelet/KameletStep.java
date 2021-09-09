@@ -28,15 +28,11 @@ public class KameletStep extends Step {
         setSubType("KAMELET");
     }
 
-    private String icon;
-    private List<Parameter> parameters;
 
     private String apiVersion;
     private String kind;
     private String kameletType;
     private String group;
-    private String title;
-    private String description;
 
     private Map<String, Object> metadata;
     private Map<String, Object> spec;
@@ -52,30 +48,6 @@ public class KameletStep extends Step {
 
     public void setGroup(String group) {
         this.group = group;
-    }
-
-    /*
-     * 🐱property title: String
-     *
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /*
-     * 🐱property description: String
-     *
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /*
@@ -130,31 +102,6 @@ public class KameletStep extends Step {
         return spec;
     }
 
-
-    /*
-     * 🐱property parameters: List[Parameter]
-     *
-     */
-    public List<Parameter> getParameters() {
-        return parameters;
-    }
-
-    /*
-     * 🐱property icon: String
-     *
-     */
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public void setParameters(List<Parameter> parameters) {
-        this.parameters = parameters;
-    }
-
     public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
     }
@@ -164,8 +111,6 @@ public class KameletStep extends Step {
         return "KameletStep{" + '\n' +
                 "  id='" + getId() + '\'' + '\n' +
                 ", name='" + getName() + '\'' + '\n' +
-                ", icon='" + getIcon() + '\'' + '\n' +
-                ", parameters=" + parameters + '\n' +
                 ", type=" + kameletType + '\n' +
                 ", metadata=" + metadata + '\n' +
                 '}';
@@ -180,7 +125,6 @@ public class KameletStep extends Step {
 
         if (!getId().equals(that.getId())) return false;
         if (!getName().equals(that.getName())) return false;
-        if (getIcon() != null ? !getIcon().equals(that.getIcon()) : that.getIcon() != null) return false;
         if (!getParameters().equals(that.getParameters())) return false;
         if (!getApiVersion().equals(that.getApiVersion())) return false;
         if (!getKind().equals(that.getKind())) return false;
