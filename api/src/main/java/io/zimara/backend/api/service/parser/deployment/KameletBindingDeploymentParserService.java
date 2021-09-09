@@ -8,6 +8,9 @@ import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.zimara.backend.model.step.Step;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -37,7 +40,15 @@ public class KameletBindingDeploymentParserService implements DeploymentParserSe
 
         KameletBinding binding = new KameletBinding(name, spec);
 
-        Representer representer = new Representer();
+        Representer representer = new Representer() {
+            @Override
+            protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
+                if (propertyValue == null) {
+                    return null;
+                }
+                return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+            }
+        };
         representer.getPropertyUtils().setAllowReadOnlyProperties(true);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), representer);

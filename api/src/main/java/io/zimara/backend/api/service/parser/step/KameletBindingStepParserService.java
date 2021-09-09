@@ -2,17 +2,18 @@ package io.zimara.backend.api.service.parser.step;
 
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.api.service.parser.StepParserService;
+import io.zimara.backend.model.deployment.kamelet.KameletBinding;
+import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
+import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
 import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
-import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ import java.util.Map;
 @ApplicationScoped
 public class KameletBindingStepParserService implements StepParserService<Step> {
 
-    private final Yaml yaml = new Yaml(new SafeConstructor());
     private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
 
     @Inject
@@ -35,11 +35,12 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         }
 
         List<Step> steps = new ArrayList<>(2);
-        Map<String, Object> parsed = yaml.load(input);
-        Map<String, Object> empty = Collections.emptyMap();
 
-        processMetadata(parsed, empty);
-        processSpec(steps, parsed, empty);
+        Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
+        KameletBinding binding = yaml.load(input);
+
+        processMetadata(binding.getMetadata());
+        processSpec(steps, binding.getSpec());
 
         return steps;
     }
@@ -50,52 +51,45 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
         }
 
-        Map<String, Object> parsed = yaml.load(input);
-        Map<String, Object> empty = Collections.emptyMap();
-
-        return processMetadata(parsed, empty);
+        Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
+        KameletBinding binding = yaml.load(input);
+        return processMetadata(binding.getMetadata());
     }
 
-    private void processSpec(List<Step> steps, Map<String, Object> parsed, Map<String, Object> empty) {
-        Map<String, Object> spec = (Map<String, Object>) parsed.getOrDefault("spec", empty);
-        steps.add(processStep((Map<String, Object>) spec.getOrDefault("source", empty)));
+    private void processSpec(List<Step> steps, KameletBindingSpec spec) {
+        steps.add(processStep(spec.getSource()));
 
-        List<Map<String, Object>> intermediatesteps = (List<Map<String, Object>>) spec.getOrDefault("steps", Collections.emptyList());
-
-        for (Map<String, Object> intermediatestep : intermediatesteps) {
-            steps.add(processStep(intermediatestep));
+        for (KameletBindingStep intermediateStep : spec.getSteps()) {
+            steps.add(processStep(intermediateStep));
         }
 
-        steps.add(processStep((Map<String, Object>) spec.getOrDefault("sink", empty)));
+        steps.add(processStep(spec.getSink()));
     }
 
-    private Step processStep(Map<String, Object> source) {
+    private Step processStep(KameletBindingStep source) {
         Step step = null;
 
-        if (source.containsKey("uri")) {
+        if (source.getUri() != null) {
             log.trace("Found uri component.");
-            String uri = source.get("uri").toString();
+            String uri = source.getUri();
             step = catalog.getReadOnlyCatalog().searchStepByName(uri.substring(0, uri.indexOf(":")));
-        } else if (source.containsKey("ref")) {
+        } else if (source.getRef() != null) {
             log.trace("Found ref component.");
-            Map<String, Object> ref = (Map<String, Object>) source.getOrDefault("ref", Collections.emptyMap());
-            Map<String, Object> properties = (Map<String, Object>) source.getOrDefault("properties", Collections.emptyMap());
-
-            step = catalog.getReadOnlyCatalog().searchStepByName(ref.get("name").toString());
+            step = catalog.getReadOnlyCatalog().searchStepByName(source.getRef().getName());
 
             if (step != null) {
                 log.trace("Found step " + step.getName());
-                setValuesOnParameters(step, properties);
+                setValuesOnParameters(step, source.getProperties());
             }
         }
 
         return step;
     }
 
-    private void setValuesOnParameters(Step step, Map<String, Object> properties) {
+    private void setValuesOnParameters(Step step, Map<String, String> properties) {
 
-        for (Map.Entry<String, Object> c : properties.entrySet()) {
-            for (Parameter p : ((KameletStep) step).getParameters()) {
+        for (Map.Entry<String, String> c : properties.entrySet()) {
+            for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
                     p.setValue(c.getValue());
                     break;
@@ -105,9 +99,8 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     }
 
-    private String processMetadata(Map<String, Object> parsed, Map<String, Object> empty) {
-        Map<String, Object> metadata = (Map<String, Object>) parsed.getOrDefault("metadata", empty);
-        return metadata.getOrDefault("name", "untitled").toString();
+    private String processMetadata(Map<String, String> metadata) {
+        return metadata.getOrDefault("name", "untitled");
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public class KameletBindingStep {
     private KameletBindingStepRef ref;
+    private String uri;
     private Map<String, String> properties = new HashMap<>();
 
     public KameletBindingStepRef getRef() {
@@ -38,5 +39,13 @@ public class KameletBindingStep {
 
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }
