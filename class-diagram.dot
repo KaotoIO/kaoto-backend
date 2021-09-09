@@ -335,7 +335,7 @@ description:String<BR align="left" />label:String<BR align="left" />id:String<BR
 "Step" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Step</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-subtype:String<BR align="left" />
+subtype:String<BR align="left" />description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />
 
 </TD></TR>
 
@@ -347,7 +347,7 @@ subtype:String<BR align="left" />
 "KameletStep" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>KameletStep</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-group:String<BR align="left" />title:String<BR align="left" />description:String<BR align="left" />kameletType:String<BR align="left" />apiVersion:String<BR align="left" />kind:String<BR align="left" />spec:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />
+group:String<BR align="left" />kameletType:String<BR align="left" />apiVersion:String<BR align="left" />kind:String<BR align="left" />spec:String<BR align="left" />
 
 </TD></TR>
 
