@@ -1,8 +1,8 @@
-package io.zimara.backend.api.service.viewdefinitions;
+package io.zimara.backend.api.service.viewdefinition;
 
-import io.zimara.backend.api.service.parser.StepParserService;
-import io.zimara.backend.api.service.parser.ViewParserService;
-import io.zimara.backend.api.service.parser.step.KameletBindingStepParserService;
+import io.zimara.backend.api.service.step.parser.StepParserService;
+import io.zimara.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
+import io.zimara.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 🐱class ViewDefinitionService
  * 🐱relationship dependsOn StepParserService
- * 🐱relationship dependsOn ViewParserService
+ * 🐱relationship dependsOn ViewDefinitionParserService
  *
  * This endpoint will return a list of views based on the parameters.
  *
@@ -25,7 +25,7 @@ import java.util.List;
 public class ViewDefinitionService {
 
     private List<StepParserService<Step>> stepParsers = new ArrayList<>();
-    private List<ViewParserService<ViewDefinition>> viewParsers = new ArrayList<>();
+    private List<ViewDefinitionParserService<ViewDefinition>> viewParsers = new ArrayList<>();
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
 
     @Inject
@@ -34,7 +34,7 @@ public class ViewDefinitionService {
     }
 
     @Inject
-    public void setViewParser(ViewParserService<ViewDefinition> viewParser) {
+    public void setViewParser(ViewDefinitionParserService<ViewDefinition> viewParser) {
         viewParsers.add(viewParser);
     }
 

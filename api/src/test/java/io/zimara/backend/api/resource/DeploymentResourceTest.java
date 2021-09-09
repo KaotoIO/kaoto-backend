@@ -5,7 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.zimara.backend.api.resource.request.DeploymentResourceYamlRequest;
-import io.zimara.backend.api.service.viewdefinitions.ViewDefinitionService;
+import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.junit.jupiter.api.BeforeAll;

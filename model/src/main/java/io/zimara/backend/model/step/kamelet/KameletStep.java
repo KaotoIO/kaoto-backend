@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * 🐱class KameletStep
+ * 🐱aka KameletStep[]
  * 🐱inherits Step
  * 🐱relationship compositionOf Parameter, 0..n
  * Represents a Kamelet step inside an integration

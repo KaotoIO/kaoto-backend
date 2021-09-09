@@ -2,6 +2,7 @@ package io.zimara.backend.api.service.parser.viewdefinition;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.zimara.backend.api.service.viewdefinition.parser.GenericViewDefinitionParserService;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import io.zimara.backend.model.view.ConstraintOperation;
@@ -17,10 +18,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @QuarkusTest
-class ViewDefinitionParserServiceTest {
+class GenericViewDefinitionParserServiceTest {
 
     @Inject
-    ViewDefinitionParserService viewDefinitionParserService;
+    GenericViewDefinitionParserService viewDefinitionParserService;
 
     @Inject
     ViewDefinitionCatalog viewCatalog;

@@ -1,17 +1,17 @@
-package io.zimara.backend.api.service.parser;
+package io.zimara.backend.api.service.deployment.generator;
 
 import io.zimara.backend.model.step.Step;
 
 import java.util.List;
 
 /**
- * 🐱class ViewParserService
- * 🐱relationship dependsOn ViewDefinition
+ * 🐱class DeploymentGeneratorService
+ * 🐱relationship dependsOn Step
  *
- * Generic interface for all viewDefinition parsers.
+ * Generic interface to generate yaml deployments
  *
  */
-public interface DeploymentParserService {
+public interface DeploymentGeneratorService {
 
     /*
      * 🐱method parse: String

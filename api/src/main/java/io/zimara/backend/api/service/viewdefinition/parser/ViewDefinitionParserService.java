@@ -1,17 +1,17 @@
-package io.zimara.backend.api.service.parser;
+package io.zimara.backend.api.service.viewdefinition.parser;
 
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.view.ViewDefinition;
 
 import java.util.List;
 /**
- * 🐱class ViewParserService
+ * 🐱class ViewDefinitionParserService
  * 🐱relationship dependsOn ViewDefinition
  *
  * Generic interface for all viewDefinition parsers.
  *
  */
-public interface ViewParserService<T extends ViewDefinition> {
+public interface ViewDefinitionParserService<T extends ViewDefinition> {
 
     /*
      * 🐱method parse: List[ViewDefinition]

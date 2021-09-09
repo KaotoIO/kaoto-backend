@@ -3,17 +3,13 @@ package io.zimara.backend.api.service.deployment;
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
-import io.zimara.backend.api.service.viewdefinitions.ViewDefinitionService;
-import io.zimara.backend.model.deployment.kamelet.KameletBinding;
+import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -21,7 +17,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
 @QuarkusTest
 class DeploymentServiceTest {

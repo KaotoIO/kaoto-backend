@@ -1,7 +1,7 @@
 package io.zimara.backend.api.service.deployment;
 
-import io.zimara.backend.api.service.parser.DeploymentParserService;
-import io.zimara.backend.api.service.parser.deployment.KameletBindingDeploymentParserService;
+import io.zimara.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.zimara.backend.api.service.deployment.generator.KameletBindingDeploymentGeneratorService;
 import io.zimara.backend.model.step.Step;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,10 +18,10 @@ import java.util.List;
 @ApplicationScoped
 public class DeploymentService {
 
-    private List<DeploymentParserService> parsers = new ArrayList<>();
+    private List<DeploymentGeneratorService> parsers = new ArrayList<>();
 
     @Inject
-    public void setKameletBindingParserService(KameletBindingDeploymentParserService kameletBindingParserService) {
+    public void setKameletBindingParserService(KameletBindingDeploymentGeneratorService kameletBindingParserService) {
         parsers.add(kameletBindingParserService);
     }
 
@@ -36,7 +36,7 @@ public class DeploymentService {
 
         List<Step> steps = Arrays.asList(stepArray);
 
-        for (DeploymentParserService parser : parsers) {
+        for (DeploymentGeneratorService parser : parsers) {
             if (parser.appliesTo(steps)) {
                 return parser.parse(name, steps);
             }

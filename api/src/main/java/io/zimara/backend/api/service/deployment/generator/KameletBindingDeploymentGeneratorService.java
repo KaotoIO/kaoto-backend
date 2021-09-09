@@ -1,6 +1,5 @@
-package io.zimara.backend.api.service.parser.deployment;
+package io.zimara.backend.api.service.deployment.generator;
 
-import io.zimara.backend.api.service.parser.DeploymentParserService;
 import io.zimara.backend.model.deployment.kamelet.KameletBinding;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
@@ -17,10 +16,10 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 /**
- * 🐱miniclass KameletBindingDeploymentParserService (DeploymentParserService)
+ * 🐱miniclass KameletBindingDeploymentGeneratorService (DeploymentGeneratorService)
  */
 @ApplicationScoped
-public class KameletBindingDeploymentParserService implements DeploymentParserService {
+public class KameletBindingDeploymentGeneratorService implements DeploymentGeneratorService {
 
     @Override
     public String parse(String name, List<Step> steps) {

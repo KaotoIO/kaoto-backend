@@ -1,24 +1,20 @@
-package io.zimara.backend.api.service.parser.deployment;
+package io.zimara.backend.api.service.deployment.generator;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.model.step.Step;
-import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @QuarkusTest
-class KameletBindingDeploymentParserServiceTest {
+class KameletBindingDeploymentGeneratorServiceTest {
 
    @Inject
-    KameletBindingDeploymentParserService parser;
+   KameletBindingDeploymentGeneratorService parser;
 
     @Test
     void parse() {

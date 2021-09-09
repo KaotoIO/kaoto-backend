@@ -1,7 +1,6 @@
-package io.zimara.backend.api.service.parser.step;
+package io.zimara.backend.api.service.step.parser;
 
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
-import io.zimara.backend.api.service.parser.StepParserService;
 import io.zimara.backend.model.deployment.kamelet.KameletBinding;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;

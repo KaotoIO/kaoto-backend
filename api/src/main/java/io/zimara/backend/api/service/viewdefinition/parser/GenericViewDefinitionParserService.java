@@ -1,7 +1,6 @@
-package io.zimara.backend.api.service.parser.viewdefinition;
+package io.zimara.backend.api.service.viewdefinition.parser;
 
 import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
-import io.zimara.backend.api.service.parser.ViewParserService;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.view.ViewDefinition;
 import io.zimara.backend.model.view.ViewDefinitionConstraint;
@@ -12,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🐱miniclass ViewDefinitionParserService (ViewParserService)
+ * 🐱miniclass GenericViewDefinitionParserService (ViewDefinitionParserService)
  * 🐱relationship compositionOf ViewDefinitionCatalog, 0..1
  *
  *
  */
 @ApplicationScoped
-public class ViewDefinitionParserService implements ViewParserService<ViewDefinition> {
+public class GenericViewDefinitionParserService implements ViewDefinitionParserService<ViewDefinition> {
 
     @Inject
     ViewDefinitionCatalog catalog;
