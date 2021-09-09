@@ -4,7 +4,7 @@ import io.zimara.backend.model.deployment.kamelet.KameletBinding;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStep;
 import io.zimara.backend.model.deployment.kamelet.KameletBindingStepRef;
-import io.zimara.backend.model.step.kamelet.KameletStep;
+import io.zimara.backend.model.step.Step;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -26,7 +26,7 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String yaml(String name, KameletStep[] steps) {
+    public String yaml(String name, Step[] steps) {
 
         KameletBindingSpec spec = new KameletBindingSpec();
 
@@ -47,7 +47,7 @@ public class DeploymentService {
         return yaml.dumpAsMap(binding);
     }
 
-    private KameletBindingStep createKameletBindingStep(KameletStep step) {
+    private KameletBindingStep createKameletBindingStep(Step step) {
         KameletBindingStep kameletStep = new KameletBindingStep();
 
         KameletBindingStepRef ref = new KameletBindingStepRef();
