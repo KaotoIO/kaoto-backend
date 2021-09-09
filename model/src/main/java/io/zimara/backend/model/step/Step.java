@@ -4,7 +4,6 @@ import io.zimara.backend.model.Metadata;
 import io.zimara.backend.model.parameter.Parameter;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 🐱class Step
