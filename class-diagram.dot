@@ -110,6 +110,32 @@ yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
 </TABLE>>]
 
 
+"ViewParserService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewParserService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+parse(&lt;String&gt; name, &lt;List[Step]&gt; steps):String
+<BR align="left" />
+appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"ViewParserService" -> "ViewDefinition" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+		"ViewParserService" -> "ViewDefinition" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
 "StepParserService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepParserService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -125,26 +151,6 @@ appliesTo(&lt;String&gt; yaml):boolean
 
 
 		"StepParserService" -> "Step" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-"ViewParserService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewParserService</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
-<BR align="left" />
-appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"ViewParserService" -> "ViewDefinition" [
 		arrowhead=open, style=dashed
 		
 		

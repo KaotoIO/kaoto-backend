@@ -323,7 +323,8 @@ endpoints to interact with deployments.</p>
 </section>
 <h2 id='deploymentservice'>DeploymentService</h2>
 <section class='namespace'>
-<p>This endpoint will return a list of views based on the parameters.</p>
+<p>&lt;p&gt;
+This endpoint will return a list of views based on the parameters.</p>
 
 <h3 id='deploymentservice-method'>Methods</h3>
 
@@ -346,6 +347,47 @@ endpoints to interact with deployments.</p>
 </section>
 
 
+
+</section>
+<h2 id='viewparserservice'>ViewParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all viewDefinition parsers.</p>
+<p>Generic interface for all viewDefinition parsers.</p>
+
+<h3 id='viewparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Based on the list of steps, returns the yaml to deploy it.
+If applies, the name will be the name used on the integration deployed.
+<p>Based on the list of steps, offer a list of compatible ViewDefinitions.</p></td>
+	</tr>
+	<tr id='viewparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the parser applies to the steps
+<p>Check if the viewDefinition applies to the steps</p></td>
+	</tr>
+</tbody></table>
+</section>
+
+
+<h2 id='viewdefinitionparserservice'></h2>
+<section class='namespace'>
+
+
+</section>
 
 </section>
 <h2 id='stepparserservice'>StepParserService</h2>
@@ -379,43 +421,6 @@ endpoints to interact with deployments.</p>
 
 
 <h2 id='kameletbindingstepparserservice'></h2>
-<section class='namespace'>
-
-
-</section>
-
-</section>
-<h2 id='viewparserservice'>ViewParserService</h2>
-<section class='namespace'>
-<p>Generic interface for all viewDefinition parsers.</p>
-
-<h3 id='viewparserservice-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='viewparserservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
-		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
-	</tr>
-	<tr id='viewparserservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Check if the viewDefinition applies to the steps</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-<h2 id='viewdefinitionparserservice'></h2>
 <section class='namespace'>
 
 

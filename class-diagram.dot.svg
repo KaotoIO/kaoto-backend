@@ -42,20 +42,20 @@
 <!-- Metadata -->
 <g id="node15" class="node">
 <title>Metadata</title>
-<polygon fill="none" stroke="black" points="1208,-66.5 1208,-87.5 1303,-87.5 1303,-66.5 1208,-66.5"/>
-<text text-anchor="start" x="1217.5" y="-74.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Metadata</text>
-<polygon fill="none" stroke="black" points="1208,-4.5 1208,-66.5 1303,-66.5 1303,-4.5 1208,-4.5"/>
-<text text-anchor="start" x="1217.5" y="-53.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
-<text text-anchor="start" x="1211" y="-39.3" font-family="Times,serif" font-size="14.00">ID:String</text>
-<text text-anchor="start" x="1211" y="-25.3" font-family="Times,serif" font-size="14.00">name:String</text>
-<text text-anchor="start" x="1211" y="-11.3" font-family="Times,serif" font-size="14.00">type:String</text>
-<polygon fill="none" stroke="black" points="1206.5,-4 1206.5,-89 1303.5,-89 1303.5,-4 1206.5,-4"/>
+<polygon fill="none" stroke="black" points="1199,-66.5 1199,-87.5 1294,-87.5 1294,-66.5 1199,-66.5"/>
+<text text-anchor="start" x="1208.5" y="-74.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Metadata</text>
+<polygon fill="none" stroke="black" points="1199,-4.5 1199,-66.5 1294,-66.5 1294,-4.5 1199,-4.5"/>
+<text text-anchor="start" x="1208.5" y="-53.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
+<text text-anchor="start" x="1202" y="-39.3" font-family="Times,serif" font-size="14.00">ID:String</text>
+<text text-anchor="start" x="1202" y="-25.3" font-family="Times,serif" font-size="14.00">name:String</text>
+<text text-anchor="start" x="1202" y="-11.3" font-family="Times,serif" font-size="14.00">type:String</text>
+<polygon fill="none" stroke="black" points="1197.5,-4 1197.5,-89 1294.5,-89 1294.5,-4 1197.5,-4"/>
 </g>
 <!-- MetadataCatalog&#45;&gt;Metadata -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>MetadataCatalog&#45;&gt;Metadata</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1536.18,-136C1461.67,-112.55 1378.11,-86.25 1321.59,-68.46"/>
-<polygon fill="black" stroke="black" points="1311.71,-65.35 1322.6,-64.06 1316.48,-66.85 1321.25,-68.35 1321.25,-68.35 1321.25,-68.35 1316.48,-66.85 1319.9,-72.64 1311.71,-65.35 1311.71,-65.35"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1532.83,-136C1456.18,-112.35 1370.15,-85.81 1312.48,-68.01"/>
+<polygon fill="black" stroke="black" points="1302.76,-65.01 1313.65,-63.66 1307.54,-66.49 1312.32,-67.96 1312.32,-67.96 1312.32,-67.96 1307.54,-66.49 1310.99,-72.26 1302.76,-65.01 1302.76,-65.01"/>
 </g>
 <!-- StepCatalog -->
 <g id="node3" class="node">
@@ -131,32 +131,49 @@
 <!-- ViewDefinitionResource -->
 <g id="node8" class="node">
 <title>ViewDefinitionResource</title>
-<polygon fill="none" stroke="black" points="571,-352.5 571,-373.5 767,-373.5 767,-352.5 571,-352.5"/>
-<text text-anchor="start" x="574" y="-360.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionResource</text>
-<polygon fill="none" stroke="black" points="571,-318.5 571,-352.5 767,-352.5 767,-318.5 571,-318.5"/>
-<text text-anchor="start" x="637.5" y="-339.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="584.5" y="-325.3" font-family="Times,serif" font-size="14.00">views:(&lt;String&gt; yaml):</text>
-<polygon fill="none" stroke="black" points="570,-318 570,-375 768,-375 768,-318 570,-318"/>
+<polygon fill="none" stroke="black" points="9,-352.5 9,-373.5 205,-373.5 205,-352.5 9,-352.5"/>
+<text text-anchor="start" x="12" y="-360.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionResource</text>
+<polygon fill="none" stroke="black" points="9,-318.5 9,-352.5 205,-352.5 205,-318.5 9,-318.5"/>
+<text text-anchor="start" x="75.5" y="-339.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="22.5" y="-325.3" font-family="Times,serif" font-size="14.00">views:(&lt;String&gt; yaml):</text>
+<polygon fill="none" stroke="black" points="8,-318 8,-375 206,-375 206,-318 8,-318"/>
 </g>
 <!-- ViewDefinitionService -->
 <g id="node9" class="node">
 <title>ViewDefinitionService</title>
-<polygon fill="none" stroke="black" points="513,-516.5 513,-537.5 825,-537.5 825,-516.5 513,-516.5"/>
-<text text-anchor="start" x="582.5" y="-524.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionService</text>
-<polygon fill="none" stroke="black" points="513,-482.5 513,-516.5 825,-516.5 825,-482.5 513,-482.5"/>
-<text text-anchor="start" x="637.5" y="-503.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="516" y="-489.3" font-family="Times,serif" font-size="14.00">views(&lt;String&gt; yaml):List[ViewDefinition]</text>
-<polygon fill="none" stroke="black" points="512,-482 512,-539 826,-539 826,-482 512,-482"/>
+<polygon fill="none" stroke="black" points="348,-516.5 348,-537.5 660,-537.5 660,-516.5 348,-516.5"/>
+<text text-anchor="start" x="417.5" y="-524.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionService</text>
+<polygon fill="none" stroke="black" points="348,-482.5 348,-516.5 660,-516.5 660,-482.5 348,-482.5"/>
+<text text-anchor="start" x="472.5" y="-503.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="351" y="-489.3" font-family="Times,serif" font-size="14.00">views(&lt;String&gt; yaml):List[ViewDefinition]</text>
+<polygon fill="none" stroke="black" points="347,-482 347,-539 661,-539 661,-482 347,-482"/>
 </g>
 <!-- ViewDefinitionService&#45;&gt;ViewDefinitionResource -->
 <g id="edge6" class="edge">
 <title>ViewDefinitionService&#45;&gt;ViewDefinitionResource</title>
-<path fill="none" stroke="black" d="M669,-477.88C669,-453.13 669,-418.42 669,-391.04"/>
-<polygon fill="black" stroke="black" points="669,-391.04 665,-385.04 669,-379.04 673,-385.04 669,-391.04"/>
-<text text-anchor="middle" x="655" y="-466.68" font-family="Times,serif" font-size="14.00">0..1</text>
+<path fill="none" stroke="black" d="M408.54,-477.98C353.61,-459.03 283.67,-433.5 223,-407 207.56,-400.26 191.29,-392.4 175.99,-384.66"/>
+<polygon fill="black" stroke="black" points="175.72,-384.52 168.55,-385.35 165.03,-379.05 172.2,-378.23 175.72,-384.52"/>
+<text text-anchor="middle" x="394.54" y="-466.78" font-family="Times,serif" font-size="14.00">0..1</text>
+</g>
+<!-- ViewParserService -->
+<g id="node11" class="node">
+<title>ViewParserService</title>
+<polygon fill="none" stroke="black" points="241,-359.5 241,-380.5 767,-380.5 767,-359.5 241,-359.5"/>
+<text text-anchor="start" x="431" y="-367.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewParserService</text>
+<polygon fill="none" stroke="black" points="241,-311.5 241,-359.5 767,-359.5 767,-311.5 241,-311.5"/>
+<text text-anchor="start" x="472.5" y="-346.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="244" y="-332.3" font-family="Times,serif" font-size="14.00">parse(&lt;String&gt; name, &lt;List[Step]&gt; steps):String</text>
+<text text-anchor="start" x="244" y="-318.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean</text>
+<polygon fill="none" stroke="black" points="240,-311 240,-382 768,-382 768,-311 240,-311"/>
+</g>
+<!-- ViewDefinitionService&#45;&gt;ViewParserService -->
+<g id="edge11" class="edge">
+<title>ViewDefinitionService&#45;&gt;ViewParserService</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M504,-477.88C504,-454.71 504,-422.83 504,-396.39"/>
+<polygon fill="black" stroke="black" points="504,-386.18 508.5,-396.18 504,-391.18 504,-396.18 504,-396.18 504,-396.18 504,-391.18 499.5,-396.18 504,-386.18 504,-386.18"/>
 </g>
 <!-- StepParserService -->
-<g id="node11" class="node">
+<g id="node13" class="node">
 <title>StepParserService</title>
 <polygon fill="none" stroke="black" points="1066,-359.5 1066,-380.5 1319,-380.5 1319,-359.5 1066,-359.5"/>
 <text text-anchor="start" x="1120" y="-367.3" font-family="Times,serif" font-weight="bold" font-size="14.00">StepParserService</text>
@@ -167,27 +184,10 @@
 <polygon fill="none" stroke="black" points="1064.5,-311 1064.5,-382 1319.5,-382 1319.5,-311 1064.5,-311"/>
 </g>
 <!-- ViewDefinitionService&#45;&gt;StepParserService -->
-<g id="edge9" class="edge">
-<title>ViewDefinitionService&#45;&gt;StepParserService</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M801.42,-477.9C874.5,-459.39 966.51,-434.31 1047,-407 1062.15,-401.86 1077.99,-395.94 1093.4,-389.87"/>
-<polygon fill="black" stroke="black" points="1102.94,-386.08 1095.31,-393.96 1098.29,-387.93 1093.64,-389.78 1093.64,-389.78 1093.64,-389.78 1098.29,-387.93 1091.98,-385.6 1102.94,-386.08 1102.94,-386.08"/>
-</g>
-<!-- ViewParserService -->
-<g id="node13" class="node">
-<title>ViewParserService</title>
-<polygon fill="none" stroke="black" points="9,-359.5 9,-380.5 535,-380.5 535,-359.5 9,-359.5"/>
-<text text-anchor="start" x="199" y="-367.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewParserService</text>
-<polygon fill="none" stroke="black" points="9,-311.5 9,-359.5 535,-359.5 535,-311.5 9,-311.5"/>
-<text text-anchor="start" x="240.5" y="-346.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="12" y="-332.3" font-family="Times,serif" font-size="14.00">parse(&lt;List[Step]&gt; steps):List[ViewDefinition]</text>
-<text text-anchor="start" x="12" y="-318.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean</text>
-<polygon fill="none" stroke="black" points="8,-311 8,-382 536,-382 536,-311 8,-311"/>
-</g>
-<!-- ViewDefinitionService&#45;&gt;ViewParserService -->
 <g id="edge10" class="edge">
-<title>ViewDefinitionService&#45;&gt;ViewParserService</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M591.51,-477.88C529.98,-452.77 443.37,-417.43 375.84,-389.87"/>
-<polygon fill="black" stroke="black" points="366.44,-386.04 377.4,-385.65 371.07,-387.93 375.7,-389.82 375.7,-389.82 375.7,-389.82 371.07,-387.93 374,-393.98 366.44,-386.04 366.44,-386.04"/>
+<title>ViewDefinitionService&#45;&gt;StepParserService</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M669.12,-487.24C777.81,-470.42 922.48,-443.89 1047,-407 1063.25,-402.19 1080.17,-396.19 1096.48,-389.88"/>
+<polygon fill="black" stroke="black" points="1106,-386.13 1098.35,-393.98 1101.35,-387.96 1096.7,-389.8 1096.7,-389.8 1096.7,-389.8 1101.35,-387.96 1095.05,-385.61 1106,-386.13 1106,-386.13"/>
 </g>
 <!-- DeploymentResourceYamlRequest -->
 <g id="node10" class="node">
@@ -196,55 +196,61 @@
 <text text-anchor="start" x="2686" y="-657.3" font-family="Times,serif" font-weight="bold" font-size="14.00">DeploymentResourceYamlRequest</text>
 <polygon fill="none" stroke="black" points="2682,-649 2682,-672 2962,-672 2962,-649 2682,-649"/>
 </g>
-<!-- Step -->
-<g id="node12" class="node">
-<title>Step</title>
-<polygon fill="none" stroke="black" points="1152,-223.5 1152,-244.5 1358,-244.5 1358,-223.5 1152,-223.5"/>
-<text text-anchor="start" x="1237" y="-231.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Step</text>
-<polygon fill="none" stroke="black" points="1152,-133.5 1152,-223.5 1358,-223.5 1358,-133.5 1152,-133.5"/>
-<text text-anchor="start" x="1217" y="-210.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
-<text text-anchor="start" x="1155" y="-196.3" font-family="Times,serif" font-size="14.00">subtype:String</text>
-<text text-anchor="start" x="1155" y="-182.3" font-family="Times,serif" font-size="14.00">description:String</text>
-<text text-anchor="start" x="1155" y="-168.3" font-family="Times,serif" font-size="14.00">title:String</text>
-<text text-anchor="start" x="1155" y="-154.3" font-family="Times,serif" font-size="14.00">parameters:List[Parameter]</text>
-<text text-anchor="start" x="1155" y="-140.3" font-family="Times,serif" font-size="14.00">icon:String</text>
-<polygon fill="none" stroke="black" points="1151,-133 1151,-246 1359,-246 1359,-133 1151,-133"/>
-</g>
-<!-- StepParserService&#45;&gt;Step -->
-<g id="edge7" class="edge">
-<title>StepParserService&#45;&gt;Step</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1207.74,-306.79C1213.55,-292.47 1220.34,-275.77 1226.92,-259.57"/>
-<polygon fill="black" stroke="black" points="1230.77,-250.12 1231.17,-261.07 1228.89,-254.75 1227,-259.38 1227,-259.38 1227,-259.38 1228.89,-254.75 1222.83,-257.69 1230.77,-250.12 1230.77,-250.12"/>
-</g>
-<!-- Step&#45;&gt;Metadata -->
-<g id="edge19" class="edge">
-<title>Step&#45;&gt;Metadata</title>
-<path fill="none" stroke="black" d="M1255,-128.7C1255,-120.27 1255,-111.63 1255,-103.28"/>
-<polygon fill="none" stroke="black" points="1258.5,-103.27 1255,-93.27 1251.5,-103.27 1258.5,-103.27"/>
-</g>
 <!-- ViewDefinition -->
-<g id="node14" class="node">
+<g id="node12" class="node">
 <title>ViewDefinition</title>
-<polygon fill="none" stroke="black" points="762,-209.5 762,-230.5 1071,-230.5 1071,-209.5 762,-209.5"/>
-<text text-anchor="start" x="858.5" y="-217.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinition</text>
-<polygon fill="none" stroke="black" points="762,-147.5 762,-209.5 1071,-209.5 1071,-147.5 762,-147.5"/>
-<text text-anchor="start" x="878.5" y="-196.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
-<text text-anchor="start" x="765" y="-182.3" font-family="Times,serif" font-size="14.00">steps:List[Step]</text>
-<text text-anchor="start" x="765" y="-168.3" font-family="Times,serif" font-size="14.00">properties:Map[String, String]</text>
-<text text-anchor="start" x="765" y="-154.3" font-family="Times,serif" font-size="14.00">constraints:List[ViewDefinitionConstraint]</text>
-<polygon fill="none" stroke="black" points="760.5,-147 760.5,-232 1071.5,-232 1071.5,-147 760.5,-147"/>
+<polygon fill="none" stroke="black" points="602,-209.5 602,-230.5 911,-230.5 911,-209.5 602,-209.5"/>
+<text text-anchor="start" x="698.5" y="-217.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinition</text>
+<polygon fill="none" stroke="black" points="602,-147.5 602,-209.5 911,-209.5 911,-147.5 602,-147.5"/>
+<text text-anchor="start" x="718.5" y="-196.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
+<text text-anchor="start" x="605" y="-182.3" font-family="Times,serif" font-size="14.00">steps:List[Step]</text>
+<text text-anchor="start" x="605" y="-168.3" font-family="Times,serif" font-size="14.00">properties:Map[String, String]</text>
+<text text-anchor="start" x="605" y="-154.3" font-family="Times,serif" font-size="14.00">constraints:List[ViewDefinitionConstraint]</text>
+<polygon fill="none" stroke="black" points="600.5,-147 600.5,-232 911.5,-232 911.5,-147 600.5,-147"/>
+</g>
+<!-- ViewParserService&#45;&gt;ViewDefinition -->
+<g id="edge7" class="edge">
+<title>ViewParserService&#45;&gt;ViewDefinition</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M560.69,-306.99C591.89,-287.23 631.29,-262.91 666.52,-241.61"/>
+<polygon fill="black" stroke="black" points="675.38,-236.26 669.15,-245.28 671.1,-238.84 666.82,-241.43 666.82,-241.43 666.82,-241.43 671.1,-238.84 664.5,-237.57 675.38,-236.26 675.38,-236.26"/>
 </g>
 <!-- ViewParserService&#45;&gt;ViewDefinition -->
 <g id="edge8" class="edge">
 <title>ViewParserService&#45;&gt;ViewDefinition</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M432.02,-306.99C526.38,-284.28 645.83,-255.53 742.45,-232.27"/>
-<polygon fill="black" stroke="black" points="752.32,-229.89 743.65,-236.61 747.46,-231.06 742.6,-232.23 742.6,-232.23 742.6,-232.23 747.46,-231.06 741.55,-227.86 752.32,-229.89 752.32,-229.89"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M572.54,-306.99C605.57,-287.23 645.27,-262.91 679.3,-241.61"/>
+<polygon fill="black" stroke="black" points="687.82,-236.26 681.74,-245.39 683.59,-238.92 679.35,-241.57 679.35,-241.57 679.35,-241.57 683.59,-238.92 676.96,-237.76 687.82,-236.26 687.82,-236.26"/>
 </g>
 <!-- ViewDefinition&#45;&gt;Metadata -->
-<g id="edge22" class="edge">
+<g id="edge23" class="edge">
 <title>ViewDefinition&#45;&gt;Metadata</title>
-<path fill="none" stroke="black" d="M1025.6,-142.92C1079.53,-120.48 1142.74,-94.19 1189.14,-74.89"/>
-<polygon fill="none" stroke="black" points="1190.6,-78.08 1198.48,-71.01 1187.91,-71.62 1190.6,-78.08"/>
+<path fill="none" stroke="black" d="M914.41,-142.92C1004.22,-117.07 1111.85,-86.1 1179.59,-66.61"/>
+<polygon fill="none" stroke="black" points="1180.65,-69.95 1189.29,-63.82 1178.71,-63.22 1180.65,-69.95"/>
+</g>
+<!-- Step -->
+<g id="node14" class="node">
+<title>Step</title>
+<polygon fill="none" stroke="black" points="1143,-223.5 1143,-244.5 1349,-244.5 1349,-223.5 1143,-223.5"/>
+<text text-anchor="start" x="1228" y="-231.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Step</text>
+<polygon fill="none" stroke="black" points="1143,-133.5 1143,-223.5 1349,-223.5 1349,-133.5 1143,-133.5"/>
+<text text-anchor="start" x="1208" y="-210.3" font-family="Times,serif" font-style="italic" font-size="14.00">Properties</text>
+<text text-anchor="start" x="1146" y="-196.3" font-family="Times,serif" font-size="14.00">subtype:String</text>
+<text text-anchor="start" x="1146" y="-182.3" font-family="Times,serif" font-size="14.00">description:String</text>
+<text text-anchor="start" x="1146" y="-168.3" font-family="Times,serif" font-size="14.00">title:String</text>
+<text text-anchor="start" x="1146" y="-154.3" font-family="Times,serif" font-size="14.00">parameters:List[Parameter]</text>
+<text text-anchor="start" x="1146" y="-140.3" font-family="Times,serif" font-size="14.00">icon:String</text>
+<polygon fill="none" stroke="black" points="1142,-133 1142,-246 1350,-246 1350,-133 1142,-133"/>
+</g>
+<!-- StepParserService&#45;&gt;Step -->
+<g id="edge9" class="edge">
+<title>StepParserService&#45;&gt;Step</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1205.49,-306.79C1210.47,-292.47 1216.29,-275.77 1221.94,-259.57"/>
+<polygon fill="black" stroke="black" points="1225.23,-250.12 1226.19,-261.04 1223.59,-254.84 1221.94,-259.56 1221.94,-259.56 1221.94,-259.56 1223.59,-254.84 1217.69,-258.08 1225.23,-250.12 1225.23,-250.12"/>
+</g>
+<!-- Step&#45;&gt;Metadata -->
+<g id="edge20" class="edge">
+<title>Step&#45;&gt;Metadata</title>
+<path fill="none" stroke="black" d="M1246,-128.7C1246,-120.27 1246,-111.63 1246,-103.28"/>
+<polygon fill="none" stroke="black" points="1249.5,-103.27 1246,-93.27 1242.5,-103.27 1249.5,-103.27"/>
 </g>
 <!-- ParseCatalog -->
 <g id="node16" class="node">
@@ -264,7 +270,7 @@
 <polygon fill="none" stroke="black" points="1538,-335 1538,-358 1686,-358 1686,-335 1538,-335"/>
 </g>
 <!-- CatalogCollection&#45;&gt;MetadataCatalog -->
-<g id="edge12" class="edge">
+<g id="edge13" class="edge">
 <title>CatalogCollection&#45;&gt;MetadataCatalog</title>
 <path fill="none" stroke="black" d="M1622.09,-328.32C1632.9,-309.9 1650.7,-279.58 1666.86,-252.06"/>
 <polygon fill="none" stroke="black" points="1669.99,-253.64 1672.03,-243.24 1663.95,-250.1 1669.99,-253.64"/>
@@ -277,7 +283,7 @@
 <polygon fill="none" stroke="black" points="1720,-335 1720,-358 1870,-358 1870,-335 1720,-335"/>
 </g>
 <!-- InMemoryCatalog&#45;&gt;MetadataCatalog -->
-<g id="edge13" class="edge">
+<g id="edge14" class="edge">
 <title>InMemoryCatalog&#45;&gt;MetadataCatalog</title>
 <path fill="none" stroke="black" d="M1784.8,-328.32C1773.87,-309.9 1755.87,-279.58 1739.54,-252.06"/>
 <polygon fill="none" stroke="black" points="1742.42,-250.06 1734.31,-243.24 1736.4,-253.63 1742.42,-250.06"/>
@@ -290,7 +296,7 @@
 <polygon fill="none" stroke="black" points="1540,-499 1540,-522 1684,-522 1684,-499 1540,-499"/>
 </g>
 <!-- ReadOnlyCatalog&#45;&gt;CatalogCollection -->
-<g id="edge14" class="edge">
+<g id="edge15" class="edge">
 <title>ReadOnlyCatalog&#45;&gt;CatalogCollection</title>
 <path fill="none" stroke="black" d="M1612,-492.47C1612,-464.47 1612,-408.46 1612,-374.85"/>
 <polygon fill="none" stroke="black" points="1615.5,-374.79 1612,-364.79 1608.5,-374.79 1615.5,-374.79"/>
@@ -306,7 +312,7 @@
 <polygon fill="none" stroke="black" points="2855,-482 2855,-539 3659,-539 3659,-482 2855,-482"/>
 </g>
 <!-- GitParseCatalog&#45;&gt;ParseCatalog -->
-<g id="edge15" class="edge">
+<g id="edge16" class="edge">
 <title>GitParseCatalog&#45;&gt;ParseCatalog</title>
 <path fill="none" stroke="black" d="M3257,-477.88C3257,-452.57 3257,-416.86 3257,-389.2"/>
 <polygon fill="none" stroke="black" points="3260.5,-389.04 3257,-379.04 3253.5,-389.04 3260.5,-389.04"/>
@@ -319,7 +325,7 @@
 <polygon fill="none" stroke="black" points="2996.5,-649 2996.5,-672 3133.5,-672 3133.5,-649 2996.5,-649"/>
 </g>
 <!-- YamlProcessFile&#45;&gt;GitParseCatalog -->
-<g id="edge16" class="edge">
+<g id="edge17" class="edge">
 <title>YamlProcessFile&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M3087.4,-642.23C3116.77,-619.6 3169.1,-579.25 3207.89,-549.35"/>
 <polygon fill="black" stroke="black" points="3215.95,-543.14 3210.78,-552.81 3211.99,-546.19 3208.03,-549.25 3208.03,-549.25 3208.03,-549.25 3211.99,-546.19 3205.29,-545.68 3215.95,-543.14 3215.95,-543.14"/>
@@ -332,7 +338,7 @@
 <polygon fill="none" stroke="black" points="3167.5,-649 3167.5,-672 3346.5,-672 3346.5,-649 3167.5,-649"/>
 </g>
 <!-- KameletParseCatalog&#45;&gt;GitParseCatalog -->
-<g id="edge17" class="edge">
+<g id="edge18" class="edge">
 <title>KameletParseCatalog&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" d="M3257,-642.23C3257,-620.54 3257,-582.6 3257,-553.16"/>
 <polygon fill="none" stroke="black" points="3260.5,-553.14 3257,-543.14 3253.5,-553.14 3260.5,-553.14"/>
@@ -345,7 +351,7 @@
 <polygon fill="none" stroke="black" points="3381,-649 3381,-672 3609,-672 3609,-649 3381,-649"/>
 </g>
 <!-- ViewDefinitionParseCatalog&#45;&gt;GitParseCatalog -->
-<g id="edge18" class="edge">
+<g id="edge19" class="edge">
 <title>ViewDefinitionParseCatalog&#45;&gt;GitParseCatalog</title>
 <path fill="none" stroke="black" d="M3467.23,-642.23C3430.52,-619.41 3364.87,-578.58 3316.67,-548.6"/>
 <polygon fill="none" stroke="black" points="3318.22,-545.45 3307.88,-543.14 3314.53,-551.39 3318.22,-545.45"/>
@@ -416,17 +422,17 @@
 <polygon fill="none" stroke="black" points="1354,-290 1354,-403 1504,-403 1504,-290 1354,-290"/>
 </g>
 <!-- Parameter&#45;&gt;KameletStep -->
-<g id="edge21" class="edge">
+<g id="edge22" class="edge">
 <title>Parameter&#45;&gt;KameletStep</title>
 <path fill="none" stroke="black" d="M1429,-442.67C1429,-434.95 1429,-427.05 1429,-419.27"/>
 <polygon fill="black" stroke="black" points="1429,-419.17 1425,-413.17 1429,-407.17 1433,-413.17 1429,-419.17"/>
 <text text-anchor="middle" x="1415" y="-431.47" font-family="Times,serif" font-size="14.00">0..n</text>
 </g>
 <!-- KameletStep&#45;&gt;Step -->
-<g id="edge20" class="edge">
+<g id="edge21" class="edge">
 <title>KameletStep&#45;&gt;Step</title>
-<path fill="none" stroke="black" d="M1361.73,-285.57C1351.18,-276.18 1340.23,-266.43 1329.54,-256.9"/>
-<polygon fill="none" stroke="black" points="1331.6,-254.05 1321.81,-250.01 1326.95,-259.28 1331.6,-254.05"/>
+<path fill="none" stroke="black" d="M1358.51,-285.79C1347.3,-276.3 1335.65,-266.43 1324.28,-256.8"/>
+<polygon fill="none" stroke="black" points="1326.35,-253.97 1316.45,-250.17 1321.82,-259.31 1326.35,-253.97"/>
 </g>
 <!-- ViewDefinitionConstraint -->
 <g id="node30" class="node">
@@ -441,11 +447,11 @@
 <polygon fill="none" stroke="black" points="802,-304 802,-389 1030,-389 1030,-304 802,-304"/>
 </g>
 <!-- ViewDefinitionConstraint&#45;&gt;ViewDefinition -->
-<g id="edge23" class="edge">
+<g id="edge24" class="edge">
 <title>ViewDefinitionConstraint&#45;&gt;ViewDefinition</title>
-<path fill="none" stroke="black" d="M916,-299.83C916,-283.67 916,-265.26 916,-248.22"/>
-<polygon fill="black" stroke="black" points="916,-248.11 912,-242.11 916,-236.11 920,-242.11 916,-248.11"/>
-<text text-anchor="middle" x="902" y="-288.63" font-family="Times,serif" font-size="14.00">0..n</text>
+<path fill="none" stroke="black" d="M868.86,-299.83C850.96,-282.49 830.39,-262.57 811.77,-244.52"/>
+<polygon fill="black" stroke="black" points="811.7,-244.46 804.61,-243.16 803.08,-236.11 810.17,-237.41 811.7,-244.46"/>
+<text text-anchor="middle" x="854.86" y="-288.63" font-family="Times,serif" font-size="14.00">0..n</text>
 </g>
 </g>
 </svg>
