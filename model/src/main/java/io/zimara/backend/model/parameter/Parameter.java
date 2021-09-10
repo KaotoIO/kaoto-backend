@@ -4,9 +4,10 @@ package io.zimara.backend.model.parameter;
  * 🐱class Parameter
  * 🐱aka List[Parameter]
  *
- * Represents a parameter of a step in an integration. These parameters could be used on the UI to configure the step.
+ * Represents a parameter of a step in an integration.
+ * These parameters could be used on the UI to configure the step.
  */
-public class Parameter<T> {
+public final class Parameter<T> {
 
     private String label;
     private String description;
@@ -15,7 +16,9 @@ public class Parameter<T> {
     private T value;
     private T defaultValue;
 
-    public Parameter(String id, String label, String description, T defaultValue, String type) {
+    public Parameter(final String id, final String label,
+                     final String description,
+                     final T defaultValue, final String type) {
         this.id = id;
         this.label = label;
         this.description = description;
@@ -53,14 +56,16 @@ public class Parameter<T> {
         return this.id;
     }
 
-    public void setValue(T value) {
+    public void setValue(final T value) {
         this.value = value;
     }
 
     /*
      * 🐱property value: String
      *
-     * Actual value of this parameter. Used when describing a configured element.
+     * Actual value of this parameter.
+     * Used when describing a configured element.
+     *
      */
     public T getValue() {
         return this.value;
