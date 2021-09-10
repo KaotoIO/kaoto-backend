@@ -33,7 +33,7 @@ public class ViewDefinitionConstraint {
         return mandatory;
     }
 
-    public void setMandatory(boolean mandatory) {
+    public void setMandatory(final boolean mandatory) {
         this.mandatory = mandatory;
     }
 
@@ -41,7 +41,7 @@ public class ViewDefinitionConstraint {
         return operation;
     }
 
-    public void setOperation(ConstraintOperation operation) {
+    public void setOperation(final ConstraintOperation operation) {
         this.operation = operation;
     }
 
@@ -49,7 +49,7 @@ public class ViewDefinitionConstraint {
         return parameter;
     }
 
-    public void setParameter(String parameter) {
+    public void setParameter(final String parameter) {
         this.parameter = parameter;
     }
 }

@@ -29,7 +29,7 @@ public class Step extends Metadata {
         return this.subType;
     }
 
-    public void setSubType(String subType) {
+    public void setSubType(final String subType) {
         this.subType = subType;
     }
 
@@ -41,7 +41,7 @@ public class Step extends Metadata {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -53,7 +53,7 @@ public class Step extends Metadata {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -65,7 +65,7 @@ public class Step extends Metadata {
         return parameters;
     }
 
-    public void setParameters(List<Parameter> parameters) {
+    public void setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
     }
 
@@ -77,7 +77,7 @@ public class Step extends Metadata {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(final String icon) {
         this.icon = icon;
     }
 

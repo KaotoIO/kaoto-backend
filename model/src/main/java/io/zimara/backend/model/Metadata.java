@@ -4,7 +4,9 @@ package io.zimara.backend.model;
  * 🐱class Metadata
  * 🐱aka List[Metadata]
  *
- * Common class for all metadata. Used to simplify the implementation of catalogs.
+ * Common class for all metadata.
+ * Used to simplify the implementation of catalogs.
+ *
  */
 public abstract class Metadata {
 
@@ -17,7 +19,7 @@ public abstract class Metadata {
      *
      * Unique identifier for this step in our whole Zimara environment
      */
-    public String getId(){
+    public String getId() {
         return this.id;
     }
     /*
@@ -40,15 +42,15 @@ public abstract class Metadata {
         return this.type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 

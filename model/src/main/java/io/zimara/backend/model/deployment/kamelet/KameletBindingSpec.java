@@ -43,7 +43,7 @@ import java.util.List;
              username: "The Username"
  ```
  */
-public class KameletBindingSpec {
+public final class KameletBindingSpec {
     private KameletBindingStep source;
     private List<KameletBindingStep> steps = new ArrayList<>();
     private KameletBindingStep sink;
@@ -52,7 +52,7 @@ public class KameletBindingSpec {
         return source;
     }
 
-    public void setSource(KameletBindingStep source) {
+    public void setSource(final KameletBindingStep source) {
         this.source = source;
     }
 
@@ -64,11 +64,11 @@ public class KameletBindingSpec {
         return sink;
     }
 
-    public void setSink(KameletBindingStep sink) {
+    public void setSink(final KameletBindingStep sink) {
         this.sink = sink;
     }
 
-    public void setSteps(List<KameletBindingStep> steps) {
+    public void setSteps(final List<KameletBindingStep> steps) {
         this.steps = steps;
     }
 }

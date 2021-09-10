@@ -20,7 +20,7 @@ import java.util.Map;
  *       accessTokenSecret: "your own"
  *       ```
  */
-public class KameletBindingStep {
+public final class KameletBindingStep {
     private KameletBindingStepRef ref;
     private String uri;
     private Map<String, String> properties = new HashMap<>();
@@ -29,7 +29,7 @@ public class KameletBindingStep {
         return ref;
     }
 
-    public void setRef(KameletBindingStepRef ref) {
+    public void setRef(final KameletBindingStepRef ref) {
         this.ref = ref;
     }
 
@@ -37,7 +37,7 @@ public class KameletBindingStep {
         return properties;
     }
 
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(final Map<String, String> properties) {
         this.properties = properties;
     }
 
@@ -45,7 +45,7 @@ public class KameletBindingStep {
         return uri;
     }
 
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 }

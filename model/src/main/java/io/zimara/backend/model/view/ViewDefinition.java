@@ -12,7 +12,6 @@ import java.util.Map;
  * 🐱relationship compositionOf ViewDefinitionConstraint, 0..n
  * 🐱aka List[ViewDefinition]
  * Represents a possible view the frontend can use to show data and metadata.
- *
  * It may have some constraints on when this view can be used.
  */
 public class ViewDefinition extends Metadata {
@@ -21,7 +20,7 @@ public class ViewDefinition extends Metadata {
 
     }
 
-    public ViewDefinition(ViewDefinition v) {
+    public ViewDefinition(final ViewDefinition v) {
         setId(v.getId());
         setName(v.getName());
         setType(v.getType());
@@ -38,15 +37,18 @@ public class ViewDefinition extends Metadata {
     /*
      * 🐱property properties: Map[String, String]
      *
-     * Properties useful for the user interface to visualize this view definition.
+     * Properties useful for the user interface to visualize
+     * this view definition.
      */
     private Map<String, String> properties = null;
 
     /*
      * 🐱property constraints: List[ViewDefinitionConstraint]
      *
-     * List of constraints on when to use this view. All mandatory constraints must be fulfilled.
-     * If there are optional constraints, at least one of them should be fulfilled.
+     * List of constraints on when to use this view.
+     * All mandatory constraints must be fulfilled.
+     * If there are optional constraints, at least
+     * one of them should be fulfilled.
      */
     private List<ViewDefinitionConstraint> constraints = null;
 
@@ -54,7 +56,7 @@ public class ViewDefinition extends Metadata {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(final List<Step> steps) {
         this.steps = steps;
     }
 
@@ -62,7 +64,7 @@ public class ViewDefinition extends Metadata {
         return properties;
     }
 
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(final Map<String, String> properties) {
         this.properties = properties;
     }
 
@@ -70,33 +72,56 @@ public class ViewDefinition extends Metadata {
         return constraints;
     }
 
-    public void setConstraints(List<ViewDefinitionConstraint> constraints) {
+    public void setConstraints(
+            final List<ViewDefinitionConstraint> constraints) {
         this.constraints = constraints;
     }
 
     @Override
     public String toString() {
-        return "ViewDefinition{" +
-                "steps=" + steps +
-                ", name='" + getName() + '\'' +
-                ", type='" + getType() + '\'' +
-                ", id='" + getId() + '\'' +
-                ", properties=" + properties +
-                '}';
+        return "ViewDefinition{"
+                + "steps=" + steps
+                + ", name='" + getName() + '\''
+                + ", type='" + getType() + '\''
+                + ", id='" + getId() + '\''
+                + ", properties=" + properties
+                + '}';
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ViewDefinition)) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ViewDefinition)) {
+            return false;
+        }
 
         ViewDefinition that = (ViewDefinition) o;
 
-        if (getSteps() != null ? !getSteps().equals(that.getSteps()) : that.getSteps() != null) return false;
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
-        if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) return false;
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
-        return getProperties() != null ? getProperties().equals(that.getProperties()) : that.getProperties() == null;
+        if (getSteps() != null
+                ? !getSteps().equals(that.getSteps())
+                : that.getSteps() != null) {
+            return false;
+        }
+        if (getName() != null
+                ? !getName().equals(that.getName())
+                : that.getName() != null) {
+            return false;
+        }
+        if (getType() != null
+                ? !getType().equals(that.getType())
+                : that.getType() != null) {
+            return false;
+        }
+        if (getId() != null
+                ? !getId().equals(that.getId())
+                : that.getId() != null) {
+            return false;
+        }
+        return getProperties() != null
+                ? getProperties().equals(that.getProperties())
+                : that.getProperties() == null;
     }
 
     @Override
@@ -105,7 +130,8 @@ public class ViewDefinition extends Metadata {
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getProperties() != null ? getProperties().hashCode() : 0);
+        result = 31 * result + (getProperties() != null
+                ? getProperties().hashCode() : 0);
         return result;
     }
 }

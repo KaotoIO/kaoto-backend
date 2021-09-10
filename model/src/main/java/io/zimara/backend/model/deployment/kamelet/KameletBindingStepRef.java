@@ -10,7 +10,7 @@ package io.zimara.backend.model.deployment.kamelet;
  *       name: twitter-search-source
  * ```
  */
-public class KameletBindingStepRef {
+public final class KameletBindingStepRef {
 
     private String kind = "Kamelet";
     private String apiVersion = "camel.apache.org/v1alpha1";
@@ -20,7 +20,7 @@ public class KameletBindingStepRef {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -32,11 +32,11 @@ public class KameletBindingStepRef {
         return apiVersion;
     }
 
-    public void setKind(String kind) {
+    public void setKind(final String kind) {
         this.kind = kind;
     }
 
-    public void setApiVersion(String apiVersion) {
+    public void setApiVersion(final String apiVersion) {
         this.apiVersion = apiVersion;
     }
 }

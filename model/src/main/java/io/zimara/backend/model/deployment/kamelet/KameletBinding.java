@@ -49,7 +49,7 @@ import java.util.Map;
              username: "The Username"
 ```
  */
-public class KameletBinding {
+public final class KameletBinding {
     private String apiVersion = "camel.apache.org/v1alpha1";
     private String kind = "KameletBinding";
     private Map<String, String> metadata = new HashMap<>();
@@ -58,7 +58,7 @@ public class KameletBinding {
     public KameletBinding() {
     }
 
-    public KameletBinding(String name, KameletBindingSpec spec) {
+    public KameletBinding(final String name, final KameletBindingSpec spec) {
         this();
         setSpec(spec);
         getMetadata().put("name", name);
@@ -80,19 +80,19 @@ public class KameletBinding {
         return spec;
     }
 
-    public void setSpec(KameletBindingSpec spec) {
+    public void setSpec(final KameletBindingSpec spec) {
         this.spec = spec;
     }
 
-    public void setApiVersion(String apiVersion) {
+    public void setApiVersion(final String apiVersion) {
         this.apiVersion = apiVersion;
     }
 
-    public void setKind(String kind) {
+    public void setKind(final String kind) {
         this.kind = kind;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(final Map<String, String> metadata) {
         this.metadata = metadata;
     }
 

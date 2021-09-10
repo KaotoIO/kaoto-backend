@@ -15,7 +15,8 @@ import java.util.Map;
  */
 public class KameletStep extends Step {
 
-    public KameletStep(String id, String name, String icon, List<Parameter> parameters) {
+    public KameletStep(final String id, final String name,
+                       final String icon, final List<Parameter> parameters) {
         this();
         setId(id);
         setName(name);
@@ -47,7 +48,7 @@ public class KameletStep extends Step {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(final String group) {
         this.group = group;
     }
 
@@ -59,7 +60,7 @@ public class KameletStep extends Step {
         return kameletType;
     }
 
-    public void setKameletType(String kameletType) {
+    public void setKameletType(final String kameletType) {
         this.kameletType = kameletType;
     }
 
@@ -71,7 +72,7 @@ public class KameletStep extends Step {
         return apiVersion;
     }
 
-    public void setApiVersion(String apiVersion) {
+    public void setApiVersion(final String apiVersion) {
         this.apiVersion = apiVersion;
     }
 
@@ -83,7 +84,7 @@ public class KameletStep extends Step {
         return kind;
     }
 
-    public void setKind(String kind) {
+    public void setKind(final String kind) {
         this.kind = kind;
     }
 
@@ -91,7 +92,7 @@ public class KameletStep extends Step {
      * 🐱property spec: String
      *
      */
-    public void setSpec(Map<String, Object> spec) {
+    public void setSpec(final Map<String, Object> spec) {
         this.spec = spec;
     }
 
@@ -103,35 +104,57 @@ public class KameletStep extends Step {
         return spec;
     }
 
-    public void setMetadata(Map<String, Object> metadata) {
+    public void setMetadata(final Map<String, Object> metadata) {
         this.metadata = metadata;
     }
 
     @Override
     public String toString() {
-        return "KameletStep{" + '\n' +
-                "  id='" + getId() + '\'' + '\n' +
-                ", name='" + getName() + '\'' + '\n' +
-                ", type=" + kameletType + '\n' +
-                ", metadata=" + metadata + '\n' +
-                '}';
+        return "KameletStep{" + '\n'
+                + "  id='" + getId() + '\'' + '\n'
+                + ", name='" + getName() + '\'' + '\n'
+                + ", type=" + kameletType + '\n'
+                + ", metadata=" + metadata + '\n'
+                + '}';
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof KameletStep)) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof KameletStep)) {
+            return false;
+        }
 
         KameletStep that = (KameletStep) o;
 
-        if (!getId().equals(that.getId())) return false;
-        if (!getName().equals(that.getName())) return false;
-        if (!getParameters().equals(that.getParameters())) return false;
-        if (!getApiVersion().equals(that.getApiVersion())) return false;
-        if (!getKind().equals(that.getKind())) return false;
-        if (!getKameletType().equals(that.getKameletType())) return false;
-        if (getGroup() != null ? !getGroup().equals(that.getGroup()) : that.getGroup() != null) return false;
-        if (!getTitle().equals(that.getTitle())) return false;
+        if (!getId().equals(that.getId())) {
+            return false;
+        }
+        if (!getName().equals(that.getName())) {
+            return false;
+        }
+        if (!getParameters().equals(that.getParameters())) {
+            return false;
+        }
+        if (!getApiVersion().equals(that.getApiVersion())) {
+            return false;
+        }
+        if (!getKind().equals(that.getKind())) {
+            return false;
+        }
+        if (!getKameletType().equals(that.getKameletType())) {
+            return false;
+        }
+        if (getGroup() != null
+                ? !getGroup().equals(that.getGroup())
+                : that.getGroup() != null) {
+            return false;
+        }
+        if (!getTitle().equals(that.getTitle())) {
+            return false;
+        }
         return getDescription().equals(that.getDescription());
     }
 
@@ -139,8 +162,10 @@ public class KameletStep extends Step {
     public int hashCode() {
         int result = getId().hashCode();
         result = 31 * result + getName().hashCode();
-        result = 31 * result + (getIcon() != null ? getIcon().hashCode() : 0);
-        result = 31 * result + (getParameters() != null ? getParameters().hashCode() : 0);
+        result = 31 * result
+                + (getIcon() != null ? getIcon().hashCode() : 0);
+        result = 31 * result
+                + (getParameters() != null ? getParameters().hashCode() : 0);
         result = 31 * result + getApiVersion().hashCode();
         result = 31 * result + getKind().hashCode();
         result = 31 * result + getKameletType().hashCode();
