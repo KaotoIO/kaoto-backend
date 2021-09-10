@@ -516,9 +516,8 @@ If applies, the name will be the name used on the integration deployed.</td>
 </section>
 <h2 id='metadatacatalog'>MetadataCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-&lt;p&gt;
-All metadata catalogs implements this interface. Helper to unify catalog handling implementation.</p>
+<p>All metadata catalogs implements this interface.
+Helper to unify catalog handling implementation.</p>
 
 <h3 id='metadatacatalog-method'>Methods</h3>
 
@@ -540,18 +539,23 @@ All metadata catalogs implements this interface. Helper to unify catalog handlin
 	<tr id='metadatacatalog-searchstepbyname'>
 		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed) identified by the name.
-<p>Returns all the elements found (no order warranteed) identified by the name.</p></td>
+		<td>Returns the first element found (no order warranteed)
+identified by the name.
+<p>Returns all the elements found (no order warranteed)
+identified by the name.</p></td>
 	</tr>
 	<tr id='metadatacatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Stores the elements passed as parameter on the catalog. Returns true if no error was found.</td>
+		<td>Stores the elements passed as parameter on the catalog.
+Returns true if no error was found.</td>
 	</tr>
 	<tr id='metadatacatalog-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
-		<td>Returns all the elements in the catalog. Be careful using this as there's no limit on the amount of data stored on the catalog.</td>
+		<td>Returns all the elements in the catalog.
+Be careful using this as there's no limit
+on the amount of data stored on the catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -561,8 +565,7 @@ All metadata catalogs implements this interface. Helper to unify catalog handlin
 </section>
 <h2 id='parsecatalog'>ParseCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Load and warm up catalog utility.</p>
+<p>Load and warm up catalog utility.</p>
 
 <h3 id='parsecatalog-method'>Methods</h3>
 
@@ -579,7 +582,8 @@ Load and warm up catalog utility.</p>
 	<tr id='parsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and return a completable list of elements to add to a catalog.</td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -620,18 +624,23 @@ connector with the same ID on this collection of catalogs.</p>
 	<tr id='catalogcollection-searchstepbyname'>
 		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed) identified by the name.
-<p>Returns all the elements found (no order warranteed) identified by the name.</p></td>
+		<td>Returns the first element found (no order warranteed)
+identified by the name.
+<p>Returns all the elements found (no order warranteed)
+identified by the name.</p></td>
 	</tr>
 	<tr id='catalogcollection-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Stores the elements passed as parameter on the catalog. Returns true if no error was found.</td>
+		<td>Stores the elements passed as parameter on the catalog.
+Returns true if no error was found.</td>
 	</tr>
 	<tr id='catalogcollection-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
-		<td>Returns all the elements in the catalog. Be careful using this as there's no limit on the amount of data stored on the catalog.</td>
+		<td>Returns all the elements in the catalog.
+Be careful using this as there's no limit
+on the amount of data stored on the catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -668,18 +677,23 @@ Basic catalog implementation useful for testing and small instances.</p>
 	<tr id='inmemorycatalog-searchstepbyname'>
 		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed) identified by the name.
-<p>Returns all the elements found (no order warranteed) identified by the name.</p></td>
+		<td>Returns the first element found (no order warranteed)
+identified by the name.
+<p>Returns all the elements found (no order warranteed)
+identified by the name.</p></td>
 	</tr>
 	<tr id='inmemorycatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Stores the elements passed as parameter on the catalog. Returns true if no error was found.</td>
+		<td>Stores the elements passed as parameter on the catalog.
+Returns true if no error was found.</td>
 	</tr>
 	<tr id='inmemorycatalog-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
-		<td>Returns all the elements in the catalog. Be careful using this as there's no limit on the amount of data stored on the catalog.</td>
+		<td>Returns all the elements in the catalog.
+Be careful using this as there's no limit
+on the amount of data stored on the catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -716,18 +730,23 @@ A Catalog Collection we make sure it can't be modified.</p>
 	<tr id='readonlycatalog-searchstepbyname'>
 		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed) identified by the name.
-<p>Returns all the elements found (no order warranteed) identified by the name.</p></td>
+		<td>Returns the first element found (no order warranteed)
+identified by the name.
+<p>Returns all the elements found (no order warranteed)
+identified by the name.</p></td>
 	</tr>
 	<tr id='readonlycatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Stores the elements passed as parameter on the catalog. Returns true if no error was found.</td>
+		<td>Stores the elements passed as parameter on the catalog.
+Returns true if no error was found.</td>
 	</tr>
 	<tr id='readonlycatalog-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
-		<td>Returns all the elements in the catalog. Be careful using this as there's no limit on the amount of data stored on the catalog.</td>
+		<td>Returns all the elements in the catalog.
+Be careful using this as there's no limit
+on the amount of data stored on the catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -738,8 +757,8 @@ A Catalog Collection we make sure it can't be modified.</p>
 </section>
 <h2 id='gitparsecatalog'>GitParseCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Abstract implementation that downloads a git repository and walks through all the files
+<p>Abstract implementation that downloads a git repository
+and walks through all the files
 parsing them and preparing elements to add to a catalog.</p>
 
 <h3 id='gitparsecatalog-method'>Methods</h3>
@@ -757,7 +776,8 @@ parsing them and preparing elements to add to a catalog.</p>
 	<tr id='gitparsecatalog-getfilevisitor'>
 		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
 		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile to process the files found on the repository.
+		<td>Returns the helper class based on YamlProcessFile
+to process the files found on the repository.
 This needs to be implemented.</td>
 	</tr>
 </tbody></table>
@@ -778,7 +798,8 @@ This needs to be implemented.</td>
 	<tr id='gitparsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and return a completable list of elements to add to a catalog.</td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -789,15 +810,15 @@ This needs to be implemented.</td>
 </section>
 <h2 id='yamlprocessfile'>YamlProcessFile</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Helper class to walk around YAML files to parse Metadata objects.</p>
+<p>Helper class to walk around YAML files to parse Metadata objects.</p>
 
 
 </section>
 <h2 id='kameletparsecatalog'>KameletParseCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Reads and parses a kamelet catalog. Extracts all the kamelet definitions it can find and generate a kamelet step for each one.</p>
+<p>Reads and parses a kamelet catalog.
+Extracts all the kamelet definitions it can find
+and generate a kamelet step for each one.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -817,7 +838,8 @@ Reads and parses a kamelet catalog. Extracts all the kamelet definitions it can 
 	<tr id='kameletparsecatalog-getfilevisitor'>
 		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
 		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile to process the files found on the repository.
+		<td>Returns the helper class based on YamlProcessFile
+to process the files found on the repository.
 This needs to be implemented.</td>
 	</tr>
 </tbody></table>
@@ -839,7 +861,8 @@ This needs to be implemented.</td>
 	<tr id='kameletparsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and return a completable list of elements to add to a catalog.</td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -850,8 +873,9 @@ This needs to be implemented.</td>
 </section>
 <h2 id='viewdefinitionparsecatalog'>ViewDefinitionParseCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Reads and parses a view definition catalog. Extracts all the view definitions it can find and generate a ViewDefinition for each one.</p>
+<p>Reads and parses a view definition catalog.
+Extracts all the view definitions it can find
+and generate a ViewDefinition for each one.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -871,7 +895,8 @@ Reads and parses a view definition catalog. Extracts all the view definitions it
 	<tr id='viewdefinitionparsecatalog-getfilevisitor'>
 		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
 		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile to process the files found on the repository.
+		<td>Returns the helper class based on YamlProcessFile
+to process the files found on the repository.
 This needs to be implemented.</td>
 	</tr>
 </tbody></table>
@@ -893,7 +918,8 @@ This needs to be implemented.</td>
 	<tr id='viewdefinitionparsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and return a completable list of elements to add to a catalog.</td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -904,7 +930,8 @@ This needs to be implemented.</td>
 </section>
 <h2 id='metadata'>Metadata</h2>
 <section class='namespace'>
-<p>Common class for all metadata. Used to simplify the implementation of catalogs.</p>
+<p>Common class for all metadata.
+Used to simplify the implementation of catalogs.</p>
 
 <h3 id='metadata-property'>Properties</h3>
 
@@ -1347,8 +1374,8 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </section>
 <h2 id='viewdefinition'>ViewDefinition</h2>
 <section class='namespace'>
-<p>Represents a possible view the frontend can use to show data and metadata.</p>
-<p>It may have some constraints on when this view can be used.</p>
+<p>Represents a possible view the frontend can use to show data and metadata.
+It may have some constraints on when this view can be used.</p>
 
 <h3 id='viewdefinition-property'>Properties</h3>
 
@@ -1370,13 +1397,16 @@ It may or may not be the same as the ID depending on the type of step.</td>
 	<tr id='viewdefinition-properties'>
 		<td><code><b>properties</b>
 		<td><code>Map[String, String]</code></td>
-		<td>Properties useful for the user interface to visualize this view definition.</td>
+		<td>Properties useful for the user interface to visualize
+this view definition.</td>
 	</tr>
 	<tr id='viewdefinition-constraints'>
 		<td><code><b>constraints</b>
 		<td><code><a href='#viewdefinitionconstraint'>List[ViewDefinitionConstraint]</a></code></td>
-		<td>List of constraints on when to use this view. All mandatory constraints must be fulfilled.
-If there are optional constraints, at least one of them should be fulfilled.</td>
+		<td>List of constraints on when to use this view.
+All mandatory constraints must be fulfilled.
+If there are optional constraints, at least
+one of them should be fulfilled.</td>
 	</tr>
 </tbody></table>
 </section>
