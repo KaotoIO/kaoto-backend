@@ -11,12 +11,13 @@ import io.zimara.backend.model.Metadata;
  */
 public class ReadOnlyCatalog<T extends Metadata> extends CatalogCollection<T> {
 
-    public ReadOnlyCatalog(MetadataCatalog<T> catalog) {
+    public ReadOnlyCatalog(final MetadataCatalog<T> catalog) {
         super.addCatalog(catalog);
     }
 
     @Override
-    public void addCatalog(MetadataCatalog<T> c) {
-        throw new UnsupportedOperationException("Read Only Catalogs are initialized at the beginning");
+    public void addCatalog(final MetadataCatalog<T> c) {
+        throw new UnsupportedOperationException(
+                "Read Only Catalogs are initialized at the beginning");
     }
 }

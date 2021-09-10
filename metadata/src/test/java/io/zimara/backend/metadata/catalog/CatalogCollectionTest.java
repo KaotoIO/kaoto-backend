@@ -16,22 +16,28 @@ import java.util.List;
 class CatalogCollectionTest {
 
     public static final String CONNECTOR_2 = "connector-2";
-    private static CatalogCollection<Step> catalogCollection = new CatalogCollection<>();
+    private static CatalogCollection<Step> catalogCollection =
+            new CatalogCollection<>();
 
     @BeforeAll
     static void before() {
         List<Step> steps = new ArrayList<>();
 
         InMemoryCatalog<Step> ic = new InMemoryCatalog<>();
-        steps.add(new KameletStep("id-1", "connector-1", "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-2", CONNECTOR_2, "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-1",
+                "connector-1", "icon",
+                Collections.emptyList()));
+        steps.add(new KameletStep("id-2", CONNECTOR_2,
+                "icon", Collections.emptyList()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
 
         ic = new InMemoryCatalog<>();
         steps.clear();
-        steps.add(new KameletStep("id-2", CONNECTOR_2, "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-3", CONNECTOR_2, "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-2", CONNECTOR_2,
+                "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-3", CONNECTOR_2,
+                "icon", Collections.emptyList()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
     }
@@ -52,7 +58,8 @@ class CatalogCollectionTest {
 
     @Test
     void searchStepsByName() {
-        Collection<Step> step = catalogCollection.searchStepsByName(CONNECTOR_2);
+        Collection<Step> step =
+                catalogCollection.searchStepsByName(CONNECTOR_2);
         Assertions.assertNotNull(step);
         Assertions.assertEquals(3, step.size());
         for (Step s : step) {
@@ -75,7 +82,8 @@ class CatalogCollectionTest {
 
     @Test
     void readOnlyWrapper() {
-        ReadOnlyCatalog<Step> readOnlyCatalog = new ReadOnlyCatalog<>(catalogCollection);
+        ReadOnlyCatalog<Step> readOnlyCatalog =
+                new ReadOnlyCatalog<>(catalogCollection);
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             readOnlyCatalog.addCatalog(catalogCollection);

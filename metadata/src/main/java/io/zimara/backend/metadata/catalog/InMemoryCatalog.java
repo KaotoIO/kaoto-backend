@@ -26,25 +26,29 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
     private Logger log = Logger.getLogger(InMemoryCatalog.class);
 
     @Override
-    public boolean store(List<T> steps) {
+    public boolean store(final List<T> steps) {
         if (steps == null) {
             return false;
         }
         final Collector<T, ?, Map<String, T>> stepMapCollector =
                 Collectors.toMap(T::getId, step -> step, (a, b) -> a);
-        metadataCatalog = Collections.synchronizedMap(steps.stream().filter(Objects::nonNull).parallel().collect(stepMapCollector));
+        metadataCatalog = Collections.synchronizedMap(
+                steps.stream()
+                        .filter(Objects::nonNull)
+                        .parallel()
+                        .collect(stepMapCollector));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
         return true;
     }
 
     @Override
-    public T searchStepByID(String id) {
+    public T searchStepByID(final String id) {
         return metadataCatalog.get(id);
     }
 
     @Override
-    public T searchStepByName(String name) {
+    public T searchStepByName(final String name) {
         for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
             if (name.equalsIgnoreCase(entry.getValue().getName())) {
                 return entry.getValue();
@@ -54,7 +58,7 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
     }
 
     @Override
-    public Collection<T> searchStepsByName(String name) {
+    public Collection<T> searchStepsByName(final String name) {
         Collection<T> steps = new ArrayList<>();
 
         for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
@@ -68,6 +72,7 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     @Override
     public Collection<T> getAll() {
-        return Collections.unmodifiableCollection(this.metadataCatalog.values());
+        return Collections.unmodifiableCollection(
+                this.metadataCatalog.values());
     }
 }

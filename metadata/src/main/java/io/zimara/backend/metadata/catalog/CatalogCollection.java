@@ -19,7 +19,8 @@ import java.util.List;
  * As each catalog have their own ID constraints, there may be more than one
  * connector with the same ID on this collection of catalogs.
  */
-public class CatalogCollection<T extends Metadata> implements MetadataCatalog<T> {
+public class CatalogCollection<T extends Metadata>
+        implements MetadataCatalog<T> {
 
     private final List<MetadataCatalog<T>> catalogs;
 
@@ -27,14 +28,14 @@ public class CatalogCollection<T extends Metadata> implements MetadataCatalog<T>
         catalogs = new ArrayList<>();
     }
 
-    public void addCatalog(MetadataCatalog<T> c) {
+    public void addCatalog(final MetadataCatalog<T> c) {
         if (!catalogs.contains(c)) {
             catalogs.add(c);
         }
     }
 
     @Override
-    public T searchStepByID(String id) {
+    public T searchStepByID(final String id) {
         for (MetadataCatalog<T> c : catalogs) {
             T s = c.searchStepByID(id);
             if (s != null) {
@@ -45,7 +46,7 @@ public class CatalogCollection<T extends Metadata> implements MetadataCatalog<T>
     }
 
     @Override
-    public T searchStepByName(String connectionName) {
+    public T searchStepByName(final String connectionName) {
         for (MetadataCatalog<T> c : catalogs) {
             var s = c.searchStepByName(connectionName);
             if (s != null) {
@@ -56,7 +57,7 @@ public class CatalogCollection<T extends Metadata> implements MetadataCatalog<T>
     }
 
     @Override
-    public Collection<T> searchStepsByName(String connectionName) {
+    public Collection<T> searchStepsByName(final String connectionName) {
         Collection<T> steps = new ArrayList<>();
         for (MetadataCatalog<T> c : catalogs) {
             steps.addAll(c.searchStepsByName(connectionName));
@@ -65,8 +66,9 @@ public class CatalogCollection<T extends Metadata> implements MetadataCatalog<T>
     }
 
     @Override
-    public boolean store(List<T> steps) {
-        throw new UnsupportedOperationException("CatalogCollection does not support direct storage.");
+    public boolean store(final List<T> steps) {
+        throw new UnsupportedOperationException(
+                "CatalogCollection does not support direct storage.");
     }
 
     @Override

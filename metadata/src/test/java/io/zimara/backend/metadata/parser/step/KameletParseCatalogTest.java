@@ -14,7 +14,10 @@ class KameletParseCatalogTest {
 
     @Test
     void getSteps() {
-        KameletParseCatalog kameletParser = new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0");
+        KameletParseCatalog kameletParser =
+                new KameletParseCatalog(
+                        "https://github.com/apache/camel-kamelets.git",
+                        "v0.3.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -41,7 +44,10 @@ class KameletParseCatalogTest {
 
     @Test
     void wrongUrlSilentlyFails() {
-        KameletParseCatalog kameletParser = new KameletParseCatalog("https://nothing/wrong/url.git", "");
+        KameletParseCatalog kameletParser =
+                new KameletParseCatalog(
+                        "https://nothing/wrong/url.git",
+                        "");
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertNotNull(steps);

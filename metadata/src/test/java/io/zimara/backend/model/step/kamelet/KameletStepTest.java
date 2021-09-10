@@ -12,7 +12,9 @@ class KameletStepTest {
     @Test
     void testParser() {
         Yaml yaml = new Yaml(new Constructor(KameletStep.class));
-        KameletStep step = yaml.load(KameletStepTest.class.getResourceAsStream("/elasticsearch-index-sink.kamelet.yaml"));
+        KameletStep step = yaml.load(
+                KameletStepTest.class.getResourceAsStream(
+                        "/elasticsearch-index-sink.kamelet.yaml"));
 
         Assertions.assertNotNull(step.getSpec());
         Assertions.assertNotNull(step.getMetadata());

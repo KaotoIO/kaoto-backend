@@ -19,25 +19,29 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 🐱class GitParseCatalog
  * 🐱inherits ParseCatalog
- * <p>
- * Abstract implementation that downloads a git repository and walks through all the files
+ * Abstract implementation that downloads a git repository
+ * and walks through all the files
  * parsing them and preparing elements to add to a catalog.
  */
-public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalog<T> {
+public abstract class GitParseCatalog<T extends Metadata>
+        implements ParseCatalog<T> {
 
-    Logger log = Logger.getLogger(GitParseCatalog.class);
+    private Logger log = Logger.getLogger(GitParseCatalog.class);
 
-    private final CompletableFuture<List<T>> metadata = new CompletableFuture<>();
+    private final CompletableFuture<List<T>> metadata =
+            new CompletableFuture<>();
 
 
-    protected GitParseCatalog(String url, String tag) {
+    protected GitParseCatalog(final String url, final String tag) {
         log.trace("Warming up repository in " + url);
         metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
     }
 
-    private List<T> cloneRepoAndParse(String url, String tag) {
-        List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
-        final List<CompletableFuture<Void>> futureMetadatas = Collections.synchronizedList(new CopyOnWriteArrayList<>());
+    private List<T> cloneRepoAndParse(final String url, final String tag) {
+        List<T> metadataList =
+                Collections.synchronizedList(new CopyOnWriteArrayList<>());
+        final List<CompletableFuture<Void>> futureMd =
+                Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         File file = null;
         try {
@@ -61,9 +65,12 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
                     .call()) {
 
                 log.trace("Parsing all files in the repository");
-                Files.walkFileTree(file.getAbsoluteFile().toPath(), getFileVisitor(metadataList, futureMetadatas));
-                log.trace("Found " + futureMetadatas.size() + " elements.");
-                CompletableFuture.allOf(futureMetadatas.toArray(new CompletableFuture[0])).join();
+                Files.walkFileTree(file.getAbsoluteFile().toPath(),
+                        getFileVisitor(metadataList, futureMd));
+                log.trace("Found " + futureMd.size() + " elements.");
+                CompletableFuture.allOf(
+                        futureMd.toArray(new CompletableFuture[0]))
+                        .join();
 
             } catch (GitAPIException e) {
                 log.error("Error trying to clone repository.", e);
@@ -92,12 +99,13 @@ public abstract class GitParseCatalog<T extends Metadata> implements ParseCatalo
      * 🐱param futureMetadata: List[CompletableFuture[]]
      *
      *
-     * Returns the helper class based on YamlProcessFile to process the files found on the repository.
+     * Returns the helper class based on YamlProcessFile
+     * to process the files found on the repository.
      * This needs to be implemented.
      *
      */
-    protected abstract YamlProcessFile<T> getFileVisitor
-    (List<T> metadataList, List<CompletableFuture<Void>> futureMetadata);
+    protected abstract YamlProcessFile<T> getFileVisitor(List<T> metadataList,
+                                List<CompletableFuture<Void>> futureMetadata);
 
 }
 

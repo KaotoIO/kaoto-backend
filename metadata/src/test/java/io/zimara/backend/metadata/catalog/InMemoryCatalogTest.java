@@ -24,27 +24,38 @@ class InMemoryCatalogTest {
 
     @Test
     void searchStepByName() {
-        Assertions.assertNull(catalog.searchStepByName("non-existent-empty-catalog"));
+        Assertions.assertNull(
+                catalog.searchStepByName("non-existent-empty-catalog"));
 
         List<Step> steps = new ArrayList<>();
-        steps.add(new KameletStep("id", "name", "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id", "name",
+                "icon", Collections.emptyList()));
 
         Assertions.assertTrue(catalog.store(steps));
 
-        Assertions.assertNull(catalog.searchStepByName("non-existent-populated-catalog"));
+        Assertions.assertNull(
+                catalog.searchStepByName("non-existent-populated-catalog"));
     }
 
     @Test
     void searchStepsByName() {
         List<Step> steps = new ArrayList<>();
         final var connector = "connector";
-        steps.add(new KameletStep("id-1", connector, "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-2", connector, "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-3", connector, "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-4", "another-one", "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-1", connector,
+                "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-2", connector,
+                "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-3", connector,
+                "icon", Collections.emptyList()));
+        steps.add(new KameletStep("id-4", "another-one",
+                "icon", Collections.emptyList()));
         Assertions.assertTrue(catalog.store(steps));
 
-        Assertions.assertEquals(3, catalog.searchStepsByName(connector).size());
-        Assertions.assertTrue(catalog.searchStepsByName(connector).contains(catalog.searchStepByName(connector)));
+        Assertions.assertEquals(
+                3,
+                catalog.searchStepsByName(connector).size());
+        Assertions.assertTrue(
+                catalog.searchStepsByName(connector)
+                        .contains(catalog.searchStepByName(connector)));
     }
 }

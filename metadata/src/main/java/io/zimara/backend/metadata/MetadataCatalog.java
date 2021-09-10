@@ -8,9 +8,8 @@ import java.util.List;
 /**
  * 🐱class MetadataCatalog
  * 🐱relationship dependsOn Metadata
- * <p>
- * <p>
- * All metadata catalogs implements this interface. Helper to unify catalog handling implementation.
+ * All metadata catalogs implements this interface.
+ * Helper to unify catalog handling implementation.
  */
 public interface MetadataCatalog<T extends Metadata> {
 
@@ -27,7 +26,8 @@ public interface MetadataCatalog<T extends Metadata> {
      * 🐱method searchStepByName : Metadata
      * 🐱param name: String
      *
-     * Returns the first element found (no order warranteed) identified by the name.
+     * Returns the first element found (no order warranteed)
+     * identified by the name.
      *
      */
     T searchStepByName(String name);
@@ -36,7 +36,8 @@ public interface MetadataCatalog<T extends Metadata> {
      * 🐱method searchStepByName : List[Metadata]
      * 🐱param name: String
      *
-     * Returns all the elements found (no order warranteed) identified by the name.
+     * Returns all the elements found (no order warranteed)
+     * identified by the name.
      *
      */
     Collection<T> searchStepsByName(String name);
@@ -45,7 +46,8 @@ public interface MetadataCatalog<T extends Metadata> {
      * 🐱method store: boolean
      * 🐱param steps: List[Step]
      *
-     * Stores the elements passed as parameter on the catalog. Returns true if no error was found.
+     * Stores the elements passed as parameter on the catalog.
+     * Returns true if no error was found.
      *
      */
     boolean store(List<T> steps);
@@ -53,7 +55,9 @@ public interface MetadataCatalog<T extends Metadata> {
     /*
      * 🐱method getAll : List[Metadata]
      *
-     * Returns all the elements in the catalog. Be careful using this as there's no limit on the amount of data stored on the catalog.
+     * Returns all the elements in the catalog.
+     * Be careful using this as there's no limit
+     * on the amount of data stored on the catalog.
      *
      */
     Collection<T> getAll();

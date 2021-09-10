@@ -15,22 +15,24 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class YamlProcessFile
  * 🐱relationship dependsOn GitParseCatalog
- * <p>
  * Helper class to walk around YAML files to parse Metadata objects.
  */
-public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor<Path> {
+public abstract class YamlProcessFile<T extends Metadata>
+        implements FileVisitor<Path> {
 
-    protected List<T> metadataList;
-    protected List<CompletableFuture<Void>> futureMetadata;
+    private List<T> metadataList;
+    private List<CompletableFuture<Void>> futureMetadata;
     private Logger log = Logger.getLogger(YamlProcessFile.class);
 
-    protected YamlProcessFile(List<T> metadataList, List<CompletableFuture<Void>> futureMetadata) {
+    protected YamlProcessFile(final List<T> metadataList,
+                              final List<CompletableFuture<Void>> futureMd) {
         this.metadataList = metadataList;
-        this.futureMetadata = futureMetadata;
+        this.futureMetadata = futureMd;
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+    public FileVisitResult preVisitDirectory(final Path dir,
+                                             final BasicFileAttributes attrs) {
         final var name = dir.toFile().getName();
         if (name.equalsIgnoreCase("test")
                 || name.equalsIgnoreCase(".git")
@@ -45,13 +47,17 @@ public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor
     }
 
     @Override
-    public FileVisitResult visitFile(final Path file, BasicFileAttributes attrs) {
+    public FileVisitResult visitFile(final Path file,
+                                     final BasicFileAttributes attrs) {
 
         File f = file.toFile();
 
         if (isYAML(f)) {
-            CompletableFuture<Void> metadata = CompletableFuture.runAsync(() -> metadataList.add(parseFile(f)));
-            metadata.thenRun(() -> log.trace(f.getName() + " parsed, now generating metadata."));
+            CompletableFuture<Void> metadata =
+                    CompletableFuture.runAsync(() ->
+                            metadataList.add(parseFile(f)));
+            metadata.thenRun(() -> log.trace(f.getName()
+                    + " parsed, now generating metadata."));
             futureMetadata.add(metadata);
         }
 
@@ -59,17 +65,21 @@ public abstract class YamlProcessFile<T extends Metadata> implements FileVisitor
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) {
+    public FileVisitResult visitFileFailed(final Path file,
+                                           final IOException exc) {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+    public FileVisitResult postVisitDirectory(final Path dir,
+                                              final IOException exc) {
         return FileVisitResult.CONTINUE;
     }
 
-    protected boolean isYAML(File file) {
-        return (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) && !file.getName().startsWith(".");
+    protected boolean isYAML(final File file) {
+        return (file.getName().endsWith(".yml")
+                || file.getName().endsWith(".yaml"))
+                && !file.getName().startsWith(".");
     }
 
     protected abstract T parseFile(File f);

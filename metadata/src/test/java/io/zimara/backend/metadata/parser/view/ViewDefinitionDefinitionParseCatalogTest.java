@@ -13,7 +13,12 @@ class ViewDefinitionDefinitionParseCatalogTest {
 
     @Test
     void getViews() {
-        ViewDefinitionParseCatalog parser = new ViewDefinitionParseCatalog("https://github.com/ZimaraIO/zimara-viewdefinition-catalog", "main");
+        final var url =
+                "https://github.com/ZimaraIO/zimara-viewdefinition-catalog";
+        var parser =
+                new ViewDefinitionParseCatalog(
+                        url,
+                        "main");
         InMemoryCatalog<ViewDefinition> catalog = new InMemoryCatalog<>();
 
         List<ViewDefinition> viewDefinitions = parser.parse().join();

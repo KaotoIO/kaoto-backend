@@ -21,18 +21,20 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class KameletParseCatalog
  * 🐱inherits GitParseCatalog
- * <p>
- * Reads and parses a kamelet catalog. Extracts all the kamelet definitions it can find and generate a kamelet step for each one.
+ * Reads and parses a kamelet catalog.
+ * Extracts all the kamelet definitions it can find
+ * and generate a kamelet step for each one.
  */
 public class KameletParseCatalog extends GitParseCatalog<Step> {
 
-    public KameletParseCatalog(String url, String tag) {
+    public KameletParseCatalog(final String url, final String tag) {
         super(url, tag);
     }
 
     @Override
-    protected KameletFileProcessor getFileVisitor(List<Step> metadataList, List<CompletableFuture<Void>> futureMetadata) {
-        return new KameletFileProcessor(metadataList, futureMetadata);
+    protected KameletFileProcessor getFileVisitor(final List<Step> mdList,
+                   final List<CompletableFuture<Void>> futureMetadata) {
+        return new KameletFileProcessor(mdList, futureMetadata);
     }
 }
 
@@ -41,12 +43,13 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
     public static final String PROPERTIES = "properties";
     private Logger log = Logger.getLogger(KameletFileProcessor.class);
 
-    KameletFileProcessor(List<Step> stepList, List<CompletableFuture<Void>> futureSteps) {
+    KameletFileProcessor(final List<Step> stepList,
+                         final List<CompletableFuture<Void>> futureSteps) {
         super(stepList, futureSteps);
     }
 
     @Override
-    public KameletStep parseFile(File f) {
+    public KameletStep parseFile(final File f) {
         try (FileReader fr = new FileReader(f)) {
             Yaml yaml = new Yaml(new Constructor(KameletStep.class));
             KameletStep step = yaml.load(fr);
@@ -60,7 +63,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return null;
     }
 
-    private KameletStep extractMetadata(KameletStep step) {
+    private KameletStep extractMetadata(final KameletStep step) {
         if (step == null || step.getMetadata() == null) {
             return step;
         }
@@ -73,7 +76,8 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
 
             final var labels = "labels";
             if (step.getMetadata().containsKey(labels)) {
-                Map<String, Object> labelsMap = (Map<String, Object>) step.getMetadata().get(labels);
+                Map<String, Object> labelsMap =
+                        (Map<String, Object>) step.getMetadata().get(labels);
                 final var type = "camel.apache.org/kamelet.type";
                 if (labelsMap.containsKey(type)) {
                     step.setKameletType(labelsMap.get(type).toString());
@@ -94,7 +98,9 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
 
             final var annotations = "annotations";
             if (step.getMetadata().containsKey(annotations)) {
-                Map<String, Object> annotationsMap = (Map<String, Object>) step.getMetadata().get(annotations);
+                Map<String, Object> annotationsMap =
+                        (Map<String, Object>) step.getMetadata()
+                                .get(annotations);
 
                 final var group = "camel.apache.org/kamelet.group";
                 if (annotationsMap.containsKey(group)) {
@@ -115,7 +121,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return step;
     }
 
-    private KameletStep extractSpec(Step s) {
+    private KameletStep extractSpec(final Step s) {
         KameletStep step = (KameletStep) s;
         if (step == null || step.getSpec() == null) {
             return step;
@@ -124,7 +130,9 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         try {
             final var definitionLabel = "definition";
             if (step.getSpec().containsKey(definitionLabel)) {
-                Map<String, Object> definition = (Map<String, Object>) step.getSpec().get(definitionLabel);
+                Map<String, Object> definition =
+                        (Map<String, Object>) step.getSpec()
+                                .get(definitionLabel);
                 final var title = "title";
                 if (definition.containsKey(title)) {
                     step.setTitle(definition.get(title).toString());
@@ -148,26 +156,40 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return step;
     }
 
-    private void parseParameters(KameletStep step, Map<String, Object> definition) {
-        Map<String, Object> properties = (Map<String, Object>) definition.get(PROPERTIES);
+    private void parseParameters(final KameletStep step,
+                                 final Map<String, Object> definition) {
+        Map<String, Object> properties =
+                (Map<String, Object>) definition.get(PROPERTIES);
         step.setParameters(new ArrayList<>());
 
         for (Map.Entry<String, Object> property : properties.entrySet()) {
-            Map<String, Object> definitions = (Map<String, Object>) property.getValue();
+            Map<String, Object> definitions =
+                    (Map<String, Object>) property.getValue();
             Parameter p;
             final var title = property.getKey();
-            var description = definitions.getOrDefault("description", title).toString();
-            String value = definitions.getOrDefault("default", "").toString();
+            var description =
+                    definitions.getOrDefault("description", title).toString();
+            String value =
+                    definitions.getOrDefault("default", "").toString();
             p = getParameter(definitions, title, description, value);
             step.getParameters().add(p);
         }
     }
 
-    private Parameter getParameter(Map<String, Object> definitions, String title, String description, String value) {
-        return switch (definitions.get("type").toString()) {
-            case "integer" -> new Parameter<>(title, title, description, (value != null ? Integer.valueOf(value) : null), definitions.get("type").toString());
-            case "boolean" -> new Parameter<>(title, title, description, (value != null ? Boolean.valueOf(value) : null), definitions.get("type").toString());
-            default -> new Parameter<>(title, title, description, value, definitions.get("type").toString());
+    private Parameter getParameter(final Map<String, Object> definitions,
+                                   final String title, final String description,
+                                   final String value) {
+        final var type = definitions.get("type").toString();
+        return switch (type) {
+            case "integer" -> {
+                final var v = value != null ? Integer.valueOf(value) : null;
+                yield new Parameter<>(title, title, description, v, type);
+            }
+            case "boolean" -> {
+                final var bool = value != null ? Boolean.valueOf(value) : null;
+                yield new Parameter<>(title, title, description, bool, type);
+            }
+            default -> new Parameter<>(title, title, description, value, type);
         };
     }
 }

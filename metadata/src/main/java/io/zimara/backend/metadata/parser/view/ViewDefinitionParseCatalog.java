@@ -17,31 +17,36 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class ViewDefinitionParseCatalog
  * 🐱inherits GitParseCatalog
- * <p>
- * Reads and parses a view definition catalog. Extracts all the view definitions it can find and generate a ViewDefinition for each one.
+ * Reads and parses a view definition catalog.
+ * Extracts all the view definitions it can find
+ * and generate a ViewDefinition for each one.
  */
-public class ViewDefinitionParseCatalog extends GitParseCatalog<ViewDefinition> {
+public class ViewDefinitionParseCatalog
+        extends GitParseCatalog<ViewDefinition> {
 
-    public ViewDefinitionParseCatalog(String url, String tag) {
+    public ViewDefinitionParseCatalog(final String url, final String tag) {
         super(url, tag);
     }
 
     @Override
-    protected YamlProcessFile<ViewDefinition> getFileVisitor(List<ViewDefinition> metadataList, List<CompletableFuture<Void>> futureMetadata) {
+    protected YamlProcessFile<ViewDefinition> getFileVisitor(
+            final List<ViewDefinition> metadataList,
+            final List<CompletableFuture<Void>> futureMetadata) {
         return new ViewDefinitionProcessFile(metadataList, futureMetadata);
     }
 }
 
 class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
 
-    Logger log = Logger.getLogger(ViewDefinitionProcessFile.class);
+    private Logger log = Logger.getLogger(ViewDefinitionProcessFile.class);
 
-    public ViewDefinitionProcessFile(List<ViewDefinition> metadataList, List<CompletableFuture<Void>> futureMetadata) {
-        super(metadataList, futureMetadata);
+    ViewDefinitionProcessFile(final List<ViewDefinition> metadataList,
+                              final List<CompletableFuture<Void>> futureMd) {
+        super(metadataList, futureMd);
     }
 
     @Override
-    public ViewDefinition parseFile(File f) {
+    public ViewDefinition parseFile(final File f) {
         try (FileReader fr = new FileReader(f)) {
             Yaml yaml = new Yaml(new Constructor(ViewDefinition.class));
             return yaml.load(fr);
