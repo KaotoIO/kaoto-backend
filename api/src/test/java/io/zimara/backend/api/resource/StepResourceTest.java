@@ -20,12 +20,12 @@ class StepResourceTest {
     private StepCatalog catalog;
 
     @Inject
-    public void setCatalog(StepCatalog catalog) {
+    public void setCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
     }
 
     @Inject
-    public void setStepResource(StepResource stepResource) {
+    public void setStepResource(final StepResource stepResource) {
         this.stepResource = stepResource;
     }
 
@@ -55,6 +55,8 @@ class StepResourceTest {
     void allSteps() {
         Collection<Step> steps = stepResource.allSteps();
         Assertions.assertNotNull(steps);
-        Assertions.assertEquals(catalog.getReadOnlyCatalog().getAll().size(), steps.size());
+        Assertions.assertEquals(
+                catalog.getReadOnlyCatalog().getAll().size(),
+                steps.size());
     }
 }

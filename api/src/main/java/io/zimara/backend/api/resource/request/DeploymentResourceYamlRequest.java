@@ -18,7 +18,7 @@ public class DeploymentResourceYamlRequest {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -33,7 +33,7 @@ public class DeploymentResourceYamlRequest {
         return steps;
     }
 
-    public void setSteps(KameletStep[] steps) {
+    public void setSteps(final KameletStep[] steps) {
         this.steps = steps;
     }
 }

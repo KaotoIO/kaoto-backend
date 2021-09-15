@@ -45,7 +45,7 @@ public class DeploymentResource {
     }
 
     @ServerExceptionMapper
-    public Response mapException(Exception x) {
+    public Response mapException(final Exception x) {
         log.error("Error processing deployment.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)

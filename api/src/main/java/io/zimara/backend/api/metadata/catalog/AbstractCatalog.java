@@ -56,7 +56,7 @@ public abstract class AbstractCatalog<T extends Metadata> {
     abstract List<ParseCatalog<T>> loadParsers();
 
     //Add all steps from the parsers into the catalog
-    private void warmUpCatalog(List<ParseCatalog<T>> catalogs) {
+    private void warmUpCatalog(final List<ParseCatalog<T>> catalogs) {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
 
@@ -64,12 +64,13 @@ public abstract class AbstractCatalog<T extends Metadata> {
             futureSteps.add(addCatalog(catalog));
         }
 
-        waitingForWarmUp = CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0]));
+        waitingForWarmUp = CompletableFuture.allOf(
+                futureSteps.toArray(new CompletableFuture[0]));
         waitingForWarmUp.thenAccept(complete -> warmedUp = true)
                 .thenRun(() -> log.debug("Catalog warmed up."));
     }
 
-    private CompletableFuture<Boolean> addCatalog(ParseCatalog<T> catalog) {
+    private CompletableFuture<Boolean> addCatalog(final ParseCatalog<T> catalog) {
         CompletableFuture<Boolean> res = new CompletableFuture<>();
         catalog.parse()
                 .thenApply(md -> c.store(md))

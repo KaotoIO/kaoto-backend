@@ -17,13 +17,18 @@ import java.util.List;
  *
  */
 @ApplicationScoped
-public class GenericViewDefinitionParserService implements ViewDefinitionParserService<ViewDefinition> {
+public class GenericViewDefinitionParserService
+        implements ViewDefinitionParserService<ViewDefinition> {
 
     @Inject
-    ViewDefinitionCatalog catalog;
+    private ViewDefinitionCatalog catalog;
+
+    public void setCatalog(final ViewDefinitionCatalog catalog) {
+        this.catalog = catalog;
+    }
 
     @Override
-    public List<ViewDefinition> parse(List<Step> steps) {
+    public List<ViewDefinition> parse(final List<Step> steps) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
 
         for (var v : catalog.getReadOnlyCatalog().getAll()) {
@@ -38,8 +43,10 @@ public class GenericViewDefinitionParserService implements ViewDefinitionParserS
     }
 
     @Override
-    public boolean appliesTo(List<Step> steps, ViewDefinition viewDefinition) {
-        if (viewDefinition.getConstraints() == null || viewDefinition.getConstraints().isEmpty()) {
+    public boolean appliesTo(final List<Step> steps,
+                             final ViewDefinition viewDefinition) {
+        if (viewDefinition.getConstraints() == null
+                || viewDefinition.getConstraints().isEmpty()) {
             return true;
         }
         boolean hasOptional = false;
@@ -55,11 +62,13 @@ public class GenericViewDefinitionParserService implements ViewDefinitionParserS
             }
         }
 
-        //If we are here, all conditionals have passed. Let's check if we have optionals pending:
+        //If we are here, all conditionals have passed.
+        // Let's check if we have optionals pending:
         return !hasOptional || passOptional;
     }
 
-    private boolean passConditional(List<Step> steps, ViewDefinitionConstraint c) {
+    private boolean passConditional(final List<Step> steps,
+                                    final ViewDefinitionConstraint c) {
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
@@ -80,12 +89,18 @@ public class GenericViewDefinitionParserService implements ViewDefinitionParserS
             case CONTAINS_STEP_TYPE:
                 res = containsStepType(steps, c, res);
                 break;
+            default:
+                //Unsupported operation or typo
+                res = false;
         }
 
         return res;
     }
 
-    private boolean containsStepIdentifier(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+    private boolean containsStepIdentifier(final List<Step> steps,
+                                           final ViewDefinitionConstraint c,
+                                           final boolean tmpRes) {
+        boolean res = tmpRes;
         for (Step s : steps) {
             if (s.getId().equalsIgnoreCase(c.getParameter())) {
                 res = true;
@@ -95,7 +110,10 @@ public class GenericViewDefinitionParserService implements ViewDefinitionParserS
         return res;
     }
 
-    private boolean containsStepName(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+    private boolean containsStepName(final List<Step> steps,
+                                     final ViewDefinitionConstraint c,
+                                     final boolean tmpRes) {
+        boolean res = tmpRes;
         for (Step s : steps) {
             if (s.getName().equalsIgnoreCase(c.getParameter())) {
                 res = true;
@@ -105,9 +123,13 @@ public class GenericViewDefinitionParserService implements ViewDefinitionParserS
         return res;
     }
 
-    private boolean containsStepType(List<Step> steps, ViewDefinitionConstraint c, boolean res) {
+    private boolean containsStepType(final List<Step> steps,
+                                     final ViewDefinitionConstraint c,
+                                     final boolean tmpRes) {
+        boolean res = tmpRes;
         for (Step s : steps) {
-            if (s.getType().equalsIgnoreCase(c.getParameter()) || s.getSubType().equalsIgnoreCase(c.getParameter())) {
+            if (s.getType().equalsIgnoreCase(c.getParameter())
+                    || s.getSubType().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
             }

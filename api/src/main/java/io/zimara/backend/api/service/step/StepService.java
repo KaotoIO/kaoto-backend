@@ -25,7 +25,7 @@ public class StepService {
      *  Returns the first step identified by the parameter.
      *
      */
-    public Step stepById(String id) {
+    public Step stepById(final String id) {
         return catalog.getReadOnlyCatalog().searchStepByID(id);
     }
 
@@ -36,7 +36,7 @@ public class StepService {
      *  Returns all the steps identified by the name.
      *
      */
-    public Collection<Step> stepsByName(String name) {
+    public Collection<Step> stepsByName(final String name) {
         return catalog.getReadOnlyCatalog().searchStepsByName(name);
     }
 

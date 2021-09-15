@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  * 🐱class DeploymentService
- * <p>
  * This endpoint will return a list of views based on the parameters.
  */
 @ApplicationScoped
@@ -21,8 +20,9 @@ public class DeploymentService {
     private List<DeploymentGeneratorService> parsers = new ArrayList<>();
 
     @Inject
-    public void setKameletBindingParserService(KameletBindingDeploymentGeneratorService kameletBindingParserService) {
-        parsers.add(kameletBindingParserService);
+    public void setKameletBindingParserService(
+            final KameletBindingDeploymentGeneratorService parserService) {
+        parsers.add(parserService);
     }
 
     /*
@@ -32,7 +32,7 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String yaml(String name, Step[] stepArray) {
+    public String yaml(final String name, final Step[] stepArray) {
 
         List<Step> steps = Arrays.asList(stepArray);
 

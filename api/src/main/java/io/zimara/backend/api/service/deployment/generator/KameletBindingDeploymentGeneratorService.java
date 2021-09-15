@@ -19,10 +19,11 @@ import java.util.List;
  * 🐱miniclass KameletBindingDeploymentGeneratorService (DeploymentGeneratorService)
  */
 @ApplicationScoped
-public class KameletBindingDeploymentGeneratorService implements DeploymentGeneratorService {
+public class KameletBindingDeploymentGeneratorService
+        implements DeploymentGeneratorService {
 
     @Override
-    public String parse(String name, List<Step> steps) {
+    public String parse(final String name, final List<Step> steps) {
         if (!appliesTo(steps)) {
             return "";
         }
@@ -41,30 +42,37 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
 
         Representer representer = new Representer() {
             @Override
-            protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
+            protected NodeTuple representJavaBeanProperty(
+                    final Object javaBean,
+                    final Property property,
+                    final Object propertyValue,
+                    final Tag customTag) {
                 if (propertyValue == null) {
                     return null;
                 }
-                return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+                return super.representJavaBeanProperty(javaBean, property,
+                        propertyValue, customTag);
             }
         };
         representer.getPropertyUtils().setAllowReadOnlyProperties(true);
 
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class), representer);
+        Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
+                    representer);
         return yaml.dumpAsMap(binding);
     }
 
-    private KameletBindingStep createKameletBindingStep(Step step) {
+    private KameletBindingStep createKameletBindingStep(final Step step) {
         KameletBindingStep kameletStep = new KameletBindingStep();
 
         KameletBindingStepRef ref = new KameletBindingStepRef();
         ref.setName(step.getName());
         kameletStep.setRef(ref);
 
-        if(step.getParameters() != null) {
+        if (step.getParameters() != null) {
             for (var p : step.getParameters()) {
                 if (p.getValue() != null) {
-                    kameletStep.getProperties().put(p.getId(), p.getValue().toString());
+                    kameletStep.getProperties().put(p.getId(),
+                            p.getValue().toString());
                 }
             }
         }
@@ -73,7 +81,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
     }
 
     @Override
-    public boolean appliesTo(List<Step> steps) {
+    public boolean appliesTo(final List<Step> steps) {
         if (steps.size() < 2) {
             return false;
         }

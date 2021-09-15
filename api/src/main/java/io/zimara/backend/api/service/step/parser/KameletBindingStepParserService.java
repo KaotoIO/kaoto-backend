@@ -28,7 +28,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     StepCatalog catalog;
 
     @Override
-    public List<Step> parse(String input) {
+    public List<Step> parse(final String input) {
         if (!appliesTo(input)) {
             throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
         }
@@ -44,7 +44,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         return steps;
     }
     
-    private void processSpec(List<Step> steps, KameletBindingSpec spec) {
+    private void processSpec(final List<Step> steps, final KameletBindingSpec spec) {
         steps.add(processStep(spec.getSource()));
 
         for (KameletBindingStep intermediateStep : spec.getSteps()) {
@@ -54,16 +54,18 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         steps.add(processStep(spec.getSink()));
     }
 
-    private Step processStep(KameletBindingStep source) {
+    private Step processStep(final KameletBindingStep source) {
         Step step = null;
 
         if (source.getUri() != null) {
             log.trace("Found uri component.");
             String uri = source.getUri();
-            step = catalog.getReadOnlyCatalog().searchStepByName(uri.substring(0, uri.indexOf(":")));
+            step = catalog.getReadOnlyCatalog()
+                    .searchStepByName(uri.substring(0, uri.indexOf(":")));
         } else if (source.getRef() != null) {
             log.trace("Found ref component.");
-            step = catalog.getReadOnlyCatalog().searchStepByName(source.getRef().getName());
+            step = catalog.getReadOnlyCatalog()
+                    .searchStepByName(source.getRef().getName());
 
             if (step != null) {
                 log.trace("Found step " + step.getName());
@@ -74,7 +76,8 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         return step;
     }
 
-    private void setValuesOnParameters(Step step, Map<String, String> properties) {
+    private void setValuesOnParameters(final Step step,
+                                       final Map<String, String> properties) {
 
         for (Map.Entry<String, String> c : properties.entrySet()) {
             for (Parameter p : step.getParameters()) {
@@ -87,12 +90,12 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     }
 
-    private String processMetadata(Map<String, String> metadata) {
+    private String processMetadata(final Map<String, String> metadata) {
         return metadata.getOrDefault("name", "untitled");
     }
 
     @Override
-    public boolean appliesTo(String yaml) {
+    public boolean appliesTo(final String yaml) {
         return yaml.contains("kind: KameletBinding");
     }
 

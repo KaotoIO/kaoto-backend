@@ -41,13 +41,13 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
-    public List<ViewDefinition> views(@QueryParam("yaml") String yaml) {
+    public List<ViewDefinition> views(final @QueryParam("yaml") String yaml) {
         return viewDefinitionService.views(yaml);
     }
 
 
     @ServerExceptionMapper
-    public Response mapException(Exception x) {
+    public Response mapException(final Exception x) {
         log.error("Error processing views definitions.", x);
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -57,7 +57,7 @@ public class ViewDefinitionResource {
     }
 
     @ServerExceptionMapper
-    public Response mapException(org.yaml.snakeyaml.scanner.ScannerException x) {
+    public Response mapException(final org.yaml.snakeyaml.scanner.ScannerException x) {
         log.error("Error trying to return YAML.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)

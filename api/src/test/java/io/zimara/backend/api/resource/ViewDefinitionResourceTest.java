@@ -31,7 +31,10 @@ class ViewDefinitionResourceTest {
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(ViewDefinitionResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
+        binding = Files.readString(Path.of(
+                ViewDefinitionResourceTest.class.getResource(
+                        "twitter-search-source-binding.yaml")
+                        .toURI()));
     }
 
     @BeforeEach
@@ -43,7 +46,8 @@ class ViewDefinitionResourceTest {
     @Test
     void testViews() {
         var res = given()
-                .when().queryParam("yaml", binding).contentType("text/yaml").post()
+                .when().queryParam("yaml", binding)
+                .contentType("text/yaml").post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         res.body("rows.size()", is(2),
@@ -57,14 +61,16 @@ class ViewDefinitionResourceTest {
         given()
                 .when().queryParam("yaml", "Not Important").post()
                 .then()
-                .statusCode(Response.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode());
+                .statusCode(Response.Status
+                        .UNSUPPORTED_MEDIA_TYPE.getStatusCode());
     }
 
     @Test
     void testExceptions() {
         given()
                 .when()
-                .queryParam("yaml", "kind: KameletBinding : wrong invalid content")
+                .queryParam("yaml",
+                        "kind: KameletBinding : wrong invalid content")
                 .contentType("text/yaml")
                 .post()
                 .then()
