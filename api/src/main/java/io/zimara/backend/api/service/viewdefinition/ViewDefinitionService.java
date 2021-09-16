@@ -49,7 +49,7 @@ public class ViewDefinitionService {
                                       final List<Step> steps) {
 
         int i = 0;
-        for(Step step : steps) {
+        for (Step step : steps) {
             step.setUUID(i++ + step.getId());
         }
 

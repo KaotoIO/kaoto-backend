@@ -20,17 +20,24 @@ import java.util.Map;
  * 🐱miniclass KameletBindingStepParserService (StepParserService)
  */
 @ApplicationScoped
-public class KameletBindingStepParserService implements StepParserService<Step> {
+public class KameletBindingStepParserService
+        implements StepParserService<Step> {
 
-    private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
+    private Logger log =
+            Logger.getLogger(KameletBindingStepParserService.class);
+
+    private StepCatalog catalog;
 
     @Inject
-    StepCatalog catalog;
+    public StepCatalog getCatalog() {
+        return catalog;
+    }
 
     @Override
     public List<Step> parse(final String input) {
         if (!appliesTo(input)) {
-            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
+            throw new IllegalArgumentException(
+                    "Wrong format provided. This is not parseable by us");
         }
 
         List<Step> steps = new ArrayList<>(2);
@@ -43,8 +50,9 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
         return steps;
     }
-    
-    private void processSpec(final List<Step> steps, final KameletBindingSpec spec) {
+
+    private void processSpec(final List<Step> steps,
+                             final KameletBindingSpec spec) {
         steps.add(processStep(spec.getSource()));
 
         for (KameletBindingStep intermediateStep : spec.getSteps()) {
@@ -90,8 +98,11 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     }
 
-    private String processMetadata(final Map<String, String> metadata) {
-        return metadata.getOrDefault("name", "untitled");
+    private String processMetadata(
+            final Map<String, String> metadata) {
+        return metadata.getOrDefault(
+                "name",
+                "untitled");
     }
 
     @Override

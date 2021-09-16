@@ -15,8 +15,12 @@ import java.util.Collection;
 @ApplicationScoped
 public class StepService {
 
+    private StepCatalog catalog;
+
     @Inject
-    StepCatalog catalog;
+    public StepCatalog getCatalog() {
+        return catalog;
+    }
 
     /*
      * 🐱method stepById : Step

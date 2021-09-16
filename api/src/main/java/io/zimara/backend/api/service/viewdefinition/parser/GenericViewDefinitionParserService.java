@@ -14,8 +14,6 @@ import java.util.List;
 /**
  * 🐱miniclass GenericViewDefinitionParserService (ViewDefinitionParserService)
  * 🐱relationship compositionOf ViewDefinitionCatalog, 0..1
- *
- *
  */
 @ApplicationScoped
 public class GenericViewDefinitionParserService
@@ -34,9 +32,9 @@ public class GenericViewDefinitionParserService
 
         for (var v : catalog.getReadOnlyCatalog().getAll()) {
             if (appliesTo(steps, v)) {
-                if(v.getType().equalsIgnoreCase("generic")) {
+                if (v.getType().equalsIgnoreCase("generic")) {
                     viewDefinitions.add(v);
-                } else if(v.getType().equalsIgnoreCase("step")) {
+                } else if (v.getType().equalsIgnoreCase("step")) {
                     viewDefinitions.addAll(getViewsPerStep(steps, v));
                 }
             }
@@ -47,10 +45,10 @@ public class GenericViewDefinitionParserService
 
     @Override
     public List<ViewDefinition> getViewsPerStep(final List<Step> steps,
-                             final ViewDefinition view) {
+                                                final ViewDefinition view) {
         List<ViewDefinition> views = new ArrayList<>();
-        for(Step step : steps) {
-            if(appliesTo(Collections.singletonList(step), view)) {
+        for (Step step : steps) {
+            if (appliesTo(Collections.singletonList(step), view)) {
                 ViewDefinition v = new ViewDefinition(view);
                 v.setStep(step.getUUID());
                 views.add(v);

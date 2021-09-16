@@ -81,7 +81,7 @@ public class ViewDefinition extends Metadata {
         return step;
     }
 
-    public void setStep(String step) {
+    public void setStep(final String step) {
         this.step = step;
     }
 
@@ -89,7 +89,7 @@ public class ViewDefinition extends Metadata {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 

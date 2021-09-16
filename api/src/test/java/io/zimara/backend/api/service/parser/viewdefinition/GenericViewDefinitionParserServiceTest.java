@@ -55,28 +55,35 @@ class GenericViewDefinitionParserServiceTest {
         List<Step> steps = new LinkedList<>();
         ViewDefinition view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
-        ViewDefinitionConstraint viewDefinitionConstraint = new ViewDefinitionConstraint();
+        ViewDefinitionConstraint viewDefinitionConstraint =
+                new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
-        viewDefinitionConstraint.setOperation(ConstraintOperation.SIZE_GREATER_THAN);
+        viewDefinitionConstraint.setOperation(
+                ConstraintOperation.SIZE_GREATER_THAN);
         viewDefinitionConstraint.setParameter("0");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertFalse(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertFalse(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
-        viewDefinitionConstraint.setOperation(ConstraintOperation.SIZE_EQUALS);
+        viewDefinitionConstraint.setOperation(
+                ConstraintOperation.SIZE_EQUALS);
         viewDefinitionConstraint.setParameter("0");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertTrue(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
-        viewDefinitionConstraint.setOperation(ConstraintOperation.SIZE_SMALLER_THAN);
+        viewDefinitionConstraint.setOperation(
+                ConstraintOperation.SIZE_SMALLER_THAN);
         viewDefinitionConstraint.setParameter("1");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertTrue(
+                viewDefinitionParserService.appliesTo(steps, view));
     }
 
     @Test
@@ -93,13 +100,15 @@ class GenericViewDefinitionParserServiceTest {
 
         ViewDefinition view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
-        ViewDefinitionConstraint viewDefinitionConstraint = new ViewDefinitionConstraint();
+        ViewDefinitionConstraint viewDefinitionConstraint =
+                new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
         viewDefinitionConstraint.setOperation(
                 ConstraintOperation.CONTAINS_STEP_TYPE);
         viewDefinitionConstraint.setParameter("no-type");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertFalse(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertFalse(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
@@ -107,7 +116,8 @@ class GenericViewDefinitionParserServiceTest {
                 ConstraintOperation.CONTAINS_STEP_TYPE);
         viewDefinitionConstraint.setParameter("KAMELET");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertTrue(
+                viewDefinitionParserService.appliesTo(steps, view));
         
         view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
@@ -117,7 +127,8 @@ class GenericViewDefinitionParserServiceTest {
                 ConstraintOperation.CONTAINS_STEP_NAME);
         viewDefinitionConstraint.setParameter("no-name");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertFalse(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertFalse(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
@@ -125,7 +136,8 @@ class GenericViewDefinitionParserServiceTest {
                 ConstraintOperation.CONTAINS_STEP_NAME);
         viewDefinitionConstraint.setParameter(stepName);
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertTrue(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
@@ -135,7 +147,8 @@ class GenericViewDefinitionParserServiceTest {
                 ConstraintOperation.CONTAINS_STEP_IDENTIFIER);
         viewDefinitionConstraint.setParameter("no-id");
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertFalse(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertFalse(
+                viewDefinitionParserService.appliesTo(steps, view));
 
         viewDefinitionConstraint = new ViewDefinitionConstraint();
         viewDefinitionConstraint.setMandatory(false);
@@ -143,6 +156,7 @@ class GenericViewDefinitionParserServiceTest {
                 ConstraintOperation.CONTAINS_STEP_IDENTIFIER);
         viewDefinitionConstraint.setParameter(stepId);
         view.getConstraints().add(viewDefinitionConstraint);
-        Assertions.assertTrue(viewDefinitionParserService.appliesTo(steps, view));
+        Assertions.assertTrue(
+                viewDefinitionParserService.appliesTo(steps, view));
     }
 }

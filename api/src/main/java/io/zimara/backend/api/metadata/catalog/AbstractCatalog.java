@@ -12,13 +12,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- *
  * 🐱class AbstractCatalog
  * 🐱relationship dependsOn MetadataCatalog
- *
  * Abstract implementation of an ApplicationScoped catalog. This will be the base of the beans
  * that can be injected in the different services and resources.
- *
  */
 public abstract class AbstractCatalog<T extends Metadata> {
 
@@ -37,6 +34,7 @@ public abstract class AbstractCatalog<T extends Metadata> {
             return readOnlyCatalog;
         } else throw new CatalogWarmingUpException("Catalog still warming up.");
     }
+
     /*
      * 🐱method waitForWarmUp : CompletableFuture
      *

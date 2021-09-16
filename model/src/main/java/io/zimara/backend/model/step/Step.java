@@ -17,7 +17,7 @@ public class Step extends Metadata {
     private List<Parameter> parameters;
     private String title;
     private String description;
-    private String UUID;
+    private String uuid;
     private String subType = null;
 
     /*
@@ -89,11 +89,11 @@ public class Step extends Metadata {
      *
      */
     public String getUUID() {
-        return UUID;
+        return uuid;
     }
 
-    public void setUUID(final String UUID) {
-        this.UUID = UUID;
+    public void setUUID(final String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
