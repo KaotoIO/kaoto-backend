@@ -50,10 +50,9 @@ class ViewDefinitionResourceTest {
                 .contentType("text/yaml").post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        res.body("rows.size()", is(2),
-                "[0].name", is("Kamelet Binding"),
-                "[0].type", is("integrationview"),
-                "[0].steps.size()", is(4));
+        res.body("views.size()", is(6),
+                "views[0].type", is("step"),
+                "steps.size()", is(4));
     }
 
     @Test

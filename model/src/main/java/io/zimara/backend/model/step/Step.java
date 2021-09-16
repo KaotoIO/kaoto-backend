@@ -17,7 +17,7 @@ public class Step extends Metadata {
     private List<Parameter> parameters;
     private String title;
     private String description;
-
+    private String UUID;
     private String subType = null;
 
     /*
@@ -81,4 +81,18 @@ public class Step extends Metadata {
         this.icon = icon;
     }
 
+    /*
+     * 🐱property UUID: String
+     *
+     * Volatile UUID to mark the relationship between
+     * a viewDefinition and a step.
+     *
+     */
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(final String UUID) {
+        this.UUID = UUID;
+    }
 }

@@ -3,6 +3,7 @@ package io.zimara.backend.api.service.deployment;
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
 import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.zimara.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import io.zimara.backend.model.view.ViewDefinition;
@@ -33,6 +34,9 @@ class DeploymentServiceTest {
     @Inject
     ViewDefinitionService viewDefinitionService;
 
+    @Inject
+    KameletBindingStepParserService stepParser;
+
     private static String binding = "";
 
     @BeforeAll
@@ -49,7 +53,8 @@ class DeploymentServiceTest {
     @Test
     void yaml() {
         List<ViewDefinition> views = viewDefinitionService.views(binding);
-        String res = deploymentService.yaml("twitter-search-source-binding", views.get(0).getSteps().toArray(new KameletStep[0]));
+        final var steps = stepParser.parse(binding);
+        String res = deploymentService.yaml("twitter-search-source-binding", steps.toArray(new KameletStep[0]));
         String expectedStr ="apiVersion: camel.apache.org/v1alpha1\n" +
                 "kind: KameletBinding\n" +
                 "metadata:\n" +

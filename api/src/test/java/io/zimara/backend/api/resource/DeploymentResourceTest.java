@@ -3,11 +3,12 @@ package io.zimara.backend.api.resource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.api.metadata.catalog.StepCatalog;
-import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.zimara.backend.api.resource.request.DeploymentResourceYamlRequest;
+import io.zimara.backend.api.service.step.parser.KameletBindingStepParserService;
+import io.zimara.backend.api.service.step.parser.StepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
-import io.zimara.backend.model.view.ViewDefinition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class DeploymentResourceTest {
 
     private DeploymentResource stepResource;
     private StepCatalog stepCatalog;
-    private ViewDefinitionCatalog viewCatalog;
+    private StepParserService<Step> stepParser;
     private static String binding;
     private ViewDefinitionService viewDefinitionService;
 
@@ -39,8 +40,8 @@ class DeploymentResourceTest {
     }
 
     @Inject
-    public void setViewDefinitionCatalog(ViewDefinitionCatalog viewCatalog) {
-        this.viewCatalog = viewCatalog;
+    public void setStepParser(KameletBindingStepParserService stepParser) {
+        this.stepParser = stepParser;
     }
 
     @Inject
@@ -56,7 +57,6 @@ class DeploymentResourceTest {
     @BeforeEach
     void ensureCatalog() {
         stepCatalog.waitForWarmUp().join();
-        viewCatalog.waitForWarmUp().join();
     }
 
     @BeforeAll
@@ -67,10 +67,10 @@ class DeploymentResourceTest {
     @Test
     void testYaml() {
 
-        List<ViewDefinition> views = viewDefinitionService.views(binding);
+        List<Step> steps = stepParser.parse(binding);
         DeploymentResourceYamlRequest request = new DeploymentResourceYamlRequest();
         request.setName("twitter-search-source-binding");
-        request.setSteps(views.get(0).getSteps().toArray(new KameletStep[0]));
+        request.setSteps(steps.toArray(new KameletStep[0]));
 
         given()
                 .when()
@@ -83,11 +83,6 @@ class DeploymentResourceTest {
 
     @Test
     void testExceptions() {
-        List<ViewDefinition> views = viewDefinitionService.views(binding);
-        DeploymentResourceYamlRequest request = new DeploymentResourceYamlRequest();
-        request.setName(views.get(0).getName());
-        request.setSteps(views.get(0).getSteps().toArray(new KameletStep[0]));
-
         given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)

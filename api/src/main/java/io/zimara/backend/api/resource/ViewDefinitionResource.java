@@ -1,6 +1,9 @@
 package io.zimara.backend.api.resource;
 
+import io.zimara.backend.api.resource.response.ViewDefinitionResourceResponse;
+import io.zimara.backend.api.service.step.parser.StepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
+import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -32,6 +35,9 @@ public class ViewDefinitionResource {
     @Inject
     ViewDefinitionService viewDefinitionService;
 
+    @Inject
+    StepParserService<Step> stepParserService;
+
     /*
      * 🐱method views:
      * 🐱param yaml: String
@@ -41,8 +47,11 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
-    public List<ViewDefinition> views(final @QueryParam("yaml") String yaml) {
-        return viewDefinitionService.views(yaml);
+    public ViewDefinitionResourceResponse views(final @QueryParam("yaml") String yaml) {
+        ViewDefinitionResourceResponse res = new ViewDefinitionResourceResponse();
+        res.setViews(viewDefinitionService.views(yaml));
+        res.setSteps(stepParserService.parse(yaml));
+        return res;
     }
 
 

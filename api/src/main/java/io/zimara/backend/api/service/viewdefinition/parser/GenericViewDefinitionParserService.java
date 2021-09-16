@@ -8,6 +8,7 @@ import io.zimara.backend.model.view.ViewDefinitionConstraint;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,13 +34,29 @@ public class GenericViewDefinitionParserService
 
         for (var v : catalog.getReadOnlyCatalog().getAll()) {
             if (appliesTo(steps, v)) {
-                ViewDefinition clone = new ViewDefinition(v);
-                clone.setSteps(steps);
-                viewDefinitions.add(clone);
+                if(v.getType().equalsIgnoreCase("generic")) {
+                    viewDefinitions.add(v);
+                } else if(v.getType().equalsIgnoreCase("step")) {
+                    viewDefinitions.addAll(getViewsPerStep(steps, v));
+                }
             }
         }
 
         return viewDefinitions;
+    }
+
+    @Override
+    public List<ViewDefinition> getViewsPerStep(final List<Step> steps,
+                             final ViewDefinition view) {
+        List<ViewDefinition> views = new ArrayList<>();
+        for(Step step : steps) {
+            if(appliesTo(Collections.singletonList(step), view)) {
+                ViewDefinition v = new ViewDefinition(view);
+                v.setStep(step.getUUID());
+                views.add(v);
+            }
+        }
+        return views;
     }
 
     @Override

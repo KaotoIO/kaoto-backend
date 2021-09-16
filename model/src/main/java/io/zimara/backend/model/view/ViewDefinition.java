@@ -1,7 +1,6 @@
 package io.zimara.backend.model.view;
 
 import io.zimara.backend.model.Metadata;
-import io.zimara.backend.model.step.Step;
 
 import java.util.List;
 import java.util.Map;
@@ -27,20 +26,29 @@ public class ViewDefinition extends Metadata {
     }
 
     /*
-     * 🐱property steps: List[Step]
-     *
-     * List of Steps on this view. Usually used on integrations views.
-     */
-    private List<Step> steps = null;
-
-
-    /*
      * 🐱property properties: Map[String, String]
      *
      * Properties useful for the user interface to visualize
      * this view definition.
      */
     private Map<String, String> properties = null;
+
+    /*
+     * 🐱property step: Step
+     *
+     * If this extension relates to a specific step (StepExtension),
+     * point to it via the UUID of the step in this integration.
+     *
+     */
+    private String step = null;
+
+    /*
+     * 🐱property url: String
+     *
+     * If this is a custom step, url to fetch the view.
+     *
+     */
+    private String url = null;
 
     /*
      * 🐱property constraints: List[ViewDefinitionConstraint]
@@ -51,14 +59,6 @@ public class ViewDefinition extends Metadata {
      * one of them should be fulfilled.
      */
     private List<ViewDefinitionConstraint> constraints = null;
-
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(final List<Step> steps) {
-        this.steps = steps;
-    }
 
     public Map<String, String> getProperties() {
         return properties;
@@ -77,13 +77,30 @@ public class ViewDefinition extends Metadata {
         this.constraints = constraints;
     }
 
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "ViewDefinition{"
-                + "steps=" + steps
                 + ", name='" + getName() + '\''
                 + ", type='" + getType() + '\''
                 + ", id='" + getId() + '\''
+                + ", url='" + getUrl() + '\''
+                + ", step='" + getStep() + '\''
                 + ", properties=" + properties
                 + '}';
     }
@@ -99,11 +116,6 @@ public class ViewDefinition extends Metadata {
 
         ViewDefinition that = (ViewDefinition) o;
 
-        if (getSteps() != null
-                ? !getSteps().equals(that.getSteps())
-                : that.getSteps() != null) {
-            return false;
-        }
         if (getName() != null
                 ? !getName().equals(that.getName())
                 : that.getName() != null) {
@@ -126,8 +138,7 @@ public class ViewDefinition extends Metadata {
 
     @Override
     public int hashCode() {
-        int result = getSteps() != null ? getSteps().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        int result = getName() != null ? getName().hashCode() : 0;
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         result = 31 * result + (getId() != null ? getId().hashCode() : 0);
         result = 31 * result + (getProperties() != null
