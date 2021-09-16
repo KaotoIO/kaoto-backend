@@ -29,8 +29,8 @@ public class KameletBindingStepParserService
     private StepCatalog catalog;
 
     @Inject
-    public StepCatalog getCatalog() {
-        return catalog;
+    public void setCatalog(final StepCatalog catalog) {
+        this.catalog = catalog;
     }
 
     @Override

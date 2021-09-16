@@ -13,8 +13,13 @@ import java.util.List;
 @QuarkusTest
 class KameletBindingDeploymentGeneratorServiceTest {
 
-   @Inject
-   KameletBindingDeploymentGeneratorService parser;
+    private KameletBindingDeploymentGeneratorService parser;
+
+    @Inject
+    public void setParser(
+            final KameletBindingDeploymentGeneratorService parser) {
+        this.parser = parser;
+    }
 
     @Test
     void parse() {
@@ -28,5 +33,6 @@ class KameletBindingDeploymentGeneratorServiceTest {
         s.setSubType("KAMELET");
         Assertions.assertNotEquals("", parser.parse("", steps));
     }
-
 }
+
+

@@ -15,9 +15,6 @@ import org.yaml.snakeyaml.representer.Representer;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
-/**
- * 🐱miniclass KameletBindingDeploymentGeneratorService (DeploymentGeneratorService)
- */
 @ApplicationScoped
 public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {

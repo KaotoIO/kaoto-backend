@@ -18,7 +18,8 @@ import javax.ws.rs.core.Response;
  * 🐱class DeploymentResource
  * 🐱relationship compositionOf DeploymentService, 0..1
  * <p>
- * This endpoint will return the yaml needed to deploy the related integration and the
+ * This endpoint will return the yaml needed to deploy
+ * the related integration and the
  * endpoints to interact with deployments.
  */
 @Path("/deployment")
@@ -28,7 +29,12 @@ public class DeploymentResource {
     private Logger log = Logger.getLogger(DeploymentResource.class);
 
     @Inject
-    DeploymentService deploymentService;
+    public void setDeploymentService(
+            final DeploymentService deploymentService) {
+        this.deploymentService = deploymentService;
+    }
+
+    private DeploymentService deploymentService;
 
     /*
      * 🐱method yaml: String

@@ -1,7 +1,6 @@
 package io.zimara.backend.api.resource.response;
 
 import io.zimara.backend.model.step.Step;
-import io.zimara.backend.model.step.kamelet.KameletStep;
 import io.zimara.backend.model.view.ViewDefinition;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class ViewDefinitionResourceResponse {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(final List<Step> steps) {
         this.steps = steps;
     }
 
@@ -25,7 +24,7 @@ public class ViewDefinitionResourceResponse {
         return views;
     }
 
-    public void setViews(List<ViewDefinition> views) {
+    public void setViews(final List<ViewDefinition> views) {
         this.views = views;
     }
 }

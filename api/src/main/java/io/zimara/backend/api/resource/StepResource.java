@@ -24,8 +24,12 @@ import java.util.Collection;
 @ApplicationScoped
 public class StepResource {
 
+    private StepService stepService;
+
     @Inject
-    StepService stepService;
+    public void setStepService(final StepService stepService) {
+        this.stepService = stepService;
+    }
 
 
     /*
@@ -38,7 +42,7 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
-    public Step stepById(@PathParam("id") String id) {
+    public Step stepById(final @PathParam("id") String id) {
         return stepService.stepById(id);
     }
 
@@ -52,7 +56,7 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
-    public Collection<Step> stepsByName(@PathParam("name") String name) {
+    public Collection<Step> stepsByName(final @PathParam("name") String name) {
         return stepService.stepsByName(name);
     }
 
@@ -70,7 +74,7 @@ public class StepResource {
 
 
     @ServerExceptionMapper
-    public Response mapException(Exception x) {
+    public Response mapException(final Exception x) {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Error returning steps: " + x.getMessage())
                 .type(MediaType.TEXT_PLAIN_TYPE)

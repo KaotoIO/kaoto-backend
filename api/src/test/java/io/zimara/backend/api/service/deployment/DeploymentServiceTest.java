@@ -6,7 +6,6 @@ import io.zimara.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.zimara.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.kamelet.KameletStep;
-import io.zimara.backend.model.view.ViewDefinition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 @QuarkusTest
 class DeploymentServiceTest {
@@ -33,27 +31,30 @@ class DeploymentServiceTest {
     private KameletBindingStepParserService stepParser;
 
     @Inject
-    public void setStepCatalog(StepCatalog stepCatalog) {
+    public void setStepCatalog(final StepCatalog stepCatalog) {
         this.stepCatalog = stepCatalog;
     }
 
     @Inject
-    public void setViewCatalog(ViewDefinitionCatalog viewCatalog) {
+    public void setViewCatalog(final ViewDefinitionCatalog viewCatalog) {
         this.viewCatalog = viewCatalog;
     }
 
     @Inject
-    public void setDeploymentService(DeploymentService deploymentService) {
+    public void setDeploymentService(
+            final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
     }
 
     @Inject
-    public void setViewDefinitionService(ViewDefinitionService viewDefinitionService) {
+    public void setViewDefinitionService(
+            final ViewDefinitionService viewDefinitionService) {
         this.viewDefinitionService = viewDefinitionService;
     }
 
     @Inject
-    public void setStepParser(KameletBindingStepParserService stepParser) {
+    public void setStepParser(
+            final KameletBindingStepParserService stepParser) {
         this.stepParser = stepParser;
     }
 
@@ -76,9 +77,11 @@ class DeploymentServiceTest {
     @Test
     void yaml() {
         final var steps = stepParser.parse(binding);
-        List<ViewDefinition> views = viewDefinitionService.views(binding, steps);
-        String res = deploymentService.yaml("twitter-search-source-binding", steps.toArray(new KameletStep[0]));
-        String expectedStr ="apiVersion: camel.apache.org/v1alpha1\n"
+        String res = deploymentService.yaml(
+                "twitter-search-source-binding",
+                steps.toArray(new KameletStep[0]));
+        String expectedStr =
+                "apiVersion: camel.apache.org/v1alpha1\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  name: twitter-search-source-binding\n"

@@ -22,7 +22,9 @@ public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
     @Override
     protected List<ParseCatalog<ViewDefinition>> loadParsers() {
         List<ParseCatalog<ViewDefinition>> catalogs = new ArrayList<>();
-        catalogs.add(new ViewDefinitionParseCatalog("https://github.com/ZimaraIO/zimara-viewdefinition-catalog.git", "main"));
+        catalogs.add(new ViewDefinitionParseCatalog(
+               "https://github.com/ZimaraIO/zimara-viewdefinition-catalog.git",
+               "main"));
         return catalogs;
     }
 }

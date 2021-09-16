@@ -20,17 +20,18 @@ import java.util.List;
 @QuarkusTest
 class GenericViewDefinitionParserServiceTest {
 
-    GenericViewDefinitionParserService viewDefinitionParserService;
+    private GenericViewDefinitionParserService viewDefinitionParserService;
 
-    ViewDefinitionCatalog viewCatalog;
+    private ViewDefinitionCatalog viewCatalog;
 
     @Inject
-    public void setViewDefinitionParserService(GenericViewDefinitionParserService viewDefinitionParserService) {
-        this.viewDefinitionParserService = viewDefinitionParserService;
+    public void setViewDefinitionParserService(
+            final GenericViewDefinitionParserService viewParser) {
+        this.viewDefinitionParserService = viewParser;
     }
 
     @Inject
-    public void setViewCatalog(ViewDefinitionCatalog viewCatalog) {
+    public void setViewCatalog(final ViewDefinitionCatalog viewCatalog) {
         this.viewCatalog = viewCatalog;
     }
 
@@ -126,7 +127,7 @@ class GenericViewDefinitionParserServiceTest {
         view.getConstraints().add(viewDefinitionConstraint);
         Assertions.assertTrue(
                 viewDefinitionParserService.appliesTo(steps, view));
-        
+
         view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
         viewDefinitionConstraint = new ViewDefinitionConstraint();

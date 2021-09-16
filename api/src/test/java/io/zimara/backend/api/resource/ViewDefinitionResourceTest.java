@@ -28,12 +28,12 @@ class ViewDefinitionResourceTest {
     private ViewDefinitionCatalog viewCatalog;
 
     @Inject
-    public void setStepCatalog(StepCatalog stepCatalog) {
+    public void setStepCatalog(final StepCatalog stepCatalog) {
         this.stepCatalog = stepCatalog;
     }
 
     @Inject
-    public void setViewCatalog(ViewDefinitionCatalog viewCatalog) {
+    public void setViewCatalog(final ViewDefinitionCatalog viewCatalog) {
         this.viewCatalog = viewCatalog;
     }
 

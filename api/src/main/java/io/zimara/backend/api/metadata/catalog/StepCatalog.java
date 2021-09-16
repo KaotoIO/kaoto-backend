@@ -22,7 +22,8 @@ public class StepCatalog extends AbstractCatalog<Step> {
     @Override
     protected List<ParseCatalog<Step>> loadParsers() {
         List<ParseCatalog<Step>> catalogs = new ArrayList<>();
-        catalogs.add(new KameletParseCatalog("https://github.com/apache/camel-kamelets.git", "v0.3.0"));
+        catalogs.add(new KameletParseCatalog(
+                "https://github.com/apache/camel-kamelets.git", "v0.3.0"));
         return catalogs;
     }
 

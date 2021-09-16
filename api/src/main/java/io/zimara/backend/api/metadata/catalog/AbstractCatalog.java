@@ -14,7 +14,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class AbstractCatalog
  * 🐱relationship dependsOn MetadataCatalog
- * Abstract implementation of an ApplicationScoped catalog. This will be the base of the beans
+ * Abstract implementation of an ApplicationScoped catalog.
+ * This will be the base of the beans
  * that can be injected in the different services and resources.
  */
 public abstract class AbstractCatalog<T extends Metadata> {
@@ -32,7 +33,9 @@ public abstract class AbstractCatalog<T extends Metadata> {
     public MetadataCatalog<T> getReadOnlyCatalog() {
         if (warmedUp) {
             return readOnlyCatalog;
-        } else throw new CatalogWarmingUpException("Catalog still warming up.");
+        } else {
+            throw new CatalogWarmingUpException("Catalog still warming up.");
+        }
     }
 
     /*
@@ -68,7 +71,8 @@ public abstract class AbstractCatalog<T extends Metadata> {
                 .thenRun(() -> log.debug("Catalog warmed up."));
     }
 
-    private CompletableFuture<Boolean> addCatalog(final ParseCatalog<T> catalog) {
+    private CompletableFuture<Boolean> addCatalog(
+            final ParseCatalog<T> catalog) {
         CompletableFuture<Boolean> res = new CompletableFuture<>();
         catalog.parse()
                 .thenApply(md -> c.store(md))

@@ -35,22 +35,24 @@ class DeploymentResourceTest {
     private ViewDefinitionService viewDefinitionService;
 
     @Inject
-    public void setCatalog(StepCatalog catalog) {
+    public void setCatalog(final StepCatalog catalog) {
         this.stepCatalog = catalog;
     }
 
     @Inject
-    public void setStepParser(KameletBindingStepParserService stepParser) {
+    public void setStepParser(
+            final KameletBindingStepParserService stepParser) {
         this.stepParser = stepParser;
     }
 
     @Inject
-    public void setViewDefinitionService(ViewDefinitionService viewDefinitionService) {
+    public void setViewDefinitionService(
+            final ViewDefinitionService viewDefinitionService) {
         this.viewDefinitionService = viewDefinitionService;
     }
 
     @Inject
-    public void setDeploymentResource(DeploymentResource stepResource) {
+    public void setDeploymentResource(final DeploymentResource stepResource) {
         this.stepResource = stepResource;
     }
 
@@ -61,14 +63,19 @@ class DeploymentResourceTest {
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(DeploymentResourceTest.class.getResource("twitter-search-source-binding.yaml").toURI()));
+        binding = Files.readString(
+                Path.of(
+                        DeploymentResourceTest.class.getResource(
+                                "twitter-search-source-binding.yaml")
+                                .toURI()));
     }
 
     @Test
     void testYaml() {
 
         List<Step> steps = stepParser.parse(binding);
-        DeploymentResourceYamlRequest request = new DeploymentResourceYamlRequest();
+        DeploymentResourceYamlRequest request =
+                new DeploymentResourceYamlRequest();
         request.setName("twitter-search-source-binding");
         request.setSteps(steps.toArray(new KameletStep[0]));
 

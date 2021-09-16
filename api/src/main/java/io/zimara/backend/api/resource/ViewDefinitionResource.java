@@ -4,9 +4,9 @@ import io.zimara.backend.api.resource.response.ViewDefinitionResourceResponse;
 import io.zimara.backend.api.service.step.parser.StepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.Step;
-import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.yaml.snakeyaml.scanner.ScannerException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
  * 🐱class ViewDefinitionResource
@@ -37,12 +36,14 @@ public class ViewDefinitionResource {
     private StepParserService<Step> stepParserService;
 
     @Inject
-    public void setViewDefinitionService(ViewDefinitionService viewDefinitionService) {
+    public void setViewDefinitionService(
+            final ViewDefinitionService viewDefinitionService) {
         this.viewDefinitionService = viewDefinitionService;
     }
 
     @Inject
-    public void setStepParserService(StepParserService<Step> stepParserService) {
+    public void setStepParserService(
+            final StepParserService<Step> stepParserService) {
         this.stepParserService = stepParserService;
     }
     /*
@@ -54,8 +55,10 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
-    public ViewDefinitionResourceResponse views(final @QueryParam("yaml") String yaml) {
-        ViewDefinitionResourceResponse res = new ViewDefinitionResourceResponse();
+    public ViewDefinitionResourceResponse views(
+            final @QueryParam("yaml") String yaml) {
+        ViewDefinitionResourceResponse res =
+                new ViewDefinitionResourceResponse();
         res.setSteps(stepParserService.parse(yaml));
         res.setViews(viewDefinitionService.views(yaml, res.getSteps()));
         return res;
@@ -67,17 +70,19 @@ public class ViewDefinitionResource {
         log.error("Error processing views definitions.", x);
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Error processing views definitions: " + x.getMessage())
+                .entity("Error processing views definitions: "
+                        + x.getMessage())
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
     }
 
     @ServerExceptionMapper
-    public Response mapException(final org.yaml.snakeyaml.scanner.ScannerException x) {
+    public Response mapException(final ScannerException x) {
         log.error("Error trying to return YAML.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Couldn't parse the YAML provided: " + x.getMessage())
+                .entity("Couldn't parse the YAML provided: "
+                        + x.getMessage())
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
     }
