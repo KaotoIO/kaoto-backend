@@ -20,11 +20,19 @@ import java.util.List;
 @QuarkusTest
 class GenericViewDefinitionParserServiceTest {
 
-    @Inject
     GenericViewDefinitionParserService viewDefinitionParserService;
 
-    @Inject
     ViewDefinitionCatalog viewCatalog;
+
+    @Inject
+    public void setViewDefinitionParserService(GenericViewDefinitionParserService viewDefinitionParserService) {
+        this.viewDefinitionParserService = viewDefinitionParserService;
+    }
+
+    @Inject
+    public void setViewCatalog(ViewDefinitionCatalog viewCatalog) {
+        this.viewCatalog = viewCatalog;
+    }
 
     @BeforeEach
     void ensureCatalog() {

@@ -32,12 +32,19 @@ public class ViewDefinitionResource {
 
     private Logger log = Logger.getLogger(ViewDefinitionResource.class);
 
-    @Inject
-    ViewDefinitionService viewDefinitionService;
+    private ViewDefinitionService viewDefinitionService;
+
+    private StepParserService<Step> stepParserService;
 
     @Inject
-    StepParserService<Step> stepParserService;
+    public void setViewDefinitionService(ViewDefinitionService viewDefinitionService) {
+        this.viewDefinitionService = viewDefinitionService;
+    }
 
+    @Inject
+    public void setStepParserService(StepParserService<Step> stepParserService) {
+        this.stepParserService = stepParserService;
+    }
     /*
      * 🐱method views:
      * 🐱param yaml: String

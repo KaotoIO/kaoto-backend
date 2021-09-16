@@ -20,7 +20,7 @@ class StepResourceTest {
     private StepCatalog catalog;
 
     @Inject
-    public void setCatalog(final StepCatalog catalog) {
+    public void setStepCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
     }
 

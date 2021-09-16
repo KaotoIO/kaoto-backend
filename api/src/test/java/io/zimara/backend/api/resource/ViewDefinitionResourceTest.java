@@ -23,11 +23,19 @@ import static org.hamcrest.Matchers.is;
 class ViewDefinitionResourceTest {
     private static String binding = "";
 
-    @Inject
-    StepCatalog stepCatalog;
+    private StepCatalog stepCatalog;
+
+    private ViewDefinitionCatalog viewCatalog;
 
     @Inject
-    ViewDefinitionCatalog viewCatalog;
+    public void setStepCatalog(StepCatalog stepCatalog) {
+        this.stepCatalog = stepCatalog;
+    }
+
+    @Inject
+    public void setViewCatalog(ViewDefinitionCatalog viewCatalog) {
+        this.viewCatalog = viewCatalog;
+    }
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
