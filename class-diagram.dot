@@ -173,6 +173,8 @@ views(&lt;String&gt; yaml):List[ViewDefinition]
 	<TR><TD><I>Methods</I><BR/>
 parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
 <BR align="left" />
+getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[ViewDefinition]
+<BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
 <BR align="left" />
 
@@ -349,7 +351,7 @@ description:String<BR align="left" />label:String<BR align="left" />id:String<BR
 "Step" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Step</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-subtype:String<BR align="left" />description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />
+subtype:String<BR align="left" />description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />
 
 </TD></TR>
 
@@ -378,7 +380,7 @@ group:String<BR align="left" />kameletType:String<BR align="left" />apiVersion:S
 "ViewDefinition" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinition</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-steps:List[Step]<BR align="left" />properties:Map[String, String]<BR align="left" />constraints:List[ViewDefinitionConstraint]<BR align="left" />
+properties:Map[String, String]<BR align="left" />step:Step<BR align="left" />url:String<BR align="left" />constraints:List[ViewDefinitionConstraint]<BR align="left" />
 
 </TD></TR>
 

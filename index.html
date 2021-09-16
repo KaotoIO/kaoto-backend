@@ -345,6 +345,11 @@ endpoints to interact with deployments.</p>
 </section>
 
 
+<h2 id='viewdefinitionresourceresponse'></h2>
+<section class='namespace'>
+
+
+</section>
 
 </section>
 <h2 id='deploymentservice'>DeploymentService</h2>
@@ -496,6 +501,12 @@ If applies, the name will be the name used on the integration deployed.</td>
 		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
+	</tr>
+	<tr id='viewdefinitionparserservice-getviewsperstep'>
+		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>If the ViewDefinition is a stepView, it returns all
+possible ViewDefinitions associated to steps.</td>
 	</tr>
 	<tr id='viewdefinitionparserservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
@@ -1213,6 +1224,12 @@ Used when describing a configured element.</td>
 		<td><code>String</code></td>
 		<td></td>
 	</tr>
+	<tr id='step-uuid'>
+		<td><code><b>UUID</b>
+		<td><code>String</code></td>
+		<td>Volatile UUID to mark the relationship between
+a viewDefinition and a step.</td>
+	</tr>
 </tbody></table>
 </section>
 
@@ -1332,6 +1349,12 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<td><code>String</code></td>
 		<td></td>
 	</tr>
+	<tr id='kameletstep-uuid'>
+		<td><code><b>UUID</b>
+		<td><code>String</code></td>
+		<td>Volatile UUID to mark the relationship between
+a viewDefinition and a step.</td>
+	</tr>
 </tbody></table>
 </section>
 </div>
@@ -1388,16 +1411,22 @@ It may have some constraints on when this view can be used.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='viewdefinition-steps'>
-		<td><code><b>steps</b>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>List of Steps on this view. Usually used on integrations views.</td>
-	</tr>
 	<tr id='viewdefinition-properties'>
 		<td><code><b>properties</b>
 		<td><code>Map[String, String]</code></td>
 		<td>Properties useful for the user interface to visualize
 this view definition.</td>
+	</tr>
+	<tr id='viewdefinition-step'>
+		<td><code><b>step</b>
+		<td><code><a href='#step'>Step</a></code></td>
+		<td>If this extension relates to a specific step (StepExtension),
+point to it via the UUID of the step in this integration.</td>
+	</tr>
+	<tr id='viewdefinition-url'>
+		<td><code><b>url</b>
+		<td><code>String</code></td>
+		<td>If this is a custom step, url to fetch the view.</td>
 	</tr>
 	<tr id='viewdefinition-constraints'>
 		<td><code><b>constraints</b>
