@@ -45,12 +45,18 @@ public class ViewDefinitionService {
      *
      * Based on the provided yaml, offer a list of compatible ViewDefinitions.
      */
-    public List<ViewDefinition> views(final @QueryParam("yaml") String yaml) {
+    public List<ViewDefinition> views(final @QueryParam("yaml") String yaml,
+                                      final List<Step> steps) {
+
+        int i = 0;
+        for(Step step : steps) {
+            step.setUUID(i++ + step.getId());
+        }
+
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var stepParser : stepParsers) {
             if (stepParser.appliesTo(yaml)) {
                 log.trace("Applying " + stepParser.getClass());
-                final var steps = stepParser.parse(yaml);
                 for (var viewParser : viewParsers) {
                     log.trace("Using " + viewParser.getClass());
                     viewDefinitions.addAll(viewParser.parse(steps));

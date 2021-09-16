@@ -109,16 +109,6 @@ public class KameletStep extends Step {
     }
 
     @Override
-    public String toString() {
-        return "KameletStep{" + '\n'
-                + "  id='" + getId() + '\'' + '\n'
-                + ", name='" + getName() + '\'' + '\n'
-                + ", type=" + kameletType + '\n'
-                + ", metadata=" + metadata + '\n'
-                + '}';
-    }
-
-    @Override
     public boolean equals(final Object o) {
         if (this == o) {
             return true;

@@ -49,8 +49,8 @@ public class ViewDefinitionResource {
     @Consumes("text/yaml")
     public ViewDefinitionResourceResponse views(final @QueryParam("yaml") String yaml) {
         ViewDefinitionResourceResponse res = new ViewDefinitionResourceResponse();
-        res.setViews(viewDefinitionService.views(yaml));
         res.setSteps(stepParserService.parse(yaml));
+        res.setViews(viewDefinitionService.views(yaml, res.getSteps()));
         return res;
     }
 

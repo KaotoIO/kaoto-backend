@@ -52,8 +52,8 @@ class DeploymentServiceTest {
 
     @Test
     void yaml() {
-        List<ViewDefinition> views = viewDefinitionService.views(binding);
         final var steps = stepParser.parse(binding);
+        List<ViewDefinition> views = viewDefinitionService.views(binding, steps);
         String res = deploymentService.yaml("twitter-search-source-binding", steps.toArray(new KameletStep[0]));
         String expectedStr ="apiVersion: camel.apache.org/v1alpha1\n" +
                 "kind: KameletBinding\n" +

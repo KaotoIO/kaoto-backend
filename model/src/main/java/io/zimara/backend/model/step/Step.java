@@ -95,4 +95,17 @@ public class Step extends Metadata {
     public void setUUID(final String UUID) {
         this.UUID = UUID;
     }
+
+    @Override
+    public String toString() {
+        return "Step{" + '\n'
+                + "  id='" + getId() + '\'' + '\n'
+                + ", name='" + getName() + '\'' + '\n'
+                + ", uuid=" + getUUID() + '\n'
+                + ", title=" + getTitle() + '\n'
+                + ", type=" + getType() + '\n'
+                + ", subType=" + getSubType() + '\n'
+                + '}';
+    }
+
 }
