@@ -4,6 +4,7 @@ import io.zimara.backend.api.resource.response.ViewDefinitionResourceResponse;
 import io.zimara.backend.api.service.step.parser.StepParserService;
 import io.zimara.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.zimara.backend.model.step.Step;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.yaml.snakeyaml.scanner.ScannerException;
@@ -14,7 +15,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -56,7 +56,7 @@ public class ViewDefinitionResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
     public ViewDefinitionResourceResponse views(
-            final @QueryParam("yaml") String yaml) {
+            final @RequestBody String yaml) {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
         res.setSteps(stepParserService.parse(yaml));

@@ -2,6 +2,7 @@ package io.zimara.backend.api.resource;
 
 import io.zimara.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.zimara.backend.api.service.deployment.DeploymentService;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
@@ -46,7 +47,8 @@ public class DeploymentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/yaml")
-    public String yaml(final DeploymentResourceYamlRequest request) {
+    public String yaml(
+            final @RequestBody DeploymentResourceYamlRequest request) {
         return deploymentService.yaml(request.getName(), request.getSteps());
     }
 

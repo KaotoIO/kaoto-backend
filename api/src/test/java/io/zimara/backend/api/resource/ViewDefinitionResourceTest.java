@@ -54,7 +54,7 @@ class ViewDefinitionResourceTest {
     @Test
     void testViews() {
         var res = given()
-                .when().queryParam("yaml", binding)
+                .when().body(binding)
                 .contentType("text/yaml").post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
@@ -66,7 +66,7 @@ class ViewDefinitionResourceTest {
     @Test
     void testInvalidType() {
         given()
-                .when().queryParam("yaml", "Not Important").post()
+                .when().body("Not Important").post()
                 .then()
                 .statusCode(Response.Status
                         .UNSUPPORTED_MEDIA_TYPE.getStatusCode());
@@ -76,8 +76,7 @@ class ViewDefinitionResourceTest {
     void testExceptions() {
         given()
                 .when()
-                .queryParam("yaml",
-                        "kind: KameletBinding : wrong invalid content")
+                .body("kind: KameletBinding : wrong invalid content")
                 .contentType("text/yaml")
                 .post()
                 .then()
