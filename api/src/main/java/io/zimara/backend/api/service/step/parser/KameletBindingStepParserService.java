@@ -40,7 +40,7 @@ public class KameletBindingStepParserService
                     "Wrong format provided. This is not parseable by us");
         }
 
-        List<Step> steps = new ArrayList<>(2);
+        List<Step> steps = new ArrayList<>();
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
         KameletBinding binding = yaml.load(input);

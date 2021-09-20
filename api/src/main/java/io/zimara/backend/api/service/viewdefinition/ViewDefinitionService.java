@@ -50,7 +50,10 @@ public class ViewDefinitionService {
 
         int i = 0;
         for (Step step : steps) {
-            step.setUUID(i++ + step.getId());
+            if(step != null) {
+                step.setUUID(i + step.getId());
+            }
+            i++;
         }
 
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
