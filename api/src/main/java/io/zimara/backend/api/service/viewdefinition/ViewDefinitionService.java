@@ -50,7 +50,7 @@ public class ViewDefinitionService {
 
         int i = 0;
         for (Step step : steps) {
-            if(step != null) {
+            if (step != null) {
                 step.setUUID(i + step.getId());
             }
             i++;
