@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 🐱miniclass KameletBindingStepParserService (StepParserService)
@@ -48,7 +50,9 @@ public class KameletBindingStepParserService
         processMetadata(binding.getMetadata());
         processSpec(steps, binding.getSpec());
 
-        return steps;
+        return steps.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private void processSpec(final List<Step> steps,
