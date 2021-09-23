@@ -23,6 +23,7 @@ public class ViewDefinition extends Metadata {
         setId(v.getId());
         setName(v.getName());
         setType(v.getType());
+        setUrl(v.getUrl());
     }
 
     /*
