@@ -4,6 +4,7 @@ import io.zimara.backend.model.Metadata;
 import io.zimara.backend.model.parameter.Parameter;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 🐱class Step
@@ -108,4 +109,42 @@ public class Step extends Metadata {
                 + '}';
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Step)) {
+            return false;
+        }
+        Step step = (Step) o;
+
+        if (getTitle() != null
+                ? !getTitle().equals(step.getTitle())
+                : step.getTitle() != null) {
+            return false;
+        }
+        if (getDescription() != null
+                ? !getDescription().equals(step.getDescription())
+                : step.getDescription() != null) {
+            return false;
+        }
+            if (!Objects.equals(uuid, step.uuid)) {
+            return false;
+        }
+        return getSubType() != null
+                ? getSubType().equals(step.getSubType())
+                : step.getSubType() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTitle() != null ? getTitle().hashCode() : 0;
+        result = 31 * result + (getDescription() != null
+                ? getDescription().hashCode() : 0);
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        result = 31 * result + (getSubType() != null
+                ? getSubType().hashCode() : 0);
+        return result;
+    }
 }

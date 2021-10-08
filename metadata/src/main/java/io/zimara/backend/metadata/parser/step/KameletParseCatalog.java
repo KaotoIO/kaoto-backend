@@ -2,6 +2,7 @@ package io.zimara.backend.metadata.parser.step;
 
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.parser.GitParseCatalog;
+import io.zimara.backend.metadata.parser.JarParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.parameter.Parameter;
 import io.zimara.backend.model.step.Step;
@@ -33,6 +34,14 @@ public final class KameletParseCatalog {
     public static ParseCatalog<Step> getParser(
             final String url, final String tag) {
         ParseCatalog<Step> parseCatalog = new GitParseCatalog<>(url, tag);
+        parseCatalog.setFileVisitor(new KameletFileProcessor());
+        return parseCatalog;
+    }
+
+
+    public static ParseCatalog<Step> getParser(
+            final String url) {
+        ParseCatalog<Step> parseCatalog = new JarParseCatalog<>(url);
         parseCatalog.setFileVisitor(new KameletFileProcessor());
         return parseCatalog;
     }

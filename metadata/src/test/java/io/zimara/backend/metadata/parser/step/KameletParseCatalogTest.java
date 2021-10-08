@@ -3,11 +3,14 @@ package io.zimara.backend.metadata.parser.step;
 import io.quarkus.test.junit.QuarkusTest;
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
+import io.zimara.backend.model.Metadata;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @QuarkusTest
@@ -23,8 +26,7 @@ class KameletParseCatalogTest {
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertTrue(catalog.store(steps));
-        Assertions.assertEquals(234, steps.size());
-        Assertions.assertEquals(117, catalog.getAll().size());
+        Assertions.assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
         KameletStep step = (KameletStep) catalog.searchStepByName(name);
@@ -54,4 +56,32 @@ class KameletParseCatalogTest {
         Assertions.assertNotNull(steps);
         Assertions.assertEquals(0, steps.size());
     }
+
+    @Test
+    void compareJarAndGit() {
+
+        ParseCatalog<Step> kameletParserGit =
+                KameletParseCatalog.getParser(
+                        "https://github.com/apache/camel-kamelets.git",
+                        "v0.4.0");
+        List<Step> stepsGit = kameletParserGit.parse().join();
+
+
+        String jarUrl = "https://repo1.maven.org/maven2/org/apache/camel/"
+                + "kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar";
+
+
+        ParseCatalog<Step> kameletParserJar =
+                KameletParseCatalog.getParser(
+                        jarUrl);
+        List<Step> stepsJar = kameletParserJar.parse().join();
+
+        Assertions.assertEquals(stepsJar.size(), stepsGit.size());
+
+        Collections.sort(stepsJar, Comparator.comparing(Metadata::getId));
+        Collections.sort(stepsGit, Comparator.comparing(Metadata::getId));
+
+        Assertions.assertIterableEquals(stepsJar, stepsGit);
+    }
+
 }

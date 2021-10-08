@@ -31,11 +31,13 @@ public abstract class YamlProcessFile<T extends Metadata>
     public FileVisitResult preVisitDirectory(final Path dir,
                                              final BasicFileAttributes attrs) {
         final var name = dir.toFile().getName();
-        if (name.equalsIgnoreCase("test")
-                || name.equalsIgnoreCase(".git")
+        if (name.equalsIgnoreCase(".git")
                 || name.equalsIgnoreCase(".github")
                 || name.equalsIgnoreCase("docs")
-                || name.equalsIgnoreCase("script")) {
+                || name.equalsIgnoreCase("library")
+                || name.equalsIgnoreCase("script")
+                || name.equalsIgnoreCase("templates")
+                || name.equalsIgnoreCase("test")) {
             return FileVisitResult.SKIP_SUBTREE;
         }
 
