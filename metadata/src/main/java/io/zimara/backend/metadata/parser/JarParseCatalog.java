@@ -43,6 +43,9 @@ public class JarParseCatalog<T extends Metadata>
 
     private YamlProcessFile<T> yamlProcessFile;
 
+    //to avoid bomb attacks
+    private int thresholdSize = 1000000000; // 1 GB
+
     public JarParseCatalog(final String url) {
         log.trace("Warming up repository in " + url);
         metadata.completeAsync(() -> cloneRepoAndParse(url));
@@ -57,6 +60,7 @@ public class JarParseCatalog<T extends Metadata>
         String location = downloadIfRemote(url);
 
         Path tmp = null;
+        long totalSize = 0;
         try (ZipInputStream zis =
                      new ZipInputStream(new FileInputStream(location))) {
             FileAttribute<Set<PosixFilePermission>> attr =
@@ -69,7 +73,13 @@ public class JarParseCatalog<T extends Metadata>
             ZipEntry zipEntry = zis.getNextEntry();
 
             while (zipEntry != null) {
-                processExtractedFile(tmp, zis, zipEntry);
+                totalSize += processExtractedFile(tmp, zis, zipEntry);
+
+                if (totalSize > thresholdSize) {
+                    throw new IOException(
+                            "This jar file unzipped is too big.");
+                }
+
                 zipEntry = zis.getNextEntry();
             }
 
@@ -92,7 +102,7 @@ public class JarParseCatalog<T extends Metadata>
         return metadataList;
     }
 
-    private void processExtractedFile(final Path tmp,
+    private long processExtractedFile(final Path tmp,
                                       final ZipInputStream zis,
                                       final ZipEntry zipEntry)
             throws IOException {
@@ -113,6 +123,7 @@ public class JarParseCatalog<T extends Metadata>
                     StandardCopyOption.REPLACE_EXISTING);
         }
         destinationFile.deleteOnExit();
+        return Files.size(tmp);
     }
 
     // Zip Slip vulnerability
