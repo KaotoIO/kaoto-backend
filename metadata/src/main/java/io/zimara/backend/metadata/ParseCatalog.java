@@ -1,5 +1,8 @@
 package io.zimara.backend.metadata;
 
+import io.zimara.backend.metadata.parser.YamlProcessFile;
+import io.zimara.backend.model.Metadata;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -7,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
  * 🐱class ParseCatalog
  * Load and warm up catalog utility.
  */
-public interface ParseCatalog<T> {
+public interface ParseCatalog<T extends Metadata> {
     /*
      * 🐱method parse : CompletableFuture[List[T]]
      *
@@ -16,4 +19,12 @@ public interface ParseCatalog<T> {
      *
      */
     CompletableFuture<List<T>> parse();
+
+
+    /*
+     * 🐱method setFileVisitor
+     * 🐱param fileVisitor: YamlProcessFile
+     *
+     */
+    void setFileVisitor(YamlProcessFile<T> fileVisitor);
 }

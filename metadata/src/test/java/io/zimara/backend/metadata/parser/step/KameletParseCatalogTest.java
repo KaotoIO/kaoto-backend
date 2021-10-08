@@ -1,6 +1,7 @@
 package io.zimara.backend.metadata.parser.step;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.catalog.InMemoryCatalog;
 import io.zimara.backend.model.step.Step;
 import io.zimara.backend.model.step.kamelet.KameletStep;
@@ -14,8 +15,8 @@ class KameletParseCatalogTest {
 
     @Test
     void getSteps() {
-        KameletParseCatalog kameletParser =
-                new KameletParseCatalog(
+        ParseCatalog<Step> kameletParser =
+                KameletParseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
                         "v0.3.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
@@ -44,8 +45,8 @@ class KameletParseCatalogTest {
 
     @Test
     void wrongUrlSilentlyFails() {
-        KameletParseCatalog kameletParser =
-                new KameletParseCatalog(
+        ParseCatalog<Step> kameletParser =
+                KameletParseCatalog.getParser(
                         "https://nothing/wrong/url.git",
                         "");
 

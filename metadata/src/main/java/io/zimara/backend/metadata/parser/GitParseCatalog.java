@@ -19,11 +19,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 🐱class GitParseCatalog
  * 🐱inherits ParseCatalog
+ * 🐱relationship dependsOn YamlProcessFile
  * Abstract implementation that downloads a git repository
  * and walks through all the files
  * parsing them and preparing elements to add to a catalog.
  */
-public abstract class GitParseCatalog<T extends Metadata>
+public class GitParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
     private Logger log = Logger.getLogger(GitParseCatalog.class);
@@ -31,8 +32,10 @@ public abstract class GitParseCatalog<T extends Metadata>
     private final CompletableFuture<List<T>> metadata =
             new CompletableFuture<>();
 
+    private YamlProcessFile<T> yamlProcessFile;
 
-    protected GitParseCatalog(final String url, final String tag) {
+
+    public GitParseCatalog(final String url, final String tag) {
         log.trace("Warming up repository in " + url);
         metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
     }
@@ -65,8 +68,10 @@ public abstract class GitParseCatalog<T extends Metadata>
                     .call()) {
 
                 log.trace("Parsing all files in the repository");
+                this.yamlProcessFile.setFutureMetadata(futureMd);
+                this.yamlProcessFile.setMetadataList(metadataList);
                 Files.walkFileTree(file.getAbsoluteFile().toPath(),
-                        getFileVisitor(metadataList, futureMd));
+                        this.yamlProcessFile);
                 log.trace("Found " + futureMd.size() + " elements.");
                 CompletableFuture.allOf(
                         futureMd.toArray(new CompletableFuture[0]))
@@ -93,19 +98,8 @@ public abstract class GitParseCatalog<T extends Metadata>
         return metadata;
     }
 
-    /*
-     * 🐱method getFileVisitor : YamlProcessFile
-     * 🐱param metadataList: List[Metadata]
-     * 🐱param futureMetadata: List[CompletableFuture[]]
-     *
-     *
-     * Returns the helper class based on YamlProcessFile
-     * to process the files found on the repository.
-     * This needs to be implemented.
-     *
-     */
-    protected abstract YamlProcessFile<T> getFileVisitor(List<T> metadataList,
-                                List<CompletableFuture<Void>> futureMetadata);
-
+    public void setFileVisitor(final YamlProcessFile<T> fileVisitor) {
+        this.yamlProcessFile = fileVisitor;
+    }
 }
 

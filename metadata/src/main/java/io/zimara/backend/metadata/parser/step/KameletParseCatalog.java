@@ -1,5 +1,6 @@
 package io.zimara.backend.metadata.parser.step;
 
+import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.parser.GitParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.parameter.Parameter;
@@ -14,27 +15,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 🐱class KameletParseCatalog
- * 🐱inherits GitParseCatalog
+ * 🐱relationship dependsOn ParseCatalog
  * Reads and parses a kamelet catalog.
  * Extracts all the kamelet definitions it can find
  * and generate a kamelet step for each one.
  */
-public class KameletParseCatalog extends GitParseCatalog<Step> {
+public final class KameletParseCatalog {
 
-    public KameletParseCatalog(final String url, final String tag) {
-        super(url, tag);
+    private KameletParseCatalog() {
+
     }
 
-    @Override
-    protected KameletFileProcessor getFileVisitor(final List<Step> mdList,
-                   final List<CompletableFuture<Void>> futureMetadata) {
-        return new KameletFileProcessor(mdList, futureMetadata);
+    public static ParseCatalog<Step> getParser(
+            final String url, final String tag) {
+        ParseCatalog<Step> parseCatalog = new GitParseCatalog<>(url, tag);
+        parseCatalog.setFileVisitor(new KameletFileProcessor());
+        return parseCatalog;
     }
 }
 
@@ -42,11 +42,6 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
 
     public static final String PROPERTIES = "properties";
     private Logger log = Logger.getLogger(KameletFileProcessor.class);
-
-    KameletFileProcessor(final List<Step> stepList,
-                         final List<CompletableFuture<Void>> futureSteps) {
-        super(stepList, futureSteps);
-    }
 
     @Override
     public KameletStep parseFile(final File f) {

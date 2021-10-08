@@ -16,7 +16,7 @@ class ViewDefinitionDefinitionParseCatalogTest {
         final var url =
                 "https://github.com/ZimaraIO/zimara-viewdefinition-catalog";
         var parser =
-                new ViewDefinitionParseCatalog(
+                ViewDefinitionParseCatalog.getParser(
                         url,
                         "main");
         InMemoryCatalog<ViewDefinition> catalog = new InMemoryCatalog<>();

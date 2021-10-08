@@ -24,10 +24,7 @@ public abstract class YamlProcessFile<T extends Metadata>
     private List<CompletableFuture<Void>> futureMetadata;
     private Logger log = Logger.getLogger(YamlProcessFile.class);
 
-    protected YamlProcessFile(final List<T> metadataList,
-                              final List<CompletableFuture<Void>> futureMd) {
-        this.metadataList = metadataList;
-        this.futureMetadata = futureMd;
+    protected YamlProcessFile() {
     }
 
     @Override
@@ -83,4 +80,13 @@ public abstract class YamlProcessFile<T extends Metadata>
     }
 
     protected abstract T parseFile(File f);
+
+    public void setMetadataList(final List<T> metadataList) {
+        this.metadataList = metadataList;
+    }
+
+    public void setFutureMetadata(
+            final List<CompletableFuture<Void>> futureMetadata) {
+        this.futureMetadata = futureMetadata;
+    }
 }
