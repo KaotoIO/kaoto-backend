@@ -592,6 +592,11 @@ on the amount of data stored on the catalog.</td>
 		<td>Load all the source data, parse it and
 return a completable list of elements to add to a catalog.</td>
 	</tr>
+	<tr id='parsecatalog-setfilevisitor'>
+		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td></td>
+	</tr>
 </tbody></table>
 </section>
 
@@ -768,27 +773,8 @@ on the amount of data stored on the catalog.</td>
 and walks through all the files
 parsing them and preparing elements to add to a catalog.</p>
 
-<h3 id='gitparsecatalog-method'>Methods</h3>
+<h3 id=''>Methods</h3>
 
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='gitparsecatalog-getfilevisitor'>
-		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
-		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile
-to process the files found on the repository.
-This needs to be implemented.</td>
-	</tr>
-</tbody></table>
-</section>
 
 <details>
 	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
@@ -807,6 +793,11 @@ This needs to be implemented.</td>
 		<td><code>CompletableFuture[List[T]]</code></td>
 		<td>Load all the source data, parse it and
 return a completable list of elements to add to a catalog.</td>
+	</tr>
+	<tr id='gitparsecatalog-setfilevisitor'>
+		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td></td>
 	</tr>
 </tbody></table>
 </section>
@@ -827,55 +818,6 @@ return a completable list of elements to add to a catalog.</td>
 Extracts all the kamelet definitions it can find
 and generate a kamelet step for each one.</p>
 
-<h3 id=''>Methods</h3>
-
-
-<details>
-	<summary>Methods inherited from <a href='#gitparsecatalog'>GitParseCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='kameletparsecatalog-getfilevisitor'>
-		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
-		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile
-to process the files found on the repository.
-This needs to be implemented.</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-<details>
-	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='kameletparsecatalog-parse'>
-		<td><code><b>parse</b>()</nobr></code></td>
-		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and
-return a completable list of elements to add to a catalog.</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-
 
 </section>
 <h2 id='viewdefinitionparsecatalog'>ViewDefinitionParseCatalog</h2>
@@ -883,55 +825,6 @@ return a completable list of elements to add to a catalog.</td>
 <p>Reads and parses a view definition catalog.
 Extracts all the view definitions it can find
 and generate a ViewDefinition for each one.</p>
-
-<h3 id=''>Methods</h3>
-
-
-<details>
-	<summary>Methods inherited from <a href='#gitparsecatalog'>GitParseCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='viewdefinitionparsecatalog-getfilevisitor'>
-		<td><code><b>getFileVisitor</b>(<nobr>&lt;<a href='#metadata'>List[Metadata]</a>&gt; <i>metadataList</i></nobr>, <nobr>&lt;List[CompletableFuture[]]&gt; <i>futureMetadata</i></nobr>)</nobr></code></td>
-		<td><code><a href='#yamlprocessfile'>YamlProcessFile</a></code></td>
-		<td>Returns the helper class based on YamlProcessFile
-to process the files found on the repository.
-This needs to be implemented.</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-<details>
-	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='viewdefinitionparsecatalog-parse'>
-		<td><code><b>parse</b>()</nobr></code></td>
-		<td><code>CompletableFuture[List[T]]</code></td>
-		<td>Load all the source data, parse it and
-return a completable list of elements to add to a catalog.</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
 
 
 </section>
