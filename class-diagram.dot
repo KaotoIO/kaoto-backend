@@ -262,6 +262,13 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 		
 		
 		]
+"JatParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>JatParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"JatParseCatalog" -> "ParseCatalog"
+
 "YamlProcessFile" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>YamlProcessFile</B></TD></TR>
 	
