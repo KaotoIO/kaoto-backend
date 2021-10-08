@@ -15,8 +15,12 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.ZipEntry;
@@ -55,7 +59,10 @@ public class JarParseCatalog<T extends Metadata>
         //If it is a remote file, download it
         if (url.startsWith("http://") || url.startsWith("https://")) {
             try {
-                Path tmp = Files.createTempFile("remote-", ".jar");
+                FileAttribute<Set<PosixFilePermission>> attr =
+                        PosixFilePermissions.asFileAttribute(
+                                PosixFilePermissions.fromString("rwx------"));
+                Path tmp = Files.createTempFile("remote-", ".jar", attr);
                 try (FileOutputStream fos =
                              new FileOutputStream(tmp.toFile())) {
                     URL remote = new URL(url);
@@ -72,8 +79,10 @@ public class JarParseCatalog<T extends Metadata>
         //Unzip and parse the files
         try (ZipInputStream zis =
                      new ZipInputStream(new FileInputStream(location))) {
-
-            tmp = Files.createTempDirectory("remote-");
+            FileAttribute<Set<PosixFilePermission>> attr =
+                    PosixFilePermissions.asFileAttribute(
+                            PosixFilePermissions.fromString("rwx------"));
+            tmp = Files.createTempDirectory("remote-", attr);
             ZipEntry zipEntry = zis.getNextEntry();
 
             while (zipEntry != null) {
