@@ -54,9 +54,92 @@ public class JarParseCatalog<T extends Metadata>
         final List<CompletableFuture<Void>> futureMd =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
+        String location = downloadIfRemote(url);
+
+        Path tmp = null;
+        try (ZipInputStream zis =
+                     new ZipInputStream(new FileInputStream(location))) {
+            FileAttribute<Set<PosixFilePermission>> attr =
+                    PosixFilePermissions.asFileAttribute(
+                            PosixFilePermissions.fromString("rwx------"));
+            tmp = Files.createTempDirectory("remote-", attr);
+            tmp.toFile().deleteOnExit();
+
+            //Unzip the files
+            ZipEntry zipEntry = zis.getNextEntry();
+
+            while (zipEntry != null) {
+                processExtractedFile(tmp, zis, zipEntry);
+                zipEntry = zis.getNextEntry();
+            }
+
+            //Walk the expanded directory
+            log.trace("Parsing all files in the jar");
+            this.yamlProcessFile.setFutureMetadata(futureMd);
+            this.yamlProcessFile.setMetadataList(metadataList);
+            Files.walkFileTree(tmp, this.yamlProcessFile);
+            log.trace("Found " + futureMd.size() + " elements.");
+            CompletableFuture.allOf(
+                            futureMd.toArray(new CompletableFuture[0]))
+                    .join();
+        } catch (FileNotFoundException e) {
+            log.error("No jar file found.", e);
+        } catch (IOException e) {
+            log.error("Error trying to parse catalog.", e);
+        }
+
+
+        return metadataList;
+    }
+
+    private void processExtractedFile(final Path tmp,
+                                      final ZipInputStream zis,
+                                      final ZipEntry zipEntry)
+            throws IOException {
+        File destinationFile = getDestinationFile(tmp, zipEntry);
+
+        if (zipEntry.getName().endsWith(File.separator)) {
+            Files.createDirectories(destinationFile.toPath());
+        } else {
+            //Make sure we have the path created
+            if (destinationFile.getParent() != null
+                    && Files.notExists(destinationFile
+                    .toPath().getParent())) {
+                Files.createDirectories(
+                        destinationFile.toPath().getParent());
+            }
+
+            Files.copy(zis, destinationFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
+        destinationFile.deleteOnExit();
+    }
+
+    // Zip Slip vulnerability
+    // https://snyk.io/research/zip-slip-vulnerability
+    private File getDestinationFile(final Path tmp,
+                                    final ZipEntry zipEntry)
+            throws IOException {
+        String canonicalDestinationDirPath =
+                tmp.toFile().getCanonicalPath();
+        File destinationFile =
+                new File(tmp.toFile(), zipEntry.getName());
+        String canonicalDestinationFile =
+                destinationFile.getCanonicalPath();
+        if (!canonicalDestinationFile.startsWith(
+                canonicalDestinationDirPath + File.separator)) {
+            throw new IOException(
+                    "Potential vulnerability: "
+                            + "entry outside of target dir: "
+                            + zipEntry.getName());
+        }
+        return destinationFile;
+    }
+
+    //If it is a remote file, download it
+    private String downloadIfRemote(final String url) {
         String location = url;
 
-        //If it is a remote file, download it
         if (url.startsWith("http://") || url.startsWith("https://")) {
             try {
                 FileAttribute<Set<PosixFilePermission>> attr =
@@ -69,78 +152,13 @@ public class JarParseCatalog<T extends Metadata>
                     URLConnection connection = remote.openConnection();
                     IOUtils.copy(connection.getInputStream(), fos);
                     location = tmp.toFile().getAbsolutePath();
+                    tmp.toFile().deleteOnExit();
                 }
             } catch (IOException e) {
                 log.error("Error trying to create temporary file.", e);
             }
         }
-
-        Path tmp = null;
-        //Unzip and parse the files
-        try (ZipInputStream zis =
-                     new ZipInputStream(new FileInputStream(location))) {
-            FileAttribute<Set<PosixFilePermission>> attr =
-                    PosixFilePermissions.asFileAttribute(
-                            PosixFilePermissions.fromString("rwx------"));
-            tmp = Files.createTempDirectory("remote-", attr);
-            ZipEntry zipEntry = zis.getNextEntry();
-
-            while (zipEntry != null) {
-                // Zip Slip vulnerability
-                // https://snyk.io/research/zip-slip-vulnerability
-                String canonicalDestinationDirPath =
-                        tmp.toFile().getCanonicalPath();
-                File destinationFile =
-                        new File(tmp.toFile(), zipEntry.getName());
-                String canonicalDestinationFile =
-                        destinationFile.getCanonicalPath();
-                if (!canonicalDestinationFile.startsWith(
-                        canonicalDestinationDirPath + File.separator)) {
-                    throw new IOException(
-                            "Potential vulnerability: "
-                                    + "entry outside of target dir: "
-                                    + zipEntry.getName());
-                }
-
-                if (zipEntry.getName().endsWith(File.separator)) {
-                    Files.createDirectories(destinationFile.toPath());
-                } else {
-                    //Make sure we have the path created
-                    if (destinationFile.getParent() != null) {
-                        if (Files.notExists(
-                                destinationFile.toPath().getParent())) {
-                            Files.createDirectories(
-                                    destinationFile.toPath().getParent());
-                        }
-                    }
-
-                    Files.copy(zis, destinationFile.toPath(),
-                            StandardCopyOption.REPLACE_EXISTING);
-                }
-
-                zipEntry = zis.getNextEntry();
-            }
-        } catch (FileNotFoundException e) {
-            log.error("No jar file found.", e);
-        } catch (IOException e) {
-            log.error("Error trying to parse catalog.", e);
-        }
-
-        //Walk the expanded directory
-        try {
-            log.trace("Parsing all files in the jar");
-            this.yamlProcessFile.setFutureMetadata(futureMd);
-            this.yamlProcessFile.setMetadataList(metadataList);
-            Files.walkFileTree(tmp, this.yamlProcessFile);
-            log.trace("Found " + futureMd.size() + " elements.");
-            CompletableFuture.allOf(
-                            futureMd.toArray(new CompletableFuture[0]))
-                    .join();
-        } catch (IOException e) {
-            log.error("Error trying to parse catalog.", e);
-        }
-
-        return metadataList;
+        return location;
     }
 
 
