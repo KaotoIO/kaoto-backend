@@ -16,7 +16,7 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 You have to install in your machine
 
 * Maven >= 3.6
-* JDK >= 11
+* JDK >= 15
 
 ### Running the application in dev mode
 
