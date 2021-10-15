@@ -32,7 +32,7 @@ spec:
       name: kafka-sink
     properties:
       password: "The Password"
-      brokers: "The Brokers"
+      bootstrapServers: "The Brokers"
       topic: "The Topic Names"
-      username: "The Username"
+      user: "The Username"
 

@@ -1,0 +1,9 @@
+repository:
+  step:
+    jar:
+      - "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar"
+  viewdefinition:
+    git:
+      -
+        url: "https://github.com/ZimaraIO/zimara-viewdefinition-catalog.git"
+        tag: "main"

@@ -7,6 +7,7 @@ import io.zimara.backend.metadata.catalog.ReadOnlyCatalog;
 import io.zimara.backend.model.Metadata;
 import org.jboss.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -20,18 +21,19 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractCatalog<T extends Metadata> {
 
-    AbstractCatalog() {
-        warmUpCatalog(loadParsers());
-    }
-
     private InMemoryCatalog<T> c = new InMemoryCatalog<>();
     private final MetadataCatalog<T> readOnlyCatalog = new ReadOnlyCatalog<>(c);
-    private boolean warmedUp = false;
     private static Logger log = Logger.getLogger(AbstractCatalog.class);
     private CompletableFuture<Void> waitingForWarmUp;
+    private List<ParseCatalog<T>> catalogs;
+    private CompletableFuture<Void> initializing = new CompletableFuture<>();
+
+    public AbstractCatalog() {
+        this.waitingForWarmUp = initializing;
+    }
 
     public MetadataCatalog<T> getReadOnlyCatalog() {
-        if (warmedUp) {
+        if (waitingForWarmUp.isDone()) {
             return readOnlyCatalog;
         } else {
             throw new CatalogWarmingUpException("Catalog still warming up.");
@@ -51,24 +53,27 @@ public abstract class AbstractCatalog<T extends Metadata> {
      * 🐱method loadParsers : List[ParseCatalog]
      *
      * Loads all the catalogs into the bean
-     *
-     *  This may be autowired by jandex?
      */
     abstract List<ParseCatalog<T>> loadParsers();
 
+    public void setCatalogs(final List<ParseCatalog<T>> catalogs) {
+        this.catalogs = catalogs;
+    }
+
     //Add all steps from the parsers into the catalog
-    private void warmUpCatalog(final List<ParseCatalog<T>> catalogs) {
+    @PostConstruct
+    public void warmUpCatalog() {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
 
-        for (var catalog : catalogs) {
+        for (var catalog : loadParsers()) {
             futureSteps.add(addCatalog(catalog));
         }
 
         waitingForWarmUp = CompletableFuture.allOf(
                 futureSteps.toArray(new CompletableFuture[0]));
-        waitingForWarmUp.thenAccept(complete -> warmedUp = true)
-                .thenRun(() -> log.debug("Catalog warmed up."));
+        waitingForWarmUp.thenAccept(complete -> initializing.complete(null))
+                .thenRun(() -> log.info("Catalog warmed up."));
     }
 
     private CompletableFuture<Boolean> addCatalog(

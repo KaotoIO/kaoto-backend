@@ -19,9 +19,9 @@ import java.util.List;
 public class GenericViewDefinitionParserService
         implements ViewDefinitionParserService<ViewDefinition> {
 
-    @Inject
     private ViewDefinitionCatalog catalog;
 
+    @Inject
     public void setCatalog(final ViewDefinitionCatalog catalog) {
         this.catalog = catalog;
     }

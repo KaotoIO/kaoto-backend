@@ -4,8 +4,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
+
 @QuarkusTest
 class CatalogWarmingUpExceptionTest {
+
+    private StepCatalog injectedCatalog;
 
     @Test
     void warmUp() {
@@ -15,9 +19,13 @@ class CatalogWarmingUpExceptionTest {
             catalog.getReadOnlyCatalog();
         });
 
-        catalog.waitForWarmUp().join();
+        injectedCatalog.waitForWarmUp().join();
 
-        Assertions.assertNotNull(catalog.getReadOnlyCatalog());
+        Assertions.assertNotNull(injectedCatalog.getReadOnlyCatalog());
     }
 
+    @Inject
+    public void setInjectedCatalog(final StepCatalog injectedCatalog) {
+        this.injectedCatalog = injectedCatalog;
+    }
 }
