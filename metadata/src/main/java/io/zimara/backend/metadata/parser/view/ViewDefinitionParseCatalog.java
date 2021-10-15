@@ -2,6 +2,7 @@ package io.zimara.backend.metadata.parser.view;
 
 import io.zimara.backend.metadata.ParseCatalog;
 import io.zimara.backend.metadata.parser.GitParseCatalog;
+import io.zimara.backend.metadata.parser.JarParseCatalog;
 import io.zimara.backend.metadata.parser.YamlProcessFile;
 import io.zimara.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
@@ -23,8 +24,15 @@ import java.io.IOException;
 public final class ViewDefinitionParseCatalog {
 
     private ViewDefinitionParseCatalog() {
-
     }
+
+    public static ParseCatalog<ViewDefinition> getParser(
+            final String url) {
+        ParseCatalog<ViewDefinition> parseCatalog = new JarParseCatalog<>(url);
+        parseCatalog.setFileVisitor(new ViewDefinitionProcessFile());
+        return parseCatalog;
+    }
+
 
     public static ParseCatalog<ViewDefinition> getParser(
             final String url, final String tag) {
