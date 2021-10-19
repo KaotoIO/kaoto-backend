@@ -25,10 +25,9 @@ public abstract class AbstractCatalog<T extends Metadata> {
     private final MetadataCatalog<T> readOnlyCatalog = new ReadOnlyCatalog<>(c);
     private static Logger log = Logger.getLogger(AbstractCatalog.class);
     private CompletableFuture<Void> waitingForWarmUp;
-    private List<ParseCatalog<T>> catalogs;
     private CompletableFuture<Void> initializing = new CompletableFuture<>();
 
-    public AbstractCatalog() {
+    protected AbstractCatalog() {
         this.waitingForWarmUp = initializing;
     }
 
@@ -55,10 +54,6 @@ public abstract class AbstractCatalog<T extends Metadata> {
      * Loads all the catalogs into the bean
      */
     abstract List<ParseCatalog<T>> loadParsers();
-
-    public void setCatalogs(final List<ParseCatalog<T>> catalogs) {
-        this.catalogs = catalogs;
-    }
 
     //Add all steps from the parsers into the catalog
     @PostConstruct
