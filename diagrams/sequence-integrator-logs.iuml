@@ -1,0 +1,19 @@
+@startuml
+actor Integrator
+Integrator -> Frontend : List integrations deployed
+Frontend -> Backend : List integrations deployed
+group External Cluster interaction
+    Backend -> Cluster : List integrations deployed
+    Cluster -> Backend : List of integrations deployed
+end
+Backend -> Frontend : List of integrations deployed
+Frontend -> Integrator : List of integrations deployed
+Integrator -> Frontend : Show log of integration i
+Frontend -> Backend : Show log of integration i
+group External Cluster interaction
+    Backend -> Cluster : Show log of integration i
+    Cluster --> Backend : Streamed log
+end
+Backend --> Frontend : Streamed log
+Frontend --> Integrator : Streamed log
+@enduml

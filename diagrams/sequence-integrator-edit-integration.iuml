@@ -1,0 +1,12 @@
+@startuml
+actor Integrator
+Integrator -> Frontend : Edit integration
+Frontend -> Backend : Check this integration
+Backend -> Backend : Parse integration
+Backend -> Backend : Select views and extensions
+Backend -> Frontend : Integration ui with potential fixes
+Backend -> Frontend : Integration code with potential fixes
+Backend -> Frontend : Potential views to use + Extensions
+Frontend -> Frontend : Load Extensions from Repository
+Frontend -> Integrator : Refresh interface
+@enduml

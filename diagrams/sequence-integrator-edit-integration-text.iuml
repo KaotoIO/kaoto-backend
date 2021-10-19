@@ -1,0 +1,12 @@
+@startuml
+actor Integrator
+Integrator -> Frontend : Edit integration (YAML)
+Frontend -> Backend : Check this integration (YAML)
+Backend -> Backend : Parse integration
+Backend -> Backend : Select views and extensions
+Backend -> Frontend : Integration parsed (JSON)
+Backend -> Frontend : Integration with potential fixes (YAML)
+Backend -> Frontend : Potential views to use + Extensions (JSON)
+Frontend -> Frontend : Load Extensions from Repository
+Frontend -> Integrator : Visualization of the integration (UI)
+@enduml

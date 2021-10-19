@@ -39,3 +39,8 @@ hs_err_pid*
 node_modules
 docs
 package-lock.json
+
+# Do not upload the images, they can be created
+# with java -jar plantuml.jar sequenceDiagram.txt
+# https://plantuml.com/es/starting
+/diagrams/*.png

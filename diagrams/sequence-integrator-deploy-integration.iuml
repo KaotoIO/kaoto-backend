@@ -1,0 +1,12 @@
+@startuml
+actor Integrator
+Integrator -> Frontend : Deploy integration
+Frontend -> Backend : Deploy integration
+group External Cluster interaction
+    Backend -> Cluster : Check cluster alive
+    Backend -> Cluster : Deploy integration
+    Cluster -> Backend : Integration deployed
+end
+Backend -> Frontend : Integration deployed
+Frontend -> Integrator : Integration deployed
+@enduml
