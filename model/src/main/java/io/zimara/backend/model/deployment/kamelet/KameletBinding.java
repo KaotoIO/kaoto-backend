@@ -7,7 +7,6 @@ import java.util.Map;
  * 🐱class KameletBinding
  * Represents a Kamelet binding that can be deployed
  *
- * 🐱example
  *
  ```
  apiVersion: camel.apache.org/v1alpha1

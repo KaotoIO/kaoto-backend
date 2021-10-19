@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 🐱class StepCatalog
  * 🐱inherits AbstractCatalog
- * <p>
+ *
  * This is a singleton that will contain all catalogs with steps.
  */
 @ApplicationScoped

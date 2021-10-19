@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * 🐱class JatParseCatalog
+ * 🐱class JarParseCatalog
  * 🐱inherits ParseCatalog
  * Abstract implementation that downloads a jar file
  * and walks through all the files

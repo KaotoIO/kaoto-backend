@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * 🐱class InMemoryCatalog
  * 🐱inherits MetadataCatalog
- * <p>
+ *
  * Basic catalog implementation useful for testing and small instances.
  */
 public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {

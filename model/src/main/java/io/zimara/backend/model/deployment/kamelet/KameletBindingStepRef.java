@@ -1,15 +1,5 @@
 package io.zimara.backend.model.deployment.kamelet;
 
-/**
- * 🐱class KameletBindingStepRef
- *
- * 🐱example
- * ```
- *       kind: Kamelet
- *       apiVersion: camel.apache.org/v1alpha1
- *       name: twitter-search-source
- * ```
- */
 public final class KameletBindingStepRef {
 
     private String kind = "Kamelet";
