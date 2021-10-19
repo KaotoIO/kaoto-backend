@@ -50,13 +50,12 @@
 	}
 
 	h2 {
-		margin-top: 4em;
+		margin-top: 2em;
 		margin-left: 0;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 		background: white;
-		height: 29px;
 	}
 	section.namespace{
 		margin-left: 1.5em;
@@ -77,7 +76,6 @@
 
     <a target="_blank" href="./class-diagram.dot.svg" ><img style="max-width:100%" src="./class-diagram.dot.svg"/></a>
     <p>(click to enlarge)</p>
-
 
 	<h2 id='abstractcatalog'>AbstractCatalog</h2>
 <section class='namespace'>
@@ -115,8 +113,7 @@ that can be injected in the different services and resources.</p>
 </section>
 <h2 id='stepcatalog'>StepCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-This is a singleton that will contain all catalogs with steps.</p>
+<p>This is a singleton that will contain all catalogs with steps.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -188,8 +185,7 @@ This is a singleton that will contain all catalogs with steps.</p>
 </section>
 <h2 id='deploymentresource'>DeploymentResource</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-This endpoint will return the yaml needed to deploy
+<p>This endpoint will return the yaml needed to deploy
 the related integration and the
 endpoints to interact with deployments.</p>
 
@@ -603,10 +599,7 @@ return a completable list of elements to add to a catalog.</td>
 </section>
 <h2 id='catalogcollection'>CatalogCollection</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-&lt;p&gt;
-Joins a list of metadata catalogs.
-&lt;p&gt;
+<p>Joins a list of metadata catalogs.
 When those catalogs are updated, the content of this collection changes too.
 As each catalog have their own ID constraints, there may be more than one
 connector with the same ID on this collection of catalogs.</p>
@@ -661,8 +654,7 @@ on the amount of data stored on the catalog.</td>
 </section>
 <h2 id='inmemorycatalog'>InMemoryCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-Basic catalog implementation useful for testing and small instances.</p>
+<p>Basic catalog implementation useful for testing and small instances.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -714,8 +706,7 @@ on the amount of data stored on the catalog.</td>
 </section>
 <h2 id='readonlycatalog'>ReadOnlyCatalog</h2>
 <section class='namespace'>
-<p>&lt;p&gt;
-A Catalog Collection we make sure it can't be modified.</p>
+<p>A Catalog Collection we make sure it can't be modified.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -804,7 +795,7 @@ return a completable list of elements to add to a catalog.</td>
 
 
 </section>
-<h2 id='jatparsecatalog'>JatParseCatalog</h2>
+<h2 id='jarparsecatalog'>JarParseCatalog</h2>
 <section class='namespace'>
 <p>Abstract implementation that downloads a jar file
 and walks through all the files
@@ -825,13 +816,13 @@ parsing them and preparing elements to add to a catalog.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='jatparsecatalog-parse'>
+	<tr id='jarparsecatalog-parse'>
 		<td><code><b>parse</b>()</nobr></code></td>
 		<td><code>CompletableFuture[List[T]]</code></td>
 		<td>Load all the source data, parse it and
 return a completable list of elements to add to a catalog.</td>
 	</tr>
-	<tr id='jatparsecatalog-setfilevisitor'>
+	<tr id='jarparsecatalog-setfilevisitor'>
 		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td></td>
@@ -907,13 +898,6 @@ It may or may not be the same as the ID depending on the type of step.</td>
 <h2 id='kameletbinding'>KameletBinding</h2>
 <section class='namespace'>
 <p>Represents a Kamelet binding that can be deployed</p>
-
-<h3 id='kameletbinding-example'>Usage example</h3>
-
-<section>
-
-
-
 <pre><code>apiVersion: camel.apache.org/v1alpha1
 kind: KameletBinding
 metadata:
@@ -952,107 +936,6 @@ spec:
             topic: &quot;The Topic Names&quot;
             username: &quot;The Username&quot;
 </code></pre>
-
-
-</section>
-
-
-
-</section>
-<h2 id='kameletbindingspec'>KameletBindingSpec</h2>
-<section class='namespace'>
-
-<h3 id='kameletbindingspec-example'>Usage example</h3>
-
-<section>
-
-
-
-<pre><code>spec:
-    source:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: twitter-search-source
-       properties:
-            keywords: &quot;Apache Camel&quot;
-            apiKey: &quot;your own&quot;
-            apiKeySecret: &quot;your own&quot;
-            accessToken: &quot;your own&quot;
-        accessTokenSecret: &quot;your own&quot;
-    steps:
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: aws-translate-action
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: avro-deserialize-action
-    sink:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: kafka-sink
-       properties:
-            brokers: &quot;The Brokers&quot;
-            password: &quot;The Password&quot;
-            topic: &quot;The Topic Names&quot;
-            username: &quot;The Username&quot;
-</code></pre>
-
-
-</section>
-
-
-
-</section>
-<h2 id='kameletbindingstep'>KameletBindingStep</h2>
-<section class='namespace'>
-
-<h3 id='kameletbindingstep-example'>Usage example</h3>
-
-<section>
-
-
-
-<pre><code>    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: twitter-search-source
-    properties:
-      keywords: &quot;Apache Camel&quot;
-      apiKey: &quot;your own&quot;
-      apiKeySecret: &quot;your own&quot;
-      accessToken: &quot;your own&quot;
-      accessTokenSecret: &quot;your own&quot;
-      ```</code></pre>
-
-
-</section>
-
-
-
-</section>
-<h2 id='kameletbindingstepref'>KameletBindingStepRef</h2>
-<section class='namespace'>
-
-<h3 id='kameletbindingstepref-example'>Usage example</h3>
-
-<section>
-
-
-
-<pre><code>      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: twitter-search-source
-</code></pre>
-
-
-</section>
-
 
 
 </section>
@@ -1497,5 +1380,8 @@ It may or may not be the same as the ID depending on the type of step.</td>
 
 </section>
 
+
+    <br/>
+	<p>You can learn more on <a target="_blank" href="https://zimara.io">https://zimara.io</a>.</p>
 
 </body></html>

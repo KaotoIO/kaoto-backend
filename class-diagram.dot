@@ -262,12 +262,12 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 		
 		
 		]
-"JatParseCatalog" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>JatParseCatalog</B></TD></TR>
+"JarParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>JarParseCatalog</B></TD></TR>
 	
 </TABLE>>]
 
-	"JatParseCatalog" -> "ParseCatalog"
+	"JarParseCatalog" -> "ParseCatalog"
 
 "YamlProcessFile" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>YamlProcessFile</B></TD></TR>
@@ -318,41 +318,7 @@ ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="
 
 "KameletBinding" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>KameletBinding</B></TD></TR>
-	<TR><TD><I>Usage example</I><BR/>
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"KameletBindingSpec" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletBindingSpec</B></TD></TR>
-	<TR><TD><I>Usage example</I><BR/>
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"KameletBindingStep" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletBindingStep</B></TD></TR>
-	<TR><TD><I>Usage example</I><BR/>
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"KameletBindingStepRef" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletBindingStepRef</B></TD></TR>
-	<TR><TD><I>Usage example</I><BR/>
-
-</TD></TR>
-
-
+	
 </TABLE>>]
 
 
