@@ -48,15 +48,15 @@ class GenericViewDefinitionParserServiceTest {
 
         steps.add(new KameletStep());
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(1, views.size());
+        Assertions.assertEquals(0, views.size());
 
         steps.add(new KameletStep());
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(4, views.size());
+        Assertions.assertEquals(2, views.size());
 
         steps.add(new KameletStep());
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(5, views.size());
+        Assertions.assertEquals(2, views.size());
     }
 
     @Test

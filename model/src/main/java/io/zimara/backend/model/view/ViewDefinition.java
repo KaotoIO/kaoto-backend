@@ -24,6 +24,8 @@ public class ViewDefinition extends Metadata {
         setName(v.getName());
         setType(v.getType());
         setUrl(v.getUrl());
+        setScope(v.getScope());
+        setModule(v.getModule());
     }
 
     /*
@@ -61,6 +63,10 @@ public class ViewDefinition extends Metadata {
      */
     private List<ViewDefinitionConstraint> constraints = null;
 
+    private String scope = null;
+
+    private String module = null;
+
     public Map<String, String> getProperties() {
         return properties;
     }
@@ -92,6 +98,22 @@ public class ViewDefinition extends Metadata {
 
     public void setUrl(final String url) {
         this.url = url;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(final String scope) {
+        this.scope = scope;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(final String module) {
+        this.module = module;
     }
 
     @Override

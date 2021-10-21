@@ -58,7 +58,7 @@ class ViewDefinitionResourceTest {
                 .contentType("text/yaml").post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        res.body("views.size()", is(6),
+        res.body("views.size()", is(4),
                 "views[0].type", is("step"),
                 "steps.size()", is(4));
     }

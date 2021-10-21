@@ -130,7 +130,8 @@ public class GenericViewDefinitionParserService
                                      final boolean tmpRes) {
         boolean res = tmpRes;
         for (Step s : steps) {
-            if (s.getName().equalsIgnoreCase(c.getParameter())) {
+            if (s.getName() != null
+                    && s.getName().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
             }

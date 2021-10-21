@@ -23,7 +23,7 @@ class ViewDefinitionDefinitionParseCatalogTest {
 
         List<ViewDefinition> viewDefinitions = parser.parse().join();
         Assertions.assertTrue(catalog.store(viewDefinitions));
-        Assertions.assertEquals(3, viewDefinitions.size());
-        Assertions.assertEquals(3, catalog.getAll().size());
+        Assertions.assertEquals(4, viewDefinitions.size());
+        Assertions.assertEquals(4, catalog.getAll().size());
     }
 }
