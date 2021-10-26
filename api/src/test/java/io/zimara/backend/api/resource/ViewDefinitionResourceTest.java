@@ -59,7 +59,7 @@ class ViewDefinitionResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         res.body("views.size()", is(4),
-                "views[0].type", is("step"),
+                "views[0].type", is("generic"),
                 "steps.size()", is(4));
     }
 
