@@ -32,11 +32,11 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
         }
         final Collector<T, ?, Map<String, T>> stepMapCollector =
                 Collectors.toMap(T::getId, step -> step, (a, b) -> a);
-        metadataCatalog = Collections.synchronizedMap(
+        metadataCatalog.putAll(Collections.synchronizedMap(
                 steps.stream()
                         .filter(Objects::nonNull)
                         .parallel()
-                        .collect(stepMapCollector));
+                        .collect(stepMapCollector)));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
         return true;
