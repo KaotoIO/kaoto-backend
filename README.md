@@ -1,11 +1,11 @@
-# Zimara Backend
+# Kaoto Backend
 
-This is the backend companion of the Zimara project.
+This is the backend companion of the Kaoto project.
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ZimaraIO_zimara-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=ZimaraIO_zimara-backend)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ZimaraIO_zimara-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=ZimaraIO_zimara-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
 
-## Using Zimara
+## Using Kaoto
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -81,4 +81,4 @@ Documentation is generated using [LeafDoc](https://github.com/Leaflet/Leafdoc).
 npm install
 npm test
 ```
-Published documentation is on https://zimaraio.github.io/zimara-backend/
+Published documentation is on https://kaotoio.github.io/kaoto-backend/
