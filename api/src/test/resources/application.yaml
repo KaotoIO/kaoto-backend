@@ -5,5 +5,5 @@ repository:
   viewdefinition:
     git:
       -
-        url: "https://github.com/ZimaraIO/zimara-viewdefinition-catalog.git"
+        url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog.git"
         tag: "test"

@@ -9,6 +9,6 @@
   <suppress checks="HiddenField" files="."/>
   <suppress checks="DesignForExtension" files="."/>
   <suppress checks="MagicNumber" files="."/>
-  <suppress checks="LineLength" files="model/src/main/java/io/zimara/backend/model/view/ConstraintOperation.java"/>
+  <suppress checks="LineLength" files="model/src/main/java/io/kaoto/backend/model/view/ConstraintOperation.java"/>
 </suppressions>
 

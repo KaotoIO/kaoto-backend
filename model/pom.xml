@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>parent</artifactId>
-        <groupId>io.zimara.backend</groupId>
+        <groupId>io.kaoto.backend</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>model</artifactId>

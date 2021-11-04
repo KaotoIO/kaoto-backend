@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.zimara.backend</groupId>
+    <groupId>io.kaoto.backend</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -24,9 +24,9 @@
         <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
 
         <!-- SonarCloud analysis -->
-        <sonar.projectKey>ZimaraIO_zimara-backend</sonar.projectKey>
+        <sonar.projectKey>KaotoIO_kaoto-backend</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
-        <sonar.organization>zimaraio</sonar.organization>
+        <sonar.organization>kaotoio</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <!-- Shared dependencies -->

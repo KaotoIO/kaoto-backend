@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.zimara.backend</groupId>
+        <groupId>io.kaoto.backend</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -46,7 +46,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.zimara.backend</groupId>
+            <groupId>io.kaoto.backend</groupId>
             <artifactId>model</artifactId>
             <version>${project.version}</version>
         </dependency>
