@@ -4,6 +4,7 @@ This is the backend companion of the Kaoto project.
 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
+[![codecov](https://codecov.io/gh/KaotoIO/kaoto-backend/branch/main/graph/badge.svg?token=7RADJHV7HT)](https://codecov.io/gh/KaotoIO/kaoto-backend)
 
 ## Using Kaoto
 
