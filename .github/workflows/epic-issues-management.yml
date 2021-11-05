@@ -1,11 +1,11 @@
-name: Update epics
+name: 🪄 Update epics 🪄
 on:
   issues:
     types: [opened, closed, reopened]
 jobs:
   epics:
     runs-on: ubuntu-latest
-    name: Update epic issues
+    name: 🪡 Update epic issues 🪡
     steps:
       - name: Run epics action
         uses: cloudaper/epics-action@v1
