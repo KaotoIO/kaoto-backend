@@ -51,3 +51,5 @@ jobs:
         run: mvn -B verify -Panalysis
       - name: 👀 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
+      - name: 💅 Codecov Analysis
+        run: bash <(curl -s https://codecov.io/bash)
