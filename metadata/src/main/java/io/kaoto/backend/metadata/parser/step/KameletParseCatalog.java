@@ -176,6 +176,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
             String value =
                     definitions.getOrDefault("default", "").toString();
             p = getParameter(definitions, title, description, value);
+            p.setPath((Boolean) definitions.getOrDefault("path", false));
             step.getParameters().add(p);
         }
     }

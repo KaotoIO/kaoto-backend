@@ -168,4 +168,9 @@ public class ViewDefinition extends Metadata {
                 ? getProperties().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public ViewDefinition clone() {
+        return (ViewDefinition) super.clone();
+    }
 }

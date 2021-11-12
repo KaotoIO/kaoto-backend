@@ -44,14 +44,22 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     @Override
     public T searchStepByID(final String id) {
-        return metadataCatalog.get(id);
+        T step = metadataCatalog.get(id);
+        if (step != null) {
+            step = (T) step.clone();
+        }
+        return step;
     }
 
     @Override
     public T searchStepByName(final String name) {
         for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
             if (name.equalsIgnoreCase(entry.getValue().getName())) {
-                return entry.getValue();
+                T step = entry.getValue();
+                if (step != null) {
+                    step = (T) step.clone();
+                }
+                return step;
             }
         }
         return null;
@@ -63,7 +71,11 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
         for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
             if (name.equalsIgnoreCase(entry.getValue().getName())) {
-                steps.add(entry.getValue());
+                T step = entry.getValue();
+                if (step != null) {
+                    step = (T) step.clone();
+                    steps.add(step);
+                }
             }
         }
 

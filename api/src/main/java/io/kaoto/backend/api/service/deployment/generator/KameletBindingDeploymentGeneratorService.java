@@ -26,11 +26,14 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         KameletBindingSpec spec = new KameletBindingSpec();
-
         spec.setSource(createKameletBindingStep(steps.get(0)));
 
         for (int i = 1; i < steps.size() - 1; i++) {
             spec.getSteps().add(createKameletBindingStep(steps.get(i)));
+        }
+
+        if (spec.getSteps().isEmpty()) {
+            spec.setSteps(null);
         }
 
         spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
@@ -61,17 +64,48 @@ public class KameletBindingDeploymentGeneratorService
     private KameletBindingStep createKameletBindingStep(final Step step) {
         KameletBindingStep kameletStep = new KameletBindingStep();
 
-        KameletBindingStepRef ref = new KameletBindingStepRef();
-        ref.setName(step.getName());
-        kameletStep.setRef(ref);
+        String type = step.getSubType();
+        if (type != null) {
+            type = type.toUpperCase().strip();
+        }
 
-        if (step.getParameters() != null) {
-            for (var p : step.getParameters()) {
-                if (p.getValue() != null) {
-                    kameletStep.getProperties().put(p.getId(),
-                            p.getValue().toString());
+        switch (type) {
+            case "CAMEL-CONNECTOR":
+                var sb = new StringBuilder();
+                String prefix = step.getName();
+
+                if (!step.getParameters().isEmpty()) {
+                    sb.append("?");
+                    for (var property : step.getParameters()) {
+                        if (property.isPath()) {
+                            prefix += ":" + property.getValue();
+                        } else if (property.getValue() != null) {
+                            sb.append(property.getId());
+                            sb.append("=");
+                            sb.append(property.getValue());
+                            sb.append("&");
+                        }
+                    }
                 }
-            }
+
+                kameletStep.setUri(prefix + sb);
+                kameletStep.setProperties(null);
+                break;
+            default:
+                KameletBindingStepRef ref = new KameletBindingStepRef();
+                ref.setName(step.getName());
+                kameletStep.setRef(ref);
+
+                if (step.getParameters() != null) {
+                    for (var p : step.getParameters()) {
+                        if (p.getValue() != null) {
+                            kameletStep.getProperties().put(
+                                    p.getId(),
+                                    p.getValue()
+                                            .toString());
+                        }
+                    }
+                }
         }
 
         return kameletStep;
@@ -84,7 +118,8 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         for (Step s : steps) {
-            if ("KAMELET".equalsIgnoreCase(s.getSubType())) {
+            if ("CAMEL-CONNECTOR".equalsIgnoreCase(s.getSubType())
+                    || "KAMELET".equalsIgnoreCase(s.getSubType())) {
                 return true;
             }
         }

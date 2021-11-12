@@ -7,9 +7,10 @@ package io.kaoto.backend.model.parameter;
  * Represents a parameter of a step in an integration.
  * These parameters could be used on the UI to configure the step.
  */
-public final class Parameter<T> {
+public final class Parameter<T> implements Cloneable {
 
     private String label;
+    private Boolean path = false;
     private String description;
     private String id;
     private String type;
@@ -87,5 +88,29 @@ public final class Parameter<T> {
      */
     public String getType() {
         return this.type;
+    }
+
+
+    /*
+     * 🐱property type: Boolean
+     *
+     * Is this a path parameter?
+     */
+    public Boolean isPath() {
+        return path;
+    }
+
+    public void setPath(final Boolean path) {
+        this.path = path;
+    }
+
+    @Override
+    public Parameter clone() {
+        try {
+            return (Parameter) super.clone();
+        } catch (CloneNotSupportedException e) {
+            //silently fail because... we are not really going to have this
+        }
+        return null;
     }
 }

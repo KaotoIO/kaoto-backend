@@ -3,6 +3,7 @@ package io.kaoto.backend.model.step;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.parameter.Parameter;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class Step extends Metadata {
     private String title;
     private String description;
     private String uuid;
-    private String subType = null;
+    private String subType = "DEFAULT";
 
     /*
      * 🐱property subtype: String
@@ -146,5 +147,18 @@ public class Step extends Metadata {
         result = 31 * result + (getSubType() != null
                 ? getSubType().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public Step clone() {
+        Step step = (Step) super.clone();
+
+        List<Parameter> parameters = step.getParameters();
+        step.setParameters(new LinkedList<>());
+        for (var p : parameters) {
+            step.getParameters().add(p.clone());
+        }
+
+        return step;
     }
 }

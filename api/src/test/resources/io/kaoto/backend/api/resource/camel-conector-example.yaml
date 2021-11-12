@@ -1,0 +1,10 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: camel-conector-example
+spec:
+  source:
+    uri: "log:debug?showBody=true"
+  sink:
+    uri: "log:info?showBody=false"
+

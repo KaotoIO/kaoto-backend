@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 🐱miniclass KameletBindingStepParserService (StepParserService)
@@ -73,6 +75,10 @@ public class KameletBindingStepParserService
             String uri = source.getUri();
             step = catalog.getReadOnlyCatalog()
                     .searchStepByName(uri.substring(0, uri.indexOf(":")));
+            if (step != null) {
+                log.trace("Found step " + step.getName());
+                setValuesOnParameters(step, uri);
+            }
         } else if (source.getRef() != null) {
             log.trace("Found ref component.");
             step = catalog.getReadOnlyCatalog()
@@ -98,6 +104,39 @@ public class KameletBindingStepParserService
                 }
             }
         }
+
+    }
+
+    private void setValuesOnParameters(final Step step,
+                                       final String uri) {
+
+        String path = uri.substring(uri.indexOf(":") + 1);
+        if (path.indexOf("?") > 0) {
+            path = path.substring(0, path.indexOf("?"));
+        }
+
+        for (Parameter p : step.getParameters()) {
+            if (p.isPath()) {
+                p.setValue(path);
+            }
+        }
+
+        Pattern pattern = Pattern.compile(
+                "(?:\\?|\\&)([^=]+)\\=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(uri);
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String value = matcher.group(2);
+
+            for (Parameter p : step.getParameters()) {
+                if (p.getId().equalsIgnoreCase(key)) {
+                    p.setValue(value);
+                    break;
+                }
+            }
+        }
+
 
     }
 

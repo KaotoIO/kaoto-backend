@@ -86,6 +86,14 @@ public class KameletStep extends Step {
 
     public void setKind(final String kind) {
         this.kind = kind;
+        switch (this.kind) {
+            case "Camel-Connector":
+                setSubType("CAMEL-CONNECTOR");
+                break;
+            default:
+                setSubType("KAMELET");
+                break;
+        }
     }
 
     /*
@@ -106,5 +114,10 @@ public class KameletStep extends Step {
 
     public void setMetadata(final Map<String, Object> metadata) {
         this.metadata = metadata;
+    }
+
+    @Override
+    public KameletStep clone() {
+        return (KameletStep) super.clone();
     }
 }

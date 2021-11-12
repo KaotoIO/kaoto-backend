@@ -8,7 +8,7 @@ package io.kaoto.backend.model;
  * Used to simplify the implementation of catalogs.
  *
  */
-public abstract class Metadata {
+public abstract class Metadata implements Cloneable {
 
     private String name = null;
     private String type = "UNDEFINED";
@@ -54,4 +54,12 @@ public abstract class Metadata {
         this.id = id;
     }
 
+    public Metadata clone() {
+        try {
+            return (Metadata) super.clone();
+        } catch (CloneNotSupportedException e) {
+          //silently fail because... we are not really going to have this
+        }
+        return null;
+    }
 }

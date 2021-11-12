@@ -59,12 +59,18 @@ class DeploymentServiceTest {
     }
 
     private static String binding = "";
+    private static String bindingRegularCamel = "";
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
         binding = Files.readString(
                 Path.of(DeploymentServiceTest.class.getResource(
                         "../../resource/twitter-search-source-binding.yaml")
+                        .toURI()));
+        bindingRegularCamel
+                = Files.readString(
+                Path.of(DeploymentServiceTest.class.getResource(
+                                "../../resource/camel-conector-example.yaml")
                         .toURI()));
     }
 
@@ -118,6 +124,27 @@ class DeploymentServiceTest {
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
                 + "      kind: Kamelet\n"
                 + "      name: avro-deserialize-action\n";
+
+        Assertions.assertEquals(expectedStr, res);
+    }
+
+
+    @Test
+    void regularCamelConnector() {
+        final var steps = stepParser.parse(bindingRegularCamel);
+        String res = deploymentService.yaml(
+                "camel-conector-example",
+                steps.toArray(new KameletStep[0]));
+        String expectedStr =
+                "apiVersion: camel.apache.org/v1alpha1\n"
+                        + "kind: KameletBinding\n"
+                        + "metadata:\n"
+                        + "  name: camel-conector-example\n"
+                        + "spec:\n"
+                        + "  sink:\n"
+                        + "    uri: log:info?showBody=false&\n"
+                        + "  source:\n"
+                        + "    uri: log:debug?showBody=true&\n";
 
         Assertions.assertEquals(expectedStr, res);
     }
