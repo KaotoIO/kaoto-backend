@@ -67,6 +67,9 @@ public class KameletBindingDeploymentGeneratorService
         String type = step.getSubType();
         if (type != null) {
             type = type.toUpperCase().strip();
+        } else {
+            //assume a kamelet, we are binding them!
+            type = "KAMELET";
         }
 
         switch (type) {
