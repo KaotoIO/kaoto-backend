@@ -10,7 +10,7 @@ package io.kaoto.backend.model.parameter;
 public final class Parameter<T> implements Cloneable {
 
     private String label;
-    private Boolean path = false;
+    private boolean path = false;
     private String description;
     private String id;
     private String type;
@@ -96,11 +96,11 @@ public final class Parameter<T> implements Cloneable {
      *
      * Is this a path parameter?
      */
-    public Boolean isPath() {
+    public boolean isPath() {
         return path;
     }
 
-    public void setPath(final Boolean path) {
+    public void setPath(final boolean path) {
         this.path = path;
     }
 
