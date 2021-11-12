@@ -60,6 +60,6 @@ public abstract class Metadata implements Cloneable {
         } catch (CloneNotSupportedException e) {
           //silently fail because... we are not really going to have this
         }
-        return null;
+        return this;
     }
 }
