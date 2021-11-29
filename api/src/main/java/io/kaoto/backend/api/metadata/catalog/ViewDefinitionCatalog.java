@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.metadata.catalog;
 
+import io.quarkus.runtime.Startup;
 import io.smallrye.config.ConfigMapping;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.view.ViewDefinitionParseCatalog;
@@ -20,6 +21,7 @@ import java.util.List;
  * This is a singleton that will contain all catalogs with viewdefinitions.
  *
  */
+@Startup
 @ApplicationScoped
 public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
 
