@@ -87,10 +87,20 @@ class DeploymentServiceTest {
                 "twitter-search-source-binding",
                 steps.toArray(new KameletStep[0]));
         String expectedStr =
-                "apiVersion: camel.apache.org/v1alpha1\n"
+                "CRDName: kameletbindings.camel.apache.org\n"
+                + "apiVersion: camel.apache.org/v1alpha1\n"
+                + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
+                + "  additionalProperties: {}\n"
+                + "  finalizers: []\n"
+                + "  managedFields: []\n"
                 + "  name: twitter-search-source-binding\n"
+                + "  ownerReferences: []\n"
+                + "plural: kameletbindings\n"
+                + "scope: Cluster\n"
+                + "served: true\n"
+                + "singular: kameletbinding\n"
                 + "spec:\n"
                 + "  sink:\n"
                 + "    properties:\n"
@@ -123,7 +133,9 @@ class DeploymentServiceTest {
                 + "    ref:\n"
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
                 + "      kind: Kamelet\n"
-                + "      name: avro-deserialize-action\n";
+                + "      name: avro-deserialize-action\n"
+                + "storage: true\n"
+                + "version: camel.apache.org/v1alpha1\n";
 
         Assertions.assertEquals(expectedStr, res);
     }
@@ -136,15 +148,27 @@ class DeploymentServiceTest {
                 "camel-conector-example",
                 steps.toArray(new KameletStep[0]));
         String expectedStr =
-                "apiVersion: camel.apache.org/v1alpha1\n"
+                "CRDName: kameletbindings.camel.apache.org\n"
+                        + "apiVersion: camel.apache.org/v1alpha1\n"
+                        + "group: camel.apache.org\n"
                         + "kind: KameletBinding\n"
                         + "metadata:\n"
+                        + "  additionalProperties: {}\n"
+                        + "  finalizers: []\n"
+                        + "  managedFields: []\n"
                         + "  name: camel-conector-example\n"
+                        + "  ownerReferences: []\n"
+                        + "plural: kameletbindings\n"
+                        + "scope: Cluster\n"
+                        + "served: true\n"
+                        + "singular: kameletbinding\n"
                         + "spec:\n"
                         + "  sink:\n"
                         + "    uri: log:info?showBody=false&\n"
                         + "  source:\n"
-                        + "    uri: log:debug?showBody=true&\n";
+                        + "    uri: log:debug?showBody=true&\n"
+                        + "storage: true\n"
+                        + "version: camel.apache.org/v1alpha1\n";
 
         Assertions.assertEquals(expectedStr, res);
     }

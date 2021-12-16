@@ -1,7 +1,10 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.model.annotation.Group;
+import io.fabric8.kubernetes.model.annotation.Version;
+
 
 /**
  * 🐱class KameletBinding
@@ -48,10 +51,15 @@ import java.util.Map;
              username: "The Username"
 ```
  */
-public final class KameletBinding {
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Group("camel.apache.org")
+@Version("camel.apache.org/v1alpha1")
+public final class KameletBinding
+        extends CustomResource<KameletBindingSpec, KameletBindingStatus> {
     private String apiVersion = "camel.apache.org/v1alpha1";
     private String kind = "KameletBinding";
-    private Map<String, String> metadata = new HashMap<>();
     private KameletBindingSpec spec;
 
     public KameletBinding() {
@@ -60,7 +68,7 @@ public final class KameletBinding {
     public KameletBinding(final String name, final KameletBindingSpec spec) {
         this();
         setSpec(spec);
-        getMetadata().put("name", name);
+        getMetadata().setName(name);
     }
 
     public String getApiVersion() {
@@ -69,10 +77,6 @@ public final class KameletBinding {
 
     public String getKind() {
         return kind;
-    }
-
-    public  Map<String, String> getMetadata() {
-        return metadata;
     }
 
     public KameletBindingSpec getSpec() {
@@ -89,10 +93,6 @@ public final class KameletBinding {
 
     public void setKind(final String kind) {
         this.kind = kind;
-    }
-
-    public void setMetadata(final Map<String, String> metadata) {
-        this.metadata = metadata;
     }
 
 }
