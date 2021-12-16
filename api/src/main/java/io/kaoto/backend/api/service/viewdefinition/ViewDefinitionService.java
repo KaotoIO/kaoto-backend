@@ -1,11 +1,11 @@
 package io.kaoto.backend.api.service.viewdefinition;
 
-import io.kaoto.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

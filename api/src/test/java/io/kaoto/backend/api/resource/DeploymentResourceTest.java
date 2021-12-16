@@ -1,17 +1,17 @@
 package io.kaoto.backend.api.resource;
 
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
-import io.kaoto.backend.api.service.step.parser.KameletBindingStepParserService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;

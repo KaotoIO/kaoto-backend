@@ -48,6 +48,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.kaoto.backend</groupId>
+            <artifactId>services-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.kaoto.backend</groupId>
+            <artifactId>kamelet-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
         </dependency>

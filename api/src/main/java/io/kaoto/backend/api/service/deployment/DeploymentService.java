@@ -1,7 +1,7 @@
 package io.kaoto.backend.api.service.deployment;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.deployment.generator.KameletBindingDeploymentGeneratorService;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
 import io.kaoto.backend.model.step.Step;
 
 import javax.enterprise.context.ApplicationScoped;

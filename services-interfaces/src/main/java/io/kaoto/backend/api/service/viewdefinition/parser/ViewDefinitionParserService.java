@@ -1,5 +1,4 @@
 package io.kaoto.backend.api.service.viewdefinition.parser;
-
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
 

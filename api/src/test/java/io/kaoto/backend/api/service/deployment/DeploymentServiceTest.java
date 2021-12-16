@@ -3,13 +3,13 @@ package io.kaoto.backend.api.service.deployment;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
-import io.kaoto.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 
 import javax.inject.Inject;
 import java.io.IOException;
