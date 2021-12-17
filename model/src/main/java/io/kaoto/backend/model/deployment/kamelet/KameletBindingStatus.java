@@ -13,7 +13,6 @@ import java.util.List;
 
 // Taken/inspired by https://github.com/citrusframework/yaks
 
-@JsonPropertyOrder({"phase", "conditions"})
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
@@ -23,6 +22,10 @@ public class KameletBindingStatus implements KubernetesResource {
     private String phase;
     @JsonProperty("conditions")
     private List<Condition> conditions;
+    @JsonProperty("replicas")
+    private Integer replicas;
+    @JsonProperty("selector")
+    private String selector;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonPropertyOrder({"type", "status",

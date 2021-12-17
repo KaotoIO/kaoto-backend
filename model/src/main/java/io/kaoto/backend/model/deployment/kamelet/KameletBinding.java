@@ -1,8 +1,12 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.model.annotation.Group;
+import io.fabric8.kubernetes.model.annotation.Kind;
+import io.fabric8.kubernetes.model.annotation.Plural;
+import io.fabric8.kubernetes.model.annotation.ShortNames;
 import io.fabric8.kubernetes.model.annotation.Version;
 
 
@@ -55,28 +59,26 @@ import io.fabric8.kubernetes.model.annotation.Version;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Group("camel.apache.org")
-@Version("camel.apache.org/v1alpha1")
+@Version("v1alpha1")
+@Kind("KameletBinding")
+@Plural("kameletbindings")
+@ShortNames("klb")
 public final class KameletBinding
-        extends CustomResource<KameletBindingSpec, KameletBindingStatus> {
-    private String apiVersion = "camel.apache.org/v1alpha1";
-    private String kind = "KameletBinding";
-    private KameletBindingSpec spec;
+        extends CustomResource<KameletBindingSpec, KameletBindingStatus>
+        implements  io.fabric8.kubernetes.api.model.Namespaced {
 
     public KameletBinding() {
     }
 
+    private KameletBindingSpec spec;
+
     public KameletBinding(final String name, final KameletBindingSpec spec) {
         this();
         setSpec(spec);
+        if (getMetadata() == null) {
+           setMetadata(new ObjectMeta());
+        }
         getMetadata().setName(name);
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
-    }
-
-    public String getKind() {
-        return kind;
     }
 
     public KameletBindingSpec getSpec() {
@@ -86,13 +88,4 @@ public final class KameletBinding
     public void setSpec(final KameletBindingSpec spec) {
         this.spec = spec;
     }
-
-    public void setApiVersion(final String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
-
-    public void setKind(final String kind) {
-        this.kind = kind;
-    }
-
 }

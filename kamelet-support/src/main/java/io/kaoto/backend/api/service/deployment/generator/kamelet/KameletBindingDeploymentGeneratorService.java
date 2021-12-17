@@ -52,6 +52,10 @@ public class KameletBindingDeploymentGeneratorService
                 if (propertyValue == null) {
                     return null;
                 }
+                if (property.getName().equalsIgnoreCase("CRDName")) {
+                    return null;
+                }
+
                 return super.representJavaBeanProperty(javaBean, property,
                         propertyValue, customTag);
             }
