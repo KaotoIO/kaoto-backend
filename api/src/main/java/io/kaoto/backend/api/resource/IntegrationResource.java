@@ -29,11 +29,11 @@ import java.util.List;
  * the related integration and the
  * endpoints to interact with deployments.
  */
-@Path("/deployment")
+@Path("/integrations")
 @ApplicationScoped
-public class DeploymentResource {
+public class IntegrationResource {
 
-    private Logger log = Logger.getLogger(DeploymentResource.class);
+    private Logger log = Logger.getLogger(IntegrationResource.class);
 
     @Inject
     public void setDeploymentService(
@@ -54,12 +54,13 @@ public class DeploymentResource {
      * 🐱method yaml: String
      * 🐱param steps: DeploymentResourceYamlRequest
      *
-     * Based on the steps provided, offer a yaml deployment
+     * Idempotent operation that, based on the steps provided,
+     * offer the source code / custom resource to deploy the integration.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
-    @Path("/yaml")
+    @Path("/customResource")
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request) {
         return deploymentService.yaml(request.getName(), request.getSteps());
@@ -69,13 +70,13 @@ public class DeploymentResource {
      * 🐱method start: String
      * 🐱param steps: DeploymentResourceYamlRequest
      *
-     * Deploy an integration
+     * Deploys an integration provided.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
-    @Path("/start")
-    public String deploy(
+    @Path("/")
+    public String start(
             final @RequestBody DeploymentResourceYamlRequest request) {
         String yaml = deploymentService.yaml(
                 request.getName(), request.getSteps());
@@ -92,7 +93,7 @@ public class DeploymentResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/integrations")
+    @Path("/")
     public List<Integration> integrations() {
         log.info("Integration");
         return clusterService.getIntegrations();
@@ -102,11 +103,11 @@ public class DeploymentResource {
     /*
      * 🐱method stop: String
      *
-     * Stops an integration by name
+     * Stops and deletes an integration by name
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/stop/{name}")
+    @Path("/{name}")
     public boolean integrations(final @PathParam("name") String name) {
         Integration i = new Integration();
         i.setName(name);

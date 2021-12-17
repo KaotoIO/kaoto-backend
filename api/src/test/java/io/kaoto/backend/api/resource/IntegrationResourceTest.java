@@ -25,10 +25,10 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-@TestHTTPEndpoint(DeploymentResource.class)
-class DeploymentResourceTest {
+@TestHTTPEndpoint(IntegrationResource.class)
+class IntegrationResourceTest {
 
-    private DeploymentResource stepResource;
+    private IntegrationResource stepResource;
     private StepCatalog stepCatalog;
     private StepParserService<Step> stepParser;
     private static String binding;
@@ -52,7 +52,7 @@ class DeploymentResourceTest {
     }
 
     @Inject
-    public void setDeploymentResource(final DeploymentResource stepResource) {
+    public void setDeploymentResource(final IntegrationResource stepResource) {
         this.stepResource = stepResource;
     }
 
@@ -65,7 +65,7 @@ class DeploymentResourceTest {
     static void setup() throws URISyntaxException, IOException {
         binding = Files.readString(
                 Path.of(
-                        DeploymentResourceTest.class.getResource(
+                        IntegrationResourceTest.class.getResource(
                                 "twitter-search-source-binding.yaml")
                                 .toURI()));
     }
@@ -83,7 +83,7 @@ class DeploymentResourceTest {
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
-                .post("yaml")
+                .post("customResource")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
     }
@@ -93,7 +93,7 @@ class DeploymentResourceTest {
         given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
-                .post("yaml")
+                .post("customResource")
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
