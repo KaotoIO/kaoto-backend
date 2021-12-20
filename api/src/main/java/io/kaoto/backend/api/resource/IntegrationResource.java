@@ -4,6 +4,8 @@ import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -61,6 +63,9 @@ public class IntegrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/customResource")
+    @Operation(summary = "Get CRD",
+            description = "Returns the associated custom resource definition."
+                    + " This is an idempotent operation.")
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request) {
         return deploymentService.yaml(request.getName(), request.getSteps());
@@ -76,6 +81,10 @@ public class IntegrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/")
+    @Operation(summary = "Start integration",
+            description = "Deploy and start the given integration"
+                    + " on the cluster. Deployment will be done "
+                    + "as a custom resource.")
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request) {
         String yaml = deploymentService.yaml(
@@ -94,8 +103,9 @@ public class IntegrationResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
+    @Operation(summary = "Get all Integrations",
+            description = "Returns all the integrations on the cluster.")
     public List<Integration> integrations() {
-        log.info("Integration");
         return clusterService.getIntegrations();
     }
 
@@ -108,7 +118,11 @@ public class IntegrationResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{name}")
-    public boolean integrations(final @PathParam("name") String name) {
+    @Operation(summary = "Get integration",
+            description = "Get details on the integration identified by name.")
+    public boolean integrations(
+            final @Parameter(description = "Name of the integration to stop.")
+            @PathParam("name") String name) {
         Integration i = new Integration();
         i.setName(name);
         return clusterService.stop(i);
