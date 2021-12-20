@@ -12,6 +12,19 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+### Running as a docker container
+
+There is a nightly dockerized container for the Kaoto backend. 
+You can run it with the following command:
+
+`docker run --rm -d -p 8080:8080 kaotoio/backend`
+
+## Developing Kaoto
+
+Developer documentation is on https://kaotoio.github.io/kaoto-backend/
+
+The API static swagger documentation is on  https://kaotoio.github.io/kaoto-backend/api/
+
 ### Requirements
 
 You have to install in your machine
@@ -19,26 +32,29 @@ You have to install in your machine
 * Maven >= 3.6
 * JDK >= 17
 
-### Running the application in dev mode
+### Building 
 
 First you need to build and install the different maven modules.
 
 ```shell script
 mvn install
 ```
+
+### Running the dev mode
+
 Then you can run your application in dev mode that enables live coding using:
 
 ```shell script
 mvn quarkus:dev -pl api
 ```
 
-Your app is now deployed on `localhost:8080` and youc an check the swagger API on `http://localhost:8080/q/swagger-ui/`.
+Your app is now deployed on `localhost:8080` and you can check the swagger API on `http://localhost:8080/q/swagger-ui/`.
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-### Packaging and running the application
+### Packaging and Running
 
-The application can be packaged using:
+Kaoto can be packaged using:
 
 ```shell script
 mvn install
@@ -53,9 +69,9 @@ If you want to build an _über-jar_, execute the following command:
 mvn install -Dquarkus.package.type=uber-jar
 ```
 
-The application is now runnable using `java -jar api/target/quarkus-app/quarkus-run.jar`.
+Kaoto backend is now runnable using `java -jar api/target/quarkus-app/quarkus-run.jar`.
 
-### Creating a native executable
+#### Creating a native executable
 
 You can create a native executable using:
 
@@ -74,7 +90,7 @@ You can then execute your native executable with: `.api/target/code-with-quarkus
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html
 .
 
-## Documentation
+#### Building the Documentation
 
 Documentation is generated using [LeafDoc](https://github.com/Leaflet/Leafdoc).
 
@@ -82,4 +98,3 @@ Documentation is generated using [LeafDoc](https://github.com/Leaflet/Leafdoc).
 npm install
 npm test
 ```
-Published documentation is on https://kaotoio.github.io/kaoto-backend/
