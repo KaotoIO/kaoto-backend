@@ -23,7 +23,7 @@ You can run it with the following command:
 
 Developer documentation is on https://kaotoio.github.io/kaoto-backend/
 
-The API static swagger documentation is on  https://kaotoio.github.io/kaoto-backend/api/
+The API static swagger documentation is on  https://kaotoio.github.io/kaoto-backend/api/index.html
 
 ### Requirements
 
