@@ -1,12 +1,11 @@
 package io.kaoto.backend.api.service.deployment;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
 import io.kaoto.backend.model.step.Step;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,13 +16,8 @@ import java.util.List;
 @ApplicationScoped
 public class DeploymentService {
 
-    private List<DeploymentGeneratorService> parsers = new ArrayList<>();
-
     @Inject
-    public void setKameletBindingParserService(
-            final KameletBindingDeploymentGeneratorService parserService) {
-        parsers.add(parserService);
-    }
+    private Instance<DeploymentGeneratorService> parsers;
 
     /*
      * 🐱method yaml: String
@@ -43,5 +37,13 @@ public class DeploymentService {
         }
 
         return "";
+    }
+
+    public Instance<DeploymentGeneratorService> getParsers() {
+        return parsers;
+    }
+
+    public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
+        this.parsers = parsers;
     }
 }
