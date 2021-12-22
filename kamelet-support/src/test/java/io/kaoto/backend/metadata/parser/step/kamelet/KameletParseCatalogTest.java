@@ -1,4 +1,4 @@
-package io.kaoto.backend.metadata.parser.step;
+package io.kaoto.backend.metadata.parser.step.kamelet;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.metadata.ParseCatalog;
@@ -8,16 +8,28 @@ import io.kaoto.backend.model.step.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 
 @QuarkusTest
-class KameletParseCatalogTest {
+public class KameletParseCatalogTest {
+
+    public KameletParseCatalog getParseCatalog() {
+        return parseCatalog;
+    }
+
+    public void setParseCatalog(final KameletParseCatalog parseCatalog) {
+        this.parseCatalog = parseCatalog;
+    }
+
+    @Inject
+    private KameletParseCatalog parseCatalog;
 
     @Test
     void getSteps() {
         ParseCatalog<Step> kameletParser =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
                         "v0.3.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
@@ -46,7 +58,7 @@ class KameletParseCatalogTest {
     @Test
     void wrongUrlSilentlyFails() {
         ParseCatalog<Step> kameletParser =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://nothing/wrong/url.git",
                         "");
 
@@ -59,7 +71,7 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
                         "v0.4.0");
         List<Step> stepsGit = kameletParserGit.parse().join();
@@ -70,7 +82,7 @@ class KameletParseCatalogTest {
 
 
         ParseCatalog<Step> kameletParserJar =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         jarUrl);
         List<Step> stepsJar = kameletParserJar.parse().join();
 

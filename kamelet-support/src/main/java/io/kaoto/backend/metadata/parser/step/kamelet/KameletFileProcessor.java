@@ -1,8 +1,5 @@
-package io.kaoto.backend.metadata.parser.step;
+package io.kaoto.backend.metadata.parser.step.kamelet;
 
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.metadata.parser.GitParseCatalog;
-import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -18,36 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * 🐱class KameletParseCatalog
- * 🐱relationship dependsOn ParseCatalog
- * Reads and parses a kamelet catalog.
- * Extracts all the kamelet definitions it can find
- * and generate a kamelet step for each one.
- */
-public final class KameletParseCatalog {
-
-    private KameletParseCatalog() {
-
-    }
-
-    public static ParseCatalog<Step> getParser(
-            final String url, final String tag) {
-        ParseCatalog<Step> parseCatalog = new GitParseCatalog<>(url, tag);
-        parseCatalog.setFileVisitor(new KameletFileProcessor());
-        return parseCatalog;
-    }
-
-
-    public static ParseCatalog<Step> getParser(
-            final String url) {
-        ParseCatalog<Step> parseCatalog = new JarParseCatalog<>(url);
-        parseCatalog.setFileVisitor(new KameletFileProcessor());
-        return parseCatalog;
-    }
-}
-
-class KameletFileProcessor extends YamlProcessFile<Step> {
+public class KameletFileProcessor extends YamlProcessFile<Step> {
 
     public static final String PROPERTIES = "properties";
     private final Logger log = Logger.getLogger(KameletFileProcessor.class);
