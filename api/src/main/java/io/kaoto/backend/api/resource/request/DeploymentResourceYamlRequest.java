@@ -1,6 +1,6 @@
 package io.kaoto.backend.api.resource.request;
 
-import io.kaoto.backend.model.step.kamelet.KameletStep;
+import io.kaoto.backend.model.step.Step;
 
 /**
  * 🐱miniclass DeploymentResourceYamlRequest (DeploymentResource)
@@ -23,17 +23,17 @@ public class DeploymentResourceYamlRequest {
     }
 
     /*
-     * 🐱property steps: KameletStep[]
+     * 🐱property steps: Step[]
      *
      * steps of the integration
      */
-    private KameletStep[] steps;
+    private Step[] steps;
 
-    public KameletStep[] getSteps() {
+    public Step[] getSteps() {
         return steps;
     }
 
-    public void setSteps(final KameletStep[] steps) {
+    public void setSteps(final Step[] steps) {
         this.steps = steps;
     }
 }

@@ -1,10 +1,10 @@
 package io.kaoto.backend.api.service.deployment;
 
+import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +85,7 @@ class DeploymentServiceTest {
         final var steps = stepParser.parse(binding);
         String res = deploymentService.yaml(
                 "twitter-search-source-binding",
-                steps.toArray(new KameletStep[0]));
+                steps.toArray(new Step[0]));
         String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
                + "group: camel.apache.org\n"
                + "kind: KameletBinding\n"
@@ -144,7 +144,7 @@ class DeploymentServiceTest {
         final var steps = stepParser.parse(bindingRegularCamel);
         String res = deploymentService.yaml(
                 "camel-conector-example",
-                steps.toArray(new KameletStep[0]));
+                steps.toArray(new Step[0]));
 
         String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
                + "group: camel.apache.org\n"

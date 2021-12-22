@@ -21,6 +21,9 @@ import java.util.List;
 public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
+    public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    public static final String KAMELET = "KAMELET";
+
     @Override
     public String parse(final String name, final List<Step> steps) {
         if (!appliesTo(steps)) {
@@ -70,16 +73,16 @@ public class KameletBindingDeploymentGeneratorService
     private KameletBindingStep createKameletBindingStep(final Step step) {
         KameletBindingStep kameletStep = new KameletBindingStep();
 
-        String type = step.getSubType();
-        if (type != null) {
-            type = type.toUpperCase().strip();
+        String kind = step.getKind();
+        if (kind != null) {
+            kind = kind.toUpperCase().strip();
         } else {
             //assume a kamelet, we are binding them!
-            type = "KAMELET";
+            kind = KAMELET;
         }
 
-        switch (type) {
-            case "CAMEL-CONNECTOR":
+        switch (kind) {
+            case CAMEL_CONNECTOR:
                 var sb = new StringBuilder();
                 String prefix = step.getName();
 
@@ -127,8 +130,8 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         for (Step s : steps) {
-            if ("CAMEL-CONNECTOR".equalsIgnoreCase(s.getSubType())
-                    || "KAMELET".equalsIgnoreCase(s.getSubType())) {
+            if (CAMEL_CONNECTOR.equalsIgnoreCase(s.getKind())
+                    || KAMELET.equalsIgnoreCase(s.getKind())) {
                 return true;
             }
         }

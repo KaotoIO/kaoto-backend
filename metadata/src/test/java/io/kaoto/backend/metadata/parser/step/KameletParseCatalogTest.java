@@ -5,11 +5,9 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,11 +27,11 @@ class KameletParseCatalogTest {
         Assertions.assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
-        KameletStep step = (KameletStep) catalog.searchStepByName(name);
+        Step step = catalog.searchStepByName(name);
         Assertions.assertNotNull(step);
         Assertions.assertEquals(name, step.getId());
         Assertions.assertEquals(name, step.getName());
-        Assertions.assertEquals("KAMELET", step.getSubType());
+        Assertions.assertEquals("Kamelet", step.getKind());
         Assertions.assertEquals("START", step.getType());
         Assertions.assertNotNull(step.getParameters());
         Assertions.assertEquals(8, step.getParameters().size());
@@ -78,8 +76,8 @@ class KameletParseCatalogTest {
 
         Assertions.assertEquals(stepsJar.size(), stepsGit.size());
 
-        Collections.sort(stepsJar, Comparator.comparing(Metadata::getId));
-        Collections.sort(stepsGit, Comparator.comparing(Metadata::getId));
+        stepsJar.sort(Comparator.comparing(Metadata::getId));
+        stepsGit.sort(Comparator.comparing(Metadata::getId));
 
         Assertions.assertIterableEquals(stepsJar, stepsGit);
     }

@@ -7,7 +7,6 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +76,7 @@ class IntegrationResourceTest {
         DeploymentResourceYamlRequest request =
                 new DeploymentResourceYamlRequest();
         request.setName("twitter-search-source-binding");
-        request.setSteps(steps.toArray(new KameletStep[0]));
+        request.setSteps(steps.toArray(new Step[0]));
 
         given()
                 .when()

@@ -6,11 +6,11 @@ import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -50,15 +50,17 @@ public final class KameletParseCatalog {
 class KameletFileProcessor extends YamlProcessFile<Step> {
 
     public static final String PROPERTIES = "properties";
-    private Logger log = Logger.getLogger(KameletFileProcessor.class);
+    private final Logger log = Logger.getLogger(KameletFileProcessor.class);
 
     @Override
-    public KameletStep parseFile(final File f) {
+    public Step parseFile(final File f) {
         try (FileReader fr = new FileReader(f)) {
-            Yaml yaml = new Yaml(new Constructor(KameletStep.class));
-            KameletStep step = yaml.load(fr);
-            extractSpec(step);
-            extractMetadata(step);
+            Representer representer = new Representer();
+            representer.getPropertyUtils().setSkipMissingProperties(true);
+            Yaml yaml = new Yaml(new Constructor(Step.class), representer);
+            Step step = yaml.load(fr);
+            step = extractSpec(step);
+            step = extractMetadata(step);
             return step;
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
@@ -67,7 +69,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return null;
     }
 
-    private KameletStep extractMetadata(final KameletStep step) {
+    private Step extractMetadata(final Step step) {
         if (step == null || step.getMetadata() == null) {
             return step;
         }
@@ -84,18 +86,11 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
                         (Map<String, Object>) step.getMetadata().get(labels);
                 final var type = "camel.apache.org/kamelet.type";
                 if (labelsMap.containsKey(type)) {
-                    step.setKameletType(labelsMap.get(type).toString());
-                    switch (step.getKameletType().toLowerCase()) {
-                        case "source":
-                            step.setType("START");
-                            break;
-                        case "sink":
-                            step.setType("END");
-                            break;
-                        default:
-                            step.setType("MIDDLE");
-                            break;
-
+                    step.setType(labelsMap.get(type).toString());
+                    switch (step.getType().toLowerCase()) {
+                        case "source" -> step.setType("START");
+                        case "sink" -> step.setType("END");
+                        default -> step.setType("MIDDLE");
                     }
                 }
             }
@@ -125,8 +120,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return step;
     }
 
-    private KameletStep extractSpec(final Step s) {
-        KameletStep step = (KameletStep) s;
+    private Step extractSpec(final Step step) {
         if (step == null || step.getSpec() == null) {
             return step;
         }
@@ -160,7 +154,7 @@ class KameletFileProcessor extends YamlProcessFile<Step> {
         return step;
     }
 
-    private void parseParameters(final KameletStep step,
+    private void parseParameters(final Step step,
                                  final Map<String, Object> definition) {
         Map<String, Object> properties =
                 (Map<String, Object>) definition.get(PROPERTIES);

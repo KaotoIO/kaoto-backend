@@ -145,7 +145,7 @@ public class GenericViewDefinitionParserService
         boolean res = tmpRes;
         for (Step s : steps) {
             if (s.getType().equalsIgnoreCase(c.getParameter())
-                    || s.getSubType().equalsIgnoreCase(c.getParameter())) {
+                    || s.getKind().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
             }
