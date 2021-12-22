@@ -5,8 +5,8 @@ import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
-import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,18 +20,18 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
 
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
+@WithKubernetesTestServer
 @TestHTTPEndpoint(IntegrationResource.class)
 class IntegrationResourceTest {
 
-    private IntegrationResource stepResource;
     private StepCatalog stepCatalog;
     private StepParserService<Step> stepParser;
     private static String binding;
-    private ViewDefinitionService viewDefinitionService;
 
     @Inject
     public void setCatalog(final StepCatalog catalog) {
@@ -42,17 +42,6 @@ class IntegrationResourceTest {
     public void setStepParser(
             final KameletBindingStepParserService stepParser) {
         this.stepParser = stepParser;
-    }
-
-    @Inject
-    public void setViewDefinitionService(
-            final ViewDefinitionService viewDefinitionService) {
-        this.viewDefinitionService = viewDefinitionService;
-    }
-
-    @Inject
-    public void setDeploymentResource(final IntegrationResource stepResource) {
-        this.stepResource = stepResource;
     }
 
     @BeforeEach
@@ -71,12 +60,22 @@ class IntegrationResourceTest {
 
     @Test
     void testYaml() {
-
         List<Step> steps = stepParser.parse(binding);
         DeploymentResourceYamlRequest request =
                 new DeploymentResourceYamlRequest();
-        request.setName("twitter-search-source-binding");
+        final String title = "twitter-search-source-binding";
+        request.setName(title);
         request.setSteps(steps.toArray(new Step[0]));
+
+        final var emptyListJSON = "[]";
+        given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .get()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .body(is(emptyListJSON));
 
         given()
                 .when()
@@ -85,6 +84,41 @@ class IntegrationResourceTest {
                 .post("customResource")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
+
+        given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .get()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .body(is(emptyListJSON));
+
+
+        given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .post()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .delete(title)
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .get()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .body(is(emptyListJSON));
     }
 
     @Test

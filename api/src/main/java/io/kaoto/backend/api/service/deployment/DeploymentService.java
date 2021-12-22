@@ -30,7 +30,7 @@ public class DeploymentService {
 
         List<Step> steps = Arrays.asList(stepArray);
 
-        for (DeploymentGeneratorService parser : parsers) {
+        for (DeploymentGeneratorService parser : getParsers()) {
             if (parser.appliesTo(steps)) {
                 return parser.parse(name, steps);
             }

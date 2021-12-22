@@ -48,10 +48,10 @@ public class ViewDefinitionService {
         }
 
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
-        for (var stepParser : stepParsers) {
+        for (var stepParser : getStepParsers()) {
             if (stepParser.appliesTo(yaml)) {
                 log.trace("Applying " + stepParser.getClass());
-                for (var viewParser : viewParsers) {
+                for (var viewParser : getViewParsers()) {
                     log.trace("Using " + viewParser.getClass());
                     viewDefinitions.addAll(viewParser.parse(steps));
                 }
