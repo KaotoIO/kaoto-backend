@@ -13,17 +13,17 @@ import java.util.Comparator;
 import java.util.List;
 
 @QuarkusTest
-public class KameletParseCatalogTest {
+class KameletParseCatalogTest {
 
     public KameletParseCatalog getParseCatalog() {
         return parseCatalog;
     }
 
+    @Inject
     public void setParseCatalog(final KameletParseCatalog parseCatalog) {
         this.parseCatalog = parseCatalog;
     }
 
-    @Inject
     private KameletParseCatalog parseCatalog;
 
     @Test
