@@ -70,8 +70,6 @@ public final class KameletBinding
     public KameletBinding() {
     }
 
-    private KameletBindingSpec spec;
-
     public KameletBinding(final String name, final KameletBindingSpec spec) {
         this();
         setSpec(spec);
@@ -79,13 +77,5 @@ public final class KameletBinding
            setMetadata(new ObjectMeta());
         }
         getMetadata().setName(name);
-    }
-
-    public KameletBindingSpec getSpec() {
-        return spec;
-    }
-
-    public void setSpec(final KameletBindingSpec spec) {
-        this.spec = spec;
     }
 }
