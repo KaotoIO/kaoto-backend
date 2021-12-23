@@ -14,7 +14,8 @@ import java.util.List;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
-public final class KameletBindingSpec implements KubernetesResource, Serializable {
+public final class KameletBindingSpec
+        implements KubernetesResource, Serializable {
     private static final long serialVersionUID = 7040723764223374489L;
 
     @JsonProperty("source")
