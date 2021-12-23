@@ -42,13 +42,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: ${{env.SONAR_TOKEN != ''}}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Panalysis
+        run: mvn -T1C -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Panalysis
       - name: 🦾 Build and analyze without sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: ${{env.SONAR_TOKEN == ''}}
-        run: mvn -B verify -Panalysis
+        run: mvn -T1C -B verify -Panalysis
       - name: 👀 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
       - name: 💅 Codecov Analysis
