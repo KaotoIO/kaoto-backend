@@ -9,6 +9,8 @@ import io.fabric8.kubernetes.model.annotation.Plural;
 import io.fabric8.kubernetes.model.annotation.ShortNames;
 import io.fabric8.kubernetes.model.annotation.Version;
 
+import java.io.Serializable;
+
 
 /**
  * 🐱class KameletBinding
@@ -65,7 +67,8 @@ import io.fabric8.kubernetes.model.annotation.Version;
 @ShortNames("klb")
 public final class KameletBinding
         extends CustomResource<KameletBindingSpec, KameletBindingStatus>
-        implements  io.fabric8.kubernetes.api.model.Namespaced {
+        implements  io.fabric8.kubernetes.api.model.Namespaced , Serializable {
+    private static final long serialVersionUID = -1089453226037028488L;
 
     public KameletBinding() {
     }

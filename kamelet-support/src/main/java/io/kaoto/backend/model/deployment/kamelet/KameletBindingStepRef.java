@@ -1,6 +1,11 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-public final class KameletBindingStepRef {
+import java.io.Serial;
+import java.io.Serializable;
+
+public final class KameletBindingStepRef implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 13684575275243089L;
 
     private String kind = "Kamelet";
     private String apiVersion = "camel.apache.org/v1alpha1";
