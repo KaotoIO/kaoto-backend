@@ -81,46 +81,49 @@ public class KameletBindingDeploymentGeneratorService
             kind = KAMELET;
         }
 
-        switch (kind) {
-            case CAMEL_CONNECTOR:
-                var sb = new StringBuilder();
-                String prefix = step.getName();
+        if (CAMEL_CONNECTOR.equals(kind)) {
+            StringBuilder prefix = new StringBuilder(step.getName());
+            prefix.append(processParameters(step, prefix));
+            kameletStep.setUri(prefix.toString());
+            kameletStep.setProperties(null);
+        } else {
+            KameletBindingStepRef ref = new KameletBindingStepRef();
+            ref.setName(step.getName());
+            kameletStep.setRef(ref);
 
-                if (!step.getParameters().isEmpty()) {
-                    sb.append("?");
-                    for (var property : step.getParameters()) {
-                        if (property.isPath()) {
-                            prefix += ":" + property.getValue();
-                        } else if (property.getValue() != null) {
-                            sb.append(property.getId());
-                            sb.append("=");
-                            sb.append(property.getValue());
-                            sb.append("&");
-                        }
+            if (step.getParameters() != null) {
+                for (var p : step.getParameters()) {
+                    if (p.getValue() != null) {
+                        kameletStep.getProperties().put(
+                                p.getId(),
+                                p.getValue()
+                                        .toString());
                     }
                 }
-
-                kameletStep.setUri(prefix + sb);
-                kameletStep.setProperties(null);
-                break;
-            default:
-                KameletBindingStepRef ref = new KameletBindingStepRef();
-                ref.setName(step.getName());
-                kameletStep.setRef(ref);
-
-                if (step.getParameters() != null) {
-                    for (var p : step.getParameters()) {
-                        if (p.getValue() != null) {
-                            kameletStep.getProperties().put(
-                                    p.getId(),
-                                    p.getValue()
-                                            .toString());
-                        }
-                    }
-                }
+            }
         }
 
         return kameletStep;
+    }
+
+    private String processParameters(final Step step,
+                                     final StringBuilder prefix) {
+        var sb = new StringBuilder();
+        if (!step.getParameters().isEmpty()) {
+            sb.append("?");
+            for (var property : step.getParameters()) {
+                if (property.isPath()) {
+                    prefix.append(":");
+                    prefix.append(property.getValue());
+                } else if (property.getValue() != null) {
+                    sb.append(property.getId());
+                    sb.append("=");
+                    sb.append(property.getValue());
+                    sb.append("&");
+                }
+            }
+        }
+        return sb.toString();
     }
 
     @Override
