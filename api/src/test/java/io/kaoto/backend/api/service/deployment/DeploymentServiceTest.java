@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 @QuarkusTest
 class DeploymentServiceTest {
@@ -83,7 +84,7 @@ class DeploymentServiceTest {
     @Test
     void yaml() {
         final var steps = stepParser.parse(binding);
-        String res = deploymentService.yaml(
+        Map<String, String> res = deploymentService.crd(
                 "twitter-search-source-binding",
                 steps.toArray(new Step[0]));
         String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
@@ -135,14 +136,14 @@ class DeploymentServiceTest {
                + "storage: true\n"
                + "version: v1alpha1";
 
-        Assertions.assertEquals(expectedStr, res.trim());
+        Assertions.assertEquals(expectedStr, res.get("KameletBinding").trim());
     }
 
 
     @Test
     void regularCamelConnector() {
         final var steps = stepParser.parse(bindingRegularCamel);
-        String res = deploymentService.yaml(
+        Map<String, String> res = deploymentService.crd(
                 "camel-conector-example",
                 steps.toArray(new Step[0]));
 
@@ -167,6 +168,6 @@ class DeploymentServiceTest {
                + "storage: true\n"
                + "version: v1alpha1";
 
-        Assertions.assertEquals(expectedStr, res.trim());
+        Assertions.assertEquals(expectedStr, res.get("KameletBinding").trim());
     }
 }

@@ -24,6 +24,10 @@ public class KameletBindingDeploymentGeneratorService
     public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     public static final String KAMELET = "KAMELET";
 
+    public String identifier() {
+        return "KameletBinding";
+    }
+
     @Override
     public String parse(final String name, final List<Step> steps) {
         if (!appliesTo(steps)) {
