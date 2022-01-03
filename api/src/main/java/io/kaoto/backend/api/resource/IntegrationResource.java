@@ -4,6 +4,7 @@ import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;
+import io.smallrye.config.ConfigMapping;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -19,9 +20,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 🐱class DeploymentResource
@@ -37,6 +40,7 @@ public class IntegrationResource {
 
     private Logger log = Logger.getLogger(IntegrationResource.class);
 
+
     @Inject
     public void setDeploymentService(
             final DeploymentService deploymentService) {
@@ -49,26 +53,73 @@ public class IntegrationResource {
         this.clusterService = clusterService;
     }
 
+    public void setCrdDefault(final String crdDefault) {
+        this.crdDefault = crdDefault;
+    }
+
+    @ConfigMapping(prefix = "crd.default")
+    private String crdDefault;
     private DeploymentService deploymentService;
     private ClusterService clusterService;
 
     /*
-     * 🐱method yaml: String
+     * 🐱method yaml: String[]
      * 🐱param steps: DeploymentResourceYamlRequest
      *
      * Idempotent operation that, based on the steps provided,
-     * offer the source code / custom resource to deploy the integration.
+     * offer all the potential source code / custom resources to deploy the
+     * integration.
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/customResources")
+    @Operation(summary = "Get CRDs",
+            description = "Returns a list of all potential associated custom "
+                    + "resource definitions."
+                    + " This is an idempotent operation.")
+    public Map<String, String> customResourcesDefinition(
+            final @RequestBody DeploymentResourceYamlRequest request) {
+        return deploymentService.crd(request.getName(), request.getSteps());
+    }
+
+    /*
+     * 🐱method yaml: String[]
+     * 🐱param steps: DeploymentResourceYamlRequest
+     * 🐱param type: String
+     *
+     * Idempotent operation that, based on the steps provided,
+     * offer the potential source code / custom resource to deploy the
+     * integration. Tries to return the type of integration passed as
+     * parameter. If that doesn't exist, it will default to the one defined
+     * on the configuration. If that doesn't exist, it will just return one
+     * randomly from the available ones.
+     *
+     * The usage of /customResources is encouraged over this one.
+     *
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/customResource")
     @Operation(summary = "Get CRD",
-            description = "Returns the associated custom resource definition."
+            description = "Returns the associated custom "
+                    + "resource definition."
                     + " This is an idempotent operation.")
     public String customResourceDefinition(
-            final @RequestBody DeploymentResourceYamlRequest request) {
-        return deploymentService.yaml(request.getName(), request.getSteps());
+            final @RequestBody DeploymentResourceYamlRequest request,
+            final @QueryParam("type") String type) {
+        Map<String, String> crds = customResourcesDefinition(request);
+
+        if (crds.containsKey(type)) {
+            return crds.get(type);
+        }
+
+        if (crds.containsKey(crdDefault)) {
+            return crds.get(crdDefault);
+        }
+
+        return crds.values().iterator().next();
     }
 
     /*
@@ -87,10 +138,11 @@ public class IntegrationResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request) {
-        String yaml = deploymentService.yaml(
+        Map<String, String> yaml = deploymentService.crd(
                 request.getName(), request.getSteps());
-        if (clusterService.start(yaml)) {
-            return yaml;
+        final var crd = yaml.values().iterator().next();
+        if (clusterService.start(crd)) {
+            return crd;
         }
         return "Error deploying " + request.getName();
     }

@@ -7,7 +7,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 🐱class DeploymentService
@@ -26,17 +28,18 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String yaml(final String name, final Step[] stepArray) {
+    public Map<String, String> crd(final String name, final Step[] stepArray) {
 
         List<Step> steps = Arrays.asList(stepArray);
+        Map<String, String> strings = new HashMap<>();
 
         for (DeploymentGeneratorService parser : getParsers()) {
             if (parser.appliesTo(steps)) {
-                return parser.parse(name, steps);
+                strings.put(parser.identifier(), parser.parse(name, steps));
             }
         }
 
-        return "";
+        return strings;
     }
 
     public Instance<DeploymentGeneratorService> getParsers() {

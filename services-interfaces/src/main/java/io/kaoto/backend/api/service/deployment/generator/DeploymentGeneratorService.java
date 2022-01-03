@@ -14,6 +14,13 @@ import java.util.List;
 public interface DeploymentGeneratorService {
 
     /*
+     * 🐱method identifier: String
+     *
+     * Returns this generator identifier.
+     */
+    String identifier();
+
+    /*
      * 🐱method parse: String
      * 🐱param name: String
      * 🐱param steps: List[Step]

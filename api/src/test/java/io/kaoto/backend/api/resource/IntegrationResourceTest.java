@@ -20,9 +20,14 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.CoreMatchers.is;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @WithKubernetesTestServer
@@ -75,15 +80,34 @@ class IntegrationResourceTest {
                 .get()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(is(emptyListJSON));
 
-        given()
+        final var outputYaml = given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .post("customResource")
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .contentType("text/yaml")
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().response().asString();
+
+        String crds = given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .post("customResources")
+                .then()
+                .contentType(MediaType.APPLICATION_JSON)
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().response().asString();
+
+        final var map = from(crds).getMap("");
+        assertEquals(1, map.size());
+        assertTrue(map.containsKey("KameletBinding"));
+        assertNotNull(map.get("KameletBinding"));
+        assertEquals(map.get("KameletBinding"), outputYaml);
 
         given()
                 .when()
@@ -91,6 +115,7 @@ class IntegrationResourceTest {
                 .body(request)
                 .get()
                 .then()
+                .contentType(MediaType.APPLICATION_JSON)
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(is(emptyListJSON));
 
@@ -101,6 +126,7 @@ class IntegrationResourceTest {
                 .body(request)
                 .post()
                 .then()
+                .contentType("text/yaml")
                 .statusCode(Response.Status.OK.getStatusCode());
 
         given()
@@ -109,6 +135,7 @@ class IntegrationResourceTest {
                 .body(request)
                 .delete(title)
                 .then()
+                .contentType(MediaType.APPLICATION_JSON)
                 .statusCode(Response.Status.OK.getStatusCode());
 
         given()
@@ -117,6 +144,7 @@ class IntegrationResourceTest {
                 .body(request)
                 .get()
                 .then()
+                .contentType(MediaType.APPLICATION_JSON)
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(is(emptyListJSON));
     }
