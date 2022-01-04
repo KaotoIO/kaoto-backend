@@ -2,14 +2,18 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.step.Step;
+import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 @ApplicationScoped
 public class KameletDeploymentGeneratorService
@@ -42,15 +46,24 @@ public class KameletDeploymentGeneratorService
 
         Kamelet kamelet = new Kamelet(name, steps, defaultIcon);
 
-        Yaml yaml = new Yaml(new Constructor(Kamelet.class),
-                new KameletRepresenter());
+        TypeDescription personDesc = new TypeDescription(SetBodyFlowStep.class);
+        personDesc.substituteProperty("set-body", SetBodyFlowStep.class,
+                "getSetBody", "setSetBody");
+        final var constructor = new Constructor(Kamelet.class);
+        constructor.addTypeDescription(personDesc);
+        final var representer = new KameletRepresenter();
+        representer.addTypeDescription(personDesc);
+        Yaml yaml = new Yaml(constructor, representer);
         return yaml.dumpAsMap(kamelet);
     }
 
     @Override
     public boolean appliesTo(final List<Step> steps) {
+        String[] validSteps = new String[]{"CAMEL-CONNECTOR", "EIP"};
         return steps.size() > 1
                 && steps.stream().allMatch(
-                s -> "Camel-Connector".equalsIgnoreCase(s.getKind()));
+                s -> Arrays.stream(validSteps)
+                        .anyMatch(
+                                Predicate.isEqual(s.getKind().toUpperCase())));
     }
 }
