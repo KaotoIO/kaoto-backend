@@ -1,5 +1,9 @@
 package io.kaoto.backend.api.service.step.parser.kamelet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
@@ -9,8 +13,6 @@ import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -46,12 +48,20 @@ public class KameletBindingStepParserService
         }
 
         List<Step> steps = new ArrayList<>();
-
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
-        KameletBinding binding = yaml.load(input);
-
-        processMetadata(binding.getMetadata());
-        processSpec(steps, binding.getSpec());
+        try {
+            ObjectMapper yamlMapper =
+                    new ObjectMapper(new YAMLFactory())
+                    .configure(
+                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                            false);
+            KameletBinding binding = yamlMapper.readValue(input,
+                    KameletBinding.class);
+            processMetadata(binding.getMetadata());
+            processSpec(steps, binding.getSpec());
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException(
+                    "Wrong format provided. This is not parseable by us");
+        }
 
         return steps.stream()
                 .filter(Objects::nonNull)

@@ -1,7 +1,16 @@
 apiVersion: camel.apache.org/v1alpha1
+group: camel.apache.org
 kind: KameletBinding
 metadata:
-  name: twitter-search-source-binding
+  additionalProperties: {}
+  finalizers: []
+  managedFields: []
+  name: Updated integration
+  ownerReferences: []
+plural: kameletbindings
+scope: Namespaced
+served: true
+singular: kameletbinding
 spec:
   source:
     ref:
@@ -35,4 +44,5 @@ spec:
       bootstrapServers: "The Brokers"
       topic: "The Topic Names"
       user: "The Username"
-
+storage: true
+version: v1alpha1

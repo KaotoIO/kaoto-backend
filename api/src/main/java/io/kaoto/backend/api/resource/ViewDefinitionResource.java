@@ -12,7 +12,6 @@ import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-import org.yaml.snakeyaml.scanner.ScannerException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -99,7 +98,7 @@ public class ViewDefinitionResource {
     }
 
     @ServerExceptionMapper
-    public Response mapException(final ScannerException x) {
+    public Response mapException(final IllegalArgumentException x) {
         log.error("Error trying to return YAML.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
