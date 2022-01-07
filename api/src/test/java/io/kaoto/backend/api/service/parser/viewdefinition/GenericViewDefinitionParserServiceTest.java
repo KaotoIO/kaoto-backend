@@ -4,7 +4,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.service.viewdefinition.parser.GenericViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import io.kaoto.backend.model.view.ConstraintOperation;
 import io.kaoto.backend.model.view.ViewDefinition;
 import io.kaoto.backend.model.view.ViewDefinitionConstraint;
@@ -46,15 +45,17 @@ class GenericViewDefinitionParserServiceTest {
         List<ViewDefinition> views = viewDefinitionParserService.parse(steps);
         Assertions.assertEquals(0, views.size());
 
-        steps.add(new KameletStep());
+        steps.add(new Step());
         views = viewDefinitionParserService.parse(steps);
         Assertions.assertEquals(0, views.size());
 
-        steps.add(new KameletStep());
+        Step s = new Step();
+        s.setKind("KAMELET");
+        steps.add(s);
         views = viewDefinitionParserService.parse(steps);
         Assertions.assertEquals(2, views.size());
 
-        steps.add(new KameletStep());
+        steps.add(new Step());
         views = viewDefinitionParserService.parse(steps);
         Assertions.assertEquals(2, views.size());
     }
@@ -102,9 +103,10 @@ class GenericViewDefinitionParserServiceTest {
         final String stepId = "test-id";
 
         List<Step> steps = new LinkedList<>();
-        KameletStep step = new KameletStep();
+        Step step = new Step();
         step.setName(stepName);
         step.setId(stepId);
+        step.setKind("Kamelet");
         steps.add(step);
 
         ViewDefinition view = new ViewDefinition();

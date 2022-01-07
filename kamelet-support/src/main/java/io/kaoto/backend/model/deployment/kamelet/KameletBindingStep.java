@@ -3,11 +3,15 @@ package io.kaoto.backend.model.deployment.kamelet;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({"ref", "uri", "properties"})
-public final class KameletBindingStep {
+public final class KameletBindingStep implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2963462792033661194L;
 
     @JsonProperty("ref")
     private KameletBindingStepRef ref;

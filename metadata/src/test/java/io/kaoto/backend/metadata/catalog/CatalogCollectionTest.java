@@ -2,7 +2,6 @@ package io.kaoto.backend.metadata.catalog;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,19 +23,19 @@ class CatalogCollectionTest {
         List<Step> steps = new ArrayList<>();
 
         InMemoryCatalog<Step> ic = new InMemoryCatalog<>();
-        steps.add(new KameletStep("id-1",
+        steps.add(new Step("id-1",
                 "connector-1", "icon",
                 Collections.emptyList()));
-        steps.add(new KameletStep("id-2", CONNECTOR_2,
+        steps.add(new Step("id-2", CONNECTOR_2,
                 "icon", Collections.emptyList()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
 
         ic = new InMemoryCatalog<>();
         steps.clear();
-        steps.add(new KameletStep("id-2", CONNECTOR_2,
+        steps.add(new Step("id-2", CONNECTOR_2,
                 "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-3", CONNECTOR_2,
+        steps.add(new Step("id-3", CONNECTOR_2,
                 "icon", Collections.emptyList()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 
+import java.io.Serializable;
 import java.util.List;
 
 // Taken/inspired by https://github.com/citrusframework/yaks
@@ -32,7 +33,9 @@ public class KameletBindingStatus implements KubernetesResource {
             "lastUpdateTime", "lastTransitionTime",
             "reason", "message"})
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Condition {
+    public static class Condition implements Serializable {
+        private static final long serialVersionUID = 37865423743856387L;
+
         @JsonProperty("type")
         private String type;
         @JsonProperty("status")

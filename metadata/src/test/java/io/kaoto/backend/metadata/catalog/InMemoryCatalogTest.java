@@ -2,7 +2,6 @@ package io.kaoto.backend.metadata.catalog;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +27,7 @@ class InMemoryCatalogTest {
                 catalog.searchStepByName("non-existent-empty-catalog"));
 
         List<Step> steps = new ArrayList<>();
-        steps.add(new KameletStep("id", "name",
+        steps.add(new Step("id", "name",
                 "icon", Collections.emptyList()));
 
         Assertions.assertTrue(catalog.store(steps));
@@ -41,13 +40,13 @@ class InMemoryCatalogTest {
     void searchStepsByName() {
         List<Step> steps = new ArrayList<>();
         final var connector = "connector";
-        steps.add(new KameletStep("id-1", connector,
+        steps.add(new Step("id-1", connector,
                 "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-2", connector,
+        steps.add(new Step("id-2", connector,
                 "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-3", connector,
+        steps.add(new Step("id-3", connector,
                 "icon", Collections.emptyList()));
-        steps.add(new KameletStep("id-4", "another-one",
+        steps.add(new Step("id-4", "another-one",
                 "icon", Collections.emptyList()));
         Assertions.assertTrue(catalog.store(steps));
 

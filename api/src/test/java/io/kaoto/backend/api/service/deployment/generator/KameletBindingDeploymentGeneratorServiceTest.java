@@ -31,7 +31,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
         Step s = new Step();
         steps.add(s);
         Assertions.assertEquals("", parser.parse("", steps));
-        s.setSubType("KAMELET");
+        s.setKind("KAMELET");
         Assertions.assertNotEquals("", parser.parse("", steps));
     }
 }

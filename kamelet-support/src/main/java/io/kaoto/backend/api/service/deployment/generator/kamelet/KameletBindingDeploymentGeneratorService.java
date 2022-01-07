@@ -21,6 +21,9 @@ import java.util.List;
 public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
+    public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    public static final String KAMELET = "KAMELET";
+
     @Override
     public String parse(final String name, final List<Step> steps) {
         if (!appliesTo(steps)) {
@@ -70,54 +73,57 @@ public class KameletBindingDeploymentGeneratorService
     private KameletBindingStep createKameletBindingStep(final Step step) {
         KameletBindingStep kameletStep = new KameletBindingStep();
 
-        String type = step.getSubType();
-        if (type != null) {
-            type = type.toUpperCase().strip();
+        String kind = step.getKind();
+        if (kind != null) {
+            kind = kind.toUpperCase().strip();
         } else {
             //assume a kamelet, we are binding them!
-            type = "KAMELET";
+            kind = KAMELET;
         }
 
-        switch (type) {
-            case "CAMEL-CONNECTOR":
-                var sb = new StringBuilder();
-                String prefix = step.getName();
+        if (CAMEL_CONNECTOR.equals(kind)) {
+            StringBuilder prefix = new StringBuilder(step.getName());
+            prefix.append(processParameters(step, prefix));
+            kameletStep.setUri(prefix.toString());
+            kameletStep.setProperties(null);
+        } else {
+            KameletBindingStepRef ref = new KameletBindingStepRef();
+            ref.setName(step.getName());
+            kameletStep.setRef(ref);
 
-                if (!step.getParameters().isEmpty()) {
-                    sb.append("?");
-                    for (var property : step.getParameters()) {
-                        if (property.isPath()) {
-                            prefix += ":" + property.getValue();
-                        } else if (property.getValue() != null) {
-                            sb.append(property.getId());
-                            sb.append("=");
-                            sb.append(property.getValue());
-                            sb.append("&");
-                        }
+            if (step.getParameters() != null) {
+                for (var p : step.getParameters()) {
+                    if (p.getValue() != null) {
+                        kameletStep.getProperties().put(
+                                p.getId(),
+                                p.getValue()
+                                        .toString());
                     }
                 }
-
-                kameletStep.setUri(prefix + sb);
-                kameletStep.setProperties(null);
-                break;
-            default:
-                KameletBindingStepRef ref = new KameletBindingStepRef();
-                ref.setName(step.getName());
-                kameletStep.setRef(ref);
-
-                if (step.getParameters() != null) {
-                    for (var p : step.getParameters()) {
-                        if (p.getValue() != null) {
-                            kameletStep.getProperties().put(
-                                    p.getId(),
-                                    p.getValue()
-                                            .toString());
-                        }
-                    }
-                }
+            }
         }
 
         return kameletStep;
+    }
+
+    private String processParameters(final Step step,
+                                     final StringBuilder prefix) {
+        var sb = new StringBuilder();
+        if (!step.getParameters().isEmpty()) {
+            sb.append("?");
+            for (var property : step.getParameters()) {
+                if (property.isPath()) {
+                    prefix.append(":");
+                    prefix.append(property.getValue());
+                } else if (property.getValue() != null) {
+                    sb.append(property.getId());
+                    sb.append("=");
+                    sb.append(property.getValue());
+                    sb.append("&");
+                }
+            }
+        }
+        return sb.toString();
     }
 
     @Override
@@ -127,8 +133,8 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         for (Step s : steps) {
-            if ("CAMEL-CONNECTOR".equalsIgnoreCase(s.getSubType())
-                    || "KAMELET".equalsIgnoreCase(s.getSubType())) {
+            if (CAMEL_CONNECTOR.equalsIgnoreCase(s.getKind())
+                    || KAMELET.equalsIgnoreCase(s.getKind())) {
                 return true;
             }
         }

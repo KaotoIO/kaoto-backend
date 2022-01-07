@@ -1,25 +1,35 @@
-package io.kaoto.backend.metadata.parser.step;
+package io.kaoto.backend.metadata.parser.step.kamelet;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 
 @QuarkusTest
 class KameletParseCatalogTest {
 
+    public KameletParseCatalog getParseCatalog() {
+        return parseCatalog;
+    }
+
+    @Inject
+    public void setParseCatalog(final KameletParseCatalog parseCatalog) {
+        this.parseCatalog = parseCatalog;
+    }
+
+    private KameletParseCatalog parseCatalog;
+
     @Test
     void getSteps() {
         ParseCatalog<Step> kameletParser =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
                         "v0.3.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
@@ -29,11 +39,11 @@ class KameletParseCatalogTest {
         Assertions.assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
-        KameletStep step = (KameletStep) catalog.searchStepByName(name);
+        Step step = catalog.searchStepByName(name);
         Assertions.assertNotNull(step);
         Assertions.assertEquals(name, step.getId());
         Assertions.assertEquals(name, step.getName());
-        Assertions.assertEquals("KAMELET", step.getSubType());
+        Assertions.assertEquals("Kamelet", step.getKind());
         Assertions.assertEquals("START", step.getType());
         Assertions.assertNotNull(step.getParameters());
         Assertions.assertEquals(8, step.getParameters().size());
@@ -48,7 +58,7 @@ class KameletParseCatalogTest {
     @Test
     void wrongUrlSilentlyFails() {
         ParseCatalog<Step> kameletParser =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://nothing/wrong/url.git",
                         "");
 
@@ -61,7 +71,7 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
                         "v0.4.0");
         List<Step> stepsGit = kameletParserGit.parse().join();
@@ -72,14 +82,14 @@ class KameletParseCatalogTest {
 
 
         ParseCatalog<Step> kameletParserJar =
-                KameletParseCatalog.getParser(
+                parseCatalog.getParser(
                         jarUrl);
         List<Step> stepsJar = kameletParserJar.parse().join();
 
         Assertions.assertEquals(stepsJar.size(), stepsGit.size());
 
-        Collections.sort(stepsJar, Comparator.comparing(Metadata::getId));
-        Collections.sort(stepsGit, Comparator.comparing(Metadata::getId));
+        stepsJar.sort(Comparator.comparing(Metadata::getId));
+        stepsGit.sort(Comparator.comparing(Metadata::getId));
 
         Assertions.assertIterableEquals(stepsJar, stepsGit);
     }

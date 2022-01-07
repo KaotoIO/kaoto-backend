@@ -1,10 +1,12 @@
 package io.kaoto.backend.model.step;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.parameter.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,28 +17,35 @@ import java.util.Objects;
  */
 public class Step extends Metadata {
 
+    private String kind;
     private String icon;
-    private List<Parameter> parameters;
     private String title;
     private String description;
-    private String uuid;
-    private String subType = "DEFAULT";
+    private String group;
+    private List<Parameter> parameters;
 
-    /*
-     * 🐱property subtype: String
-     *
-     * Specifies the subtype (kamelet connector, camel connector,...)
-     */
-    public String getSubType() {
-        return this.subType;
+    private String uuid;
+    private Map<String, Object> metadata;
+    private Map<String, Object> spec;
+
+    public Step() {
+        setType("MIDDLE");
+        setKind("UNKNOWN");
     }
 
-    public void setSubType(final String subType) {
-        this.subType = subType;
+    public Step(final String identifier, final String connector,
+                final String icon, final List<Parameter> parameters) {
+        this();
+        setId(identifier);
+        setName(connector);
+        setIcon(icon);
+        setParameters(parameters);
     }
 
     /*
      * 🐱property description: String
+     *
+     * Human-readable description of what this step does.
      *
      */
     public String getDescription() {
@@ -50,6 +59,8 @@ public class Step extends Metadata {
     /*
      * 🐱property title: String
      *
+     * Human-readable title of this step.
+     *
      */
     public String getTitle() {
         return title;
@@ -62,6 +73,8 @@ public class Step extends Metadata {
     /*
      * 🐱property parameters: List[Parameter]
      *
+     * List of configurable parameters for this step.
+     *
      */
     public List<Parameter> getParameters() {
         return parameters;
@@ -73,6 +86,8 @@ public class Step extends Metadata {
 
     /*
      * 🐱property icon: String
+     *
+     * Base64 icon image for this step.
      *
      */
     public String getIcon() {
@@ -98,6 +113,55 @@ public class Step extends Metadata {
         this.uuid = uuid;
     }
 
+
+
+    /*
+     * 🐱property group: String
+     *
+     * Group that identifies and classifies inside the steps world.
+     */
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(final String group) {
+        this.group = group;
+    }
+
+    /*
+     * 🐱property kind: String
+     *
+     * Kind of step which usually translates to the kind this step will have
+     * on the final CRD for deployment.
+     *
+     */
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(final String kind) {
+        this.kind = kind;
+    }
+
+    public void setSpec(final Map<String, Object> spec) {
+        this.spec = spec;
+    }
+
+    @JsonIgnore
+    public Map<String, Object> getSpec() {
+        return spec;
+    }
+
+    @JsonIgnore
+    public Map<String, Object> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(final Map<String, Object> metadata) {
+        this.metadata = metadata;
+    }
+
+
     @Override
     public String toString() {
         return "Step{" + '\n'
@@ -106,7 +170,6 @@ public class Step extends Metadata {
                 + ", uuid=" + getUUID() + '\n'
                 + ", title=" + getTitle() + '\n'
                 + ", type=" + getType() + '\n'
-                + ", subType=" + getSubType() + '\n'
                 + '}';
     }
 
@@ -120,11 +183,6 @@ public class Step extends Metadata {
         }
         Step step = (Step) o;
 
-        if (getTitle() != null
-                ? !getTitle().equals(step.getTitle())
-                : step.getTitle() != null) {
-            return false;
-        }
         if (getDescription() != null
                 ? !getDescription().equals(step.getDescription())
                 : step.getDescription() != null) {
@@ -133,9 +191,9 @@ public class Step extends Metadata {
             if (!Objects.equals(uuid, step.uuid)) {
             return false;
         }
-        return getSubType() != null
-                ? getSubType().equals(step.getSubType())
-                : step.getSubType() == null;
+        return getTitle() != null
+                ? getTitle().equals(step.getTitle())
+                : step.getTitle() == null;
     }
 
     @Override
@@ -144,8 +202,6 @@ public class Step extends Metadata {
         result = 31 * result + (getDescription() != null
                 ? getDescription().hashCode() : 0);
         result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
-        result = 31 * result + (getSubType() != null
-                ? getSubType().hashCode() : 0);
         return result;
     }
 

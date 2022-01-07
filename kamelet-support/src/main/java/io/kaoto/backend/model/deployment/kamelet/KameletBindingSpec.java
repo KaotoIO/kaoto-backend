@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
-public final class KameletBindingSpec implements KubernetesResource {
+public final class KameletBindingSpec
+        implements KubernetesResource, Serializable {
+    private static final long serialVersionUID = 7040723764223374489L;
 
     @JsonProperty("source")
     private KameletBindingStep source;
