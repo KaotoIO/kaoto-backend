@@ -95,6 +95,27 @@ public class StepResource {
     }
 
     /*
+     * 🐱method stepsByKind : List[Step]
+     * 🐱param type: String
+     *
+     *  Returns all the steps of the type.
+     *
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/kind/{kind}")
+    @Operation(summary = "Get step by kind",
+            description = "Returns all the details of steps based on the kind"
+                    + ". ")
+    public Collection<Step> stepsByKind(
+            final  @Parameter(description = "Kind of the steps we want to "
+                    + "retrieve.")
+            @PathParam("kind") String kind) {
+        return stepService.allSteps().parallelStream()
+                .filter(step -> kind.equalsIgnoreCase(step.getKind())).toList();
+    }
+
+    /*
      * 🐱method allSteps : List[Step]
      *
      *  Returns all the steps.
