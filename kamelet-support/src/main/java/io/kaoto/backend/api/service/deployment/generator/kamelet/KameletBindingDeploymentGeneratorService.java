@@ -15,6 +15,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.util.Arrays;
 import java.util.List;
 
 @ApplicationScoped
@@ -26,6 +27,11 @@ public class KameletBindingDeploymentGeneratorService
 
     public String identifier() {
         return "KameletBinding";
+    }
+
+    @Override
+    public List<String> getKinds() {
+        return Arrays.asList(new String[]{CAMEL_CONNECTOR, KAMELET});
     }
 
     @Override

@@ -1,5 +1,7 @@
 package io.kaoto.backend.api.resource;
 
+import io.kaoto.backend.api.service.deployment.DeploymentService;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.StepService;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
@@ -19,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 🐱class StepResource
@@ -45,10 +48,17 @@ import java.util.Collection;
 public class StepResource {
 
     private StepService stepService;
+    private DeploymentService deploymentService;
 
     @Inject
     public void setStepService(final StepService stepService) {
         this.stepService = stepService;
+    }
+
+    @Inject
+    public void setDeploymentService(
+            final DeploymentService deploymentService) {
+        this.deploymentService = deploymentService;
     }
 
 
@@ -111,8 +121,36 @@ public class StepResource {
             final  @Parameter(description = "Kind of the steps we want to "
                     + "retrieve.")
             @PathParam("kind") String kind) {
-        return stepService.allSteps().parallelStream()
+        return stepService.allSteps().stream().parallel()
                 .filter(step -> kind.equalsIgnoreCase(step.getKind())).toList();
+    }
+
+    /*
+     * 🐱method stepsByIntegrationType : List[Step]
+     * 🐱param type: String
+     *
+     *  Returns all the steps that fit a specific integration type.
+     *
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/integrationType/{integrationType}")
+    @Operation(summary = "Get step by integration type",
+            description = "Returns all the steps that fit a specific "
+                    + "integration type. ")
+    public Collection<Step> stepsByIntegrationType(
+            final  @Parameter(description = "Integration type we want to use.")
+            @PathParam("integrationType") String integrationType) {
+        List<String> kind = deploymentService.getParsers().stream().parallel()
+                .filter(s -> integrationType.equalsIgnoreCase(s.identifier()))
+                .map(DeploymentGeneratorService::getKinds)
+                .flatMap(Collection::stream)
+                .toList();
+
+        return stepService.allSteps().stream().parallel()
+                .filter(step -> kind.stream()
+                        .anyMatch(s -> s.equalsIgnoreCase(step.getKind())))
+                .toList();
     }
 
     /*
