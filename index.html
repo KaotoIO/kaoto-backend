@@ -98,10 +98,18 @@ endpoints to interact with deployments.</p>
 	</tr>
 	</thead><tbody>
 	<tr id='deploymentresource-yaml'>
-		<td><code><b>yaml</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code>String</code></td>
+		<td><code><b>yaml</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
+		<td><code>String[]</code></td>
 		<td>Idempotent operation that, based on the steps provided,
-offer the source code / custom resource to deploy the integration.</td>
+offer all the potential source code / custom resources to deploy the
+integration.
+<p>Idempotent operation that, based on the steps provided,
+offer the potential source code / custom resource to deploy the
+integration. Tries to return the type of integration passed as
+parameter. If that doesn't exist, it will default to the one defined
+on the configuration. If that doesn't exist, it will just return one
+randomly from the available ones.</p>
+<p>The usage of /customResources is encouraged over this one.</p></td>
 	</tr>
 	<tr id='deploymentresource-start'>
 		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -180,6 +188,16 @@ offer the source code / custom resource to deploy the integration.</td>
 		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>List[Step]</a></code></td>
 		<td>Returns all the steps identified by the name.</td>
+	</tr>
+	<tr id='stepresource-stepsbykind'>
+		<td><code><b>stepsByKind</b>(<nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps of the type.</td>
+	</tr>
+	<tr id='stepresource-stepsbyintegrationtype'>
+		<td><code><b>stepsByIntegrationType</b>(<nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps that fit a specific integration type.</td>
 	</tr>
 	<tr id='stepresource-allsteps'>
 		<td><code><b>allSteps</b>()</nobr></code></td>
@@ -425,6 +443,15 @@ that can be injected in the different services and resources.</p>
 <p>Reads and parses a kamelet catalog.
 Extracts all the kamelet definitions it can find
 and generate a kamelet step for each one.</p>
+
+
+</section>
+<h2 id='kamelet'>Kamelet</h2>
+<section class='namespace'>
+<p>Represents a Kamelet definition that can be deployed.</p>
+<p>This generates a flow based on how Camel-K defines YAML routes as
+described in https://camel.apache.org/camel-k/1.6.x/languages/yaml.html
+This implementation models the steps as &quot;Using URI and parameters&quot;.</p>
 
 
 </section>
@@ -1181,6 +1208,11 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
+	<tr id='deploymentgeneratorservice-identifier'>
+		<td><code><b>identifier</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns this generator identifier.</td>
+	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
@@ -1191,6 +1223,11 @@ If applies, the name will be the name used on the integration deployed.</td>
 		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
 		<td>Check if the parser applies to the steps</td>
+	</tr>
+	<tr id='deploymentgeneratorservice-getkinds'>
+		<td><code><b>getKinds</b>()</nobr></code></td>
+		<td><code>String[]</code></td>
+		<td>Return the step kinds compatible with this service.</td>
 	</tr>
 </tbody></table>
 </section>

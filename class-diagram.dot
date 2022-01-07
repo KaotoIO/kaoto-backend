@@ -5,7 +5,7 @@ digraph ClassDiagram {
 "DeploymentResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-yaml(&lt;DeploymentResourceYamlRequest&gt; steps):String
+yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; type):String[]
 <BR align="left" />
 start(&lt;DeploymentResourceYamlRequest&gt; steps):String
 <BR align="left" />
@@ -31,6 +31,10 @@ stop():String
 stepById(&lt;String&gt; id):Step
 <BR align="left" />
 stepsByName(&lt;String&gt; name):List[Step]
+<BR align="left" />
+stepsByKind(&lt;String&gt; type):List[Step]
+<BR align="left" />
+stepsByIntegrationType(&lt;String&gt; type):List[Step]
 <BR align="left" />
 allSteps():List[Step]
 <BR align="left" />
@@ -146,6 +150,12 @@ loadParsers():List[ParseCatalog]
 		
 		
 		]
+"Kamelet" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Kamelet</B></TD></TR>
+	
+</TABLE>>]
+
+
 "KameletBinding" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>KameletBinding</B></TD></TR>
 	
@@ -320,9 +330,13 @@ mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left
 "DeploymentGeneratorService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentGeneratorService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
+identifier():String
+<BR align="left" />
 parse(&lt;String&gt; name, &lt;List[Step]&gt; steps):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
+<BR align="left" />
+getKinds():String[]
 <BR align="left" />
 
 </TD></TR>
