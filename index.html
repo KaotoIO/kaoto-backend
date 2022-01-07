@@ -79,113 +79,7 @@
     <a target="_blank" href="./class-diagram.dot.svg" ><img style="max-width:100%" src="./class-diagram.dot.svg"/></a>
     <p>(click to enlarge)</p>
 
-	<h2 id='abstractcatalog'>AbstractCatalog</h2>
-<section class='namespace'>
-<p>Abstract implementation of an ApplicationScoped catalog.
-This will be the base of the beans
-that can be injected in the different services and resources.</p>
-
-<h3 id='abstractcatalog-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='abstractcatalog-waitforwarmup'>
-		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
-		<td><code>CompletableFuture</code></td>
-		<td>Completable reference to when the loadParsers method finishes.</td>
-	</tr>
-	<tr id='abstractcatalog-loadparsers'>
-		<td><code><b>loadParsers</b>()</nobr></code></td>
-		<td><code>List[ParseCatalog]</code></td>
-		<td>Loads all the catalogs into the bean</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
-<h2 id='stepcatalog'>StepCatalog</h2>
-<section class='namespace'>
-<p>This is a singleton that will contain all catalogs with steps.</p>
-
-<h3 id=''>Methods</h3>
-
-
-<details>
-	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='stepcatalog-waitforwarmup'>
-		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
-		<td><code>CompletableFuture</code></td>
-		<td>Completable reference to when the loadParsers method finishes.</td>
-	</tr>
-	<tr id='stepcatalog-loadparsers'>
-		<td><code><b>loadParsers</b>()</nobr></code></td>
-		<td><code>List[ParseCatalog]</code></td>
-		<td>Loads all the catalogs into the bean</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-
-
-</section>
-<h2 id='viewdefinitioncatalog'>ViewDefinitionCatalog</h2>
-<section class='namespace'>
-<p>This is a singleton that will contain all catalogs with viewdefinitions.</p>
-
-<h3 id=''>Methods</h3>
-
-
-<details>
-	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='viewdefinitioncatalog-waitforwarmup'>
-		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
-		<td><code>CompletableFuture</code></td>
-		<td>Completable reference to when the loadParsers method finishes.</td>
-	</tr>
-	<tr id='viewdefinitioncatalog-loadparsers'>
-		<td><code><b>loadParsers</b>()</nobr></code></td>
-		<td><code>List[ParseCatalog]</code></td>
-		<td>Loads all the catalogs into the bean</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-
-
-</section>
-<h2 id='deploymentresource'>DeploymentResource</h2>
+	<h2 id='deploymentresource'>DeploymentResource</h2>
 <section class='namespace'>
 <p>This endpoint will return the yaml needed to deploy
 the related integration and the
@@ -206,7 +100,23 @@ endpoints to interact with deployments.</p>
 	<tr id='deploymentresource-yaml'>
 		<td><code><b>yaml</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Based on the steps provided, offer a yaml deployment</td>
+		<td>Idempotent operation that, based on the steps provided,
+offer the source code / custom resource to deploy the integration.</td>
+	</tr>
+	<tr id='deploymentresource-start'>
+		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Deploys an integration provided.</td>
+	</tr>
+	<tr id='deploymentresource-integrations'>
+		<td><code><b>integrations</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the list of all integrations</td>
+	</tr>
+	<tr id='deploymentresource-stop'>
+		<td><code><b>stop</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Stops and deletes an integration by name</td>
 	</tr>
 </tbody></table>
 </section>
@@ -377,76 +287,6 @@ endpoints to interact with deployments.</p>
 
 
 </section>
-<h2 id='deploymentgeneratorservice'>DeploymentGeneratorService</h2>
-<section class='namespace'>
-<p>Generic interface to generate yaml deployments</p>
-
-<h3 id='deploymentgeneratorservice-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='deploymentgeneratorservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Based on the list of steps, returns the yaml to deploy it.
-If applies, the name will be the name used on the integration deployed.</td>
-	</tr>
-	<tr id='deploymentgeneratorservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Check if the parser applies to the steps</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
-<h2 id='stepparserservice'>StepParserService</h2>
-<section class='namespace'>
-<p>Generic interface for all step parsers.</p>
-
-<h3 id='stepparserservice-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='stepparserservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Based on the YAML provided, offer a list of steps defined on it, if any</td>
-	</tr>
-	<tr id='stepparserservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Check if this parser knows how to parse the provided string</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-<h2 id='kameletbindingstepparserservice'></h2>
-<section class='namespace'>
-
-
-</section>
-
-</section>
 <h2 id='viewdefinitionservice'>ViewDefinitionService</h2>
 <section class='namespace'>
 <p>This endpoint will return a list of views based on the parameters.</p>
@@ -474,11 +314,13 @@ If applies, the name will be the name used on the integration deployed.</td>
 
 
 </section>
-<h2 id='viewdefinitionparserservice'>ViewDefinitionParserService</h2>
+<h2 id='abstractcatalog'>AbstractCatalog</h2>
 <section class='namespace'>
-<p>Generic interface for all viewDefinition parsers.</p>
+<p>Abstract implementation of an ApplicationScoped catalog.
+This will be the base of the beans
+that can be injected in the different services and resources.</p>
 
-<h3 id='viewdefinitionparserservice-method'>Methods</h3>
+<h3 id='abstractcatalog-method'>Methods</h3>
 
 <section>
 
@@ -490,31 +332,92 @@ If applies, the name will be the name used on the integration deployed.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='viewdefinitionparserservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
-		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
+	<tr id='abstractcatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
 	</tr>
-	<tr id='viewdefinitionparserservice-getviewsperstep'>
-		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>)</nobr></code></td>
-		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
-		<td>If the ViewDefinition is a stepView, it returns all
-possible ViewDefinitions associated to steps.</td>
-	</tr>
-	<tr id='viewdefinitionparserservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Check if the viewDefinition applies to the steps</td>
+	<tr id='abstractcatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean</td>
 	</tr>
 </tbody></table>
 </section>
 
 
-<h2 id='genericviewdefinitionparserservice'></h2>
+
+</section>
+<h2 id='stepcatalog'>StepCatalog</h2>
 <section class='namespace'>
+<p>This is a singleton that will contain all catalogs with steps.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepcatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
+	</tr>
+	<tr id='stepcatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
 
 
 </section>
+<h2 id='viewdefinitioncatalog'>ViewDefinitionCatalog</h2>
+<section class='namespace'>
+<p>This is a singleton that will contain all catalogs with viewdefinitions.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#abstractcatalog'>AbstractCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitioncatalog-waitforwarmup'>
+		<td><code><b>waitForWarmUp</b>()</nobr></code></td>
+		<td><code>CompletableFuture</code></td>
+		<td>Completable reference to when the loadParsers method finishes.</td>
+	</tr>
+	<tr id='viewdefinitioncatalog-loadparsers'>
+		<td><code><b>loadParsers</b>()</nobr></code></td>
+		<td><code>List[ParseCatalog]</code></td>
+		<td>Loads all the catalogs into the bean</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
 
 </section>
 <h2 id='metadatacatalog'>MetadataCatalog</h2>
@@ -1377,6 +1280,119 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </tbody></table>
 </section>
 
+
+
+</section>
+
+</section>
+<h2 id='deploymentgeneratorservice'>DeploymentGeneratorService</h2>
+<section class='namespace'>
+<p>Generic interface to generate yaml deployments</p>
+
+<h3 id='deploymentgeneratorservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentgeneratorservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Based on the list of steps, returns the yaml to deploy it.
+If applies, the name will be the name used on the integration deployed.</td>
+	</tr>
+	<tr id='deploymentgeneratorservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the parser applies to the steps</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='stepparserservice'>StepParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all step parsers.</p>
+
+<h3 id='stepparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stepparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Based on the YAML provided, offer a list of steps defined on it, if any</td>
+	</tr>
+	<tr id='stepparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if this parser knows how to parse the provided string</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+<h2 id='kameletbindingstepparserservice'></h2>
+<section class='namespace'>
+
+
+</section>
+
+</section>
+<h2 id='viewdefinitionparserservice'>ViewDefinitionParserService</h2>
+<section class='namespace'>
+<p>Generic interface for all viewDefinition parsers.</p>
+
+<h3 id='viewdefinitionparserservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='viewdefinitionparserservice-parse'>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
+	</tr>
+	<tr id='viewdefinitionparserservice-getviewsperstep'>
+		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>If the ViewDefinition is a stepView, it returns all
+possible ViewDefinitions associated to steps.</td>
+	</tr>
+	<tr id='viewdefinitionparserservice-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the viewDefinition applies to the steps</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+<h2 id='genericviewdefinitionparserservice'></h2>
+<section class='namespace'>
 
 
 </section>
