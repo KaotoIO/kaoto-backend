@@ -21,6 +21,11 @@ public class KameletDeploymentGeneratorService
 
     private String defaultIcon;
 
+    @Override
+    public List<String> getKinds() {
+        return Arrays.asList(new String[]{"Camel-Connector", "EIP"});
+    }
+
     public String identifier() {
         return "Kamelet";
     }

@@ -38,4 +38,11 @@ public interface DeploymentGeneratorService {
      */
     boolean appliesTo(List<Step> steps);
 
+    /*
+     * 🐱method getKinds: String[]
+     *
+     * Return the step kinds compatible with this service.
+     */
+    List<String> getKinds();
+
 }
