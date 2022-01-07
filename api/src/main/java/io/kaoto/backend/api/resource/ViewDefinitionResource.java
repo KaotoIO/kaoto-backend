@@ -4,6 +4,11 @@ import io.kaoto.backend.api.resource.response.ViewDefinitionResourceResponse;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.info.Contact;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
+import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -27,6 +32,20 @@ import javax.ws.rs.core.Response;
  */
 @Path("/viewdefinition")
 @ApplicationScoped
+@OpenAPIDefinition(
+        info = @Info(
+            title = "View Definition API",
+            version = "1.0.0",
+            description = "With this API, backend and frontend agree on what "
+                    + "views and extensions can be used for the "
+                    + "integration workflow.",
+            contact = @Contact(
+                    name = "Kaoto Team",
+                    url = "https://kaoto.io"),
+            license = @License(
+                    name = "Apache 2.0",
+                    url = "https://www.apache.org/licenses/LICENSE-2.0.html"))
+)
 public class ViewDefinitionResource {
 
     private Logger log = Logger.getLogger(ViewDefinitionResource.class);
@@ -55,6 +74,9 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
+    @Operation(summary = "Get views",
+            description = "Get view definitions for a specific integration."
+            + " This is an idempotent operation.")
     public ViewDefinitionResourceResponse views(
             final @RequestBody String yaml) {
         ViewDefinitionResourceResponse res =

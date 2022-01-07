@@ -1,17 +1,17 @@
 package io.kaoto.backend.api.resource;
 
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
-import io.kaoto.backend.api.service.step.parser.KameletBindingStepParserService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.step.kamelet.KameletStep;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
@@ -25,10 +25,10 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-@TestHTTPEndpoint(DeploymentResource.class)
-class DeploymentResourceTest {
+@TestHTTPEndpoint(IntegrationResource.class)
+class IntegrationResourceTest {
 
-    private DeploymentResource stepResource;
+    private IntegrationResource stepResource;
     private StepCatalog stepCatalog;
     private StepParserService<Step> stepParser;
     private static String binding;
@@ -52,7 +52,7 @@ class DeploymentResourceTest {
     }
 
     @Inject
-    public void setDeploymentResource(final DeploymentResource stepResource) {
+    public void setDeploymentResource(final IntegrationResource stepResource) {
         this.stepResource = stepResource;
     }
 
@@ -65,7 +65,7 @@ class DeploymentResourceTest {
     static void setup() throws URISyntaxException, IOException {
         binding = Files.readString(
                 Path.of(
-                        DeploymentResourceTest.class.getResource(
+                        IntegrationResourceTest.class.getResource(
                                 "twitter-search-source-binding.yaml")
                                 .toURI()));
     }
@@ -83,7 +83,7 @@ class DeploymentResourceTest {
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
-                .post("yaml")
+                .post("customResource")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
     }
@@ -93,7 +93,7 @@ class DeploymentResourceTest {
         given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
-                .post("yaml")
+                .post("customResource")
                 .then()
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }

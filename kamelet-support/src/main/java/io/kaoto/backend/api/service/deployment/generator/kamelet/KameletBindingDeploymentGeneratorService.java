@@ -1,5 +1,7 @@
-package io.kaoto.backend.api.service.deployment.generator;
+package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
+
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
@@ -50,6 +52,10 @@ public class KameletBindingDeploymentGeneratorService
                 if (propertyValue == null) {
                     return null;
                 }
+                if (property.getName().equalsIgnoreCase("CRDName")) {
+                    return null;
+                }
+
                 return super.representJavaBeanProperty(javaBean, property,
                         propertyValue, customTag);
             }

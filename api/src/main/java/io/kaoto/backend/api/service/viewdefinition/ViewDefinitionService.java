@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.viewdefinition;
 
-import io.kaoto.backend.api.service.step.parser.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
@@ -8,6 +7,7 @@ import io.kaoto.backend.model.view.ViewDefinition;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
@@ -22,22 +22,13 @@ import java.util.List;
 @ApplicationScoped
 public class ViewDefinitionService {
 
-    private List<StepParserService<Step>> stepParsers = new ArrayList<>();
-    private List<ViewDefinitionParserService<ViewDefinition>> viewParsers =
-            new ArrayList<>();
+    @Inject
+    private Instance<StepParserService<Step>> stepParsers;
+
+    @Inject
+    private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
+
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
-
-    @Inject
-    public void setKameletBindingParserService(
-            final KameletBindingStepParserService kameletBindingParserService) {
-        stepParsers.add(kameletBindingParserService);
-    }
-
-    @Inject
-    public void setViewParser(
-            final ViewDefinitionParserService<ViewDefinition> viewParser) {
-        viewParsers.add(viewParser);
-    }
 
     /*
      * 🐱method views: List[ViewDefinition]
@@ -69,4 +60,25 @@ public class ViewDefinitionService {
         }
         return viewDefinitions;
     }
+
+    public Instance<StepParserService<Step>> getStepParsers() {
+        return stepParsers;
+    }
+
+    public void setStepParsers(
+            final Instance<StepParserService<Step>> stepParsers) {
+        this.stepParsers = stepParsers;
+    }
+
+    public Instance<ViewDefinitionParserService<ViewDefinition>>
+    getViewParsers() {
+        return viewParsers;
+    }
+
+    public void setViewParsers(
+            final Instance<ViewDefinitionParserService<ViewDefinition>>
+                    viewParsers) {
+        this.viewParsers = viewParsers;
+    }
+
 }

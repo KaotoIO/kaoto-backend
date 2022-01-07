@@ -1,6 +1,8 @@
-package io.kaoto.backend.api.service.step.parser;
+package io.kaoto.backend.api.service.step.parser.kamelet;
 
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
@@ -141,10 +143,8 @@ public class KameletBindingStepParserService
     }
 
     private String processMetadata(
-            final Map<String, String> metadata) {
-        return metadata.getOrDefault(
-                "name",
-                "untitled");
+            final ObjectMeta metadata) {
+        return metadata.getName();
     }
 
     @Override

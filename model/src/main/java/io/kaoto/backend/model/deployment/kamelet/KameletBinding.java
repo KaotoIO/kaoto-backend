@@ -1,7 +1,14 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.model.annotation.Group;
+import io.fabric8.kubernetes.model.annotation.Kind;
+import io.fabric8.kubernetes.model.annotation.Plural;
+import io.fabric8.kubernetes.model.annotation.ShortNames;
+import io.fabric8.kubernetes.model.annotation.Version;
+
 
 /**
  * 🐱class KameletBinding
@@ -48,31 +55,30 @@ import java.util.Map;
              username: "The Username"
 ```
  */
-public final class KameletBinding {
-    private String apiVersion = "camel.apache.org/v1alpha1";
-    private String kind = "KameletBinding";
-    private Map<String, String> metadata = new HashMap<>();
-    private KameletBindingSpec spec;
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Group("camel.apache.org")
+@Version("v1alpha1")
+@Kind("KameletBinding")
+@Plural("kameletbindings")
+@ShortNames("klb")
+public final class KameletBinding
+        extends CustomResource<KameletBindingSpec, KameletBindingStatus>
+        implements  io.fabric8.kubernetes.api.model.Namespaced {
 
     public KameletBinding() {
     }
 
+    private KameletBindingSpec spec;
+
     public KameletBinding(final String name, final KameletBindingSpec spec) {
         this();
         setSpec(spec);
-        getMetadata().put("name", name);
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public  Map<String, String> getMetadata() {
-        return metadata;
+        if (getMetadata() == null) {
+           setMetadata(new ObjectMeta());
+        }
+        getMetadata().setName(name);
     }
 
     public KameletBindingSpec getSpec() {
@@ -82,17 +88,4 @@ public final class KameletBinding {
     public void setSpec(final KameletBindingSpec spec) {
         this.spec = spec;
     }
-
-    public void setApiVersion(final String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
-
-    public void setKind(final String kind) {
-        this.kind = kind;
-    }
-
-    public void setMetadata(final Map<String, String> metadata) {
-        this.metadata = metadata;
-    }
-
 }

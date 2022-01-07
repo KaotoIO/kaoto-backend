@@ -1,11 +1,27 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.fabric8.kubernetes.api.model.KubernetesResource;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public final class KameletBindingSpec {
+@JsonPropertyOrder({"source", "steps", "sink"})
+@JsonDeserialize(
+        using = JsonDeserializer.None.class
+)
+public final class KameletBindingSpec implements KubernetesResource {
+
+    @JsonProperty("source")
     private KameletBindingStep source;
+
+    @JsonProperty("steps")
     private List<KameletBindingStep> steps = new ArrayList<>();
+
+    @JsonProperty("sink")
     private KameletBindingStep sink;
 
     public KameletBindingStep getSource() {
