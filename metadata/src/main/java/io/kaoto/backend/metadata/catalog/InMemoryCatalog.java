@@ -4,7 +4,6 @@ import io.kaoto.backend.metadata.MetadataCatalog;
 import io.kaoto.backend.model.Metadata;
 import org.jboss.logging.Logger;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,8 +33,8 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
                 Collectors.toMap(T::getId, step -> step, (a, b) -> a);
         metadataCatalog.putAll(Collections.synchronizedMap(
                 steps.stream()
-                        .filter(Objects::nonNull)
                         .parallel()
+                        .filter(Objects::nonNull)
                         .collect(stepMapCollector)));
         log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
@@ -67,24 +66,20 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     @Override
     public Collection<T> searchStepsByName(final String name) {
-        Collection<T> steps = new ArrayList<>();
-
-        for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
-            if (name.equalsIgnoreCase(entry.getValue().getName())) {
-                T step = entry.getValue();
-                if (step != null) {
-                    step = (T) step.clone();
-                    steps.add(step);
-                }
-            }
-        }
-
-        return steps;
+        return metadataCatalog.entrySet().stream().parallel()
+                .filter(
+                        entry -> name.equalsIgnoreCase(
+                                entry.getValue().getName()))
+                .map(Map.Entry::getValue)
+                .map(t -> (T) t.clone())
+                .toList();
     }
 
     @Override
     public Collection<T> getAll() {
-        return Collections.unmodifiableCollection(
-                this.metadataCatalog.values());
+        return metadataCatalog.entrySet().stream().parallel()
+                .map(Map.Entry::getValue)
+                .map(t -> (T) t.clone())
+                .toList();
     }
 }

@@ -211,8 +211,10 @@ public class Step extends Metadata {
 
         List<Parameter> parameters = step.getParameters();
         step.setParameters(new LinkedList<>());
-        for (var p : parameters) {
-            step.getParameters().add(p.clone());
+        if (parameters != null) {
+            for (var p : parameters) {
+                step.getParameters().add(p.clone());
+            }
         }
 
         return step;
