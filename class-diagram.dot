@@ -134,6 +134,24 @@ loadParsers():List[ParseCatalog]
 
 	"ViewDefinitionCatalog" -> "AbstractCatalog"
 
+"KameletParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+
+		"KameletParseCatalog" -> "ParseCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"KameletBinding" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBinding</B></TD></TR>
+	
+</TABLE>>]
+
+
 "MetadataCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>MetadataCatalog</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -225,18 +243,6 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 		
 		
 		]
-"KameletParseCatalog" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletParseCatalog</B></TD></TR>
-	
-</TABLE>>]
-
-
-		"KameletParseCatalog" -> "ParseCatalog" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "ViewDefinitionParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParseCatalog</B></TD></TR>
 	
@@ -260,12 +266,6 @@ ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="
 </TABLE>>]
 
 
-"KameletBinding" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletBinding</B></TD></TR>
-	
-</TABLE>>]
-
-
 "Parameter" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Parameter</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
@@ -280,7 +280,7 @@ description:String<BR align="left" />label:String<BR align="left" />id:String<BR
 "Step" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Step</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-subtype:String<BR align="left" />description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />
+description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />group:String<BR align="left" />kind:String<BR align="left" />
 
 </TD></TR>
 
@@ -289,23 +289,6 @@ subtype:String<BR align="left" />description:String<BR align="left" />title:Stri
 
 	"Step" -> "Metadata"
 
-"KameletStep" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletStep</B></TD></TR>
-	<TR><TD><I>Properties</I><BR/>
-group:String<BR align="left" />kameletType:String<BR align="left" />apiVersion:String<BR align="left" />kind:String<BR align="left" />spec:String<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-	"KameletStep" -> "Step"
-
-		"Parameter" -> "KameletStep" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..n"
-		
-		]
 "ViewDefinition" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinition</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>

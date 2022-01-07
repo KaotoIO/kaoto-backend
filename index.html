@@ -144,7 +144,7 @@ offer the source code / custom resource to deploy the integration.</td>
 	</tr>
 	<tr id='deploymentresourceyamlrequest-steps'>
 		<td><code><b>steps</b>
-		<td><code><a href='#kameletstep'>KameletStep[]</a></code></td>
+		<td><code>Step[]</code></td>
 		<td>steps of the integration</td>
 	</tr>
 </tbody></table>
@@ -417,6 +417,58 @@ that can be injected in the different services and resources.</p>
 </section>
 </div>
 </details>
+
+
+</section>
+<h2 id='kameletparsecatalog'>KameletParseCatalog</h2>
+<section class='namespace'>
+<p>Reads and parses a kamelet catalog.
+Extracts all the kamelet definitions it can find
+and generate a kamelet step for each one.</p>
+
+
+</section>
+<h2 id='kameletbinding'>KameletBinding</h2>
+<section class='namespace'>
+<p>Represents a Kamelet binding that can be deployed</p>
+<pre><code>apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+   name: twitter-search-source-binding
+spec:
+    source:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: twitter-search-source
+        properties:
+            keywords: &quot;Apache Camel&quot;
+            apiKey: &quot;your own&quot;
+            apiKeySecret: &quot;your own&quot;
+            accessToken: &quot;your own&quot;
+            accessTokenSecret: &quot;your own&quot;
+    steps:
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: aws-translate-action
+        -
+            ref:
+                kind: Kamelet
+                apiVersion: camel.apache.org/v1alpha1
+                name: avro-deserialize-action
+    sink:
+        ref:
+            kind: Kamelet
+            apiVersion: camel.apache.org/v1alpha1
+            name: kafka-sink
+        properties:
+            brokers: &quot;The Brokers&quot;
+            password: &quot;The Password&quot;
+            topic: &quot;The Topic Names&quot;
+            username: &quot;The Username&quot;
+</code></pre>
 
 
 </section>
@@ -745,14 +797,6 @@ return a completable list of elements to add to a catalog.</td>
 
 
 </section>
-<h2 id='kameletparsecatalog'>KameletParseCatalog</h2>
-<section class='namespace'>
-<p>Reads and parses a kamelet catalog.
-Extracts all the kamelet definitions it can find
-and generate a kamelet step for each one.</p>
-
-
-</section>
 <h2 id='viewdefinitionparsecatalog'>ViewDefinitionParseCatalog</h2>
 <section class='namespace'>
 <p>Reads and parses a view definition catalog.
@@ -797,50 +841,6 @@ It may or may not be the same as the ID depending on the type of step.</td>
 </tbody></table>
 </section>
 
-
-
-</section>
-<h2 id='kameletbinding'>KameletBinding</h2>
-<section class='namespace'>
-<p>Represents a Kamelet binding that can be deployed</p>
-<pre><code>apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-   name: twitter-search-source-binding
-spec:
-    source:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: twitter-search-source
-        properties:
-            keywords: &quot;Apache Camel&quot;
-            apiKey: &quot;your own&quot;
-            apiKeySecret: &quot;your own&quot;
-            accessToken: &quot;your own&quot;
-            accessTokenSecret: &quot;your own&quot;
-    steps:
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: aws-translate-action
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: avro-deserialize-action
-    sink:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: kafka-sink
-        properties:
-            brokers: &quot;The Brokers&quot;
-            password: &quot;The Password&quot;
-            topic: &quot;The Topic Names&quot;
-            username: &quot;The Username&quot;
-</code></pre>
 
 
 </section>
@@ -915,36 +915,42 @@ Used when describing a configured element.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='step-subtype'>
-		<td><code><b>subtype</b>
-		<td><code>String</code></td>
-		<td>Specifies the subtype (kamelet connector, camel connector,...)</td>
-	</tr>
 	<tr id='step-description'>
 		<td><code><b>description</b>
 		<td><code>String</code></td>
-		<td></td>
+		<td>Human-readable description of what this step does.</td>
 	</tr>
 	<tr id='step-title'>
 		<td><code><b>title</b>
 		<td><code>String</code></td>
-		<td></td>
+		<td>Human-readable title of this step.</td>
 	</tr>
 	<tr id='step-parameters'>
 		<td><code><b>parameters</b>
 		<td><code><a href='#parameter'>List[Parameter]</a></code></td>
-		<td></td>
+		<td>List of configurable parameters for this step.</td>
 	</tr>
 	<tr id='step-icon'>
 		<td><code><b>icon</b>
 		<td><code>String</code></td>
-		<td></td>
+		<td>Base64 icon image for this step.</td>
 	</tr>
 	<tr id='step-uuid'>
 		<td><code><b>UUID</b>
 		<td><code>String</code></td>
 		<td>Volatile UUID to mark the relationship between
 a viewDefinition and a step.</td>
+	</tr>
+	<tr id='step-group'>
+		<td><code><b>group</b>
+		<td><code>String</code></td>
+		<td>Group that identifies and classifies inside the steps world.</td>
+	</tr>
+	<tr id='step-kind'>
+		<td><code><b>kind</b>
+		<td><code>String</code></td>
+		<td>Kind of step which usually translates to the kind this step will have
+on the final CRD for deployment.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -973,132 +979,6 @@ a viewDefinition and a step.</td>
 It may or may not be the same as the ID depending on the type of step.</td>
 	</tr>
 	<tr id='step-type'>
-		<td><code><b>type</b>
-		<td><code>String</code></td>
-		<td>Type of step: transformation, connector</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-
-
-</section>
-<h2 id='kameletstep'>KameletStep</h2>
-<section class='namespace'>
-<p>Represents a Kamelet step inside an integration</p>
-
-<h3 id='kameletstep-property'>Properties</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='kameletstep-group'>
-		<td><code><b>group</b>
-		<td><code>String</code></td>
-		<td>Kamelet group that identifies and classifies inside the kamelet world.</td>
-	</tr>
-	<tr id='kameletstep-kamelettype'>
-		<td><code><b>kameletType</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-apiversion'>
-		<td><code><b>apiVersion</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-kind'>
-		<td><code><b>kind</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-spec'>
-		<td><code><b>spec</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-</tbody></table>
-</section>
-
-<details>
-	<summary>Properties inherited from <a href='#step'>Step</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='kameletstep-subtype'>
-		<td><code><b>subtype</b>
-		<td><code>String</code></td>
-		<td>Specifies the subtype (kamelet connector, camel connector,...)</td>
-	</tr>
-	<tr id='kameletstep-description'>
-		<td><code><b>description</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-title'>
-		<td><code><b>title</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-parameters'>
-		<td><code><b>parameters</b>
-		<td><code><a href='#parameter'>List[Parameter]</a></code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-icon'>
-		<td><code><b>icon</b>
-		<td><code>String</code></td>
-		<td></td>
-	</tr>
-	<tr id='kameletstep-uuid'>
-		<td><code><b>UUID</b>
-		<td><code>String</code></td>
-		<td>Volatile UUID to mark the relationship between
-a viewDefinition and a step.</td>
-	</tr>
-</tbody></table>
-</section>
-</div>
-</details>
-<details>
-	<summary>Properties inherited from <a href='#metadata'>Metadata</a></summary>
-	<div class='accordion-content'><section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='kameletstep-id'>
-		<td><code><b>ID</b>
-		<td><code>String</code></td>
-		<td>Unique identifier for this step in our whole Kaoto environment</td>
-	</tr>
-	<tr id='kameletstep-name'>
-		<td><code><b>name</b>
-		<td><code>String</code></td>
-		<td>This represents the first part of the camel connection string.
-It may or may not be the same as the ID depending on the type of step.</td>
-	</tr>
-	<tr id='kameletstep-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
 		<td>Type of step: transformation, connector</td>
