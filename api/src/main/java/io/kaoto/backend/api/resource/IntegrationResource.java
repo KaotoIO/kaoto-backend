@@ -170,8 +170,8 @@ public class IntegrationResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{name}")
-    @Operation(summary = "Get integration",
-            description = "Get details on the integration identified by name.")
+    @Operation(summary = "Stop/Remove integration",
+            description = "Remove the integration identified by name.")
     public boolean integrations(
             final @Parameter(description = "Name of the integration to stop.")
             @PathParam("name") String name) {
