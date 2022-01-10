@@ -128,18 +128,22 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 (Map<String, Object>) definition.get(PROPERTIES);
         step.setParameters(new ArrayList<>());
 
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            Map<String, Object> definitions =
-                    (Map<String, Object>) property.getValue();
-            Parameter p;
-            final var title = property.getKey();
-            var description =
-                    definitions.getOrDefault("description", title).toString();
-            String value =
-                    definitions.getOrDefault("default", "").toString();
-            p = getParameter(definitions, title, description, value);
-            p.setPath((Boolean) definitions.getOrDefault("path", false));
-            step.getParameters().add(p);
+        if (properties != null) {
+            for (Map.Entry<String, Object> property : properties.entrySet()) {
+                Map<String, Object> definitions =
+                        (Map<String, Object>) property.getValue();
+                Parameter p;
+                final var title = property.getKey();
+                var description =
+                        definitions.getOrDefault("description", title)
+                                .toString();
+                String value =
+                        definitions.getOrDefault("default", "")
+                                .toString();
+                p = getParameter(definitions, title, description, value);
+                p.setPath((Boolean) definitions.getOrDefault("path", false));
+                step.getParameters().add(p);
+            }
         }
     }
 
@@ -149,11 +153,13 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         final var type = definitions.get("type").toString();
         return switch (type) {
             case "integer" -> {
-                final var v = value != null ? Integer.valueOf(value) : null;
+                final var v = (value != null && !value.trim().isEmpty())
+                        ? Integer.valueOf(value) : null;
                 yield new Parameter<>(title, title, description, v, type);
             }
             case "boolean" -> {
-                final var bool = value != null ? Boolean.valueOf(value) : null;
+                final var bool = (value != null && !value.trim().isEmpty())
+                        ? Boolean.valueOf(value) : null;
                 yield new Parameter<>(title, title, description, bool, type);
             }
             default -> new Parameter<>(title, title, description, value, type);
