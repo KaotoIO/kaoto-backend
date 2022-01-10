@@ -702,66 +702,19 @@
     "steps" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/KameletStep"
+        "$ref" : "#/components/schemas/Step"
       }
     }
   }
 };
-            defs.KameletStep = {
+            defs.Integration = {
   "type" : "object",
   "properties" : {
+    "running" : {
+      "type" : "boolean"
+    },
     "name" : {
       "type" : "string"
-    },
-    "type" : {
-      "type" : "string"
-    },
-    "id" : {
-      "type" : "string"
-    },
-    "icon" : {
-      "type" : "string"
-    },
-    "parameters" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/Parameter"
-      }
-    },
-    "title" : {
-      "type" : "string"
-    },
-    "description" : {
-      "type" : "string"
-    },
-    "uuid" : {
-      "type" : "string"
-    },
-    "subType" : {
-      "type" : "string"
-    },
-    "uUID" : {
-      "type" : "string"
-    },
-    "apiVersion" : {
-      "type" : "string"
-    },
-    "kind" : {
-      "type" : "string"
-    },
-    "kameletType" : {
-      "type" : "string"
-    },
-    "group" : {
-      "type" : "string"
-    },
-    "metadata" : {
-      "type" : "object",
-      "additionalProperties" : { }
-    },
-    "spec" : {
-      "type" : "object",
-      "additionalProperties" : { }
     }
   }
 };
@@ -806,7 +759,19 @@
     "id" : {
       "type" : "string"
     },
+    "kind" : {
+      "type" : "string"
+    },
     "icon" : {
+      "type" : "string"
+    },
+    "title" : {
+      "type" : "string"
+    },
+    "description" : {
+      "type" : "string"
+    },
+    "group" : {
       "type" : "string"
     },
     "parameters" : {
@@ -815,17 +780,16 @@
         "$ref" : "#/components/schemas/Parameter"
       }
     },
-    "title" : {
-      "type" : "string"
-    },
-    "description" : {
-      "type" : "string"
-    },
     "uuid" : {
       "type" : "string"
     },
-    "subType" : {
-      "type" : "string"
+    "metadata" : {
+      "type" : "object",
+      "additionalProperties" : { }
+    },
+    "spec" : {
+      "type" : "object",
+      "additionalProperties" : { }
     },
     "uUID" : {
       "type" : "string"
@@ -917,9 +881,21 @@
             -->
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
-                  <li class="nav-header" data-group="DeploymentResource"><a href="#api-DeploymentResource">API Methods - DeploymentResource</a></li>
-                    <li data-group="DeploymentResource" data-name="deploymentYamlPost" class="">
-                      <a href="#api-DeploymentResource-deploymentYamlPost">deploymentYamlPost</a>
+                  <li class="nav-header" data-group="IntegrationResource"><a href="#api-IntegrationResource">API Methods - IntegrationResource</a></li>
+                    <li data-group="IntegrationResource" data-name="integrationsCustomResourcePost" class="">
+                      <a href="#api-IntegrationResource-integrationsCustomResourcePost">integrationsCustomResourcePost</a>
+                    </li>
+                    <li data-group="IntegrationResource" data-name="integrationsCustomResourcesPost" class="">
+                      <a href="#api-IntegrationResource-integrationsCustomResourcesPost">integrationsCustomResourcesPost</a>
+                    </li>
+                    <li data-group="IntegrationResource" data-name="integrationsGet" class="">
+                      <a href="#api-IntegrationResource-integrationsGet">integrationsGet</a>
+                    </li>
+                    <li data-group="IntegrationResource" data-name="integrationsNameDelete" class="">
+                      <a href="#api-IntegrationResource-integrationsNameDelete">integrationsNameDelete</a>
+                    </li>
+                    <li data-group="IntegrationResource" data-name="integrationsPost" class="">
+                      <a href="#api-IntegrationResource-integrationsPost">integrationsPost</a>
                     </li>
                   <li class="nav-header" data-group="StepResource"><a href="#api-StepResource">API Methods - StepResource</a></li>
                     <li data-group="StepResource" data-name="stepGet" class="">
@@ -927,6 +903,12 @@
                     </li>
                     <li data-group="StepResource" data-name="stepIdIdGet" class="">
                       <a href="#api-StepResource-stepIdIdGet">stepIdIdGet</a>
+                    </li>
+                    <li data-group="StepResource" data-name="stepIntegrationTypeIntegrationTypeGet" class="">
+                      <a href="#api-StepResource-stepIntegrationTypeIntegrationTypeGet">stepIntegrationTypeIntegrationTypeGet</a>
+                    </li>
+                    <li data-group="StepResource" data-name="stepKindKindGet" class="">
+                      <a href="#api-StepResource-stepKindKindGet">stepKindKindGet</a>
                     </li>
                     <li data-group="StepResource" data-name="stepNameNameGet" class="">
                       <a href="#api-StepResource-stepNameNameGet">stepNameNameGet</a>
@@ -954,96 +936,101 @@
           </div>
         </div>
         <div id="sections">
-                <section id="api-DeploymentResource">
-                  <h1>DeploymentResource</h1>
-                    <div id="api-DeploymentResource-deploymentYamlPost">
-                      <article id="api-DeploymentResource-deploymentYamlPost-0" data-group="User" data-name="deploymentYamlPost" data-version="0">
+                <section id="api-IntegrationResource">
+                  <h1>IntegrationResource</h1>
+                    <div id="api-IntegrationResource-integrationsCustomResourcePost">
+                      <article id="api-IntegrationResource-integrationsCustomResourcePost-0" data-group="User" data-name="integrationsCustomResourcePost" data-version="0">
                         <div class="pull-left">
-                          <h1>deploymentYamlPost</h1>
-                          <p></p>
+                          <h1>integrationsCustomResourcePost</h1>
+                          <p>Get CRD</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">Returns the associated custom resource definition. This is an idempotent operation.</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/deployment/yaml</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/integrations/customResource</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-DeploymentResource-deploymentYamlPost-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-java">Java</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-DeploymentResource-deploymentYamlPost-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcePost-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-DeploymentResource-deploymentYamlPost-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//deployment/yaml"</code></pre>
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsCustomResourcePost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations/customResource?type="</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-java">
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
-import io.swagger.client.api.DeploymentResourceApi;
+import io.swagger.client.api.IntegrationResourceApi;
 
 import java.io.File;
 import java.util.*;
 
-public class DeploymentResourceApiExample {
+public class IntegrationResourceApiExample {
 
     public static void main(String[] args) {
         
-        DeploymentResourceApi apiInstance = new DeploymentResourceApi();
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String type = type_example; // String | 
         try {
-            'String' result = apiInstance.deploymentYamlPost(body);
+            'String' result = apiInstance.integrationsCustomResourcePost(body, type);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DeploymentResourceApi#deploymentYamlPost");
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcePost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentResourceApi;
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
 
-public class DeploymentResourceApiExample {
+public class IntegrationResourceApiExample {
 
     public static void main(String[] args) {
-        DeploymentResourceApi apiInstance = new DeploymentResourceApi();
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String type = type_example; // String | 
         try {
-            'String' result = apiInstance.deploymentYamlPost(body);
+            'String' result = apiInstance.integrationsCustomResourcePost(body, type);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DeploymentResourceApi#deploymentYamlPost");
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcePost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-groovy">
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-objc">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
+String *type = type_example; //  (optional)
 
-DeploymentResourceApi *apiInstance = [[DeploymentResourceApi alloc] init];
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-[apiInstance deploymentYamlPostWith:body
+// Get CRD
+[apiInstance integrationsCustomResourcePostWith:body
+    type:type
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -1055,12 +1042,13 @@ DeploymentResourceApi *apiInstance = [[DeploymentResourceApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-javascript">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
 
-var api = new ApiApi.DeploymentResourceApi()
+var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
+  'type': type_example // {{String}} 
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -1069,14 +1057,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.deploymentYamlPost(opts, callback);
+api.integrationsCustomResourcePost(opts, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-angular">
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-csharp">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -1085,22 +1073,24 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class deploymentYamlPostExample
+    public class integrationsCustomResourcePostExample
     {
         public void main()
         {
 
-            var apiInstance = new DeploymentResourceApi();
+            var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
+            var type = type_example;  // String |  (optional) 
 
             try
             {
-                'String' result = apiInstance.deploymentYamlPost(body);
+                // Get CRD
+                'String' result = apiInstance.integrationsCustomResourcePost(body, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DeploymentResourceApi.deploymentYamlPost: " + e.Message );
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsCustomResourcePost: " + e.Message );
             }
         }
     }
@@ -1108,40 +1098,42 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-php">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\ApiDeploymentResourceApi();
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
+$type = type_example; // String | 
 
 try {
-    $result = $api_instance->deploymentYamlPost($body);
+    $result = $api_instance->integrationsCustomResourcePost($body, $type);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DeploymentResourceApi->deploymentYamlPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling IntegrationResourceApi->integrationsCustomResourcePost: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-perl">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DeploymentResourceApi;
+use WWW::SwaggerClient::IntegrationResourceApi;
 
-my $api_instance = WWW::SwaggerClient::DeploymentResourceApi->new();
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
+my $type = type_example; # String | 
 
 eval { 
-    my $result = $api_instance->deploymentYamlPost(body => $body);
+    my $result = $api_instance->integrationsCustomResourcePost(body => $body, type => $type);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DeploymentResourceApi->deploymentYamlPost: $@\n";
+    warn "Exception when calling IntegrationResourceApi->integrationsCustomResourcePost: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-DeploymentResource-deploymentYamlPost-0-python">
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -1149,14 +1141,16 @@ from swagger_client.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.DeploymentResourceApi()
+api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
+type = type_example # String |  (optional)
 
 try: 
-    api_response = api_instance.deployment_yaml_post(body=body)
+    # Get CRD
+    api_response = api_instance.integrations_custom_resource_post(body=body, type=type)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DeploymentResourceApi->deploymentYamlPost: %s\n" % e)</code></pre>
+    print("Exception when calling IntegrationResourceApi->integrationsCustomResourcePost: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -1197,31 +1191,54 @@ except ApiException as e:
                                   }
                                 
                                   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_deploymentYamlPost_body');
+                                  var result = $('#d2e199_integrationsCustomResourcePost_body');
                                   result.empty();
                                   result.append(view.render());
                                 });
                                 </script>
-                                <div id="d2e199_deploymentYamlPost_body"></div>
+                                <div id="d2e199_integrationsCustomResourcePost_body"></div>
                                 </td>
                                 </tr>
                             </table>
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsCustomResourcePost_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-deploymentYamlPost-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-integrationsCustomResourcePost-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-deploymentYamlPost-200-schema">
-                                  <div id='responses-deploymentYamlPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-integrationsCustomResourcePost-200-schema">
+                                  <div id='responses-integrationsCustomResourcePost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -1248,14 +1265,1190 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-deploymentYamlPost-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-deploymentYamlPost-200-schema-200');
+                                        $('#responses-integrationsCustomResourcePost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsCustomResourcePost-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-deploymentYamlPost-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-integrationsCustomResourcePost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationResource-integrationsCustomResourcesPost">
+                      <article id="api-IntegrationResource-integrationsCustomResourcesPost-0" data-group="User" data-name="integrationsCustomResourcesPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>integrationsCustomResourcesPost</h1>
+                          <p>Get CRDs</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns a list of all potential associated custom resource definitions. This is an idempotent operation.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/integrations/customResources</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsCustomResourcesPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations/customResources"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        try {
+            map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcesPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        try {
+            map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcesPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
+
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
+
+// Get CRDs
+[apiInstance integrationsCustomResourcesPostWith:body
+              completionHandler: ^(map['String', 'String'] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationResourceApi()
+var opts = { 
+  'body':  // {{DeploymentResourceYamlRequest}} 
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.integrationsCustomResourcesPost(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class integrationsCustomResourcesPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationResourceApi();
+            var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
+
+            try
+            {
+                // Get CRDs
+                map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsCustomResourcesPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+$body = ; // DeploymentResourceYamlRequest | 
+
+try {
+    $result = $api_instance->integrationsCustomResourcesPost($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationResourceApi->integrationsCustomResourcesPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
+
+eval { 
+    my $result = $api_instance->integrationsCustomResourcesPost(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationResourceApi->integrationsCustomResourcesPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationResourceApi()
+body =  # DeploymentResourceYamlRequest |  (optional)
+
+try: 
+    # Get CRDs
+    api_response = api_instance.integrations_custom_resources_post(body=body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationResourceApi->integrationsCustomResourcesPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/DeploymentResourceYamlRequest"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_integrationsCustomResourcesPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_integrationsCustomResourcesPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-integrationsCustomResourcesPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-integrationsCustomResourcesPost-200-schema">
+                                  <div id='responses-integrationsCustomResourcesPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-integrationsCustomResourcesPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsCustomResourcesPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-integrationsCustomResourcesPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationResource-integrationsGet">
+                      <article id="api-IntegrationResource-integrationsGet-0" data-group="User" data-name="integrationsGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>integrationsGet</h1>
+                          <p>Get all Integrations</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the integrations on the cluster.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/integrations</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsGet-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//integrations"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        try {
+            array[Integration] result = apiInstance.integrationsGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        try {
+            array[Integration] result = apiInstance.integrationsGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
+
+// Get all Integrations
+[apiInstance integrationsGetWithCompletionHandler: 
+              ^(array[Integration] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationResourceApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.integrationsGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class integrationsGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationResourceApi();
+
+            try
+            {
+                // Get all Integrations
+                array[Integration] result = apiInstance.integrationsGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+
+try {
+    $result = $api_instance->integrationsGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationResourceApi->integrationsGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+
+eval { 
+    my $result = $api_instance->integrationsGet();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationResourceApi->integrationsGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationResourceApi()
+
+try: 
+    # Get all Integrations
+    api_response = api_instance.integrations_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationResourceApi->integrationsGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-integrationsGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-integrationsGet-200-schema">
+                                  <div id='responses-integrationsGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Integration"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-integrationsGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-integrationsGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationResource-integrationsNameDelete">
+                      <article id="api-IntegrationResource-integrationsNameDelete-0" data-group="User" data-name="integrationsNameDelete" data-version="0">
+                        <div class="pull-left">
+                          <h1>integrationsNameDelete</h1>
+                          <p>Get integration</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get details on the integration identified by name.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/integrations/{name}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsNameDelete-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameDelete-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsNameDelete-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE "//integrations/{name}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String name = name_example; // String | Name of the integration to stop.
+        try {
+            'Boolean' result = apiInstance.integrationsNameDelete(name);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsNameDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String name = name_example; // String | Name of the integration to stop.
+        try {
+            'Boolean' result = apiInstance.integrationsNameDelete(name);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsNameDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the integration to stop.
+
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
+
+// Get integration
+[apiInstance integrationsNameDeleteWith:name
+              completionHandler: ^('Boolean' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationResourceApi()
+var name = name_example; // {{String}} Name of the integration to stop.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.integrationsNameDelete(name, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class integrationsNameDeleteExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationResourceApi();
+            var name = name_example;  // String | Name of the integration to stop.
+
+            try
+            {
+                // Get integration
+                'Boolean' result = apiInstance.integrationsNameDelete(name);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsNameDelete: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+$name = name_example; // String | Name of the integration to stop.
+
+try {
+    $result = $api_instance->integrationsNameDelete($name);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationResourceApi->integrationsNameDelete: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+my $name = name_example; # String | Name of the integration to stop.
+
+eval { 
+    my $result = $api_instance->integrationsNameDelete(name => $name);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationResourceApi->integrationsNameDelete: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationResourceApi()
+name = name_example # String | Name of the integration to stop.
+
+try: 
+    # Get integration
+    api_response = api_instance.integrations_name_delete(name)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationResourceApi->integrationsNameDelete: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_integrationsNameDelete_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the integration to stop.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-integrationsNameDelete-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-integrationsNameDelete-200-schema">
+                                  <div id='responses-integrationsNameDelete-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "boolean",
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-integrationsNameDelete-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsNameDelete-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-integrationsNameDelete-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationResource-integrationsPost">
+                      <article id="api-IntegrationResource-integrationsPost-0" data-group="User" data-name="integrationsPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>integrationsPost</h1>
+                          <p>Start integration</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Deploy and start the given integration on the cluster. Deployment will be done as a custom resource.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/integrations</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsPost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        try {
+            'String' result = apiInstance.integrationsPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        try {
+            'String' result = apiInstance.integrationsPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
+
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
+
+// Start integration
+[apiInstance integrationsPostWith:body
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationResourceApi()
+var opts = { 
+  'body':  // {{DeploymentResourceYamlRequest}} 
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.integrationsPost(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class integrationsPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationResourceApi();
+            var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
+
+            try
+            {
+                // Start integration
+                'String' result = apiInstance.integrationsPost(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+$body = ; // DeploymentResourceYamlRequest | 
+
+try {
+    $result = $api_instance->integrationsPost($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationResourceApi->integrationsPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
+
+eval { 
+    my $result = $api_instance->integrationsPost(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationResourceApi->integrationsPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationResourceApi()
+body =  # DeploymentResourceYamlRequest |  (optional)
+
+try: 
+    # Start integration
+    api_response = api_instance.integrations_post(body=body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationResourceApi->integrationsPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/DeploymentResourceYamlRequest"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_integrationsPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_integrationsPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-integrationsPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-integrationsPost-200-schema">
+                                  <div id='responses-integrationsPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/yaml"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/yaml"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-integrationsPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-integrationsPost-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
@@ -1269,12 +2462,12 @@ except ApiException as e:
                       <article id="api-StepResource-stepGet-0" data-group="User" data-name="stepGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepGet</h1>
-                          <p></p>
+                          <p>Get all steps</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">Returns all the available steps that can be added to the integration.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step</span></code></pre>
@@ -1349,6 +2542,7 @@ public class StepResourceApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
+// Get all steps
 [apiInstance stepGetWithCompletionHandler: 
               ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -1397,6 +2591,7 @@ namespace Example
 
             try
             {
+                // Get all steps
                 array[Step] result = apiInstance.stepGet();
                 Debug.WriteLine(result);
             }
@@ -1452,6 +2647,7 @@ from pprint import pprint
 api_instance = swagger_client.StepResourceApi()
 
 try: 
+    # Get all steps
     api_response = api_instance.step_get()
     pprint(api_response)
 except ApiException as e:
@@ -1526,12 +2722,12 @@ except ApiException as e:
                       <article id="api-StepResource-stepIdIdGet-0" data-group="User" data-name="stepIdIdGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepIdIdGet</h1>
-                          <p></p>
+                          <p>Get step by ID</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">Returns all the details of a specific step based on the identifier.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step/id/{id}</span></code></pre>
@@ -1570,7 +2766,7 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         
         StepResourceApi apiInstance = new StepResourceApi();
-        String id = id_example; // String | 
+        String id = id_example; // String | Identifier of the step we want to retrieve.
         try {
             Step result = apiInstance.stepIdIdGet(id);
             System.out.println(result);
@@ -1589,7 +2785,7 @@ public class StepResourceApiExample {
 
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
-        String id = id_example; // String | 
+        String id = id_example; // String | Identifier of the step we want to retrieve.
         try {
             Step result = apiInstance.stepIdIdGet(id);
             System.out.println(result);
@@ -1605,10 +2801,11 @@ public class StepResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-stepIdIdGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *id = id_example; // 
+                              <pre class="prettyprint"><code class="language-cpp">String *id = id_example; // Identifier of the step we want to retrieve.
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
+// Get step by ID
 [apiInstance stepIdIdGetWith:id
               completionHandler: ^(Step output, NSError* error) {
                             if (output) {
@@ -1625,7 +2822,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
 
 var api = new ApiApi.StepResourceApi()
-var id = id_example; // {{String}} 
+var id = id_example; // {{String}} Identifier of the step we want to retrieve.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1656,10 +2853,11 @@ namespace Example
         {
 
             var apiInstance = new StepResourceApi();
-            var id = id_example;  // String | 
+            var id = id_example;  // String | Identifier of the step we want to retrieve.
 
             try
             {
+                // Get step by ID
                 Step result = apiInstance.stepIdIdGet(id);
                 Debug.WriteLine(result);
             }
@@ -1678,7 +2876,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
-$id = id_example; // String | 
+$id = id_example; // String | Identifier of the step we want to retrieve.
 
 try {
     $result = $api_instance->stepIdIdGet($id);
@@ -1695,7 +2893,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
-my $id = id_example; # String | 
+my $id = id_example; # String | Identifier of the step we want to retrieve.
 
 eval { 
     my $result = $api_instance->stepIdIdGet(id => $id);
@@ -1715,9 +2913,10 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
-id = id_example # String | 
+id = id_example # String | Identifier of the step we want to retrieve.
 
 try: 
+    # Get step by ID
     api_response = api_instance.step_id_id_get(id)
     pprint(api_response)
 except ApiException as e:
@@ -1744,6 +2943,9 @@ except ApiException as e:
                                                       String
                                                   </span>
                                   
+                                                      <div class="inner description">
+                                                          Identifier of the step we want to retrieve.
+                                                      </div>
                                               </div>
                                                   <div class="inner required">
                                                       Required
@@ -1810,16 +3012,612 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
-                    <div id="api-StepResource-stepNameNameGet">
-                      <article id="api-StepResource-stepNameNameGet-0" data-group="User" data-name="stepNameNameGet" data-version="0">
+                    <div id="api-StepResource-stepIntegrationTypeIntegrationTypeGet">
+                      <article id="api-StepResource-stepIntegrationTypeIntegrationTypeGet-0" data-group="User" data-name="stepIntegrationTypeIntegrationTypeGet" data-version="0">
                         <div class="pull-left">
-                          <h1>stepNameNameGet</h1>
-                          <p></p>
+                          <h1>stepIntegrationTypeIntegrationTypeGet</h1>
+                          <p>Get step by integration type</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">Returns all the steps that fit a specific integration type. </p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step/integrationType/{integrationType}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/integrationType/{integrationType}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StepResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        StepResourceApi apiInstance = new StepResourceApi();
+        String integrationType = integrationType_example; // String | Integration type we want to use.
+        try {
+            array[Step] result = apiInstance.stepIntegrationTypeIntegrationTypeGet(integrationType);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#stepIntegrationTypeIntegrationTypeGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StepResourceApi;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        StepResourceApi apiInstance = new StepResourceApi();
+        String integrationType = integrationType_example; // String | Integration type we want to use.
+        try {
+            array[Step] result = apiInstance.stepIntegrationTypeIntegrationTypeGet(integrationType);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#stepIntegrationTypeIntegrationTypeGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *integrationType = integrationType_example; // Integration type we want to use.
+
+StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
+
+// Get step by integration type
+[apiInstance stepIntegrationTypeIntegrationTypeGetWith:integrationType
+              completionHandler: ^(array[Step] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.StepResourceApi()
+var integrationType = integrationType_example; // {{String}} Integration type we want to use.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.stepIntegrationTypeIntegrationTypeGet(integrationType, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class stepIntegrationTypeIntegrationTypeGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new StepResourceApi();
+            var integrationType = integrationType_example;  // String | Integration type we want to use.
+
+            try
+            {
+                // Get step by integration type
+                array[Step] result = apiInstance.stepIntegrationTypeIntegrationTypeGet(integrationType);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StepResourceApi.stepIntegrationTypeIntegrationTypeGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiStepResourceApi();
+$integrationType = integrationType_example; // String | Integration type we want to use.
+
+try {
+    $result = $api_instance->stepIntegrationTypeIntegrationTypeGet($integrationType);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StepResourceApi->stepIntegrationTypeIntegrationTypeGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StepResourceApi;
+
+my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $integrationType = integrationType_example; # String | Integration type we want to use.
+
+eval { 
+    my $result = $api_instance->stepIntegrationTypeIntegrationTypeGet(integrationType => $integrationType);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StepResourceApi->stepIntegrationTypeIntegrationTypeGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.StepResourceApi()
+integrationType = integrationType_example # String | Integration type we want to use.
+
+try: 
+    # Get step by integration type
+    api_response = api_instance.step_integration_type_integration_type_get(integrationType)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StepResourceApi->stepIntegrationTypeIntegrationTypeGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">integrationType*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_stepIntegrationTypeIntegrationTypeGet_integrationType">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Integration type we want to use.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-stepIntegrationTypeIntegrationTypeGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-stepIntegrationTypeIntegrationTypeGet-200-schema">
+                                  <div id='responses-stepIntegrationTypeIntegrationTypeGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-stepIntegrationTypeIntegrationTypeGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-stepIntegrationTypeIntegrationTypeGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-stepIntegrationTypeIntegrationTypeGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-StepResource-stepKindKindGet">
+                      <article id="api-StepResource-stepKindKindGet-0" data-group="User" data-name="stepKindKindGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>stepKindKindGet</h1>
+                          <p>Get step by kind</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the details of steps based on the kind. </p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step/kind/{kind}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-StepResource-stepKindKindGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-stepKindKindGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-stepKindKindGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-StepResource-stepKindKindGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-StepResource-stepKindKindGet-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/kind/{kind}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StepResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        StepResourceApi apiInstance = new StepResourceApi();
+        String kind = kind_example; // String | Kind of the steps we want to retrieve.
+        try {
+            array[Step] result = apiInstance.stepKindKindGet(kind);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#stepKindKindGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StepResourceApi;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        StepResourceApi apiInstance = new StepResourceApi();
+        String kind = kind_example; // String | Kind of the steps we want to retrieve.
+        try {
+            array[Step] result = apiInstance.stepKindKindGet(kind);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#stepKindKindGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *kind = kind_example; // Kind of the steps we want to retrieve.
+
+StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
+
+// Get step by kind
+[apiInstance stepKindKindGetWith:kind
+              completionHandler: ^(array[Step] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.StepResourceApi()
+var kind = kind_example; // {{String}} Kind of the steps we want to retrieve.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.stepKindKindGet(kind, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class stepKindKindGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new StepResourceApi();
+            var kind = kind_example;  // String | Kind of the steps we want to retrieve.
+
+            try
+            {
+                // Get step by kind
+                array[Step] result = apiInstance.stepKindKindGet(kind);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StepResourceApi.stepKindKindGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiStepResourceApi();
+$kind = kind_example; // String | Kind of the steps we want to retrieve.
+
+try {
+    $result = $api_instance->stepKindKindGet($kind);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StepResourceApi->stepKindKindGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StepResourceApi;
+
+my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $kind = kind_example; # String | Kind of the steps we want to retrieve.
+
+eval { 
+    my $result = $api_instance->stepKindKindGet(kind => $kind);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StepResourceApi->stepKindKindGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.StepResourceApi()
+kind = kind_example # String | Kind of the steps we want to retrieve.
+
+try: 
+    # Get step by kind
+    api_response = api_instance.step_kind_kind_get(kind)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StepResourceApi->stepKindKindGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">kind*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_stepKindKindGet_kind">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Kind of the steps we want to retrieve.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-stepKindKindGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-stepKindKindGet-200-schema">
+                                  <div id='responses-stepKindKindGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-stepKindKindGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-stepKindKindGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-stepKindKindGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-StepResource-stepNameNameGet">
+                      <article id="api-StepResource-stepNameNameGet-0" data-group="User" data-name="stepNameNameGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>stepNameNameGet</h1>
+                          <p>Get step by name</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the details of steps based on the name. There may be more than one step with the same name, although configuration of catalogs should try to avoid duplications.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step/name/{name}</span></code></pre>
@@ -1858,7 +3656,7 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         
         StepResourceApi apiInstance = new StepResourceApi();
-        String name = name_example; // String | 
+        String name = name_example; // String | Name of the steps we want to retrieve.
         try {
             array[Step] result = apiInstance.stepNameNameGet(name);
             System.out.println(result);
@@ -1877,7 +3675,7 @@ public class StepResourceApiExample {
 
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
-        String name = name_example; // String | 
+        String name = name_example; // String | Name of the steps we want to retrieve.
         try {
             array[Step] result = apiInstance.stepNameNameGet(name);
             System.out.println(result);
@@ -1893,10 +3691,11 @@ public class StepResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-stepNameNameGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // 
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the steps we want to retrieve.
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
+// Get step by name
 [apiInstance stepNameNameGetWith:name
               completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -1913,7 +3712,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
 
 var api = new ApiApi.StepResourceApi()
-var name = name_example; // {{String}} 
+var name = name_example; // {{String}} Name of the steps we want to retrieve.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -1944,10 +3743,11 @@ namespace Example
         {
 
             var apiInstance = new StepResourceApi();
-            var name = name_example;  // String | 
+            var name = name_example;  // String | Name of the steps we want to retrieve.
 
             try
             {
+                // Get step by name
                 array[Step] result = apiInstance.stepNameNameGet(name);
                 Debug.WriteLine(result);
             }
@@ -1966,7 +3766,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
-$name = name_example; // String | 
+$name = name_example; // String | Name of the steps we want to retrieve.
 
 try {
     $result = $api_instance->stepNameNameGet($name);
@@ -1983,7 +3783,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
-my $name = name_example; # String | 
+my $name = name_example; # String | Name of the steps we want to retrieve.
 
 eval { 
     my $result = $api_instance->stepNameNameGet(name => $name);
@@ -2003,9 +3803,10 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
-name = name_example # String | 
+name = name_example # String | Name of the steps we want to retrieve.
 
 try: 
+    # Get step by name
     api_response = api_instance.step_name_name_get(name)
     pprint(api_response)
 except ApiException as e:
@@ -2032,6 +3833,9 @@ except ApiException as e:
                                                       String
                                                   </span>
                                   
+                                                      <div class="inner description">
+                                                          Name of the steps we want to retrieve.
+                                                      </div>
                                               </div>
                                                   <div class="inner required">
                                                       Required
@@ -2109,12 +3913,12 @@ except ApiException as e:
                       <article id="api-ViewDefinitionResource-viewdefinitionPost-0" data-group="User" data-name="viewdefinitionPost" data-version="0">
                         <div class="pull-left">
                           <h1>viewdefinitionPost</h1>
-                          <p></p>
+                          <p>Get views</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">Get view definitions for a specific integration. This is an idempotent operation.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/viewdefinition</span></code></pre>
@@ -2192,6 +3996,7 @@ public class ViewDefinitionResourceApiExample {
 
 ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
 
+// Get views
 [apiInstance viewdefinitionPostWith:body
               completionHandler: ^(ViewDefinitionResourceResponse output, NSError* error) {
                             if (output) {
@@ -2244,6 +4049,7 @@ namespace Example
 
             try
             {
+                // Get views
                 ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body);
                 Debug.WriteLine(result);
             }
@@ -2302,6 +4108,7 @@ api_instance = swagger_client.ViewDefinitionResourceApi()
 body =  # String |  (optional)
 
 try: 
+    # Get views
     api_response = api_instance.viewdefinition_post(body=body)
     pprint(api_response)
 except ApiException as e:
