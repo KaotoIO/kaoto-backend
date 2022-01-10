@@ -51,7 +51,7 @@ class KameletParseCatalogTest {
             Assertions.assertNotNull(p.getType());
             Assertions.assertNotNull(p.getLabel());
             Assertions.assertNotNull(p.getId());
-            Assertions.assertNotNull(p.getDefault());
+            Assertions.assertNotNull(p.getDefaultValue());
         }
     }
 

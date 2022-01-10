@@ -109,7 +109,7 @@ public final class Kamelet
                     if (p.isPath()) {
                         uri.append(":");
                         uri.append((p.getValue() != null ? p.getValue()
-                                : p.getDefault()));
+                                : p.getDefaultValue()));
                     } else if (p.getValue() != null) {
                         params.put(p.getId(), p.getValue().toString());
                     }

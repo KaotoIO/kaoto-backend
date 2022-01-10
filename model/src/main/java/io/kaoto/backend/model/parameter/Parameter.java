@@ -77,7 +77,7 @@ public final class Parameter<T> implements Cloneable {
      *
      * Default value, if there is any
      */
-    public T getDefault() {
+    public T getDefaultValue() {
         return this.defaultValue;
     }
 
