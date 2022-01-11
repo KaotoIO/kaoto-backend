@@ -57,6 +57,10 @@ public final class Parameter<T> implements Cloneable {
         return this.id;
     }
 
+    public void setId(final String id) {
+        this.id = id;
+    }
+
     public void setValue(final T value) {
         this.value = value;
     }
@@ -81,6 +85,10 @@ public final class Parameter<T> implements Cloneable {
         return this.defaultValue;
     }
 
+    public void setDefaultValue(final T defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
     /*
      * 🐱property type: String
      *
@@ -90,6 +98,9 @@ public final class Parameter<T> implements Cloneable {
         return this.type;
     }
 
+    public void setType(final String type) {
+        this.type = type;
+    }
 
     /*
      * 🐱property type: Boolean
