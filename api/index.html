@@ -741,9 +741,6 @@
     },
     "defaultValue" : {
       "type" : "object"
-    },
-    "default" : {
-      "type" : "object"
     }
   }
 };
@@ -1855,12 +1852,12 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsNameDelete-0" data-group="User" data-name="integrationsNameDelete" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsNameDelete</h1>
-                          <p>Get integration</p>
+                          <p>Stop/Remove integration</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Get details on the integration identified by name.</p>
+                        <p class="marked">Remove the integration identified by name.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/integrations/{name}</span></code></pre>
@@ -1938,7 +1935,7 @@ public class IntegrationResourceApiExample {
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Get integration
+// Stop/Remove integration
 [apiInstance integrationsNameDeleteWith:name
               completionHandler: ^('Boolean' output, NSError* error) {
                             if (output) {
@@ -1990,7 +1987,7 @@ namespace Example
 
             try
             {
-                // Get integration
+                // Stop/Remove integration
                 'Boolean' result = apiInstance.integrationsNameDelete(name);
                 Debug.WriteLine(result);
             }
@@ -2049,7 +2046,7 @@ api_instance = swagger_client.IntegrationResourceApi()
 name = name_example # String | Name of the integration to stop.
 
 try: 
-    # Get integration
+    # Stop/Remove integration
     api_response = api_instance.integrations_name_delete(name)
     pprint(api_response)
 except ApiException as e:
