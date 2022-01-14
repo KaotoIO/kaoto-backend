@@ -24,7 +24,7 @@ class IntegrationResourceTest {
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
         jsonRequest = Files.readString(Path.of(
-                ViewDefinitionResourceTest.class.getResource(
+                IntegrationResourceTest.class.getResource(
                                 "request.json")
                         .toURI()));
     }
