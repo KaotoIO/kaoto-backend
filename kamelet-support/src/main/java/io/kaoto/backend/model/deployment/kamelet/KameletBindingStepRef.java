@@ -1,8 +1,14 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serial;
 import java.io.Serializable;
 
+@JsonDeserialize(
+        using = JsonDeserializer.None.class
+)
 public final class KameletBindingStepRef implements Serializable {
     @Serial
     private static final long serialVersionUID = 13684575275243089L;
