@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -28,11 +29,11 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("Camel-Connector");
         step.setName("log");
         step.setParameters(new ArrayList<>());
-        Parameter<String> p = new Parameter<>();
+        Parameter<String> p = new StringParameter();
         p.setPath(true);
         p.setValue("loggerName");
         step.getParameters().add(p);
-        p = new Parameter<String>("level", "level", "", "default",
+        p = new StringParameter("level", "level", "", "default",
                 "string");
         p.setValue("info");
         step.getParameters().add(p);
@@ -78,7 +79,7 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("EIP");
         step.setName("set-body");
         step.setParameters(new ArrayList<>());
-        p = new Parameter<String>("constant", "constant", "", "default",
+        p = new StringParameter("constant", "constant", "", "default",
                 "string");
         p.setValue("Hello Llama");
         step.getParameters().add(p);
