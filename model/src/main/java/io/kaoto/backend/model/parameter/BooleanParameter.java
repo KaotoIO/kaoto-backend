@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BooleanParameter extends Parameter<Boolean> {
 
     public BooleanParameter(final String id, final String title,
-                            final String description, final Boolean v,
-                            final String type) {
-        super(id, title, description, v, type);
+                            final String description, final Boolean v) {
+        super(id, title, description, v);
     }
 
     public BooleanParameter() {

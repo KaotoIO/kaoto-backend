@@ -33,8 +33,7 @@ class KameletDeploymentGeneratorServiceTest {
         p.setPath(true);
         p.setValue("loggerName");
         step.getParameters().add(p);
-        p = new StringParameter("level", "level", "", "default",
-                "string");
+        p = new StringParameter("level", "level", "", "default");
         p.setValue("info");
         step.getParameters().add(p);
         steps.add(step);
@@ -79,8 +78,7 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("EIP");
         step.setName("set-body");
         step.setParameters(new ArrayList<>());
-        p = new StringParameter("constant", "constant", "", "default",
-                "string");
+        p = new StringParameter("constant", "constant", "", "default");
         p.setValue("Hello Llama");
         step.getParameters().add(p);
         steps.add(1, step);

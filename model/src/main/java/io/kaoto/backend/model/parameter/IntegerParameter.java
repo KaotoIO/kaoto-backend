@@ -13,9 +13,8 @@ public class IntegerParameter extends Parameter<Integer> {
     private Integer minimum;
 
     public IntegerParameter(final String id, final String title,
-                            final String description, final Integer v,
-                            final String type) {
-        super(id, title, description, v, type);
+                            final String description, final Integer v) {
+        super(id, title, description, v);
     }
 
     public IntegerParameter() {
