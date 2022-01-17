@@ -31,7 +31,7 @@ class KameletParseCatalogTest {
         ParseCatalog<Step> kameletParser =
                 parseCatalog.getParser(
                         "https://github.com/apache/camel-kamelets.git",
-                        "v0.3.0");
+                        "v0.5.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
