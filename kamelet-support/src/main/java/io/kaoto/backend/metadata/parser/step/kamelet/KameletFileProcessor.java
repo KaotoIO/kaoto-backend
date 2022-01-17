@@ -1,7 +1,13 @@
 package io.kaoto.backend.metadata.parser.step.kamelet;
 
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
+import io.kaoto.backend.model.parameter.ArrayParameter;
+import io.kaoto.backend.model.parameter.BooleanParameter;
+import io.kaoto.backend.model.parameter.IntegerParameter;
+import io.kaoto.backend.model.parameter.NumberParameter;
+import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -137,9 +143,8 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 var description =
                         definitions.getOrDefault("description", title)
                                 .toString();
-                String value =
-                        definitions.getOrDefault("default", "")
-                                .toString();
+                Object value = definitions
+                                .getOrDefault("default", null);
                 p = getParameter(definitions, title, description, value);
                 p.setPath((Boolean) definitions.getOrDefault("path", false));
                 step.getParameters().add(p);
@@ -149,20 +154,24 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
     private Parameter getParameter(final Map<String, Object> definitions,
                                    final String title, final String description,
-                                   final String value) {
+                                   final Object value) {
         final var type = definitions.get("type").toString();
+
         return switch (type) {
-            case "integer" -> {
-                final var v = (value != null && !value.trim().isEmpty())
-                        ? Integer.valueOf(value) : null;
-                yield new Parameter<>(title, title, description, v, type);
-            }
-            case "boolean" -> {
-                final var bool = (value != null && !value.trim().isEmpty())
-                        ? Boolean.valueOf(value) : null;
-                yield new Parameter<>(title, title, description, bool, type);
-            }
-            default -> new Parameter<>(title, title, description, value, type);
+            //number, integer, string, boolean, array, object, or null
+            case "number" -> new NumberParameter(title, title, description,
+                    (Number) value, type);
+            case "integer" -> new IntegerParameter(title, title, description,
+                    (value != null ? Integer.valueOf(value.toString()) : null),
+                    type);
+            case "string" -> new StringParameter(title, title, description,
+                    (value != null ? value.toString() : null), type);
+            case "boolean" -> new BooleanParameter(title, title, description,
+                    (Boolean) value, type);
+            case "array" -> new ArrayParameter(title, title, description,
+                    (Object[]) value, type);
+            default -> new ObjectParameter(title, title, description,
+                    value, type);
         };
     }
 }

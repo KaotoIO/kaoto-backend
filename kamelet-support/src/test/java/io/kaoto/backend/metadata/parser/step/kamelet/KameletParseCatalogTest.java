@@ -49,9 +49,10 @@ class KameletParseCatalogTest {
         Assertions.assertEquals(8, step.getParameters().size());
         for (var p : step.getParameters()) {
             Assertions.assertNotNull(p.getType());
-            Assertions.assertNotNull(p.getLabel());
+            Assertions.assertNotNull(p.getTitle());
             Assertions.assertNotNull(p.getId());
-            Assertions.assertNotNull(p.getDefaultValue());
+            Assertions.assertNotNull(p.getType());
+            Assertions.assertNotNull(p.getDescription());
         }
     }
 

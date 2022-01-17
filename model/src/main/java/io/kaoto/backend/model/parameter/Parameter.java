@@ -1,5 +1,8 @@
 package io.kaoto.backend.model.parameter;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * 🐱class Parameter
  * 🐱aka List[Parameter]
@@ -7,27 +10,47 @@ package io.kaoto.backend.model.parameter;
  * Represents a parameter of a step in an integration.
  * These parameters could be used on the UI to configure the step.
  */
-public final class Parameter<T> implements Cloneable {
 
-    private String label;
-    private boolean path = false;
-    private String description;
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = StringParameter.class, name = "string"),
+        @JsonSubTypes.Type(value = ObjectParameter.class, name = "object"),
+        @JsonSubTypes.Type(value = NumberParameter.class, name = "number"),
+        @JsonSubTypes.Type(value = IntegerParameter.class, name = "integer"),
+        @JsonSubTypes.Type(value = BooleanParameter.class, name = "boolean"),
+        @JsonSubTypes.Type(value = ArrayParameter.class, name = "array")})
+public class Parameter<T> implements Cloneable {
+
+    // Kaoto
     private String id;
-    private String type;
+    private boolean path = false;
     private T value;
-    private T defaultValue;
 
-    public Parameter(final String id, final String label,
+    //JSON schema
+    private String title;
+    private String description;
+    private String type;
+    private Boolean nullable;
+    private T[] enumeration;
+    private T defaultValue;
+    private T[] examples;
+
+
+    public Parameter(final String id,
+                     final String title,
                      final String description,
-                     final T defaultValue, final String type) {
+                     final T defaultValue,
+                     final String type) {
         this.id = id;
-        this.label = label;
+        this.title = title;
         this.description = description;
         this.defaultValue = defaultValue;
         this.type = type;
     }
 
     public Parameter() {
+        super();
     }
 
     /*
@@ -40,12 +63,16 @@ public final class Parameter<T> implements Cloneable {
     }
 
     /*
-     * 🐱property label: String
+     * 🐱property title: String
      *
      * Human name for the view
      */
-    public String getLabel() {
-        return this.label;
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     /*
@@ -66,7 +93,7 @@ public final class Parameter<T> implements Cloneable {
     }
 
     /*
-     * 🐱property value: String
+     * 🐱property value: Object
      *
      * Actual value of this parameter.
      * Used when describing a configured element.
@@ -77,7 +104,7 @@ public final class Parameter<T> implements Cloneable {
     }
 
     /*
-     * 🐱property default: String
+     * 🐱property default: Object
      *
      * Default value, if there is any
      */
@@ -92,18 +119,15 @@ public final class Parameter<T> implements Cloneable {
     /*
      * 🐱property type: String
      *
-     * Type of parameter: text, integer, float, boolean,...
+     * Type of parameter: number, integer, string, boolean, array, object, or
+     *  null
      */
     public String getType() {
-        return this.type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
+        return "object";
     }
 
     /*
-     * 🐱property type: Boolean
+     * 🐱property path: Boolean
      *
      * Is this a path parameter?
      */
@@ -115,10 +139,54 @@ public final class Parameter<T> implements Cloneable {
         this.path = path;
     }
 
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    /*
+     * 🐱property nullable: Boolean
+     *
+     * Can this property be null?
+     */
+    public Boolean getNullable() {
+        return nullable;
+    }
+
+    public void setNullable(final Boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    /*
+     * 🐱property enum: Object[]
+     *
+     * All the possible values for this property.
+     */
+    public T[] getEnum() {
+        return enumeration;
+    }
+
+    public void setEnum(final T[] enumeration) {
+        this.enumeration = enumeration;
+    }
+
+
+    /*
+     * 🐱property examples: Object[]
+     *
+     * Examples of valid values.
+     */
+    public T[] getExamples() {
+        return examples;
+    }
+
+    public void setExamples(final T[] examples) {
+        this.examples = examples;
+    }
+
     @Override
-    public Parameter clone() {
+    public Parameter<T> clone() {
         try {
-            return (Parameter) super.clone();
+            return (Parameter<T>) super.clone();
         } catch (CloneNotSupportedException e) {
             //silently fail because... we are not really going to have this
         }
