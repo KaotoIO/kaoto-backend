@@ -16,9 +16,8 @@ public class StringParameter extends Parameter<String> {
     private String format;
 
     public StringParameter(final String id, final String title,
-                           final String description, final String v,
-                           final String type) {
-        super(id, title, description, v, type);
+                           final String description, final String v) {
+        super(id, title, description, v);
     }
 
     public StringParameter() {

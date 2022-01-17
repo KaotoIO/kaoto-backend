@@ -11,8 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * These parameters could be used on the UI to configure the step.
  */
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = StringParameter.class, name = "string"),
         @JsonSubTypes.Type(value = ObjectParameter.class, name = "object"),
@@ -30,7 +29,6 @@ public class Parameter<T> implements Cloneable {
     //JSON schema
     private String title;
     private String description;
-    private String type;
     private Boolean nullable;
     private T[] enumeration;
     private T defaultValue;
@@ -40,13 +38,11 @@ public class Parameter<T> implements Cloneable {
     public Parameter(final String id,
                      final String title,
                      final String description,
-                     final T defaultValue,
-                     final String type) {
+                     final T defaultValue) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.defaultValue = defaultValue;
-        this.type = type;
     }
 
     public Parameter() {
