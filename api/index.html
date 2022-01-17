@@ -721,26 +721,47 @@
             defs.Parameter = {
   "type" : "object",
   "properties" : {
-    "label" : {
+    "id" : {
       "type" : "string"
     },
     "path" : {
       "type" : "boolean"
     },
-    "description" : {
+    "value" : {
+      "type" : "object"
+    },
+    "title" : {
       "type" : "string"
     },
-    "id" : {
+    "description" : {
       "type" : "string"
     },
     "type" : {
       "type" : "string"
     },
-    "value" : {
-      "type" : "object"
+    "nullable" : {
+      "type" : "boolean"
+    },
+    "enumeration" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
     },
     "defaultValue" : {
       "type" : "object"
+    },
+    "examples" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    },
+    "enum" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
     }
   }
 };
