@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @ApplicationScoped
@@ -60,6 +61,14 @@ public class KameletDeploymentGeneratorService
         representer.addTypeDescription(personDesc);
         Yaml yaml = new Yaml(constructor, representer);
         return yaml.dumpAsMap(kamelet);
+    }
+
+    @Override
+    public String parse(final List<Step> steps,
+                        final Map<String, Object> metadata) {
+        return parse(
+                metadata.getOrDefault("name", "").toString(),
+                steps);
     }
 
     @Override

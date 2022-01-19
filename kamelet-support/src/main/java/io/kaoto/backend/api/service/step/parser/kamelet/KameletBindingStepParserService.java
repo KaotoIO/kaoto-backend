@@ -42,10 +42,17 @@ public class KameletBindingStepParserService
 
     @Override
     public List<Step> parse(final String input) {
+        return deepParse(input).getSteps();
+    }
+
+    @Override
+    public ParseResult<Step> deepParse(final String input) {
         if (!appliesTo(input)) {
             throw new IllegalArgumentException(
                     "Wrong format provided. This is not parseable by us");
         }
+
+        ParseResult<Step> res = new ParseResult<>();
 
         List<Step> steps = new ArrayList<>();
         try {
@@ -63,9 +70,10 @@ public class KameletBindingStepParserService
                     "Wrong format provided. This is not parseable by us");
         }
 
-        return steps.stream()
+        res.setSteps(steps.stream()
                 .filter(Objects::nonNull)
-                .toList();
+                .toList());
+        return res;
     }
 
     private void processSpec(final List<Step> steps,
