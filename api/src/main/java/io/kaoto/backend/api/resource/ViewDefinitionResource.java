@@ -14,6 +14,7 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -51,7 +52,7 @@ public class ViewDefinitionResource {
 
     private ViewDefinitionService viewDefinitionService;
 
-    private StepParserService<Step> stepParserService;
+    private Instance<StepParserService<Step>> stepParserServices;
 
     @Inject
     public void setViewDefinitionService(
@@ -60,10 +61,11 @@ public class ViewDefinitionResource {
     }
 
     @Inject
-    public void setStepParserService(
-            final StepParserService<Step> stepParserService) {
-        this.stepParserService = stepParserService;
+    public void setStepParserServices(
+            final Instance<StepParserService<Step>> stepParserServices) {
+        this.stepParserServices = stepParserServices;
     }
+
     /*
      * 🐱method views:
      * 🐱param yaml: String
@@ -77,11 +79,16 @@ public class ViewDefinitionResource {
             description = "Get view definitions for a specific integration."
             + " This is an idempotent operation.")
     public ViewDefinitionResourceResponse views(
-            final @RequestBody String yaml) {
+            final @RequestBody String crd) {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
-        res.setSteps(stepParserService.parse(yaml));
-        res.setViews(viewDefinitionService.views(yaml, res.getSteps()));
+        for (StepParserService<Step> stepParserService : stepParserServices) {
+            if (stepParserService.appliesTo(crd)) {
+                res.setSteps(stepParserService.parse(crd));
+                break;
+            }
+        }
+        res.setViews(viewDefinitionService.views(crd, res.getSteps()));
         return res;
     }
 

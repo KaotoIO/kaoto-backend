@@ -22,10 +22,8 @@ import java.util.List;
 @ApplicationScoped
 public class ViewDefinitionService {
 
-    @Inject
     private Instance<StepParserService<Step>> stepParsers;
 
-    @Inject
     private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
 
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
@@ -65,6 +63,7 @@ public class ViewDefinitionService {
         return stepParsers;
     }
 
+    @Inject
     public void setStepParsers(
             final Instance<StepParserService<Step>> stepParsers) {
         this.stepParsers = stepParsers;
@@ -75,6 +74,7 @@ public class ViewDefinitionService {
         return viewParsers;
     }
 
+    @Inject
     public void setViewParsers(
             final Instance<ViewDefinitionParserService<ViewDefinition>>
                     viewParsers) {

@@ -17,6 +17,7 @@ import org.yaml.snakeyaml.representer.Representer;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class KameletBindingDeploymentGeneratorService
@@ -78,6 +79,14 @@ public class KameletBindingDeploymentGeneratorService
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
                     representer);
         return yaml.dumpAsMap(binding);
+    }
+
+    @Override
+    public String parse(final List<Step> steps,
+                        final Map<String, Object> metadata) {
+        return parse(
+                metadata.getOrDefault("name", "").toString(),
+                steps);
     }
 
     private KameletBindingStep createKameletBindingStep(final Step step) {
