@@ -70,24 +70,22 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 }
             }
 
-            final var annotations = "annotations";
-            if (step.getMetadata().containsKey(annotations)) {
-                Map<String, Object> annotationsMap =
-                        (Map<String, Object>) step.getMetadata()
-                                .get(annotations);
+            Map<String, Object> annotationsMap =
+                    (Map<String, Object>) step.getMetadata()
+                            .get("annotations");
 
-                final var group = "camel.apache.org/kamelet.group";
-                if (annotationsMap.containsKey(group)) {
-                    step.setGroup(annotationsMap.get(group).toString());
-                }
-
-                final var icon = "camel.apache.org/kamelet.icon";
-                if (annotationsMap.containsKey(icon)) {
-                    step.setIcon(annotationsMap.get(icon).toString());
-                }
+            final var group = "camel.apache.org/kamelet.group";
+            if (annotationsMap.containsKey(group)) {
+                step.setGroup(annotationsMap.get(group).toString());
             }
+
+            final var icon = "camel.apache.org/kamelet.icon";
+            if (annotationsMap.containsKey(icon)) {
+                step.setIcon(annotationsMap.get(icon).toString());
+            }
+
         } catch (Exception e) {
-            log.error(e, e);
+            log.error("We didn't know how to parse this kamelet", e);
         } finally {
             step.setMetadata(null);
         }
@@ -96,7 +94,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     }
 
     private Step extractSpec(final Step step) {
-        if (step == null || step.getSpec() == null) {
+        if (step == null) {
             return step;
         }
 
@@ -106,22 +104,20 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 Map<String, Object> definition =
                         (Map<String, Object>) step.getSpec()
                                 .get(definitionLabel);
-                final var title = "title";
-                if (definition.containsKey(title)) {
-                    step.setTitle(definition.get(title).toString());
-                }
 
-                final var description = "description";
-                if (definition.containsKey(description)) {
-                    step.setDescription(definition.get(description).toString());
-                }
+                //We always need a title
+                step.setTitle((String) definition.getOrDefault("title",
+                        "unknown"));
+
+                step.setDescription((String) definition.getOrDefault(
+                        "description", null));
 
                 if (definition.containsKey(PROPERTIES)) {
                     parseParameters(step, definition);
                 }
             }
         } catch (Exception e) {
-            log.error(e, e);
+            log.error("We didn't know how to parse this kamelet", e);
         } finally {
             step.setSpec(null);
         }
@@ -152,8 +148,8 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 p.setPath((Boolean)
                         definitions.getOrDefault("path", false));
 
-                p.setNullable(required == null || !required.stream()
-                        .anyMatch(r -> r.equalsIgnoreCase(title)));
+                p.setNullable(required == null || required.stream()
+                        .noneMatch(r -> r.equalsIgnoreCase(title)));
 
                 step.getParameters().add(p);
             }
