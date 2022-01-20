@@ -161,6 +161,7 @@
         <module>catalog</module>
         <module>services-interfaces</module>
         <module>kamelet-support</module>
+        <module>serverless-workflow-support</module>
         <module>cluster</module>
         <module>api</module>
     </modules>

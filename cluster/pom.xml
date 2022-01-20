@@ -39,6 +39,11 @@
                     <artifactId>kamelet-support</artifactId>
                     <version>${project.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>io.kaoto.backend</groupId>
+                    <artifactId>serverless-workflow-support</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
             </dependencies>
         </profile>
     </profiles>
