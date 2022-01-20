@@ -13,15 +13,7 @@ served: true
 singular: kameletbinding
 spec:
   sink:
-    properties:
-      password: The Password
-      bootstrapServers: The Brokers
-      topic: The Topic Names
-      user: The Username
-    ref:
-      apiVersion: camel.apache.org/v1alpha1
-      kind: Kamelet
-      name: kafka-sink
+    uri: log:info?showBody=false&
   source:
     properties:
       keywords: Apache Camel

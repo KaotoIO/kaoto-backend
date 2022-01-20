@@ -7,7 +7,5 @@ repository:
         url: "https://github.com/KaotoIO/camel-component-metadata.git"
         tag: "main"
   viewdefinition:
-    git:
-      -
-        url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog.git"
-        tag: "test"
+    jar:
+      - "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/tags/test.zip"
