@@ -893,8 +893,8 @@ These parameters could be used on the UI to configure the step.</p>
 		<td><code>String</code></td>
 		<td>Helping text describing the parameter</td>
 	</tr>
-	<tr id='parameter-label'>
-		<td><code><b>label</b>
+	<tr id='parameter-title'>
+		<td><code><b>title</b>
 		<td><code>String</code></td>
 		<td>Human name for the view</td>
 	</tr>
@@ -905,25 +905,220 @@ These parameters could be used on the UI to configure the step.</p>
 	</tr>
 	<tr id='parameter-value'>
 		<td><code><b>value</b>
-		<td><code>String</code></td>
+		<td><code>Object</code></td>
 		<td>Actual value of this parameter.
 Used when describing a configured element.</td>
 	</tr>
 	<tr id='parameter-default'>
 		<td><code><b>default</b>
-		<td><code>String</code></td>
+		<td><code>Object</code></td>
 		<td>Default value, if there is any</td>
 	</tr>
 	<tr id='parameter-type'>
 		<td><code><b>type</b>
 		<td><code>String</code></td>
-		<td>Type of parameter: text, integer, float, boolean,...
-<p>Is this a path parameter?</p></td>
+		<td>Type of parameter: number, integer, string, boolean, array, object, or
+null</td>
+	</tr>
+	<tr id='parameter-path'>
+		<td><code><b>path</b>
+		<td><code>Boolean</code></td>
+		<td>Is this a path parameter?</td>
+	</tr>
+	<tr id='parameter-nullable'>
+		<td><code><b>nullable</b>
+		<td><code>Boolean</code></td>
+		<td>Can this property be null?</td>
+	</tr>
+	<tr id='parameter-enum'>
+		<td><code><b>enum</b>
+		<td><code>Object[]</code></td>
+		<td>All the possible values for this property.</td>
+	</tr>
+	<tr id='parameter-examples'>
+		<td><code><b>examples</b>
+		<td><code>Object[]</code></td>
+		<td>Examples of valid values.</td>
 	</tr>
 </tbody></table>
 </section>
 
 
+<h2 id='arrayparameter'></h2>
+<section class='namespace'>
+
+<h3 id='arrayparameter-property'>ArrayParameter</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='arrayparameter-maxitems'>
+		<td><code><b>maxItems</b>
+		<td><code>Integer</code></td>
+		<td>Maximum number of items this array can have.</td>
+	</tr>
+	<tr id='arrayparameter-minitems'>
+		<td><code><b>minItems</b>
+		<td><code>Integer</code></td>
+		<td>Minimum number of items this array must have.</td>
+	</tr>
+	<tr id='arrayparameter-uniqueitems'>
+		<td><code><b>uniqueItems</b>
+		<td><code>boolean</code></td>
+		<td>Indicates if all items must be unique.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='integerparameter'></h2>
+<section class='namespace'>
+
+<h3 id='integerparameter-property'>IntegerParameter</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='integerparameter-maximum'>
+		<td><code><b>maximum</b>
+		<td><code>Integer</code></td>
+		<td>Maximum value for this property.</td>
+	</tr>
+	<tr id='integerparameter-minimum'>
+		<td><code><b>minimum</b>
+		<td><code>Integer</code></td>
+		<td>Minimum value for this property.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='numberparameter'></h2>
+<section class='namespace'>
+
+<h3 id='numberparameter-property'>NumberParameter</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='numberparameter-maximum'>
+		<td><code><b>maximum</b>
+		<td><code>Number</code></td>
+		<td>Maximum value for this property.</td>
+	</tr>
+	<tr id='numberparameter-minimum'>
+		<td><code><b>minimum</b>
+		<td><code>Number</code></td>
+		<td>Minimum value for this property.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='objectparameter'></h2>
+<section class='namespace'>
+
+<h3 id='objectparameter-property'>ObjectParameter</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='objectparameter-maxproperties'>
+		<td><code><b>maxProperties</b>
+		<td><code>Integer</code></td>
+		<td>Maximum number of properties this object can have.</td>
+	</tr>
+	<tr id='objectparameter-minproperties'>
+		<td><code><b>minProperties</b>
+		<td><code>Integer</code></td>
+		<td>Minimum number of properties this object can have.</td>
+	</tr>
+	<tr id='objectparameter-required'>
+		<td><code><b>required</b>
+		<td><code>String[]</code></td>
+		<td>List of properties that the object must have.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='stringparameter'></h2>
+<section class='namespace'>
+
+<h3 id='stringparameter-property'>StringParameter</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Property</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='stringparameter-maxlength'>
+		<td><code><b>maxLength</b>
+		<td><code>Integer</code></td>
+		<td>Maximum size of the string.</td>
+	</tr>
+	<tr id='stringparameter-minlength'>
+		<td><code><b>minLength</b>
+		<td><code>Integer</code></td>
+		<td>Minimum size of the string.</td>
+	</tr>
+	<tr id='stringparameter-pattern'>
+		<td><code><b>pattern</b>
+		<td><code>Regex (String)</code></td>
+		<td>Valid data must match this regular expression.</td>
+	</tr>
+	<tr id='stringparameter-format'>
+		<td><code><b>format</b>
+		<td><code>String</code></td>
+		<td>Valid data must match the format with this name. See input types on HTML.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 
 </section>
 <h2 id='step'>Step</h2>
