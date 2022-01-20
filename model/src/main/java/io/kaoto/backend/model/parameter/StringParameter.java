@@ -16,8 +16,10 @@ public class StringParameter extends Parameter<String> {
     private String format;
 
     public StringParameter(final String id, final String title,
-                           final String description, final String v) {
+                           final String description, final String v,
+                           final String format) {
         super(id, title, description, v);
+        this.setFormat(format);
     }
 
     public StringParameter() {
