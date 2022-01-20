@@ -332,7 +332,7 @@ mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left
 	<TR><TD><I>Methods</I><BR/>
 identifier():String
 <BR align="left" />
-parse(&lt;String&gt; name, &lt;List[Step]&gt; steps):String
+parse(&lt;String&gt; name, &lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
