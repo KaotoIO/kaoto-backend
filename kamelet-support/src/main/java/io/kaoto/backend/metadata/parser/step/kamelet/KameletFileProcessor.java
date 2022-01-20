@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
@@ -132,6 +133,8 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                                  final Map<String, Object> definition) {
         Map<String, Object> properties =
                 (Map<String, Object>) definition.get(PROPERTIES);
+        List<String> required = (List<String>) definition.get("required");
+
         step.setParameters(new ArrayList<>());
 
         if (properties != null) {
@@ -146,7 +149,12 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 Object value = definitions
                                 .getOrDefault("default", null);
                 p = getParameter(definitions, title, description, value);
-                p.setPath((Boolean) definitions.getOrDefault("path", false));
+                p.setPath((Boolean)
+                        definitions.getOrDefault("path", false));
+
+                p.setNullable(required == null || !required.stream()
+                        .anyMatch(r -> r.equalsIgnoreCase(title)));
+
                 step.getParameters().add(p);
             }
         }
@@ -164,7 +172,8 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             case "integer" -> new IntegerParameter(title, title, description,
                     (value != null ? Integer.valueOf(value.toString()) : null));
             case "string" -> new StringParameter(title, title, description,
-                    (value != null ? value.toString() : null));
+                    (value != null ? value.toString() : null),
+                    (String) definitions.getOrDefault("format", null));
             case "boolean" -> new BooleanParameter(title, title, description,
                     (Boolean) value);
             case "array" -> new ArrayParameter(title, title, description,
