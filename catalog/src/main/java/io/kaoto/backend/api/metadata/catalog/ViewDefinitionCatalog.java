@@ -1,7 +1,6 @@
 package io.kaoto.backend.api.metadata.catalog;
 
 import io.quarkus.runtime.Startup;
-import io.smallrye.config.ConfigMapping;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.view.ViewDefinitionParseCatalog;
 import io.kaoto.backend.model.configuration.Repository;
@@ -25,7 +24,7 @@ import java.util.List;
 @ApplicationScoped
 public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
 
-    private ViewDefinitionCatalog.ViewDefinitionRepository repository;
+    private ViewDefinitionRepository repository;
 
     @Override
     protected List<ParseCatalog<ViewDefinition>> loadParsers() {
@@ -45,11 +44,8 @@ public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
 
     @Inject
     public void setRepository(
-            final ViewDefinitionCatalog.ViewDefinitionRepository repo) {
+            final ViewDefinitionRepository repo) {
         this.repository = repo;
     }
 
-    @ConfigMapping(prefix = "repository.viewdefinition")
-    interface ViewDefinitionRepository extends Repository {
-    }
 }

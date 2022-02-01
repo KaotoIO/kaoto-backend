@@ -92,5 +92,18 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>syndesis-support</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.kaoto.backend</groupId>
+                    <artifactId>syndesis-support</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 </project>

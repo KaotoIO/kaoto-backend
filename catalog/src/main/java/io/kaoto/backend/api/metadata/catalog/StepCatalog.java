@@ -1,7 +1,6 @@
 package io.kaoto.backend.api.metadata.catalog;
 
 import io.quarkus.runtime.Startup;
-import io.smallrye.config.ConfigMapping;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.configuration.Repository;
 import io.kaoto.backend.model.step.Step;
@@ -62,7 +61,4 @@ public class StepCatalog extends AbstractCatalog<Step> {
     }
 
 
-    @ConfigMapping(prefix = "repository.step")
-    interface StepRepository extends Repository {
-    }
 }
