@@ -28,12 +28,11 @@ class KameletBindingDeploymentGeneratorServiceTest {
         Assertions.assertEquals("", parser.parse("", steps));
         steps.add(new Step());
         Assertions.assertEquals("", parser.parse("", steps));
-        Step s = new Step();
-        steps.add(s);
+        steps.add(new Step());
         Assertions.assertEquals("", parser.parse("", steps));
-        s.setKind("KAMELET");
+        for (Step step : steps) {
+            step.setKind("Kamelet");
+        }
         Assertions.assertNotEquals("", parser.parse("", steps));
     }
 }
-
-

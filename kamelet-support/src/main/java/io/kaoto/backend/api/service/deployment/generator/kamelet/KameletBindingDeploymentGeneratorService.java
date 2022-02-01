@@ -18,6 +18,7 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @ApplicationScoped
 public class KameletBindingDeploymentGeneratorService
@@ -25,6 +26,9 @@ public class KameletBindingDeploymentGeneratorService
 
     public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     public static final String KAMELET = "KAMELET";
+    public static final String EIP = "EIP";
+    public static final List<String> KINDS = Arrays.asList(
+            new String[]{CAMEL_CONNECTOR, KAMELET, EIP});
 
     public String identifier() {
         return "KameletBinding";
@@ -32,7 +36,7 @@ public class KameletBindingDeploymentGeneratorService
 
     @Override
     public List<String> getKinds() {
-        return Arrays.asList(new String[]{CAMEL_CONNECTOR, KAMELET});
+        return KINDS;
     }
 
     @Override
@@ -147,17 +151,10 @@ public class KameletBindingDeploymentGeneratorService
 
     @Override
     public boolean appliesTo(final List<Step> steps) {
-        if (steps.size() < 2) {
-            return false;
-        }
-
-        for (Step s : steps) {
-            if (CAMEL_CONNECTOR.equalsIgnoreCase(s.getKind())
-                    || KAMELET.equalsIgnoreCase(s.getKind())) {
-                return true;
-            }
-        }
-
-        return false;
+        return steps.size() > 1
+                && steps.stream().allMatch(
+                s -> getKinds().stream()
+                        .anyMatch(
+                                Predicate.isEqual(s.getKind().toUpperCase())));
     }
 }

@@ -20,16 +20,14 @@ import java.util.function.Predicate;
 public class KameletDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
+    public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    public static final String KAMELET = "KAMELET";
+    public static final String EIP = "EIP";
+    public static final String EIP_BRANCHES = "EIP-BRANCH";
+    public static final List<String> KINDS = Arrays.asList(
+            new String[]{CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES});
+
     private String defaultIcon;
-
-    @Override
-    public List<String> getKinds() {
-        return Arrays.asList(new String[]{"Camel-Connector", "EIP"});
-    }
-
-    public String identifier() {
-        return "Kamelet";
-    }
 
     public KameletDeploymentGeneratorService() {
         try {
@@ -42,6 +40,15 @@ public class KameletDeploymentGeneratorService
             defaultIcon = "";
             //No need to raise any exception, just the icon will be empty
         }
+    }
+
+    @Override
+    public List<String> getKinds() {
+        return KINDS;
+    }
+
+    public String identifier() {
+        return "Kamelet";
     }
 
     @Override
@@ -73,10 +80,9 @@ public class KameletDeploymentGeneratorService
 
     @Override
     public boolean appliesTo(final List<Step> steps) {
-        String[] validSteps = new String[]{"CAMEL-CONNECTOR", "EIP"};
         return steps.size() > 1
                 && steps.stream().allMatch(
-                s -> Arrays.stream(validSteps)
+                s -> getKinds().stream()
                         .anyMatch(
                                 Predicate.isEqual(s.getKind().toUpperCase())));
     }

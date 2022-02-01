@@ -134,7 +134,24 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Kamelet");
         steps.add(step);
+        assertTrue(service.appliesTo(steps));
+
+        steps.clear();
+
+        step = new Step();
+        step.setKind("Kamelet");
+        steps.add(step);
         assertFalse(service.appliesTo(steps));
+
+        step = new Step();
+        step.setKind("EIP-BRANCH");
+        steps.add(step);
+        assertTrue(service.appliesTo(steps));
+
+        step = new Step();
+        step.setKind("Camel-Connector");
+        steps.add(step);
+        assertTrue(service.appliesTo(steps));
 
         steps.clear();
 
@@ -146,12 +163,12 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Kamelet");
         steps.add(step);
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
 
         step = new Step();
-        step.setKind("Camel-Connector");
+        step.setKind("Kamelet");
         steps.add(step);
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
     }
 
     public KameletDeploymentGeneratorService getService() {
