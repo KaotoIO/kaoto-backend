@@ -83,9 +83,14 @@ public class ViewDefinitionResource {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
         for (StepParserService<Step> stepParserService : stepParserServices) {
-            if (stepParserService.appliesTo(crd)) {
-                res.setSteps(stepParserService.parse(crd));
-                break;
+            try {
+                if (stepParserService.appliesTo(crd)) {
+                    res.setSteps(stepParserService.parse(crd));
+                    break;
+                }
+            } catch (Exception e) {
+                log.warn("Parser " + stepParserService.getClass() + "threw an"
+                        + " unexpected error.", e);
             }
         }
         res.setViews(viewDefinitionService.views(crd, res.getSteps()));

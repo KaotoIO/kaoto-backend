@@ -2,6 +2,7 @@ package io.kaoto.backend.api.service.deployment;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.step.Step;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -17,6 +18,8 @@ import java.util.Map;
  */
 @ApplicationScoped
 public class DeploymentService {
+
+    private Logger log = Logger.getLogger(DeploymentService.class);
 
     @Inject
     private Instance<DeploymentGeneratorService> parsers;
@@ -34,8 +37,14 @@ public class DeploymentService {
         Map<String, String> strings = new HashMap<>();
 
         for (DeploymentGeneratorService parser : getParsers()) {
-            if (parser.appliesTo(steps)) {
-                strings.put(parser.identifier(), parser.parse(name, steps));
+            try {
+                if (parser.appliesTo(steps)) {
+                    strings.put(parser.identifier(), parser.parse(name, steps));
+                }
+            } catch (Exception e) {
+                log.warn("Parser " + parser.getClass() + "threw an unexpected"
+                                + " error. ",
+                        e);
             }
         }
 
