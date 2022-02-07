@@ -4,7 +4,7 @@ import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;
-import io.smallrye.config.ConfigMapping;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -53,11 +53,7 @@ public class IntegrationResource {
         this.clusterService = clusterService;
     }
 
-    public void setCrdDefault(final String crdDefault) {
-        this.crdDefault = crdDefault;
-    }
-
-    @ConfigMapping(prefix = "crd.default")
+    @ConfigProperty(name = "crd.default")
     private String crdDefault;
     private DeploymentService deploymentService;
     private ClusterService clusterService;
@@ -111,14 +107,20 @@ public class IntegrationResource {
             final @QueryParam("type") String type) {
         Map<String, String> crds = customResourcesDefinition(request);
 
+        log.trace("Found " + crds.size() + " potential CRDs.");
+
         if (crds.containsKey(type)) {
+            log.trace("Returning type " + type);
             return crds.get(type);
         }
 
+        log.trace("Trying to return default type " + crdDefault);
         if (crds.containsKey(crdDefault)) {
+            log.trace("Returning default " + crdDefault);
             return crds.get(crdDefault);
         }
 
+        log.trace("Returning arbitrary one.");
         return crds.values().iterator().next();
     }
 

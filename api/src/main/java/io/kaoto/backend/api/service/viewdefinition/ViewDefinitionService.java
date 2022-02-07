@@ -45,6 +45,7 @@ public class ViewDefinitionService {
                 }
                 i++;
             }
+            log.trace("Found " + steps.size() + " steps.");
         }
 
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
