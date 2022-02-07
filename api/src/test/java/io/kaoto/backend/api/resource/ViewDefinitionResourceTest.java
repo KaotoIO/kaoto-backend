@@ -71,16 +71,4 @@ class ViewDefinitionResourceTest {
                 .statusCode(Response.Status
                         .UNSUPPORTED_MEDIA_TYPE.getStatusCode());
     }
-
-    @Test
-    void testExceptions() {
-        given()
-                .when()
-                .body("kind: KameletBinding : wrong invalid content")
-                .contentType("text/yaml")
-                .post()
-                .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-    }
-
 }
