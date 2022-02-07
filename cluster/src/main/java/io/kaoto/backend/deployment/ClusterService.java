@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.model.deployment.Integration;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
@@ -18,6 +19,8 @@ public class ClusterService {
 
     private KubernetesClient kubernetesClient;
 
+    private Logger log = Logger.getLogger(ClusterService.class);
+
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
         this.kubernetesClient = kubernetesClient;
@@ -25,15 +28,19 @@ public class ClusterService {
 
     public List<Integration> getIntegrations() {
         List<Integration> res = new ArrayList<>();
-        final var resources =
-                kubernetesClient.resources(KameletBinding.class)
-                .list().getItems();
-        for (KameletBinding integration : resources) {
-            Integration i = new Integration();
-            i.setName(integration.getMetadata().getName());
-            i.setRunning(true);
-            i.setResource(integration);
-            res.add(i);
+        try {
+            final var resources =
+                    kubernetesClient.resources(KameletBinding.class)
+                            .list().getItems();
+            for (KameletBinding integration : resources) {
+                Integration i = new Integration();
+                i.setName(integration.getMetadata().getName());
+                i.setRunning(true);
+                i.setResource(integration);
+                res.add(i);
+            }
+        } catch (Exception e) {
+            log.warn("Error extracting the list of integrations.", e);
         }
         return res;
     }
@@ -52,16 +59,17 @@ public class ClusterService {
             }
             return start(binding);
         } catch (ConstructorException e) {
+            log.warn("Error starting the integration.", e);
             return false;
         }
     }
 
     public boolean start(final KameletBinding binding) {
-
         try {
             kubernetesClient.resources(KameletBinding.class)
                     .createOrReplace(binding);
         } catch (Exception e) {
+            log.warn("Error starting the integration.", e);
             return false;
         }
 

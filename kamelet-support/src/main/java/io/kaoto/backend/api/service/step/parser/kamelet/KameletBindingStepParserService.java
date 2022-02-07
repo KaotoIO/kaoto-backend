@@ -80,8 +80,10 @@ public class KameletBindingStepParserService
                              final KameletBindingSpec spec) {
         steps.add(processStep(spec.getSource()));
 
-        for (KameletBindingStep intermediateStep : spec.getSteps()) {
-            steps.add(processStep(intermediateStep));
+        if (spec.getSteps() != null) {
+            for (KameletBindingStep intermediateStep : spec.getSteps()) {
+                steps.add(processStep(intermediateStep));
+            }
         }
 
         steps.add(processStep(spec.getSink()));
@@ -90,24 +92,29 @@ public class KameletBindingStepParserService
     private Step processStep(final KameletBindingStep source) {
         Step step = null;
 
-        if (source.getUri() != null) {
-            log.trace("Found uri component.");
-            String uri = source.getUri();
-            step = catalog.getReadOnlyCatalog()
-                    .searchStepByName(uri.substring(0, uri.indexOf(":")));
-            if (step != null) {
-                log.trace("Found step " + step.getName());
-                setValuesOnParameters(step, uri);
-            }
-        } else if (source.getRef() != null) {
-            log.trace("Found ref component.");
-            step = catalog.getReadOnlyCatalog()
-                    .searchStepByName(source.getRef().getName());
+        try {
 
-            if (step != null) {
-                log.trace("Found step " + step.getName());
-                setValuesOnParameters(step, source.getProperties());
+            if (source.getUri() != null) {
+                log.trace("Found uri component.");
+                String uri = source.getUri();
+                step = catalog.getReadOnlyCatalog()
+                        .searchStepByName(uri.substring(0, uri.indexOf(":")));
+                if (step != null) {
+                    log.trace("Found step " + step.getName());
+                    setValuesOnParameters(step, uri);
+                }
+            } else if (source.getRef() != null) {
+                log.trace("Found ref component.");
+                step = catalog.getReadOnlyCatalog()
+                        .searchStepByName(source.getRef().getName());
+
+                if (step != null) {
+                    log.trace("Found step " + step.getName());
+                    setValuesOnParameters(step, source.getProperties());
+                }
             }
+        } catch (Exception e) {
+            log.trace("Can't parse step -> " + e.getMessage());
         }
 
         return step;
