@@ -38,11 +38,13 @@ public class ViewDefinitionService {
                                       final List<Step> steps) {
 
         int i = 0;
-        for (Step step : steps) {
-            if (step != null) {
-                step.setUUID(i + step.getId());
+        if (steps != null) {
+            for (Step step : steps) {
+                if (step != null) {
+                    step.setUUID(i + step.getId());
+                }
+                i++;
             }
-            i++;
         }
 
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
