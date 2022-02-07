@@ -108,16 +108,4 @@ public class ViewDefinitionResource {
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
     }
-
-    @ServerExceptionMapper
-    public Response mapException(final IllegalArgumentException x) {
-        log.error("Error trying to return YAML.", x);
-
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Couldn't parse the YAML provided: "
-                        + x.getMessage())
-                .type(MediaType.TEXT_PLAIN_TYPE)
-                .build();
-    }
-
 }
