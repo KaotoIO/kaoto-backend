@@ -114,7 +114,7 @@ public class KameletBindingStepParserService
                 }
             }
         } catch (Exception e) {
-            log.trace("Can't parse step -> " + e.getMessage());
+            log.warn("Can't parse step -> " + e.getMessage());
         }
 
         return step;

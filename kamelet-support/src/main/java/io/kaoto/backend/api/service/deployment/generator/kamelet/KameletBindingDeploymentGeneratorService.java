@@ -151,8 +151,7 @@ public class KameletBindingDeploymentGeneratorService
 
     @Override
     public boolean appliesTo(final List<Step> steps) {
-        return steps.size() > 1
-                && steps.stream().allMatch(
+        return steps.stream().allMatch(
                 s -> getKinds().stream()
                         .anyMatch(
                                 Predicate.isEqual(s.getKind().toUpperCase())));
