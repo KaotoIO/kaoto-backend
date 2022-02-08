@@ -34,7 +34,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
-        run: mvn clean install -Pnative -DskipTests -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.3-java17
+        run: mvn clean install -Pnative -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
       - name: 🤳 Build Docker Image
         run: cd api && docker build -f src/main/docker/Dockerfile.native -t kaotoio/backend .
       - name: Login to DockerHub
@@ -56,4 +56,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-
