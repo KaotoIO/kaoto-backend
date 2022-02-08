@@ -31,7 +31,7 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 There is a nightly dockerized container for the Kaoto backend. 
 You can run it with the following command:
 
-`docker run --rm -d -p 8080:8080 kaotoio/backend`
+`docker run --rm -d -p 8081:8081 kaotoio/backend`
 
 ## Developing Kaoto
 
@@ -62,9 +62,11 @@ Then you can run your application in dev mode that enables live coding using:
 mvn quarkus:dev -pl api
 ```
 
-Your app is now deployed on `localhost:8080` and you can check the swagger API on `http://localhost:8080/q/swagger-ui/`.
+Your app is now deployed on `localhost:8081` and you can check the swagger 
+API on `http://localhost:8081/q/swagger-ui/`.
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev 
+> mode only at http://localhost:8081/q/dev/.
 
 ### Packaging and Running
 

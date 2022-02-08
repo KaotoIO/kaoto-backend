@@ -2,15 +2,10 @@ repository:
   step:
     jar:
       - "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.6.0/camel-kamelets-0.6.0.jar"
-    git:
-      -
-        url: "https://github.com/KaotoIO/camel-component-metadata.git"
-        tag: "main"
+      - "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
   viewdefinition:
-    git:
-      -
-        url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog.git"
-        tag: "main"
+    jar:
+      - "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/heads/main.zip"
 
 crd:
   default: "KameletBinding"
@@ -19,6 +14,7 @@ quarkus:
   http:
     test-port: 8083
     cors: true
+    port: 8081
   log:
     category:
       io.kaoto.backend.api:
