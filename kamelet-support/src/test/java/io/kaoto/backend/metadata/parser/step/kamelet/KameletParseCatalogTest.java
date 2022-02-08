@@ -9,8 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class KameletParseCatalogTest {
@@ -36,17 +39,25 @@ class KameletParseCatalogTest {
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertTrue(catalog.store(steps));
-        Assertions.assertEquals(catalog.getAll().size(), steps.size());
+        assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
+        String[] required = new String[]{
+                "connectionHost", "connectionPort",
+                "username", "password", "directoryName"};
         Step step = catalog.searchStepByName(name);
+
+        assertEquals(step.getRequired().size(), required.length);
+        Arrays.stream(required).allMatch(
+                property -> step.getRequired().contains(property));
+
         Assertions.assertNotNull(step);
-        Assertions.assertEquals(name, step.getId());
-        Assertions.assertEquals(name, step.getName());
-        Assertions.assertEquals("Kamelet", step.getKind());
-        Assertions.assertEquals("START", step.getType());
+        assertEquals(name, step.getId());
+        assertEquals(name, step.getName());
+        assertEquals("Kamelet", step.getKind());
+        assertEquals("START", step.getType());
         Assertions.assertNotNull(step.getParameters());
-        Assertions.assertEquals(8, step.getParameters().size());
+        assertEquals(8, step.getParameters().size());
         for (var p : step.getParameters()) {
             Assertions.assertNotNull(p.getType());
             Assertions.assertNotNull(p.getTitle());
@@ -65,7 +76,7 @@ class KameletParseCatalogTest {
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertNotNull(steps);
-        Assertions.assertEquals(0, steps.size());
+        assertEquals(0, steps.size());
     }
 
     @Test
@@ -87,7 +98,7 @@ class KameletParseCatalogTest {
                         jarUrl);
         List<Step> stepsJar = kameletParserJar.parse().join();
 
-        Assertions.assertEquals(stepsJar.size(), stepsGit.size());
+        assertEquals(stepsJar.size(), stepsGit.size());
 
         stepsJar.sort(Comparator.comparing(Metadata::getId));
         stepsGit.sort(Comparator.comparing(Metadata::getId));

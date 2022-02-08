@@ -130,6 +130,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         Map<String, Object> properties =
                 (Map<String, Object>) definition.get(PROPERTIES);
         List<String> required = (List<String>) definition.get("required");
+        step.setRequired(required);
 
         step.setParameters(new ArrayList<>());
 
