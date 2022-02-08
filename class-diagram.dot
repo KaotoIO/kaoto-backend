@@ -290,7 +290,7 @@ description:String<BR align="left" />title:String<BR align="left" />id:String<BR
 "Step" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Step</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />group:String<BR align="left" />kind:String<BR align="left" />
+description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />required:String[]<BR align="left" />group:String<BR align="left" />kind:String<BR align="left" />
 
 </TD></TR>
 
