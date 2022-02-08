@@ -23,6 +23,7 @@ public class Step extends Metadata {
     private String description;
     private String group;
     private List<Parameter> parameters;
+    private List<String> required;
 
     private String uuid;
     private Map<String, Object> metadata;
@@ -113,7 +114,18 @@ public class Step extends Metadata {
         this.uuid = uuid;
     }
 
+    /*
+     * 🐱property required: String[]
+     *
+     * List of properties that the object must have.
+     */
+    public List<String> getRequired() {
+        return required;
+    }
 
+    public void setRequired(final List<String> required) {
+        this.required = required;
+    }
 
     /*
      * 🐱property group: String
