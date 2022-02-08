@@ -1,5 +1,8 @@
 name: 🧐 Generate Docker image
 on:
+  pull_request:
+    branches:
+      - 'main'
   push:
     tags:
       - 'v*'
@@ -35,8 +38,6 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
         run: mvn clean install -Pnative -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
-      - name: 🤳 Build Docker Image
-        run: cd api && docker build -f src/main/docker/Dockerfile.native -t kaotoio/backend .
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -47,10 +48,14 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: kaotoio/backend
+          tags: |
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+            type=ref,event=tag
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: 'api/'
+          file: 'src/main/docker/Dockerfile.native'
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
