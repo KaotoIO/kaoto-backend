@@ -3,19 +3,18 @@
 This is the backend companion of the Kaoto project.
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/kaotoio/kaoto-backend?include_prereleases)
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/kaotoio/backend?label=docker%20version&sort=date)
+![GitHub](https://img.shields.io/github/license/kaotoio/kaoto-backend)
+
+
 ![Docker Pulls](https://img.shields.io/docker/pulls/kaotoio/backend)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/kaotoio/backend/latest?label=docker%20image)
+[![Docker generation](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml/badge.svg)](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
-[![codecov](https://codecov.io/gh/KaotoIO/kaoto-backend/branch/main/graph/badge.svg?token=7RADJHV7HT)](https://codecov.io/gh/KaotoIO/kaoto-backend)
-[![DeepSource](https://deepsource.io/gh/KaotoIO/kaoto-backend.svg/?label=active+issues&show_trend=true&token=AD8N4e26NKVNN6S3mM85hwe-)](https://deepsource.io/gh/KaotoIO/kaoto-backend/?ref=repository-badge)
-
-
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-backend)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kaotoio/kaoto-backend)
 ![GitHub contributors](https://img.shields.io/github/contributors/kaotoio/kaoto-backend)
-![GitHub](https://img.shields.io/github/license/kaotoio/kaoto-backend)
+
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-backend)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
+[![codecov](https://codecov.io/gh/KaotoIO/kaoto-backend/branch/main/graph/badge.svg?token=7RADJHV7HT)](https://codecov.io/gh/KaotoIO/kaoto-backend)
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/kaotoio?style=social)
 ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCcWUAnL5sBYVFen0RMxbZ3A?style=social)
