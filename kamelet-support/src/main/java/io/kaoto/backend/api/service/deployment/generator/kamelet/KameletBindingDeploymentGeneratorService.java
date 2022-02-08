@@ -46,7 +46,9 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         KameletBindingSpec spec = new KameletBindingSpec();
-        spec.setSource(createKameletBindingStep(steps.get(0)));
+        if (steps.size() > 0) {
+            spec.setSource(createKameletBindingStep(steps.get(0)));
+        }
 
         for (int i = 1; i < steps.size() - 1; i++) {
             spec.getSteps().add(createKameletBindingStep(steps.get(i)));
@@ -56,8 +58,9 @@ public class KameletBindingDeploymentGeneratorService
             spec.setSteps(null);
         }
 
-        spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
-
+        if (steps.size() > 1) {
+            spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
+        }
         KameletBinding binding = new KameletBinding(name, spec);
 
         Representer representer = new Representer() {

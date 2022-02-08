@@ -22,6 +22,6 @@ quarkus:
   log:
     category:
       io.kaoto.backend.api:
-        level: "TRACE"
+        level: "INFO"
       org.ecl.yas.int:
         level: "INFO"
