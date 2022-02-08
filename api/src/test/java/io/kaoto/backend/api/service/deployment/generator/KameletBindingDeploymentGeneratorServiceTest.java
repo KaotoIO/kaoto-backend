@@ -14,6 +14,23 @@ import java.util.List;
 @QuarkusTest
 class KameletBindingDeploymentGeneratorServiceTest {
 
+    public static final String EMPTY_INTEGRATION =
+            "apiVersion: camel.apache.org/v1alpha1\n"
+                    + "group: camel.apache.org\n"
+                    + "kind: KameletBinding\n"
+                    + "metadata:\n"
+                    + "  additionalProperties: {}\n"
+                    + "  finalizers: []\n"
+                    + "  managedFields: []\n"
+                    + "  name: ''\n"
+                    + "  ownerReferences: []\n"
+                    + "plural: kameletbindings\n"
+                    + "scope: Namespaced\n"
+                    + "served: true\n"
+                    + "singular: kameletbinding\n"
+                    + "spec: {}\n"
+                    + "storage: true\n"
+                    + "version: v1alpha1\n";
     private KameletBindingDeploymentGeneratorService parser;
 
     @Inject
@@ -25,14 +42,13 @@ class KameletBindingDeploymentGeneratorServiceTest {
     @Test
     void parse() {
         List<Step> steps = new ArrayList();
-        Assertions.assertEquals("", parser.parse("", steps));
+        Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse("", steps));
         steps.add(new Step());
-        Assertions.assertEquals("", parser.parse("", steps));
         steps.add(new Step());
-        Assertions.assertEquals("", parser.parse("", steps));
         for (Step step : steps) {
             step.setKind("Kamelet");
         }
         Assertions.assertNotEquals("", parser.parse("", steps));
+        Assertions.assertNotEquals(EMPTY_INTEGRATION, parser.parse("", steps));
     }
 }

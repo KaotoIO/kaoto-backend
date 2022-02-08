@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
@@ -23,7 +22,27 @@ class KameletDeploymentGeneratorServiceTest {
     @Test
     void parse() {
         List<Step> steps = new ArrayList<Step>();
-        assertEquals("", service.parse("kamelet-test", steps));
+        assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
+                + "group: camel.apache.org\n"
+                + "kind: Kamelet\n"
+                + "metadata:\n"
+                + "  additionalProperties: {}\n"
+                + "  finalizers: []\n"
+                + "  labels:\n"
+                + "    camel.apache.org/kamelet.type: action\n"
+                + "    camel.apache.org/kamelet.icon: ''\n"
+                + "  managedFields: []\n"
+                + "  name: kamelet-test-action\n"
+                + "  ownerReferences: []\n"
+                + "plural: kamelets\n"
+                + "scope: Namespaced\n"
+                + "served: true\n"
+                + "singular: kamelet\n"
+                + "spec:\n"
+                + "  flow:\n"
+                + "    steps: []\n"
+                + "storage: true\n"
+                + "version: v1alpha1\n", service.parse("kamelet-test", steps));
 
         Step step = new Step();
         step.setKind("Camel-Connector");
@@ -119,12 +138,12 @@ class KameletDeploymentGeneratorServiceTest {
     @Test
     void appliesTo() {
         List<Step> steps = new ArrayList<Step>();
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
 
         Step step = new Step();
         step.setKind("Camel-Connector");
         steps.add(step);
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
 
         step = new Step();
         step.setKind("Camel-Connector");
@@ -141,7 +160,7 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Kamelet");
         steps.add(step);
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
 
         step = new Step();
         step.setKind("EIP-BRANCH");
@@ -158,7 +177,7 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Kamelet");
         steps.add(step);
-        assertFalse(service.appliesTo(steps));
+        assertTrue(service.appliesTo(steps));
 
         step = new Step();
         step.setKind("Kamelet");
