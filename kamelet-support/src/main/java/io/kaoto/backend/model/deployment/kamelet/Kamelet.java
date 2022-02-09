@@ -41,7 +41,7 @@ public final class Kamelet
     @Serial
     private static final long serialVersionUID = -6210736155226440906L;
 
-    private final String group = "camel.apache.org";
+    private final static String group = "camel.apache.org";
 
     public Kamelet() {
     }
@@ -100,7 +100,7 @@ public final class Kamelet
      * defined in the "Defining Endpoints" section of
      * https://camel.apache.org/camel-k/1.6.x/languages/yaml.html
     **/
-    private FlowStep processStep(final Step step, final Boolean to) {
+    private FlowStep processStep(final Step step, final boolean to) {
         FlowStep flowStep = null;
 
         if ("Camel-Connector".equalsIgnoreCase(step.getKind())) {
