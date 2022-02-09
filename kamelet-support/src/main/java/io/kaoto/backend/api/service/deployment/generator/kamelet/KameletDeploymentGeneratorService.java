@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 @ApplicationScoped
@@ -80,9 +81,11 @@ public class KameletDeploymentGeneratorService
 
     @Override
     public boolean appliesTo(final List<Step> steps) {
-        return steps.stream().allMatch(
-                s -> getKinds().stream()
+        return steps.stream().filter(Objects::nonNull)
+                .allMatch(
+                        s -> getKinds().stream()
                         .anyMatch(
-                                Predicate.isEqual(s.getKind().toUpperCase())));
+                                Predicate.isEqual(
+                                        s.getKind().toUpperCase())));
     }
 }

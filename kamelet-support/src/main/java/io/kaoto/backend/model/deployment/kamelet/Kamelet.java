@@ -41,7 +41,7 @@ public final class Kamelet
     @Serial
     private static final long serialVersionUID = -6210736155226440906L;
 
-    private final static String group = "camel.apache.org";
+    private final String group = "camel.apache.org";
 
     public Kamelet() {
     }

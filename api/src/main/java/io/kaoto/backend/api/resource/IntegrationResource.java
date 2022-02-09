@@ -142,9 +142,11 @@ public class IntegrationResource {
             final @RequestBody DeploymentResourceYamlRequest request) {
         Map<String, String> yaml = deploymentService.crd(
                 request.getName(), request.getSteps());
-        final var crd = yaml.values().iterator().next();
-        if (clusterService.start(crd)) {
-            return crd;
+        if (!yaml.values().isEmpty()) {
+            final var crd = yaml.values().iterator().next();
+            if (clusterService.start(crd)) {
+                return crd;
+            }
         }
         return "Error deploying " + request.getName();
     }
