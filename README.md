@@ -9,12 +9,15 @@ This is the backend companion of the Kaoto project.
 ![Docker Pulls](https://img.shields.io/docker/pulls/kaotoio/backend)
 [![Docker generation](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml/badge.svg)](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kaotoio/kaoto-backend)
 ![GitHub contributors](https://img.shields.io/github/contributors/kaotoio/kaoto-backend)
-
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kaotoio/kaoto-backend)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-backend)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
 [![codecov](https://codecov.io/gh/KaotoIO/kaoto-backend/branch/main/graph/badge.svg?token=7RADJHV7HT)](https://codecov.io/gh/KaotoIO/kaoto-backend)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-backend)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-backend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-backend)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-backend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-backend)
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/kaotoio?style=social)
 ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCcWUAnL5sBYVFen0RMxbZ3A?style=social)
