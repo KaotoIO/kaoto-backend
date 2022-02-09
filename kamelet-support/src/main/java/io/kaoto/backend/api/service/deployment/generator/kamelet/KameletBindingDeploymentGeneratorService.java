@@ -27,8 +27,8 @@ public class KameletBindingDeploymentGeneratorService
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
     private static final String EIP = "EIP";
-    private static final List<String> KINDS = Arrays.asList(
-            new String[]{CAMEL_CONNECTOR, KAMELET, EIP});
+    private static final List<String> KINDS =
+            Arrays.asList(CAMEL_CONNECTOR, KAMELET, EIP);
 
     public String identifier() {
         return "KameletBinding";

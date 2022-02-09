@@ -25,7 +25,7 @@ public class KameletDeploymentGeneratorService
     private static final String EIP = "EIP";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(
-            new String[]{CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES});
+            CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES);
 
     private String defaultIcon;
 
