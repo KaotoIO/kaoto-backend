@@ -106,7 +106,7 @@ public class GenericViewDefinitionParserService
                 break;
             default:
                 //Unsupported operation or typo
-                res = false;
+                break;
         }
 
         return res;

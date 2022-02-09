@@ -221,7 +221,6 @@ public class Step extends Metadata {
     public Step clone() {
         Step step = (Step) super.clone();
 
-        List<Parameter> parameters = step.getParameters();
         step.setParameters(new LinkedList<>());
         if (parameters != null) {
             for (var p : parameters) {
