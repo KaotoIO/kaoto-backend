@@ -104,46 +104,55 @@ public final class Kamelet
         FlowStep flowStep = null;
 
         if ("Camel-Connector".equalsIgnoreCase(step.getKind())) {
-            StringBuilder uri = new StringBuilder(step.getName());
-            Map<String, String> params = new HashMap<>();
-            if (step.getParameters() != null) {
-                for (Parameter p : step.getParameters()) {
-                    if (p.isPath()) {
-                        uri.append(":");
-                        uri.append((p.getValue() != null ? p.getValue()
-                                : p.getDefaultValue()));
-                    } else if (p.getValue() != null) {
-                        params.put(p.getId(), p.getValue().toString());
-                    }
-                }
-            }
-            flowStep = new UriFlowStep(uri.toString(), params);
-            if (to) {
-               flowStep = new ToFlowStep(flowStep);
-            }
+            flowStep = getCamelConnector(step, to);
         } else  if ("EIP".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
                 case "set-body":
-                    flowStep = new SetBodyFlowStep();
-                    Expression expression = new Expression();
-                    for (Parameter p : step.getParameters()) {
-                        if (p.getValue() == null) {
-                            continue;
-                        }
-                        if (p.getId().equalsIgnoreCase("simple")) {
-                            expression.setSimple(p.getValue().toString());
-                        } else if (p.getId().equalsIgnoreCase("constant")) {
-                            expression.setConstant(p.getValue().toString());
-                        }
-                    }
-                    ((SetBodyFlowStep) flowStep).setSetBody(expression);
+                    flowStep = getSetBodyStep(step);
                     break;
                 default:
-                    flowStep = null;
                     break;
             }
         }
 
+        return flowStep;
+    }
+
+    private FlowStep getSetBodyStep(final Step step) {
+        FlowStep flowStep = new SetBodyFlowStep();
+        Expression expression = new Expression();
+        for (Parameter p : step.getParameters()) {
+            if (p.getValue() == null) {
+                continue;
+            }
+            if (p.getId().equalsIgnoreCase("simple")) {
+                expression.setSimple(p.getValue().toString());
+            } else if (p.getId().equalsIgnoreCase("constant")) {
+                expression.setConstant(p.getValue().toString());
+            }
+        }
+        ((SetBodyFlowStep) flowStep).setSetBody(expression);
+        return flowStep;
+    }
+
+    private FlowStep getCamelConnector(final Step step, final Boolean to) {
+        StringBuilder uri = new StringBuilder(step.getName());
+        Map<String, String> params = new HashMap<>();
+        if (step.getParameters() != null) {
+            for (Parameter p : step.getParameters()) {
+                if (p.isPath()) {
+                    uri.append(":");
+                    uri.append((p.getValue() != null ? p.getValue()
+                            : p.getDefaultValue()));
+                } else if (p.getValue() != null) {
+                    params.put(p.getId(), p.getValue().toString());
+                }
+            }
+        }
+        FlowStep flowStep = new UriFlowStep(uri.toString(), params);
+        if (to) {
+           flowStep = new ToFlowStep(flowStep);
+        }
         return flowStep;
     }
 
