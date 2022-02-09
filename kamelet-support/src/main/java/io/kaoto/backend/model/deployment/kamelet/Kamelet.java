@@ -53,7 +53,7 @@ public final class Kamelet
         //Define the steps
         setSpec(new KameletSpec());
         getSpec().setFlow(new Flow());
-        if (steps.size() > 0) {
+        if (!steps.isEmpty()) {
             getSpec().getFlow().setFrom(processStep(steps.get(0), false));
         }
         getSpec().getFlow().setSteps(new ArrayList<>());

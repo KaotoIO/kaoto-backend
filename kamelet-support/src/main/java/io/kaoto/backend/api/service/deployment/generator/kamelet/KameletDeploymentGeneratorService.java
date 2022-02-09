@@ -20,11 +20,11 @@ import java.util.function.Predicate;
 public class KameletDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
-    public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    public static final String KAMELET = "KAMELET";
-    public static final String EIP = "EIP";
-    public static final String EIP_BRANCHES = "EIP-BRANCH";
-    public static final List<String> KINDS = Arrays.asList(
+    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    private static final String KAMELET = "KAMELET";
+    private static final String EIP = "EIP";
+    private static final String EIP_BRANCHES = "EIP-BRANCH";
+    private static final List<String> KINDS = Arrays.asList(
             new String[]{CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES});
 
     private String defaultIcon;

@@ -24,10 +24,10 @@ import java.util.function.Predicate;
 public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
-    public static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    public static final String KAMELET = "KAMELET";
-    public static final String EIP = "EIP";
-    public static final List<String> KINDS = Arrays.asList(
+    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    private static final String KAMELET = "KAMELET";
+    private static final String EIP = "EIP";
+    private static final List<String> KINDS = Arrays.asList(
             new String[]{CAMEL_CONNECTOR, KAMELET, EIP});
 
     public String identifier() {
@@ -46,7 +46,7 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         KameletBindingSpec spec = new KameletBindingSpec();
-        if (steps.size() > 0) {
+        if (!steps.isEmpty()) {
             spec.setSource(createKameletBindingStep(steps.get(0)));
         }
 

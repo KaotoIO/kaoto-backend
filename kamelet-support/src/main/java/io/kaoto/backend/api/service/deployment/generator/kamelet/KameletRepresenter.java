@@ -22,6 +22,7 @@ public class KameletRepresenter extends Representer {
 
         //For each type of FlowStep or custom classes, create a representer
         this.multiRepresenters.put(ToFlowStep.class, new RepresentMap() {
+            @Override
             public Node representData(final Object data) {
                 Map<String, Object> properties = new HashMap<>();
                 ToFlowStep uriFlowStep = (ToFlowStep) data;
@@ -32,6 +33,7 @@ public class KameletRepresenter extends Representer {
             }
         });
         this.multiRepresenters.put(UriFlowStep.class, new RepresentMap() {
+            @Override
             public Node representData(final Object data) {
                 Map<String, Object> properties = new HashMap<>();
                 UriFlowStep uriFlowStep = (UriFlowStep) data;
@@ -43,6 +45,7 @@ public class KameletRepresenter extends Representer {
             }
         });
         this.multiRepresenters.put(SetBodyFlowStep.class, new RepresentMap() {
+            @Override
             public Node representData(final Object data) {
                 Map<String, Object> properties = new HashMap<>();
                 SetBodyFlowStep step = (SetBodyFlowStep) data;
@@ -53,6 +56,7 @@ public class KameletRepresenter extends Representer {
             }
         });
         this.multiRepresenters.put(Expression.class, new RepresentMap() {
+            @Override
             public Node representData(final Object data) {
                 Map<String, Object> properties = new HashMap<>();
                 Expression step = (Expression) data;

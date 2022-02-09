@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class KameletParseCatalogTest {
@@ -38,7 +39,7 @@ class KameletParseCatalogTest {
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
-        Assertions.assertTrue(catalog.store(steps));
+        assertTrue(catalog.store(steps));
         assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
@@ -48,8 +49,8 @@ class KameletParseCatalogTest {
         Step step = catalog.searchStepByName(name);
 
         assertEquals(step.getRequired().size(), required.length);
-        Arrays.stream(required).allMatch(
-                property -> step.getRequired().contains(property));
+        assertTrue(Arrays.stream(required).allMatch(
+                property -> step.getRequired().contains(property)));
 
         Assertions.assertNotNull(step);
         assertEquals(name, step.getId());
