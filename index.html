@@ -267,6 +267,11 @@ randomly from the available ones.</p>
 		<td><code></code></td>
 		<td>Based on the YAML provided, offer a list of possible views</td>
 	</tr>
+	<tr id='viewdefinitionresource-viewspersteplist:'>
+		<td><code><b>viewsPerStepList:</b>(<nobr>&lt;Step[]&gt; <i>DeploymentResourceYamlRequest</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td>Based on the list of steps provided, offer a list of possible views</td>
+	</tr>
 </tbody></table>
 </section>
 
@@ -325,6 +330,12 @@ randomly from the available ones.</p>
 		<td><code><b>views</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>Based on the provided yaml, offer a list of compatible ViewDefinitions.</td>
+	</tr>
+	<tr id='viewdefinitionservice-viewspersteplist'>
+		<td><code><b>viewsPerStepList</b>(<nobr>&lt;Step[]&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
+		<td>Based on the provided list of steps, offer a list of compatible
+ViewDefinitions.</td>
 	</tr>
 </tbody></table>
 </section>
