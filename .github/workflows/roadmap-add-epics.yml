@@ -26,10 +26,10 @@ jobs:
       if: contains(github.event.issue.labels.*.name, 'good first issue')
       with:
         project: 'https://github.com/orgs/KaotoIO/projects/4'
-        column_name: 'Good First Issue'
+        column_name: 'What To Do'
     - name: Assign issues with `help wanted` label to project 4
       uses: srggrs/assign-one-project-github-action@1.3.1
       if: contains(github.event.issue.labels.*.name, 'help wanted')
       with:
         project: 'https://github.com/orgs/KaotoIO/projects/4'
-        column_name: 'Good First Issue'
+        column_name: 'What To Do'
