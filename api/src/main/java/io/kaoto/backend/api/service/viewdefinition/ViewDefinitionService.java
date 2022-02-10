@@ -62,6 +62,35 @@ public class ViewDefinitionService {
         return viewDefinitions;
     }
 
+    /*
+     * 🐱method viewsPerStepList: List[ViewDefinition]
+     * 🐱param steps: Step[]
+     *
+     * Based on the provided list of steps, offer a list of compatible
+     * ViewDefinitions.
+     */
+    public List<ViewDefinition> viewsPerStepList(final List<Step> steps) {
+
+        int i = 0;
+        if (steps != null) {
+            for (Step step : steps) {
+                if (step != null && step.getUUID() == null) {
+                    step.setUUID(i + step.getId());
+                }
+                i++;
+            }
+            log.trace("Found " + steps.size() + " steps.");
+        }
+
+        List<ViewDefinition> viewDefinitions = new ArrayList<>();
+        for (var viewParser : getViewParsers()) {
+            log.trace("Using " + viewParser.getClass());
+            viewDefinitions.addAll(viewParser.parse(steps));
+        }
+
+        return viewDefinitions;
+    }
+
     public Instance<StepParserService<Step>> getStepParsers() {
         return stepParsers;
     }

@@ -22,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * 🐱class ViewDefinitionResource
@@ -94,6 +95,27 @@ public class ViewDefinitionResource {
             }
         }
         res.setViews(viewDefinitionService.views(crd, res.getSteps()));
+        return res;
+    }
+
+    /*
+     * 🐱method viewsPerStepList:
+     * 🐱param DeploymentResourceYamlRequest: Step[]
+     *
+     * Based on the list of steps provided, offer a list of possible views
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get views based on steps",
+            description = "Get view definitions for a specific integration."
+                    + " This is an idempotent operation.")
+    public ViewDefinitionResourceResponse viewsPerStepList(
+            final @RequestBody List<Step> steps) {
+        ViewDefinitionResourceResponse res =
+                new ViewDefinitionResourceResponse();
+        res.setSteps(steps);
+        res.setViews(viewDefinitionService.viewsPerStepList(steps));
         return res;
     }
 
