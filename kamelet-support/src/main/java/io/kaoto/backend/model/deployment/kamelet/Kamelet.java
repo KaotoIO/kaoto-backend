@@ -135,7 +135,7 @@ public final class Kamelet
         return flowStep;
     }
 
-    private FlowStep getCamelConnector(final Step step, final Boolean to) {
+    private FlowStep getCamelConnector(final Step step, final boolean to) {
         StringBuilder uri = new StringBuilder(step.getName());
         Map<String, String> params = new HashMap<>();
         if (step.getParameters() != null) {
