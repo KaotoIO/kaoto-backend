@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.viewdefinition;
 
-import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
@@ -14,15 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🐱class ViewDefinitionService
- * 🐱relationship dependsOn StepParserService
- * 🐱relationship dependsOn ViewDefinitionParserService
- * This endpoint will return a list of views based on the parameters.
+ * 🐱class ViewDefinitionService 🐱relationship dependsOn StepParserService
+ * 🐱relationship dependsOn ViewDefinitionParserService This endpoint will
+ * return a list of views based on the parameters.
  */
 @ApplicationScoped
 public class ViewDefinitionService {
-
-    private Instance<StepParserService<Step>> stepParsers;
 
     private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
 
@@ -49,15 +45,9 @@ public class ViewDefinitionService {
         }
 
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
-        for (var stepParser : getStepParsers()) {
-            if (stepParser.appliesTo(yaml)) {
-                log.trace("Applying " + stepParser.getClass());
-                for (var viewParser : getViewParsers()) {
-                    log.trace("Using " + viewParser.getClass());
-                    viewDefinitions.addAll(viewParser.parse(steps));
-                }
-
-            }
+        for (var viewParser : getViewParsers()) {
+            log.trace("Using " + viewParser.getClass());
+            viewDefinitions.addAll(viewParser.parse(steps));
         }
         return viewDefinitions;
     }
@@ -89,16 +79,6 @@ public class ViewDefinitionService {
         }
 
         return viewDefinitions;
-    }
-
-    public Instance<StepParserService<Step>> getStepParsers() {
-        return stepParsers;
-    }
-
-    @Inject
-    public void setStepParsers(
-            final Instance<StepParserService<Step>> stepParsers) {
-        this.stepParsers = stepParsers;
     }
 
     public Instance<ViewDefinitionParserService<ViewDefinition>>
