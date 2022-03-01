@@ -23,16 +23,6 @@ public interface DeploymentGeneratorService {
 
     /*
      * 🐱method parse: String
-     * 🐱param name: String
-     * 🐱param steps: List[Step]
-     *
-     * Based on the list of steps, returns the yaml to deploy it.
-     * If applies, the name will be the name used on the integration deployed.
-     */
-    String parse(String name, List<Step> steps);
-
-    /*
-     * 🐱method parse: String
      * 🐱param steps: List[Step]
      * 🐱param metadata: Map
      *

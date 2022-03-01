@@ -11,30 +11,31 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import java.io.Serial;
 
 
-@JsonPropertyOrder({"set-body"})
+@JsonPropertyOrder({"set-header"})
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
-public class SetBodyFlowStep implements FlowStep {
+public class SetHeaderFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public SetBodyFlowStep(
-            final @JsonProperty(value = "setBody", required = true)
-                    Expression setBody) {
+    public SetHeaderFlowStep(
+            final @JsonProperty(value = "set-header", required = true)
+                    Expression e) {
         super();
-        setSetBody(setBody);
+        setSetHeaderPairFlowStep(e);
     }
 
-    @JsonProperty("set-body")
-    private Expression setBody;
+    @JsonProperty("set-header")
+    private Expression setHeaderPairFlowStep;
 
-    public Expression getSetBody() {
-        return setBody;
+    public Expression getSetHeaderPairFlowStep() {
+        return setHeaderPairFlowStep;
     }
 
-    public void setSetBody(final Expression setBody) {
-        this.setBody = setBody;
+    public void setSetHeaderPairFlowStep(
+            final Expression setHeaderPairFlowStep) {
+        this.setHeaderPairFlowStep = setHeaderPairFlowStep;
     }
 }

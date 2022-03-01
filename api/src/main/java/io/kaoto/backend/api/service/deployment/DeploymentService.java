@@ -8,6 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +36,14 @@ public class DeploymentService {
 
         List<Step> steps = Arrays.asList(stepArray);
         Map<String, String> strings = new HashMap<>();
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("name", name);
 
         for (DeploymentGeneratorService parser : getParsers()) {
             try {
                 if (parser.appliesTo(steps)) {
-                    strings.put(parser.identifier(), parser.parse(name, steps));
+                    strings.put(parser.identifier(),
+                            parser.parse(steps, metadata));
                 }
             } catch (Exception e) {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected"

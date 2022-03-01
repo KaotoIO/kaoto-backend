@@ -45,7 +45,7 @@ public class KameletDefinition implements Serializable {
     private List<String> required;
 
     @JsonProperty("properties")
-    private List<KameletDefinitionProperty> properties;
+    private KameletDefinitionProperty properties;
 
     public String getTitle() {
         return title;
@@ -71,12 +71,12 @@ public class KameletDefinition implements Serializable {
         this.required = required;
     }
 
-    public List<KameletDefinitionProperty> getProperties() {
+    public KameletDefinitionProperty getProperties() {
         return properties;
     }
 
     public void setProperties(
-            final List<KameletDefinitionProperty> properties) {
+            final KameletDefinitionProperty properties) {
         this.properties = properties;
     }
 }
