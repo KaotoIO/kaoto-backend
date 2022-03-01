@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.step.Step;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -53,30 +54,31 @@ public class KameletDeploymentGeneratorService
     }
 
     @Override
-    public String parse(final String name, final List<Step> steps) {
-        if (!appliesTo(steps)) {
-            return "";
-        }
-
-        Kamelet kamelet = new Kamelet(name, steps, defaultIcon);
-
-        TypeDescription personDesc = new TypeDescription(SetBodyFlowStep.class);
-        personDesc.substituteProperty("set-body", SetBodyFlowStep.class,
-                "getSetBody", "setSetBody");
-        final var constructor = new Constructor(Kamelet.class);
-        constructor.addTypeDescription(personDesc);
-        final var representer = new KameletRepresenter();
-        representer.addTypeDescription(personDesc);
-        Yaml yaml = new Yaml(constructor, representer);
-        return yaml.dumpAsMap(kamelet);
-    }
-
-    @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata) {
-        return parse(
-                metadata.getOrDefault("name", "").toString(),
-                steps);
+
+        Kamelet kamelet = new Kamelet(steps, metadata);
+
+        TypeDescription setHeaderDesc =
+                new TypeDescription(SetBodyFlowStep.class);
+        setHeaderDesc.substituteProperty("set-header",
+                SetHeaderFlowStep.class, "getSetHeader", "setSetHeader");
+
+        TypeDescription setBodyDesc =
+                new TypeDescription(SetBodyFlowStep.class);
+        setBodyDesc.substituteProperty("set-body", SetBodyFlowStep.class,
+                "getSetBody", "setSetBody");
+
+        final var constructor = new Constructor(Kamelet.class);
+        constructor.addTypeDescription(setBodyDesc);
+        constructor.addTypeDescription(setHeaderDesc);
+
+        final var representer = new KameletRepresenter();
+        representer.addTypeDescription(setBodyDesc);
+        representer.addTypeDescription(setHeaderDesc);
+
+        Yaml yaml = new Yaml(constructor, representer);
+        return yaml.dumpAsMap(kamelet);
     }
 
     @Override

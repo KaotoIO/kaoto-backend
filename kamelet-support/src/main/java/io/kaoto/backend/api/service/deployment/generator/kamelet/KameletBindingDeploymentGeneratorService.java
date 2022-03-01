@@ -41,7 +41,9 @@ public class KameletBindingDeploymentGeneratorService
     }
 
     @Override
-    public String parse(final String name, final List<Step> steps) {
+    public String parse(final List<Step> steps,
+                        final Map<String, Object> metadata) {
+
         if (!appliesTo(steps)) {
             return "";
         }
@@ -62,7 +64,8 @@ public class KameletBindingDeploymentGeneratorService
         if (steps.size() > 1) {
             spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
         }
-        KameletBinding binding = new KameletBinding(name, spec);
+        KameletBinding binding = new KameletBinding(String.valueOf(
+                metadata.getOrDefault("name", "")), spec);
 
         Representer representer = new Representer() {
             @Override
@@ -85,16 +88,8 @@ public class KameletBindingDeploymentGeneratorService
         representer.getPropertyUtils().setAllowReadOnlyProperties(true);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
-                    representer);
+                representer);
         return yaml.dumpAsMap(binding);
-    }
-
-    @Override
-    public String parse(final List<Step> steps,
-                        final Map<String, Object> metadata) {
-        return parse(
-                metadata.getOrDefault("name", "").toString(),
-                steps);
     }
 
     private KameletBindingStep createKameletBindingStep(final Step step) {

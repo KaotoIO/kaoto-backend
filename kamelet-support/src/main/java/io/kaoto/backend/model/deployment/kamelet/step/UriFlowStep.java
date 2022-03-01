@@ -1,5 +1,7 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -17,7 +19,15 @@ public class UriFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 3379417696583645440L;
 
+    @JsonCreator
+    public UriFlowStep(
+           final @JsonProperty(value = "uri", required = true) String uri) {
+        super();
+        setUri(uri);
+    }
+
     @JsonProperty("uri")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String uri;
 
     @JsonProperty("parameters")

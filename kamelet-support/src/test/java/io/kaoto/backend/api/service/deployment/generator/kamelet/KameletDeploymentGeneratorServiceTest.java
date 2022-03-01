@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,15 +24,18 @@ class KameletDeploymentGeneratorServiceTest {
     @Test
     void parse() {
         List<Step> steps = new ArrayList<Step>();
+        Map<String, Object> md = new HashMap<>();
+        md.put("name", "kamelet-test");
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
                 + "group: camel.apache.org\n"
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
+                + "  annotations:\n"
+                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: action\n"
-                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  managedFields: []\n"
                 + "  name: kamelet-test-action\n"
                 + "  ownerReferences: []\n"
@@ -39,10 +44,12 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
-                + "  flow:\n"
-                + "    steps: []\n"
+                + "  template:\n"
+                + "    from:\n"
+                + "      uri: null\n"
+                + "      steps: []\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n", service.parse("kamelet-test", steps));
+                + "version: v1alpha1\n", service.parse(steps, md));
 
         Step step = new Step();
         step.setKind("Camel-Connector");
@@ -68,10 +75,11 @@ class KameletDeploymentGeneratorServiceTest {
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
+                + "  annotations:\n"
+                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: source\n"
-                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  managedFields: []\n"
                 + "  name: kamelet-test-source\n"
                 + "  ownerReferences: []\n"
@@ -80,18 +88,16 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
-                + "  flow:\n"
+                + "  template:\n"
                 + "    from:\n"
                 + "      uri: log:loggerName\n"
                 + "      parameters:\n"
                 + "        level: info\n"
-                + "    steps:\n"
-                + "    - to:\n"
-                + "        uri: kamelet:sink\n"
-                + "        parameters: {}\n"
+                + "      steps:\n"
+                + "      - to:\n"
+                + "          uri: kamelet:sink\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n", service.parse("kamelet-test", steps));
-
+                + "version: v1alpha1\n",  service.parse(steps, md));
 
         step = new Step();
         step.setKind("EIP");
@@ -108,10 +114,11 @@ class KameletDeploymentGeneratorServiceTest {
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
+                + "  annotations:\n"
+                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: source\n"
-                + "    camel.apache.org/kamelet.icon: ''\n"
                 + "  managedFields: []\n"
                 + "  name: kamelet-test-source\n"
                 + "  ownerReferences: []\n"
@@ -120,19 +127,18 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
-                + "  flow:\n"
+                + "  template:\n"
                 + "    from:\n"
                 + "      uri: log:loggerName\n"
                 + "      parameters:\n"
                 + "        level: info\n"
-                + "    steps:\n"
-                + "    - set-body:\n"
-                + "        constant: Hello Llama\n"
-                + "    - to:\n"
-                + "        uri: kamelet:sink\n"
-                + "        parameters: {}\n"
+                + "      steps:\n"
+                + "      - set-body:\n"
+                + "          constant: Hello Llama\n"
+                + "      - to:\n"
+                + "          uri: kamelet:sink\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n", service.parse("kamelet-test", steps));
+                + "version: v1alpha1\n",  service.parse(steps, md));
     }
 
     @Test

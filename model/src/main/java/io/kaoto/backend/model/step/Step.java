@@ -24,6 +24,7 @@ public class Step extends Metadata {
     private String group;
     private List<Parameter> parameters;
     private List<String> required;
+    private List<Branch> branches;
 
     private String uuid;
     private Map<String, Object> metadata;
@@ -153,6 +154,21 @@ public class Step extends Metadata {
 
     public void setKind(final String kind) {
         this.kind = kind;
+    }
+
+    /*
+     * 🐱property branches: Branch[]
+     *
+     * If this is a nested step that contains branches of steps, this is
+     * where those branches are defined.
+     *
+     */
+    public List<Branch> getBranches() {
+        return branches;
+    }
+
+    public void setBranches(final List<Branch> branches) {
+        this.branches = branches;
     }
 
     public void setSpec(final Map<String, Object> spec) {

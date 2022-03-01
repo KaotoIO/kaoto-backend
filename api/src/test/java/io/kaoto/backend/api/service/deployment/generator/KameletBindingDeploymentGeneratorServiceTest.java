@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @QuarkusTest
@@ -42,13 +43,16 @@ class KameletBindingDeploymentGeneratorServiceTest {
     @Test
     void parse() {
         List<Step> steps = new ArrayList();
-        Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse("", steps));
+        Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse(
+                steps, Collections.emptyMap()));
         steps.add(new Step());
         steps.add(new Step());
         for (Step step : steps) {
             step.setKind("Kamelet");
         }
-        Assertions.assertNotEquals("", parser.parse("", steps));
-        Assertions.assertNotEquals(EMPTY_INTEGRATION, parser.parse("", steps));
+        Assertions.assertNotEquals("",
+                parser.parse(steps, Collections.emptyMap()));
+        Assertions.assertNotEquals(EMPTY_INTEGRATION,
+                parser.parse(steps, Collections.emptyMap()));
     }
 }
