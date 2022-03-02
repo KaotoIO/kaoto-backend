@@ -99,7 +99,7 @@ public class ViewDefinitionResource {
                         + " unexpected error.", e);
             }
         }
-        res.setViews(viewDefinitionService.views(crd, res.getSteps()));
+        res.setViews(viewDefinitionService.viewsPerStepList(res.getSteps()));
         return res;
     }
 
