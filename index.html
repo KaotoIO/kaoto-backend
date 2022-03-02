@@ -326,11 +326,6 @@ randomly from the available ones.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='viewdefinitionservice-views'>
-		<td><code><b>views</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
-		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
-		<td>Based on the provided yaml, offer a list of compatible ViewDefinitions.</td>
-	</tr>
 	<tr id='viewdefinitionservice-viewspersteplist'>
 		<td><code><b>viewsPerStepList</b>(<nobr>&lt;Step[]&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
@@ -1132,6 +1127,11 @@ null</td>
 </section>
 
 </section>
+<h2 id='branch'>Branch</h2>
+<section class='namespace'>
+
+
+</section>
 <h2 id='step'>Step</h2>
 <section class='namespace'>
 <p>Represents a step inside an integration.</p>
@@ -1189,6 +1189,12 @@ a viewDefinition and a step.</td>
 		<td><code>String</code></td>
 		<td>Kind of step which usually translates to the kind this step will have
 on the final CRD for deployment.</td>
+	</tr>
+	<tr id='step-branches'>
+		<td><code><b>branches</b>
+		<td><code>Branch[]</code></td>
+		<td>If this is a nested step that contains branches of steps, this is
+where those branches are defined.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -1425,12 +1431,10 @@ It may or may not be the same as the ID depending on the type of step.</td>
 		<td>Returns this generator identifier.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>)</nobr></code></td>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the list of steps, returns the yaml to deploy it.
-If applies, the name will be the name used on the integration deployed.
-<p>Based on the list of steps, returns the yaml to deploy it.
-If applies, the name will be the name used on the integration deployed.</p></td>
+If applies, the name will be the name used on the integration deployed.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -1481,6 +1485,11 @@ the metadata associated to the orchestration.</p></td>
 
 
 <h2 id='kameletbindingstepparserservice'></h2>
+<section class='namespace'>
+
+
+</section>
+<h2 id='kameletstepparserservice'></h2>
 <section class='namespace'>
 
 

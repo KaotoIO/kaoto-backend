@@ -85,8 +85,6 @@ yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
 "ViewDefinitionService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-views(&lt;String&gt; yaml):List[ViewDefinition]
-<BR align="left" />
 viewsPerStepList(&lt;Step[]&gt; steps):List[ViewDefinition]
 <BR align="left" />
 
@@ -291,10 +289,16 @@ description:String<BR align="left" />title:String<BR align="left" />id:String<BR
 </TABLE>>]
 
 
+"Branch" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Branch</B></TD></TR>
+	
+</TABLE>>]
+
+
 "Step" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Step</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />required:String[]<BR align="left" />group:String<BR align="left" />kind:String<BR align="left" />
+description:String<BR align="left" />title:String<BR align="left" />parameters:List[Parameter]<BR align="left" />icon:String<BR align="left" />UUID:String<BR align="left" />required:String[]<BR align="left" />group:String<BR align="left" />kind:String<BR align="left" />branches:Branch[]<BR align="left" />
 
 </TD></TR>
 
@@ -336,7 +340,7 @@ mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left
 	<TR><TD><I>Methods</I><BR/>
 identifier():String
 <BR align="left" />
-parse(&lt;String&gt; name, &lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
+parse(&lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
