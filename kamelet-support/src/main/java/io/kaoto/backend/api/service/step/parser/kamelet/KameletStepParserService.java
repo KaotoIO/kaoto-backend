@@ -108,17 +108,17 @@ public class KameletStepParserService
     //there must be a more elegant solution
     //but a visitor sounds like overengineering
     private Step processStep(final FlowStep step) {
-        if (step instanceof ChoiceFlowStep) {
-            return processDefinedStep((ChoiceFlowStep) step);
-        } else if (step instanceof ToFlowStep) {
-            return processDefinedStep((ToFlowStep) step);
+        if (step instanceof ChoiceFlowStep choiceFlowStep) {
+            return processDefinedStep(choiceFlowStep);
+        } else if (step instanceof ToFlowStep toFlowStep) {
+            return processDefinedStep(toFlowStep);
         } else if (step instanceof UriFlowStep
                 || step instanceof From) {
             return processDefinedStep((UriFlowStep) step);
-        } else if (step instanceof SetBodyFlowStep) {
-            return processDefinedStep((SetBodyFlowStep) step);
-        } else if (step instanceof SetHeaderFlowStep) {
-            return processDefinedStep((SetHeaderFlowStep) step);
+        } else if (step instanceof SetBodyFlowStep setBodyFlowStep) {
+            return processDefinedStep(setBodyFlowStep);
+        } else if (step instanceof SetHeaderFlowStep setHeaderFlowStep) {
+            return processDefinedStep(setHeaderFlowStep);
         } else {
             log.warn("Unrecognized step -> " + step);
             return null;
@@ -161,18 +161,10 @@ public class KameletStepParserService
     }
 
     private String getChoiceIdentifier(final Choice flow) {
-//        if (flow.getJsonPath() != null) {
-//            return flow.getJsonPath().toString();
-//        }
-
         return flow.getSimple();
     }
 
     private String getChoiceCondition(final Choice flow) {
-//        if (flow.getJsonPath() != null) {
-//            return flow.getJsonPath().toString();
-//        }
-
         return flow.getSimple();
     }
 
@@ -301,7 +293,7 @@ public class KameletStepParserService
             additionalProperties.putAll((Map<String, Object>)
                     metadata.getAdditionalProperties()
                             .getOrDefault("additionalProperties",
-                                Collections.EMPTY_MAP));
+                                Collections.emptyMap()));
         }
 
         result.getMetadata().put("name", metadata.getName());
