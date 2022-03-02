@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.step.parser.kamelet;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class KameletStepParserServiceTest {
 
     private static String binding;
+    private static String bindingIncomplete;
 
     @Inject
     private KameletStepParserService service;
@@ -42,6 +44,10 @@ class KameletStepParserServiceTest {
         binding = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "dropbox-sink.kamelet.yaml")
+                        .toURI()));
+        bindingIncomplete = Files.readString(Path.of(
+                KameletBindingStepParserServiceTest.class.getResource(
+                                "dropbox-sink.kamelet-incomplete.yaml")
                         .toURI()));
     }
 
@@ -99,11 +105,30 @@ class KameletStepParserServiceTest {
         var parsed2 = service.deepParse(output);
         assertEquals(parsed.getSteps(), parsed2.getSteps());
         assertEquals(parsed.getMetadata(), parsed2.getMetadata());
+
+        var parsedInc = service.deepParse(bindingIncomplete);
+        String outputInc = deploymentService.parse(parsedInc.getSteps(),
+                parsedInc.getMetadata());
+        var parsed2Inc = service.deepParse(outputInc);
+        assertEquals(parsedInc.getSteps(), parsed2Inc.getSteps());
     }
 
     @Test
     void appliesTo() {
         assertTrue(service.appliesTo(binding));
-        assertTrue(deploymentService.appliesTo(service.parse(binding)));
+        assertTrue(service.appliesTo(bindingIncomplete));
+        assertTrue(
+                deploymentService.appliesTo(service.parse(binding)));
+        assertTrue(
+                deploymentService.appliesTo(service.parse(bindingIncomplete)));
+    }
+
+    @Test
+    void fail() {
+        //include here potential security issues
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            service.parse("Kind: Kamelet\n But not really");
+        });
+        assertFalse(service.appliesTo("Malformed YAML"));
     }
 }
