@@ -42,6 +42,9 @@ import java.util.regex.Pattern;
 public class KameletStepParserService
         implements StepParserService<Step> {
 
+    public static final String CONDITION = "condition";
+    public static final String SIMPLE = "simple";
+    public static final String OTHERWISE = "otherwise";
     private Logger log =
             Logger.getLogger(KameletStepParserService.class);
 
@@ -132,21 +135,16 @@ public class KameletStepParserService
             for (var flow : choice.getChoice().getChoice()) {
                 Branch branch =
                         new Branch(getChoiceIdentifier(flow));
-                branch.put("condition", getChoiceCondition(flow));
+                branch.put(CONDITION, getChoiceCondition(flow));
                 for (var s : flow.getSteps()) {
                     branch.getSteps().add(processStep(s));
                 }
-                for (Parameter p : res.getParameters()) {
-                    if (p.getId().equalsIgnoreCase("simple")) {
-                        p.setValue(branch.get("condition"));
-                        break;
-                    }
-                }
+                setValueOnStepProperty(res, SIMPLE, branch.get(CONDITION));
                 res.getBranches().add(branch);
             }
 
             if (choice.getChoice().getOtherwise() != null) {
-                Branch branch = new Branch("otherwise");
+                Branch branch = new Branch(OTHERWISE);
                 for (var s : choice.getChoice().getOtherwise()) {
                     branch.getSteps().add(processStep(s));
                 }
@@ -173,17 +171,21 @@ public class KameletStepParserService
 
     private Step processDefinedStep(final UriFlowStep uriFlowStep) {
         String uri = uriFlowStep.getUri();
-        var connectorName = uri.substring(0, uri.indexOf(":"));
+        String connectorName = null;
 
-        //special kamelet source and sink
-        if (connectorName.equalsIgnoreCase("kamelet")) {
-            connectorName = uri;
+        if (uri != null) {
+            connectorName = uri.substring(0, uri.indexOf(":"));
+
+            //special kamelet source and sink
+            if (connectorName.equalsIgnoreCase("kamelet")) {
+                connectorName = uri;
+            }
         }
 
         Step step = catalog.getReadOnlyCatalog()
                 .searchStepByName(connectorName);
 
-        if (step != null) {
+        if (step != null && uri != null) {
             log.trace("Found step " + step.getName());
             setValuesOnParameters(step, uri);
             setValuesOnParameters(step, uriFlowStep.getParameters());
@@ -207,7 +209,7 @@ public class KameletStepParserService
         for (Parameter p : res.getParameters()) {
             if (p.getId().equalsIgnoreCase("name")) {
                 p.setValue(step.getSetHeaderPairFlowStep().getName());
-            } else if (p.getId().equalsIgnoreCase("simple")) {
+            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
                 p.setValue(step.getSetHeaderPairFlowStep().getSimple());
             } else if (p.getId().equalsIgnoreCase("constant")) {
                 p.setValue(step.getSetHeaderPairFlowStep().getConstant());
@@ -216,22 +218,6 @@ public class KameletStepParserService
 
 
         return res;
-    }
-
-    private void setValuesOnParameters(final Step step,
-                                       final Map<String, String> properties) {
-
-        if (properties != null) {
-            for (Map.Entry<String, String> c : properties.entrySet()) {
-                for (Parameter p : step.getParameters()) {
-                    if (p.getId().equalsIgnoreCase(c.getKey())) {
-                        p.setValue(c.getValue());
-                        break;
-                    }
-                }
-            }
-        }
-
     }
 
     private void setValuesOnParameters(final Step step,
@@ -253,18 +239,29 @@ public class KameletStepParserService
         Matcher matcher = pattern.matcher(uri);
 
         while (matcher.find()) {
-            String key = matcher.group(1);
-            String value = matcher.group(2);
+            setValueOnStepProperty(step, matcher.group(1), matcher.group(2));
+        }
+    }
 
-            for (Parameter p : step.getParameters()) {
-                if (p.getId().equalsIgnoreCase(key)) {
-                    p.setValue(value);
-                    break;
-                }
+    private void setValuesOnParameters(final Step step,
+                                       final Map<String, String> properties) {
+
+        if (properties != null) {
+            for (Map.Entry<String, String> c : properties.entrySet()) {
+                setValueOnStepProperty(step, c.getKey(), c.getValue());
             }
         }
 
+    }
 
+    private void setValueOnStepProperty(final Step step, final String key,
+                                        final Object value) {
+        for (Parameter p : step.getParameters()) {
+            if (p.getId().equalsIgnoreCase(key)) {
+                p.setValue(value);
+                break;
+            }
+        }
     }
 
     private void processMetadata(

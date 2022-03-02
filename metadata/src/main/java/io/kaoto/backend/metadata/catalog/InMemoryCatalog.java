@@ -52,13 +52,15 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     @Override
     public T searchStepByName(final String name) {
-        for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
-            if (name.equalsIgnoreCase(entry.getValue().getName())) {
-                T step = entry.getValue();
-                if (step != null) {
-                    step = (T) step.clone();
+        if (name != null) {
+            for (Map.Entry<String, T> entry : metadataCatalog.entrySet()) {
+                if (name.equalsIgnoreCase(entry.getValue().getName())) {
+                    T step = entry.getValue();
+                    if (step != null) {
+                        step = (T) step.clone();
+                    }
+                    return step;
                 }
-                return step;
             }
         }
         return null;
