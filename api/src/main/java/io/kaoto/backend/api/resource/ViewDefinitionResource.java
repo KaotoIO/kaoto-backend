@@ -83,11 +83,16 @@ public class ViewDefinitionResource {
             final @RequestBody String crd) {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
+        log.trace("Extracting steps from crd");
         for (StepParserService<Step> stepParserService : stepParserServices) {
             try {
+                log.trace("Trying with service: " + stepParserService);
                 if (stepParserService.appliesTo(crd)) {
                     res.setSteps(stepParserService.parse(crd));
-                    break;
+                    log.trace("Extracted " + res.getSteps().size() + " steps.");
+                    if (!res.getSteps().isEmpty()) {
+                        break;
+                    }
                 }
             } catch (Exception e) {
                 log.warn("Parser " + stepParserService.getClass() + "threw an"
