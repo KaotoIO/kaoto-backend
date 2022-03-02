@@ -8,7 +8,6 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,34 +22,6 @@ public class ViewDefinitionService {
     private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
 
     private Logger log = Logger.getLogger(ViewDefinitionService.class);
-
-    /*
-     * 🐱method views: List[ViewDefinition]
-     * 🐱param yaml: String
-     *
-     * Based on the provided yaml, offer a list of compatible ViewDefinitions.
-     */
-    public List<ViewDefinition> views(final @QueryParam("yaml") String yaml,
-                                      final List<Step> steps) {
-
-        int i = 0;
-        if (steps != null) {
-            for (Step step : steps) {
-                if (step != null) {
-                    step.setUUID(i + step.getId());
-                }
-                i++;
-            }
-            log.trace("Found " + steps.size() + " steps.");
-        }
-
-        List<ViewDefinition> viewDefinitions = new ArrayList<>();
-        for (var viewParser : getViewParsers()) {
-            log.trace("Using " + viewParser.getClass());
-            viewDefinitions.addAll(viewParser.parse(steps));
-        }
-        return viewDefinitions;
-    }
 
     /*
      * 🐱method viewsPerStepList: List[ViewDefinition]
