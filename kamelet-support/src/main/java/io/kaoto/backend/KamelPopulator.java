@@ -28,6 +28,12 @@ import java.util.Map;
 
 public class KamelPopulator {
 
+    public static final String CONDITION = "condition";
+    public static final String SIMPLE = "simple";
+    public static final String CONSTANT = "constant";
+    public static final String NAME = "name";
+    public static final String CAMEL_APACHE_ORG_KAMELET_ICON =
+            "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
     private Logger log = Logger.getLogger(KamelPopulator.class);
 
@@ -59,17 +65,17 @@ public class KamelPopulator {
                 type.name());
 
         //consistent naming for kamelets
-        String name = metadata.getOrDefault("name", "").toString();
+        String name = metadata.getOrDefault(NAME, "").toString();
         if (!name.endsWith(type.name())) {
             name = name + "-" + type.name();
         }
         kamelet.getMetadata().setName(name);
 
         //do we have an icon?
-        if (kamelet.getMetadata().getAnnotations().getOrDefault("camel.apache"
-                + ".org/kamelet.icon", "").isBlank()) {
-            kamelet.getMetadata().getAnnotations().put("camel.apache"
-                    + ".org/kamelet.icon",
+        if (kamelet.getMetadata().getAnnotations().getOrDefault(
+                CAMEL_APACHE_ORG_KAMELET_ICON, "").isBlank()) {
+            kamelet.getMetadata().getAnnotations().put(
+                    CAMEL_APACHE_ORG_KAMELET_ICON,
                     metadata.getOrDefault("icon", "").toString());
         }
     }
@@ -113,11 +119,10 @@ public class KamelPopulator {
         Type type = Type.action;
         if (steps.size() > 1) {
             boolean source = steps.get(0).getName()
-                    .equalsIgnoreCase("kamelet" + ":source");
+                    .equalsIgnoreCase("kamelet:source");
             boolean sink =
                     steps.get(steps.size() - 1).getName().equalsIgnoreCase(
-                            "kamelet"
-                                    + ":sink");
+                            "kamelet:sink");
 
             if (source && !sink) {
                 type = Type.sink;
@@ -202,10 +207,10 @@ public class KamelPopulator {
         final var choice = new SuperChoice();
         final var flowStep = new ChoiceFlowStep(choice);
 
-        List<Choice> choices = new LinkedList<Choice>();
+        List<Choice> choices = new LinkedList<>();
 
         for (Branch b : step.getBranches()) {
-            if (b.containsKey("condition")) {
+            if (b.containsKey(CONDITION)) {
                 choices.add(processChoice(b));
             } else if (choice.getOtherwise() == null) {
                 choice.setOtherwise(processChoice(b).getSteps());
@@ -227,12 +232,9 @@ public class KamelPopulator {
                 choice.getSteps().add(processStep(step, true));
             }
         }
-//
-//        JSONPath jsonPath = new JSONPath();
-//        choice.setJsonPath(jsonPath);
 
-        if (b.containsKey("condition")) {
-            choice.setSimple(b.get("condition").toString());
+        if (b.containsKey(CONDITION)) {
+            choice.setSimple(b.get(CONDITION).toString());
         }
 
         return choice;
@@ -245,9 +247,9 @@ public class KamelPopulator {
             if (p.getValue() == null) {
                 continue;
             }
-            if ("simple".equalsIgnoreCase(p.getId())) {
+            if (SIMPLE.equalsIgnoreCase(p.getId())) {
                 expression.setSimple(p.getValue().toString());
-            } else if ("constant".equalsIgnoreCase(p.getId())) {
+            } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
                 expression.setConstant(p.getValue().toString());
             }
         }
@@ -261,11 +263,11 @@ public class KamelPopulator {
             if (p.getValue() == null) {
                 continue;
             }
-           if ("name".equalsIgnoreCase(p.getId())) {
+           if (NAME.equalsIgnoreCase(p.getId())) {
                expression.setName(p.getValue().toString());
-           } else if ("simple".equalsIgnoreCase(p.getId())) {
+           } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
                expression.setSimple(p.getValue().toString());
-           } else if ("constant".equalsIgnoreCase(p.getId())) {
+           } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
                expression.setConstant(p.getValue().toString());
            }
         }
