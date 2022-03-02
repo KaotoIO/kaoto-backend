@@ -11,26 +11,30 @@ import java.util.List;
  */
 public class Branch extends HashMap<String, Object> {
 
+    public static final String STEPS = "steps";
+    public static final String PARAMETERS = "parameters";
+    public static final String IDENTIFIER = "identifier";
+
     public Branch(final String identifier) {
         super();
-        this.put("identifier", identifier);
-        this.put("steps", new LinkedList<Step>());
-        this.put("parameters", new LinkedList<Parameter>());
+        this.put(IDENTIFIER, identifier);
+        this.put(STEPS, new LinkedList<Step>());
+        this.put(PARAMETERS, new LinkedList<Parameter>());
     }
 
     public List<Step> getSteps() {
-        if (!this.containsKey("steps")) {
-            this.put("steps", new LinkedList<Step>());
+        if (!this.containsKey(STEPS)) {
+            this.put(STEPS, new LinkedList<Step>());
         }
 
-        return ((List<Step>) this.get("steps"));
+        return ((List<Step>) this.get(STEPS));
     }
 
     public List<Parameter> getParameters() {
-        if (!this.containsKey("parameters")) {
-            this.put("parameters", new LinkedList<Parameter>());
+        if (!this.containsKey(PARAMETERS)) {
+            this.put(PARAMETERS, new LinkedList<Parameter>());
         }
 
-        return ((List<Parameter>) this.get("parameters"));
+        return ((List<Parameter>) this.get(PARAMETERS));
     }
 }
