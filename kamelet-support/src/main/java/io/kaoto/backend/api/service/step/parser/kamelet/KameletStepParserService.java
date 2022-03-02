@@ -11,7 +11,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
@@ -45,7 +44,7 @@ public class KameletStepParserService
     public static final String CONDITION = "condition";
     public static final String SIMPLE = "simple";
     public static final String OTHERWISE = "otherwise";
-    private Logger log =
+    private final Logger log =
             Logger.getLogger(KameletStepParserService.class);
 
     private StepCatalog catalog;
@@ -114,9 +113,8 @@ public class KameletStepParserService
             return processDefinedStep(choiceFlowStep);
         } else if (step instanceof ToFlowStep toFlowStep) {
             return processDefinedStep(toFlowStep);
-        } else if (step instanceof UriFlowStep
-                || step instanceof From) {
-            return processDefinedStep((UriFlowStep) step);
+        } else if (step instanceof UriFlowStep uriFlowStep) {
+            return processDefinedStep(uriFlowStep);
         } else if (step instanceof SetBodyFlowStep setBodyFlowStep) {
             return processDefinedStep(setBodyFlowStep);
         } else if (step instanceof SetHeaderFlowStep setHeaderFlowStep) {
@@ -224,7 +222,7 @@ public class KameletStepParserService
                                        final String uri) {
 
         String path = uri.substring(uri.indexOf(":") + 1);
-        if (path.indexOf("?") > -1) {
+        if (path.contains("?")) {
             path = path.substring(0, path.indexOf("?"));
         }
 
@@ -235,7 +233,7 @@ public class KameletStepParserService
         }
 
         Pattern pattern = Pattern.compile(
-                "(?:\\?|\\&)([^=]+)\\=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
+                "[?&]([^=]+)=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(uri);
 
         while (matcher.find()) {
