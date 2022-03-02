@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 
 @JsonPropertyOrder({"simple", "steps"})
-public class Choice {
+public class Choice implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7206333633897407153L;
 
     @JsonProperty("simple")
     private String simple;
