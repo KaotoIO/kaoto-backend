@@ -61,7 +61,7 @@ public class KameletStepParserService
     public ParseResult<Step> deepParse(final String input) {
         if (!appliesTo(input)) {
             throw new IllegalArgumentException(
-                    "Wrong format provided. This is not parseable by us");
+                    "Wrong format provided. This is not parseable by us.");
         }
 
         ParseResult<Step> res = new ParseResult<>();
@@ -79,9 +79,8 @@ public class KameletStepParserService
             processMetadata(res, kamelet.getMetadata());
             processSpec(steps, kamelet.getSpec());
         } catch (JsonProcessingException e) {
-            log.error("Wrong format provided. This is not parseable by us", e);
             throw new IllegalArgumentException(
-                    "Wrong format provided. This is not parseable by us");
+                    "Error trying to parse.", e);
         }
 
         res.setSteps(steps.stream()
