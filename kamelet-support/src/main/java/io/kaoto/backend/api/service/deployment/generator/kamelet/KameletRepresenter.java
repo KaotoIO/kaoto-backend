@@ -21,53 +21,28 @@ import java.util.Map;
 
 public class KameletRepresenter extends Representer {
 
+    public static final String SIMPLE = "simple";
+    public static final String STEPS = "steps";
+    public static final String PARAMETERS = "parameters";
+    public static final String URI = "uri";
+    public static final String NAME = "name";
+
     KameletRepresenter() {
         getPropertyUtils().setSkipMissingProperties(true);
         getPropertyUtils().setAllowReadOnlyProperties(true);
 
         //For each type of FlowStep or custom classes, create a representer
-        this.multiRepresenters.put(ToFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                ToFlowStep uriFlowStep = (ToFlowStep) data;
-                properties.put("to", uriFlowStep.getTo());
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-        this.multiRepresenters.put(From.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                From step = (From) data;
-                properties.put("uri", step.getUri());
-                if (step.getParameters() != null
-                        && !step.getParameters().isEmpty()) {
-                    properties.put("parameters", step.getParameters());
-                }
-                properties.put("steps", step.getSteps());
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-        this.multiRepresenters.put(UriFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                UriFlowStep step = (UriFlowStep) data;
-                properties.put("uri", step.getUri());
-                if (step.getParameters() != null
-                        && !step.getParameters().isEmpty()) {
-                    properties.put("parameters", step.getParameters());
-                }
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
+        from();
+        to();
+
+        uri();
+        choice();
+        setBody();
+        setHeader();
+        expression();
+    }
+
+    private void metaChoice() {
         this.multiRepresenters.put(ChoiceFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
@@ -79,23 +54,81 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
-        this.multiRepresenters.put(Choice.class, new RepresentMap() {
+    }
+
+    private void to() {
+        this.multiRepresenters.put(ToFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
                 Map<String, Object> properties = new HashMap<>();
-                Choice step = (Choice) data;
-                properties.put("steps", step.getSteps());
-                if (step.getSimple() != null
-                        && !step.getSimple().isEmpty()) {
-                    properties.put("simple", step.getSimple());
-//                } else if (step.getJsonPath() != null) {
-//                    properties.put("jsonPath", step.getJsonPath());
+                ToFlowStep uriFlowStep = (ToFlowStep) data;
+                properties.put("to", uriFlowStep.getTo());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+    }
+
+    private void from() {
+        this.multiRepresenters.put(From.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                From step = (From) data;
+                properties.put(URI, step.getUri());
+                if (step.getParameters() != null
+                        && !step.getParameters().isEmpty()) {
+                    properties.put(PARAMETERS, step.getParameters());
+                }
+                properties.put(STEPS, step.getSteps());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+    }
+
+    private void uri() {
+        this.multiRepresenters.put(UriFlowStep.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                UriFlowStep step = (UriFlowStep) data;
+                properties.put(URI, step.getUri());
+                if (step.getParameters() != null
+                        && !step.getParameters().isEmpty()) {
+                    properties.put(PARAMETERS, step.getParameters());
                 }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
                         properties,
                         DumperOptions.FlowStyle.AUTO);
             }
         });
+    }
+
+    private void choice() {
+        this.multiRepresenters.put(Choice.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                Choice step = (Choice) data;
+                properties.put(STEPS, step.getSteps());
+                if (step.getSimple() != null
+                        && !step.getSimple().isEmpty()) {
+                    properties.put(SIMPLE, step.getSimple());
+                }
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+
+        metaChoice();
+        whenChoice();
+    }
+
+    private void whenChoice() {
         this.multiRepresenters.put(SuperChoice.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
@@ -111,6 +144,9 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
+    }
+
+    private void setBody() {
         this.multiRepresenters.put(SetBodyFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
@@ -122,6 +158,9 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
+    }
+
+    private void setHeader() {
         this.multiRepresenters.put(SetHeaderFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
@@ -133,6 +172,9 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
+    }
+
+    private void expression() {
         this.multiRepresenters.put(Expression.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
@@ -143,11 +185,11 @@ public class KameletRepresenter extends Representer {
                 }
 
                 if (step.getSimple() != null) {
-                    properties.put("simple", step.getSimple());
+                    properties.put(SIMPLE, step.getSimple());
                 }
 
                 if (step.getName() != null) {
-                    properties.put("name", step.getName());
+                    properties.put(NAME, step.getName());
                 }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
                         properties,
