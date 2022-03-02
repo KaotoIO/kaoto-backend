@@ -75,10 +75,36 @@ class StepResourceTest {
 
     @Test
     void allSteps() {
-        Collection<Step> steps = stepResource.allSteps();
+        Collection<Step> steps = stepResource.allSteps(null, null, null);
         Assertions.assertNotNull(steps);
         Assertions.assertEquals(
                 catalog.getReadOnlyCatalog().getAll().size(),
                 steps.size());
+
+        var integrationType = "KameletBinding";
+        Assertions.assertNotNull(steps);
+        Assertions.assertEquals(
+                stepResource.stepsByIntegrationType(integrationType),
+                stepResource.allSteps(null, integrationType, null));
+
+        var kind = "Kamelet";
+        Assertions.assertNotNull(steps);
+        Assertions.assertTrue(
+                stepResource.allSteps(null, null, kind)
+                        .stream().allMatch(s ->
+                                kind.equalsIgnoreCase(s.getKind())));
+        var type = "START";
+        Assertions.assertNotNull(steps);
+        Assertions.assertTrue(
+                stepResource.allSteps(type, null, null)
+                        .stream().allMatch(s ->
+                                type.equalsIgnoreCase(s.getType())));
+
+        Assertions.assertNotNull(steps);
+        Assertions.assertTrue(
+                stepResource.allSteps(type, integrationType, kind)
+                        .stream().allMatch(s ->
+                                type.equalsIgnoreCase(s.getType())
+                                && kind.equalsIgnoreCase(s.getKind())));
     }
 }

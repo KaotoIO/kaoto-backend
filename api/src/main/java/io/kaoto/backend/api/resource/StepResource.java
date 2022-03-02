@@ -18,14 +18,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * 🐱class StepResource
- * 🐱relationship dependsOn StepCatalog
+ * 🐱class StepResource 🐱relationship dependsOn StepCatalog
  *
  * This endpoint will return steps based on the parameters.
  */
@@ -33,17 +33,18 @@ import java.util.List;
 @ApplicationScoped
 @OpenAPIDefinition(
         info = @Info(
-            title = "Steps API",
-            version = "1.0.0",
-            description = "The backend parses the steps provided "
-                    + "and returns both a valid integration and "
-                    + "the source code associated.",
-            contact = @Contact(
-                    name = "Kaoto Team",
-                    url = "https://kaoto.io"),
-            license = @License(
-                    name = "Apache 2.0",
-                    url = "https://www.apache.org/licenses/LICENSE-2.0.html"))
+                title = "Steps API",
+                version = "1.0.0",
+                description = "The backend parses the steps provided "
+                        + "and returns both a valid integration and "
+                        + "the source code associated.",
+                contact = @Contact(
+                        name = "Kaoto Team",
+                        url = "https://kaoto.io"),
+                license = @License(
+                        name = "Apache 2.0",
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.html"
+                ))
 )
 public class StepResource {
 
@@ -78,7 +79,7 @@ public class StepResource {
     public Step stepById(
             final @Parameter(
                     description = "Identifier of the step we want to retrieve.")
-             @PathParam("id") String id) {
+            @PathParam("id") String id) {
         return stepService.stepById(id);
     }
 
@@ -98,7 +99,7 @@ public class StepResource {
                     + "although configuration of catalogs should try to avoid"
                     + " duplications.")
     public Collection<Step> stepsByName(
-            final  @Parameter(description = "Name of the steps we want to "
+            final @Parameter(description = "Name of the steps we want to "
                     + "retrieve.")
             @PathParam("name") String name) {
         return stepService.stepsByName(name);
@@ -118,7 +119,7 @@ public class StepResource {
             description = "Returns all the details of steps based on the kind"
                     + ". ")
     public Collection<Step> stepsByKind(
-            final  @Parameter(description = "Kind of the steps we want to "
+            final @Parameter(description = "Kind of the steps we want to "
                     + "retrieve.")
             @PathParam("kind") String kind) {
         return stepService.allSteps().stream().parallel()
@@ -139,7 +140,7 @@ public class StepResource {
             description = "Returns all the steps that fit a specific "
                     + "integration type. ")
     public Collection<Step> stepsByIntegrationType(
-            final  @Parameter(description = "Integration type we want to use.")
+            final @Parameter(description = "Integration type we want to use.")
             @PathParam("integrationType") String integrationType) {
         List<String> kind = deploymentService.getParsers().stream().parallel()
                 .filter(s -> integrationType.equalsIgnoreCase(s.identifier()))
@@ -155,8 +156,12 @@ public class StepResource {
 
     /*
      * 🐱method allSteps : List[Step]
+     * 🐱param type: String
+     * 🐱param integrationType: String
+     * 🐱param kind: String
      *
-     *  Returns all the steps.
+     * Returns all the steps. If parameters are included in the query, it
+     * will filter only those steps compatible with the constraints.
      *
      */
     @GET
@@ -164,8 +169,35 @@ public class StepResource {
     @Operation(summary = "Get all steps",
             description = "Returns all the available steps that can be added"
                     + " to the integration.")
-    public Collection<Step> allSteps() {
-        return stepService.allSteps();
+    public Collection<Step> allSteps(
+            final @Parameter(description = "Filter by step type. Example: "
+                    + "'START'")
+            @QueryParam("type") String type,
+            final @Parameter(description = "Filter by DSL. Example: "
+                    + "'KameletBinding'")
+            @QueryParam("integrationType") String integrationType,
+            final @Parameter(description = "Filter by kind of step. Example: "
+                    + "'Kamelet'")
+            @QueryParam("kind") String kind) {
+        var steps = stepService.allSteps().stream().parallel();
+        if (type != null && !type.isEmpty()) {
+            steps = steps.filter(step -> type.equalsIgnoreCase(step.getType()));
+        }
+        if (integrationType != null && !integrationType.isEmpty()) {
+            List<String> kinds =
+                    deploymentService.getParsers().stream().parallel()
+                    .filter(s ->
+                            integrationType.equalsIgnoreCase(s.identifier()))
+                    .map(DeploymentGeneratorService::getKinds)
+                    .flatMap(Collection::stream)
+                    .toList();
+             steps = steps.filter(step -> kinds.stream()
+                    .anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
+        }
+        if (kind != null && !kind.isEmpty()) {
+            steps = steps.filter(step -> kind.equalsIgnoreCase(step.getKind()));
+        }
+        return steps.toList();
     }
 
 
