@@ -10,9 +10,6 @@ import java.util.List;
 @JsonPropertyOrder({"simple", "steps"})
 public class Choice {
 
-//    @JsonProperty("jsonpath")
-//    private JSONPath jsonPath;
-
     @JsonProperty("simple")
     private String simple;
 
@@ -27,15 +24,6 @@ public class Choice {
             final List<FlowStep> steps) {
         this.steps = steps;
     }
-//
-//    public JSONPath getJsonPath() {
-//        return jsonPath;
-//    }
-//
-//    public void setJsonPath(
-//            final JSONPath jsonPath) {
-//        this.jsonPath = jsonPath;
-//    }
 
     public String getSimple() {
         return simple;
