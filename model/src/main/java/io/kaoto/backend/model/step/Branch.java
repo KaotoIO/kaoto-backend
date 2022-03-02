@@ -5,6 +5,7 @@ import io.kaoto.backend.model.parameter.Parameter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 🐱class Branch
@@ -23,17 +24,13 @@ public class Branch extends HashMap<String, Object> {
     }
 
     public List<Step> getSteps() {
-        if (!this.containsKey(STEPS)) {
-            this.put(STEPS, new LinkedList<Step>());
-        }
+        this.computeIfAbsent(STEPS, k -> new LinkedList<Step>());
 
         return ((List<Step>) this.get(STEPS));
     }
 
     public List<Parameter> getParameters() {
-        if (!this.containsKey(PARAMETERS)) {
-            this.put(PARAMETERS, new LinkedList<Parameter>());
-        }
+        this.computeIfAbsent(PARAMETERS, k -> new LinkedList<Parameter>());
 
         return ((List<Parameter>) this.get(PARAMETERS));
     }
