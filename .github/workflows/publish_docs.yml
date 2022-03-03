@@ -31,7 +31,7 @@ jobs:
           node-version: "14"
       - run: npm install
       - run: mkdir docs
-      - run: sudo apt-get install xdot
+      - run: sudo apt-get update; sudo apt-get install xdot
       - run: npm run docs
       - run: mv docs/api-reference.html docs/index.html
       - run: curl http://localhost:${{ job.services.kaoto.ports[8081] }}/q/openapi?type=json > /tmp/openapi.json
