@@ -35,8 +35,8 @@ jobs:
       - run: npm run docs
       - run: mv docs/api-reference.html docs/index.html
       - run: curl http://localhost:${{ job.services.kaoto.ports[8081] }}/q/openapi?type=json > /tmp/openapi.json
-      - run: wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.20/swagger-codegen-cli-3.0.20.jar
-      - run: java -jar swagger-codegen-cli-3.0.20.jar generate -i /tmp/openapi.json -l html2 -o docs/api/
+      - run: wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.33/swagger-codegen-cli-3.0.33.jar
+      - run: java -jar swagger-codegen-cli-3.0.33.jar generate -i /tmp/openapi.json -l html2 -o docs/api/
       - name: 🚀 deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
