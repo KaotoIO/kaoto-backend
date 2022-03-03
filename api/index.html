@@ -689,7 +689,7 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-            defs.Branch = {
+            defs["Branch"] = {
   "type" : "object",
   "properties" : {
     "steps" : {
@@ -706,11 +706,11 @@
     }
   }
 };
-            defs.ConstraintOperation = {
+            defs["ConstraintOperation"] = {
   "type" : "string",
   "enum" : [ "CONTAINS_STEP_IDENTIFIER", "CONTAINS_STEP_NAME", "CONTAINS_STEP_TYPE", "SIZE_EQUALS", "SIZE_GREATER_THAN", "SIZE_SMALLER_THAN" ]
 };
-            defs.DeploymentResourceYamlRequest = {
+            defs["DeploymentResourceYamlRequest"] = {
   "type" : "object",
   "properties" : {
     "name" : {
@@ -724,7 +724,7 @@
     }
   }
 };
-            defs.Integration = {
+            defs["Integration"] = {
   "type" : "object",
   "properties" : {
     "running" : {
@@ -735,7 +735,7 @@
     }
   }
 };
-            defs.Parameter = {
+            defs["Parameter"] = {
   "type" : "object",
   "properties" : {
     "id" : {
@@ -782,7 +782,7 @@
     }
   }
 };
-            defs.Step = {
+            defs["Step"] = {
   "type" : "object",
   "properties" : {
     "name" : {
@@ -849,7 +849,7 @@
     }
   }
 };
-            defs.ViewDefinition = {
+            defs["ViewDefinition"] = {
   "type" : "object",
   "properties" : {
     "name" : {
@@ -887,7 +887,7 @@
     }
   }
 };
-            defs.ViewDefinitionConstraint = {
+            defs["ViewDefinitionConstraint"] = {
   "type" : "object",
   "properties" : {
     "mandatory" : {
@@ -901,7 +901,7 @@
     }
   }
 };
-            defs.ViewDefinitionResourceResponse = {
+            defs["ViewDefinitionResourceResponse"] = {
   "type" : "object",
   "properties" : {
     "steps" : {
@@ -1023,7 +1023,10 @@
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsCustomResourcePost-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations/customResource?type="</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: text/yaml"\
+-H "Content-Type: application/json"\
+"//integrations/customResource?type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1364,7 +1367,10 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations/customResources"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"//integrations/customResources"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcesPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1676,7 +1682,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//integrations"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//integrations"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1936,7 +1944,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsNameDelete-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE "//integrations/{name}"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+-H "Accept: application/json"\
+"//integrations/{name}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2231,7 +2241,10 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsPost-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//integrations"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: text/yaml"\
+-H "Content-Type: application/json"\
+"//integrations"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2543,7 +2556,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-StepResource-stepGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//step"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2803,7 +2818,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-StepResource-stepIdIdGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/id/{id}"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//step/id/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepIdIdGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3097,7 +3114,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/integrationType/{integrationType}"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//step/integrationType/{integrationType}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepIntegrationTypeIntegrationTypeGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3395,7 +3414,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-StepResource-stepKindKindGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/kind/{kind}"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//step/kind/{kind}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepKindKindGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3693,7 +3714,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-StepResource-stepNameNameGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "//step/name/{name}"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//step/name/{name}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepNameNameGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3994,7 +4017,10 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-ViewDefinitionResource-viewdefinitionPost-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "//viewdefinition"</code></pre>
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: text/yaml,application/json"\
+"//viewdefinition"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-ViewDefinitionResource-viewdefinitionPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5375,10 +5401,15 @@ except ApiException as e:
   
       _classCallCheck(this, JSONSchemaView);
   
-      this.schema = schema; //console.log(schema);
+      this.schema = schema;
       this.open = open;
       this.options = options;
       this.isCollapsed = open <= 0;
+  
+      if (this.schema.type == undefined && this.schema.$ref) {
+        const elements = this.schema.$ref.split('/');
+        this.schema = defs[elements.pop()];
+      }
   
       // if schema is an empty object which means any JOSN
       this.isAny = typeof schema === 'object' && !Array.isArray(schema) && !Object.keys(schema).filter(function (k) {
@@ -5388,7 +5419,7 @@ except ApiException as e:
       // Determine if a schema is an array
       this.isArray = !this.isAny && this.schema && this.schema.type === 'array';
   
-      this.isObject = this.schema && (this.schema.type === 'object' || this.schema.properties || this.schema.anyOf || this.schema.oneof || this.schema.allOf);
+      this.isObject = this.schema && (this.schema.type === 'object' || this.schema.properties || this.schema.allOf);
   
       // Determine if a schema is a primitive
       this.isPrimitive = !this.isAny && !this.isArray && !this.isObject;
