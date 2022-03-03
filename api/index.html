@@ -689,6 +689,23 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
+            defs.Branch = {
+  "type" : "object",
+  "properties" : {
+    "steps" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Step"
+      }
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter"
+      }
+    }
+  }
+};
             defs.ConstraintOperation = {
   "type" : "string",
   "enum" : [ "CONTAINS_STEP_IDENTIFIER", "CONTAINS_STEP_NAME", "CONTAINS_STEP_TYPE", "SIZE_EQUALS", "SIZE_GREATER_THAN", "SIZE_SMALLER_THAN" ]
@@ -796,6 +813,18 @@
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/Parameter"
+      }
+    },
+    "required" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "branches" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Branch"
       }
     },
     "uuid" : {
@@ -3937,7 +3966,7 @@ except ApiException as e:
                       <article id="api-ViewDefinitionResource-viewdefinitionPost-0" data-group="User" data-name="viewdefinitionPost" data-version="0">
                         <div class="pull-left">
                           <h1>viewdefinitionPost</h1>
-                          <p>Get views</p>
+                          <p>Get views based on steps</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4020,7 +4049,7 @@ public class ViewDefinitionResourceApiExample {
 
 ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
 
-// Get views
+// Get views based on steps
 [apiInstance viewdefinitionPostWith:body
               completionHandler: ^(ViewDefinitionResourceResponse output, NSError* error) {
                             if (output) {
@@ -4073,7 +4102,7 @@ namespace Example
 
             try
             {
-                // Get views
+                // Get views based on steps
                 ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body);
                 Debug.WriteLine(result);
             }
@@ -4132,7 +4161,7 @@ api_instance = swagger_client.ViewDefinitionResourceApi()
 body =  # String |  (optional)
 
 try: 
-    # Get views
+    # Get views based on steps
     api_response = api_instance.viewdefinition_post(body=body)
     pprint(api_response)
 except ApiException as e:
@@ -4161,6 +4190,14 @@ except ApiException as e:
     "text/yaml" : {
       "schema" : {
         "type" : "string"
+      }
+    },
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        }
       }
     }
   }

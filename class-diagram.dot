@@ -36,7 +36,7 @@ stepsByKind(&lt;String&gt; type):List[Step]
 <BR align="left" />
 stepsByIntegrationType(&lt;String&gt; type):List[Step]
 <BR align="left" />
-allSteps():List[Step]
+allSteps(&lt;String&gt; type, &lt;String&gt; integrationType, &lt;String&gt; kind):List[Step]
 <BR align="left" />
 
 </TD></TR>
