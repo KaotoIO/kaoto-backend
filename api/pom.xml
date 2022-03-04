@@ -92,5 +92,46 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>swagger-ui</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.smallrye</groupId>
+                        <artifactId>smallrye-open-api-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>generate-schema</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/src/main/resources/api.yaml</outputDirectory>
+                            <includeDependenciesScopes>compile,provided,system,test,import</includeDependenciesScopes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.swagger.codegen.v3</groupId>
+                        <artifactId>swagger-codegen-maven-plugin</artifactId>
+                        <version>3.0.32</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${project.basedir}/src/main/resources/api.yaml/openapi.json</inputSpec>
+                                    <language>html2</language>
+                                    <output>/tmp/api/</output>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

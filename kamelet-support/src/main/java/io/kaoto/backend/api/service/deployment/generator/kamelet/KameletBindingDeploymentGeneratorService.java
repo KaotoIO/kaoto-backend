@@ -49,11 +49,16 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         KameletBindingSpec spec = new KameletBindingSpec();
+        int i = 0;
+
         if (!steps.isEmpty()) {
-            spec.setSource(createKameletBindingStep(steps.get(0)));
+            Step step = steps.get(i);
+            if ("START".equalsIgnoreCase(step.getType())) {
+                spec.setSource(createKameletBindingStep(steps.get(i++)));
+            }
         }
 
-        for (int i = 1; i < steps.size() - 1; i++) {
+        for (; i < steps.size() - 1; i++) {
             spec.getSteps().add(createKameletBindingStep(steps.get(i)));
         }
 

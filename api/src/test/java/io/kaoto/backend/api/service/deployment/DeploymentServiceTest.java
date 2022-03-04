@@ -163,8 +163,8 @@ class DeploymentServiceTest {
                + "spec:\n"
                + "  sink:\n"
                + "    uri: log:info?showBody=false&\n"
-               + "  source:\n"
-               + "    uri: log:debug?showBody=true&\n"
+               + "  steps:\n"
+               + "  - uri: log:debug?showBody=true&\n"
                + "storage: true\n"
                + "version: v1alpha1";
 
