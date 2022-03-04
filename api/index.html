@@ -2558,7 +2558,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-StepResource-stepGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//step"</code></pre>
+"//step?integrationType=&kind=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2574,8 +2574,11 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         
         StepResourceApi apiInstance = new StepResourceApi();
+        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
+        String kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
+        String type = type_example; // String | Filter by step type. Example: 'START'
         try {
-            array[Step] result = apiInstance.stepGet();
+            array[Step] result = apiInstance.stepGet(integrationType, kind, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#stepGet");
@@ -2592,8 +2595,11 @@ public class StepResourceApiExample {
 
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
+        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
+        String kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
+        String type = type_example; // String | Filter by step type. Example: 'START'
         try {
-            array[Step] result = apiInstance.stepGet();
+            array[Step] result = apiInstance.stepGet(integrationType, kind, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#stepGet");
@@ -2607,12 +2613,17 @@ public class StepResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-stepGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">String *integrationType = integrationType_example; // Filter by DSL. Example: 'KameletBinding' (optional)
+String *kind = kind_example; // Filter by kind of step. Example: 'Kamelet' (optional)
+String *type = type_example; // Filter by step type. Example: 'START' (optional)
+
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 // Get all steps
-[apiInstance stepGetWithCompletionHandler: 
-              ^(array[Step] output, NSError* error) {
+[apiInstance stepGetWith:integrationType
+    kind:kind
+    type:type
+              completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2627,6 +2638,11 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
 
 var api = new ApiApi.StepResourceApi()
+var opts = { 
+  'integrationType': integrationType_example, // {{String}} Filter by DSL. Example: 'KameletBinding'
+  'kind': kind_example, // {{String}} Filter by kind of step. Example: 'Kamelet'
+  'type': type_example // {{String}} Filter by step type. Example: 'START'
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2634,7 +2650,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.stepGet(callback);
+api.stepGet(opts, callback);
 </code></pre>
                             </div>
 
@@ -2656,11 +2672,14 @@ namespace Example
         {
 
             var apiInstance = new StepResourceApi();
+            var integrationType = integrationType_example;  // String | Filter by DSL. Example: 'KameletBinding' (optional) 
+            var kind = kind_example;  // String | Filter by kind of step. Example: 'Kamelet' (optional) 
+            var type = type_example;  // String | Filter by step type. Example: 'START' (optional) 
 
             try
             {
                 // Get all steps
-                array[Step] result = apiInstance.stepGet();
+                array[Step] result = apiInstance.stepGet(integrationType, kind, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2678,9 +2697,12 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
+$integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
+$kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
+$type = type_example; // String | Filter by step type. Example: 'START'
 
 try {
-    $result = $api_instance->stepGet();
+    $result = $api_instance->stepGet($integrationType, $kind, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling StepResourceApi->stepGet: ', $e->getMessage(), PHP_EOL;
@@ -2694,9 +2716,12 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $integrationType = integrationType_example; # String | Filter by DSL. Example: 'KameletBinding'
+my $kind = kind_example; # String | Filter by kind of step. Example: 'Kamelet'
+my $type = type_example; # String | Filter by step type. Example: 'START'
 
 eval { 
-    my $result = $api_instance->stepGet();
+    my $result = $api_instance->stepGet(integrationType => $integrationType, kind => $kind, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2713,10 +2738,13 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
+integrationType = integrationType_example # String | Filter by DSL. Example: 'KameletBinding' (optional)
+kind = kind_example # String | Filter by kind of step. Example: 'Kamelet' (optional)
+type = type_example # String | Filter by step type. Example: 'START' (optional)
 
 try: 
     # Get all steps
-    api_response = api_instance.step_get()
+    api_response = api_instance.step_get(integrationType=integrationType, kind=kind, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling StepResourceApi->stepGet: %s\n" % e)</code></pre>
@@ -2729,6 +2757,70 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">integrationType</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_stepGet_integrationType">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by DSL. Example: &#x27;KameletBinding&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">kind</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_stepGet_kind">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by kind of step. Example: &#x27;Kamelet&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_stepGet_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by step type. Example: &#x27;START&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
