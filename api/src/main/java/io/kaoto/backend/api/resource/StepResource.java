@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -172,23 +173,24 @@ public class StepResource {
                     + " to the integration.")
     public Collection<Step> allSteps(
             final @Parameter(description = "Filter by step type. Example: "
-                    + "'START'")
+                    + "'START' 'MIDDLE,END")
             @QueryParam("type") String type,
             final @Parameter(description = "Filter by DSL. Example: "
-                    + "'KameletBinding'")
+                    + "'KameletBinding' 'KameletBinding,Kamelet'")
             @QueryParam("integrationType") String integrationType,
-            final @Parameter(description = "Filter by kind of step. Example: "
-                    + "'Kamelet'")
+            final @Parameter(description = "Filter by kind of step. Examples: "
+                    + "'Kamelet' 'Kamelet,KameletBinding'")
             @QueryParam("kind") String kind) {
         var steps = stepService.allSteps().stream().parallel();
         if (type != null && !type.isEmpty()) {
-            steps = steps.filter(step -> type.equalsIgnoreCase(step.getType()));
+            steps = steps.filter(step -> Arrays.stream(type.split(","))
+                            .anyMatch(t -> t.equalsIgnoreCase(step.getType())));
         }
         if (integrationType != null && !integrationType.isEmpty()) {
             List<String> kinds =
                     deploymentService.getParsers().stream().parallel()
-                    .filter(s ->
-                            integrationType.equalsIgnoreCase(s.identifier()))
+                    .filter(s -> Arrays.stream(integrationType.split(","))
+                           .anyMatch(it -> it.equalsIgnoreCase(s.identifier())))
                     .map(DeploymentGeneratorService::getKinds)
                     .flatMap(Collection::stream)
                     .toList();
@@ -196,7 +198,8 @@ public class StepResource {
                     .anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
         }
         if (kind != null && !kind.isEmpty()) {
-            steps = steps.filter(step -> kind.equalsIgnoreCase(step.getKind()));
+            steps = steps.filter(step -> Arrays.stream(kind.split(","))
+                            .anyMatch(k -> k.equalsIgnoreCase(step.getKind())));
         }
         return steps.toList();
     }
