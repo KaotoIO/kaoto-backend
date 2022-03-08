@@ -2574,9 +2574,9 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         
         StepResourceApi apiInstance = new StepResourceApi();
-        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
-        String kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
-        String type = type_example; // String | Filter by step type. Example: 'START'
+        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+        String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
             array[Step] result = apiInstance.stepGet(integrationType, kind, type);
             System.out.println(result);
@@ -2595,9 +2595,9 @@ public class StepResourceApiExample {
 
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
-        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
-        String kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
-        String type = type_example; // String | Filter by step type. Example: 'START'
+        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+        String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
             array[Step] result = apiInstance.stepGet(integrationType, kind, type);
             System.out.println(result);
@@ -2613,9 +2613,9 @@ public class StepResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-stepGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *integrationType = integrationType_example; // Filter by DSL. Example: 'KameletBinding' (optional)
-String *kind = kind_example; // Filter by kind of step. Example: 'Kamelet' (optional)
-String *type = type_example; // Filter by step type. Example: 'START' (optional)
+                              <pre class="prettyprint"><code class="language-cpp">String *integrationType = integrationType_example; // Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+String *kind = kind_example; // Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
@@ -2639,9 +2639,9 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 var api = new ApiApi.StepResourceApi()
 var opts = { 
-  'integrationType': integrationType_example, // {{String}} Filter by DSL. Example: 'KameletBinding'
-  'kind': kind_example, // {{String}} Filter by kind of step. Example: 'Kamelet'
-  'type': type_example // {{String}} Filter by step type. Example: 'START'
+  'integrationType': integrationType_example, // {{String}} Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+  'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+  'type': type_example // {{String}} Filter by step type. Example: 'START' 'MIDDLE,END
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -2672,9 +2672,9 @@ namespace Example
         {
 
             var apiInstance = new StepResourceApi();
-            var integrationType = integrationType_example;  // String | Filter by DSL. Example: 'KameletBinding' (optional) 
-            var kind = kind_example;  // String | Filter by kind of step. Example: 'Kamelet' (optional) 
-            var type = type_example;  // String | Filter by step type. Example: 'START' (optional) 
+            var integrationType = integrationType_example;  // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
+            var kind = kind_example;  // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional) 
+            var type = type_example;  // String | Filter by step type. Example: 'START' 'MIDDLE,END (optional) 
 
             try
             {
@@ -2697,9 +2697,9 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
-$integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding'
-$kind = kind_example; // String | Filter by kind of step. Example: 'Kamelet'
-$type = type_example; // String | Filter by step type. Example: 'START'
+$integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+$kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+$type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 try {
     $result = $api_instance->stepGet($integrationType, $kind, $type);
@@ -2716,9 +2716,9 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
-my $integrationType = integrationType_example; # String | Filter by DSL. Example: 'KameletBinding'
-my $kind = kind_example; # String | Filter by kind of step. Example: 'Kamelet'
-my $type = type_example; # String | Filter by step type. Example: 'START'
+my $integrationType = integrationType_example; # String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+my $kind = kind_example; # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+my $type = type_example; # String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 eval { 
     my $result = $api_instance->stepGet(integrationType => $integrationType, kind => $kind, type => $type);
@@ -2738,9 +2738,9 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
-integrationType = integrationType_example # String | Filter by DSL. Example: 'KameletBinding' (optional)
-kind = kind_example # String | Filter by kind of step. Example: 'Kamelet' (optional)
-type = type_example # String | Filter by step type. Example: 'START' (optional)
+integrationType = integrationType_example # String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 try: 
     # Get all steps
@@ -2775,7 +2775,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        Filter by DSL. Example: &#x27;KameletBinding&#x27;
+                                                        Filter by DSL. Example: &#x27;KameletBinding&#x27; &#x27;KameletBinding,Kamelet&#x27;
                                                     </div>
                                             </div>
                                         </div>
@@ -2794,7 +2794,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        Filter by kind of step. Example: &#x27;Kamelet&#x27;
+                                                        Filter by kind of step. Examples: &#x27;Kamelet&#x27; &#x27;Kamelet,KameletBinding&#x27;
                                                     </div>
                                             </div>
                                         </div>
@@ -2813,7 +2813,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        Filter by step type. Example: &#x27;START&#x27;
+                                                        Filter by step type. Example: &#x27;START&#x27; &#x27;MIDDLE,END
                                                     </div>
                                             </div>
                                         </div>
