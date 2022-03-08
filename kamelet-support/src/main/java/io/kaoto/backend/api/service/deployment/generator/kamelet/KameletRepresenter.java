@@ -1,6 +1,9 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
+import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
+import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -17,6 +20,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class KameletRepresenter extends Representer {
@@ -31,6 +35,9 @@ public class KameletRepresenter extends Representer {
         getPropertyUtils().setSkipMissingProperties(true);
         getPropertyUtils().setAllowReadOnlyProperties(true);
 
+        //proper order sink steps and source
+        spec();
+
         //For each type of FlowStep or custom classes, create a representer
         from();
         to();
@@ -40,6 +47,73 @@ public class KameletRepresenter extends Representer {
         setBody();
         setHeader();
         expression();
+    }
+
+    private void spec() {
+        //spec does not have the right order
+        this.multiRepresenters.put(KameletBindingSpec.class,
+            new RepresentMap() {
+                @Override
+                public Node representData(final Object data) {
+                    Map<String, Object> properties = new LinkedHashMap<>();
+                    KameletBindingSpec spec = (KameletBindingSpec) data;
+                    if (spec.getSource() != null) {
+                        properties.put("source", spec.getSource());
+                    }
+                    if (spec.getSteps() != null) {
+                        properties.put("steps", spec.getSteps());
+                    }
+                    if (spec.getSink() != null) {
+                        properties.put("sink", spec.getSink());
+                    }
+                    return representMapping(getTag(data.getClass(), Tag.MAP),
+                            properties,
+                            DumperOptions.FlowStyle.AUTO);
+                }
+            });
+
+        this.multiRepresenters.put(KameletBindingStep.class,
+            new RepresentMap() {
+                @Override
+                public Node representData(final Object data) {
+                    Map<String, Object> properties = new LinkedHashMap<>();
+                    KameletBindingStep step = (KameletBindingStep) data;
+                    if (step.getRef() != null) {
+                        properties.put("ref", step.getRef());
+                    }
+                    if (step.getUri() != null) {
+                        properties.put("uri", step.getUri());
+                    }
+                    if (step.getProperties() != null
+                            && !step.getProperties().isEmpty()) {
+                        properties.put("properties", step.getProperties());
+                    }
+                    return representMapping(getTag(data.getClass(), Tag.MAP),
+                            properties,
+                            DumperOptions.FlowStyle.AUTO);
+                }
+            });
+
+        this.multiRepresenters.put(KameletBindingStepRef.class,
+            new RepresentMap() {
+                @Override
+                public Node representData(final Object data) {
+                    Map<String, Object> properties = new LinkedHashMap<>();
+                    KameletBindingStepRef ref = (KameletBindingStepRef) data;
+                    if (ref.getApiVersion() != null) {
+                        properties.put("apiVersion", ref.getApiVersion());
+                    }
+                    if (ref.getName() != null) {
+                        properties.put("name", ref.getName());
+                    }
+                    if (ref.getKind() != null) {
+                        properties.put("kind", ref.getKind());
+                    }
+                    return representMapping(getTag(data.getClass(), Tag.MAP),
+                            properties,
+                            DumperOptions.FlowStyle.AUTO);
+                }
+            });
     }
 
     private void metaChoice() {

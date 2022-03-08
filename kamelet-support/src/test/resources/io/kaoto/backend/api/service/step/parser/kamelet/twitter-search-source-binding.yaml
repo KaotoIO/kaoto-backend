@@ -12,24 +12,23 @@ scope: Namespaced
 served: true
 singular: kameletbinding
 spec:
-  sink:
-    uri: log:info?showBody=false&
   source:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: twitter-search-source
+      kind: Kamelet
     properties:
       keywords: Apache Camel
       apiKey: your own
       apiKeySecret: your own
       accessToken: your own
       accessTokenSecret: your own
-    ref:
-      apiVersion: camel.apache.org/v1alpha1
-      kind: Kamelet
-      name: twitter-search-source
   steps:
-  - properties: {}
-    ref:
+  - ref:
       apiVersion: camel.apache.org/v1alpha1
-      kind: Kamelet
       name: aws-translate-action
+      kind: Kamelet
+  sink:
+    uri: log:info?showBody=false&
 storage: true
 version: v1alpha1
