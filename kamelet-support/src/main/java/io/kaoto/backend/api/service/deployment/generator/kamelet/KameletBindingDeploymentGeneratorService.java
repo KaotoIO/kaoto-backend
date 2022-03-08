@@ -9,10 +9,6 @@ import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.step.Step;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Arrays;
@@ -72,28 +68,8 @@ public class KameletBindingDeploymentGeneratorService
         KameletBinding binding = new KameletBinding(String.valueOf(
                 metadata.getOrDefault("name", "")), spec);
 
-        Representer representer = new Representer() {
-            @Override
-            protected NodeTuple representJavaBeanProperty(
-                    final Object javaBean,
-                    final Property property,
-                    final Object propertyValue,
-                    final Tag customTag) {
-                if (propertyValue == null) {
-                    return null;
-                }
-                if (property.getName().equalsIgnoreCase("CRDName")) {
-                    return null;
-                }
-
-                return super.representJavaBeanProperty(javaBean, property,
-                        propertyValue, customTag);
-            }
-        };
-        representer.getPropertyUtils().setAllowReadOnlyProperties(true);
-
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
-                representer);
+                new KameletRepresenter());
         return yaml.dumpAsMap(binding);
     }
 
