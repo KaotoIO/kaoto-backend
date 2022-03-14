@@ -87,13 +87,16 @@ public class GenericViewDefinitionParserService
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
-                res = steps.size() == Integer.valueOf(c.getParameter());
+                res = (steps != null
+                        && steps.size() == Integer.valueOf(c.getParameter()));
                 break;
             case SIZE_GREATER_THAN:
-                res = steps.size() > Integer.valueOf(c.getParameter());
+                res = (steps != null
+                        && steps.size() > Integer.valueOf(c.getParameter()));
                 break;
             case SIZE_SMALLER_THAN:
-                res = steps.size() < Integer.valueOf(c.getParameter());
+                res = (steps != null
+                        && steps.size() < Integer.valueOf(c.getParameter()));
                 break;
             case CONTAINS_STEP_IDENTIFIER:
                 res = containsStepIdentifier(steps, c, res);
