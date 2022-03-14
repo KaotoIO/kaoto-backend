@@ -99,13 +99,16 @@ public class GenericViewDefinitionParserService
                         && steps.size() < Integer.valueOf(c.getParameter()));
                 break;
             case CONTAINS_STEP_IDENTIFIER:
-                res = containsStepIdentifier(steps, c, res);
+                res = (steps != null
+                        &&  containsStepIdentifier(steps, c));
                 break;
             case CONTAINS_STEP_NAME:
-                res = containsStepName(steps, c, res);
+                res = (steps != null
+                        && containsStepName(steps, c));
                 break;
             case CONTAINS_STEP_TYPE:
-                res = containsStepType(steps, c, res);
+                res = (steps != null
+                        && containsStepType(steps, c));
                 break;
             default:
                 //Unsupported operation or typo
@@ -116,9 +119,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepIdentifier(final List<Step> steps,
-                                           final ViewDefinitionConstraint c,
-                                           final boolean tmpRes) {
-        boolean res = tmpRes;
+                                           final ViewDefinitionConstraint c) {
+        boolean res = false;
         for (Step s : steps) {
             if (s.getId().equalsIgnoreCase(c.getParameter())) {
                 res = true;
@@ -129,9 +131,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepName(final List<Step> steps,
-                                     final ViewDefinitionConstraint c,
-                                     final boolean tmpRes) {
-        boolean res = tmpRes;
+                                     final ViewDefinitionConstraint c) {
+        boolean res = false;
         for (Step s : steps) {
             if (s.getName() != null
                     && s.getName().equalsIgnoreCase(c.getParameter())) {
@@ -143,9 +144,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepType(final List<Step> steps,
-                                     final ViewDefinitionConstraint c,
-                                     final boolean tmpRes) {
-        boolean res = tmpRes;
+                                     final ViewDefinitionConstraint c) {
+        boolean res = false;
         for (Step s : steps) {
             if (s.getType().equalsIgnoreCase(c.getParameter())
                     || s.getKind().equalsIgnoreCase(c.getParameter())) {
