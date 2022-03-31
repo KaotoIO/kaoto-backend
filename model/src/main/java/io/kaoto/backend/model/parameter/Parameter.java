@@ -3,6 +3,8 @@ package io.kaoto.backend.model.parameter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import javax.json.bind.annotation.JsonbTypeDeserializer;
+
 /**
  * 🐱class Parameter
  * 🐱aka List[Parameter]
@@ -10,8 +12,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * Represents a parameter of a step in an integration.
  * These parameters could be used on the UI to configure the step.
  */
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl = ObjectParameter.class,
+        visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = StringParameter.class, name = "string"),
         @JsonSubTypes.Type(value = ObjectParameter.class, name = "object"),
@@ -19,7 +25,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = IntegerParameter.class, name = "integer"),
         @JsonSubTypes.Type(value = BooleanParameter.class, name = "boolean"),
         @JsonSubTypes.Type(value = ArrayParameter.class, name = "array")})
-public class Parameter<T> implements Cloneable {
+//This is a workaround utility class until Quarkus supports fully polymorphism
+@JsonbTypeDeserializer(ParameterDeserializer.class)
+public abstract class Parameter<T> implements Cloneable {
 
     // Kaoto
     private String id;
@@ -36,7 +44,7 @@ public class Parameter<T> implements Cloneable {
     private T[] examples;
 
 
-    public Parameter(final String id,
+    protected Parameter(final String id,
                      final String title,
                      final String description,
                      final T defaultValue) {
@@ -46,7 +54,7 @@ public class Parameter<T> implements Cloneable {
         this.defaultValue = defaultValue;
     }
 
-    public Parameter() {
+    protected Parameter() {
         super();
     }
 
@@ -119,9 +127,7 @@ public class Parameter<T> implements Cloneable {
      * Type of parameter: number, integer, string, boolean, array, object, or
      *  null
      */
-    public String getType() {
-        return type;
-    }
+    public abstract String getType();
 
     public void setType(final String type) {
         this.type = type;
