@@ -6,7 +6,7 @@ This is the backend companion of the Kaoto project.
 ![GitHub](https://img.shields.io/github/license/kaotoio/kaoto-backend)
 
 
-![Docker Pulls](https://img.shields.io/docker/pulls/kaotoio/backend)
+![Docker Pulls](https://img.shields.io/docker/pulls/kaotoio/frontend)
 [![Docker generation](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml/badge.svg)](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml)
 
 ![GitHub contributors](https://img.shields.io/github/contributors/kaotoio/kaoto-backend)
