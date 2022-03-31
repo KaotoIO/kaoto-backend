@@ -47,7 +47,7 @@ class ViewDefinitionResourceTest {
     static void setup() throws URISyntaxException, IOException {
         binding = Files.readString(Path.of(
                 ViewDefinitionResourceTest.class.getResource(
-                        "twitter-search-source-binding.yaml")
+                                "twitter-search-source-binding.yaml")
                         .toURI()));
     }
 
@@ -85,6 +85,28 @@ class ViewDefinitionResourceTest {
                 "views[0].type", is("generic"),
                 "steps.size()", is(2));
 
+    }
+
+    @Test
+    void testParametersRight() throws URISyntaxException, IOException {
+
+        String request = Files.readString(Path.of(
+                ViewDefinitionResourceTest.class.getResource(
+                                "request-viewdefinition.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(request).post()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        res.body("steps.size()", is(2));
+        res.body("steps[0].parameters.size()", is(5));
+        for (int i = 0; i < 5; i++) {
+            res.body("steps[0].parameters[" + i + "].type",
+                    is("string"));
+        }
     }
 
     @Test

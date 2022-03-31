@@ -25,6 +25,7 @@ public class Parameter<T> implements Cloneable {
     private String id;
     private boolean path = false;
     private T value;
+    private String type;
 
     //JSON schema
     private String title;
@@ -119,7 +120,11 @@ public class Parameter<T> implements Cloneable {
      *  null
      */
     public String getType() {
-        return "object";
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
     }
 
     /*
