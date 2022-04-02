@@ -8,10 +8,13 @@ import javax.json.bind.serializer.JsonbDeserializer;
 import javax.json.stream.JsonParser;
 import java.lang.reflect.Type;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * This is a workaround utility class until Quarkus supports full polymorphic
  * unmarshalling.
  */
+@RegisterForReflection
 public class ParameterDeserializer implements JsonbDeserializer<Parameter> {
 
     private static final Jsonb JSONB = JsonbBuilder.create();
