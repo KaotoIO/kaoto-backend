@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public class LanguageResource {
     @Operation(summary = "Get Languages",
             description = "Returns a list of all potential supported "
                     + "languages.")
-    public Map<String, Map<String, String>> getAll() {
+    public Collection<Map<String, String>> getAll() {
         return languageService.getAll();
     }
 

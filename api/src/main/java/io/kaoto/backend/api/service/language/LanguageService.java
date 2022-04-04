@@ -9,6 +9,7 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,28 +38,22 @@ public class LanguageService {
      *
      * Returns the supported languages.
      */
-    public Map<String, Map<String, String>> getAll() {
+    public Collection<Map<String, String>> getAll() {
 
         Map<String, Map<String, String>> res = new HashMap<>();
 
         for (DeploymentGeneratorService parser : getGeneratorServices()) {
-            String key = parser.identifier();
-            if (!res.containsKey(key)) {
-                final var language = new HashMap<String, String>();
-                res.put(key, language);
-                res.get(key).put("description", parser.description());
-            }
-            res.get(key).put("output", "true");
+            addNewLanguage(res, parser.identifier(), parser.description());
+            res.get(parser.identifier())
+                    .put("step-kinds", parser.getKinds().toString());
+            res.get(parser.identifier())
+                    .put("output", "true");
         }
 
         for (StepParserService parser : getStepParserServices()) {
-            String key = parser.identifier();
-            if (!res.containsKey(key)) {
-                final var language = new HashMap<String, String>();
-                res.put(key, language);
-                res.get(key).put("description", parser.description());
-            }
-            res.get(key).put("input", "true");
+            addNewLanguage(res, parser.identifier(),
+                    parser.description());
+            res.get(parser.identifier()).put("input", "true");
         }
 
         if (null != crdDefault && !crdDefault.isEmpty()) {
@@ -67,7 +62,19 @@ public class LanguageService {
             }
         }
 
-        return res;
+        return res.values();
+    }
+
+    private String addNewLanguage(final Map<String, Map<String, String>> res,
+                                  final String key,
+                                  final String description) {
+        if (!res.containsKey(key)) {
+            final var language = new HashMap<String, String>();
+            res.put(key, language);
+            res.get(key).put("description", description);
+            res.get(key).put("name", key);
+        }
+        return key;
     }
 
     public Instance<DeploymentGeneratorService> getGeneratorServices() {
