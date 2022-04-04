@@ -159,7 +159,7 @@ public class StepResource {
     /*
      * 🐱method allSteps : List[Step]
      * 🐱param type: String
-     * 🐱param integrationType: String
+     * 🐱param dsl: String
      * 🐱param kind: String
      *
      * Returns all the steps. If parameters are included in the query, it
@@ -175,9 +175,10 @@ public class StepResource {
             final @Parameter(description = "Filter by step type. Example: "
                     + "'START' 'MIDDLE,END")
             @QueryParam("type") String type,
-            final @Parameter(description = "Filter by DSL. Example: "
+            final @Parameter(description = "Filter by Domain Specific "
+                    + "Language (DSL). Examples: "
                     + "'KameletBinding' 'KameletBinding,Kamelet'")
-            @QueryParam("integrationType") String integrationType,
+            @QueryParam("dsl") String dsl,
             final @Parameter(description = "Filter by kind of step. Examples: "
                     + "'Kamelet' 'Kamelet,KameletBinding'")
             @QueryParam("kind") String kind) {
@@ -186,10 +187,10 @@ public class StepResource {
             steps = steps.filter(step -> Arrays.stream(type.split(","))
                             .anyMatch(t -> t.equalsIgnoreCase(step.getType())));
         }
-        if (integrationType != null && !integrationType.isEmpty()) {
+        if (dsl != null && !dsl.isEmpty()) {
             List<String> kinds =
                     deploymentService.getParsers().stream().parallel()
-                    .filter(s -> Arrays.stream(integrationType.split(","))
+                    .filter(s -> Arrays.stream(dsl.split(","))
                            .anyMatch(it -> it.equalsIgnoreCase(s.identifier())))
                     .map(DeploymentGeneratorService::getKinds)
                     .flatMap(Collection::stream)
