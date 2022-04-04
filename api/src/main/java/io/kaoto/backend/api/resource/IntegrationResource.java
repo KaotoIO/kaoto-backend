@@ -74,7 +74,7 @@ public class IntegrationResource {
             description = "Returns a list of all potential associated custom "
                     + "resource definitions."
                     + " This is an idempotent operation.")
-    public Map<String, String> customResourcesDefinition(
+    public List<Map<String, String>> customResourcesDefinition(
             final @RequestBody DeploymentResourceYamlRequest request) {
         return deploymentService.crd(request.getName(), request.getSteps());
     }
@@ -105,23 +105,28 @@ public class IntegrationResource {
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request,
             final @QueryParam("type") String type) {
-        Map<String, String> crds = customResourcesDefinition(request);
+        List<Map<String, String>> crds = customResourcesDefinition(request);
 
         log.trace("Found " + crds.size() + " potential CRDs.");
 
-        if (crds.containsKey(type)) {
-            log.trace("Returning type " + type);
-            return crds.get(type);
+        for (var crd : crds) {
+            if (crd.get("dsl").equalsIgnoreCase(type)) {
+                log.trace("Returning type " + type);
+                return crd.get("crd");
+            }
         }
 
         log.trace("Trying to return default type " + crdDefault);
-        if (crds.containsKey(crdDefault)) {
-            log.trace("Returning default " + crdDefault);
-            return crds.get(crdDefault);
+        for (var crd : crds) {
+            if (crd.get("dsl").equalsIgnoreCase(crdDefault)) {
+                log.trace("Returning type " + crdDefault);
+                return crd.get("crd");
+            }
         }
 
+
         log.trace("Returning arbitrary one.");
-        return crds.values().iterator().next();
+        return crds.iterator().next().get("crd");
     }
 
     /*
@@ -140,10 +145,10 @@ public class IntegrationResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request) {
-        Map<String, String> yaml = deploymentService.crd(
+        List<Map<String, String>> crds = deploymentService.crd(
                 request.getName(), request.getSteps());
-        if (!yaml.values().isEmpty()) {
-            final var crd = yaml.values().iterator().next();
+        if (!crds.isEmpty()) {
+            final var crd = crds.iterator().next().get("crd");
             if (clusterService.start(crd)) {
                 return crd;
             }

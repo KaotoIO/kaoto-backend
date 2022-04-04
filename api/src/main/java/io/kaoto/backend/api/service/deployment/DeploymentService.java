@@ -9,12 +9,13 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 🐱class DeploymentService
- * This endpoint will return a list of views based on the parameters.
+ * 🐱class DeploymentService This endpoint will return a list of views based on
+ * the parameters.
  */
 @ApplicationScoped
 public class DeploymentService {
@@ -31,18 +32,21 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public Map<String, String> crd(final String name, final Step[] stepArray) {
+    public List<Map<String, String>> crd(final String name,
+                                         final Step[] stepArray) {
 
         List<Step> steps = Arrays.asList(stepArray);
-        Map<String, String> strings = new HashMap<>();
+        List<Map<String, String>> res = new LinkedList<>();
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("name", name);
 
         for (DeploymentGeneratorService parser : getParsers()) {
             try {
                 if (parser.appliesTo(steps)) {
-                    strings.put(parser.identifier(),
-                            parser.parse(steps, metadata));
+                    Map<String, String> strings = new HashMap<>();
+                    strings.put("dsl", parser.identifier());
+                    strings.put("crd", parser.parse(steps, metadata));
+                    res.add(strings);
                 }
             } catch (Exception e) {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected"
@@ -51,7 +55,7 @@ public class DeploymentService {
             }
         }
 
-        return strings;
+        return res;
     }
 
     public Instance<DeploymentGeneratorService> getParsers() {
