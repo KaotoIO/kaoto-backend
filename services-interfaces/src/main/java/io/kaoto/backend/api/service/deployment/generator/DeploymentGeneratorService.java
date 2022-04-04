@@ -17,9 +17,16 @@ public interface DeploymentGeneratorService {
     /*
      * 🐱method identifier: String
      *
-     * Returns this generator identifier.
+     * Returns the identifier of the supported language.
      */
     String identifier();
+
+    /*
+     * 🐱method description: String
+     *
+     * Returns the description of the supported language.
+     */
+    String description();
 
     /*
      * 🐱method parse: String

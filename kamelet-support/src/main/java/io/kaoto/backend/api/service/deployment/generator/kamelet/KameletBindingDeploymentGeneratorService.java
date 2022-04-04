@@ -31,6 +31,12 @@ public class KameletBindingDeploymentGeneratorService
         return "KameletBinding";
     }
 
+    public String description() {
+        return "Kamelet Bindings are used to create simple integrations that "
+                + "link a start step to an end step with optional "
+                + "intermediate action steps.";
+    }
+
     @Override
     public List<String> getKinds() {
         return KINDS;

@@ -15,6 +15,20 @@ import java.util.Map;
 public interface StepParserService<T extends Step> {
 
     /*
+     * 🐱method identifier: String
+     *
+     * Returns the identifier of the supported language.
+     */
+    String identifier();
+
+    /*
+     * 🐱method description: String
+     *
+     * Returns the description of the supported language.
+     */
+    String description();
+
+    /*
      * 🐱method parse: List[Step]
      * 🐱param yaml: String
      *

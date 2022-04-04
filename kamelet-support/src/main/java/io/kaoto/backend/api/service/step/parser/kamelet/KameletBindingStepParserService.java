@@ -35,6 +35,16 @@ public class KameletBindingStepParserService
 
     private StepCatalog catalog;
 
+    public String identifier() {
+        return "KameletBinding";
+    }
+
+    public String description() {
+        return "Kamelet Bindings are used to create simple integrations that "
+                + "link a start step to an end step with optional "
+                + "intermediate action steps.";
+    }
+
     @Inject
     public void setCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
