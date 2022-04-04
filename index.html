@@ -163,6 +163,33 @@ randomly from the available ones.</p>
 </section>
 
 </section>
+<h2 id='languageresource-🐱relationship-compositionof-languageservice,-0--1'>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</h2>
+<section class='namespace'>
+<p>This endpoint will return information about the supported DSLs.</p>
+
+<h3 id='languageresource-🐱relationship-compositionof-languageservice,-0--1-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='languageresource-🐱relationship-compositionof-languageservice,-0--1-getall'>
+		<td><code><b>getAll</b>()</nobr></code></td>
+		<td><code>Map</code></td>
+		<td>Returns information of all the supported DSLs.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
 <h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
 <p>This endpoint will return steps based on the parameters.</p>
@@ -304,6 +331,33 @@ will filter only those steps compatible with the constraints.</td>
 		<td><code><b>yaml</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the provided steps, return a valid yaml string to deploy</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='languageservice'>LanguageService</h2>
+<section class='namespace'>
+<p>This endpoint compiles data about the languages supported.</p>
+
+<h3 id='languageservice-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='languageservice-getall'>
+		<td><code><b>getAll</b>()</nobr></code></td>
+		<td><code>Map</code></td>
+		<td>Returns the supported languages.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -1429,7 +1483,12 @@ It may or may not be the same as the ID depending on the type of step.</td>
 	<tr id='deploymentgeneratorservice-identifier'>
 		<td><code><b>identifier</b>()</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Returns this generator identifier.</td>
+		<td>Returns the identifier of the supported language.</td>
+	</tr>
+	<tr id='deploymentgeneratorservice-description'>
+		<td><code><b>description</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the description of the supported language.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>)</nobr></code></td>
@@ -1469,6 +1528,16 @@ If applies, the name will be the name used on the integration deployed.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
+	<tr id='stepparserservice-identifier'>
+		<td><code><b>identifier</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the identifier of the supported language.</td>
+	</tr>
+	<tr id='stepparserservice-description'>
+		<td><code><b>description</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the description of the supported language.</td>
+	</tr>
 	<tr id='stepparserservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>List[Step]</a></code></td>

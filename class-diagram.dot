@@ -25,6 +25,18 @@ stop():String
 		, taillabel="0..1"
 		
 		]
+"LanguageResource 🐱relationship compositionOf LanguageService, 0..1" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+getAll():Map
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
 "StepResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -74,6 +86,18 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 	<TR><TD><B>DeploymentService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
 yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"LanguageService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>LanguageService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+getAll():Map
 <BR align="left" />
 
 </TD></TR>
@@ -340,6 +364,8 @@ mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left
 	<TR><TD><I>Methods</I><BR/>
 identifier():String
 <BR align="left" />
+description():String
+<BR align="left" />
 parse(&lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
@@ -362,6 +388,10 @@ getKinds():String[]
 "StepParserService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>StepParserService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
+identifier():String
+<BR align="left" />
+description():String
+<BR align="left" />
 parse(&lt;String&gt; yaml):List[Step]
 <BR align="left" />
 appliesTo(&lt;String&gt; yaml):boolean
