@@ -82,8 +82,8 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		, taillabel="0..1"
 		
 		]
-"DeploymentService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentService</B></TD></TR>
+"DeploymentService This endpoint will return a list of views based on" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentService This endpoint will return a list of views based on</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
 yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
 <BR align="left" />
