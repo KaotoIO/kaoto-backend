@@ -49,6 +49,15 @@ public class KameletStepParserService
 
     private StepCatalog catalog;
 
+    public String identifier() {
+        return "Kamelet";
+    }
+
+    public String description() {
+        return "A Kamelet is a snippet of a route. It defines meta building "
+                + "blocks or steps that can be reused on integrations.";
+    }
+
     @Inject
     public void setCatalog(final StepCatalog catalog) {
         this.catalog = catalog;

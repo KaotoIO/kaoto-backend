@@ -53,6 +53,11 @@ public class KameletDeploymentGeneratorService
         return "Kamelet";
     }
 
+    public String description() {
+        return "A Kamelet is a snippet of a route. It defines meta building "
+                + "blocks or steps that can be reused on integrations.";
+    }
+
     @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata) {
