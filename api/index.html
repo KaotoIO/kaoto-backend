@@ -950,6 +950,10 @@
                     <li data-group="IntegrationResource" data-name="integrationsPost" class="">
                       <a href="#api-IntegrationResource-integrationsPost">integrationsPost</a>
                     </li>
+                  <li class="nav-header" data-group="LanguageResource"><a href="#api-LanguageResource">API Methods - LanguageResource</a></li>
+                    <li data-group="LanguageResource" data-name="languagesGet" class="">
+                      <a href="#api-LanguageResource-languagesGet">languagesGet</a>
+                    </li>
                   <li class="nav-header" data-group="StepResource"><a href="#api-StepResource">API Methods - StepResource</a></li>
                     <li data-group="StepResource" data-name="stepGet" class="">
                       <a href="#api-StepResource-stepGet">stepGet</a>
@@ -1388,7 +1392,7 @@ public class IntegrationResourceApiExample {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
         try {
-            map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+            array[map['String', 'String']] result = apiInstance.integrationsCustomResourcesPost(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcesPost");
@@ -1407,7 +1411,7 @@ public class IntegrationResourceApiExample {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
         try {
-            map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+            array[map['String', 'String']] result = apiInstance.integrationsCustomResourcesPost(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcesPost");
@@ -1427,7 +1431,7 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Get CRDs
 [apiInstance integrationsCustomResourcesPostWith:body
-              completionHandler: ^(map['String', 'String'] output, NSError* error) {
+              completionHandler: ^(array[map['String', 'String']] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1479,7 +1483,7 @@ namespace Example
             try
             {
                 // Get CRDs
-                map['String', 'String'] result = apiInstance.integrationsCustomResourcesPost(body);
+                array[map['String', 'String']] result = apiInstance.integrationsCustomResourcesPost(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1614,9 +1618,12 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "type" : "object",
-        "additionalProperties" : {
-          "type" : "string"
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
         },
         "x-content-type" : "application/json"
       }
@@ -2522,6 +2529,274 @@ except ApiException as e:
                       </div>
                       <hr>
                   </section>
+                <section id="api-LanguageResource">
+                  <h1>LanguageResource</h1>
+                    <div id="api-LanguageResource-languagesGet">
+                      <article id="api-LanguageResource-languagesGet-0" data-group="User" data-name="languagesGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>languagesGet</h1>
+                          <p>Get Languages</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns a list of all potential supported languages.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/languages</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-LanguageResource-languagesGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-LanguageResource-languagesGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-LanguageResource-languagesGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-LanguageResource-languagesGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-LanguageResource-languagesGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//languages"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.LanguageResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class LanguageResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        LanguageResourceApi apiInstance = new LanguageResourceApi();
+        try {
+            array[map['String', 'String']] result = apiInstance.languagesGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LanguageResourceApi#languagesGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.LanguageResourceApi;
+
+public class LanguageResourceApiExample {
+
+    public static void main(String[] args) {
+        LanguageResourceApi apiInstance = new LanguageResourceApi();
+        try {
+            array[map['String', 'String']] result = apiInstance.languagesGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LanguageResourceApi#languagesGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+LanguageResourceApi *apiInstance = [[LanguageResourceApi alloc] init];
+
+// Get Languages
+[apiInstance languagesGetWithCompletionHandler: 
+              ^(array[map['String', 'String']] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.LanguageResourceApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.languagesGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-LanguageResource-languagesGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class languagesGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new LanguageResourceApi();
+
+            try
+            {
+                // Get Languages
+                array[map['String', 'String']] result = apiInstance.languagesGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling LanguageResourceApi.languagesGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiLanguageResourceApi();
+
+try {
+    $result = $api_instance->languagesGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling LanguageResourceApi->languagesGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::LanguageResourceApi;
+
+my $api_instance = WWW::SwaggerClient::LanguageResourceApi->new();
+
+eval { 
+    my $result = $api_instance->languagesGet();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling LanguageResourceApi->languagesGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-LanguageResource-languagesGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.LanguageResourceApi()
+
+try: 
+    # Get Languages
+    api_response = api_instance.languages_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling LanguageResourceApi->languagesGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-languagesGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-languagesGet-200-schema">
+                                  <div id='responses-languagesGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-languagesGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-languagesGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-languagesGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                  </section>
                 <section id="api-StepResource">
                   <h1>StepResource</h1>
                     <div id="api-StepResource-stepGet">
@@ -2558,7 +2833,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-StepResource-stepGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//step?integrationType=&kind=&type="</code></pre>
+"//step?dsl=&kind=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-stepGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2574,11 +2849,11 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         
         StepResourceApi apiInstance = new StepResourceApi();
-        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+        String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.stepGet(integrationType, kind, type);
+            array[Step] result = apiInstance.stepGet(dsl, kind, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#stepGet");
@@ -2595,11 +2870,11 @@ public class StepResourceApiExample {
 
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
-        String integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+        String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.stepGet(integrationType, kind, type);
+            array[Step] result = apiInstance.stepGet(dsl, kind, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#stepGet");
@@ -2613,14 +2888,14 @@ public class StepResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-stepGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *integrationType = integrationType_example; // Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+                              <pre class="prettyprint"><code class="language-cpp">String *dsl = dsl_example; // Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
 String *kind = kind_example; // Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
 String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 // Get all steps
-[apiInstance stepGetWith:integrationType
+[apiInstance stepGetWith:dsl
     kind:kind
     type:type
               completionHandler: ^(array[Step] output, NSError* error) {
@@ -2639,7 +2914,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 var api = new ApiApi.StepResourceApi()
 var opts = { 
-  'integrationType': integrationType_example, // {{String}} Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+  'dsl': dsl_example, // {{String}} Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
   'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
   'type': type_example // {{String}} Filter by step type. Example: 'START' 'MIDDLE,END
 };
@@ -2672,14 +2947,14 @@ namespace Example
         {
 
             var apiInstance = new StepResourceApi();
-            var integrationType = integrationType_example;  // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
+            var dsl = dsl_example;  // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
             var kind = kind_example;  // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional) 
             var type = type_example;  // String | Filter by step type. Example: 'START' 'MIDDLE,END (optional) 
 
             try
             {
                 // Get all steps
-                array[Step] result = apiInstance.stepGet(integrationType, kind, type);
+                array[Step] result = apiInstance.stepGet(dsl, kind, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2697,12 +2972,12 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
-$integrationType = integrationType_example; // String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+$dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
 $kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
 $type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 try {
-    $result = $api_instance->stepGet($integrationType, $kind, $type);
+    $result = $api_instance->stepGet($dsl, $kind, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling StepResourceApi->stepGet: ', $e->getMessage(), PHP_EOL;
@@ -2716,12 +2991,12 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
-my $integrationType = integrationType_example; # String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet'
+my $dsl = dsl_example; # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
 my $kind = kind_example; # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
 my $type = type_example; # String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 eval { 
-    my $result = $api_instance->stepGet(integrationType => $integrationType, kind => $kind, type => $type);
+    my $result = $api_instance->stepGet(dsl => $dsl, kind => $kind, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2738,13 +3013,13 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
-integrationType = integrationType_example # String | Filter by DSL. Example: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+dsl = dsl_example # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
 kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
 type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 try: 
     # Get all steps
-    api_response = api_instance.step_get(integrationType=integrationType, kind=kind, type=type)
+    api_response = api_instance.step_get(dsl=dsl, kind=kind, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling StepResourceApi->stepGet: %s\n" % e)</code></pre>
@@ -2763,11 +3038,11 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">integrationType</td>
+                                <tr><td style="width:150px;">dsl</td>
                                 <td>
                                 
                                 
-                                    <div id="d2e199_stepGet_integrationType">
+                                    <div id="d2e199_stepGet_dsl">
                                         <div class="json-schema-view">
                                             <div class="primitive">
                                                 <span class="type">
@@ -2775,7 +3050,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        Filter by DSL. Example: &#x27;KameletBinding&#x27; &#x27;KameletBinding,Kamelet&#x27;
+                                                        Filter by Domain Specific Language (DSL). Examples: &#x27;KameletBinding&#x27; &#x27;KameletBinding,Kamelet&#x27;
                                                     </div>
                                             </div>
                                         </div>
