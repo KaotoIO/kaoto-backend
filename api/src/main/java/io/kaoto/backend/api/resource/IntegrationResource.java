@@ -145,10 +145,11 @@ public class IntegrationResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request,
-            final @QueryParam("type") String type) {
+            final @QueryParam("type") String type,
+            final @QueryParam("namespace") String namespace) {
         final var crd = customResourceDefinition(request, type);
 
-        if (clusterService.start(crd)) {
+        if (clusterService.start(crd, namespace)) {
             return crd;
         }
         return "Error deploying " + request.getName();

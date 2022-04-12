@@ -8,6 +8,8 @@ import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,9 +47,17 @@ public class ClusterService {
         return res;
     }
 
-    public boolean start(final String input) {
+    public boolean start(final String input, final String namespace) {
         try {
-            Yaml yaml = new Yaml(new Constructor(KameletBinding.class));
+            var constructor = new Constructor(KameletBinding.class);
+            Representer representer = new Representer();
+            representer.getPropertyUtils().setSkipMissingProperties(true);
+            representer.getPropertyUtils().setAllowReadOnlyProperties(true);
+            representer.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
+            constructor.getPropertyUtils().setSkipMissingProperties(true);
+            constructor.getPropertyUtils().setAllowReadOnlyProperties(true);
+            constructor.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
+            Yaml yaml = new Yaml(constructor, representer);
             KameletBinding binding = yaml.load(input);
             if (binding.getMetadata() == null) {
                 binding.setMetadata(new ObjectMeta());
@@ -57,16 +67,22 @@ public class ClusterService {
                 binding.getMetadata().setName(
                         "integration-" + System.currentTimeMillis());
             }
-            return start(binding);
+            return start(binding, namespace);
         } catch (ConstructorException e) {
             log.warn("Error starting the integration.", e);
             return false;
         }
     }
 
-    public boolean start(final KameletBinding binding) {
+    public boolean start(final KameletBinding binding, final String namespace) {
         try {
+            String ns = namespace;
+            if (ns == null || ns.isBlank()) {
+                ns = "default";
+            }
+
             kubernetesClient.resources(KameletBinding.class)
+                    .inNamespace(ns)
                     .createOrReplace(binding);
         } catch (Exception e) {
             log.warn("Error starting the integration.", e);
