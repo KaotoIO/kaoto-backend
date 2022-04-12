@@ -38,7 +38,9 @@ public class DeploymentService {
         List<Step> steps = Arrays.asList(stepArray);
         List<Map<String, String>> res = new LinkedList<>();
         Map<String, Object> metadata = new HashMap<>();
-        metadata.put("name", name);
+        if (name != null && !name.isBlank()) {
+            metadata.put("name", name);
+        }
 
         for (DeploymentGeneratorService parser : getParsers()) {
             try {
