@@ -144,14 +144,12 @@ public class IntegrationResource {
                     + " on the cluster. Deployment will be done "
                     + "as a custom resource.")
     public String start(
-            final @RequestBody DeploymentResourceYamlRequest request) {
-        List<Map<String, String>> crds = deploymentService.crd(
-                request.getName(), request.getSteps());
-        if (!crds.isEmpty()) {
-            final var crd = crds.iterator().next().get("crd");
-            if (clusterService.start(crd)) {
-                return crd;
-            }
+            final @RequestBody DeploymentResourceYamlRequest request,
+            final @QueryParam("type") String type) {
+        final var crd = customResourceDefinition(request, type);
+
+        if (clusterService.start(crd)) {
+            return crd;
         }
         return "Error deploying " + request.getName();
     }
