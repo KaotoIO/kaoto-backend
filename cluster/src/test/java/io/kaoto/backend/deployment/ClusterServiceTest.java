@@ -32,10 +32,10 @@ class ClusterServiceTest {
     void testAll() throws URISyntaxException {
         assertTrue(clusterService.getIntegrations().isEmpty());
 
-        assertFalse(clusterService.start("Wrong text"));
+        assertFalse(clusterService.start("Wrong text", null));
         assertTrue(clusterService.getIntegrations().isEmpty());
 
-        assertTrue(clusterService.start(binding));
+        assertTrue(clusterService.start(binding, null));
         assertFalse(clusterService.getIntegrations().isEmpty());
 
         final var integrations = clusterService.getIntegrations();
