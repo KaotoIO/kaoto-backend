@@ -2251,7 +2251,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: text/yaml"\
 -H "Content-Type: application/json"\
-"//integrations"</code></pre>
+"//integrations?namespace=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2268,8 +2268,10 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String namespace = namespace_example; // String | 
+        String type = type_example; // String | 
         try {
-            'String' result = apiInstance.integrationsPost(body);
+            'String' result = apiInstance.integrationsPost(body, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
@@ -2287,8 +2289,10 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String namespace = namespace_example; // String | 
+        String type = type_example; // String | 
         try {
-            'String' result = apiInstance.integrationsPost(body);
+            'String' result = apiInstance.integrationsPost(body, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
@@ -2303,11 +2307,15 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
+String *namespace = namespace_example; //  (optional)
+String *type = type_example; //  (optional)
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Start integration
 [apiInstance integrationsPostWith:body
+    namespace:namespace
+    type:type
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2325,6 +2333,8 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
+  'namespace': namespace_example // {{String}} 
+  'type': type_example // {{String}} 
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -2356,11 +2366,13 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
+            var namespace = namespace_example;  // String |  (optional) 
+            var type = type_example;  // String |  (optional) 
 
             try
             {
                 // Start integration
-                'String' result = apiInstance.integrationsPost(body);
+                'String' result = apiInstance.integrationsPost(body, namespace, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2379,9 +2391,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
+$namespace = namespace_example; // String | 
+$type = type_example; // String | 
 
 try {
-    $result = $api_instance->integrationsPost($body);
+    $result = $api_instance->integrationsPost($body, $namespace, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling IntegrationResourceApi->integrationsPost: ', $e->getMessage(), PHP_EOL;
@@ -2396,9 +2410,11 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
+my $namespace = namespace_example; # String | 
+my $type = type_example; # String | 
 
 eval { 
-    my $result = $api_instance->integrationsPost(body => $body);
+    my $result = $api_instance->integrationsPost(body => $body, namespace => $namespace, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2416,10 +2432,12 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
+namespace = namespace_example # String |  (optional)
+type = type_example # String |  (optional)
 
 try: 
     # Start integration
-    api_response = api_instance.integrations_post(body=body)
+    api_response = api_instance.integrations_post(body=body, namespace=namespace, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling IntegrationResourceApi->integrationsPost: %s\n" % e)</code></pre>
@@ -2474,6 +2492,45 @@ except ApiException as e:
                             </table>
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsPost_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsPost_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
