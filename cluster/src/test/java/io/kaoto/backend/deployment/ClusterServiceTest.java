@@ -30,23 +30,24 @@ class ClusterServiceTest {
 
     @Test
     void testAll() throws URISyntaxException {
-        assertTrue(clusterService.getIntegrations().isEmpty());
+        String ns = "default";
+        assertTrue(clusterService.getIntegrations(ns).isEmpty());
 
-        assertFalse(clusterService.start("Wrong text", null));
-        assertTrue(clusterService.getIntegrations().isEmpty());
+        assertFalse(clusterService.start("Wrong text", ns));
+        assertTrue(clusterService.getIntegrations(ns).isEmpty());
 
-        assertTrue(clusterService.start(binding, null));
-        assertFalse(clusterService.getIntegrations().isEmpty());
+        assertTrue(clusterService.start(binding, ns));
+        assertFalse(clusterService.getIntegrations(ns).isEmpty());
 
-        final var integrations = clusterService.getIntegrations();
+        final var integrations = clusterService.getIntegrations(ns);
         assertEquals(1, integrations.size());
         final var integration = integrations.get(0);
 
         assertNotNull(integration.getName());
         assertTrue(integration.isRunning());
 
-        clusterService.stop(integration);
-        assertTrue(clusterService.getIntegrations().isEmpty());
+        clusterService.stop(integration, ns);
+        assertTrue(clusterService.getIntegrations(ns).isEmpty());
     }
 
     public ClusterService getClusterService() {
