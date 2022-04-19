@@ -28,11 +28,12 @@ public class ClusterService {
         this.kubernetesClient = kubernetesClient;
     }
 
-    public List<Integration> getIntegrations() {
+    public List<Integration> getIntegrations(final String namespace) {
         List<Integration> res = new ArrayList<>();
         try {
             final var resources =
                     kubernetesClient.resources(KameletBinding.class)
+                            .inNamespace(getNamespace(namespace))
                             .list().getItems();
             for (KameletBinding integration : resources) {
                 Integration i = new Integration();
@@ -76,13 +77,8 @@ public class ClusterService {
 
     public boolean start(final KameletBinding binding, final String namespace) {
         try {
-            String ns = namespace;
-            if (ns == null || ns.isBlank()) {
-                ns = "default";
-            }
-
             kubernetesClient.resources(KameletBinding.class)
-                    .inNamespace(ns)
+                    .inNamespace(getNamespace(namespace))
                     .createOrReplace(binding);
         } catch (Exception e) {
             log.warn("Error starting the integration.", e);
@@ -92,9 +88,18 @@ public class ClusterService {
         return true;
     }
 
-    public boolean stop(final Integration i) {
+    public boolean stop(final Integration i, final String namespace) {
         return kubernetesClient.resources(KameletBinding.class)
+                .inNamespace(getNamespace(namespace))
                 .withName(i.getName())
                 .delete();
+    }
+
+    private String getNamespace(final String namespace) {
+        String ns = namespace;
+        if (ns == null || ns.isBlank()) {
+            ns = "default";
+        }
+        return ns;
     }
 }

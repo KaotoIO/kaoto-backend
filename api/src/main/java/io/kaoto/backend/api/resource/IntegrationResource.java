@@ -104,7 +104,9 @@ public class IntegrationResource {
                     + " This is an idempotent operation.")
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request,
-            final @QueryParam("type") String type) {
+            final @Parameter(description = "Type of integration. For example: "
+                    + "'Kamelet Binding'.")
+            @QueryParam("type") String type) {
         List<Map<String, String>> crds = customResourcesDefinition(request);
 
         log.trace("Found " + crds.size() + " potential CRDs.");
@@ -145,8 +147,12 @@ public class IntegrationResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request,
-            final @QueryParam("type") String type,
-            final @QueryParam("namespace") String namespace) {
+            final @Parameter(description = "Type of integration. For example: "
+                    + "'Kamelet Binding'.")
+            @QueryParam("type") String type,
+            final @Parameter(description = "Namespace of the cluster where "
+                    + "we want the integration to run.")
+            @QueryParam("namespace") String namespace) {
         final var crd = customResourceDefinition(request, type);
 
         if (clusterService.start(crd, namespace)) {
@@ -165,8 +171,11 @@ public class IntegrationResource {
     @Path("/")
     @Operation(summary = "Get all Integrations",
             description = "Returns all the integrations on the cluster.")
-    public List<Integration> integrations() {
-        return clusterService.getIntegrations();
+    public List<Integration> allIntegrations(
+            final @Parameter(description = "Namespace of the cluster where "
+                    + "the integrations are running.")
+            @QueryParam("namespace") String namespace) {
+        return clusterService.getIntegrations(namespace);
     }
 
 
@@ -182,10 +191,13 @@ public class IntegrationResource {
             description = "Remove the integration identified by name.")
     public boolean integrations(
             final @Parameter(description = "Name of the integration to stop.")
-            @PathParam("name") String name) {
+            @PathParam("name") String name,
+            final @Parameter(description = "Namespace of the cluster where "
+                    + "the integration is running.")
+            @QueryParam("namespace") String namespace) {
         Integration i = new Integration();
         i.setName(name);
-        return clusterService.stop(i);
+        return clusterService.stop(i, namespace);
     }
 
     @ServerExceptionMapper
