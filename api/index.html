@@ -1047,7 +1047,7 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String type = type_example; // String | 
+        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.integrationsCustomResourcePost(body, type);
             System.out.println(result);
@@ -1067,7 +1067,7 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String type = type_example; // String | 
+        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.integrationsCustomResourcePost(body, type);
             System.out.println(result);
@@ -1084,7 +1084,7 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
-String *type = type_example; //  (optional)
+String *type = type_example; // Type of integration. For example: 'Kamelet Binding'. (optional)
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
@@ -1108,7 +1108,7 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
-  'type': type_example // {{String}} 
+  'type': type_example // {{String}} Type of integration. For example: 'Kamelet Binding'.
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -1140,7 +1140,7 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
-            var type = type_example;  // String |  (optional) 
+            var type = type_example;  // String | Type of integration. For example: 'Kamelet Binding'. (optional) 
 
             try
             {
@@ -1164,7 +1164,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
-$type = type_example; // String | 
+$type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
 
 try {
     $result = $api_instance->integrationsCustomResourcePost($body, $type);
@@ -1182,7 +1182,7 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
-my $type = type_example; # String | 
+my $type = type_example; # String | Type of integration. For example: 'Kamelet Binding'.
 
 eval { 
     my $result = $api_instance->integrationsCustomResourcePost(body => $body, type => $type);
@@ -1203,7 +1203,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
-type = type_example # String |  (optional)
+type = type_example # String | Type of integration. For example: 'Kamelet Binding'. (optional)
 
 try: 
     # Get CRD
@@ -1279,6 +1279,9 @@ except ApiException as e:
                                                     String
                                                 </span>
                                 
+                                                    <div class="inner description">
+                                                        Type of integration. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1691,7 +1694,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//integrations"</code></pre>
+"//integrations?namespace="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1707,8 +1710,9 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String namespace = namespace_example; // String | Namespace of the cluster where the integrations are running.
         try {
-            array[Integration] result = apiInstance.integrationsGet();
+            array[Integration] result = apiInstance.integrationsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
@@ -1725,8 +1729,9 @@ public class IntegrationResourceApiExample {
 
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String namespace = namespace_example; // String | Namespace of the cluster where the integrations are running.
         try {
-            array[Integration] result = apiInstance.integrationsGet();
+            array[Integration] result = apiInstance.integrationsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
@@ -1740,12 +1745,13 @@ public class IntegrationResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">String *namespace = namespace_example; // Namespace of the cluster where the integrations are running. (optional)
+
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Get all Integrations
-[apiInstance integrationsGetWithCompletionHandler: 
-              ^(array[Integration] output, NSError* error) {
+[apiInstance integrationsGetWith:namespace
+              completionHandler: ^(array[Integration] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1760,6 +1766,9 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
 
 var api = new ApiApi.IntegrationResourceApi()
+var opts = { 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the integrations are running.
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -1767,7 +1776,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.integrationsGet(callback);
+api.integrationsGet(opts, callback);
 </code></pre>
                             </div>
 
@@ -1789,11 +1798,12 @@ namespace Example
         {
 
             var apiInstance = new IntegrationResourceApi();
+            var namespace = namespace_example;  // String | Namespace of the cluster where the integrations are running. (optional) 
 
             try
             {
                 // Get all Integrations
-                array[Integration] result = apiInstance.integrationsGet();
+                array[Integration] result = apiInstance.integrationsGet(namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1811,9 +1821,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+$namespace = namespace_example; // String | Namespace of the cluster where the integrations are running.
 
 try {
-    $result = $api_instance->integrationsGet();
+    $result = $api_instance->integrationsGet($namespace);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling IntegrationResourceApi->integrationsGet: ', $e->getMessage(), PHP_EOL;
@@ -1827,9 +1838,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+my $namespace = namespace_example; # String | Namespace of the cluster where the integrations are running.
 
 eval { 
-    my $result = $api_instance->integrationsGet();
+    my $result = $api_instance->integrationsGet(namespace => $namespace);
     print Dumper($result);
 };
 if ($@) {
@@ -1846,10 +1858,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
+namespace = namespace_example # String | Namespace of the cluster where the integrations are running. (optional)
 
 try: 
     # Get all Integrations
-    api_response = api_instance.integrations_get()
+    api_response = api_instance.integrations_get(namespace=namespace)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling IntegrationResourceApi->integrationsGet: %s\n" % e)</code></pre>
@@ -1862,6 +1875,32 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsGet_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the integrations are running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
@@ -1953,7 +1992,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-IntegrationResource-integrationsNameDelete-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"//integrations/{name}"</code></pre>
+"//integrations/{name}?namespace="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1970,8 +2009,9 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         String name = name_example; // String | Name of the integration to stop.
+        String namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
         try {
-            'Boolean' result = apiInstance.integrationsNameDelete(name);
+            'Boolean' result = apiInstance.integrationsNameDelete(name, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsNameDelete");
@@ -1989,8 +2029,9 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         String name = name_example; // String | Name of the integration to stop.
+        String namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
         try {
-            'Boolean' result = apiInstance.integrationsNameDelete(name);
+            'Boolean' result = apiInstance.integrationsNameDelete(name, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsNameDelete");
@@ -2005,11 +2046,13 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsNameDelete-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the integration to stop.
+String *namespace = namespace_example; // Namespace of the cluster where the integration is running. (optional)
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Stop/Remove integration
 [apiInstance integrationsNameDeleteWith:name
+    namespace:namespace
               completionHandler: ^('Boolean' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2026,7 +2069,9 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 var api = new ApiApi.IntegrationResourceApi()
 var name = name_example; // {{String}} Name of the integration to stop.
-
+var opts = { 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the integration is running.
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2034,7 +2079,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.integrationsNameDelete(name, callback);
+api.integrationsNameDelete(name, opts, callback);
 </code></pre>
                             </div>
 
@@ -2057,11 +2102,12 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var name = name_example;  // String | Name of the integration to stop.
+            var namespace = namespace_example;  // String | Namespace of the cluster where the integration is running. (optional) 
 
             try
             {
                 // Stop/Remove integration
-                'Boolean' result = apiInstance.integrationsNameDelete(name);
+                'Boolean' result = apiInstance.integrationsNameDelete(name, namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2080,9 +2126,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $name = name_example; // String | Name of the integration to stop.
+$namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
 
 try {
-    $result = $api_instance->integrationsNameDelete($name);
+    $result = $api_instance->integrationsNameDelete($name, $namespace);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling IntegrationResourceApi->integrationsNameDelete: ', $e->getMessage(), PHP_EOL;
@@ -2097,9 +2144,10 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $name = name_example; # String | Name of the integration to stop.
+my $namespace = namespace_example; # String | Namespace of the cluster where the integration is running.
 
 eval { 
-    my $result = $api_instance->integrationsNameDelete(name => $name);
+    my $result = $api_instance->integrationsNameDelete(name => $name, namespace => $namespace);
     print Dumper($result);
 };
 if ($@) {
@@ -2117,10 +2165,11 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 name = name_example # String | Name of the integration to stop.
+namespace = namespace_example # String | Namespace of the cluster where the integration is running. (optional)
 
 try: 
     # Stop/Remove integration
-    api_response = api_instance.integrations_name_delete(name)
+    api_response = api_instance.integrations_name_delete(name, namespace=namespace)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling IntegrationResourceApi->integrationsNameDelete: %s\n" % e)</code></pre>
@@ -2162,6 +2211,32 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsNameDelete_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the integration is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
@@ -2268,8 +2343,8 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String namespace = namespace_example; // String | 
-        String type = type_example; // String | 
+        String namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
+        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.integrationsPost(body, namespace, type);
             System.out.println(result);
@@ -2289,8 +2364,8 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String namespace = namespace_example; // String | 
-        String type = type_example; // String | 
+        String namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
+        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.integrationsPost(body, namespace, type);
             System.out.println(result);
@@ -2307,8 +2382,8 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
-String *namespace = namespace_example; //  (optional)
-String *type = type_example; //  (optional)
+String *namespace = namespace_example; // Namespace of the cluster where we want the integration to run. (optional)
+String *type = type_example; // Type of integration. For example: 'Kamelet Binding'. (optional)
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
@@ -2333,8 +2408,8 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
-  'namespace': namespace_example // {{String}} 
-  'type': type_example // {{String}} 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where we want the integration to run.
+  'type': type_example // {{String}} Type of integration. For example: 'Kamelet Binding'.
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -2366,8 +2441,8 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
-            var namespace = namespace_example;  // String |  (optional) 
-            var type = type_example;  // String |  (optional) 
+            var namespace = namespace_example;  // String | Namespace of the cluster where we want the integration to run. (optional) 
+            var type = type_example;  // String | Type of integration. For example: 'Kamelet Binding'. (optional) 
 
             try
             {
@@ -2391,8 +2466,8 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
-$namespace = namespace_example; // String | 
-$type = type_example; // String | 
+$namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
+$type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
 
 try {
     $result = $api_instance->integrationsPost($body, $namespace, $type);
@@ -2410,8 +2485,8 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
-my $namespace = namespace_example; # String | 
-my $type = type_example; # String | 
+my $namespace = namespace_example; # String | Namespace of the cluster where we want the integration to run.
+my $type = type_example; # String | Type of integration. For example: 'Kamelet Binding'.
 
 eval { 
     my $result = $api_instance->integrationsPost(body => $body, namespace => $namespace, type => $type);
@@ -2432,8 +2507,8 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
-namespace = namespace_example # String |  (optional)
-type = type_example # String |  (optional)
+namespace = namespace_example # String | Namespace of the cluster where we want the integration to run. (optional)
+type = type_example # String | Type of integration. For example: 'Kamelet Binding'. (optional)
 
 try: 
     # Start integration
@@ -2509,6 +2584,9 @@ except ApiException as e:
                                                     String
                                                 </span>
                                 
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where we want the integration to run.
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2525,6 +2603,9 @@ except ApiException as e:
                                                     String
                                                 </span>
                                 
+                                                    <div class="inner description">
+                                                        Type of integration. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
