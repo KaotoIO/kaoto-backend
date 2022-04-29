@@ -17,7 +17,9 @@
 FROM quay.io/quarkus/quarkus-distroless-image:1.0
 COPY target/*-runner /application
 
-EXPOSE 8080
+EXPOSE 8081
 USER nonroot
+
+HEALTHCHECK --interval=3s --start-period=1s CMD curl --fail http://localhost:8081/ || exit 1
 
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
