@@ -5,7 +5,7 @@ digraph ClassDiagram {
 "DeploymentResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; type):String[]
+yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; dsl):String[]
 <BR align="left" />
 start(&lt;DeploymentResourceYamlRequest&gt; steps):String
 <BR align="left" />

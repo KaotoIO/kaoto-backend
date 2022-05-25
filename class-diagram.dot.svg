@@ -12,37 +12,37 @@
 <!-- DeploymentResource -->
 <g id="node1" class="node">
 <title>DeploymentResource</title>
-<polygon fill="none" stroke="black" points="176,-579.5 176,-600.5 714,-600.5 714,-579.5 176,-579.5"/>
-<text text-anchor="start" x="360.5" y="-587.3" font-family="Times,serif" font-weight="bold" font-size="14.00">DeploymentResource</text>
-<polygon fill="none" stroke="black" points="176,-503.5 176,-579.5 714,-579.5 714,-503.5 176,-503.5"/>
-<text text-anchor="start" x="413.5" y="-566.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="179" y="-552.3" font-family="Times,serif" font-size="14.00">yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; type):String[]</text>
-<text text-anchor="start" x="179" y="-538.3" font-family="Times,serif" font-size="14.00">start(&lt;DeploymentResourceYamlRequest&gt; steps):String</text>
-<text text-anchor="start" x="179" y="-524.3" font-family="Times,serif" font-size="14.00">integrations():String</text>
-<text text-anchor="start" x="179" y="-510.3" font-family="Times,serif" font-size="14.00">stop():String</text>
-<polygon fill="none" stroke="black" points="175,-503 175,-602 715,-602 715,-503 175,-503"/>
+<polygon fill="none" stroke="black" points="187,-579.5 187,-600.5 714,-600.5 714,-579.5 187,-579.5"/>
+<text text-anchor="start" x="366" y="-587.3" font-family="Times,serif" font-weight="bold" font-size="14.00">DeploymentResource</text>
+<polygon fill="none" stroke="black" points="187,-503.5 187,-579.5 714,-579.5 714,-503.5 187,-503.5"/>
+<text text-anchor="start" x="419" y="-566.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="190" y="-552.3" font-family="Times,serif" font-size="14.00">yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; dsl):String[]</text>
+<text text-anchor="start" x="190" y="-538.3" font-family="Times,serif" font-size="14.00">start(&lt;DeploymentResourceYamlRequest&gt; steps):String</text>
+<text text-anchor="start" x="190" y="-524.3" font-family="Times,serif" font-size="14.00">integrations():String</text>
+<text text-anchor="start" x="190" y="-510.3" font-family="Times,serif" font-size="14.00">stop():String</text>
+<polygon fill="none" stroke="black" points="185.5,-503 185.5,-602 714.5,-602 714.5,-503 185.5,-503"/>
 </g>
 <!-- DeploymentService -->
 <g id="node2" class="node">
 <title>DeploymentService</title>
-<text text-anchor="middle" x="445" y="-733.8" font-family="Times,serif" font-size="14.00">DeploymentService</text>
+<text text-anchor="middle" x="450" y="-733.8" font-family="Times,serif" font-size="14.00">DeploymentService</text>
 </g>
 <!-- DeploymentService&#45;&gt;DeploymentResource -->
 <g id="edge1" class="edge">
 <title>DeploymentService&#45;&gt;DeploymentResource</title>
-<path fill="none" stroke="black" d="M445,-719.28C445,-696.36 445,-654.53 445,-618.63"/>
-<polygon fill="black" stroke="black" points="445,-618.22 441,-612.22 445,-606.22 449,-612.22 445,-618.22"/>
-<text text-anchor="middle" x="431" y="-708.08" font-family="Times,serif" font-size="14.00">0..1</text>
+<path fill="none" stroke="black" d="M450,-719.28C450,-696.36 450,-654.53 450,-618.63"/>
+<polygon fill="black" stroke="black" points="450,-618.22 446,-612.22 450,-606.22 454,-612.22 450,-618.22"/>
+<text text-anchor="middle" x="436" y="-708.08" font-family="Times,serif" font-size="14.00">0..1</text>
 </g>
 <!-- LanguageResource 🐱relationship compositionOf LanguageService, 0..1 -->
 <g id="node3" class="node">
 <title>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</title>
-<polygon fill="none" stroke="black" points="1009,-743.5 1009,-764.5 1579,-764.5 1579,-743.5 1009,-743.5"/>
-<text text-anchor="start" x="1012" y="-751.3" font-family="Times,serif" font-weight="bold" font-size="14.00">LanguageResource 🐱relationship compositionOf LanguageService, 0..1</text>
-<polygon fill="none" stroke="black" points="1009,-709.5 1009,-743.5 1579,-743.5 1579,-709.5 1009,-709.5"/>
-<text text-anchor="start" x="1262.5" y="-730.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="1249.5" y="-716.3" font-family="Times,serif" font-size="14.00">getAll():Map</text>
-<polygon fill="none" stroke="black" points="1008,-709 1008,-766 1580,-766 1580,-709 1008,-709"/>
+<polygon fill="none" stroke="black" points="1012,-743.5 1012,-764.5 1582,-764.5 1582,-743.5 1012,-743.5"/>
+<text text-anchor="start" x="1015" y="-751.3" font-family="Times,serif" font-weight="bold" font-size="14.00">LanguageResource 🐱relationship compositionOf LanguageService, 0..1</text>
+<polygon fill="none" stroke="black" points="1012,-709.5 1012,-743.5 1582,-743.5 1582,-709.5 1012,-709.5"/>
+<text text-anchor="start" x="1265.5" y="-730.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="1252.5" y="-716.3" font-family="Times,serif" font-size="14.00">getAll():Map</text>
+<polygon fill="none" stroke="black" points="1011,-709 1011,-766 1583,-766 1583,-709 1011,-709"/>
 </g>
 <!-- StepResource -->
 <g id="node4" class="node">
