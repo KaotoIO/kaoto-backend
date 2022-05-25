@@ -82,7 +82,7 @@ public class IntegrationResource {
     /*
      * 🐱method yaml: String[]
      * 🐱param steps: DeploymentResourceYamlRequest
-     * 🐱param type: String
+     * 🐱param dsl: String
      *
      * Idempotent operation that, based on the steps provided,
      * offer the potential source code / custom resource to deploy the
@@ -104,24 +104,33 @@ public class IntegrationResource {
                     + " This is an idempotent operation.")
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request,
-            final @Parameter(description = "Type of integration. For example: "
+            final @Parameter(description = "Type of integration. "
+                    + "Deprecated. For example: "
+                    + "'Kamelet Binding'.", deprecated = true)
+            @QueryParam("type") String type,
+            final @Parameter(description = "DSL to use. For example: "
                     + "'Kamelet Binding'.")
-            @QueryParam("type") String type) {
+            @QueryParam("dsl") String dsl) {
+        String wanteddsl = type;
+        if (dsl != null && !dsl.isBlank()) {
+            wanteddsl = dsl;
+        }
+
         List<Map<String, String>> crds = customResourcesDefinition(request);
 
         log.trace("Found " + crds.size() + " potential CRDs.");
 
         for (var crd : crds) {
-            if (crd.get("dsl").equalsIgnoreCase(type)) {
-                log.trace("Returning type " + type);
+            if (crd.get("dsl").equalsIgnoreCase(wanteddsl)) {
+                log.trace("Returning dsl " + wanteddsl);
                 return crd.get("crd");
             }
         }
 
-        log.trace("Trying to return default type " + crdDefault);
+        log.trace("Trying to return default dsl " + crdDefault);
         for (var crd : crds) {
             if (crd.get("dsl").equalsIgnoreCase(crdDefault)) {
-                log.trace("Returning type " + crdDefault);
+                log.trace("Returning dsl " + crdDefault);
                 return crd.get("crd");
             }
         }
@@ -148,12 +157,15 @@ public class IntegrationResource {
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request,
             final @Parameter(description = "Type of integration. For example: "
-                    + "'Kamelet Binding'.")
+                    + "'Kamelet Binding'.", deprecated = true)
             @QueryParam("type") String type,
+            final @Parameter(description = "DSL of integration. For example: "
+                    + "'Kamelet Binding'.")
+            @QueryParam("dsl") String dsl,
             final @Parameter(description = "Namespace of the cluster where "
                     + "we want the integration to run.")
             @QueryParam("namespace") String namespace) {
-        final var crd = customResourceDefinition(request, type);
+        final var crd = customResourceDefinition(request, type, dsl);
 
         if (clusterService.start(crd, namespace)) {
             return crd;
