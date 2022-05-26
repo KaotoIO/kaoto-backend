@@ -1030,7 +1030,7 @@
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: text/yaml"\
 -H "Content-Type: application/json"\
-"//integrations/customResource?type="</code></pre>
+"//integrations/customResource?dsl=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1047,9 +1047,10 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        String type = type_example; // String | Type of integration. Deprecated. For example: 'Kamelet Binding'.
         try {
-            'String' result = apiInstance.integrationsCustomResourcePost(body, type);
+            'String' result = apiInstance.integrationsCustomResourcePost(body, dsl, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcePost");
@@ -1067,9 +1068,10 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
-        String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        String type = type_example; // String | Type of integration. Deprecated. For example: 'Kamelet Binding'.
         try {
-            'String' result = apiInstance.integrationsCustomResourcePost(body, type);
+            'String' result = apiInstance.integrationsCustomResourcePost(body, dsl, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsCustomResourcePost");
@@ -1084,12 +1086,14 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsCustomResourcePost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
-String *type = type_example; // Type of integration. For example: 'Kamelet Binding'. (optional)
+String *dsl = dsl_example; // DSL to use. For example: 'Kamelet Binding'. (optional)
+String *type = type_example; // Type of integration. Deprecated. For example: 'Kamelet Binding'. (optional)
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Get CRD
 [apiInstance integrationsCustomResourcePostWith:body
+    dsl:dsl
     type:type
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
@@ -1108,7 +1112,8 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
-  'type': type_example // {{String}} Type of integration. For example: 'Kamelet Binding'.
+  'dsl': dsl_example // {{String}} DSL to use. For example: 'Kamelet Binding'.
+  'type': type_example // {{String}} Type of integration. Deprecated. For example: 'Kamelet Binding'.
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -1140,12 +1145,13 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
-            var type = type_example;  // String | Type of integration. For example: 'Kamelet Binding'. (optional) 
+            var dsl = dsl_example;  // String | DSL to use. For example: 'Kamelet Binding'. (optional) 
+            var type = type_example;  // String | Type of integration. Deprecated. For example: 'Kamelet Binding'. (optional) 
 
             try
             {
                 // Get CRD
-                'String' result = apiInstance.integrationsCustomResourcePost(body, type);
+                'String' result = apiInstance.integrationsCustomResourcePost(body, dsl, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1164,10 +1170,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
-$type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
+$dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+$type = type_example; // String | Type of integration. Deprecated. For example: 'Kamelet Binding'.
 
 try {
-    $result = $api_instance->integrationsCustomResourcePost($body, $type);
+    $result = $api_instance->integrationsCustomResourcePost($body, $dsl, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling IntegrationResourceApi->integrationsCustomResourcePost: ', $e->getMessage(), PHP_EOL;
@@ -1182,10 +1189,11 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
-my $type = type_example; # String | Type of integration. For example: 'Kamelet Binding'.
+my $dsl = dsl_example; # String | DSL to use. For example: 'Kamelet Binding'.
+my $type = type_example; # String | Type of integration. Deprecated. For example: 'Kamelet Binding'.
 
 eval { 
-    my $result = $api_instance->integrationsCustomResourcePost(body => $body, type => $type);
+    my $result = $api_instance->integrationsCustomResourcePost(body => $body, dsl => $dsl, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -1203,11 +1211,12 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
-type = type_example # String | Type of integration. For example: 'Kamelet Binding'. (optional)
+dsl = dsl_example # String | DSL to use. For example: 'Kamelet Binding'. (optional)
+type = type_example # String | Type of integration. Deprecated. For example: 'Kamelet Binding'. (optional)
 
 try: 
     # Get CRD
-    api_response = api_instance.integrations_custom_resource_post(body=body, type=type)
+    api_response = api_instance.integrations_custom_resource_post(body=body, dsl=dsl, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling IntegrationResourceApi->integrationsCustomResourcePost: %s\n" % e)</code></pre>
@@ -1268,6 +1277,25 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsCustomResourcePost_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        DSL to use. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
                                 <tr><td style="width:150px;">type</td>
                                 <td>
                                 
@@ -1280,7 +1308,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        Type of integration. For example: &#x27;Kamelet Binding&#x27;.
+                                                        Type of integration. Deprecated. For example: &#x27;Kamelet Binding&#x27;.
                                                     </div>
                                             </div>
                                         </div>
@@ -2326,7 +2354,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: text/yaml"\
 -H "Content-Type: application/json"\
-"//integrations?namespace=&type="</code></pre>
+"//integrations?dsl=&namespace=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2343,10 +2371,11 @@ public class IntegrationResourceApiExample {
         
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String dsl = dsl_example; // String | DSL of integration. For example: 'Kamelet Binding'.
         String namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
         String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
-            'String' result = apiInstance.integrationsPost(body, namespace, type);
+            'String' result = apiInstance.integrationsPost(body, dsl, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
@@ -2364,10 +2393,11 @@ public class IntegrationResourceApiExample {
     public static void main(String[] args) {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         DeploymentResourceYamlRequest body = ; // DeploymentResourceYamlRequest | 
+        String dsl = dsl_example; // String | DSL of integration. For example: 'Kamelet Binding'.
         String namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
         String type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
         try {
-            'String' result = apiInstance.integrationsPost(body, namespace, type);
+            'String' result = apiInstance.integrationsPost(body, dsl, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsPost");
@@ -2382,6 +2412,7 @@ public class IntegrationResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationResource-integrationsPost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">DeploymentResourceYamlRequest *body = ; //  (optional)
+String *dsl = dsl_example; // DSL of integration. For example: 'Kamelet Binding'. (optional)
 String *namespace = namespace_example; // Namespace of the cluster where we want the integration to run. (optional)
 String *type = type_example; // Type of integration. For example: 'Kamelet Binding'. (optional)
 
@@ -2389,6 +2420,7 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Start integration
 [apiInstance integrationsPostWith:body
+    dsl:dsl
     namespace:namespace
     type:type
               completionHandler: ^('String' output, NSError* error) {
@@ -2408,6 +2440,7 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 var api = new ApiApi.IntegrationResourceApi()
 var opts = { 
   'body':  // {{DeploymentResourceYamlRequest}} 
+  'dsl': dsl_example // {{String}} DSL of integration. For example: 'Kamelet Binding'.
   'namespace': namespace_example // {{String}} Namespace of the cluster where we want the integration to run.
   'type': type_example // {{String}} Type of integration. For example: 'Kamelet Binding'.
 };
@@ -2441,13 +2474,14 @@ namespace Example
 
             var apiInstance = new IntegrationResourceApi();
             var body = new DeploymentResourceYamlRequest(); // DeploymentResourceYamlRequest |  (optional) 
+            var dsl = dsl_example;  // String | DSL of integration. For example: 'Kamelet Binding'. (optional) 
             var namespace = namespace_example;  // String | Namespace of the cluster where we want the integration to run. (optional) 
             var type = type_example;  // String | Type of integration. For example: 'Kamelet Binding'. (optional) 
 
             try
             {
                 // Start integration
-                'String' result = apiInstance.integrationsPost(body, namespace, type);
+                'String' result = apiInstance.integrationsPost(body, dsl, namespace, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2466,11 +2500,12 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationResourceApi();
 $body = ; // DeploymentResourceYamlRequest | 
+$dsl = dsl_example; // String | DSL of integration. For example: 'Kamelet Binding'.
 $namespace = namespace_example; // String | Namespace of the cluster where we want the integration to run.
 $type = type_example; // String | Type of integration. For example: 'Kamelet Binding'.
 
 try {
-    $result = $api_instance->integrationsPost($body, $namespace, $type);
+    $result = $api_instance->integrationsPost($body, $dsl, $namespace, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling IntegrationResourceApi->integrationsPost: ', $e->getMessage(), PHP_EOL;
@@ -2485,11 +2520,12 @@ use WWW::SwaggerClient::IntegrationResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
 my $body = WWW::SwaggerClient::Object::DeploymentResourceYamlRequest->new(); # DeploymentResourceYamlRequest | 
+my $dsl = dsl_example; # String | DSL of integration. For example: 'Kamelet Binding'.
 my $namespace = namespace_example; # String | Namespace of the cluster where we want the integration to run.
 my $type = type_example; # String | Type of integration. For example: 'Kamelet Binding'.
 
 eval { 
-    my $result = $api_instance->integrationsPost(body => $body, namespace => $namespace, type => $type);
+    my $result = $api_instance->integrationsPost(body => $body, dsl => $dsl, namespace => $namespace, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2507,12 +2543,13 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
+dsl = dsl_example # String | DSL of integration. For example: 'Kamelet Binding'. (optional)
 namespace = namespace_example # String | Namespace of the cluster where we want the integration to run. (optional)
 type = type_example # String | Type of integration. For example: 'Kamelet Binding'. (optional)
 
 try: 
     # Start integration
-    api_response = api_instance.integrations_post(body=body, namespace=namespace, type=type)
+    api_response = api_instance.integrations_post(body=body, dsl=dsl, namespace=namespace, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling IntegrationResourceApi->integrationsPost: %s\n" % e)</code></pre>
@@ -2573,6 +2610,25 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsPost_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        DSL of integration. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
                                 <tr><td style="width:150px;">namespace</td>
                                 <td>
                                 
