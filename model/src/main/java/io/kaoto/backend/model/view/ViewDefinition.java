@@ -2,6 +2,7 @@ package io.kaoto.backend.model.view;
 
 import io.kaoto.backend.model.Metadata;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +20,15 @@ public class ViewDefinition extends Metadata {
 
     }
 
-    public ViewDefinition(final ViewDefinition v) {
+    public ViewDefinition(final ViewDefinition v, final String name) {
         setId(v.getId());
         setName(v.getName());
         setType(v.getType());
         setUrl(v.getUrl());
         setScope(v.getScope());
         setModule(v.getModule());
+        setProperties(new HashMap<>());
+        getProperties().put("name", name);
     }
 
     /*

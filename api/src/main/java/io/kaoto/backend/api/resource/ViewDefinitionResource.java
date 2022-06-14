@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -20,6 +21,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -80,7 +82,9 @@ public class ViewDefinitionResource {
             description = "Get view definitions for a specific integration."
             + " This is an idempotent operation.")
     public ViewDefinitionResourceResponse views(
-            final @RequestBody String crd) {
+            final @RequestBody String crd,
+            final @Parameter(description = "Name of the integration")
+            @QueryParam("name") String name) {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
         log.trace("Extracting steps from crd");
@@ -99,7 +103,8 @@ public class ViewDefinitionResource {
                         + " unexpected error.", e);
             }
         }
-        res.setViews(viewDefinitionService.viewsPerStepList(res.getSteps()));
+        res.setViews(viewDefinitionService.viewsPerStepList(res.getSteps(),
+                name));
         return res;
     }
 
@@ -116,11 +121,13 @@ public class ViewDefinitionResource {
             description = "Get view definitions for a specific integration."
                     + " This is an idempotent operation.")
     public ViewDefinitionResourceResponse viewsPerStepList(
-            final @RequestBody List<Step> steps) {
+            final @RequestBody List<Step> steps,
+            final @Parameter(description = "Name of the integration")
+            @QueryParam("name") String name) {
         ViewDefinitionResourceResponse res =
                 new ViewDefinitionResourceResponse();
         res.setSteps(steps);
-        res.setViews(viewDefinitionService.viewsPerStepList(steps));
+        res.setViews(viewDefinitionService.viewsPerStepList(steps, name));
         return res;
     }
 

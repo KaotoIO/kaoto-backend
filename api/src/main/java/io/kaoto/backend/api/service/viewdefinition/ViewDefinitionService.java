@@ -31,7 +31,8 @@ public class ViewDefinitionService {
      * Based on the provided list of steps, offer a list of compatible
      * ViewDefinitions.
      */
-    public List<ViewDefinition> viewsPerStepList(final List<Step> steps) {
+    public List<ViewDefinition> viewsPerStepList(final List<Step> steps,
+                                                 final String name) {
 
         int i = 0;
         if (steps != null) {
@@ -47,7 +48,7 @@ public class ViewDefinitionService {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var viewParser : getViewParsers()) {
             log.trace("Using " + viewParser.getClass());
-            viewDefinitions.addAll(viewParser.parse(steps));
+            viewDefinitions.addAll(viewParser.parse(steps, name));
         }
 
         return viewDefinitions;
