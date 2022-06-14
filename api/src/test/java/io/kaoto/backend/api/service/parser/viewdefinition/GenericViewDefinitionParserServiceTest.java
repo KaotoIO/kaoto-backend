@@ -42,22 +42,39 @@ class GenericViewDefinitionParserServiceTest {
     @Test
     void checkConstraintsBySize() {
         List<Step> steps = new LinkedList<>();
-        List<ViewDefinition> views = viewDefinitionParserService.parse(steps);
+        List<ViewDefinition> views =
+                viewDefinitionParserService.parse(steps, "integration");
         Assertions.assertEquals(0, views.size());
+        for (ViewDefinition v : views) {
+            Assertions.assertEquals("integration",
+                    v.getProperties().get("name"));
+        }
 
         steps.add(new Step());
-        views = viewDefinitionParserService.parse(steps);
+        views = viewDefinitionParserService.parse(steps, "integration");
         Assertions.assertEquals(0, views.size());
+        for (ViewDefinition v : views) {
+            Assertions.assertEquals("integration",
+                    v.getProperties().get("name"));
+        }
 
         Step s = new Step();
         s.setKind("KAMELET");
         steps.add(s);
-        views = viewDefinitionParserService.parse(steps);
+        views = viewDefinitionParserService.parse(steps, "integration");
         Assertions.assertEquals(2, views.size());
+        for (ViewDefinition v : views) {
+            Assertions.assertEquals("integration",
+                    v.getProperties().get("name"));
+        }
 
         steps.add(new Step());
-        views = viewDefinitionParserService.parse(steps);
+        views = viewDefinitionParserService.parse(steps, "integration");
         Assertions.assertEquals(2, views.size());
+        for (ViewDefinition v : views) {
+            Assertions.assertEquals("integration",
+                    v.getProperties().get("name"));
+        }
     }
 
     @Test
