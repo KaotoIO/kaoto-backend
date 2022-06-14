@@ -412,9 +412,9 @@ appliesTo(&lt;String&gt; yaml):boolean
 "ViewDefinitionParserService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParserService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
+parse(&lt;List[Step]&gt; steps, &lt;String&gt; name):List[ViewDefinition]
 <BR align="left" />
-getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[ViewDefinition]
+getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view, &lt;String&gt; name):List[ViewDefinition]
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
 <BR align="left" />

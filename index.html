@@ -1583,12 +1583,12 @@ the metadata associated to the orchestration.</p></td>
 	</tr>
 	</thead><tbody>
 	<tr id='viewdefinitionparserservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
 	</tr>
 	<tr id='viewdefinitionparserservice-getviewsperstep'>
-		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>)</nobr></code></td>
+		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>If the ViewDefinition is a stepView, it returns all
 possible ViewDefinitions associated to steps.</td>
