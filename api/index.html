@@ -4581,7 +4581,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: text/yaml,application/json"\
-"//viewdefinition"</code></pre>
+"//viewdefinition?name="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-ViewDefinitionResource-viewdefinitionPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4598,8 +4598,9 @@ public class ViewDefinitionResourceApiExample {
         
         ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
         String body = ; // String | 
+        String name = name_example; // String | Name of the integration
         try {
-            ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body);
+            ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body, name);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ViewDefinitionResourceApi#viewdefinitionPost");
@@ -4617,8 +4618,9 @@ public class ViewDefinitionResourceApiExample {
     public static void main(String[] args) {
         ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
         String body = ; // String | 
+        String name = name_example; // String | Name of the integration
         try {
-            ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body);
+            ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body, name);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ViewDefinitionResourceApi#viewdefinitionPost");
@@ -4633,11 +4635,13 @@ public class ViewDefinitionResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-ViewDefinitionResource-viewdefinitionPost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *body = ; //  (optional)
+String *name = name_example; // Name of the integration (optional)
 
 ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
 
 // Get views based on steps
 [apiInstance viewdefinitionPostWith:body
+    name:name
               completionHandler: ^(ViewDefinitionResourceResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -4655,6 +4659,7 @@ ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init
 var api = new ApiApi.ViewDefinitionResourceApi()
 var opts = { 
   'body':  // {{String}} 
+  'name': name_example // {{String}} Name of the integration
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -4686,11 +4691,12 @@ namespace Example
 
             var apiInstance = new ViewDefinitionResourceApi();
             var body = new String(); // String |  (optional) 
+            var name = name_example;  // String | Name of the integration (optional) 
 
             try
             {
                 // Get views based on steps
-                ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body);
+                ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body, name);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4709,9 +4715,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiViewDefinitionResourceApi();
 $body = ; // String | 
+$name = name_example; // String | Name of the integration
 
 try {
-    $result = $api_instance->viewdefinitionPost($body);
+    $result = $api_instance->viewdefinitionPost($body, $name);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ViewDefinitionResourceApi->viewdefinitionPost: ', $e->getMessage(), PHP_EOL;
@@ -4726,9 +4733,10 @@ use WWW::SwaggerClient::ViewDefinitionResourceApi;
 
 my $api_instance = WWW::SwaggerClient::ViewDefinitionResourceApi->new();
 my $body = WWW::SwaggerClient::Object::String->new(); # String | 
+my $name = name_example; # String | Name of the integration
 
 eval { 
-    my $result = $api_instance->viewdefinitionPost(body => $body);
+    my $result = $api_instance->viewdefinitionPost(body => $body, name => $name);
     print Dumper($result);
 };
 if ($@) {
@@ -4746,10 +4754,11 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.ViewDefinitionResourceApi()
 body =  # String |  (optional)
+name = name_example # String | Name of the integration (optional)
 
 try: 
     # Get views based on steps
-    api_response = api_instance.viewdefinition_post(body=body)
+    api_response = api_instance.viewdefinition_post(body=body, name=name)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ViewDefinitionResourceApi->viewdefinitionPost: %s\n" % e)</code></pre>
@@ -4812,6 +4821,32 @@ except ApiException as e:
                             </table>
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">name</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_viewdefinitionPost_name">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Name of the integration
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
