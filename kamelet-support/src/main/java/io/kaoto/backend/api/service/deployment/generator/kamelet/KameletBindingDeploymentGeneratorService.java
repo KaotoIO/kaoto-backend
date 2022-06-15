@@ -11,6 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +24,9 @@ public class KameletBindingDeploymentGeneratorService
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
-    private static final String EIP = "EIP";
+    private static final String KNATIVE = "KNATIVE";
     private static final List<String> KINDS =
-            Arrays.asList(CAMEL_CONNECTOR, KAMELET, EIP);
+            Arrays.asList(CAMEL_CONNECTOR, KAMELET, KNATIVE);
 
     public String identifier() {
         return "KameletBinding";
@@ -98,6 +99,25 @@ public class KameletBindingDeploymentGeneratorService
         } else {
             KameletBindingStepRef ref = new KameletBindingStepRef();
             ref.setName(step.getName());
+            if (step.getKind().equalsIgnoreCase("Knative")) {
+                ref.setKind("Broker");
+                ref.setApiVersion("eventing.knative.dev/v1");
+
+                if (step.getParameters() != null) {
+                    for (var p : new ArrayList<>(step.getParameters())) {
+                        if (p.getTitle().equalsIgnoreCase("name")
+                                && p.getValue() != null) {
+                            ref.setName(p.getValue().toString());
+                            step.getParameters().remove(p);
+                        }
+                        if (p.getTitle().equalsIgnoreCase("kind")
+                                && p.getValue() != null) {
+                            ref.setKind(p.getValue().toString());
+                            step.getParameters().remove(p);
+                        }
+                    }
+                }
+            }
             kameletStep.setRef(ref);
 
             if (step.getParameters() != null) {
