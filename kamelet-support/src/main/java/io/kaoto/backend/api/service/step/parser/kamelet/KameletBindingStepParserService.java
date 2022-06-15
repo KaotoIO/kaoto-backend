@@ -99,28 +99,43 @@ public class KameletBindingStepParserService
         steps.add(processStep(spec.getSink()));
     }
 
-    private Step processStep(final KameletBindingStep source) {
+    private Step processStep(final KameletBindingStep bindingStep) {
         Step step = null;
 
         try {
 
-            if (source.getUri() != null) {
+            if (bindingStep.getUri() != null) {
                 log.trace("Found uri component.");
-                String uri = source.getUri();
+                String uri = bindingStep.getUri();
                 step = catalog.getReadOnlyCatalog()
                         .searchStepByName(uri.substring(0, uri.indexOf(":")));
                 if (step != null) {
                     log.trace("Found step " + step.getName());
                     setValuesOnParameters(step, uri);
                 }
-            } else if (source.getRef() != null) {
+            } else if (bindingStep.getRef() != null) {
                 log.trace("Found ref component.");
-                step = catalog.getReadOnlyCatalog()
-                        .searchStepByName(source.getRef().getName());
+                if (bindingStep.getRef().getApiVersion().equalsIgnoreCase(
+                        "eventing.knative.dev/v1")) {
+                    step = catalog.getReadOnlyCatalog()
+                            .searchStepByName("knative");
+                    for (Parameter p : new ArrayList<>(step.getParameters())) {
+                        if (p.getId().equalsIgnoreCase("kind")) {
+                            p.setValue(bindingStep.getRef().getKind());
+                        }
+                        if (p.getId().equalsIgnoreCase("name")) {
+                            p.setValue(bindingStep.getRef().getName());
+                        }
+                    }
+
+                } else {
+                    step = catalog.getReadOnlyCatalog()
+                            .searchStepByName(bindingStep.getRef().getName());
+                }
 
                 if (step != null) {
                     log.trace("Found step " + step.getName());
-                    setValuesOnParameters(step, source.getProperties());
+                    setValuesOnParameters(step, bindingStep.getProperties());
                 }
             }
         } catch (Exception e) {
