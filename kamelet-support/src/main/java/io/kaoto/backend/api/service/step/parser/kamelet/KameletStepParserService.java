@@ -25,7 +25,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class KameletStepParserService
                     Kamelet.class);
 
             processMetadata(res, kamelet.getMetadata());
-            processSpec(steps, kamelet.getSpec());
+            processSpec(steps, res, kamelet.getSpec());
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(
                     "Error trying to parse.", e);
@@ -101,6 +100,7 @@ public class KameletStepParserService
     }
 
     private void processSpec(final List<Step> steps,
+                             final ParseResult<Step> res,
                              final KameletSpec spec) {
         if (spec.getTemplate() != null
                 && spec.getTemplate().getFrom() != null) {
@@ -113,6 +113,8 @@ public class KameletStepParserService
                 }
             }
         }
+
+        res.getMetadata().put("definition", spec.getDefinition());
     }
 
     //there must be a more elegant solution
@@ -274,7 +276,7 @@ public class KameletStepParserService
     private void processMetadata(
             final ParseResult<Step> result,
             final ObjectMeta metadata) {
-        result.setMetadata(new HashMap<>());
+        result.setMetadata(new LinkedHashMap<>());
 
         var labels = new LinkedHashMap<String, String>();
         result.getMetadata().put("labels", labels);

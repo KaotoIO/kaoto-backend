@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ```
@@ -45,7 +46,7 @@ public class KameletDefinition implements Serializable {
     private List<String> required;
 
     @JsonProperty("properties")
-    private KameletDefinitionProperty properties;
+    private Map<String, KameletDefinitionProperty> properties;
 
     public String getTitle() {
         return title;
@@ -71,12 +72,22 @@ public class KameletDefinition implements Serializable {
         this.required = required;
     }
 
-    public KameletDefinitionProperty getProperties() {
+    public Map<String, KameletDefinitionProperty> getProperties() {
         return properties;
     }
 
     public void setProperties(
-            final KameletDefinitionProperty properties) {
+            final Map<String, KameletDefinitionProperty> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public String toString() {
+        return "KameletDefinition{"
+                + "title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", required=" + required
+                + ", properties=" + properties
+                + '}';
     }
 }

@@ -8,7 +8,7 @@ import io.fabric8.kubernetes.api.model.KubernetesResource;
 
 import java.io.Serializable;
 
-@JsonPropertyOrder({"definition", "types", "template"})
+@JsonPropertyOrder({"definition", "template", "dependencies"})
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
@@ -19,9 +19,6 @@ public final class KameletSpec
     @JsonProperty("definition")
     private KameletDefinition definition;
 
-    @JsonProperty("types")
-    private KameletTypes types;
-
     @JsonProperty("template")
     private Template template;
 
@@ -31,14 +28,6 @@ public final class KameletSpec
 
     public void setDefinition(final KameletDefinition definition) {
         this.definition = definition;
-    }
-
-    public KameletTypes getTypes() {
-        return types;
-    }
-
-    public void setTypes(final KameletTypes types) {
-        this.types = types;
     }
 
     public Template getTemplate() {

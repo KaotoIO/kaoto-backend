@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
@@ -22,6 +23,7 @@ import org.jboss.logging.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,10 @@ public class KamelPopulator {
         kamelet.setSpec(new KameletSpec());
         kamelet.getSpec().setTemplate(new Template());
         kamelet.getSpec().getTemplate().setFrom(getFlow(steps));
+        if (metadata.containsKey("definition")
+            && metadata.get("definition") instanceof KameletDefinition def) {
+            kamelet.getSpec().setDefinition(def);
+        }
 
         kamelet.setMetadata(new ObjectMeta());
         populateLabels(kamelet, (Map<String, String>) metadata.getOrDefault(
@@ -82,7 +88,7 @@ public class KamelPopulator {
 
     private void populateAnnotations(final Kamelet kamelet,
                                      final Map<String, String> annotations) {
-        kamelet.getMetadata().setAnnotations(new HashMap<>());
+        kamelet.getMetadata().setAnnotations(new LinkedHashMap<>());
         for (Map.Entry<String, String> entry : annotations.entrySet()) {
             kamelet.getMetadata().getAnnotations().put(entry.getKey(),
                     entry.getValue());
