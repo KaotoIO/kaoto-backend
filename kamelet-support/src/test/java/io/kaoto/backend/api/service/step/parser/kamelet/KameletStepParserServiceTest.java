@@ -2,6 +2,8 @@ package io.kaoto.backend.api.service.step.parser.kamelet;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -95,6 +97,23 @@ class KameletStepParserServiceTest {
 
         final var dropboxStep = parsed.getSteps().get(2);
         assertEquals("dropbox", dropboxStep.getId());
+
+        KameletDefinition definition =
+                (KameletDefinition) parsed.getMetadata().get("definition");
+
+        assertNotNull(definition);
+
+        assertEquals("Dropbox Sink", definition.getTitle());
+        assertNotNull(definition.getProperties());
+        assertFalse(definition.getProperties().isEmpty());
+        assertEquals(4, definition.getProperties().size());
+        assertTrue(definition.getProperties().containsKey("accessToken"));
+        KameletDefinitionProperty accessToken =
+                definition.getProperties().get("accessToken");
+        assertEquals("Dropbox Access Token", accessToken.getTitle());
+        assertEquals("The access Token to use to access Dropbox",
+                accessToken.getDescription());
+        assertEquals("string", accessToken.getType());
     }
 
     @Test
@@ -104,7 +123,14 @@ class KameletStepParserServiceTest {
                 parsed.getMetadata());
         var parsed2 = service.deepParse(output);
         assertEquals(parsed.getSteps(), parsed2.getSteps());
-        assertEquals(parsed.getMetadata(), parsed2.getMetadata());
+        assertEquals(parsed.getMetadata().keySet(),
+                parsed2.getMetadata().keySet());
+        for (String key : new String[]{"labels", "annotations",
+                "additionalProperties",
+                "name"}) {
+            assertEquals(parsed.getMetadata().get(key),
+                    parsed2.getMetadata().get(key));
+        }
 
         var parsedInc = service.deepParse(bindingIncomplete);
         String outputInc = deploymentService.parse(parsedInc.getSteps(),

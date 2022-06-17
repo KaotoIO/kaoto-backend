@@ -63,11 +63,11 @@ public class KameletDefinitionProperty  implements Serializable {
         this.type = type;
     }
 
-    public String getDefaultValue() {
+    public String getDefault() {
         return defaultValue;
     }
 
-    public void setDefaultValue(final String defaultValue) {
+    public void setDefault(final String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
@@ -77,5 +77,16 @@ public class KameletDefinitionProperty  implements Serializable {
 
     public void setExample(final String example) {
         this.example = example;
+    }
+
+    @Override
+    public String toString() {
+        return "KameletDefinitionProperty{"
+                + "title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", type='" + type + '\''
+                + ", defaultValue='" + defaultValue + '\''
+                + ", example='" + example + '\''
+                + '}';
     }
 }
