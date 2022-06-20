@@ -212,6 +212,24 @@ public class IntegrationResource {
         return clusterService.stop(i, namespace);
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/{name}/logs")
+    @Operation(summary = "Get logs",
+            description = "Get the integration's log.")
+    public String logs(
+            final @Parameter(description = "Name of the integration "
+                    + "of which logs should be retrieved.")
+            @PathParam("name") String name,
+            final @Parameter(description = "Namespace of the cluster "
+                    + "where the integration is running.")
+            @QueryParam("namespace") String namespace,
+            final @Parameter(description = "Number of last N l"
+                    + "ines to be retrieved.")
+            @QueryParam("lines") int lines) {
+        return clusterService.logs(namespace, name, lines);
+    }
+
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
         log.error("Error processing deployment.", x);

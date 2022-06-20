@@ -5,7 +5,6 @@ import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import java.net.URISyntaxException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +28,7 @@ class ClusterServiceTest {
 
 
     @Test
-    void testAll() throws URISyntaxException {
+    void testAll() {
         String ns = "default";
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
 
@@ -45,6 +44,9 @@ class ClusterServiceTest {
 
         assertNotNull(integration.getName());
         assertTrue(integration.isRunning());
+
+        assertFalse(
+                clusterService.logs(ns, integration.getName(), 1).isEmpty());
 
         clusterService.stop(integration, ns);
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
