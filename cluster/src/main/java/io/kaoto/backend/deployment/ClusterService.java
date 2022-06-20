@@ -95,6 +95,15 @@ public class ClusterService {
                 .delete();
     }
 
+    public String logs(final String namespace, final String podName,
+            final int lines)  {
+        return kubernetesClient.pods()
+               .inNamespace(getNamespace(namespace))
+                .withName(podName)
+                .tailingLines(lines)
+                .getLog(Boolean.TRUE);
+    }
+
     private String getNamespace(final String namespace) {
         String ns = namespace;
         if (ns == null || ns.isBlank()) {

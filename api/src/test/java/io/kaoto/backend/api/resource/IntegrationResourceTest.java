@@ -20,6 +20,7 @@ import java.nio.file.Path;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -95,6 +96,14 @@ class IntegrationResourceTest {
                 .get()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
+
+        res = given()
+                .when()
+                .contentType("text/plain")
+                .get("/{name}/logs?tailingLines=1", request.getName())
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        assertFalse(res.extract().response().asString().isEmpty());
 
         given()
                 .when()
