@@ -5,7 +5,7 @@ metadata:
   additionalProperties: {}
   finalizers: []
   managedFields: []
-  name: Updated integration
+  name: integration-4
   ownerReferences: []
 plural: kameletbindings
 scope: Namespaced

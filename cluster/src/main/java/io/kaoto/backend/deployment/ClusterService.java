@@ -95,6 +95,11 @@ public class ClusterService {
                 .delete();
     }
 
+    public KameletBinding get(final String namespace, final String name)  {
+        return kubernetesClient.customResources(KameletBinding.class)
+                .inNamespace(getNamespace(namespace))
+                .withName(name).get();
+    }
     public String logs(final String namespace, final String podName,
             final int lines)  {
         return kubernetesClient.pods()
