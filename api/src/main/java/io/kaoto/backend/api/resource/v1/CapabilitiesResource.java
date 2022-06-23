@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.resource.v1;
 
+import io.kaoto.backend.api.resource.v1.model.Capabilities;
 import io.kaoto.backend.api.service.language.LanguageService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.logging.Logger;
@@ -12,8 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * 🐱class LanguageResource 🐱relationship compositionOf LanguageService, 0..1
@@ -58,19 +57,6 @@ public class CapabilitiesResource {
                 .entity("Error parsing capabilities.")
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();
-    }
-
-    class Capabilities {
-        private Collection<Map<String, String>> DSLs;
-
-        public Collection<Map<String, String>> getDSLs() {
-            return DSLs;
-        }
-
-        public void setDSLs(
-                final Collection<Map<String, String>> DSLs) {
-            this.DSLs = DSLs;
-        }
     }
 
 }
