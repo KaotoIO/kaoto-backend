@@ -1,4 +1,4 @@
-package io.kaoto.backend.api.resource.request;
+package io.kaoto.backend.api.resource.v0.request;
 
 import io.kaoto.backend.model.step.Step;
 

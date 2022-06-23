@@ -1,6 +1,6 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
-import io.kaoto.backend.api.resource.response.ViewDefinitionResourceResponse;
+import io.kaoto.backend.api.resource.v0.response.ViewDefinitionResourceResponse;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;

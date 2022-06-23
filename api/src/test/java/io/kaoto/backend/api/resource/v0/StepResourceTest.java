@@ -1,4 +1,4 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.step.Step;

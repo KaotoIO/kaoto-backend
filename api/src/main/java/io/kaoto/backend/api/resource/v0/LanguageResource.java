@@ -1,4 +1,4 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
 import io.kaoto.backend.api.service.language.LanguageService;
 import org.eclipse.microprofile.openapi.annotations.Operation;

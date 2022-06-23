@@ -1,6 +1,6 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
-import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
+import io.kaoto.backend.api.resource.v0.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;

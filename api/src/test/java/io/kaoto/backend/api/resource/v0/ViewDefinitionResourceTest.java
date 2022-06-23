@@ -1,4 +1,4 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +47,7 @@ class ViewDefinitionResourceTest {
     static void setup() throws URISyntaxException, IOException {
         binding = Files.readString(Path.of(
                 ViewDefinitionResourceTest.class.getResource(
-                                "twitter-search-source-binding.yaml")
+                                "../twitter-search-source-binding.yaml")
                         .toURI()));
     }
 
@@ -92,7 +92,7 @@ class ViewDefinitionResourceTest {
 
         String request = Files.readString(Path.of(
                 ViewDefinitionResourceTest.class.getResource(
-                                "request-viewdefinition.json")
+                                "../request-viewdefinition.json")
                         .toURI()));
         var res = given()
                 .when()

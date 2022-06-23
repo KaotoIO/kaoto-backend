@@ -1,9 +1,9 @@
-package io.kaoto.backend.api.resource;
+package io.kaoto.backend.api.resource.v0;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.resource.request.DeploymentResourceYamlRequest;
+import io.kaoto.backend.api.resource.v0.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -36,7 +36,7 @@ class IntegrationResourceTest {
     static void setup() throws URISyntaxException, IOException {
         jsonRequest = Files.readString(Path.of(
                 IntegrationResourceTest.class.getResource(
-                                "request.json")
+                                "../request.json")
                         .toURI()));
     }
 
