@@ -31,7 +31,7 @@ public class KameletRepresenter extends Representer {
     public static final String URI = "uri";
     public static final String NAME = "name";
 
-    KameletRepresenter() {
+    public KameletRepresenter() {
         getPropertyUtils().setSkipMissingProperties(true);
         getPropertyUtils().setAllowReadOnlyProperties(true);
 
