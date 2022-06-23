@@ -62,7 +62,7 @@ class StepResourceTest {
         var integrationType = "KameletBinding";
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
-                stepResource.all(integrationType, null, null)
+                stepResource.all(null, integrationType, null)
                         .stream().allMatch(s ->
                                 integrationType.equalsIgnoreCase(s.getType())));
 
