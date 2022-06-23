@@ -15,24 +15,21 @@ public interface ViewDefinitionParserService<T extends ViewDefinition> {
     /*
      * 🐱method parse: List[ViewDefinition]
      * 🐱param steps: List[Step]
-     * 🐱param name: String
      *
      * Based on the list of steps, offer a list of compatible ViewDefinitions.
      */
-    List<T> parse(List<Step> steps, String name);
+    List<T> parse(List<Step> steps);
 
     /*
      * 🐱method getViewsPerStep: List[ViewDefinition]
      * 🐱param steps: List[Step]
      * 🐱param view: ViewDefinition
-     * 🐱param name: String
      *
      * If the ViewDefinition is a stepView, it returns all
      * possible ViewDefinitions associated to steps.
      */
     List<ViewDefinition> getViewsPerStep(List<Step> steps,
-                                         ViewDefinition view,
-                                         String name);
+                                         ViewDefinition view);
 
     /*
      * 🐱method appliesTo: boolean
