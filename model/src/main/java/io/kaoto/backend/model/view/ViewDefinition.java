@@ -20,7 +20,7 @@ public class ViewDefinition extends Metadata {
 
     }
 
-    public ViewDefinition(final ViewDefinition v, final String name) {
+    public ViewDefinition(final ViewDefinition v) {
         setId(v.getId());
         setName(v.getName());
         setType(v.getType());
@@ -28,7 +28,6 @@ public class ViewDefinition extends Metadata {
         setScope(v.getScope());
         setModule(v.getModule());
         setProperties(new HashMap<>());
-        getProperties().put("name", name);
     }
 
     /*
