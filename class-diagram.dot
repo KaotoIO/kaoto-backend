@@ -13,6 +13,10 @@ integrations():String
 <BR align="left" />
 stop():String
 <BR align="left" />
+all():String
+<BR align="left" />
+get():String
+<BR align="left" />
 
 </TD></TR>
 
@@ -20,6 +24,11 @@ stop():String
 </TABLE>>]
 
 
+		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
 		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
 		
 		, taillabel="0..1"
@@ -63,6 +72,12 @@ allSteps(&lt;String&gt; type, &lt;String&gt; dsl, &lt;String&gt; kind):List[Step
 		
 		
 		]
+		"StepResource" -> "StepCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
 "ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -82,6 +97,40 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		, taillabel="0..1"
 		
 		]
+		"ViewDefinitionService" -> "ViewDefinitionResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"IntegrationsResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>IntegrationsResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+crd(&lt;String&gt; dsl):Map&lt;String, Map&lt;String&gt;&gt;
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"DeploymentService" -> "IntegrationsResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"Capabilities" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Capabilities</B></TD></TR>
+	
+</TABLE>>]
+
+
+"Integration" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Integration</B></TD></TR>
+	
+</TABLE>>]
+
+
 "DeploymentService This endpoint will return a list of views based on" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentService This endpoint will return a list of views based on</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -412,9 +461,9 @@ appliesTo(&lt;String&gt; yaml):boolean
 "ViewDefinitionParserService" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParserService</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-parse(&lt;List[Step]&gt; steps, &lt;String&gt; name):List[ViewDefinition]
+parse(&lt;List[Step]&gt; steps):List[ViewDefinition]
 <BR align="left" />
-getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view, &lt;String&gt; name):List[ViewDefinition]
+getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[ViewDefinition]
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
 <BR align="left" />

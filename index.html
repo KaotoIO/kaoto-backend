@@ -84,6 +84,8 @@
 <p>This endpoint will return the yaml needed to deploy
 the related integration and the
 endpoints to interact with deployments.</p>
+<p>This endpoint will interact with the cluster starting, stopping, and
+listing running resources.</p>
 
 <h3 id='deploymentresource-method'>Methods</h3>
 
@@ -114,7 +116,8 @@ randomly from the available ones.</p>
 	<tr id='deploymentresource-start'>
 		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Deploys an integration provided.</td>
+		<td>Deploys an integration provided.
+<p>Deploys a CRD provided.</p></td>
 	</tr>
 	<tr id='deploymentresource-integrations'>
 		<td><code><b>integrations</b>()</nobr></code></td>
@@ -124,7 +127,18 @@ randomly from the available ones.</p>
 	<tr id='deploymentresource-stop'>
 		<td><code><b>stop</b>()</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Stops and deletes an integration by name</td>
+		<td>Stops and deletes an integration by name
+<p>Stops and deletes a running resource by name</p></td>
+	</tr>
+	<tr id='deploymentresource-all'>
+		<td><code><b>all</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the list of all resources</td>
+	</tr>
+	<tr id='deploymentresource-get'>
+		<td><code><b>get</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the CRD of the running resource, if exists.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -166,6 +180,7 @@ randomly from the available ones.</p>
 <h2 id='languageresource-🐱relationship-compositionof-languageservice,-0--1'>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</h2>
 <section class='namespace'>
 <p>This endpoint will return information about the supported DSLs.</p>
+<p>This endpoint will return information about the supported DSLs.</p>
 
 <h3 id='languageresource-🐱relationship-compositionof-languageservice,-0--1-method'>Methods</h3>
 
@@ -182,7 +197,8 @@ randomly from the available ones.</p>
 	<tr id='languageresource-🐱relationship-compositionof-languageservice,-0--1-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code>Map</code></td>
-		<td>Returns information of all the supported DSLs.</td>
+		<td>Returns information of all the supported DSLs.
+<p>Returns information of all the supported DSLs.</p></td>
 	</tr>
 </tbody></table>
 </section>
@@ -192,6 +208,7 @@ randomly from the available ones.</p>
 </section>
 <h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
+<p>This endpoint will return steps based on the parameters.</p>
 <p>This endpoint will return steps based on the parameters.</p>
 
 <h3 id='stepresource-method'>Methods</h3>
@@ -209,12 +226,14 @@ randomly from the available ones.</p>
 	<tr id='stepresource-stepbyid'>
 		<td><code><b>stepById</b>(<nobr>&lt;String&gt; <i>id</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>Step</a></code></td>
-		<td>Returns the first step identified by the parameter.</td>
+		<td>Returns the first step identified by the parameter.
+<p>Returns the first step identified by the parameter.</p></td>
 	</tr>
 	<tr id='stepresource-stepsbyname'>
 		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Returns all the steps identified by the name.</td>
+		<td>Returns all the steps identified by the name.
+<p>Returns all the steps identified by the name.</p></td>
 	</tr>
 	<tr id='stepresource-stepsbykind'>
 		<td><code><b>stepsByKind</b>(<nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
@@ -230,7 +249,9 @@ randomly from the available ones.</p>
 		<td><code><b>allSteps</b>(<nobr>&lt;String&gt; <i>type</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>, <nobr>&lt;String&gt; <i>kind</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>List[Step]</a></code></td>
 		<td>Returns all the steps. If parameters are included in the query, it
-will filter only those steps compatible with the constraints.</td>
+will filter only those steps compatible with the constraints.
+<p>Returns all the steps. If parameters are included in the query, it
+will filter only those steps compatible with the constraints.</p></td>
 	</tr>
 </tbody></table>
 </section>
@@ -277,6 +298,7 @@ will filter only those steps compatible with the constraints.</td>
 <h2 id='viewdefinitionresource'>ViewDefinitionResource</h2>
 <section class='namespace'>
 <p>This endpoint will return a list of views based on the parameters.</p>
+<p>This endpoint will return a list of views based on the parameters.</p>
 
 <h3 id='viewdefinitionresource-method'>Methods</h3>
 
@@ -293,12 +315,16 @@ will filter only those steps compatible with the constraints.</td>
 	<tr id='viewdefinitionresource-views:'>
 		<td><code><b>views:</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
-		<td>Based on the YAML provided, offer a list of possible views</td>
+		<td>Based on the YAML provided, offer a list of possible views
+<p>Based on the YAML provided, offer a list of possible view definitions
+and step extensions.</p></td>
 	</tr>
 	<tr id='viewdefinitionresource-viewspersteplist:'>
 		<td><code><b>viewsPerStepList:</b>(<nobr>&lt;Step[]&gt; <i>DeploymentResourceYamlRequest</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
-		<td>Based on the list of steps provided, offer a list of possible views</td>
+		<td>Based on the list of steps provided, offer a list of possible views
+<p>Based on the list of steps provided, offer a list of possible view
+definitions and step extensions.</p></td>
 	</tr>
 </tbody></table>
 </section>
@@ -309,6 +335,48 @@ will filter only those steps compatible with the constraints.</td>
 
 
 </section>
+
+</section>
+<h2 id='integrationsresource'>IntegrationsResource</h2>
+<section class='namespace'>
+<p>This endpoint will return the yaml needed to deploy
+the related integration and the
+endpoints to interact with deployments.</p>
+
+<h3 id='integrationsresource-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='integrationsresource-crd'>
+		<td><code><b>crd</b>(<nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
+		<td><code>Map<String, Map<String>></code></td>
+		<td>Idempotent operation that given a CRD or given a JSON status, returns
+the other one.
+<p>Idempotent operation that given a CRD or given a JSON status, returns
+the other one.</p></td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='capabilities'>Capabilities</h2>
+<section class='namespace'>
+
+
+</section>
+<h2 id='integration'>Integration</h2>
+<section class='namespace'>
+
 
 </section>
 <h2 id='deploymentservice-this-endpoint-will-return-a-list-of-views-based-on'>DeploymentService This endpoint will return a list of views based on</h2>
@@ -330,7 +398,8 @@ will filter only those steps compatible with the constraints.</td>
 	<tr id='deploymentservice-this-endpoint-will-return-a-list-of-views-based-on-yaml'>
 		<td><code><b>yaml</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Based on the provided steps, return a valid yaml string to deploy</td>
+		<td>Based on the provided steps, return a valid yaml string to deploy
+<p>Based on the provided steps, return a valid yaml string to deploy</p></td>
 	</tr>
 </tbody></table>
 </section>
@@ -1583,12 +1652,12 @@ the metadata associated to the orchestration.</p></td>
 	</tr>
 	</thead><tbody>
 	<tr id='viewdefinitionparserservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>Based on the list of steps, offer a list of compatible ViewDefinitions.</td>
 	</tr>
 	<tr id='viewdefinitionparserservice-getviewsperstep'>
-		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><b>getViewsPerStep</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>view</i></nobr>)</nobr></code></td>
 		<td><code><a href='#viewdefinition'>List[ViewDefinition]</a></code></td>
 		<td>If the ViewDefinition is a stepView, it returns all
 possible ViewDefinitions associated to steps.</td>
