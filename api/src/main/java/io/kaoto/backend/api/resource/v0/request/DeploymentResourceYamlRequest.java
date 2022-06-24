@@ -2,6 +2,8 @@ package io.kaoto.backend.api.resource.v0.request;
 
 import io.kaoto.backend.model.step.Step;
 
+import java.util.Arrays;
+
 /**
  * 🐱miniclass DeploymentResourceYamlRequest (DeploymentResource)
  */
@@ -30,7 +32,7 @@ public class DeploymentResourceYamlRequest {
     private Step[] steps;
 
     public Step[] getSteps() {
-        return steps;
+        return Arrays.copyOf(steps, steps.length);
     }
 
     public void setSteps(final Step[] steps) {
