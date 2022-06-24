@@ -199,10 +199,16 @@ public class ClusterService {
     }
 
     public String logs(final String namespace, final String podName,
-                       final int lines) {
+            final int lines)  {
+        String fullPodName = kubernetesClient.pods()
+                .inNamespace(getNamespace(namespace)).list().getItems().stream()
+                .filter(p -> p.getMetadata().getName().contains(podName))
+                .map(p -> p.getMetadata().getName())
+                .findFirst().orElseThrow();
+
         return kubernetesClient.pods()
-                .inNamespace(getNamespace(namespace))
-                .withName(podName)
+               .inNamespace(getNamespace(namespace))
+                .withName(fullPodName)
                 .tailingLines(lines)
                 .getLog(Boolean.TRUE);
     }
