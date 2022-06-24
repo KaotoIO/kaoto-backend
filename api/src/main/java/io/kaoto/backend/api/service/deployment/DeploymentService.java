@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.deployment;
 
+import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
@@ -58,6 +59,33 @@ public class DeploymentService {
         }
 
         return res;
+    }
+    /*
+     * 🐱method yaml: String
+     * 🐱param steps: List[Step]
+     * 🐱param name: String
+     *
+     * Based on the provided steps, return a valid yaml string to deploy
+     */
+    public String crd(final Integration i,
+                                         final String dsl) {
+
+        for (DeploymentGeneratorService parser : getParsers()) {
+            try {
+                if (parser.identifier().equalsIgnoreCase(dsl)) {
+                    if (parser.appliesTo(i.getSteps())) {
+                        return parser.parse(i.getSteps(), i.getMetadata());
+                    }
+                    break;
+                }
+            } catch (Exception e) {
+                log.warn("Parser " + parser.getClass() + "threw an unexpected"
+                                + " error. ",
+                        e);
+            }
+        }
+
+        return null;
     }
 
     public Instance<DeploymentGeneratorService> getParsers() {

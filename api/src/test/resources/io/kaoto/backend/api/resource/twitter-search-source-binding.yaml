@@ -14,35 +14,33 @@ singular: kameletbinding
 spec:
   source:
     ref:
-      kind: Kamelet
       apiVersion: camel.apache.org/v1alpha1
       name: twitter-search-source
+      kind: Kamelet
     properties:
-      keywords: "Apache Camel"
-      apiKey: "your own"
-      apiKeySecret: "your own"
-      accessToken: "your own"
-      accessTokenSecret: "your own"
+      keywords: Apache Camel
+      apiKey: your own
+      apiKeySecret: your own
+      accessToken: your own
+      accessTokenSecret: your own
   steps:
-    -
-      ref:
-        kind: Kamelet
-        apiVersion: camel.apache.org/v1alpha1
-        name: aws-translate-action
-    -
-      ref:
-        kind: Kamelet
-        apiVersion: camel.apache.org/v1alpha1
-        name: avro-deserialize-action
+  - ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: aws-translate-action
+      kind: Kamelet
+  - ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: avro-deserialize-action
+      kind: Kamelet
   sink:
     ref:
-      kind: Kamelet
       apiVersion: camel.apache.org/v1alpha1
       name: kafka-sink
+      kind: Kamelet
     properties:
-      password: "The Password"
-      bootstrapServers: "The Brokers"
-      topic: "The Topic Names"
-      user: "The Username"
+      password: The Password
+      bootstrapServers: The Brokers
+      topic: The Topic Names
+      user: The Username
 storage: true
 version: v1alpha1

@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.step.parser;
 
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.List;
@@ -60,6 +61,7 @@ public interface StepParserService<T extends Step> {
      */
     class ParseResult<T> {
         private List<T> steps;
+        private List<Parameter> parameters;
         private Map<String, Object> metadata;
 
         public List<T> getSteps() {
@@ -76,6 +78,15 @@ public interface StepParserService<T extends Step> {
 
         public void setMetadata(final Map<String, Object> metadata) {
             this.metadata = metadata;
+        }
+
+        public List<Parameter> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(
+                final List<Parameter> parameters) {
+            this.parameters = parameters;
         }
     }
 
