@@ -947,6 +947,9 @@
                     <li data-group="IntegrationResource" data-name="integrationsNameDelete" class="">
                       <a href="#api-IntegrationResource-integrationsNameDelete">integrationsNameDelete</a>
                     </li>
+                    <li data-group="IntegrationResource" data-name="integrationsNameLogsGet" class="">
+                      <a href="#api-IntegrationResource-integrationsNameLogsGet">integrationsNameLogsGet</a>
+                    </li>
                     <li data-group="IntegrationResource" data-name="integrationsPost" class="">
                       <a href="#api-IntegrationResource-integrationsPost">integrationsPost</a>
                     </li>
@@ -2313,6 +2316,370 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-integrationsNameDelete-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationResource-integrationsNameLogsGet">
+                      <article id="api-IntegrationResource-integrationsNameLogsGet-0" data-group="User" data-name="integrationsNameLogsGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>integrationsNameLogsGet</h1>
+                          <p>Get logs</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get the integration&#x27;s log.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/integrations/{name}/logs</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationResource-integrationsNameLogsGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationResource-integrationsNameLogsGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: text/plain"\
+"//integrations/{name}/logs?lines=&namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String name = name_example; // String | Name of the integration of which logs should be retrieved.
+        Integer lines = 56; // Integer | Number of last N lines to be retrieved.
+        String namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
+        try {
+            'String' result = apiInstance.integrationsNameLogsGet(name, lines, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsNameLogsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationResourceApi;
+
+public class IntegrationResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationResourceApi apiInstance = new IntegrationResourceApi();
+        String name = name_example; // String | Name of the integration of which logs should be retrieved.
+        Integer lines = 56; // Integer | Number of last N lines to be retrieved.
+        String namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
+        try {
+            'String' result = apiInstance.integrationsNameLogsGet(name, lines, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationResourceApi#integrationsNameLogsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the integration of which logs should be retrieved.
+Integer *lines = 56; // Number of last N lines to be retrieved. (optional)
+String *namespace = namespace_example; // Namespace of the cluster where the integration is running. (optional)
+
+IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
+
+// Get logs
+[apiInstance integrationsNameLogsGetWith:name
+    lines:lines
+    namespace:namespace
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationResourceApi()
+var name = name_example; // {{String}} Name of the integration of which logs should be retrieved.
+var opts = { 
+  'lines': 56, // {{Integer}} Number of last N lines to be retrieved.
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the integration is running.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.integrationsNameLogsGet(name, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class integrationsNameLogsGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationResourceApi();
+            var name = name_example;  // String | Name of the integration of which logs should be retrieved.
+            var lines = 56;  // Integer | Number of last N lines to be retrieved. (optional) 
+            var namespace = namespace_example;  // String | Namespace of the cluster where the integration is running. (optional) 
+
+            try
+            {
+                // Get logs
+                'String' result = apiInstance.integrationsNameLogsGet(name, lines, namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationResourceApi.integrationsNameLogsGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationResourceApi();
+$name = name_example; // String | Name of the integration of which logs should be retrieved.
+$lines = 56; // Integer | Number of last N lines to be retrieved.
+$namespace = namespace_example; // String | Namespace of the cluster where the integration is running.
+
+try {
+    $result = $api_instance->integrationsNameLogsGet($name, $lines, $namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationResourceApi->integrationsNameLogsGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationResourceApi->new();
+my $name = name_example; # String | Name of the integration of which logs should be retrieved.
+my $lines = 56; # Integer | Number of last N lines to be retrieved.
+my $namespace = namespace_example; # String | Namespace of the cluster where the integration is running.
+
+eval { 
+    my $result = $api_instance->integrationsNameLogsGet(name => $name, lines => $lines, namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationResourceApi->integrationsNameLogsGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationResource-integrationsNameLogsGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationResourceApi()
+name = name_example # String | Name of the integration of which logs should be retrieved.
+lines = 56 # Integer | Number of last N lines to be retrieved. (optional)
+namespace = namespace_example # String | Namespace of the cluster where the integration is running. (optional)
+
+try: 
+    # Get logs
+    api_response = api_instance.integrations_name_logs_get(name, lines=lines, namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationResourceApi->integrationsNameLogsGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_integrationsNameLogsGet_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the integration of which logs should be retrieved.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">lines</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsNameLogsGet_lines">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                                    <span class="format">
+                                                        (int32)
+                                                    </span>
+                                
+                                                    <div class="inner description">
+                                                        Number of last N lines to be retrieved.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_integrationsNameLogsGet_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the integration is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-integrationsNameLogsGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-integrationsNameLogsGet-200-schema">
+                                  <div id='responses-integrationsNameLogsGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/plain" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/plain"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/plain"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-integrationsNameLogsGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-integrationsNameLogsGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-integrationsNameLogsGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
