@@ -1,5 +1,9 @@
 package io.kaoto.backend.api.resource.v1;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.deployment.ClusterService;
@@ -87,10 +91,29 @@ public class DeploymentsResource {
                     + "we want to deploy it.")
             @QueryParam("namespace") String namespace) {
 
-        if (clusterService.start(crd, namespace)) {
-            return "OK";
+        String securedcrd = securityCheck(crd);
+
+        if (clusterService.start(securedcrd, namespace)) {
+            return securedcrd;
         }
         return "Error deploying " + name;
+    }
+
+    private String securityCheck(final String crd) {
+
+        ObjectMapper yamlMapper =
+                new ObjectMapper(new YAMLFactory())
+                    .configure(
+                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                            false);
+        try {
+            yamlMapper.readValue(crd, KameletBinding.class);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Couldn't understand the yaml "
+                    + "sent. Check the syntax and try again.");
+        }
+
+        return crd;
     }
 
     /*
