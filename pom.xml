@@ -32,6 +32,7 @@
         <!-- Shared dependencies -->
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+        <failsafe-plugin.version>3.0.0-M7</failsafe-plugin.version>
     </properties>
     <build>
         <plugins>
@@ -69,6 +70,31 @@
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                        <quarkus.kubernetes-client.master-url>${kubernetes.master-url}</quarkus.kubernetes-client.master-url>
+                        <quarkus.kubernetes-client.client-cert-data>${kubernetes.client-cert-data}</quarkus.kubernetes-client.client-cert-data>
+                        <quarkus.kubernetes-client.client-key-data>${kubernetes.client-key-data}</quarkus.kubernetes-client.client-key-data>
+                        <quarkus.kubernetes-client.trust-certs>${kubernetes.trust-certs}</quarkus.kubernetes-client.trust-certs>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

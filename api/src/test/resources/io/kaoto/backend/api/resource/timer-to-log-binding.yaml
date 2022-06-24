@@ -1,0 +1,29 @@
+apiVersion: camel.apache.org/v1alpha1
+group: camel.apache.org
+kind: KameletBinding
+metadata:
+  additionalProperties: {}
+  finalizers: []
+  managedFields: []
+  name: tralalala
+  ownerReferences: []
+plural: kameletbindings
+scope: Namespaced
+served: true
+singular: kameletbinding
+spec:
+  source:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: cron-source
+    properties:
+      message: 'Hello Kaoto'
+      schedule: '* * * * * ?'
+  sink:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: log-sink
+storage: true
+version: v1alpha1

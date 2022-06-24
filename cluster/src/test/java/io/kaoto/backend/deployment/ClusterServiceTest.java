@@ -50,9 +50,6 @@ class ClusterServiceTest {
         assertNotNull(integration.getErrors());
         assertNotNull(integration.getNamespace());
 
-        assertFalse(
-                clusterService.logs(ns, integration.getName(), 1).isEmpty());
-
         clusterService.stop(integration.getName(), ns);
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
     }
