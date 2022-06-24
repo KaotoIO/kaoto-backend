@@ -17,6 +17,7 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -65,6 +66,7 @@ public class KameletBindingStepParserService
         ParseResult<Step> res = new ParseResult<>();
 
         List<Step> steps = new ArrayList<>();
+        Map<String, Object> md = new LinkedHashMap<>();
         try {
             ObjectMapper yamlMapper =
                     new ObjectMapper(new YAMLFactory())
@@ -73,8 +75,9 @@ public class KameletBindingStepParserService
                             false);
             KameletBinding binding = yamlMapper.readValue(input,
                     KameletBinding.class);
-            processMetadata(binding.getMetadata());
+            processMetadata(md, binding.getMetadata());
             processSpec(steps, binding.getSpec());
+
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(
                     "Wrong format provided. This is not parseable by us");
@@ -83,6 +86,7 @@ public class KameletBindingStepParserService
         res.setSteps(steps.stream()
                 .filter(Objects::nonNull)
                 .toList());
+        res.setMetadata(md);
         return res;
     }
 
@@ -188,13 +192,15 @@ public class KameletBindingStepParserService
                 }
             }
         }
-
-
     }
 
-    private String processMetadata(
+    private void processMetadata(final Map<String, Object> res,
             final ObjectMeta metadata) {
-        return metadata.getName();
+        res.put("name", metadata.getName());
+        res.put("additionalProperties", metadata.getAdditionalProperties());
+        res.put("finalizers", metadata.getFinalizers());
+        res.put("managedFields", metadata.getManagedFields());
+        res.put("annotations", metadata.getAnnotations());
     }
 
     @Override
