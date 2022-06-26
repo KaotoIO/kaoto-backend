@@ -86,7 +86,7 @@
                         <phase>verify</phase>
                         <configuration>
                             <verbose>true</verbose>
-                            <failOnViolation>false</failOnViolation>
+                            <failOnViolation>true</failOnViolation>
                         </configuration>
                     </execution>
                 </executions>

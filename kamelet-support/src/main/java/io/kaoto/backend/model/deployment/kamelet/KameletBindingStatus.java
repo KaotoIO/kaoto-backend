@@ -28,6 +28,39 @@ public class KameletBindingStatus implements KubernetesResource {
     @JsonProperty("selector")
     private String selector;
 
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(final String phase) {
+        this.phase = phase;
+    }
+
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(
+            final List<Condition> conditions) {
+        this.conditions = conditions;
+    }
+
+    public Integer getReplicas() {
+        return replicas;
+    }
+
+    public void setReplicas(final Integer replicas) {
+        this.replicas = replicas;
+    }
+
+    public String getSelector() {
+        return selector;
+    }
+
+    public void setSelector(final String selector) {
+        this.selector = selector;
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonPropertyOrder({"type", "status",
             "lastUpdateTime", "lastTransitionTime",
@@ -109,4 +142,5 @@ public class KameletBindingStatus implements KubernetesResource {
             this.message = message;
         }
     }
+
 }
