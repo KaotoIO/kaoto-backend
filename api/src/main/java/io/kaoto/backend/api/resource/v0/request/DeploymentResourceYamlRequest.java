@@ -4,10 +4,7 @@ import io.kaoto.backend.model.step.Step;
 
 import java.util.Arrays;
 
-/**
- * 🐱miniclass DeploymentResourceYamlRequest (DeploymentResource)
- */
-@Deprecated
+@Deprecated(since = "0.3.0", forRemoval = true)
 public class DeploymentResourceYamlRequest {
 
     /*

@@ -26,17 +26,9 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 🐱class DeploymentResource
- * 🐱relationship compositionOf DeploymentService, 0..1
- *
- * This endpoint will return the yaml needed to deploy
- * the related integration and the
- * endpoints to interact with deployments.
- */
 @Path("/integrations")
 @ApplicationScoped
-@Deprecated
+@Deprecated(since = "0.3.0", forRemoval = true)
 public class IntegrationResource {
 
     private Logger log = Logger.getLogger(IntegrationResource.class);

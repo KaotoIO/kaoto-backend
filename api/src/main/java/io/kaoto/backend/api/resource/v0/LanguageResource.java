@@ -15,14 +15,9 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * 🐱class LanguageResource 🐱relationship compositionOf LanguageService, 0..1
- *
- * This endpoint will return information about the supported DSLs.
- */
 @Path("/languages")
 @ApplicationScoped
-@Deprecated
+@Deprecated(since = "0.3.0", forRemoval = true)
 public class LanguageResource {
 
     private Logger log = Logger.getLogger(LanguageResource.class);
