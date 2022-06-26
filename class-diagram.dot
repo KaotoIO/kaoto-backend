@@ -13,10 +13,6 @@ integrations():String
 <BR align="left" />
 stop():String
 <BR align="left" />
-all():String
-<BR align="left" />
-get():String
-<BR align="left" />
 
 </TD></TR>
 
@@ -24,11 +20,6 @@ get():String
 </TABLE>>]
 
 
-		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..1"
-		
-		]
 		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
 		
 		, taillabel="0..1"
@@ -102,6 +93,24 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		, taillabel="0..1"
 		
 		]
+"DeploymentResource 🐱relationship compositionOf DeploymentService," [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentResource 🐱relationship compositionOf DeploymentService,</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+all():String
+<BR align="left" />
+start(&lt;DeploymentResourceYamlRequest&gt; steps):String
+<BR align="left" />
+get():String
+<BR align="left" />
+stop():String
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
 "IntegrationsResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>IntegrationsResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -419,6 +428,8 @@ parse(&lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
+supportedCustomResources():List&lt;Class&gt;
+<BR align="left" />
 getKinds():String[]
 <BR align="left" />
 
@@ -441,7 +452,7 @@ identifier():String
 <BR align="left" />
 description():String
 <BR align="left" />
-parse(&lt;String&gt; yaml):List[Step]
+parse(&lt;String&gt; yaml):ParseResult
 <BR align="left" />
 appliesTo(&lt;String&gt; yaml):boolean
 <BR align="left" />

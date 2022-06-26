@@ -84,8 +84,6 @@
 <p>This endpoint will return the yaml needed to deploy
 the related integration and the
 endpoints to interact with deployments.</p>
-<p>This endpoint will interact with the cluster starting, stopping, and
-listing running resources.</p>
 
 <h3 id='deploymentresource-method'>Methods</h3>
 
@@ -116,8 +114,7 @@ randomly from the available ones.</p>
 	<tr id='deploymentresource-start'>
 		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Deploys an integration provided.
-<p>Deploys a CRD provided.</p></td>
+		<td>Deploys an integration provided.</td>
 	</tr>
 	<tr id='deploymentresource-integrations'>
 		<td><code><b>integrations</b>()</nobr></code></td>
@@ -127,18 +124,7 @@ randomly from the available ones.</p>
 	<tr id='deploymentresource-stop'>
 		<td><code><b>stop</b>()</nobr></code></td>
 		<td><code>String</code></td>
-		<td>Stops and deletes an integration by name
-<p>Stops and deletes a running resource by name</p></td>
-	</tr>
-	<tr id='deploymentresource-all'>
-		<td><code><b>all</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the list of all resources</td>
-	</tr>
-	<tr id='deploymentresource-get'>
-		<td><code><b>get</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the CRD of the running resource, if exists.</td>
+		<td>Stops and deletes an integration by name</td>
 	</tr>
 </tbody></table>
 </section>
@@ -335,6 +321,50 @@ definitions and step extensions.</p></td>
 
 
 </section>
+
+</section>
+<h2 id='deploymentresource-🐱relationship-compositionof-deploymentservice,'>DeploymentResource 🐱relationship compositionOf DeploymentService,</h2>
+<section class='namespace'>
+<p>0..1</p>
+<p>This endpoint will interact with the cluster starting, stopping, and listing
+running resources.</p>
+
+<h3 id='deploymentresource-🐱relationship-compositionof-deploymentservice,-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-all'>
+		<td><code><b>all</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the list of all resources</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-start'>
+		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Deploys a CRD provided.</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-get'>
+		<td><code><b>get</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the CRD of the running resource, if exists.</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-stop'>
+		<td><code><b>stop</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Stops and deletes a running resource by name</td>
+	</tr>
+</tbody></table>
+</section>
+
+
 
 </section>
 <h2 id='integrationsresource'>IntegrationsResource</h2>
@@ -1570,6 +1600,12 @@ If applies, the name will be the name used on the integration deployed.</td>
 		<td><code>boolean</code></td>
 		<td>Check if the parser applies to the steps</td>
 	</tr>
+	<tr id='deploymentgeneratorservice-supportedcustomresources'>
+		<td><code><b>supportedCustomResources</b>()</nobr></code></td>
+		<td><code>List<Class></code></td>
+		<td>Returns the Java model classes that extend CustomResource and that are
+the types of custom resources supported in the cluster.</td>
+	</tr>
 	<tr id='deploymentgeneratorservice-getkinds'>
 		<td><code><b>getKinds</b>()</nobr></code></td>
 		<td><code>String[]</code></td>
@@ -1609,10 +1645,9 @@ If applies, the name will be the name used on the integration deployed.</td>
 	</tr>
 	<tr id='stepparserservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Based on the YAML provided, offer a list of steps defined on it, if any
-<p>Based on the YAML provided, offer a list of steps defined on it and
-the metadata associated to the orchestration.</p></td>
+		<td><code>ParseResult</code></td>
+		<td>Based on the YAML provided, offer a list of steps defined on it and
+the metadata associated to the orchestration.</td>
 	</tr>
 	<tr id='stepparserservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
