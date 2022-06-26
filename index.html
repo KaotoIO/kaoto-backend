@@ -79,93 +79,8 @@
     <a target="_blank" href="./class-diagram.dot.svg" ><img style="max-width:100%" src="./class-diagram.dot.svg"/></a>
     <p>(click to enlarge)</p>
 
-	<h2 id='deploymentresource'>DeploymentResource</h2>
+	<h2 id='languageresource-🐱relationship-compositionof-languageservice,-0--1'>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</h2>
 <section class='namespace'>
-<p>This endpoint will return the yaml needed to deploy
-the related integration and the
-endpoints to interact with deployments.</p>
-
-<h3 id='deploymentresource-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='deploymentresource-yaml'>
-		<td><code><b>yaml</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
-		<td><code>String[]</code></td>
-		<td>Idempotent operation that, based on the steps provided,
-offer all the potential source code / custom resources to deploy the
-integration.
-<p>Idempotent operation that, based on the steps provided,
-offer the potential source code / custom resource to deploy the
-integration. Tries to return the type of integration passed as
-parameter. If that doesn't exist, it will default to the one defined
-on the configuration. If that doesn't exist, it will just return one
-randomly from the available ones.</p>
-<p>The usage of /customResources is encouraged over this one.</p></td>
-	</tr>
-	<tr id='deploymentresource-start'>
-		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Deploys an integration provided.</td>
-	</tr>
-	<tr id='deploymentresource-integrations'>
-		<td><code><b>integrations</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the list of all integrations</td>
-	</tr>
-	<tr id='deploymentresource-stop'>
-		<td><code><b>stop</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Stops and deletes an integration by name</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-<h2 id='deploymentresourceyamlrequest'></h2>
-<section class='namespace'>
-
-<h3 id='deploymentresourceyamlrequest-property'>DeploymentResourceYamlRequest</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='deploymentresourceyamlrequest-name'>
-		<td><code><b>name</b>
-		<td><code>String</code></td>
-		<td>Name of the integration</td>
-	</tr>
-	<tr id='deploymentresourceyamlrequest-steps'>
-		<td><code><b>steps</b>
-		<td><code>Step[]</code></td>
-		<td>steps of the integration</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
-
-</section>
-<h2 id='languageresource-🐱relationship-compositionof-languageservice,-0--1'>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</h2>
-<section class='namespace'>
-<p>This endpoint will return information about the supported DSLs.</p>
 <p>This endpoint will return information about the supported DSLs.</p>
 
 <h3 id='languageresource-🐱relationship-compositionof-languageservice,-0--1-method'>Methods</h3>
@@ -183,8 +98,83 @@ randomly from the available ones.</p>
 	<tr id='languageresource-🐱relationship-compositionof-languageservice,-0--1-getall'>
 		<td><code><b>getAll</b>()</nobr></code></td>
 		<td><code>Map</code></td>
-		<td>Returns information of all the supported DSLs.
-<p>Returns information of all the supported DSLs.</p></td>
+		<td>Returns information of all the supported DSLs.</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='deploymentresource-🐱relationship-compositionof-deploymentservice,'>DeploymentResource 🐱relationship compositionOf DeploymentService,</h2>
+<section class='namespace'>
+<p>0..1</p>
+<p>This endpoint will interact with the cluster starting, stopping, and listing
+running resources.</p>
+
+<h3 id='deploymentresource-🐱relationship-compositionof-deploymentservice,-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-all'>
+		<td><code><b>all</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the list of all resources</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-start'>
+		<td><code><b>start</b>(<nobr>&lt;DeploymentResourceYamlRequest&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Deploys a CRD provided.</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-get'>
+		<td><code><b>get</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the CRD of the running resource, if exists.</td>
+	</tr>
+	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-stop'>
+		<td><code><b>stop</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Stops and deletes a running resource by name</td>
+	</tr>
+</tbody></table>
+</section>
+
+
+
+</section>
+<h2 id='integrationsresource'>IntegrationsResource</h2>
+<section class='namespace'>
+<p>This endpoint will return the yaml needed to deploy
+the related integration and the
+endpoints to interact with deployments.</p>
+
+<h3 id='integrationsresource-method'>Methods</h3>
+
+<section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='integrationsresource-crd'>
+		<td><code><b>crd</b>(<nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
+		<td><code>Map<String, Map<String>></code></td>
+		<td>Idempotent operation that given a CRD or given a JSON status, returns
+the other one.
+<p>Idempotent operation that given a CRD or given a JSON status, returns
+the other one.</p></td>
 	</tr>
 </tbody></table>
 </section>
@@ -194,7 +184,6 @@ randomly from the available ones.</p>
 </section>
 <h2 id='stepresource'>StepResource</h2>
 <section class='namespace'>
-<p>This endpoint will return steps based on the parameters.</p>
 <p>This endpoint will return steps based on the parameters.</p>
 
 <h3 id='stepresource-method'>Methods</h3>
@@ -209,35 +198,21 @@ randomly from the available ones.</p>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='stepresource-stepbyid'>
-		<td><code><b>stepById</b>(<nobr>&lt;String&gt; <i>id</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>Step</a></code></td>
-		<td>Returns the first step identified by the parameter.
-<p>Returns the first step identified by the parameter.</p></td>
-	</tr>
-	<tr id='stepresource-stepsbyname'>
-		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Returns all the steps identified by the name.
-<p>Returns all the steps identified by the name.</p></td>
-	</tr>
-	<tr id='stepresource-stepsbykind'>
-		<td><code><b>stepsByKind</b>(<nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Returns all the steps of the type.</td>
-	</tr>
-	<tr id='stepresource-stepsbyintegrationtype'>
-		<td><code><b>stepsByIntegrationType</b>(<nobr>&lt;String&gt; <i>type</i></nobr>)</nobr></code></td>
-		<td><code><a href='#step'>List[Step]</a></code></td>
-		<td>Returns all the steps that fit a specific integration type.</td>
-	</tr>
 	<tr id='stepresource-allsteps'>
 		<td><code><b>allSteps</b>(<nobr>&lt;String&gt; <i>type</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>, <nobr>&lt;String&gt; <i>kind</i></nobr>)</nobr></code></td>
 		<td><code><a href='#step'>List[Step]</a></code></td>
 		<td>Returns all the steps. If parameters are included in the query, it
-will filter only those steps compatible with the constraints.
-<p>Returns all the steps. If parameters are included in the query, it
-will filter only those steps compatible with the constraints.</p></td>
+will filter only those steps compatible with the constraints.</td>
+	</tr>
+	<tr id='stepresource-stepbyid'>
+		<td><code><b>stepById</b>(<nobr>&lt;String&gt; <i>id</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>Step</a></code></td>
+		<td>Returns the first step identified by the parameter.</td>
+	</tr>
+	<tr id='stepresource-stepsbyname'>
+		<td><code><b>stepsByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Returns all the steps identified by the name.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -284,7 +259,6 @@ will filter only those steps compatible with the constraints.</p></td>
 <h2 id='viewdefinitionresource'>ViewDefinitionResource</h2>
 <section class='namespace'>
 <p>This endpoint will return a list of views based on the parameters.</p>
-<p>This endpoint will return a list of views based on the parameters.</p>
 
 <h3 id='viewdefinitionresource-method'>Methods</h3>
 
@@ -301,97 +275,14 @@ will filter only those steps compatible with the constraints.</p></td>
 	<tr id='viewdefinitionresource-views:'>
 		<td><code><b>views:</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
-		<td>Based on the YAML provided, offer a list of possible views
-<p>Based on the YAML provided, offer a list of possible view definitions
-and step extensions.</p></td>
+		<td>Based on the YAML provided, offer a list of possible view definitions
+and step extensions.</td>
 	</tr>
 	<tr id='viewdefinitionresource-viewspersteplist:'>
 		<td><code><b>viewsPerStepList:</b>(<nobr>&lt;Step[]&gt; <i>DeploymentResourceYamlRequest</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
-		<td>Based on the list of steps provided, offer a list of possible views
-<p>Based on the list of steps provided, offer a list of possible view
-definitions and step extensions.</p></td>
-	</tr>
-</tbody></table>
-</section>
-
-
-<h2 id='viewdefinitionresourceresponse'></h2>
-<section class='namespace'>
-
-
-</section>
-
-</section>
-<h2 id='deploymentresource-🐱relationship-compositionof-deploymentservice,'>DeploymentResource 🐱relationship compositionOf DeploymentService,</h2>
-<section class='namespace'>
-<p>0..1</p>
-<p>This endpoint will interact with the cluster starting, stopping, and listing
-running resources.</p>
-
-<h3 id='deploymentresource-🐱relationship-compositionof-deploymentservice,-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-all'>
-		<td><code><b>all</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the list of all resources</td>
-	</tr>
-	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-start'>
-		<td><code><b>start</b>(<nobr>&lt;<a href='#deploymentresourceyamlrequest'>DeploymentResourceYamlRequest</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Deploys a CRD provided.</td>
-	</tr>
-	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-get'>
-		<td><code><b>get</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the CRD of the running resource, if exists.</td>
-	</tr>
-	<tr id='deploymentresource-🐱relationship-compositionof-deploymentservice,-stop'>
-		<td><code><b>stop</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Stops and deletes a running resource by name</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
-<h2 id='integrationsresource'>IntegrationsResource</h2>
-<section class='namespace'>
-<p>This endpoint will return the yaml needed to deploy
-the related integration and the
-endpoints to interact with deployments.</p>
-
-<h3 id='integrationsresource-method'>Methods</h3>
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Method</th>
-		<th>Returns</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='integrationsresource-crd'>
-		<td><code><b>crd</b>(<nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
-		<td><code>Map<String, Map<String>></code></td>
-		<td>Idempotent operation that given a CRD or given a JSON status, returns
-the other one.
-<p>Idempotent operation that given a CRD or given a JSON status, returns
-the other one.</p></td>
+		<td>Based on the list of steps provided, offer a list of possible view
+definitions and step extensions.</td>
 	</tr>
 </tbody></table>
 </section>

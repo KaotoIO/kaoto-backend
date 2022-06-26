@@ -2,29 +2,6 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
-"DeploymentResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentResource</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-yaml(&lt;DeploymentResourceYamlRequest&gt; steps, &lt;String&gt; dsl):String[]
-<BR align="left" />
-start(&lt;DeploymentResourceYamlRequest&gt; steps):String
-<BR align="left" />
-integrations():String
-<BR align="left" />
-stop():String
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"DeploymentService" -> "DeploymentResource" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..1"
-		
-		]
 "LanguageResource 🐱relationship compositionOf LanguageService, 0..1" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -37,62 +14,6 @@ getAll():Map
 </TABLE>>]
 
 
-"StepResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>StepResource</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-stepById(&lt;String&gt; id):Step
-<BR align="left" />
-stepsByName(&lt;String&gt; name):List[Step]
-<BR align="left" />
-stepsByKind(&lt;String&gt; type):List[Step]
-<BR align="left" />
-stepsByIntegrationType(&lt;String&gt; type):List[Step]
-<BR align="left" />
-allSteps(&lt;String&gt; type, &lt;String&gt; dsl, &lt;String&gt; kind):List[Step]
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"StepResource" -> "StepCatalog" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-		"StepResource" -> "StepCatalog" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-"ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-views:(&lt;String&gt; yaml):
-<BR align="left" />
-viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"ViewDefinitionService" -> "ViewDefinitionResource" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..1"
-		
-		]
-		"ViewDefinitionService" -> "ViewDefinitionResource" [dir=both; arrowhead=diamond; arrowtail=none
-		
-		, taillabel="0..1"
-		
-		]
 "DeploymentResource 🐱relationship compositionOf DeploymentService," [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>DeploymentResource 🐱relationship compositionOf DeploymentService,</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -124,6 +45,47 @@ crd(&lt;String&gt; dsl):Map&lt;String, Map&lt;String&gt;&gt;
 
 
 		"DeploymentService" -> "IntegrationsResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"StepResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+allSteps(&lt;String&gt; type, &lt;String&gt; dsl, &lt;String&gt; kind):List[Step]
+<BR align="left" />
+stepById(&lt;String&gt; id):Step
+<BR align="left" />
+stepsByName(&lt;String&gt; name):List[Step]
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"StepResource" -> "StepCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
+"ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+views:(&lt;String&gt; yaml):
+<BR align="left" />
+viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+		"ViewDefinitionService" -> "ViewDefinitionResource" [dir=both; arrowhead=diamond; arrowtail=none
 		
 		, taillabel="0..1"
 		

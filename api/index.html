@@ -793,9 +793,6 @@
     "value" : {
       "type" : "object"
     },
-    "type" : {
-      "type" : "string"
-    },
     "title" : {
       "type" : "string"
     },
@@ -819,6 +816,9 @@
       "items" : {
         "type" : "object"
       }
+    },
+    "type" : {
+      "type" : "string"
     },
     "enum" : {
       "type" : "array",
@@ -3061,7 +3061,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsCustomResourcePost-0" data-group="User" data-name="integrationsCustomResourcePost" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsCustomResourcePost</h1>
-                          <p>Get CRD</p>
+                          <p>Deprecated Get CRD</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3153,7 +3153,7 @@ String *type = type_example; // Type of integration. Deprecated. For example: 'K
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Get CRD
+// Deprecated Get CRD
 [apiInstance integrationsCustomResourcePostWith:body
     dsl:dsl
     type:type
@@ -3212,7 +3212,7 @@ namespace Example
 
             try
             {
-                // Get CRD
+                // Deprecated Get CRD
                 'String' result = apiInstance.integrationsCustomResourcePost(body, dsl, type);
                 Debug.WriteLine(result);
             }
@@ -3277,7 +3277,7 @@ dsl = dsl_example # String | DSL to use. For example: 'Kamelet Binding'. (option
 type = type_example # String | Type of integration. Deprecated. For example: 'Kamelet Binding'. (optional)
 
 try: 
-    # Get CRD
+    # Deprecated Get CRD
     api_response = api_instance.integrations_custom_resource_post(body=body, dsl=dsl, type=type)
     pprint(api_response)
 except ApiException as e:
@@ -3436,7 +3436,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsCustomResourcesPost-0" data-group="User" data-name="integrationsCustomResourcesPost" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsCustomResourcesPost</h1>
-                          <p>Get CRDs</p>
+                          <p>Deprecated Get CRDs</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3522,7 +3522,7 @@ public class IntegrationResourceApiExample {
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Get CRDs
+// Deprecated Get CRDs
 [apiInstance integrationsCustomResourcesPostWith:body
               completionHandler: ^(array[map['String', 'String']] output, NSError* error) {
                             if (output) {
@@ -3575,7 +3575,7 @@ namespace Example
 
             try
             {
-                // Get CRDs
+                // Deprecated Get CRDs
                 array[map['String', 'String']] result = apiInstance.integrationsCustomResourcesPost(body);
                 Debug.WriteLine(result);
             }
@@ -3634,7 +3634,7 @@ api_instance = swagger_client.IntegrationResourceApi()
 body =  # DeploymentResourceYamlRequest |  (optional)
 
 try: 
-    # Get CRDs
+    # Deprecated Get CRDs
     api_response = api_instance.integrations_custom_resources_post(body=body)
     pprint(api_response)
 except ApiException as e:
@@ -3754,7 +3754,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsGet-0" data-group="User" data-name="integrationsGet" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsGet</h1>
-                          <p>Get all Integrations</p>
+                          <p>Deprecated Get all Integrations</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3839,7 +3839,7 @@ public class IntegrationResourceApiExample {
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Get all Integrations
+// Deprecated Get all Integrations
 [apiInstance integrationsGetWith:namespace
               completionHandler: ^(array[Integration] output, NSError* error) {
                             if (output) {
@@ -3892,7 +3892,7 @@ namespace Example
 
             try
             {
-                // Get all Integrations
+                // Deprecated Get all Integrations
                 array[Integration] result = apiInstance.integrationsGet(namespace);
                 Debug.WriteLine(result);
             }
@@ -3951,7 +3951,7 @@ api_instance = swagger_client.IntegrationResourceApi()
 namespace = namespace_example # String | Namespace of the cluster where the integrations are running. (optional)
 
 try: 
-    # Get all Integrations
+    # Deprecated Get all Integrations
     api_response = api_instance.integrations_get(namespace=namespace)
     pprint(api_response)
 except ApiException as e:
@@ -4052,7 +4052,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsNameDelete-0" data-group="User" data-name="integrationsNameDelete" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsNameDelete</h1>
-                          <p>Stop/Remove integration</p>
+                          <p>Deprecated Stop/Remove integration</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4140,7 +4140,7 @@ String *namespace = namespace_example; // Namespace of the cluster where the int
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Stop/Remove integration
+// Deprecated Stop/Remove integration
 [apiInstance integrationsNameDeleteWith:name
     namespace:namespace
               completionHandler: ^('Boolean' output, NSError* error) {
@@ -4196,7 +4196,7 @@ namespace Example
 
             try
             {
-                // Stop/Remove integration
+                // Deprecated Stop/Remove integration
                 'Boolean' result = apiInstance.integrationsNameDelete(name, namespace);
                 Debug.WriteLine(result);
             }
@@ -4258,7 +4258,7 @@ name = name_example # String | Name of the integration to stop.
 namespace = namespace_example # String | Namespace of the cluster where the integration is running. (optional)
 
 try: 
-    # Stop/Remove integration
+    # Deprecated Stop/Remove integration
     api_response = api_instance.integrations_name_delete(name, namespace=namespace)
     pprint(api_response)
 except ApiException as e:
@@ -4385,7 +4385,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsNameLogsGet-0" data-group="User" data-name="integrationsNameLogsGet" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsNameLogsGet</h1>
-                          <p>Get logs</p>
+                          <p>Deprecated Get logs</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4476,7 +4476,7 @@ String *namespace = namespace_example; // Namespace of the cluster where the int
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Get logs
+// Deprecated Get logs
 [apiInstance integrationsNameLogsGetWith:name
     lines:lines
     namespace:namespace
@@ -4535,7 +4535,7 @@ namespace Example
 
             try
             {
-                // Get logs
+                // Deprecated Get logs
                 'String' result = apiInstance.integrationsNameLogsGet(name, lines, namespace);
                 Debug.WriteLine(result);
             }
@@ -4600,7 +4600,7 @@ lines = 56 # Integer | Number of last N lines to be retrieved. (optional)
 namespace = namespace_example # String | Namespace of the cluster where the integration is running. (optional)
 
 try: 
-    # Get logs
+    # Deprecated Get logs
     api_response = api_instance.integrations_name_logs_get(name, lines=lines, namespace=namespace)
     pprint(api_response)
 except ApiException as e:
@@ -4749,7 +4749,7 @@ except ApiException as e:
                       <article id="api-IntegrationResource-integrationsPost-0" data-group="User" data-name="integrationsPost" data-version="0">
                         <div class="pull-left">
                           <h1>integrationsPost</h1>
-                          <p>Start integration</p>
+                          <p>Deprecated Start integration</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4844,7 +4844,7 @@ String *type = type_example; // Type of integration. For example: 'Kamelet Bindi
 
 IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
-// Start integration
+// Deprecated Start integration
 [apiInstance integrationsPostWith:body
     dsl:dsl
     namespace:namespace
@@ -4906,7 +4906,7 @@ namespace Example
 
             try
             {
-                // Start integration
+                // Deprecated Start integration
                 'String' result = apiInstance.integrationsPost(body, dsl, namespace, type);
                 Debug.WriteLine(result);
             }
@@ -4974,7 +4974,7 @@ namespace = namespace_example # String | Namespace of the cluster where we want 
 type = type_example # String | Type of integration. For example: 'Kamelet Binding'. (optional)
 
 try: 
-    # Start integration
+    # Deprecated Start integration
     api_response = api_instance.integrations_post(body=body, dsl=dsl, namespace=namespace, type=type)
     pprint(api_response)
 except ApiException as e:
@@ -5515,12 +5515,12 @@ except ApiException as e:
                       <article id="api-LanguageResource-languagesGet-0" data-group="User" data-name="languagesGet" data-version="0">
                         <div class="pull-left">
                           <h1>languagesGet</h1>
-                          <p>Get Languages</p>
+                          <p>Deprecated Get Languages</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Returns a list of all potential supported languages.</p>
+                        <p class="marked">Returns a list of all potential supported languages</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/languages</span></code></pre>
@@ -5597,7 +5597,7 @@ public class LanguageResourceApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 LanguageResourceApi *apiInstance = [[LanguageResourceApi alloc] init];
 
-// Get Languages
+// Deprecated Get Languages
 [apiInstance languagesGetWithCompletionHandler: 
               ^(array[map['String', 'String']] output, NSError* error) {
                             if (output) {
@@ -5646,7 +5646,7 @@ namespace Example
 
             try
             {
-                // Get Languages
+                // Deprecated Get Languages
                 array[map['String', 'String']] result = apiInstance.languagesGet();
                 Debug.WriteLine(result);
             }
@@ -5702,7 +5702,7 @@ from pprint import pprint
 api_instance = swagger_client.LanguageResourceApi()
 
 try: 
-    # Get Languages
+    # Deprecated Get Languages
     api_response = api_instance.languages_get()
     pprint(api_response)
 except ApiException as e:
@@ -5783,7 +5783,7 @@ except ApiException as e:
                       <article id="api-StepResource-stepGet-0" data-group="User" data-name="stepGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepGet</h1>
-                          <p>Get all steps</p>
+                          <p>Deprecated Get all steps</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -5874,7 +5874,7 @@ String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,EN
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
-// Get all steps
+// Deprecated Get all steps
 [apiInstance stepGetWith:dsl
     kind:kind
     type:type
@@ -5933,7 +5933,7 @@ namespace Example
 
             try
             {
-                // Get all steps
+                // Deprecated Get all steps
                 array[Step] result = apiInstance.stepGet(dsl, kind, type);
                 Debug.WriteLine(result);
             }
@@ -5998,7 +5998,7 @@ kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kame
 type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 try: 
-    # Get all steps
+    # Deprecated Get all steps
     api_response = api_instance.step_get(dsl=dsl, kind=kind, type=type)
     pprint(api_response)
 except ApiException as e:
@@ -6137,7 +6137,7 @@ except ApiException as e:
                       <article id="api-StepResource-stepIdIdGet-0" data-group="User" data-name="stepIdIdGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepIdIdGet</h1>
-                          <p>Get step by ID</p>
+                          <p>Deprecated Get step by ID</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -6222,7 +6222,7 @@ public class StepResourceApiExample {
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
-// Get step by ID
+// Deprecated Get step by ID
 [apiInstance stepIdIdGetWith:id
               completionHandler: ^(Step output, NSError* error) {
                             if (output) {
@@ -6274,7 +6274,7 @@ namespace Example
 
             try
             {
-                // Get step by ID
+                // Deprecated Get step by ID
                 Step result = apiInstance.stepIdIdGet(id);
                 Debug.WriteLine(result);
             }
@@ -6333,7 +6333,7 @@ api_instance = swagger_client.StepResourceApi()
 id = id_example # String | Identifier of the step we want to retrieve.
 
 try: 
-    # Get step by ID
+    # Deprecated Get step by ID
     api_response = api_instance.step_id_id_get(id)
     pprint(api_response)
 except ApiException as e:
@@ -6433,7 +6433,7 @@ except ApiException as e:
                       <article id="api-StepResource-stepIntegrationTypeIntegrationTypeGet-0" data-group="User" data-name="stepIntegrationTypeIntegrationTypeGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepIntegrationTypeIntegrationTypeGet</h1>
-                          <p>Get step by integration type</p>
+                          <p>Deprecated Get step by integration type</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -6518,7 +6518,7 @@ public class StepResourceApiExample {
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
-// Get step by integration type
+// Deprecated Get step by integration type
 [apiInstance stepIntegrationTypeIntegrationTypeGetWith:integrationType
               completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -6570,7 +6570,7 @@ namespace Example
 
             try
             {
-                // Get step by integration type
+                // Deprecated Get step by integration type
                 array[Step] result = apiInstance.stepIntegrationTypeIntegrationTypeGet(integrationType);
                 Debug.WriteLine(result);
             }
@@ -6629,7 +6629,7 @@ api_instance = swagger_client.StepResourceApi()
 integrationType = integrationType_example # String | Integration type we want to use.
 
 try: 
-    # Get step by integration type
+    # Deprecated Get step by integration type
     api_response = api_instance.step_integration_type_integration_type_get(integrationType)
     pprint(api_response)
 except ApiException as e:
@@ -6733,12 +6733,12 @@ except ApiException as e:
                       <article id="api-StepResource-stepKindKindGet-0" data-group="User" data-name="stepKindKindGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepKindKindGet</h1>
-                          <p>Get step by kind</p>
+                          <p>Deprecated Get step by kind</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Returns all the details of steps based on the kind. </p>
+                        <p class="marked">Returns all the details of steps based on the kind.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/step/kind/{kind}</span></code></pre>
@@ -6818,7 +6818,7 @@ public class StepResourceApiExample {
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
-// Get step by kind
+// Deprecated Get step by kind
 [apiInstance stepKindKindGetWith:kind
               completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -6870,7 +6870,7 @@ namespace Example
 
             try
             {
-                // Get step by kind
+                // Deprecated Get step by kind
                 array[Step] result = apiInstance.stepKindKindGet(kind);
                 Debug.WriteLine(result);
             }
@@ -6929,7 +6929,7 @@ api_instance = swagger_client.StepResourceApi()
 kind = kind_example # String | Kind of the steps we want to retrieve.
 
 try: 
-    # Get step by kind
+    # Deprecated Get step by kind
     api_response = api_instance.step_kind_kind_get(kind)
     pprint(api_response)
 except ApiException as e:
@@ -7033,7 +7033,7 @@ except ApiException as e:
                       <article id="api-StepResource-stepNameNameGet-0" data-group="User" data-name="stepNameNameGet" data-version="0">
                         <div class="pull-left">
                           <h1>stepNameNameGet</h1>
-                          <p>Get step by name</p>
+                          <p>Deprecated Get step by name</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -7118,7 +7118,7 @@ public class StepResourceApiExample {
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
-// Get step by name
+// Deprecated Get step by name
 [apiInstance stepNameNameGetWith:name
               completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -7170,7 +7170,7 @@ namespace Example
 
             try
             {
-                // Get step by name
+                // Deprecated Get step by name
                 array[Step] result = apiInstance.stepNameNameGet(name);
                 Debug.WriteLine(result);
             }
@@ -7229,7 +7229,7 @@ api_instance = swagger_client.StepResourceApi()
 name = name_example # String | Name of the steps we want to retrieve.
 
 try: 
-    # Get step by name
+    # Deprecated Get step by name
     api_response = api_instance.step_name_name_get(name)
     pprint(api_response)
 except ApiException as e:
@@ -8609,7 +8609,7 @@ except ApiException as e:
                       <article id="api-ViewDefinitionResource-viewdefinitionPost-0" data-group="User" data-name="viewdefinitionPost" data-version="0">
                         <div class="pull-left">
                           <h1>viewdefinitionPost</h1>
-                          <p>Get views based on steps</p>
+                          <p>Deprecated Get views based on steps</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -8698,7 +8698,7 @@ String *name = name_example; // Name of the integration (optional)
 
 ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
 
-// Get views based on steps
+// Deprecated Get views based on steps
 [apiInstance viewdefinitionPostWith:body
     name:name
               completionHandler: ^(ViewDefinitionResourceResponse output, NSError* error) {
@@ -8754,7 +8754,7 @@ namespace Example
 
             try
             {
-                // Get views based on steps
+                // Deprecated Get views based on steps
                 ViewDefinitionResourceResponse result = apiInstance.viewdefinitionPost(body, name);
                 Debug.WriteLine(result);
             }
@@ -8816,7 +8816,7 @@ body =  # String |  (optional)
 name = name_example # String | Name of the integration (optional)
 
 try: 
-    # Get views based on steps
+    # Deprecated Get views based on steps
     api_response = api_instance.viewdefinition_post(body=body, name=name)
     pprint(api_response)
 except ApiException as e:
