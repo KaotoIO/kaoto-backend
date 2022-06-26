@@ -706,6 +706,29 @@
     }
   }
 };
+            defs["Capabilities"] = {
+  "type" : "object",
+  "properties" : {
+    "dsls" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      }
+    },
+    "dSLs" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+};
             defs["ConstraintOperation"] = {
   "type" : "string",
   "enum" : [ "CONTAINS_STEP_IDENTIFIER", "CONTAINS_STEP_NAME", "CONTAINS_STEP_TYPE", "SIZE_EQUALS", "SIZE_GREATER_THAN", "SIZE_SMALLER_THAN" ]
@@ -732,6 +755,29 @@
     },
     "name" : {
       "type" : "string"
+    }
+  }
+};
+            defs["Integration1"] = {
+  "type" : "object",
+  "properties" : {
+    "steps" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Step"
+      }
+    },
+    "metadata" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "object"
+      }
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter"
+      }
     }
   }
 };
@@ -934,6 +980,26 @@
             -->
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
+                  <li class="nav-header" data-group="CapabilitiesResource"><a href="#api-CapabilitiesResource">API Methods - CapabilitiesResource</a></li>
+                    <li data-group="CapabilitiesResource" data-name="v1CapabilitiesGet" class="">
+                      <a href="#api-CapabilitiesResource-v1CapabilitiesGet">v1CapabilitiesGet</a>
+                    </li>
+                  <li class="nav-header" data-group="DeploymentsResource"><a href="#api-DeploymentsResource">API Methods - DeploymentsResource</a></li>
+                    <li data-group="DeploymentsResource" data-name="v1DeploymentsGet" class="">
+                      <a href="#api-DeploymentsResource-v1DeploymentsGet">v1DeploymentsGet</a>
+                    </li>
+                    <li data-group="DeploymentsResource" data-name="v1DeploymentsNameDelete" class="">
+                      <a href="#api-DeploymentsResource-v1DeploymentsNameDelete">v1DeploymentsNameDelete</a>
+                    </li>
+                    <li data-group="DeploymentsResource" data-name="v1DeploymentsNameGet" class="">
+                      <a href="#api-DeploymentsResource-v1DeploymentsNameGet">v1DeploymentsNameGet</a>
+                    </li>
+                    <li data-group="DeploymentsResource" data-name="v1DeploymentsNameLogsGet" class="">
+                      <a href="#api-DeploymentsResource-v1DeploymentsNameLogsGet">v1DeploymentsNameLogsGet</a>
+                    </li>
+                    <li data-group="DeploymentsResource" data-name="v1DeploymentsNamePost" class="">
+                      <a href="#api-DeploymentsResource-v1DeploymentsNamePost">v1DeploymentsNamePost</a>
+                    </li>
                   <li class="nav-header" data-group="IntegrationResource"><a href="#api-IntegrationResource">API Methods - IntegrationResource</a></li>
                     <li data-group="IntegrationResource" data-name="integrationsCustomResourcePost" class="">
                       <a href="#api-IntegrationResource-integrationsCustomResourcePost">integrationsCustomResourcePost</a>
@@ -952,6 +1018,10 @@
                     </li>
                     <li data-group="IntegrationResource" data-name="integrationsPost" class="">
                       <a href="#api-IntegrationResource-integrationsPost">integrationsPost</a>
+                    </li>
+                  <li class="nav-header" data-group="IntegrationsResource"><a href="#api-IntegrationsResource">API Methods - IntegrationsResource</a></li>
+                    <li data-group="IntegrationsResource" data-name="v1IntegrationsPost" class="">
+                      <a href="#api-IntegrationsResource-v1IntegrationsPost">v1IntegrationsPost</a>
                     </li>
                   <li class="nav-header" data-group="LanguageResource"><a href="#api-LanguageResource">API Methods - LanguageResource</a></li>
                     <li data-group="LanguageResource" data-name="languagesGet" class="">
@@ -973,7 +1043,19 @@
                     <li data-group="StepResource" data-name="stepNameNameGet" class="">
                       <a href="#api-StepResource-stepNameNameGet">stepNameNameGet</a>
                     </li>
+                    <li data-group="StepResource" data-name="v1StepsGet" class="">
+                      <a href="#api-StepResource-v1StepsGet">v1StepsGet</a>
+                    </li>
+                    <li data-group="StepResource" data-name="v1StepsIdIdGet" class="">
+                      <a href="#api-StepResource-v1StepsIdIdGet">v1StepsIdIdGet</a>
+                    </li>
+                    <li data-group="StepResource" data-name="v1StepsNameNameGet" class="">
+                      <a href="#api-StepResource-v1StepsNameNameGet">v1StepsNameNameGet</a>
+                    </li>
                   <li class="nav-header" data-group="ViewDefinitionResource"><a href="#api-ViewDefinitionResource">API Methods - ViewDefinitionResource</a></li>
+                    <li data-group="ViewDefinitionResource" data-name="v1ViewDefinitionsPost" class="">
+                      <a href="#api-ViewDefinitionResource-v1ViewDefinitionsPost">v1ViewDefinitionsPost</a>
+                    </li>
                     <li data-group="ViewDefinitionResource" data-name="viewdefinitionPost" class="">
                       <a href="#api-ViewDefinitionResource-viewdefinitionPost">viewdefinitionPost</a>
                     </li>
@@ -996,6 +1078,1983 @@
           </div>
         </div>
         <div id="sections">
+                <section id="api-CapabilitiesResource">
+                  <h1>CapabilitiesResource</h1>
+                    <div id="api-CapabilitiesResource-v1CapabilitiesGet">
+                      <article id="api-CapabilitiesResource-v1CapabilitiesGet-0" data-group="User" data-name="v1CapabilitiesGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1CapabilitiesGet</h1>
+                          <p>Get Languages</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns a list of all potential supported languages.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/capabilities</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-CapabilitiesResource-v1CapabilitiesGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//v1/capabilities"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.CapabilitiesResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class CapabilitiesResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        CapabilitiesResourceApi apiInstance = new CapabilitiesResourceApi();
+        try {
+            Capabilities result = apiInstance.v1CapabilitiesGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CapabilitiesResourceApi#v1CapabilitiesGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.CapabilitiesResourceApi;
+
+public class CapabilitiesResourceApiExample {
+
+    public static void main(String[] args) {
+        CapabilitiesResourceApi apiInstance = new CapabilitiesResourceApi();
+        try {
+            Capabilities result = apiInstance.v1CapabilitiesGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CapabilitiesResourceApi#v1CapabilitiesGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+CapabilitiesResourceApi *apiInstance = [[CapabilitiesResourceApi alloc] init];
+
+// Get Languages
+[apiInstance v1CapabilitiesGetWithCompletionHandler: 
+              ^(Capabilities output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.CapabilitiesResourceApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1CapabilitiesGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1CapabilitiesGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new CapabilitiesResourceApi();
+
+            try
+            {
+                // Get Languages
+                Capabilities result = apiInstance.v1CapabilitiesGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling CapabilitiesResourceApi.v1CapabilitiesGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiCapabilitiesResourceApi();
+
+try {
+    $result = $api_instance->v1CapabilitiesGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling CapabilitiesResourceApi->v1CapabilitiesGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::CapabilitiesResourceApi;
+
+my $api_instance = WWW::SwaggerClient::CapabilitiesResourceApi->new();
+
+eval { 
+    my $result = $api_instance->v1CapabilitiesGet();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling CapabilitiesResourceApi->v1CapabilitiesGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.CapabilitiesResourceApi()
+
+try: 
+    # Get Languages
+    api_response = api_instance.v1_capabilities_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling CapabilitiesResourceApi->v1CapabilitiesGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1CapabilitiesGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1CapabilitiesGet-200-schema">
+                                  <div id='responses-v1CapabilitiesGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Capabilities"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1CapabilitiesGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1CapabilitiesGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1CapabilitiesGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                  </section>
+                <section id="api-DeploymentsResource">
+                  <h1>DeploymentsResource</h1>
+                    <div id="api-DeploymentsResource-v1DeploymentsGet">
+                      <article id="api-DeploymentsResource-v1DeploymentsGet-0" data-group="User" data-name="v1DeploymentsGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1DeploymentsGet</h1>
+                          <p>Get all Resources</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the resources on the cluster.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/deployments</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//v1/deployments?namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DeploymentsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
+        try {
+            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentsResourceApi;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
+        try {
+            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *namespace = namespace_example; // Namespace of the cluster where the resources are running. (optional)
+
+DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
+
+// Get all Resources
+[apiInstance v1DeploymentsGetWith:namespace
+              completionHandler: ^(array[Integration] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.DeploymentsResourceApi()
+var opts = { 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the resources are running.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1DeploymentsGet(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1DeploymentsGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DeploymentsResourceApi();
+            var namespace = namespace_example;  // String | Namespace of the cluster where the resources are running. (optional) 
+
+            try
+            {
+                // Get all Resources
+                array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DeploymentsResourceApi.v1DeploymentsGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
+$namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
+
+try {
+    $result = $api_instance->v1DeploymentsGet($namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DeploymentsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
+my $namespace = namespace_example; # String | Namespace of the cluster where the resources are running.
+
+eval { 
+    my $result = $api_instance->v1DeploymentsGet(namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DeploymentsResourceApi->v1DeploymentsGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DeploymentsResourceApi()
+namespace = namespace_example # String | Namespace of the cluster where the resources are running. (optional)
+
+try: 
+    # Get all Resources
+    api_response = api_instance.v1_deployments_get(namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DeploymentsResourceApi->v1DeploymentsGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsGet_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the resources are running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1DeploymentsGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1DeploymentsGet-200-schema">
+                                  <div id='responses-v1DeploymentsGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Integration"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1DeploymentsGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1DeploymentsGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1DeploymentsGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-DeploymentsResource-v1DeploymentsNameDelete">
+                      <article id="api-DeploymentsResource-v1DeploymentsNameDelete-0" data-group="User" data-name="v1DeploymentsNameDelete" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1DeploymentsNameDelete</h1>
+                          <p>Stop/Remove</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Remove the resource identified by name.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/v1/deployments/{name}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-java">Java</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameDelete-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+-H "Accept: application/json"\
+"//v1/deployments/{name}?namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DeploymentsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to stop.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentsResourceApi;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to stop.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to stop.
+String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
+
+DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
+
+// Stop/Remove
+[apiInstance v1DeploymentsNameDeleteWith:name
+    namespace:namespace
+              completionHandler: ^('Boolean' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.DeploymentsResourceApi()
+var name = name_example; // {{String}} Name of the resource to stop.
+var opts = { 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1DeploymentsNameDelete(name, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1DeploymentsNameDeleteExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DeploymentsResourceApi();
+            var name = name_example;  // String | Name of the resource to stop.
+            var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
+
+            try
+            {
+                // Stop/Remove
+                'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DeploymentsResourceApi.v1DeploymentsNameDelete: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
+$name = name_example; // String | Name of the resource to stop.
+$namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+
+try {
+    $result = $api_instance->v1DeploymentsNameDelete($name, $namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameDelete: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DeploymentsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
+my $name = name_example; # String | Name of the resource to stop.
+my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
+
+eval { 
+    my $result = $api_instance->v1DeploymentsNameDelete(name => $name, namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DeploymentsResourceApi->v1DeploymentsNameDelete: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DeploymentsResourceApi()
+name = name_example # String | Name of the resource to stop.
+namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
+
+try: 
+    # Stop/Remove
+    api_response = api_instance.v1_deployments_name_delete(name, namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameDelete: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1DeploymentsNameDelete_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the resource to stop.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameDelete_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the resource is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1DeploymentsNameDelete-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1DeploymentsNameDelete-200-schema">
+                                  <div id='responses-v1DeploymentsNameDelete-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "boolean",
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1DeploymentsNameDelete-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1DeploymentsNameDelete-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1DeploymentsNameDelete-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-DeploymentsResource-v1DeploymentsNameGet">
+                      <article id="api-DeploymentsResource-v1DeploymentsNameGet-0" data-group="User" data-name="v1DeploymentsNameGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1DeploymentsNameGet</h1>
+                          <p>Get CRD</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns the custom resource identified by name.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/deployments/{name}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: text/yaml"\
+"//v1/deployments/{name}?namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DeploymentsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to get.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentsResourceApi;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to get.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to get.
+String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
+
+DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
+
+// Get CRD
+[apiInstance v1DeploymentsNameGetWith:name
+    namespace:namespace
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.DeploymentsResourceApi()
+var name = name_example; // {{String}} Name of the resource to get.
+var opts = { 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1DeploymentsNameGet(name, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1DeploymentsNameGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DeploymentsResourceApi();
+            var name = name_example;  // String | Name of the resource to get.
+            var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
+
+            try
+            {
+                // Get CRD
+                'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DeploymentsResourceApi.v1DeploymentsNameGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
+$name = name_example; // String | Name of the resource to get.
+$namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+
+try {
+    $result = $api_instance->v1DeploymentsNameGet($name, $namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DeploymentsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
+my $name = name_example; # String | Name of the resource to get.
+my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
+
+eval { 
+    my $result = $api_instance->v1DeploymentsNameGet(name => $name, namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DeploymentsResourceApi->v1DeploymentsNameGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DeploymentsResourceApi()
+name = name_example # String | Name of the resource to get.
+namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
+
+try: 
+    # Get CRD
+    api_response = api_instance.v1_deployments_name_get(name, namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1DeploymentsNameGet_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the resource to get.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameGet_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the resource is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1DeploymentsNameGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1DeploymentsNameGet-200-schema">
+                                  <div id='responses-v1DeploymentsNameGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/yaml"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/yaml"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1DeploymentsNameGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1DeploymentsNameGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1DeploymentsNameGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-DeploymentsResource-v1DeploymentsNameLogsGet">
+                      <article id="api-DeploymentsResource-v1DeploymentsNameLogsGet-0" data-group="User" data-name="v1DeploymentsNameLogsGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1DeploymentsNameLogsGet</h1>
+                          <p>Get logs</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get the resource&#x27;s log.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/deployments/{name}/logs</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: text/plain"\
+"//v1/deployments/{name}/logs?lines=&namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DeploymentsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource of which logs should be retrieved.
+        Integer lines = 56; // Integer | Number of last N lines to be retrieved.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentsResourceApi;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource of which logs should be retrieved.
+        Integer lines = 56; // Integer | Number of last N lines to be retrieved.
+        String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        try {
+            'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource of which logs should be retrieved.
+Integer *lines = 56; // Number of last N lines to be retrieved. (optional)
+String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
+
+DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
+
+// Get logs
+[apiInstance v1DeploymentsNameLogsGetWith:name
+    lines:lines
+    namespace:namespace
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.DeploymentsResourceApi()
+var name = name_example; // {{String}} Name of the resource of which logs should be retrieved.
+var opts = { 
+  'lines': 56, // {{Integer}} Number of last N lines to be retrieved.
+  'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1DeploymentsNameLogsGet(name, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1DeploymentsNameLogsGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DeploymentsResourceApi();
+            var name = name_example;  // String | Name of the resource of which logs should be retrieved.
+            var lines = 56;  // Integer | Number of last N lines to be retrieved. (optional) 
+            var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
+
+            try
+            {
+                // Get logs
+                'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DeploymentsResourceApi.v1DeploymentsNameLogsGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
+$name = name_example; // String | Name of the resource of which logs should be retrieved.
+$lines = 56; // Integer | Number of last N lines to be retrieved.
+$namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+
+try {
+    $result = $api_instance->v1DeploymentsNameLogsGet($name, $lines, $namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameLogsGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DeploymentsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
+my $name = name_example; # String | Name of the resource of which logs should be retrieved.
+my $lines = 56; # Integer | Number of last N lines to be retrieved.
+my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
+
+eval { 
+    my $result = $api_instance->v1DeploymentsNameLogsGet(name => $name, lines => $lines, namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DeploymentsResourceApi->v1DeploymentsNameLogsGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DeploymentsResourceApi()
+name = name_example # String | Name of the resource of which logs should be retrieved.
+lines = 56 # Integer | Number of last N lines to be retrieved. (optional)
+namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
+
+try: 
+    # Get logs
+    api_response = api_instance.v1_deployments_name_logs_get(name, lines=lines, namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameLogsGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1DeploymentsNameLogsGet_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the resource of which logs should be retrieved.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">lines</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameLogsGet_lines">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Integer
+                                                </span>
+                                                    <span class="format">
+                                                        (int32)
+                                                    </span>
+                                
+                                                    <div class="inner description">
+                                                        Number of last N lines to be retrieved.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameLogsGet_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where the resource is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1DeploymentsNameLogsGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1DeploymentsNameLogsGet-200-schema">
+                                  <div id='responses-v1DeploymentsNameLogsGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/plain" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/plain"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/plain"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1DeploymentsNameLogsGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1DeploymentsNameLogsGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1DeploymentsNameLogsGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-DeploymentsResource-v1DeploymentsNamePost">
+                      <article id="api-DeploymentsResource-v1DeploymentsNamePost-0" data-group="User" data-name="v1DeploymentsNamePost" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1DeploymentsNamePost</h1>
+                          <p>Start</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Deploy and start the given CRD on the cluster. Deployment will be done as a custom resource.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/v1/deployments/{name}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-DeploymentsResource-v1DeploymentsNamePost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: text/plain"\
+-H "Content-Type: text/yaml"\
+"//v1/deployments/{name}?namespace="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DeploymentsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to start.
+        String body = ; // String | 
+        String namespace = namespace_example; // String | Namespace of the cluster where we want to deploy it.
+        try {
+            'String' result = apiInstance.v1DeploymentsNamePost(name, body, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNamePost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DeploymentsResourceApi;
+
+public class DeploymentsResourceApiExample {
+
+    public static void main(String[] args) {
+        DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
+        String name = name_example; // String | Name of the resource to start.
+        String body = ; // String | 
+        String namespace = namespace_example; // String | Namespace of the cluster where we want to deploy it.
+        try {
+            'String' result = apiInstance.v1DeploymentsNamePost(name, body, namespace);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNamePost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to start.
+String *body = ; //  (optional)
+String *namespace = namespace_example; // Namespace of the cluster where we want to deploy it. (optional)
+
+DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
+
+// Start
+[apiInstance v1DeploymentsNamePostWith:name
+    body:body
+    namespace:namespace
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.DeploymentsResourceApi()
+var name = name_example; // {{String}} Name of the resource to start.
+var opts = { 
+  'body':  // {{String}} 
+  'namespace': namespace_example // {{String}} Namespace of the cluster where we want to deploy it.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1DeploymentsNamePost(name, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1DeploymentsNamePostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DeploymentsResourceApi();
+            var name = name_example;  // String | Name of the resource to start.
+            var body = new String(); // String |  (optional) 
+            var namespace = namespace_example;  // String | Namespace of the cluster where we want to deploy it. (optional) 
+
+            try
+            {
+                // Start
+                'String' result = apiInstance.v1DeploymentsNamePost(name, body, namespace);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DeploymentsResourceApi.v1DeploymentsNamePost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
+$name = name_example; // String | Name of the resource to start.
+$body = ; // String | 
+$namespace = namespace_example; // String | Namespace of the cluster where we want to deploy it.
+
+try {
+    $result = $api_instance->v1DeploymentsNamePost($name, $body, $namespace);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNamePost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DeploymentsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
+my $name = name_example; # String | Name of the resource to start.
+my $body = WWW::SwaggerClient::Object::String->new(); # String | 
+my $namespace = namespace_example; # String | Namespace of the cluster where we want to deploy it.
+
+eval { 
+    my $result = $api_instance->v1DeploymentsNamePost(name => $name, body => $body, namespace => $namespace);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DeploymentsResourceApi->v1DeploymentsNamePost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DeploymentsResourceApi()
+name = name_example # String | Name of the resource to start.
+body =  # String |  (optional)
+namespace = namespace_example # String | Namespace of the cluster where we want to deploy it. (optional)
+
+try: 
+    # Start
+    api_response = api_instance.v1_deployments_name_post(name, body=body, namespace=namespace)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DeploymentsResourceApi->v1DeploymentsNamePost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1DeploymentsNamePost_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the resource to start.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["text/yaml"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_v1DeploymentsNamePost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_v1DeploymentsNamePost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">namespace</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNamePost_namespace">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Namespace of the cluster where we want to deploy it.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1DeploymentsNamePost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1DeploymentsNamePost-200-schema">
+                                  <div id='responses-v1DeploymentsNamePost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/plain" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/plain"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/plain"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1DeploymentsNamePost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1DeploymentsNamePost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1DeploymentsNamePost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                  </section>
                 <section id="api-IntegrationResource">
                   <h1>IntegrationResource</h1>
                     <div id="api-IntegrationResource-integrationsCustomResourcePost">
@@ -3090,6 +5149,366 @@ except ApiException as e:
                       </div>
                       <hr>
                   </section>
+                <section id="api-IntegrationsResource">
+                  <h1>IntegrationsResource</h1>
+                    <div id="api-IntegrationsResource-v1IntegrationsPost">
+                      <article id="api-IntegrationsResource-v1IntegrationsPost-0" data-group="User" data-name="v1IntegrationsPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1IntegrationsPost</h1>
+                          <p>Get Integration Object</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Given the associated custom resource definition, returns the JSON object. This is an idempotent operation.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/v1/integrations</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v1IntegrationsPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationsResource-v1IntegrationsPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: text/yaml,application/json"\
+-H "Content-Type: application/json,text/yaml"\
+"//v1/integrations?dsl="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
+        Integration1 body = ; // Integration1 | 
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        try {
+            'String' result = apiInstance.v1IntegrationsPost(body, dsl);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationsResourceApi;
+
+public class IntegrationsResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
+        Integration1 body = ; // Integration1 | 
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        try {
+            'String' result = apiInstance.v1IntegrationsPost(body, dsl);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Integration1 *body = ; //  (optional)
+String *dsl = dsl_example; // DSL to use. For example: 'Kamelet Binding'. (optional)
+
+IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
+
+// Get Integration Object
+[apiInstance v1IntegrationsPostWith:body
+    dsl:dsl
+              completionHandler: ^('String' output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.IntegrationsResourceApi()
+var opts = { 
+  'body':  // {{Integration1}} 
+  'dsl': dsl_example // {{String}} DSL to use. For example: 'Kamelet Binding'.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1IntegrationsPost(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1IntegrationsPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationsResourceApi();
+            var body = new Integration1(); // Integration1 |  (optional) 
+            var dsl = dsl_example;  // String | DSL to use. For example: 'Kamelet Binding'. (optional) 
+
+            try
+            {
+                // Get Integration Object
+                'String' result = apiInstance.v1IntegrationsPost(body, dsl);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationsResourceApi.v1IntegrationsPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationsResourceApi();
+$body = ; // Integration1 | 
+$dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+
+try {
+    $result = $api_instance->v1IntegrationsPost($body, $dsl);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationsResourceApi->v1IntegrationsPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationsResourceApi->new();
+my $body = WWW::SwaggerClient::Object::Integration1->new(); # Integration1 | 
+my $dsl = dsl_example; # String | DSL to use. For example: 'Kamelet Binding'.
+
+eval { 
+    my $result = $api_instance->v1IntegrationsPost(body => $body, dsl => $dsl);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationsResourceApi->v1IntegrationsPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationsResourceApi()
+body =  # Integration1 |  (optional)
+dsl = dsl_example # String | DSL to use. For example: 'Kamelet Binding'. (optional)
+
+try: 
+    # Get Integration Object
+    api_response = api_instance.v1_integrations_post(body=body, dsl=dsl)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationsResourceApi->v1IntegrationsPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Integration1"
+      }
+    },
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_v1IntegrationsPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_v1IntegrationsPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1IntegrationsPost_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        DSL to use. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1IntegrationsPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1IntegrationsPost-200-schema">
+                                  <div id='responses-v1IntegrationsPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string",
+        "x-content-type" : "text/yaml"
+      }
+    },
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Integration1"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["text/yaml"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1IntegrationsPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1IntegrationsPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1IntegrationsPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                  </section>
                 <section id="api-LanguageResource">
                   <h1>LanguageResource</h1>
                     <div id="api-LanguageResource-languagesGet">
@@ -4910,9 +7329,1282 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-StepResource-v1StepsGet">
+                      <article id="api-StepResource-v1StepsGet-0" data-group="User" data-name="v1StepsGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1StepsGet</h1>
+                          <p>Get all steps</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the available steps that can be added to the integration.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/steps</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-StepResource-v1StepsGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-StepResource-v1StepsGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//v1/steps?dsl=&kind=&type="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StepResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        StepResourceApi apiInstance = new StepResourceApi();
+        String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+        String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
+        try {
+            array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StepResourceApi;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        StepResourceApi apiInstance = new StepResourceApi();
+        String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+        String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
+        try {
+            array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *dsl = dsl_example; // Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+String *kind = kind_example; // Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,END (optional)
+
+StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
+
+// Get all steps
+[apiInstance v1StepsGetWith:dsl
+    kind:kind
+    type:type
+              completionHandler: ^(array[Step] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.StepResourceApi()
+var opts = { 
+  'dsl': dsl_example, // {{String}} Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+  'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+  'type': type_example // {{String}} Filter by step type. Example: 'START' 'MIDDLE,END
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1StepsGet(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-StepResource-v1StepsGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1StepsGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new StepResourceApi();
+            var dsl = dsl_example;  // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
+            var kind = kind_example;  // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional) 
+            var type = type_example;  // String | Filter by step type. Example: 'START' 'MIDDLE,END (optional) 
+
+            try
+            {
+                // Get all steps
+                array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StepResourceApi.v1StepsGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiStepResourceApi();
+$dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+$kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+$type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
+
+try {
+    $result = $api_instance->v1StepsGet($dsl, $kind, $type);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StepResourceApi->v1StepsGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StepResourceApi;
+
+my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $dsl = dsl_example; # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+my $kind = kind_example; # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+my $type = type_example; # String | Filter by step type. Example: 'START' 'MIDDLE,END
+
+eval { 
+    my $result = $api_instance->v1StepsGet(dsl => $dsl, kind => $kind, type => $type);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StepResourceApi->v1StepsGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.StepResourceApi()
+dsl = dsl_example # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
+
+try: 
+    # Get all steps
+    api_response = api_instance.v1_steps_get(dsl=dsl, kind=kind, type=type)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StepResourceApi->v1StepsGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by Domain Specific Language (DSL). Examples: &#x27;KameletBinding&#x27; &#x27;KameletBinding,Kamelet&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">kind</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_kind">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by kind of step. Examples: &#x27;Kamelet&#x27; &#x27;Kamelet,KameletBinding&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Filter by step type. Example: &#x27;START&#x27; &#x27;MIDDLE,END
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1StepsGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1StepsGet-200-schema">
+                                  <div id='responses-v1StepsGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1StepsGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1StepsGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1StepsGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-StepResource-v1StepsIdIdGet">
+                      <article id="api-StepResource-v1StepsIdIdGet-0" data-group="User" data-name="v1StepsIdIdGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1StepsIdIdGet</h1>
+                          <p>Get step by ID</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the details of a specific step based on the identifier.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/steps/id/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-StepResource-v1StepsIdIdGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsIdIdGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-StepResource-v1StepsIdIdGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//v1/steps/id/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StepResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        StepResourceApi apiInstance = new StepResourceApi();
+        String id = id_example; // String | Identifier of the step we want to retrieve.
+        try {
+            Step result = apiInstance.v1StepsIdIdGet(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsIdIdGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StepResourceApi;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        StepResourceApi apiInstance = new StepResourceApi();
+        String id = id_example; // String | Identifier of the step we want to retrieve.
+        try {
+            Step result = apiInstance.v1StepsIdIdGet(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsIdIdGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *id = id_example; // Identifier of the step we want to retrieve.
+
+StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
+
+// Get step by ID
+[apiInstance v1StepsIdIdGetWith:id
+              completionHandler: ^(Step output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.StepResourceApi()
+var id = id_example; // {{String}} Identifier of the step we want to retrieve.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1StepsIdIdGet(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1StepsIdIdGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new StepResourceApi();
+            var id = id_example;  // String | Identifier of the step we want to retrieve.
+
+            try
+            {
+                // Get step by ID
+                Step result = apiInstance.v1StepsIdIdGet(id);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StepResourceApi.v1StepsIdIdGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiStepResourceApi();
+$id = id_example; // String | Identifier of the step we want to retrieve.
+
+try {
+    $result = $api_instance->v1StepsIdIdGet($id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StepResourceApi->v1StepsIdIdGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StepResourceApi;
+
+my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $id = id_example; # String | Identifier of the step we want to retrieve.
+
+eval { 
+    my $result = $api_instance->v1StepsIdIdGet(id => $id);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StepResourceApi->v1StepsIdIdGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.StepResourceApi()
+id = id_example # String | Identifier of the step we want to retrieve.
+
+try: 
+    # Get step by ID
+    api_response = api_instance.v1_steps_id_id_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StepResourceApi->v1StepsIdIdGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1StepsIdIdGet_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Identifier of the step we want to retrieve.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1StepsIdIdGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1StepsIdIdGet-200-schema">
+                                  <div id='responses-v1StepsIdIdGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Step"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1StepsIdIdGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1StepsIdIdGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1StepsIdIdGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-StepResource-v1StepsNameNameGet">
+                      <article id="api-StepResource-v1StepsNameNameGet-0" data-group="User" data-name="v1StepsNameNameGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1StepsNameNameGet</h1>
+                          <p>Get step by name</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns all the details of steps based on the name. There may be more than one step with the same name, although configuration of catalogs should try to avoid duplications.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/v1/steps/name/{name}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-StepResource-v1StepsNameNameGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-StepResource-v1StepsNameNameGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-StepResource-v1StepsNameNameGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//v1/steps/name/{name}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StepResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        StepResourceApi apiInstance = new StepResourceApi();
+        String name = name_example; // String | Name of the steps we want to retrieve.
+        try {
+            array[Step] result = apiInstance.v1StepsNameNameGet(name);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsNameNameGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StepResourceApi;
+
+public class StepResourceApiExample {
+
+    public static void main(String[] args) {
+        StepResourceApi apiInstance = new StepResourceApi();
+        String name = name_example; // String | Name of the steps we want to retrieve.
+        try {
+            array[Step] result = apiInstance.v1StepsNameNameGet(name);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StepResourceApi#v1StepsNameNameGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the steps we want to retrieve.
+
+StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
+
+// Get step by name
+[apiInstance v1StepsNameNameGetWith:name
+              completionHandler: ^(array[Step] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.StepResourceApi()
+var name = name_example; // {{String}} Name of the steps we want to retrieve.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1StepsNameNameGet(name, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1StepsNameNameGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new StepResourceApi();
+            var name = name_example;  // String | Name of the steps we want to retrieve.
+
+            try
+            {
+                // Get step by name
+                array[Step] result = apiInstance.v1StepsNameNameGet(name);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StepResourceApi.v1StepsNameNameGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiStepResourceApi();
+$name = name_example; // String | Name of the steps we want to retrieve.
+
+try {
+    $result = $api_instance->v1StepsNameNameGet($name);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StepResourceApi->v1StepsNameNameGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StepResourceApi;
+
+my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
+my $name = name_example; # String | Name of the steps we want to retrieve.
+
+eval { 
+    my $result = $api_instance->v1StepsNameNameGet(name => $name);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StepResourceApi->v1StepsNameNameGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.StepResourceApi()
+name = name_example # String | Name of the steps we want to retrieve.
+
+try: 
+    # Get step by name
+    api_response = api_instance.v1_steps_name_name_get(name)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StepResourceApi->v1StepsNameNameGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">name*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_v1StepsNameNameGet_name">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Name of the steps we want to retrieve.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1StepsNameNameGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1StepsNameNameGet-200-schema">
+                                  <div id='responses-v1StepsNameNameGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1StepsNameNameGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1StepsNameNameGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1StepsNameNameGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                   </section>
                 <section id="api-ViewDefinitionResource">
                   <h1>ViewDefinitionResource</h1>
+                    <div id="api-ViewDefinitionResource-v1ViewDefinitionsPost">
+                      <article id="api-ViewDefinitionResource-v1ViewDefinitionsPost-0" data-group="User" data-name="v1ViewDefinitionsPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>v1ViewDefinitionsPost</h1>
+                          <p>Get views based on steps</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get view definitions for a specific resource. This is an idempotent operation.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/v1/view-definitions</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: text/yaml,application/json"\
+"//v1/view-definitions"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.ViewDefinitionResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class ViewDefinitionResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
+        String body = ; // String | 
+        try {
+            array[ViewDefinition] result = apiInstance.v1ViewDefinitionsPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ViewDefinitionResourceApi#v1ViewDefinitionsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.ViewDefinitionResourceApi;
+
+public class ViewDefinitionResourceApiExample {
+
+    public static void main(String[] args) {
+        ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
+        String body = ; // String | 
+        try {
+            array[ViewDefinition] result = apiInstance.v1ViewDefinitionsPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ViewDefinitionResourceApi#v1ViewDefinitionsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *body = ; //  (optional)
+
+ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
+
+// Get views based on steps
+[apiInstance v1ViewDefinitionsPostWith:body
+              completionHandler: ^(array[ViewDefinition] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+
+var api = new ApiApi.ViewDefinitionResourceApi()
+var opts = { 
+  'body':  // {{String}} 
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v1ViewDefinitionsPost(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v1ViewDefinitionsPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new ViewDefinitionResourceApi();
+            var body = new String(); // String |  (optional) 
+
+            try
+            {
+                // Get views based on steps
+                array[ViewDefinition] result = apiInstance.v1ViewDefinitionsPost(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling ViewDefinitionResourceApi.v1ViewDefinitionsPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiViewDefinitionResourceApi();
+$body = ; // String | 
+
+try {
+    $result = $api_instance->v1ViewDefinitionsPost($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ViewDefinitionResourceApi->v1ViewDefinitionsPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::ViewDefinitionResourceApi;
+
+my $api_instance = WWW::SwaggerClient::ViewDefinitionResourceApi->new();
+my $body = WWW::SwaggerClient::Object::String->new(); # String | 
+
+eval { 
+    my $result = $api_instance->v1ViewDefinitionsPost(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling ViewDefinitionResourceApi->v1ViewDefinitionsPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.ViewDefinitionResourceApi()
+body =  # String |  (optional)
+
+try: 
+    # Get views based on steps
+    api_response = api_instance.v1_view_definitions_post(body=body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling ViewDefinitionResourceApi->v1ViewDefinitionsPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string"
+      }
+    },
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Step"
+        }
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["text/yaml"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_v1ViewDefinitionsPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_v1ViewDefinitionsPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v1ViewDefinitionsPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v1ViewDefinitionsPost-200-schema">
+                                  <div id='responses-v1ViewDefinitionsPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/ViewDefinition"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v1ViewDefinitionsPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v1ViewDefinitionsPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v1ViewDefinitionsPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-ViewDefinitionResource-viewdefinitionPost">
                       <article id="api-ViewDefinitionResource-viewdefinitionPost-0" data-group="User" data-name="viewdefinitionPost" data-version="0">
                         <div class="pull-left">
