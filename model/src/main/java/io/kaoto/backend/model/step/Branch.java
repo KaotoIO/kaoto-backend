@@ -25,12 +25,12 @@ public class Branch extends HashMap<String, Object> {
     public List<Step> getSteps() {
         this.computeIfAbsent(STEPS, k -> new LinkedList<Step>());
 
-        return ((List<Step>) this.get(STEPS));
+        return (List<Step>) this.get(STEPS);
     }
 
     public List<Parameter> getParameters() {
         this.computeIfAbsent(PARAMETERS, k -> new LinkedList<Parameter>());
 
-        return ((List<Parameter>) this.get(PARAMETERS));
+        return (List<Parameter>) this.get(PARAMETERS);
     }
 }

@@ -33,7 +33,6 @@ public abstract class Parameter<T> implements Cloneable {
     private String id;
     private boolean path = false;
     private T value;
-    private String type;
 
     //JSON schema
     private String title;
@@ -128,10 +127,6 @@ public abstract class Parameter<T> implements Cloneable {
      *  null
      */
     public abstract String getType();
-
-    public void setType(final String type) {
-        this.type = type;
-    }
 
     /*
      * 🐱property path: Boolean
