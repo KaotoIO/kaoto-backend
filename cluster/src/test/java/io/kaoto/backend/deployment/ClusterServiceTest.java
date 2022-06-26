@@ -48,7 +48,7 @@ class ClusterServiceTest {
         assertFalse(
                 clusterService.logs(ns, integration.getName(), 1).isEmpty());
 
-        clusterService.stop(integration, ns);
+        clusterService.stop(integration.getName(), ns);
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
     }
 

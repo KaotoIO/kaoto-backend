@@ -4,7 +4,6 @@ import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorServ
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -20,9 +19,6 @@ import java.util.Map;
  */
 @ApplicationScoped
 public class LanguageService {
-
-    private Logger log = Logger.getLogger(LanguageService.class);
-
 
     @ConfigProperty(name = "crd.default")
     private String crdDefault;
@@ -56,10 +52,9 @@ public class LanguageService {
             res.get(parser.identifier()).put("input", "true");
         }
 
-        if (null != crdDefault && !crdDefault.isEmpty()) {
-            if (res.containsKey(crdDefault)) {
-                res.get(crdDefault).put("default", "true");
-            }
+        if (null != crdDefault && !crdDefault.isEmpty()
+                && res.containsKey(crdDefault)) {
+            res.get(crdDefault).put("default", "true");
         }
 
         return res.values();

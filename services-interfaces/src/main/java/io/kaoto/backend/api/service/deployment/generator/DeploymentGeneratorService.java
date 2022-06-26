@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.deployment.generator;
 
+import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.List;
@@ -45,6 +46,15 @@ public interface DeploymentGeneratorService {
      * Check if the parser applies to the steps
      */
     boolean appliesTo(List<Step> steps);
+
+    /*
+     * 🐱method supportedCustomResources: List<Class>
+     *
+     * Returns the Java model classes that extend CustomResource and that are
+     *  the types of custom resources supported in the cluster.
+     */
+    List<Class<? extends CustomResource>> supportedCustomResources();
+
 
     /*
      * 🐱method getKinds: String[]

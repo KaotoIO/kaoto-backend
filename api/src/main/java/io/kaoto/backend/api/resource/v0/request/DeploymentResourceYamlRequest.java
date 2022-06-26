@@ -7,6 +7,7 @@ import java.util.Arrays;
 /**
  * 🐱miniclass DeploymentResourceYamlRequest (DeploymentResource)
  */
+@Deprecated
 public class DeploymentResourceYamlRequest {
 
     /*

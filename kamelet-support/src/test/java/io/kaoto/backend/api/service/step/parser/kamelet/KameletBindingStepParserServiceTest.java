@@ -55,7 +55,7 @@ class KameletBindingStepParserServiceTest {
 
     @Test
     void parse() {
-        List<Step> steps = service.parse(binding);
+        List<Step> steps = service.deepParse(binding).getSteps();
         assertNotNull(steps);
         assertEquals(3, steps.size());
 
@@ -70,7 +70,7 @@ class KameletBindingStepParserServiceTest {
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "knative-binding.yaml")
                         .toURI()));
-        List<Step> steps = service.parse(binding);
+        List<Step> steps = service.deepParse(binding).getSteps();
         assertNotNull(steps);
         assertEquals(2, steps.size());
 

@@ -22,6 +22,7 @@ import java.util.Map;
  */
 @Path("/languages")
 @ApplicationScoped
+@Deprecated
 public class LanguageResource {
 
     private Logger log = Logger.getLogger(LanguageResource.class);
@@ -41,9 +42,9 @@ public class LanguageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
-    @Operation(summary = "Get Languages",
-            description = "Returns a list of all potential supported "
-                    + "languages.")
+    @Operation(summary = "Deprecated Get Languages",
+            description = "Returns a list of all potential supported languages",
+            deprecated = true)
     public Collection<Map<String, String>> getAll() {
         return languageService.getAll();
     }

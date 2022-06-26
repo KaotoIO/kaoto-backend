@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
+import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -10,8 +11,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,19 +29,7 @@ public class KameletDeploymentGeneratorService
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES, KNATIVE);
 
-    private String defaultIcon;
-
     public KameletDeploymentGeneratorService() {
-        try {
-            defaultIcon = Files.readString(
-                    Path.of(
-                            KameletDeploymentGeneratorService.class.getResource(
-                                            "defaultIcon.txt")
-                                    .toURI()));
-        } catch (Exception e) {
-            defaultIcon = "";
-            //No need to raise any exception, just the icon will be empty
-        }
     }
 
     @Override
@@ -95,5 +82,10 @@ public class KameletDeploymentGeneratorService
                         .anyMatch(
                                 Predicate.isEqual(
                                         s.getKind().toUpperCase())));
+    }
+
+    @Override
+    public List<Class<? extends CustomResource>> supportedCustomResources() {
+        return Arrays.asList(new Class[]{Kamelet.class});
     }
 }

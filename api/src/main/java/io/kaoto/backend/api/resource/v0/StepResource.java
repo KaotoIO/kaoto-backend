@@ -21,7 +21,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +34,8 @@ import java.util.List;
 @ApplicationScoped
 @OpenAPIDefinition(
         info = @Info(
-                title = "Steps API",
-                version = "1.0.0",
+                title = "Deprecated Steps API",
+                version = "0.0.0",
                 description = "The backend parses the steps provided "
                         + "and returns both a valid integration and "
                         + "the source code associated.",
@@ -48,10 +47,12 @@ import java.util.List;
                         url = "https://www.apache.org/licenses/LICENSE-2.0.html"
                 ))
 )
+@Deprecated
 public class StepResource {
 
     private StepService stepService;
     private DeploymentService deploymentService;
+    private io.kaoto.backend.api.resource.v1.StepResource stepResource;
 
     @Inject
     public void setStepService(final StepService stepService) {
@@ -62,6 +63,12 @@ public class StepResource {
     public void setDeploymentService(
             final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
+    }
+
+    @Inject
+    public void setStepResource(
+            final io.kaoto.backend.api.resource.v1.StepResource stepResource) {
+        this.stepResource = stepResource;
     }
 
 
@@ -75,9 +82,10 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
-    @Operation(summary = "Get step by ID",
+    @Operation(summary = "Deprecated Get step by ID",
             description = "Returns all the details of a specific step "
-                    + "based on the identifier.")
+                    + "based on the identifier.",
+            deprecated = true)
     public Step stepById(
             final @Parameter(
                     description = "Identifier of the step we want to retrieve.")
@@ -95,11 +103,12 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
-    @Operation(summary = "Get step by name",
+    @Operation(summary = "Deprecated Get step by name",
             description = "Returns all the details of steps based on the name. "
                     + "There may be more than one step with the same name, "
                     + "although configuration of catalogs should try to avoid"
-                    + " duplications.")
+                    + " duplications.",
+            deprecated = true)
     public Collection<Step> stepsByName(
             final @Parameter(description = "Name of the steps we want to "
                     + "retrieve.")
@@ -117,9 +126,9 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/kind/{kind}")
-    @Operation(summary = "Get step by kind",
-            description = "Returns all the details of steps based on the kind"
-                    + ". ")
+    @Operation(summary = "Deprecated Get step by kind",
+            description = "Returns all the details of steps based on the kind.",
+            deprecated = true)
     public Collection<Step> stepsByKind(
             final @Parameter(description = "Kind of the steps we want to "
                     + "retrieve.")
@@ -138,9 +147,10 @@ public class StepResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/integrationType/{integrationType}")
-    @Operation(summary = "Get step by integration type",
+    @Operation(summary = "Deprecated Get step by integration type",
             description = "Returns all the steps that fit a specific "
-                    + "integration type. ")
+                    + "integration type. ",
+            deprecated = true)
     public Collection<Step> stepsByIntegrationType(
             final @Parameter(description = "Integration type we want to use.")
             @PathParam("integrationType") String integrationType) {
@@ -168,9 +178,10 @@ public class StepResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all steps",
+    @Operation(summary = "Deprecated Get all steps",
             description = "Returns all the available steps that can be added"
-                    + " to the integration.")
+                    + " to the integration.",
+            deprecated = true)
     public Collection<Step> allSteps(
             final @Parameter(description = "Filter by step type. Example: "
                     + "'START' 'MIDDLE,END")
@@ -182,27 +193,7 @@ public class StepResource {
             final @Parameter(description = "Filter by kind of step. Examples: "
                     + "'Kamelet' 'Kamelet,KameletBinding'")
             @QueryParam("kind") String kind) {
-        var steps = stepService.allSteps().stream().parallel();
-        if (type != null && !type.isEmpty()) {
-            steps = steps.filter(step -> Arrays.stream(type.split(","))
-                            .anyMatch(t -> t.equalsIgnoreCase(step.getType())));
-        }
-        if (dsl != null && !dsl.isEmpty()) {
-            List<String> kinds =
-                    deploymentService.getParsers().stream().parallel()
-                    .filter(s -> Arrays.stream(dsl.split(","))
-                           .anyMatch(it -> it.equalsIgnoreCase(s.identifier())))
-                    .map(DeploymentGeneratorService::getKinds)
-                    .flatMap(Collection::stream)
-                    .toList();
-             steps = steps.filter(step -> kinds.stream()
-                    .anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
-        }
-        if (kind != null && !kind.isEmpty()) {
-            steps = steps.filter(step -> Arrays.stream(kind.split(","))
-                            .anyMatch(k -> k.equalsIgnoreCase(step.getKind())));
-        }
-        return steps.toList();
+        return stepResource.all(dsl, type, kind);
     }
 
 

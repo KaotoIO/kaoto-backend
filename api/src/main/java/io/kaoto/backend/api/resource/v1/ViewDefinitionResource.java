@@ -51,21 +51,19 @@ public class ViewDefinitionResource {
 
     private Logger log = Logger.getLogger(ViewDefinitionResource.class);
 
-    private ViewDefinitionService viewDefinitionService;
-
-    private Instance<StepParserService<Step>> stepParserServices;
-
     @Inject
     public void setViewDefinitionService(
             final ViewDefinitionService viewDefinitionService) {
         this.viewDefinitionService = viewDefinitionService;
     }
+    private ViewDefinitionService viewDefinitionService;
 
     @Inject
     public void setStepParserServices(
             final Instance<StepParserService<Step>> stepParserServices) {
         this.stepParserServices = stepParserServices;
     }
+    private Instance<StepParserService<Step>> stepParserServices;
 
     /*
      * 🐱method views:
@@ -89,7 +87,7 @@ public class ViewDefinitionResource {
             try {
                 log.trace("Trying with service: " + stepParserService);
                 if (stepParserService.appliesTo(crd)) {
-                    steps = stepParserService.parse(crd);
+                    steps = stepParserService.deepParse(crd).getSteps();
                     log.trace("Extracted " + steps.size() + " steps.");
                     if (!steps.isEmpty()) {
                         break;

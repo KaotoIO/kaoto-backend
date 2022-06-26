@@ -37,8 +37,8 @@ import java.util.List;
 @ApplicationScoped
 @OpenAPIDefinition(
         info = @Info(
-            title = "View Definition API",
-            version = "1.0.0",
+            title = "Deprecated View Definition API",
+            version = "0.0.0",
             description = "With this API, backend and frontend agree on what "
                     + "views and extensions can be used for the "
                     + "integration workflow.",
@@ -49,6 +49,7 @@ import java.util.List;
                     name = "Apache 2.0",
                     url = "https://www.apache.org/licenses/LICENSE-2.0.html"))
 )
+ @Deprecated
 public class ViewDefinitionResource {
 
     private Logger log = Logger.getLogger(ViewDefinitionResource.class);
@@ -78,9 +79,10 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
-    @Operation(summary = "Get views",
+    @Operation(summary = "Deprecated Deprecated Get views",
             description = "Get view definitions for a specific integration."
-            + " This is an idempotent operation.")
+            + " This is an idempotent operation.",
+            deprecated = true)
     public ViewDefinitionResourceResponse views(
             final @RequestBody String crd,
             final @Parameter(description = "Name of the integration")
@@ -92,7 +94,7 @@ public class ViewDefinitionResource {
             try {
                 log.trace("Trying with service: " + stepParserService);
                 if (stepParserService.appliesTo(crd)) {
-                    res.setSteps(stepParserService.parse(crd));
+                    res.setSteps(stepParserService.deepParse(crd).getSteps());
                     log.trace("Extracted " + res.getSteps().size() + " steps.");
                     if (!res.getSteps().isEmpty()) {
                         break;
@@ -116,9 +118,10 @@ public class ViewDefinitionResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get views based on steps",
+    @Operation(summary = "Deprecated Get views based on steps",
             description = "Get view definitions for a specific integration."
-                    + " This is an idempotent operation.")
+                    + " This is an idempotent operation.",
+            deprecated = true)
     public ViewDefinitionResourceResponse viewsPerStepList(
             final @RequestBody List<Step> steps,
             final @Parameter(description = "Name of the integration")

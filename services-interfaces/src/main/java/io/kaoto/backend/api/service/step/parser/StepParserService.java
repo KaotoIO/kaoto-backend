@@ -30,14 +30,6 @@ public interface StepParserService<T extends Step> {
     String description();
 
     /*
-     * 🐱method parse: List[Step]
-     * 🐱param yaml: String
-     *
-     * Based on the YAML provided, offer a list of steps defined on it, if any
-     */
-    List<T> parse(String yaml);
-
-    /*
      * 🐱method parse: ParseResult
      * 🐱param yaml: String
      *

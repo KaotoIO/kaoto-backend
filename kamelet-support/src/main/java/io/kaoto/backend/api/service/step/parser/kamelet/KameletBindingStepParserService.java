@@ -52,11 +52,6 @@ public class KameletBindingStepParserService
     }
 
     @Override
-    public List<Step> parse(final String input) {
-        return deepParse(input).getSteps();
-    }
-
-    @Override
     public ParseResult<Step> deepParse(final String input) {
         if (!appliesTo(input)) {
             throw new IllegalArgumentException(

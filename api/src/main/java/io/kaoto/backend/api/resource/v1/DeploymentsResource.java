@@ -1,14 +1,13 @@
 package io.kaoto.backend.api.resource.v1;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -18,6 +17,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,24 +33,30 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * 🐱class DeploymentResource
- * 🐱relationship compositionOf DeploymentService, 0..1
+ * 🐱class DeploymentResource 🐱relationship compositionOf DeploymentService,
+ * 0..1
  *
- * This endpoint will interact with the cluster starting, stopping, and
- * listing running resources.
+ * This endpoint will interact with the cluster starting, stopping, and listing
+ * running resources.
  */
 @Path("/v1/deployments")
 @ApplicationScoped
 public class DeploymentsResource {
 
     private Logger log = Logger.getLogger(DeploymentsResource.class);
+    private ClusterService clusterService;
+    private Instance<DeploymentGeneratorService> parsers;
 
     @Inject
     public void setClusterService(
             final ClusterService clusterService) {
         this.clusterService = clusterService;
     }
-    private ClusterService clusterService;
+
+    @Inject
+    public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
+        this.parsers = parsers;
+    }
 
     /*
      * 🐱method all: String
@@ -106,9 +112,22 @@ public class DeploymentsResource {
                     .configure(
                             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
                             false);
-        try {
-            yamlMapper.readValue(crd, KameletBinding.class);
-        } catch (JsonProcessingException e) {
+
+        boolean valid = false;
+        for (var parser : parsers) {
+            for (Class<? extends CustomResource> c
+                    : parser.supportedCustomResources()) {
+                try {
+                    yamlMapper.readValue(crd, c);
+                    valid = true;
+                } catch (Exception e) {
+                    log.trace("We tried to parse with " + c.getName() + " and"
+                            + " it didn't work.");
+                }
+            }
+        }
+
+        if (!valid) {
             throw new IllegalArgumentException("Couldn't understand the yaml "
                     + "sent. Check the syntax and try again.");
         }
@@ -138,9 +157,23 @@ public class DeploymentsResource {
             throw new NotFoundException("Resource with name " + name + " not "
                     + "found.");
         }
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
-                new KameletRepresenter());
-        return yaml.dumpAsMap(cr);
+
+        for (var parser : parsers) {
+            for (Class<? extends CustomResource> c
+                    : parser.supportedCustomResources()) {
+                try {
+                    Yaml yaml = new Yaml(new Constructor(c),
+                            new KameletRepresenter());
+                    return yaml.dumpAsMap(cr);
+                } catch (Exception e) {
+                    log.trace("We tried to parse with " + c.getName() + " and"
+                            + " it didn't work.");
+                }
+            }
+        }
+
+        throw new NotFoundException("Unrecognized resource type with name "
+                + name + ".");
     }
 
 
@@ -160,9 +193,7 @@ public class DeploymentsResource {
             final @Parameter(description = "Namespace of the cluster where "
                     + "the resource is running.")
             @QueryParam("namespace") String namespace) {
-        Integration i = new Integration();
-        i.setName(name);
-        return clusterService.stop(i, namespace);
+        return clusterService.stop(name, namespace);
     }
 
     @GET
