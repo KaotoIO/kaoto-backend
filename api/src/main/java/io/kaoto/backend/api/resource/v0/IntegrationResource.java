@@ -51,14 +51,6 @@ public class IntegrationResource {
     private DeploymentService deploymentService;
     private ClusterService clusterService;
 
-    /*
-     * 🐱method yaml: String[]
-     * 🐱param steps: DeploymentResourceYamlRequest
-     *
-     * Idempotent operation that, based on the steps provided,
-     * offer all the potential source code / custom resources to deploy the
-     * integration.
-     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,21 +65,6 @@ public class IntegrationResource {
         return deploymentService.crd(request.getName(), request.getSteps());
     }
 
-    /*
-     * 🐱method yaml: String[]
-     * 🐱param steps: DeploymentResourceYamlRequest
-     * 🐱param dsl: String
-     *
-     * Idempotent operation that, based on the steps provided,
-     * offer the potential source code / custom resource to deploy the
-     * integration. Tries to return the type of integration passed as
-     * parameter. If that doesn't exist, it will default to the one defined
-     * on the configuration. If that doesn't exist, it will just return one
-     * randomly from the available ones.
-     *
-     * The usage of /customResources is encouraged over this one.
-     *
-     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
@@ -134,12 +111,6 @@ public class IntegrationResource {
         return crds.iterator().next().get("crd");
     }
 
-    /*
-     * 🐱method start: String
-     * 🐱param steps: DeploymentResourceYamlRequest
-     *
-     * Deploys an integration provided.
-     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
@@ -168,11 +139,6 @@ public class IntegrationResource {
         return "Error deploying " + request.getName();
     }
 
-    /*
-     * 🐱method integrations: String
-     *
-     * Returns the list of all integrations
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
@@ -186,12 +152,6 @@ public class IntegrationResource {
         return clusterService.getIntegrations(namespace);
     }
 
-
-    /*
-     * 🐱method stop: String
-     *
-     * Stops and deletes an integration by name
-     */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{name}")
