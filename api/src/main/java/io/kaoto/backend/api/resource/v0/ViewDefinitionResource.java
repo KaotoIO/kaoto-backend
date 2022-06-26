@@ -26,13 +26,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- * 🐱class ViewDefinitionResource
- * 🐱relationship compositionOf ViewDefinitionService, 0..1
- *
- * This endpoint will return a list of views based on the parameters.
- *
- */
 @Path("/viewdefinition")
 @ApplicationScoped
 @OpenAPIDefinition(
@@ -49,7 +42,7 @@ import java.util.List;
                     name = "Apache 2.0",
                     url = "https://www.apache.org/licenses/LICENSE-2.0.html"))
 )
- @Deprecated
+ @Deprecated(since = "0.3.0", forRemoval = true)
 public class ViewDefinitionResource {
 
     private Logger log = Logger.getLogger(ViewDefinitionResource.class);

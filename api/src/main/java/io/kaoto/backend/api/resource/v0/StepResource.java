@@ -24,12 +24,6 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * 🐱class StepResource
- * 🐱relationship dependsOn StepCatalog
- *
- * This endpoint will return steps based on the parameters.
- */
 @Path("/step")
 @ApplicationScoped
 @OpenAPIDefinition(
@@ -47,7 +41,7 @@ import java.util.List;
                         url = "https://www.apache.org/licenses/LICENSE-2.0.html"
                 ))
 )
-@Deprecated
+@Deprecated(since = "0.3.0", forRemoval = true)
 public class StepResource {
 
     private StepService stepService;

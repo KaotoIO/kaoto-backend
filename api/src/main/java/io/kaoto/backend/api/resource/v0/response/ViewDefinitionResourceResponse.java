@@ -5,10 +5,7 @@ import io.kaoto.backend.model.view.ViewDefinition;
 
 import java.util.List;
 
-/**
- * 🐱miniclass ViewDefinitionResourceResponse (ViewDefinitionResource)
- */
-@Deprecated
+@Deprecated(since = "0.3.0", forRemoval = true)
 public class ViewDefinitionResourceResponse {
     private List<Step> steps;
     private List<ViewDefinition> views;
