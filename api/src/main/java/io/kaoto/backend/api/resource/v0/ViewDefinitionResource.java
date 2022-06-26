@@ -63,12 +63,6 @@ public class ViewDefinitionResource {
         this.stepParserServices = stepParserServices;
     }
 
-    /*
-     * 🐱method views:
-     * 🐱param yaml: String
-     *
-     * Based on the YAML provided, offer a list of possible views
-     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
@@ -102,12 +96,6 @@ public class ViewDefinitionResource {
         return res;
     }
 
-    /*
-     * 🐱method viewsPerStepList:
-     * 🐱param DeploymentResourceYamlRequest: Step[]
-     *
-     * Based on the list of steps provided, offer a list of possible views
-     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

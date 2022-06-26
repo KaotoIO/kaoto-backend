@@ -29,11 +29,6 @@ public class LanguageResource {
         this.languageService = languageService;
     }
 
-    /*
-     * 🐱method getAll: Map
-     *
-     * Returns information of all the supported DSLs.
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")

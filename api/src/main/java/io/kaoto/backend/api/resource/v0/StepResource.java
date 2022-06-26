@@ -65,14 +65,6 @@ public class StepResource {
         this.stepResource = stepResource;
     }
 
-
-    /*
-     * 🐱method stepById : Step
-     * 🐱param id: String
-     *
-     *  Returns the first step identified by the parameter.
-     *
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/id/{id}")
@@ -87,13 +79,6 @@ public class StepResource {
         return stepService.stepById(id);
     }
 
-    /*
-     * 🐱method stepsByName : List[Step]
-     * 🐱param name: String
-     *
-     *  Returns all the steps identified by the name.
-     *
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/name/{name}")
@@ -110,13 +95,6 @@ public class StepResource {
         return stepService.stepsByName(name);
     }
 
-    /*
-     * 🐱method stepsByKind : List[Step]
-     * 🐱param type: String
-     *
-     *  Returns all the steps of the type.
-     *
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/kind/{kind}")
@@ -131,13 +109,6 @@ public class StepResource {
                 .filter(step -> kind.equalsIgnoreCase(step.getKind())).toList();
     }
 
-    /*
-     * 🐱method stepsByIntegrationType : List[Step]
-     * 🐱param type: String
-     *
-     *  Returns all the steps that fit a specific integration type.
-     *
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/integrationType/{integrationType}")
@@ -160,16 +131,6 @@ public class StepResource {
                 .toList();
     }
 
-    /*
-     * 🐱method allSteps : List[Step]
-     * 🐱param type: String
-     * 🐱param dsl: String
-     * 🐱param kind: String
-     *
-     * Returns all the steps. If parameters are included in the query, it
-     * will filter only those steps compatible with the constraints.
-     *
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Deprecated Get all steps",
