@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * 🐱miniclass ViewDefinitionResourceResponse (ViewDefinitionResource)
  */
+@Deprecated
 public class ViewDefinitionResourceResponse {
     private List<Step> steps;
     private List<ViewDefinition> views;

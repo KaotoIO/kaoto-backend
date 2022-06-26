@@ -36,6 +36,7 @@ import java.util.Map;
  */
 @Path("/integrations")
 @ApplicationScoped
+@Deprecated
 public class IntegrationResource {
 
     private Logger log = Logger.getLogger(IntegrationResource.class);
@@ -70,10 +71,11 @@ public class IntegrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/customResources")
-    @Operation(summary = "Get CRDs",
+    @Operation(summary = "Deprecated Get CRDs",
             description = "Returns a list of all potential associated custom "
                     + "resource definitions."
-                    + " This is an idempotent operation.")
+                    + " This is an idempotent operation.",
+            deprecated = true)
     public List<Map<String, String>> customResourcesDefinition(
             final @RequestBody DeploymentResourceYamlRequest request) {
         return deploymentService.crd(request.getName(), request.getSteps());
@@ -98,10 +100,10 @@ public class IntegrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/customResource")
-    @Operation(summary = "Get CRD",
+    @Operation(summary = "Deprecated Get CRD",
             description = "Returns the associated custom "
-                    + "resource definition."
-                    + " This is an idempotent operation.")
+                    + "resource definition. This is an idempotent operation.",
+            deprecated = true)
     public String customResourceDefinition(
             final @RequestBody DeploymentResourceYamlRequest request,
             final @Parameter(description = "Type of integration. "
@@ -150,10 +152,11 @@ public class IntegrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/")
-    @Operation(summary = "Start integration",
+    @Operation(summary = "Deprecated Start integration",
             description = "Deploy and start the given integration"
                     + " on the cluster. Deployment will be done "
-                    + "as a custom resource.")
+                    + "as a custom resource.",
+            deprecated = true)
     public String start(
             final @RequestBody DeploymentResourceYamlRequest request,
             final @Parameter(description = "Type of integration. For example: "
@@ -181,8 +184,9 @@ public class IntegrationResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
-    @Operation(summary = "Get all Integrations",
-            description = "Returns all the integrations on the cluster.")
+    @Operation(summary = "Deprecated Get all Integrations",
+            description = "Returns all the integrations on the cluster.",
+            deprecated = true)
     public List<Integration> allIntegrations(
             final @Parameter(description = "Namespace of the cluster where "
                     + "the integrations are running.")
@@ -199,24 +203,24 @@ public class IntegrationResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{name}")
-    @Operation(summary = "Stop/Remove integration",
-            description = "Remove the integration identified by name.")
+    @Operation(summary = "Deprecated Stop/Remove integration",
+            description = "Remove the integration identified by name.",
+            deprecated = true)
     public boolean integrations(
             final @Parameter(description = "Name of the integration to stop.")
             @PathParam("name") String name,
             final @Parameter(description = "Namespace of the cluster where "
                     + "the integration is running.")
             @QueryParam("namespace") String namespace) {
-        Integration i = new Integration();
-        i.setName(name);
-        return clusterService.stop(i, namespace);
+        return clusterService.stop(name, namespace);
     }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{name}/logs")
-    @Operation(summary = "Get logs",
-            description = "Get the integration's log.")
+    @Operation(summary = "Deprecated Get logs",
+            description = "Get the integration's log.",
+            deprecated = true)
     public String logs(
             final @Parameter(description = "Name of the integration "
                     + "of which logs should be retrieved.")

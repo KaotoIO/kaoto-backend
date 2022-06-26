@@ -93,6 +93,7 @@ public class StepResource {
 
         //DSL first because it is usually the parameter we will use
         if (dsl != null && !dsl.isEmpty()) {
+            //First take all the kinds from the parameter list given
             List<String> kinds =
                     deploymentService.getParsers().stream().parallel()
                             .filter(s -> Arrays.stream(dsl.split(","))
@@ -101,6 +102,7 @@ public class StepResource {
                             .map(DeploymentGeneratorService::getKinds)
                             .flatMap(Collection::stream)
                             .toList();
+            //And now we can filter by the kinds
             steps = steps.filter(step -> kinds.stream()
                     .anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
         }

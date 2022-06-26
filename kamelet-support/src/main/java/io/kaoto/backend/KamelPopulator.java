@@ -18,7 +18,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +36,6 @@ public class KamelPopulator {
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON =
             "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
-    private Logger log = Logger.getLogger(KamelPopulator.class);
 
     public void populateKamelet(
             final Kamelet kamelet,
@@ -165,8 +163,8 @@ public class KamelPopulator {
             for (Parameter p : s.getParameters()) {
                 if (p.isPath()) {
                     uri.append(":");
-                    uri.append((p.getValue() != null ? p.getValue()
-                            : p.getDefaultValue()));
+                    uri.append(p.getValue() != null ? p.getValue()
+                            : p.getDefaultValue());
                 } else if (p.getValue() != null) {
                     params.put(p.getId(), p.getValue().toString());
                 }

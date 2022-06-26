@@ -1,9 +1,11 @@
 package io.kaoto.backend.deployment;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.Integration;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -12,98 +14,159 @@ import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 public class ClusterService {
 
-    private KubernetesClient kubernetesClient;
 
     private Logger log = Logger.getLogger(ClusterService.class);
+    private KubernetesClient kubernetesClient;
+    private Instance<DeploymentGeneratorService> parsers;
 
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
         this.kubernetesClient = kubernetesClient;
     }
 
+    @Inject
+    public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
+        this.parsers = parsers;
+    }
+
     public List<Integration> getIntegrations(final String namespace) {
         List<Integration> res = new ArrayList<>();
-        try {
-            final var resources =
-                    kubernetesClient.resources(KameletBinding.class)
-                            .inNamespace(getNamespace(namespace))
-                            .list().getItems();
-            for (KameletBinding integration : resources) {
-                Integration i = new Integration();
-                i.setName(integration.getMetadata().getName());
-                i.setRunning(true);
-                i.setResource(integration);
-                res.add(i);
+
+        for (var parser : parsers) {
+            for (Class<? extends CustomResource> c
+                    : parser.supportedCustomResources()) {
+                try {
+                    final var resources =
+                            kubernetesClient.resources(c)
+                                    .inNamespace(getNamespace(namespace))
+                                    .list().getItems();
+                    for (CustomResource integration : resources) {
+                        Integration i = new Integration();
+                        i.setName(integration.getMetadata().getName());
+                        i.setRunning(true);
+                        i.setResource(integration);
+                        res.add(i);
+                    }
+                } catch (Exception e) {
+                    log.warn("Error extracting the list of integrations.", e);
+                }
             }
-        } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
         }
         return res;
     }
 
     public boolean start(final String input, final String namespace) {
-        try {
-            var constructor = new Constructor(KameletBinding.class);
-            Representer representer = new Representer();
-            representer.getPropertyUtils().setSkipMissingProperties(true);
-            representer.getPropertyUtils().setAllowReadOnlyProperties(true);
-            representer.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
-            constructor.getPropertyUtils().setSkipMissingProperties(true);
-            constructor.getPropertyUtils().setAllowReadOnlyProperties(true);
-            constructor.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
-            Yaml yaml = new Yaml(constructor, representer);
-            KameletBinding binding = yaml.load(input);
-            if (binding.getMetadata() == null) {
-                binding.setMetadata(new ObjectMeta());
+        for (var parser : parsers) {
+            for (Class<? extends CustomResource> c
+                    : parser.supportedCustomResources()) {
+                try {
+                    var constructor = new Constructor(c);
+                    Representer representer = new Representer();
+                    representer.getPropertyUtils()
+                            .setSkipMissingProperties(true);
+                    representer.getPropertyUtils()
+                            .setAllowReadOnlyProperties(true);
+                    representer.getPropertyUtils()
+                            .setBeanAccess(BeanAccess.FIELD);
+                    constructor.getPropertyUtils()
+                            .setSkipMissingProperties(true);
+                    constructor.getPropertyUtils()
+                            .setAllowReadOnlyProperties(true);
+                    constructor.getPropertyUtils()
+                            .setBeanAccess(BeanAccess.FIELD);
+                    Yaml yaml = new Yaml(constructor, representer);
+                    CustomResource binding = yaml.load(input);
+                    if (binding.getMetadata() == null) {
+                        binding.setMetadata(new ObjectMeta());
+                    }
+                    final var name = binding.getMetadata().getName();
+                    if (name == null || name.isEmpty()) {
+                        binding.getMetadata().setName(
+                                "integration-" + System.currentTimeMillis());
+                    }
+                    return start(binding, namespace);
+                } catch (ConstructorException e) {
+                    log.trace("Tried with " + c.getName() + " and it didn't "
+                            + "work.");
+                }
             }
-            final var name = binding.getMetadata().getName();
-            if (name == null || name.isEmpty()) {
-                binding.getMetadata().setName(
-                        "integration-" + System.currentTimeMillis());
-            }
-            return start(binding, namespace);
-        } catch (ConstructorException e) {
-            log.warn("Error starting the integration.", e);
-            return false;
         }
+
+        return false;
     }
 
-    public boolean start(final KameletBinding binding, final String namespace) {
+    public boolean start(final CustomResource binding, final String namespace) {
         try {
-            kubernetesClient.resources(KameletBinding.class)
+            ResourceDefinitionContext context =
+                    new ResourceDefinitionContext.Builder()
+                            .withNamespaced(true)
+                            .withGroup(binding.getGroup())
+                            .withKind(binding.getKind())
+                            .withPlural(binding.getPlural())
+                            .withVersion(binding.getVersion())
+                            .build();
+
+            var constructor = new Constructor(binding.getClass());
+            Yaml yaml = new Yaml(constructor);
+            kubernetesClient.genericKubernetesResources(context)
                     .inNamespace(getNamespace(namespace))
-                    .createOrReplace(binding);
+                    .load(new ByteArrayInputStream(
+                            yaml.dumpAsMap(binding)
+                                    .getBytes(StandardCharsets.UTF_8)))
+                    .create();
+            return true;
         } catch (Exception e) {
-            log.warn("Error starting the integration.", e);
-            return false;
+            log.error("Error starting the integration.", e);
         }
-
-        return true;
+        return false;
     }
 
-    public boolean stop(final Integration i, final String namespace) {
-        return kubernetesClient.resources(KameletBinding.class)
+    public boolean stop(final String name, final String namespace) {
+        CustomResource cr = get(namespace, name);
+        if (cr == null) {
+            throw new NotFoundException("Resource with name " + name + " not "
+                    + "found.");
+        }
+        return kubernetesClient.resources(cr.getClass())
                 .inNamespace(getNamespace(namespace))
-                .withName(i.getName())
+                .withName(name)
                 .delete();
     }
 
-    public KameletBinding get(final String namespace, final String name)  {
-        return kubernetesClient.customResources(KameletBinding.class)
-                .inNamespace(getNamespace(namespace))
-                .withName(name).get();
+    public CustomResource get(final String namespace, final String name) {
+        CustomResource cr = null;
+        for (var parser : parsers) {
+            for (Class<? extends CustomResource> c
+                    : parser.supportedCustomResources()) {
+                cr = kubernetesClient.customResources(c)
+                        .inNamespace(getNamespace(namespace))
+                        .withName(name).get();
+                if (cr != null) {
+                    break;
+                }
+            }
+            if (cr != null) {
+                break;
+            }
+        }
+        return cr;
     }
+
     public String logs(final String namespace, final String podName,
-            final int lines)  {
+                       final int lines) {
         return kubernetesClient.pods()
-               .inNamespace(getNamespace(namespace))
+                .inNamespace(getNamespace(namespace))
                 .withName(podName)
                 .tailingLines(lines)
                 .getLog(Boolean.TRUE);

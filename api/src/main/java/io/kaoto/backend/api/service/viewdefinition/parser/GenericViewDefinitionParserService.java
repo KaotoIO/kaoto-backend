@@ -87,28 +87,28 @@ public class GenericViewDefinitionParserService
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
-                res = (steps != null
-                        && steps.size() == Integer.valueOf(c.getParameter()));
+                res = steps != null
+                        && steps.size() == Integer.valueOf(c.getParameter());
                 break;
             case SIZE_GREATER_THAN:
-                res = (steps != null
-                        && steps.size() > Integer.valueOf(c.getParameter()));
+                res = steps != null
+                        && steps.size() > Integer.valueOf(c.getParameter());
                 break;
             case SIZE_SMALLER_THAN:
-                res = (steps != null
-                        && steps.size() < Integer.valueOf(c.getParameter()));
+                res = steps != null
+                        && steps.size() < Integer.valueOf(c.getParameter());
                 break;
             case CONTAINS_STEP_IDENTIFIER:
-                res = (steps != null
-                        &&  containsStepIdentifier(steps, c));
+                res = steps != null
+                        &&  containsStepIdentifier(steps, c);
                 break;
             case CONTAINS_STEP_NAME:
-                res = (steps != null
-                        && containsStepName(steps, c));
+                res = steps != null
+                        && containsStepName(steps, c);
                 break;
             case CONTAINS_STEP_TYPE:
-                res = (steps != null
-                        && containsStepType(steps, c));
+                res = steps != null
+                        && containsStepType(steps, c);
                 break;
             default:
                 //Unsupported operation or typo

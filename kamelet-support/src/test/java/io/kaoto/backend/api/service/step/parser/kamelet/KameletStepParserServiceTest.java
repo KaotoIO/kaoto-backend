@@ -144,16 +144,18 @@ class KameletStepParserServiceTest {
         assertTrue(service.appliesTo(binding));
         assertTrue(service.appliesTo(bindingIncomplete));
         assertTrue(
-                deploymentService.appliesTo(service.parse(binding)));
+                deploymentService.appliesTo(
+                        service.deepParse(binding).getSteps()));
         assertTrue(
-                deploymentService.appliesTo(service.parse(bindingIncomplete)));
+                deploymentService.appliesTo(
+                        service.deepParse(bindingIncomplete).getSteps()));
     }
 
     @Test
     void fail() {
         //include here potential security issues
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            service.parse("Kind: Kamelet\n But not really");
+            service.deepParse("Kind: Kamelet\n But not really");
         });
         assertFalse(service.appliesTo("Malformed YAML"));
     }

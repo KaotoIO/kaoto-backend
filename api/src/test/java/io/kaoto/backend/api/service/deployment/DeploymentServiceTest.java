@@ -77,7 +77,7 @@ class DeploymentServiceTest {
 
     @Test
     void yaml() {
-        final var steps = stepParser.parse(binding);
+        final var steps = stepParser.deepParse(binding).getSteps();
         var res = deploymentService.crd(
                 "twitter-search-source-binding",
                 steps.toArray(new Step[0]));
@@ -141,7 +141,7 @@ class DeploymentServiceTest {
 
     @Test
     void regularCamelConnector() {
-        final var steps = stepParser.parse(bindingRegularCamel);
+        final var steps = stepParser.deepParse(bindingRegularCamel).getSteps();
         var res = deploymentService.crd(
                 "camel-conector-example",
                 steps.toArray(new Step[0]));

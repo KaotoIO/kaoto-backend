@@ -59,8 +59,7 @@ class DeploymentsResourceTest {
                 .contentType("application/json")
                 .delete("/{name}", name)
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-        assertTrue(!Boolean.valueOf(res.extract().response().asString()));
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
 
         given()
                 .when().body(yamlBinding)

@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 
+import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
@@ -163,5 +164,10 @@ public class KameletBindingDeploymentGeneratorService
                                 .anyMatch(
                                         Predicate.isEqual(
                                                 s.getKind().toUpperCase())));
+    }
+
+    @Override
+    public List<Class<? extends CustomResource>> supportedCustomResources() {
+        return Arrays.asList(new Class[]{KameletBinding.class});
     }
 }
