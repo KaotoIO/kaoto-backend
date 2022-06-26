@@ -33,8 +33,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * 🐱class DeploymentResource 🐱relationship compositionOf DeploymentService,
- * 0..1
+ * 🐱class DeploymentResource
  *
  * This endpoint will interact with the cluster starting, stopping, and listing
  * running resources.
@@ -77,7 +76,6 @@ public class DeploymentsResource {
 
     /*
      * 🐱method start: String
-     * 🐱param steps: DeploymentResourceYamlRequest
      *
      * Deploys a CRD provided.
      */
