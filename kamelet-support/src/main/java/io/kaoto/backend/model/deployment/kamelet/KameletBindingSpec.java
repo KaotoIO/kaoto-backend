@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -14,6 +15,7 @@ import java.util.List;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class KameletBindingSpec
         implements KubernetesResource, Serializable {
     private static final long serialVersionUID = 7040723764223374489L;
