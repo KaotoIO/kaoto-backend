@@ -17,6 +17,7 @@ import java.util.List;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KameletBindingStatus implements KubernetesResource {
 
     @JsonProperty("phase")
