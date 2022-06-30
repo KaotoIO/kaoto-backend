@@ -1,6 +1,7 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -14,6 +15,7 @@ import java.io.Serial;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChoiceFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = -3320625752519808958L;

@@ -1,6 +1,12 @@
 package io.kaoto.backend.metadata.parser.step.kamelet;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
+import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.IntegerParameter;
@@ -10,32 +16,96 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
 
-    public static final String PROPERTIES = "properties";
     private final Logger log = Logger.getLogger(KameletFileProcessor.class);
+
+    public KameletFileProcessor(final KameletStepParserService service) {
+        this.service = service;
+    }
+    private KameletStepParserService service;
 
     @Override
     public Step parseFile(final File f) {
+        String kind = null;
+        try {
+            final var yaml = Files.readString(f.toPath());
+            if (!service.appliesTo(yaml)) {
+                return null;
+            }
+            kind = getKind(yaml);
+        } catch (IOException e) {
+            log.trace("Skipping file as I can't read it: " + f.getName());
+        }
+
         try (FileReader fr = new FileReader(f)) {
-            Representer representer = new Representer();
-            representer.getPropertyUtils().setSkipMissingProperties(true);
-            Yaml yaml = new Yaml(new Constructor(Step.class), representer);
-            Step step = yaml.load(fr);
-            step = extractSpec(step);
-            step = extractMetadata(step);
+            ObjectMapper yamlMapper =
+                new ObjectMapper(new YAMLFactory())
+                        .configure(
+                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                            false);
+            Kamelet kamelet = yamlMapper.readValue(fr, Kamelet.class);
+
+            Step step = new Step();
+            step.setKind(kind);
+
+            if (kamelet.getMetadata() != null) {
+                step.setId(kamelet.getMetadata().getName());
+                step.setName(kamelet.getMetadata().getName());
+
+                if (kamelet.getMetadata().getLabels() != null) {
+                    switch (kamelet.getMetadata().getLabels()
+                            .getOrDefault("camel.apache.org/kamelet.type",
+                                    "action")
+                            .toLowerCase()) {
+                        case "source" -> step.setType("START");
+                        case "sink" -> step.setType("END");
+                        default -> step.setType("MIDDLE");
+                    }
+                }
+
+                if (kamelet.getMetadata().getAnnotations() != null) {
+                    step.setGroup(kamelet.getMetadata().getAnnotations()
+                            .getOrDefault("camel.apache.org/kamelet.group",
+                                    "others"));
+
+                    step.setIcon(
+                            kamelet.getMetadata().getAnnotations().getOrDefault(
+                                    "camel.apache.org/kamelet.icon", ""));
+                }
+
+            }
+
+            if (kamelet.getSpec() != null
+                    && kamelet.getSpec().getDefinition() != null) {
+                step.setTitle(kamelet.getSpec()
+                        .getDefinition().getTitle());
+                step.setDescription(kamelet.getSpec()
+                        .getDefinition().getDescription());
+
+
+                if (kamelet.getSpec().getDefinition().getProperties() != null) {
+                    parseParameters(step,
+                            kamelet.getSpec().getDefinition().getProperties(),
+                            kamelet.getSpec().getDefinition().getRequired());
+                }
+
+            }
+            if (step.getId() == null) {
+                step = null;
+            }
             return step;
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
@@ -44,137 +114,61 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         return null;
     }
 
-    private Step extractMetadata(final Step step) {
-        if (step == null || step.getMetadata() == null) {
-            return step;
+    private String getKind(final String yaml) {
+        Pattern pattern = Pattern.compile(
+                "(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(yaml);
+        if (matcher.find()) {
+            return matcher.group(2).trim();
+        } else {
+            return null;
         }
-        try {
-            final var name = "name";
-            if (step.getMetadata().containsKey(name)) {
-                step.setId(step.getMetadata().get(name).toString());
-                step.setName(step.getMetadata().get(name).toString());
-            }
-
-            final var labels = "labels";
-            if (step.getMetadata().containsKey(labels)) {
-                Map<String, Object> labelsMap =
-                        (Map<String, Object>) step.getMetadata().get(labels);
-                final var type = "camel.apache.org/kamelet.type";
-                if (labelsMap.containsKey(type)) {
-                    step.setType(labelsMap.get(type).toString());
-                    switch (step.getType().toLowerCase()) {
-                        case "source" -> step.setType("START");
-                        case "sink" -> step.setType("END");
-                        default -> step.setType("MIDDLE");
-                    }
-                }
-            }
-
-            Map<String, Object> annotationsMap =
-                    (Map<String, Object>) step.getMetadata()
-                            .get("annotations");
-
-            final var group = "camel.apache.org/kamelet.group";
-            if (annotationsMap.containsKey(group)) {
-                step.setGroup(annotationsMap.get(group).toString());
-            }
-
-            final var icon = "camel.apache.org/kamelet.icon";
-            if (annotationsMap.containsKey(icon)) {
-                step.setIcon(annotationsMap.get(icon).toString());
-            }
-
-        } catch (Exception e) {
-            log.error("We didn't know how to parse this kamelet", e);
-        } finally {
-            step.setMetadata(null);
-        }
-
-        return step;
     }
 
-    private Step extractSpec(final Step step) {
-        if (step == null) {
-            return step;
-        }
+    private void parseParameters(
+            final Step step,
+            final Map<String, KameletDefinitionProperty> properties,
+            final List<String> required) {
 
-        try {
-            final var definitionLabel = "definition";
-            if (step.getSpec().containsKey(definitionLabel)) {
-                Map<String, Object> definition =
-                        (Map<String, Object>) step.getSpec()
-                                .get(definitionLabel);
-
-                //We always need a title
-                step.setTitle((String) definition.getOrDefault("title",
-                        "unknown"));
-
-                step.setDescription((String) definition.getOrDefault(
-                        "description", null));
-
-                if (definition.containsKey(PROPERTIES)) {
-                    parseParameters(step, definition);
-                }
-            }
-        } catch (Exception e) {
-            log.error("We didn't know how to parse this kamelet", e);
-        } finally {
-            step.setSpec(null);
-        }
-
-        return step;
-    }
-
-    private void parseParameters(final Step step,
-                                 final Map<String, Object> definition) {
-        Map<String, Object> properties =
-                (Map<String, Object>) definition.get(PROPERTIES);
-        List<String> required = (List<String>) definition.get("required");
         step.setRequired(required);
 
         step.setParameters(new ArrayList<>());
 
-        if (properties != null) {
-            for (Map.Entry<String, Object> property : properties.entrySet()) {
-                Map<String, Object> definitions =
-                        (Map<String, Object>) property.getValue();
-                Parameter p;
-                final var title = property.getKey();
-                var description =
-                        definitions.getOrDefault("description", title)
-                                .toString();
-                Object value = definitions
-                                .getOrDefault("default", null);
-                p = getParameter(definitions, title, description, value);
-                p.setPath((Boolean)
-                        definitions.getOrDefault("path", false));
+        for (var property : properties.entrySet()) {
+            Parameter p;
+            final var title = property.getKey();
 
-                p.setNullable(required == null || required.stream()
-                        .noneMatch(r -> r.equalsIgnoreCase(title)));
+            final var prop = property.getValue();
+            var description = prop.getDescription();
+            String value = prop.getDefault();
+            p = getParameter(prop, title, description, value);
+            p.setPath(prop.getPath());
 
-                step.getParameters().add(p);
-            }
+            p.setNullable(required == null || required.stream()
+                    .noneMatch(r -> r.equalsIgnoreCase(title)));
+
+            step.getParameters().add(p);
+
         }
     }
 
-    private Parameter getParameter(final Map<String, Object> definitions,
+    private Parameter getParameter(final KameletDefinitionProperty property,
                                    final String title, final String description,
-                                   final Object value) {
-        final var type = definitions.get("type").toString();
+                                   final String value) {
+        final var type = property.getType().toLowerCase();
 
         return switch (type) {
             //number, integer, string, boolean, array, object, or null
             case "number" -> new NumberParameter(title, title, description,
-                    (Number) value);
+                    (value != null ? Double.valueOf(value) : null));
             case "integer" -> new IntegerParameter(title, title, description,
-                    (value != null ? Integer.valueOf(value.toString()) : null));
+                    (value != null ? Integer.valueOf(value) : null));
             case "string" -> new StringParameter(title, title, description,
-                    (value != null ? value.toString() : null),
-                    (String) definitions.getOrDefault("format", null));
+                    value, property.getFormat());
             case "boolean" -> new BooleanParameter(title, title, description,
-                    (Boolean) value);
+                    (value != null ? Boolean.valueOf(value) : null));
             case "array" -> new ArrayParameter(title, title, description,
-                    (Object[]) value);
+                    (value != null ? value.split(",") : null));
             default -> new ObjectParameter(title, title, description,
                     value);
         };
