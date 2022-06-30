@@ -1,7 +1,6 @@
 repository:
   step:
     jar:
-      - "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.6.0/camel-kamelets-0.6.0.jar"
       - "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
   viewdefinition:
     jar:
