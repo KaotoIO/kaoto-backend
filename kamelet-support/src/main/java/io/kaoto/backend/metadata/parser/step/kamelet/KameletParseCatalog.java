@@ -25,10 +25,6 @@ import java.nio.file.Path;
 @ApplicationScoped
 public final class KameletParseCatalog implements StepCatalogParser {
 
-    private KameletParseCatalog() {
-
-    }
-
     @Inject
     public void setService(final KameletStepParserService service) {
         this.service = service;

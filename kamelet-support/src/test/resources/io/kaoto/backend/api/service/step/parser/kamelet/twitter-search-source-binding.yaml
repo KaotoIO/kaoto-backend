@@ -18,8 +18,8 @@ spec:
       name: twitter-search-source
       kind: Kamelet
     properties:
-      keywords: Apache Camel
       apiKey: your own
+      keywords: Apache Camel
       apiKeySecret: your own
       accessToken: your own
       accessTokenSecret: your own

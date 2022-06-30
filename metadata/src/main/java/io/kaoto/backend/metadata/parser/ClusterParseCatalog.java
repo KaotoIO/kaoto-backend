@@ -77,7 +77,7 @@ public class ClusterParseCatalog<T extends Metadata>
 
             final var resources =
                 kubernetesClient.resources(cr)
-                        .inNamespace("default")
+                        .inAnyNamespace()
                         .list().getItems();
 
             for (CustomResource integration : resources) {
