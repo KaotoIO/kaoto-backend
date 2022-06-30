@@ -267,6 +267,13 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 
 	"ReadOnlyCatalog" -> "CatalogCollection"
 
+"ClusterParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ClusterParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"ClusterParseCatalog" -> "ParseCatalog"
+
 "GitParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>GitParseCatalog</B></TD></TR>
 	
@@ -286,6 +293,13 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 </TABLE>>]
 
 	"JarParseCatalog" -> "ParseCatalog"
+
+"LocalFolderParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>LocalFolderParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"LocalFolderParseCatalog" -> "ParseCatalog"
 
 "YamlProcessFile" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>YamlProcessFile</B></TD></TR>

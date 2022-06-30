@@ -790,6 +790,44 @@ on the amount of data stored on the catalog.</td>
 
 
 </section>
+<h2 id='clusterparsecatalog'>ClusterParseCatalog</h2>
+<section class='namespace'>
+<p>Abstract implementation that extracts CustomResources from a cluster
+and parses them to add to a catalog.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='clusterparsecatalog-parse'>
+		<td><code><b>parse</b>()</nobr></code></td>
+		<td><code>CompletableFuture[List[T]]</code></td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
+	</tr>
+	<tr id='clusterparsecatalog-setfilevisitor'>
+		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td></td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
+
+</section>
 <h2 id='gitparsecatalog'>GitParseCatalog</h2>
 <section class='namespace'>
 <p>Abstract implementation that downloads a git repository
@@ -857,6 +895,44 @@ parsing them and preparing elements to add to a catalog.</p>
 return a completable list of elements to add to a catalog.</td>
 	</tr>
 	<tr id='jarparsecatalog-setfilevisitor'>
+		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td></td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
+
+</section>
+<h2 id='localfolderparsecatalog'>LocalFolderParseCatalog</h2>
+<section class='namespace'>
+<p>Abstract implementation that walks through all the files in a local folder
+parsing them and preparing elements to add to a catalog.</p>
+
+<h3 id=''>Methods</h3>
+
+
+<details>
+	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='localfolderparsecatalog-parse'>
+		<td><code><b>parse</b>()</nobr></code></td>
+		<td><code>CompletableFuture[List[T]]</code></td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
+	</tr>
+	<tr id='localfolderparsecatalog-setfilevisitor'>
 		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td></td>
