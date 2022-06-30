@@ -137,8 +137,10 @@ public abstract class Parameter<T> implements Cloneable {
         return path;
     }
 
-    public void setPath(final boolean path) {
-        this.path = path;
+    public void setPath(final Boolean path) {
+        if (path != null) {
+            this.path = path;
+        }
     }
 
     public void setDescription(final String description) {

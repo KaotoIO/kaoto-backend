@@ -48,10 +48,10 @@ public class JarParseCatalog<T extends Metadata>
 
     public JarParseCatalog(final String url) {
         log.trace("Warming up repository in " + url);
-        metadata.completeAsync(() -> cloneRepoAndParse(url));
+        metadata.completeAsync(() -> getJarAndParse(url));
     }
 
-    private List<T> cloneRepoAndParse(final String url) {
+    private List<T> getJarAndParse(final String url) {
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
@@ -169,6 +169,7 @@ public class JarParseCatalog<T extends Metadata>
                 log.error("Error trying to create temporary file.", e);
             }
         }
+
         return location;
     }
 
@@ -182,4 +183,3 @@ public class JarParseCatalog<T extends Metadata>
         this.yamlProcessFile = fileVisitor;
     }
 }
-

@@ -9,6 +9,7 @@ import io.kaoto.backend.model.step.Step;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,13 @@ public class StepCatalog extends AbstractCatalog<Step> {
                 catalogs.add(parser.getParser(jar));
             }
         }
+        for (String location : repository.localFolder().orElse(
+                Collections.emptyList())) {
+            for (StepCatalogParser parser : stepCatalogParsers) {
+                File dir = new File(location);
+                catalogs.add(parser.getLocalFolder(dir.toPath()));
+            }
+        }
         for (Repository.Git git : repository.git().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
@@ -43,6 +51,11 @@ public class StepCatalog extends AbstractCatalog<Step> {
                         git.url(), git.tag()));
             }
         }
+
+        for (StepCatalogParser parser : stepCatalogParsers) {
+            catalogs.add(parser.getParserFromCluster());
+        }
+
         return catalogs;
     }
 

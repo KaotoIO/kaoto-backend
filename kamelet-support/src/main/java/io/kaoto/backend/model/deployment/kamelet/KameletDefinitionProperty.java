@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KameletDefinitionProperty  implements Serializable {
     private static final long serialVersionUID = -2212036216788957786L;
 
@@ -38,6 +40,12 @@ public class KameletDefinitionProperty  implements Serializable {
 
     @JsonProperty("example")
     private String example;
+
+    @JsonProperty("path")
+    private Boolean path;
+
+    @JsonProperty("format")
+    private String format;
 
     public String getTitle() {
         return title;
@@ -77,6 +85,22 @@ public class KameletDefinitionProperty  implements Serializable {
 
     public void setExample(final String example) {
         this.example = example;
+    }
+
+    public Boolean getPath() {
+        return path;
+    }
+
+    public void setPath(final Boolean path) {
+        this.path = path;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(final String format) {
+        this.format = format;
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -301,7 +302,18 @@ public class KameletStepParserService
 
     @Override
     public boolean appliesTo(final String yaml) {
-        return yaml.contains("kind: Kamelet\n");
+        String[] kinds = new String[]{
+                "Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
+
+        Pattern pattern = Pattern.compile(
+                "(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(yaml);
+        if (matcher.find()) {
+            return Arrays.stream(kinds).anyMatch(
+                    k -> k.equalsIgnoreCase(matcher.group(2).trim()));
+        }
+
+        return false;
     }
 
 }

@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.model.annotation.Group;
@@ -28,6 +29,7 @@ import java.util.Map;
 @Group("camel.apache.org")
 @Version("v1alpha1")
 @Kind("Kamelet")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class Kamelet
         extends CustomResource<KameletSpec, KameletBindingStatus>
         implements io.fabric8.kubernetes.api.model.Namespaced, Serializable {

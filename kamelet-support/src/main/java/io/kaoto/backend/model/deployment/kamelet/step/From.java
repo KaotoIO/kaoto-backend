@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -13,6 +14,7 @@ import java.util.List;
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class From extends UriFlowStep {
     private static final long serialVersionUID = -4601560033032557024L;
 

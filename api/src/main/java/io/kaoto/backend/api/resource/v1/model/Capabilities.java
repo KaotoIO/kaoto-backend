@@ -11,12 +11,13 @@ import java.util.Map;
 public class Capabilities {
     private List<Map<String, String>> dsls = new ArrayList<>();
 
-    public List<Map<String, String>> getDSLs() {
+    public List<Map<String, String>> getDsls() {
         return dsls;
     }
 
-    public void setDSLs(
+    public void setDsls(
             final Collection<Map<String, String>> dsls) {
+        this.dsls.clear();
         this.dsls.addAll(dsls);
     }
 }

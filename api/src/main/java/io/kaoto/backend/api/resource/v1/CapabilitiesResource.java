@@ -45,7 +45,7 @@ public class CapabilitiesResource {
                     + "languages.")
     public Capabilities getAll() {
         Capabilities capabilities = new Capabilities();
-        capabilities.setDSLs(languageService.getAll());
+        capabilities.setDsls(languageService.getAll());
         return capabilities;
     }
 
