@@ -74,8 +74,6 @@ stepsByName(&lt;String&gt; name):List[Step]
 "ViewDefinitionResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-views:(&lt;String&gt; yaml):
-<BR align="left" />
 viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 <BR align="left" />
 
