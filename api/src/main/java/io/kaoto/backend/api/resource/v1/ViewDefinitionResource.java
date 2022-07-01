@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.resource.v1;
 
-import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
@@ -14,7 +13,6 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -57,53 +55,6 @@ public class ViewDefinitionResource {
         this.viewDefinitionService = viewDefinitionService;
     }
     private ViewDefinitionService viewDefinitionService;
-
-    @Inject
-    public void setStepParserServices(
-            final Instance<StepParserService<Step>> stepParserServices) {
-        this.stepParserServices = stepParserServices;
-    }
-    private Instance<StepParserService<Step>> stepParserServices;
-
-    /*
-     * 🐱method views:
-     * 🐱param yaml: String
-     *
-     * Based on the YAML provided, offer a list of possible view definitions
-     * and step extensions.
-     */
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes("text/yaml")
-    @Operation(summary = "Get views",
-            description = "Get view definitions for a specific resource."
-            + " This is an idempotent operation.")
-    public List<ViewDefinition> views(
-            final @RequestBody String crd) {
-
-        log.trace("Extracting steps from crd");
-        List<Step> steps = null;
-        for (StepParserService<Step> stepParserService : stepParserServices) {
-            try {
-                log.trace("Trying with service: " + stepParserService);
-                if (stepParserService.appliesTo(crd)) {
-                    steps = stepParserService.deepParse(crd).getSteps();
-                    log.trace("Extracted " + steps.size() + " steps.");
-                    if (!steps.isEmpty()) {
-                        break;
-                    }
-                    log.warn("There was a step parser service that applies "
-                            + "but couldn't extract steps. We will try to "
-                            + "find another step parser service, but this "
-                            + "should not happen unless the crd is empty.");
-                }
-            } catch (Exception e) {
-                log.warn("Parser " + stepParserService.getClass() + "threw an"
-                        + " unexpected error.", e);
-            }
-        }
-        return viewsPerStepList(steps);
-    }
 
     /*
      * 🐱method viewsPerStepList:
