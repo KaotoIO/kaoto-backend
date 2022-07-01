@@ -61,15 +61,6 @@ class ViewDefinitionResourceTest {
 
     @Test
     void testViews() throws JsonProcessingException {
-        var res = given()
-                .when().body(binding)
-                .contentType("text/yaml").post()
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-        res.body("$.size()", is(4));
-        assertEquals(res.extract().path("type"), Arrays.asList(new String[]{
-                "generic", "step", "step", "generic"}));
-
         List<Step> steps = new LinkedList<Step>();
         steps.add(stepCatalog.getReadOnlyCatalog().searchStepByID(
                                 "kamelet:source"));
@@ -78,7 +69,7 @@ class ViewDefinitionResourceTest {
 
         final var mapper = new ObjectMapper();
         final var json = mapper.writeValueAsString(steps);
-        res = given()
+        var res = given()
                 .when().body(json)
                 .contentType(MediaType.APPLICATION_JSON).post()
                 .then()
