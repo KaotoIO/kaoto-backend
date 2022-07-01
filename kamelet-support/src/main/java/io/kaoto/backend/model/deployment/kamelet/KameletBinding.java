@@ -81,4 +81,6 @@ public final class KameletBinding
         }
         getMetadata().setName(name);
     }
+
+
 }

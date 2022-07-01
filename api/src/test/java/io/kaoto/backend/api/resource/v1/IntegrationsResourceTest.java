@@ -1,10 +1,15 @@
 package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.representer.Representer;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -35,7 +40,7 @@ class IntegrationsResourceTest {
     @Test
     void thereAndBackAgain() throws URISyntaxException, IOException {
 
-        String yaml = Files.readString(Path.of(
+        String yaml1 = Files.readString(Path.of(
                 DeploymentsResourceTest.class.getResource(
                                 "../twitter-search-source-binding.yaml")
                         .toURI()));
@@ -43,7 +48,7 @@ class IntegrationsResourceTest {
        var res = given()
                .when()
                .contentType("text/yaml")
-               .body(yaml)
+               .body(yaml1)
                .post("?dsl=KameletBinding")
                .then()
                .statusCode(Response.Status.OK.getStatusCode());
@@ -61,7 +66,25 @@ class IntegrationsResourceTest {
 
         String yaml2 = res.extract().body().asString();
 
-        assertEquals(yaml, yaml2);
+        var constructor = new Constructor(KameletBinding.class);
+        Representer representer = new Representer();
+        representer.getPropertyUtils()
+                .setSkipMissingProperties(true);
+        representer.getPropertyUtils()
+                .setAllowReadOnlyProperties(true);
+        representer.getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD);
+        constructor.getPropertyUtils()
+                .setSkipMissingProperties(true);
+        constructor.getPropertyUtils()
+                .setAllowReadOnlyProperties(true);
+        constructor.getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD);
+        Yaml yaml = new Yaml(constructor, representer);
+        KameletBinding res1 = yaml.load(yaml1);
+        KameletBinding res2 = yaml.load(yaml2);
+
+        assertEquals(res1, res2);
 
     }
 }

@@ -4,18 +4,25 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
+import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.representer.Representer;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class DeploymentServiceTest {
@@ -81,6 +88,7 @@ class DeploymentServiceTest {
         var res = deploymentService.crd(
                 "twitter-search-source-binding",
                 steps.toArray(new Step[0]));
+
         String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
                 + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
@@ -101,11 +109,11 @@ class DeploymentServiceTest {
                 + "      name: twitter-search-source\n"
                 + "      kind: Kamelet\n"
                 + "    properties:\n"
-                + "      apiKey: your own\n"
-                + "      keywords: Apache Camel\n"
-                + "      apiKeySecret: your own\n"
                 + "      accessToken: your own\n"
                 + "      accessTokenSecret: your own\n"
+                + "      apiKey: your own\n"
+                + "      apiKeySecret: your own\n"
+                + "      keywords: Apache Camel\n"
                 + "  steps:\n"
                 + "  - ref:\n"
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
@@ -121,8 +129,8 @@ class DeploymentServiceTest {
                 + "      name: kafka-sink\n"
                 + "      kind: Kamelet\n"
                 + "    properties:\n"
-                + "      password: The Password\n"
                 + "      bootstrapServers: The Brokers\n"
+                + "      password: The Password\n"
                 + "      topic: The Topic Names\n"
                 + "      user: The Username\n"
                 + "storage: true\n"
@@ -135,7 +143,26 @@ class DeploymentServiceTest {
                 result = crd.get("crd").trim();
             }
         }
-        Assertions.assertEquals(expectedStr, result);
+
+        var constructor = new Constructor(KameletBinding.class);
+        Representer representer = new Representer();
+        representer.getPropertyUtils()
+                .setSkipMissingProperties(true);
+        representer.getPropertyUtils()
+                .setAllowReadOnlyProperties(true);
+        representer.getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD);
+        constructor.getPropertyUtils()
+                .setSkipMissingProperties(true);
+        constructor.getPropertyUtils()
+                .setAllowReadOnlyProperties(true);
+        constructor.getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD);
+        Yaml yaml = new Yaml(constructor, representer);
+        KameletBinding res1 = yaml.load(expectedStr);
+        KameletBinding res2 = yaml.load(result);
+
+        assertEquals(res1, res2);
     }
 
 

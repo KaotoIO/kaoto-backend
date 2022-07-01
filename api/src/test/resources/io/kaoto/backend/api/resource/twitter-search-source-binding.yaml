@@ -18,11 +18,11 @@ spec:
       name: twitter-search-source
       kind: Kamelet
     properties:
-      apiKey: your own
-      keywords: Apache Camel
-      apiKeySecret: your own
       accessToken: your own
       accessTokenSecret: your own
+      apiKey: your own
+      apiKeySecret: your own
+      keywords: Apache Camel
   steps:
   - ref:
       apiVersion: camel.apache.org/v1alpha1
@@ -38,8 +38,8 @@ spec:
       name: kafka-sink
       kind: Kamelet
     properties:
-      password: The Password
       bootstrapServers: The Brokers
+      password: The Password
       topic: The Topic Names
       user: The Username
 storage: true
