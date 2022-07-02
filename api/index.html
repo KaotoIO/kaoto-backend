@@ -8307,7 +8307,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
--H "Content-Type: text/yaml,application/json"\
+-H "Content-Type: application/json"\
 "//v1/view-definitions"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-java">
@@ -8324,7 +8324,7 @@ public class ViewDefinitionResourceApiExample {
     public static void main(String[] args) {
         
         ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
-        String body = ; // String | 
+        array[Step] body = ; // array[Step] | 
         try {
             array[ViewDefinition] result = apiInstance.v1ViewDefinitionsPost(body);
             System.out.println(result);
@@ -8343,7 +8343,7 @@ public class ViewDefinitionResourceApiExample {
 
     public static void main(String[] args) {
         ViewDefinitionResourceApi apiInstance = new ViewDefinitionResourceApi();
-        String body = ; // String | 
+        array[Step] body = ; // array[Step] | 
         try {
             array[ViewDefinition] result = apiInstance.v1ViewDefinitionsPost(body);
             System.out.println(result);
@@ -8359,7 +8359,7 @@ public class ViewDefinitionResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *body = ; //  (optional)
+                              <pre class="prettyprint"><code class="language-cpp">array[Step] *body = ; //  (optional)
 
 ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init];
 
@@ -8381,7 +8381,7 @@ ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init
 
 var api = new ApiApi.ViewDefinitionResourceApi()
 var opts = { 
-  'body':  // {{String}} 
+  'body':  // {{array[Step]}} 
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -8412,7 +8412,7 @@ namespace Example
         {
 
             var apiInstance = new ViewDefinitionResourceApi();
-            var body = new String(); // String |  (optional) 
+            var body = new array[Step](); // array[Step] |  (optional) 
 
             try
             {
@@ -8435,7 +8435,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiViewDefinitionResourceApi();
-$body = ; // String | 
+$body = ; // array[Step] | 
 
 try {
     $result = $api_instance->v1ViewDefinitionsPost($body);
@@ -8452,7 +8452,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ViewDefinitionResourceApi;
 
 my $api_instance = WWW::SwaggerClient::ViewDefinitionResourceApi->new();
-my $body = WWW::SwaggerClient::Object::String->new(); # String | 
+my $body = [WWW::SwaggerClient::Object::array[Step]->new()]; # array[Step] | 
 
 eval { 
     my $result = $api_instance->v1ViewDefinitionsPost(body => $body);
@@ -8472,7 +8472,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ViewDefinitionResourceApi()
-body =  # String |  (optional)
+body =  # array[Step] |  (optional)
 
 try: 
     # Get views based on steps
@@ -8501,11 +8501,6 @@ except ApiException as e:
                                 $(document).ready(function() {
                                   var schemaWrapper = {
   "content" : {
-    "text/yaml" : {
-      "schema" : {
-        "type" : "string"
-      }
-    },
     "application/json" : {
       "schema" : {
         "type" : "array",
@@ -8516,7 +8511,7 @@ except ApiException as e:
     }
   }
 };
-                                  var schema = schemaWrapper.content["text/yaml"].schema;
+                                  var schema = schemaWrapper.content["application/json"].schema;
                                   if (schema.$ref != null) {
                                     schema = defsParser.$refs.get(schema.$ref);
                                   } else {
