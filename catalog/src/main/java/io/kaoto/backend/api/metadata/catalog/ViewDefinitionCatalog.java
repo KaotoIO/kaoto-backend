@@ -30,11 +30,12 @@ public class ViewDefinitionCatalog extends AbstractCatalog<ViewDefinition> {
     @Override
     protected List<ParseCatalog<ViewDefinition>> loadParsers() {
         List<ParseCatalog<ViewDefinition>> catalogs = new ArrayList<>();
-        for (String jar : repository.jar().orElse(
+        for (var jar : repository.jar().orElse(
                 Collections.emptyList())) {
             catalogs.add(ViewDefinitionParseCatalog.getParser(
-                    jar));
+                    jar.url()));
         }
+
         for (Repository.Git git : repository.git().orElse(
                 Collections.emptyList())) {
             catalogs.add(ViewDefinitionParseCatalog.getParser(

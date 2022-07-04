@@ -2,7 +2,6 @@ package io.kaoto.backend.metadata.parser;
 
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
 import org.apache.commons.io.IOUtils;
@@ -36,42 +35,40 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ClusterParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
+    private final Class<? extends CustomResource> cr;
     private Logger log = Logger.getLogger(ClusterParseCatalog.class);
 
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
+        log.error(kubernetesClient);
         this.kubernetesClient = kubernetesClient;
     }
     private KubernetesClient kubernetesClient;
 
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
-
     private YamlProcessFile<T> yamlProcessFile;
 
     public ClusterParseCatalog(final Class<? extends CustomResource> cr) {
-        log.trace("Warming up repository from cluster.");
-        metadata.completeAsync(() -> getCRAndParse(cr));
+        this.cr = cr;
     }
 
     private List<T> getCRAndParse(final Class<? extends CustomResource> cr) {
+        log.trace("Warming up repository from cluster.");
 
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
+        File dir = null;
         try {
+            log.trace("Creating temporary folder.");
+            dir = Files.createTempDirectory("kaoto-catalog").toFile();
+            dir.setExecutable(true, true);
+            dir.setReadable(true, true);
+            dir.setWritable(true, true);
+        } catch (IOException e) {
+            log.error("Error trying to create temporary directory.", e);
+        }
 
-            File dir = null;
-            try {
-                log.trace("Creating temporary folder.");
-                dir = Files.createTempDirectory("kaoto-catalog").toFile();
-                dir.setExecutable(true, true);
-                dir.setReadable(true, true);
-                dir.setWritable(true, true);
-            } catch (IOException e) {
-                log.error("Error trying to create temporary directory.", e);
-            }
-
+        try {
             var constructor = new Constructor(cr);
             Yaml yaml = new Yaml(constructor);
 
@@ -103,30 +100,32 @@ public class ClusterParseCatalog<T extends Metadata>
                     log.error("Error trying to create temporary file.", e);
                 }
             }
-            //Walk the expanded directory
-            log.trace("Parsing all files in the cluster");
-            this.yamlProcessFile.setFutureMetadata(futureMd);
-            this.yamlProcessFile.setMetadataList(metadataList);
-            try {
-                Files.walkFileTree(dir.toPath(), this.yamlProcessFile);
-            } catch (IOException e) {
-                log.error("Error parsing elements on the cluster", e);
-            }
-            log.trace("Found " + futureMd.size() + " elements.");
-            CompletableFuture.allOf(
-                            futureMd.toArray(new CompletableFuture[0]))
-                    .join();
-
-        } catch (KubernetesClientException e) {
+        } catch (Exception e) {
             log.error("Error retrieving elements from cluster.", e);
-
         }
+
+        //Walk the expanded directory
+        log.trace("Parsing all files in the cluster");
+        this.yamlProcessFile.setFutureMetadata(futureMd);
+        this.yamlProcessFile.setMetadataList(metadataList);
+        try {
+            Files.walkFileTree(dir.toPath(), this.yamlProcessFile);
+        } catch (IOException e) {
+            log.error("Error parsing elements on the cluster", e);
+        }
+
+        log.trace("Found " + futureMd.size() + " elements.");
+        CompletableFuture.allOf(
+                        futureMd.toArray(new CompletableFuture[0]))
+                .join();
 
         return metadataList;
     }
 
     @Override
     public CompletableFuture<List<T>> parse() {
+        CompletableFuture<List<T>> metadata = new CompletableFuture<>();
+        metadata.completeAsync(() -> getCRAndParse(cr));
         return metadata;
     }
 

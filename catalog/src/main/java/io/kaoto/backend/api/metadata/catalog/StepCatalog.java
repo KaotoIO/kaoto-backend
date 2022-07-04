@@ -1,10 +1,12 @@
 package io.kaoto.backend.api.metadata.catalog;
 
-import io.quarkus.runtime.Startup;
-import io.smallrye.config.ConfigMapping;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.configuration.Repository;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.Startup;
+import io.smallrye.config.ConfigMapping;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -28,32 +30,50 @@ public class StepCatalog extends AbstractCatalog<Step> {
 
     private Instance<StepCatalogParser> stepCatalogParsers;
 
+    private KubernetesClient kclient;
+
     @Override
     protected List<ParseCatalog<Step>> loadParsers() {
         List<ParseCatalog<Step>> catalogs = new ArrayList<>();
-        for (String jar : repository.jar().orElse(
-                Collections.emptyList())) {
+
+        boolean clusterAvailable = true;
+        try {
+            kclient.pods().list();
+        } catch (KubernetesClientException e) {
+            clusterAvailable = false;
+        }
+
+        if (clusterAvailable) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                catalogs.add(parser.getParser(jar));
+                catalogs.add(parser.getParserFromCluster());
             }
         }
-        for (String location : repository.localFolder().orElse(
+
+        for (var jar : repository.jar().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                File dir = new File(location);
-                catalogs.add(parser.getLocalFolder(dir.toPath()));
+                if (!jar.whennocluster() || !clusterAvailable) {
+                    catalogs.add(parser.getParser(jar.url()));
+                }
+            }
+        }
+        for (var location : repository.localFolder().orElse(
+                Collections.emptyList())) {
+            for (StepCatalogParser parser : stepCatalogParsers) {
+                if (!location.whennocluster() || !clusterAvailable) {
+                    File dir = new File(location.url());
+                    catalogs.add(parser.getLocalFolder(dir.toPath()));
+                }
             }
         }
         for (Repository.Git git : repository.git().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                catalogs.add(parser.getParser(
-                        git.url(), git.tag()));
+                if (!git.ifNoCluster() || !clusterAvailable) {
+                    catalogs.add(parser.getParser(
+                            git.url(), git.tag()));
+                }
             }
-        }
-
-        for (StepCatalogParser parser : stepCatalogParsers) {
-            catalogs.add(parser.getParserFromCluster());
         }
 
         return catalogs;
@@ -74,6 +94,10 @@ public class StepCatalog extends AbstractCatalog<Step> {
         this.stepCatalogParsers = stepCatalogParsers;
     }
 
+    @Inject
+    public void setKclient(final KubernetesClient kclient) {
+        this.kclient = kclient;
+    }
 
     @ConfigMapping(prefix = "repository.step")
     interface StepRepository extends Repository {
