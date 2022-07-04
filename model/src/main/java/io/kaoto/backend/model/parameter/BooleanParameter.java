@@ -1,8 +1,10 @@
 package io.kaoto.backend.model.parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("boolean")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BooleanParameter extends Parameter<Boolean> {
 
     public BooleanParameter(final String id, final String title,

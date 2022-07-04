@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  *
  */
 @JsonTypeName("string")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StringParameter extends Parameter<String> {
 
     // string
