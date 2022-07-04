@@ -2,6 +2,7 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -20,6 +21,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 🐱class IntegrationsResource
@@ -48,6 +51,13 @@ public class IntegrationsResource {
         this.stepParserServices = stepParserServices;
     }
     private Instance<StepParserService<Step>> stepParserServices;
+
+    @Inject
+    public void setParsers(
+            final Instance<DeploymentGeneratorService> services) {
+        this.deploymentGeneratorServices = services;
+    }
+    private Instance<DeploymentGeneratorService> deploymentGeneratorServices;
 
     /*
      * 🐱method crd: Map<String, Map<String>>
@@ -101,7 +111,7 @@ public class IntegrationsResource {
         for (StepParserService<Step> stepParserService : stepParserServices) {
             try {
                 if (stepParserService.identifier().equalsIgnoreCase(dsl)
-                         && stepParserService.appliesTo(crd)) {
+                        && stepParserService.appliesTo(crd)) {
                     var parsed = stepParserService.deepParse(crd);
                     integration.setSteps(parsed.getSteps());
                     integration.setMetadata(parsed.getMetadata());
@@ -115,6 +125,36 @@ public class IntegrationsResource {
         }
 
         return integration;
+    }
+
+
+
+    /*
+     * 🐱method crd: Map<String, Map<String>>
+     * 🐱param dsl: String
+     *
+     * Idempotent operation that given a CRD or given a JSON status, returns
+     * the other one.
+     *
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/dsls")
+    @Operation(summary = "Get Compatible DSLs",
+            description = "Given the list of steps, returns the list of"
+                    + " potential DSL compatible with said list."
+                    + " This is an idempotent operation.")
+    public List<String> compatibleDSL(final @RequestBody List<Step> steps) {
+        List<String> dsls = new ArrayList<>();
+
+        for (DeploymentGeneratorService parser : deploymentGeneratorServices) {
+           if (parser.appliesTo(steps)) {
+               dsls.add(parser.identifier());
+           }
+        }
+
+        return dsls;
     }
 
     @ServerExceptionMapper

@@ -1,6 +1,8 @@
 package io.kaoto.backend.api.resource.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,9 +20,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
@@ -54,6 +58,21 @@ class IntegrationsResourceTest {
                .statusCode(Response.Status.OK.getStatusCode());
 
        String json = res.extract().body().asString();
+        ObjectMapper mapper = new ObjectMapper();
+        Integration integration = mapper.readValue(json, Integration.class);
+
+        res = given()
+                .when()
+                .contentType("application/json")
+                .body(integration.getSteps())
+                .post("/dsls")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        List<String> dsls =
+                mapper.readValue(res.extract().body().asString(), List.class);
+        assertEquals(2, dsls.size());
+        assertTrue(dsls.contains("Kamelet"));
+        assertTrue(dsls.contains("KameletBinding"));
 
         res = given()
                 .when()

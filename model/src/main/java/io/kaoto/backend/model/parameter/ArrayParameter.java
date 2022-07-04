@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  *
  */
 @JsonTypeName("object")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ArrayParameter extends Parameter<Object[]> {
     private Integer maxItems;
     private Integer minItems;
