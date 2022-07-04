@@ -28,19 +28,17 @@ public class GitParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
     private Logger log = Logger.getLogger(GitParseCatalog.class);
-
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
-
     private YamlProcessFile<T> yamlProcessFile;
-
+    private final String url;
+    private final String tag;
 
     public GitParseCatalog(final String url, final String tag) {
-        log.trace("Warming up repository in " + url);
-        metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
+        this.url = url;
+        this.tag = tag;
     }
 
     private List<T> cloneRepoAndParse(final String url, final String tag) {
+        log.trace("Warming up repository in " + url);
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
@@ -95,6 +93,8 @@ public class GitParseCatalog<T extends Metadata>
 
     @Override
     public CompletableFuture<List<T>> parse() {
+        CompletableFuture<List<T>> metadata = new CompletableFuture<>();
+        metadata.completeAsync(() -> cloneRepoAndParse(url, tag));
         return metadata;
     }
 
@@ -102,4 +102,3 @@ public class GitParseCatalog<T extends Metadata>
         this.yamlProcessFile = fileVisitor;
     }
 }
-

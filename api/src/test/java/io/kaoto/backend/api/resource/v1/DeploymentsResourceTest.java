@@ -54,7 +54,7 @@ class DeploymentsResourceTest {
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
 
-        res = given()
+        given()
                 .when()
                 .contentType("application/json")
                 .delete("/{name}", name)

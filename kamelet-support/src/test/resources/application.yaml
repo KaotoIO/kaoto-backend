@@ -1,11 +1,11 @@
 repository:
   step:
     jar:
-      - "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar"
+      - url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar"
     git:
       -
         url: "https://github.com/KaotoIO/camel-component-metadata.git"
         tag: "main"
   viewdefinition:
     jar:
-      - "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/tags/test.zip"
+      - url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/tags/test.zip"

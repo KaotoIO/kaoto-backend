@@ -23,18 +23,16 @@ public class LocalFolderParseCatalog<T extends Metadata>
 
     private Logger log = Logger.getLogger(LocalFolderParseCatalog.class);
 
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
-
     private YamlProcessFile<T> yamlProcessFile;
 
+    private final Path uri;
 
-    public LocalFolderParseCatalog(final Path url) {
-        log.trace("Warming up repository in local folder" + url);
-        metadata.completeAsync(() -> getFolderAndParse(url));
+    public LocalFolderParseCatalog(final Path uri) {
+        this.uri = uri;
     }
 
     private List<T> getFolderAndParse(final Path location) {
+        log.trace("Warming up repository in local folder" + uri);
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
@@ -60,6 +58,8 @@ public class LocalFolderParseCatalog<T extends Metadata>
 
     @Override
     public CompletableFuture<List<T>> parse() {
+        CompletableFuture<List<T>> metadata = new CompletableFuture<>();
+        metadata.completeAsync(() -> getFolderAndParse(uri));
         return metadata;
     }
 

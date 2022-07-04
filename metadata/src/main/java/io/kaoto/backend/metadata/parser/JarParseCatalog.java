@@ -37,21 +37,18 @@ public class JarParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
     private Logger log = Logger.getLogger(JarParseCatalog.class);
-
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
-
     private YamlProcessFile<T> yamlProcessFile;
+    private final String url;
 
     //to avoid bomb attacks
     private int thresholdSize = 1000000000; // 1 GB
 
     public JarParseCatalog(final String url) {
-        log.trace("Warming up repository in " + url);
-        metadata.completeAsync(() -> getJarAndParse(url));
+        this.url = url;
     }
 
     private List<T> getJarAndParse(final String url) {
+        log.trace("Warming up repository in " + url);
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
@@ -176,6 +173,8 @@ public class JarParseCatalog<T extends Metadata>
 
     @Override
     public CompletableFuture<List<T>> parse() {
+        CompletableFuture<List<T>> metadata = new CompletableFuture<>();
+        metadata.completeAsync(() -> getJarAndParse(url));
         return metadata;
     }
 
