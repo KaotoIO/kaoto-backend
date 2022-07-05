@@ -54,8 +54,10 @@ public class ClusterService {
                     for (CustomResource integration : resources) {
                         Integration i = new Integration();
                         i.setName(integration.getMetadata().getName());
-                        i.setRunning(true);
-                        i.setResource(integration);
+                        i.setNamespace(getNamespace(namespace));
+                        i.setStatus(integration.getStatus());
+                        i.setDate(integration.getMetadata()
+                                .getCreationTimestamp());
                         res.add(i);
                     }
                 } catch (Exception e) {
