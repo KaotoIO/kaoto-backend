@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,12 +46,26 @@ class IntegrationsResourceTest {
     @Test
     void thereAndBackAgain() throws URISyntaxException, IOException {
 
+        ObjectMapper mapper = new ObjectMapper();
+
         String yaml1 = Files.readString(Path.of(
                 DeploymentsResourceTest.class.getResource(
                                 "../twitter-search-source-binding.yaml")
                         .toURI()));
 
-       var res = given()
+
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(Collections.emptyList())
+                .post("/dsls")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        List<String> dsls =
+                mapper.readValue(res.extract().body().asString(), List.class);
+        assertFalse(dsls.isEmpty());
+
+       res = given()
                .when()
                .contentType("text/yaml")
                .body(yaml1)
@@ -58,7 +74,6 @@ class IntegrationsResourceTest {
                .statusCode(Response.Status.OK.getStatusCode());
 
        String json = res.extract().body().asString();
-        ObjectMapper mapper = new ObjectMapper();
         Integration integration = mapper.readValue(json, Integration.class);
 
         res = given()
@@ -68,7 +83,7 @@ class IntegrationsResourceTest {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        List<String> dsls =
+        dsls =
                 mapper.readValue(res.extract().body().asString(), List.class);
         assertEquals(2, dsls.size());
         assertTrue(dsls.contains("Kamelet"));
