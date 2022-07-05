@@ -3,7 +3,7 @@ repository:
     jar:
       -
         url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.6.0/camel-kamelets-0.6.0.jar"
-        whennocluster: true
+        if-no-cluster: true
       - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
   viewdefinition:
     jar:

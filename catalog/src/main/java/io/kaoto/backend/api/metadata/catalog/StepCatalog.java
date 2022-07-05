@@ -52,7 +52,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
         for (var jar : repository.jar().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!jar.whennocluster() || !clusterAvailable) {
+                if (!jar.ifNoCluster() || !clusterAvailable) {
                     catalogs.add(parser.getParser(jar.url()));
                 }
             }
@@ -60,7 +60,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
         for (var location : repository.localFolder().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!location.whennocluster() || !clusterAvailable) {
+                if (!location.ifNoCluster() || !clusterAvailable) {
                     File dir = new File(location.url());
                     catalogs.add(parser.getLocalFolder(dir.toPath()));
                 }
@@ -99,7 +99,8 @@ public class StepCatalog extends AbstractCatalog<Step> {
         this.kclient = kclient;
     }
 
-    @ConfigMapping(prefix = "repository.step")
+    @ConfigMapping(prefix = "repository.step", namingStrategy =
+            ConfigMapping.NamingStrategy.KEBAB_CASE)
     interface StepRepository extends Repository {
     }
 }
