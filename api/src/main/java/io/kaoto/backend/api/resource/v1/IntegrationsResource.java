@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -59,6 +60,12 @@ public class IntegrationsResource {
     }
     private Instance<DeploymentGeneratorService> deploymentGeneratorServices;
 
+    private LanguageService languageService;
+
+    @Inject
+    public void setLanguageService(final LanguageService languageService) {
+        this.languageService = languageService;
+    }
     /*
      * 🐱method crd: Map<String, Map<String>>
      * 🐱param dsl: String
@@ -152,6 +159,12 @@ public class IntegrationsResource {
            if (parser.appliesTo(steps)) {
                dsls.add(parser.identifier());
            }
+        }
+
+        if (dsls.isEmpty()) {
+            for (var l : languageService.getAll()) {
+                dsls.add(l.get("name"));
+            }
         }
 
         return dsls;
