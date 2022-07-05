@@ -742,10 +742,22 @@
             defs["Integration"] = {
   "type" : "object",
   "properties" : {
-    "running" : {
-      "type" : "boolean"
-    },
     "name" : {
+      "type" : "string"
+    },
+    "date" : {
+      "type" : "string"
+    },
+    "errors" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "status" : {
+      "type" : "object"
+    },
+    "namespace" : {
       "type" : "string"
     }
   }
