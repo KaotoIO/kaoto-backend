@@ -2367,7 +2367,7 @@ public class DeploymentsResourceApiExample {
         Integer lines = 56; // Integer | Number of last N lines to be retrieved.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
-            'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
@@ -2388,7 +2388,7 @@ public class DeploymentsResourceApiExample {
         Integer lines = 56; // Integer | Number of last N lines to be retrieved.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
-            'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
@@ -2412,7 +2412,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 [apiInstance v1DeploymentsNameLogsGetWith:name
     lines:lines
     namespace:namespace
-              completionHandler: ^('String' output, NSError* error) {
+              completionHandler: ^(array['String'] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2468,7 +2468,7 @@ namespace Example
             try
             {
                 // Get logs
-                'String' result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+                array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2644,7 +2644,10 @@ except ApiException as e:
   "content" : {
     "text/plain" : {
       "schema" : {
-        "type" : "string",
+        "type" : "array",
+        "items" : {
+          "type" : "string"
+        },
         "x-content-type" : "text/plain"
       }
     }
