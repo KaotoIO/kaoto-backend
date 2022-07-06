@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.wildfly.common.Assert.assertFalse;
 
 
 @QuarkusTest
@@ -86,14 +85,6 @@ class DeploymentsResourceTest {
         assertTrue(yaml.contains("kind: KameletBinding"));
         assertTrue(yaml.contains("name: twitter-search-source"));
         assertTrue(yaml.contains("name: aws-translate-action"));
-
-        res = given()
-                .when()
-                .contentType("text/plain")
-                .get("/{name}/logs?tailingLines=1", name)
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-        assertFalse(res.extract().response().asString().isEmpty());
 
         res = given()
                 .when()
