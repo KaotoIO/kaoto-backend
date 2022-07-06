@@ -8,10 +8,13 @@ import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorServ
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.deployment.ClusterService;
 import io.kaoto.backend.model.deployment.Integration;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.NoCache;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -195,11 +198,13 @@ public class DeploymentsResource {
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @NoCache
     @Path("/{name}/logs")
+    @Produces(MediaType.TEXT_PLAIN)
     @Operation(summary = "Get logs",
             description = "Get the resource's log.")
-    public String logs(
+    @Blocking
+    public Multi<String> logs(
             final @Parameter(description = "Name of the resource "
                     + "of which logs should be retrieved.")
             @PathParam("name") String name,
@@ -209,7 +214,9 @@ public class DeploymentsResource {
             final @Parameter(description = "Number of last N lines to be "
                     + "retrieved.")
             @QueryParam("lines") int lines) {
-        return clusterService.logs(namespace, name, lines);
+
+        return clusterService.streamlogs(namespace, name, lines);
+
     }
 
     @ServerExceptionMapper

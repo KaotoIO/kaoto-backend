@@ -6,6 +6,9 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.Integration;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -17,7 +20,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +33,10 @@ import java.util.List;
 @ApplicationScoped
 public class ClusterService {
 
-
     private Logger log = Logger.getLogger(ClusterService.class);
     private KubernetesClient kubernetesClient;
     private Instance<DeploymentGeneratorService> parsers;
+    private ManagedExecutor managedExecutor;
 
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
@@ -38,6 +46,13 @@ public class ClusterService {
     @Inject
     public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
         this.parsers = parsers;
+    }
+
+
+    @Inject
+    public void setManagedExecutor(
+            final ManagedExecutor managedExecutor) {
+        this.managedExecutor = managedExecutor;
     }
 
     public List<Integration> getIntegrations(final String namespace) {
@@ -170,6 +185,51 @@ public class ClusterService {
                 .withName(podName)
                 .tailingLines(lines)
                 .getLog(Boolean.TRUE);
+    }
+
+    @Blocking
+    public Multi<String> streamlogs(final String namespace,
+                                    final String podName,
+                                    final Integer lines) {
+        final var out = new PipedOutputStream();
+        final var in = new PipedInputStream();
+
+        managedExecutor.execute(() ->
+                kubernetesClient.pods()
+                        .inNamespace(getNamespace(namespace))
+                        .withName(podName)
+                        .tailingLines(lines)
+                        .watchLog(out));
+
+        managedExecutor.execute(() -> {
+            try {
+                out.connect(in);
+            } catch (IOException e) {
+                log.error("Pipeline broken", e);
+            }
+        });
+
+        var reader = new BufferedReader(new InputStreamReader(in));
+
+        Multi<String> logs = Multi.createFrom().generator(
+                () -> 0, (n, emitter) -> {
+                    try {
+                        reader
+                            .lines()
+                            .forEach(
+                                    line ->  emitter.emit(line + "\n"));
+                        emitter.emit(reader.readLine() + "\n");
+                    } catch (Exception e) {
+                        emitter.fail(e);
+                    }
+                    emitter.complete();
+                    return ++n;
+                }
+        );
+        logs.runSubscriptionOn(managedExecutor);
+        logs.onOverflow().buffer(3);
+
+        return logs;
     }
 
     private String getNamespace(final String namespace) {
