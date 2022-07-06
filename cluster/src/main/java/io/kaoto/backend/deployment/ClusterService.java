@@ -191,10 +191,23 @@ public class ClusterService {
 
     @Blocking
     public Multi<String> streamlogs(final String namespace,
-                                    final String podName,
+                                    final String name,
                                     final Integer lines) {
         final var out = new PipedOutputStream();
         final var in = new PipedInputStream();
+
+        var list = kubernetesClient.pods()
+                .inNamespace(getNamespace(namespace))
+                        .list().getItems();
+
+        var integrationName = name;
+        for (var pod : list) {
+            if (pod.getMetadata().getName().startsWith(name)) {
+                integrationName = pod.getMetadata().getName();
+            }
+        }
+
+        final var podName = integrationName;
 
         managedExecutor.execute(() ->
                 kubernetesClient.pods()
