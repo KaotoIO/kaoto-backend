@@ -16,6 +16,7 @@ public class Integration {
     private List<Step> steps = Collections.emptyList();
     private Map<String, Object> metadata = Collections.emptyMap();
     private List<Parameter> parameters = Collections.emptyList();
+    private String dsl = null;
 
     public List<Step> getSteps() {
         return steps;
@@ -40,5 +41,13 @@ public class Integration {
     public void setParameters(
             final List<Parameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public String getDsl() {
+        return dsl;
+    }
+
+    public void setDsl(final String dsl) {
+        this.dsl = dsl;
     }
 }

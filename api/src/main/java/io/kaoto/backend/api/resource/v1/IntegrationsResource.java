@@ -115,6 +115,7 @@ public class IntegrationsResource {
             @QueryParam("dsl") String dsl) {
         Integration integration = new Integration();
 
+        boolean found = false;
         for (StepParserService<Step> stepParserService : stepParserServices) {
             try {
                 if (stepParserService.identifier().equalsIgnoreCase(dsl)
@@ -123,11 +124,34 @@ public class IntegrationsResource {
                     integration.setSteps(parsed.getSteps());
                     integration.setMetadata(parsed.getMetadata());
                     integration.setParameters(parsed.getParameters());
+                    integration.setDsl(dsl);
+                    found = true;
                     break;
                 }
             } catch (Exception e) {
                 log.warn("Parser " + stepParserService.getClass() + "threw an"
                         + " unexpected error.", e);
+            }
+        }
+
+        if (!found) {
+            for (var stepParserService : stepParserServices) {
+                try {
+                    if (stepParserService.appliesTo(crd)) {
+                        var parsed = stepParserService.deepParse(crd);
+                        integration.setSteps(parsed.getSteps());
+                        integration.setMetadata(parsed.getMetadata());
+                        integration.setParameters(parsed.getParameters());
+                        integration.setDsl(stepParserService.identifier());
+                        log.warn("Gurl, the DSL you gave me is so wrong. This"
+                                + " is a " + stepParserService.identifier()
+                                + " not a " + dsl);
+                        break;
+                    }
+                } catch (Exception e) {
+                    log.warn("Parser " + stepParserService.getClass()
+                            + "threw an unexpected error.", e);
+                }
             }
         }
 
