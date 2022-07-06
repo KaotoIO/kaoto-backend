@@ -236,6 +236,14 @@ public class ClusterService {
                         emitter.emit(reader.readLine() + "\n");
                     } catch (Exception e) {
                         emitter.fail(e);
+                    } finally {
+                        try {
+                            in.close();
+                            out.close();
+                            reader.close();
+                        } catch (Exception e) {
+                            log.error(e);
+                        }
                     }
                     emitter.complete();
                     return ++n;
