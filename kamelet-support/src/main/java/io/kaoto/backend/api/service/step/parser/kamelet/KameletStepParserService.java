@@ -176,16 +176,15 @@ public class KameletStepParserService
 
     private Step processDefinedStep(final UriFlowStep uriFlowStep) {
         String uri = uriFlowStep.getUri();
-        String connectorName = null;
+        String connectorName = uri;
+        log.info("Parsing " + uri);
 
-        if (uri != null) {
+        if (uri != null
+                && uri.contains(":")
+                && !uri.startsWith("kamelet:")) {
             connectorName = uri.substring(0, uri.indexOf(":"));
-
-            //special kamelet source and sink
-            if (connectorName.equalsIgnoreCase("kamelet")) {
-                connectorName = uri;
-            }
         }
+        log.info("Found connector " + connectorName);
 
         Step step = catalog.getReadOnlyCatalog()
                 .searchStepByName(connectorName);
