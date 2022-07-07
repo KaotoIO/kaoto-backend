@@ -7,6 +7,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -46,7 +47,8 @@ public class KameletBindingDeploymentGeneratorService
 
     @Override
     public String parse(final List<Step> steps,
-                        final Map<String, Object> metadata) {
+                        final Map<String, Object> metadata,
+                        final List<Parameter> parameters) {
 
         if (!appliesTo(steps)) {
             return "";

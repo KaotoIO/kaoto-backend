@@ -44,15 +44,17 @@ class KameletBindingDeploymentGeneratorServiceTest {
     void parse() {
         List<Step> steps = new ArrayList();
         Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse(
-                steps, Collections.emptyMap()));
+                steps, Collections.emptyMap(), Collections.emptyList()));
         steps.add(new Step());
         steps.add(new Step());
         for (Step step : steps) {
             step.setKind("Kamelet");
         }
         Assertions.assertNotEquals("",
-                parser.parse(steps, Collections.emptyMap()));
+                parser.parse(steps, Collections.emptyMap(),
+                        Collections.emptyList()));
         Assertions.assertNotEquals(EMPTY_INTEGRATION,
-                parser.parse(steps, Collections.emptyMap()));
+                parser.parse(steps, Collections.emptyMap(),
+                        Collections.emptyList()));
     }
 }

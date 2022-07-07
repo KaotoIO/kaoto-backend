@@ -9,6 +9,7 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -16,7 +17,13 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
+import io.kaoto.backend.model.parameter.ArrayParameter;
+import io.kaoto.backend.model.parameter.BooleanParameter;
+import io.kaoto.backend.model.parameter.IntegerParameter;
+import io.kaoto.backend.model.parameter.NumberParameter;
+import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
@@ -84,6 +91,7 @@ public class KameletStepParserService
 
             processMetadata(res, kamelet.getMetadata());
             processSpec(steps, res, kamelet.getSpec());
+            processParameters(res, kamelet.getSpec());
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(
                     "Error trying to parse.", e);
@@ -93,6 +101,57 @@ public class KameletStepParserService
                 .filter(Objects::nonNull)
                 .toList());
         return res;
+    }
+
+    private void processParameters(final ParseResult<Step> res,
+                                   final KameletSpec spec) {
+        res.setParameters(new ArrayList<>());
+        if (spec.getDefinition() != null
+                && spec.getDefinition().getProperties() != null) {
+            Map<String, KameletDefinitionProperty> props =
+                    spec.getDefinition().getProperties();
+
+            for (var prop : props.entrySet()) {
+                String key = prop.getKey();
+                var def = prop.getValue();
+                Parameter p = new ObjectParameter();
+                switch (def.getType()) {
+                    case "string":
+                        p = new StringParameter(key, def.getTitle(),
+                        def.getDescription(), def.getDefault(),
+                                def.getFormat());
+                        break;
+                    case "number":
+                        p = new NumberParameter(key, def.getTitle(),
+                        def.getDescription(), Double.valueOf(def.getDefault()));
+                        break;
+                    case "integer":
+                        p = new IntegerParameter(key, def.getTitle(),
+                                def.getDescription(),
+                                (def.getDefault() != null
+                                        ? Integer.valueOf(def.getDefault())
+                                        : null));
+                        break;
+                    case "boolean":
+                        p = new BooleanParameter(key, def.getTitle(),
+                                def.getDescription(),
+                                (def.getDefault() != null
+                                        ? Boolean.valueOf(def.getDefault())
+                                        : null));
+                        break;
+                    case "array":
+                        p = new ArrayParameter(key, def.getTitle(),
+                                def.getDescription(),
+                                (def.getDefault() != null
+                                    ? def.getDefault().split(",") : null));
+                        break;
+                    default:
+                        p = new ObjectParameter(key, def.getTitle(),
+                                def.getDescription(), def.getDefault());
+                }
+                res.getParameters().add(p);
+            }
+        }
     }
 
     private void processSpec(final List<Step> steps,
@@ -177,14 +236,14 @@ public class KameletStepParserService
     private Step processDefinedStep(final UriFlowStep uriFlowStep) {
         String uri = uriFlowStep.getUri();
         String connectorName = uri;
-        log.info("Parsing " + uri);
+        log.trace("Parsing " + uri);
 
         if (uri != null
                 && uri.contains(":")
                 && !uri.startsWith("kamelet:")) {
             connectorName = uri.substring(0, uri.indexOf(":"));
         }
-        log.info("Found connector " + connectorName);
+        log.trace("Found connector " + connectorName);
 
         Step step = catalog.getReadOnlyCatalog()
                 .searchStepByName(connectorName);
