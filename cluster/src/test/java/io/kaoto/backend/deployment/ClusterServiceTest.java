@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -32,10 +33,12 @@ class ClusterServiceTest {
         String ns = "default";
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
 
-        assertFalse(clusterService.start("Wrong text", ns));
+        assertThrows(IllegalArgumentException.class,
+                () -> clusterService.start("Wrong text", ns));
+
         assertTrue(clusterService.getIntegrations(ns).isEmpty());
 
-        assertTrue(clusterService.start(binding, ns));
+        clusterService.start(binding, ns);
         assertFalse(clusterService.getIntegrations(ns).isEmpty());
 
         final var integrations = clusterService.getIntegrations(ns);

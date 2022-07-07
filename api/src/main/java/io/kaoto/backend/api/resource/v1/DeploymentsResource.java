@@ -99,11 +99,8 @@ public class DeploymentsResource {
             @QueryParam("namespace") String namespace) {
 
         String securedcrd = securityCheck(crd);
-
-        if (clusterService.start(securedcrd, namespace)) {
-            return securedcrd;
-        }
-        return "Error deploying " + name;
+        clusterService.start(securedcrd, namespace);
+        return securedcrd;
     }
 
     private String securityCheck(final String crd) {

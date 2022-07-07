@@ -132,11 +132,8 @@ public class IntegrationResource {
                     + "we want the integration to run.")
             @QueryParam("namespace") String namespace) {
         final var crd = customResourceDefinition(request, type, dsl);
-
-        if (clusterService.start(crd, namespace)) {
-            return crd;
-        }
-        return "Error deploying " + request.getName();
+        clusterService.start(crd, namespace);
+        return crd;
     }
 
     @GET
