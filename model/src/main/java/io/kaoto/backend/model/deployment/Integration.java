@@ -12,6 +12,7 @@ public class Integration {
     private String[] errors = new String[]{};
     private Object status;
     private String namespace;
+    private String type;
     @JsonIgnore
     private CustomResource resource;
 
@@ -64,5 +65,13 @@ public class Integration {
 
     public void setNamespace(final String namespace) {
         this.namespace = namespace;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
     }
 }

@@ -74,6 +74,7 @@ public class ClusterService {
                         i.setStatus(parser.getStatus(integration));
                         i.setDate(integration.getMetadata()
                                 .getCreationTimestamp());
+                        i.setType(integration.getKind());
                         res.add(i);
                     }
                 } catch (Exception e) {
