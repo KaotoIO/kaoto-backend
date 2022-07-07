@@ -398,7 +398,7 @@ identifier():String
 <BR align="left" />
 description():String
 <BR align="left" />
-parse(&lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String
+parse(&lt;List[Step]&gt; steps, &lt;List[Parameter]&gt; parameters, &lt;Map&gt; metadata):String
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />

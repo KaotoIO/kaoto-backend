@@ -508,23 +508,23 @@
 <!-- DeploymentGeneratorService -->
 <g id="node37" class="node">
 <title>DeploymentGeneratorService</title>
-<polygon fill="none" stroke="black" points="364,-450.5 364,-471.5 744,-471.5 744,-450.5 364,-450.5"/>
-<text text-anchor="start" x="438" y="-458.3" font-family="Times,serif" font-weight="bold" font-size="14.00">DeploymentGeneratorService</text>
-<polygon fill="none" stroke="black" points="364,-346.5 364,-450.5 744,-450.5 744,-346.5 364,-346.5"/>
-<text text-anchor="start" x="522.5" y="-437.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="367" y="-423.3" font-family="Times,serif" font-size="14.00">identifier():String</text>
-<text text-anchor="start" x="367" y="-409.3" font-family="Times,serif" font-size="14.00">description():String</text>
-<text text-anchor="start" x="367" y="-395.3" font-family="Times,serif" font-size="14.00">parse(&lt;List[Step]&gt; steps, &lt;Map&gt; metadata):String</text>
-<text text-anchor="start" x="367" y="-381.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps):boolean</text>
-<text text-anchor="start" x="367" y="-367.3" font-family="Times,serif" font-size="14.00">supportedCustomResources():List&lt;Class&gt;</text>
-<text text-anchor="start" x="367" y="-353.3" font-family="Times,serif" font-size="14.00">getKinds():String[]</text>
-<polygon fill="none" stroke="black" points="363,-346 363,-473 745,-473 745,-346 363,-346"/>
+<polygon fill="none" stroke="black" points="132,-450.5 132,-471.5 745,-471.5 745,-450.5 132,-450.5"/>
+<text text-anchor="start" x="322.5" y="-458.3" font-family="Times,serif" font-weight="bold" font-size="14.00">DeploymentGeneratorService</text>
+<polygon fill="none" stroke="black" points="132,-346.5 132,-450.5 745,-450.5 745,-346.5 132,-346.5"/>
+<text text-anchor="start" x="407" y="-437.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="135" y="-423.3" font-family="Times,serif" font-size="14.00">identifier():String</text>
+<text text-anchor="start" x="135" y="-409.3" font-family="Times,serif" font-size="14.00">description():String</text>
+<text text-anchor="start" x="135" y="-395.3" font-family="Times,serif" font-size="14.00">parse(&lt;List[Step]&gt; steps, &lt;List[Parameter]&gt; parameters, &lt;Map&gt; metadata):String</text>
+<text text-anchor="start" x="135" y="-381.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps):boolean</text>
+<text text-anchor="start" x="135" y="-367.3" font-family="Times,serif" font-size="14.00">supportedCustomResources():List&lt;Class&gt;</text>
+<text text-anchor="start" x="135" y="-353.3" font-family="Times,serif" font-size="14.00">getKinds():String[]</text>
+<polygon fill="none" stroke="black" points="130.5,-346 130.5,-473 745.5,-473 745.5,-346 130.5,-346"/>
 </g>
 <!-- DeploymentGeneratorService&#45;&gt;Step -->
 <g id="edge24" class="edge">
 <title>DeploymentGeneratorService&#45;&gt;Step</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M678.31,-341.78C713.57,-322.85 751.9,-302.28 786.97,-283.46"/>
-<polygon fill="black" stroke="black" points="795.81,-278.72 789.13,-287.41 791.4,-281.08 787,-283.44 787,-283.44 787,-283.44 791.4,-281.08 784.87,-279.48 795.81,-278.72 795.81,-278.72"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M602.71,-341.91C663.12,-317.49 730.35,-290.31 786.32,-267.69"/>
+<polygon fill="black" stroke="black" points="795.91,-263.81 788.33,-271.73 791.28,-265.69 786.64,-267.56 786.64,-267.56 786.64,-267.56 791.28,-265.69 784.95,-263.39 795.91,-263.81 795.91,-263.81"/>
 </g>
 </g>
 </svg>
