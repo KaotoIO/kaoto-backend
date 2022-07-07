@@ -51,6 +51,14 @@ public interface DeploymentGeneratorService {
     boolean appliesTo(List<Step> steps);
 
     /*
+     * 🐱method getStatus: CustomResource
+     *
+     * Returns the status of the custom resource provided. It must be one of
+     * the supported types in #supportedCustomResources() .
+     */
+    Status getStatus(CustomResource cr);
+
+    /*
      * 🐱method supportedCustomResources: List<Class>
      *
      * Returns the Java model classes that extend CustomResource and that are
@@ -66,4 +74,7 @@ public interface DeploymentGeneratorService {
      */
     List<String> getKinds();
 
+    enum Status {
+        Stopped, Building, Running, Invalid
+    }
 }

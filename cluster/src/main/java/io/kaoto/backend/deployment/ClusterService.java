@@ -71,7 +71,7 @@ public class ClusterService {
                         Integration i = new Integration();
                         i.setName(integration.getMetadata().getName());
                         i.setNamespace(getNamespace(namespace));
-                        i.setStatus(integration.getStatus());
+                        i.setStatus(parser.getStatus(integration));
                         i.setDate(integration.getMetadata()
                                 .getCreationTimestamp());
                         res.add(i);
