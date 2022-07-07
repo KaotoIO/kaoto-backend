@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,8 @@ class KameletBindingStepParserServiceTest {
                 .setBeanAccess(BeanAccess.FIELD);
         Yaml yaml = new Yaml(constructor, representer);
         KameletBinding res1 = yaml.load(binding);
-        KameletBinding res2 = yaml.load(deploymentService.parse(steps, md));
+        KameletBinding res2 = yaml.load(
+                deploymentService.parse(steps, md, Collections.emptyList()));
 
         assertEquals(res1, res2);
     }
@@ -117,7 +119,8 @@ class KameletBindingStepParserServiceTest {
                 .setBeanAccess(BeanAccess.FIELD);
         Yaml yaml = new Yaml(constructor, representer);
         KameletBinding res1 = yaml.load(binding);
-        KameletBinding res2 = yaml.load(deploymentService.parse(steps, md));
+        KameletBinding res2 = yaml.load(
+                deploymentService.parse(steps, md, Collections.emptyList()));
 
         assertEquals(res1, res2);
     }

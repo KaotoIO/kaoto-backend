@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,8 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "singular: kameletbinding\n"
                 + "spec: {}\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n", service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
 
 
         steps.add(catalog.getReadOnlyCatalog()
@@ -79,7 +81,8 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "      name: aws-s3-source\n"
                 + "      kind: Kamelet\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n",  service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
 
         Step step = catalog.getReadOnlyCatalog()
                 .searchStepByName("knative-sink");
@@ -121,7 +124,8 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "    properties:\n"
                 + "      type: example\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n",  service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
     }
 
     @Test

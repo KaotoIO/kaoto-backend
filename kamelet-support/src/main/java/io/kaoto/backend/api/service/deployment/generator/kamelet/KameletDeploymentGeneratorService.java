@@ -5,6 +5,7 @@ import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorServ
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -48,9 +49,10 @@ public class KameletDeploymentGeneratorService
 
     @Override
     public String parse(final List<Step> steps,
-                        final Map<String, Object> metadata) {
+                        final Map<String, Object> metadata,
+                        final List<Parameter> parameters) {
 
-        Kamelet kamelet = new Kamelet(steps, metadata);
+        Kamelet kamelet = new Kamelet(steps, metadata, parameters);
 
         TypeDescription setHeaderDesc =
                 new TypeDescription(SetBodyFlowStep.class);

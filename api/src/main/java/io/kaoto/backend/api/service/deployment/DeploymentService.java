@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,12 +49,13 @@ public class DeploymentService {
                 if (parser.appliesTo(steps)) {
                     Map<String, String> strings = new HashMap<>();
                     strings.put("dsl", parser.identifier());
-                    strings.put("crd", parser.parse(steps, metadata));
+                    strings.put("crd", parser.parse(steps,
+                            metadata, Collections.emptyList()));
                     res.add(strings);
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected"
-                                + " error. ",
+                log.warn("Parser " + parser.getClass()
+                                + "threw an unexpected error. ",
                         e);
             }
         }
@@ -74,7 +76,9 @@ public class DeploymentService {
             try {
                 if (parser.identifier().equalsIgnoreCase(dsl)) {
                     if (parser.appliesTo(i.getSteps())) {
-                        return parser.parse(i.getSteps(), i.getMetadata());
+                        return parser.parse(i.getSteps(),
+                                i.getMetadata(),
+                                i.getParameters());
                     }
                     break;
                 }

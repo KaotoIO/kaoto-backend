@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +45,15 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
+                + "  definition:\n"
+                + "    properties: {}\n"
                 + "  template:\n"
                 + "    from:\n"
                 + "      uri: null\n"
                 + "      steps: []\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n", service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
 
         Step step = new Step();
         step.setKind("Camel-Connector");
@@ -88,6 +92,8 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
+                + "  definition:\n"
+                + "    properties: {}\n"
                 + "  template:\n"
                 + "    from:\n"
                 + "      uri: log:loggerName\n"
@@ -97,7 +103,8 @@ class KameletDeploymentGeneratorServiceTest {
                 + "      - to:\n"
                 + "          uri: kamelet:sink\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n",  service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
 
         step = new Step();
         step.setKind("EIP");
@@ -127,6 +134,8 @@ class KameletDeploymentGeneratorServiceTest {
                 + "served: true\n"
                 + "singular: kamelet\n"
                 + "spec:\n"
+                + "  definition:\n"
+                + "    properties: {}\n"
                 + "  template:\n"
                 + "    from:\n"
                 + "      uri: log:loggerName\n"
@@ -138,7 +147,8 @@ class KameletDeploymentGeneratorServiceTest {
                 + "      - to:\n"
                 + "          uri: kamelet:sink\n"
                 + "storage: true\n"
-                + "version: v1alpha1\n",  service.parse(steps, md));
+                + "version: v1alpha1\n",
+                service.parse(steps, md, Collections.emptyList()));
     }
 
     @Test

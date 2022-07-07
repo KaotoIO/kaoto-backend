@@ -5,6 +5,7 @@ import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
@@ -16,6 +17,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
@@ -40,7 +42,8 @@ public class KamelPopulator {
     public void populateKamelet(
             final Kamelet kamelet,
             final Map<String, Object> metadata,
-            final List<Step> steps) {
+            final List<Step> steps,
+            final List<Parameter> parameters) {
 
         kamelet.setSpec(new KameletSpec());
         kamelet.getSpec().setTemplate(new Template());
@@ -81,6 +84,31 @@ public class KamelPopulator {
             kamelet.getMetadata().getAnnotations().put(
                     CAMEL_APACHE_ORG_KAMELET_ICON,
                     metadata.getOrDefault("icon", "").toString());
+        }
+
+        if (kamelet.getSpec().getDefinition() == null) {
+            kamelet.getSpec().setDefinition(new KameletDefinition());
+        }
+        var def = kamelet.getSpec().getDefinition();
+        if (def.getProperties() == null) {
+            def.setProperties(new LinkedHashMap<>());
+        }
+        for (Parameter p : parameters) {
+            //this will override anything that comes from the metadata set
+            //which means there are edited changes
+            KameletDefinitionProperty property =
+                    new KameletDefinitionProperty();
+            if (p.getDefaultValue() != null) {
+                property.setDefault(p.getDefaultValue().toString());
+            }
+            property.setDescription(p.getDescription());
+            if ("string".equalsIgnoreCase(p.getType())) {
+                property.setFormat(((StringParameter) p).getFormat());
+            }
+            property.setPath(false);
+            property.setTitle(p.getTitle());
+            property.setType(p.getType());
+            def.getProperties().put(p.getId(), property);
         }
     }
 

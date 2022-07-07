@@ -120,7 +120,7 @@ class KameletStepParserServiceTest {
     void goAndBackAgain() {
         var parsed = service.deepParse(binding);
         String output = deploymentService.parse(parsed.getSteps(),
-                parsed.getMetadata());
+                parsed.getMetadata(), parsed.getParameters());
         var parsed2 = service.deepParse(output);
         assertEquals(parsed.getSteps(), parsed2.getSteps());
         assertEquals(parsed.getMetadata().keySet(),
@@ -134,7 +134,7 @@ class KameletStepParserServiceTest {
 
         var parsedInc = service.deepParse(bindingIncomplete);
         String outputInc = deploymentService.parse(parsedInc.getSteps(),
-                parsedInc.getMetadata());
+                parsedInc.getMetadata(), parsed.getParameters());
         var parsed2Inc = service.deepParse(outputInc);
         assertEquals(parsedInc.getSteps(), parsed2Inc.getSteps());
     }

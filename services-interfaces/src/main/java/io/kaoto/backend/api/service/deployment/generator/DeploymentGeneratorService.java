@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator;
 
 import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.List;
@@ -32,12 +33,14 @@ public interface DeploymentGeneratorService {
     /*
      * 🐱method parse: String
      * 🐱param steps: List[Step]
+     * 🐱param parameters: List[Parameter]
      * 🐱param metadata: Map
      *
      * Based on the list of steps, returns the yaml to deploy it.
      * If applies, the name will be the name used on the integration deployed.
      */
-    String parse(List<Step> steps, Map<String, Object> metadata);
+    String parse(List<Step> steps, Map<String, Object> metadata,
+                 List<Parameter> parameters);
 
     /*
      * 🐱method appliesTo: boolean
