@@ -402,6 +402,8 @@ parse(&lt;List[Step]&gt; steps, &lt;List[Parameter]&gt; parameters, &lt;Map&gt; 
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
+getStatus():CustomResource
+<BR align="left" />
 supportedCustomResources():List&lt;Class&gt;
 <BR align="left" />
 getKinds():String[]
