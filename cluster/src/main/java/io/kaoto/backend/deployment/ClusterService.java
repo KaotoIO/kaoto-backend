@@ -123,6 +123,19 @@ public class ClusterService {
                     binding.getMetadata().setName(
                             binding.getMetadata().getName()
                                     .toLowerCase(Locale.ROOT));
+
+                    //check no other deployment has the same name already
+                    for (Integration i
+                           : getIntegrations(getNamespace(namespace))) {
+                        if (i.getName()
+                                .equalsIgnoreCase(
+                                        binding.getMetadata().getName())) {
+                            throw new IllegalArgumentException("There is an "
+                                    + "existing deployment with the same name: "
+                                    + binding.getMetadata().getName());
+                        }
+                    }
+
                     start(binding, namespace);
                     return;
                 }
