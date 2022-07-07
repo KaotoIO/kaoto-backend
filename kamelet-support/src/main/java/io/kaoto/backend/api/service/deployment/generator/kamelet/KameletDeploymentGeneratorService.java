@@ -23,12 +23,10 @@ public class KameletDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    private static final String KAMELET = "KAMELET";
     private static final String EIP = "EIP";
-    private static final String KNATIVE = "Knative";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(
-            CAMEL_CONNECTOR, KAMELET, EIP, EIP_BRANCHES, KNATIVE);
+            CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
     public KameletDeploymentGeneratorService() {
     }

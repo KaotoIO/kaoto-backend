@@ -167,18 +167,6 @@ class KameletDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         step = new Step();
-        step.setKind("Kamelet");
-        steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
-        steps.clear();
-
-        step = new Step();
-        step.setKind("Kamelet");
-        steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
-        step = new Step();
         step.setKind("EIP-BRANCH");
         steps.add(step);
         assertTrue(service.appliesTo(steps));
@@ -188,22 +176,17 @@ class KameletDeploymentGeneratorServiceTest {
         steps.add(step);
         assertTrue(service.appliesTo(steps));
 
+        step = new Step();
+        step.setKind("Kamelet");
+        steps.add(step);
+        assertTrue(!service.appliesTo(steps));
+
         steps.clear();
 
         step = new Step();
         step.setKind("Kamelet");
         steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
-        step = new Step();
-        step.setKind("Kamelet");
-        steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
-        step = new Step();
-        step.setKind("Kamelet");
-        steps.add(step);
-        assertTrue(service.appliesTo(steps));
+        assertTrue(!service.appliesTo(steps));
     }
 
     public KameletDeploymentGeneratorService getService() {

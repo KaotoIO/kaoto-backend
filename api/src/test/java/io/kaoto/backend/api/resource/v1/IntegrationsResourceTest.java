@@ -85,8 +85,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
         dsls =
                 mapper.readValue(res.extract().body().asString(), List.class);
-        assertEquals(2, dsls.size());
-        assertTrue(dsls.contains("Kamelet"));
+        assertEquals(1, dsls.size());
         assertTrue(dsls.contains("KameletBinding"));
 
         res = given()
@@ -96,7 +95,6 @@ class IntegrationsResourceTest {
                 .post("?dsl=KameletBinding")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-
 
         String yaml2 = res.extract().body().asString();
 
