@@ -83,10 +83,11 @@ public class ClusterService {
         return res;
     }
 
-    public boolean start(final String input, final String namespace) {
+    public void start(final String input, final String namespace) {
         for (var parser : parsers) {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
+                CustomResource binding = null;
                 try {
                     var constructor = new Constructor(c);
                     Representer representer = new Representer();
@@ -103,7 +104,12 @@ public class ClusterService {
                     constructor.getPropertyUtils()
                             .setBeanAccess(BeanAccess.FIELD);
                     Yaml yaml = new Yaml(constructor, representer);
-                    CustomResource binding = yaml.load(input);
+                    binding = yaml.load(input);
+                } catch (ConstructorException e) {
+                    log.trace("Tried with " + c.getName() + " and it didn't "
+                            + "work.");
+                }
+                if (binding != null) {
                     if (binding.getMetadata() == null) {
                         binding.setMetadata(new ObjectMeta());
                     }
@@ -112,41 +118,34 @@ public class ClusterService {
                         binding.getMetadata().setName(
                                 "integration-" + System.currentTimeMillis());
                     }
-                    return start(binding, namespace);
-                } catch (ConstructorException e) {
-                    log.trace("Tried with " + c.getName() + " and it didn't "
-                            + "work.");
+                    start(binding, namespace);
+                    return;
                 }
             }
         }
 
-        return false;
+        throw new IllegalArgumentException("The provided CRD is invalid or "
+                + "not supported.");
     }
 
-    public boolean start(final CustomResource binding, final String namespace) {
-        try {
-            ResourceDefinitionContext context =
-                    new ResourceDefinitionContext.Builder()
-                            .withNamespaced(true)
-                            .withGroup(binding.getGroup())
-                            .withKind(binding.getKind())
-                            .withPlural(binding.getPlural())
-                            .withVersion(binding.getVersion())
-                            .build();
+    public void start(final CustomResource binding, final String namespace) {
+        ResourceDefinitionContext context =
+                new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup(binding.getGroup())
+                        .withKind(binding.getKind())
+                        .withPlural(binding.getPlural())
+                        .withVersion(binding.getVersion())
+                        .build();
 
-            var constructor = new Constructor(binding.getClass());
-            Yaml yaml = new Yaml(constructor);
-            kubernetesClient.genericKubernetesResources(context)
-                    .inNamespace(getNamespace(namespace))
-                    .load(new ByteArrayInputStream(
-                            yaml.dumpAsMap(binding)
-                                    .getBytes(StandardCharsets.UTF_8)))
-                    .create();
-            return true;
-        } catch (Exception e) {
-            log.error("Error starting the integration.", e);
-        }
-        return false;
+        var constructor = new Constructor(binding.getClass());
+        Yaml yaml = new Yaml(constructor);
+        kubernetesClient.genericKubernetesResources(context)
+                .inNamespace(getNamespace(namespace))
+                .load(new ByteArrayInputStream(
+                        yaml.dumpAsMap(binding)
+                                .getBytes(StandardCharsets.UTF_8)))
+                .create();
     }
 
     public boolean stop(final String name, final String namespace) {
