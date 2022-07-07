@@ -85,6 +85,22 @@ public class KameletDeploymentGeneratorService
     }
 
     @Override
+    public Status getStatus(final CustomResource cr) {
+        Status s = Status.Invalid;
+        if (cr instanceof Kamelet kamelet
+                && kamelet.getStatus() != null) {
+            switch (kamelet.getStatus().getPhase()) {
+                case "Ready":
+                    s = Status.Running;
+                    break;
+                default:
+                    s = Status.Stopped;
+            }
+        }
+        return s;
+    }
+
+    @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{Kamelet.class});
     }

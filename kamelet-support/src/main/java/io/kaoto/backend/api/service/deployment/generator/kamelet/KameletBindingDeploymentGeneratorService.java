@@ -169,6 +169,25 @@ public class KameletBindingDeploymentGeneratorService
     }
 
     @Override
+    public Status getStatus(final CustomResource cr) {
+        Status s = Status.Invalid;
+        if (cr instanceof KameletBinding binding
+                && binding.getStatus() != null) {
+            switch (binding.getStatus().getPhase()) {
+                case "Ready":
+                    s = Status.Running;
+                    break;
+                case "Creating":
+                    s = Status.Building;
+                    break;
+                default:
+                    s = Status.Stopped;
+            }
+        }
+        return s;
+    }
+
+    @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{KameletBinding.class});
     }
