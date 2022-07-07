@@ -29,6 +29,7 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @ApplicationScoped
 public class ClusterService {
@@ -118,6 +119,10 @@ public class ClusterService {
                         binding.getMetadata().setName(
                                 "integration-" + System.currentTimeMillis());
                     }
+                    //force lowercase
+                    binding.getMetadata().setName(
+                            binding.getMetadata().getName()
+                                    .toLowerCase(Locale.ROOT));
                     start(binding, namespace);
                     return;
                 }
