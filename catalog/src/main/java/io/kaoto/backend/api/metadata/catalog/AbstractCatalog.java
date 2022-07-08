@@ -79,4 +79,17 @@ public abstract class AbstractCatalog<T extends Metadata> {
                 .thenAccept(md -> res.complete(true));
         return res;
     }
+
+    public void refresh() {
+        List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
+        for (var catalog : loadParsers()) {
+            futureSteps.add(addCatalog(catalog));
+        }
+
+        var waitingForWarmUp = CompletableFuture.allOf(
+                futureSteps.toArray(new CompletableFuture[0]));
+        waitingForWarmUp.thenAccept(complete ->
+                ((ReadOnlyCatalog) getReadOnlyCatalog()).addCatalog(c))
+                .thenRun(() -> log.info("Catalog refreshed."));
+    }
 }

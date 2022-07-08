@@ -61,4 +61,14 @@ public interface MetadataCatalog<T extends Metadata> {
      *
      */
     Collection<T> getAll();
+
+    /*
+     * 🐱method clear : void
+     *
+     * Removes all metadata from catalog.
+     *
+     */
+    void clear();
+
+
 }

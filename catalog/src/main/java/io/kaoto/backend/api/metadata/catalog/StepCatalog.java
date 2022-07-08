@@ -6,6 +6,7 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.configuration.Repository;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.Startup;
+import io.quarkus.scheduler.Scheduled;
 import io.smallrye.config.ConfigMapping;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -102,5 +103,12 @@ public class StepCatalog extends AbstractCatalog<Step> {
     @ConfigMapping(prefix = "repository.step", namingStrategy =
             ConfigMapping.NamingStrategy.KEBAB_CASE)
     interface StepRepository extends Repository {
+    }
+
+    @Override
+    @Scheduled(every = "60s", identity = "refresh-step-catalog",
+            concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    public void refresh() {
+        super.refresh();
     }
 }

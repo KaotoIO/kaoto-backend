@@ -7,7 +7,9 @@ import io.kaoto.backend.model.Metadata;
  * 🐱class ReadOnlyCatalog
  * 🐱inherits CatalogCollection
  *
- * A Catalog Collection we make sure it can't be modified.
+ * A Catalog Collection that acts as singleton to a catalog collection. It
+ * only contains one catalog, and if you add another one, it replaces it.
+ * This is useful to avoid empty catalogs when reloading data.
  */
 public class ReadOnlyCatalog<T extends Metadata> extends CatalogCollection<T> {
 
@@ -16,8 +18,8 @@ public class ReadOnlyCatalog<T extends Metadata> extends CatalogCollection<T> {
     }
 
     @Override
-    public void addCatalog(final MetadataCatalog<T> c) {
-        throw new UnsupportedOperationException(
-                "Read Only Catalogs are initialized at the beginning");
+    public synchronized void addCatalog(final MetadataCatalog<T> c) {
+        this.clear();
+        super.addCatalog(c);
     }
 }
