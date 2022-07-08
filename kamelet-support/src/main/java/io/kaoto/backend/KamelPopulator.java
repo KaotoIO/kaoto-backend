@@ -1,6 +1,7 @@
 package io.kaoto.backend;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
@@ -88,6 +89,8 @@ public class KamelPopulator {
 
         setSpecDependencies(kamelet.getSpec(), steps);
         setSpecDefinition(kamelet, parameters);
+        kamelet.getSpec().getTemplate().setBeans(
+                (List<Bean>) metadata.getOrDefault("beans", null));
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
