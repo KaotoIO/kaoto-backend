@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 
 import java.io.Serializable;
+import java.util.List;
 
-@JsonPropertyOrder({"definition", "template", "dependencies"})
+@JsonPropertyOrder({"definition", "dependencies", "template"})
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
@@ -20,6 +21,9 @@ public final class KameletSpec
 
     @JsonProperty("definition")
     private KameletDefinition definition;
+
+    @JsonProperty("dependencies")
+    private List<String> dependencies;
 
     @JsonProperty("template")
     private Template template;
@@ -38,5 +42,13 @@ public final class KameletSpec
 
     public void setTemplate(final Template template) {
         this.template = template;
+    }
+
+    public List<String> getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(final List<String> dependencies) {
+        this.dependencies = dependencies;
     }
 }
