@@ -23,7 +23,7 @@ public class SetBodyFlowStep implements FlowStep {
 
     @JsonCreator
     public SetBodyFlowStep(
-            final @JsonProperty(value = "setBody", required = true)
+            final @JsonProperty(value = "set-body", required = true)
                     Expression setBody) {
         super();
         setSetBody(setBody);
@@ -32,6 +32,7 @@ public class SetBodyFlowStep implements FlowStep {
     @JsonProperty("set-body")
     private Expression setBody;
 
+    @JsonProperty("set-body")
     public Expression getSetBody() {
         return setBody;
     }
