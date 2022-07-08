@@ -37,7 +37,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
                         UriFlowStep.class);
             }
         } catch (Exception e) {
-            log.error("Error trying to deserialize step: " + e.getMessage());
+            log.debug("Error trying to deserialize step: " + e.getMessage());
         }
 
         return new UriFlowStep();
