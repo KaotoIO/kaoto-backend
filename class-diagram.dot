@@ -217,6 +217,8 @@ store(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
 getAll():List[Metadata]
 <BR align="left" />
+clear():void
+<BR align="left" />
 
 </TD></TR>
 

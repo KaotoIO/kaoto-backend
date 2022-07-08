@@ -588,6 +588,11 @@ Returns true if no error was found.</td>
 Be careful using this as there's no limit
 on the amount of data stored on the catalog.</td>
 	</tr>
+	<tr id='metadatacatalog-clear'>
+		<td><code><b>clear</b>()</nobr></code></td>
+		<td><code>void</code></td>
+		<td>Removes all metadata from catalog.</td>
+	</tr>
 </tbody></table>
 </section>
 
@@ -675,6 +680,11 @@ Returns true if no error was found.</td>
 Be careful using this as there's no limit
 on the amount of data stored on the catalog.</td>
 	</tr>
+	<tr id='catalogcollection-clear'>
+		<td><code><b>clear</b>()</nobr></code></td>
+		<td><code>void</code></td>
+		<td>Removes all metadata from catalog.</td>
+	</tr>
 </tbody></table>
 </section>
 </div>
@@ -727,6 +737,11 @@ Returns true if no error was found.</td>
 Be careful using this as there's no limit
 on the amount of data stored on the catalog.</td>
 	</tr>
+	<tr id='inmemorycatalog-clear'>
+		<td><code><b>clear</b>()</nobr></code></td>
+		<td><code>void</code></td>
+		<td>Removes all metadata from catalog.</td>
+	</tr>
 </tbody></table>
 </section>
 </div>
@@ -736,7 +751,9 @@ on the amount of data stored on the catalog.</td>
 </section>
 <h2 id='readonlycatalog'>ReadOnlyCatalog</h2>
 <section class='namespace'>
-<p>A Catalog Collection we make sure it can't be modified.</p>
+<p>A Catalog Collection that acts as singleton to a catalog collection. It
+only contains one catalog, and if you add another one, it replaces it.
+This is useful to avoid empty catalogs when reloading data.</p>
 
 <h3 id=''>Methods</h3>
 
@@ -778,6 +795,11 @@ Returns true if no error was found.</td>
 		<td>Returns all the elements in the catalog.
 Be careful using this as there's no limit
 on the amount of data stored on the catalog.</td>
+	</tr>
+	<tr id='readonlycatalog-clear'>
+		<td><code><b>clear</b>()</nobr></code></td>
+		<td><code>void</code></td>
+		<td>Removes all metadata from catalog.</td>
 	</tr>
 </tbody></table>
 </section>
