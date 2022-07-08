@@ -86,6 +86,12 @@ public class KamelPopulator {
                     metadata.getOrDefault("icon", "").toString());
         }
 
+        setSpecDependencies(kamelet.getSpec(), steps);
+        setSpecDefinition(kamelet, parameters);
+    }
+
+    private void setSpecDefinition(final Kamelet kamelet,
+                                   final List<Parameter> parameters) {
         if (kamelet.getSpec().getDefinition() == null) {
             kamelet.getSpec().setDefinition(new KameletDefinition());
         }
@@ -93,6 +99,35 @@ public class KamelPopulator {
         if (def.getProperties() == null) {
             def.setProperties(new LinkedHashMap<>());
         }
+        setParameters(parameters, def);
+    }
+
+    private void setSpecDependencies(final KameletSpec spec,
+                                  final List<Step> steps) {
+        if (spec.getDependencies() == null) {
+            spec.setDependencies(new LinkedList<>());
+        }
+        var deps = spec.getDependencies();
+
+        if (!deps.contains("camel:core")) {
+            deps.add("camel:core");
+        }
+
+        for (Step s : steps) {
+            var dep = s.getId();
+            if (dep != null) {
+                if (dep.contains(":")) {
+                    dep = dep.substring(0, dep.indexOf(":"));
+                }
+                if (!deps.contains("camel:" + dep)) {
+                    deps.add("camel:" + dep);
+                }
+            }
+        }
+    }
+
+    private void setParameters(final List<Parameter> parameters,
+                           final KameletDefinition def) {
         for (Parameter p : parameters) {
             //this will override anything that comes from the metadata set
             //which means there are edited changes
