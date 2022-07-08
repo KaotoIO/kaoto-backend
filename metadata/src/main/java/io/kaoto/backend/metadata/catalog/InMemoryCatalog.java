@@ -84,4 +84,9 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
                 .map(t -> (T) t.clone())
                 .toList();
     }
+
+    @Override
+    public void clear() {
+        metadataCatalog.clear();
+    }
 }

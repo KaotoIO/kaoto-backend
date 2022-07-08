@@ -84,8 +84,9 @@ class CatalogCollectionTest {
         ReadOnlyCatalog<Step> readOnlyCatalog =
                 new ReadOnlyCatalog<>(catalogCollection);
 
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            readOnlyCatalog.addCatalog(catalogCollection);
-        });
+        readOnlyCatalog.addCatalog(catalogCollection);
+
+        Assertions.assertEquals(catalogCollection.getAll().size(),
+                readOnlyCatalog.getAll().size());
     }
 }

@@ -77,4 +77,9 @@ public class CatalogCollection<T extends Metadata>
         }
         return steps;
     }
+
+    @Override
+    public void clear() {
+        catalogs.clear();
+    }
 }

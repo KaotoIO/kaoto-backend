@@ -23,3 +23,10 @@ quarkus:
         level: "INFO"
       org.ecl.yas.int:
         level: "INFO"
+  quartz:
+    misfire-policy: ignore-misfire-policy
+    plugins:
+      jobHistory:
+        class: org.quartz.plugins.history.LoggingJobHistoryPlugin
+        properties:
+          jobSuccessMessage: "Job [{1}.{0}] execution complete and reports: {8}"
