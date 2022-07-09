@@ -87,7 +87,7 @@ public class KamelPopulator {
                     metadata.getOrDefault("icon", "").toString());
         }
 
-        setSpecDependencies(kamelet.getSpec(), steps);
+        setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
         kamelet.getSpec().getTemplate().setBeans(
                 (List<Bean>) metadata.getOrDefault("beans", null));
@@ -106,10 +106,16 @@ public class KamelPopulator {
     }
 
     private void setSpecDependencies(final KameletSpec spec,
-                                  final List<Step> steps) {
+                                     final List<Step> steps,
+                                     final Map<String, Object> metadata) {
+
+        spec.setDependencies((List<String>)
+                metadata.getOrDefault("dependencies", new LinkedList<>()));
+
         if (spec.getDependencies() == null) {
             spec.setDependencies(new LinkedList<>());
         }
+
         var deps = spec.getDependencies();
 
         if (!deps.contains("camel:core")) {

@@ -93,9 +93,6 @@ public class KameletStepParserService
             processSpec(steps, res, kamelet.getSpec());
             processParameters(res, kamelet.getSpec());
 
-
-            res.getMetadata().put("beans",
-                    kamelet.getSpec().getTemplate().getBeans());
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(
                     "Error trying to parse.", e);
@@ -174,6 +171,8 @@ public class KameletStepParserService
         }
 
         res.getMetadata().put("definition", spec.getDefinition());
+        res.getMetadata().put("beans", spec.getTemplate().getBeans());
+        res.getMetadata().put("dependencies", spec.getDependencies());
     }
 
     //there must be a more elegant solution
