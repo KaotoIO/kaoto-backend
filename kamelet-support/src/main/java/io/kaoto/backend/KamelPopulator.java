@@ -124,7 +124,8 @@ public class KamelPopulator {
 
         for (Step s : steps) {
             var dep = s.getId();
-            if (dep != null) {
+            if (dep != null
+                    && s.getKind().equalsIgnoreCase("Camel-Connector")) {
                 if (dep.contains(":")) {
                     dep = dep.substring(0, dep.indexOf(":"));
                 }
