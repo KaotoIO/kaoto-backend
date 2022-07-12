@@ -12,7 +12,8 @@ jobs:
     name: 👩🏼‍🏭 Build 👩🏼‍🏭
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: ☄️ Checkout source code
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: 🥸 Set up JDK
@@ -37,6 +38,18 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: java
+      - name: 🌪️ Kubernetes Kind Cluster
+        uses: container-tools/kind-action@v1
+      - name: 🦙 Download Camel-K
+        run: wget https://github.com/apache/camel-k/releases/download/v1.9.2/camel-k-client-1.9.2-linux-64bit.tar.gz
+      - name: 🐪 Decompress Camel-K
+        run: tar -xvzf camel-k-client*.tar.gz
+      - name: 🐫 Install Camel-K
+        run: chmod +x kamel; ./kamel install --olm=false -n default --wait --registry kind-registry:5000
+      - name: ✨ Download Kamelets
+        run: mkdir kamelets; cd kamelets; wget https://github.com/apache/camel-kamelets/archive/refs/tags/v0.8.1.zip
+      - name: 💫 Install Kamelets
+        run: cd kamelets; unzip v*.zip; find camel-kamelets*/kamelets -maxdepth 1 -name '*.kamelet.yaml' -exec kubectl apply -f {} \;
       - name: 🦾 Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
