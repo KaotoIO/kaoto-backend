@@ -194,6 +194,12 @@ loadParsers():List[ParseCatalog]
 		
 		
 		]
+"Condition" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Condition</B></TD></TR>
+	
+</TABLE>>]
+
+
 "Kamelet" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Kamelet</B></TD></TR>
 	
