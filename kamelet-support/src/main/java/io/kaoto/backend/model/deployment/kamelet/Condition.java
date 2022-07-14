@@ -1,16 +1,19 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
 
 /**
  * 🐱class Condition
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonDeserialize(
+        using = JsonDeserializer.None.class
+)
 @JsonPropertyOrder({"type", "status",
         "lastUpdateTime", "lastTransitionTime",
         "reason", "message"})
@@ -30,17 +33,8 @@ public class Condition implements Serializable {
     private String reason;
     @JsonProperty("message")
     private String message;
-
     public Condition() {
         super();
-    }
-
-    public Condition(final String type, final String status,
-                     final String reason, final String message) {
-        this.type = type;
-        this.status = status;
-        this.reason = reason;
-        this.message = message;
     }
 
     public String getType() {
