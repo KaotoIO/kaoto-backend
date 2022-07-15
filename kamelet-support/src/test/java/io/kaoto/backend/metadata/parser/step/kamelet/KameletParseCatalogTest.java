@@ -142,7 +142,7 @@ class KameletParseCatalogTest {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        assertEquals(2, steps.size());
+        assertEquals(3, steps.size());
     }
 
     @Test

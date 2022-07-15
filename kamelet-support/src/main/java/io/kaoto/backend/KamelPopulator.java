@@ -165,6 +165,8 @@ public class KamelPopulator {
                     entry.getValue());
         }
 
+        kamelet.getMetadata().getAnnotations().remove("icon");
+
     }
 
     private void populateAdditionalProperties(final Kamelet kamelet,

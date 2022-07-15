@@ -18,15 +18,16 @@ import java.nio.file.Path;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class KameletStepParserServiceTest {
 
-    private static String binding;
-    private static String bindingIncomplete;
+    private static String kamelet;
+    private static String incomplete;
+    private static String kameletEIP;
 
     @Inject
     private KameletStepParserService service;
@@ -43,13 +44,17 @@ class KameletStepParserServiceTest {
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(
+        kamelet = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "dropbox-sink.kamelet.yaml")
                         .toURI()));
-        bindingIncomplete = Files.readString(Path.of(
+        incomplete = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "dropbox-sink.kamelet-incomplete.yaml")
+                        .toURI()));
+        kameletEIP = Files.readString(Path.of(
+                KameletBindingStepParserServiceTest.class.getResource(
+                                "eip.kamelet.yaml")
                         .toURI()));
     }
 
@@ -60,7 +65,7 @@ class KameletStepParserServiceTest {
 
     @Test
     void deepParse() {
-        var parsed = service.deepParse(binding);
+        var parsed = service.deepParse(kamelet);
         assertNotNull(parsed);
 
         assertNotNull(parsed.getMetadata());
@@ -118,7 +123,7 @@ class KameletStepParserServiceTest {
 
     @Test
     void goAndBackAgain() {
-        var parsed = service.deepParse(binding);
+        var parsed = service.deepParse(kamelet);
         String output = deploymentService.parse(parsed.getSteps(),
                 parsed.getMetadata(), parsed.getParameters());
         var parsed2 = service.deepParse(output);
@@ -132,7 +137,7 @@ class KameletStepParserServiceTest {
                     parsed2.getMetadata().get(key));
         }
 
-        var parsedInc = service.deepParse(bindingIncomplete);
+        var parsedInc = service.deepParse(incomplete);
         String outputInc = deploymentService.parse(parsedInc.getSteps(),
                 parsedInc.getMetadata(), parsed.getParameters());
         var parsed2Inc = service.deepParse(outputInc);
@@ -141,14 +146,25 @@ class KameletStepParserServiceTest {
 
     @Test
     void appliesTo() {
-        assertTrue(service.appliesTo(binding));
-        assertTrue(service.appliesTo(bindingIncomplete));
+        assertTrue(service.appliesTo(kamelet));
+        assertTrue(service.appliesTo(incomplete));
         assertTrue(
                 deploymentService.appliesTo(
-                        service.deepParse(binding).getSteps()));
+                        service.deepParse(kamelet).getSteps()));
         assertTrue(
                 deploymentService.appliesTo(
-                        service.deepParse(bindingIncomplete).getSteps()));
+                        service.deepParse(incomplete).getSteps()));
+    }
+
+    @Test
+    void setBody() {
+        assertTrue(service.appliesTo(kameletEIP));
+        final var parsed = service.deepParse(kameletEIP);
+        assertNotNull(parsed);
+        assertTrue(deploymentService.appliesTo(parsed.getSteps()));
+        assertEquals(kameletEIP, deploymentService.parse(parsed.getSteps(),
+                parsed.getMetadata(), parsed.getParameters()));
+
     }
 
     @Test

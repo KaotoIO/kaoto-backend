@@ -263,6 +263,15 @@ public class KameletStepParserService
     private Step processDefinedStep(final SetBodyFlowStep step) {
         Step res = catalog.getReadOnlyCatalog().searchStepByName("set-body");
 
+        for (var p : res.getParameters()) {
+            if (p.getId().equalsIgnoreCase("simple")) {
+                p.setValue(step.getSetBody().getSimple());
+            } else if (p.getId().equalsIgnoreCase("constant")) {
+                p.setValue(step.getSetBody().getConstant());
+            } else if (p.getId().equalsIgnoreCase("name")) {
+                p.setValue(step.getSetBody().getName());
+            }
+        }
 
         return res;
     }
