@@ -742,32 +742,6 @@
             defs["Integration"] = {
   "type" : "object",
   "properties" : {
-    "name" : {
-      "type" : "string"
-    },
-    "date" : {
-      "type" : "string"
-    },
-    "errors" : {
-      "type" : "array",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "status" : {
-      "type" : "object"
-    },
-    "namespace" : {
-      "type" : "string"
-    },
-    "type" : {
-      "type" : "string"
-    }
-  }
-};
-            defs["Integration1"] = {
-  "type" : "object",
-  "properties" : {
     "steps" : {
       "type" : "array",
       "items" : {
@@ -787,6 +761,32 @@
       }
     },
     "dsl" : {
+      "type" : "string"
+    }
+  }
+};
+            defs["Integration1"] = {
+  "type" : "object",
+  "properties" : {
+    "name" : {
+      "type" : "string"
+    },
+    "date" : {
+      "type" : "string"
+    },
+    "errors" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "status" : {
+      "type" : "object"
+    },
+    "namespace" : {
+      "type" : "string"
+    },
+    "type" : {
       "type" : "string"
     }
   }
@@ -1407,7 +1407,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1426,7 +1426,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1446,7 +1446,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Get all Resources
 [apiInstance v1DeploymentsGetWith:namespace
-              completionHandler: ^(array[Integration] output, NSError* error) {
+              completionHandler: ^(array[Integration1] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1498,7 +1498,7 @@ namespace Example
             try
             {
                 // Get all Resources
-                array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+                array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1619,7 +1619,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Integration"
+          "$ref" : "#/components/schemas/Integration1"
         },
         "x-content-type" : "application/json"
       }
@@ -3819,7 +3819,7 @@ public class IntegrationResourceApiExample {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the integrations are running.
         try {
-            array[Integration] result = apiInstance.integrationsGet(namespace);
+            array[Integration1] result = apiInstance.integrationsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
@@ -3838,7 +3838,7 @@ public class IntegrationResourceApiExample {
         IntegrationResourceApi apiInstance = new IntegrationResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the integrations are running.
         try {
-            array[Integration] result = apiInstance.integrationsGet(namespace);
+            array[Integration1] result = apiInstance.integrationsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationResourceApi#integrationsGet");
@@ -3858,7 +3858,7 @@ IntegrationResourceApi *apiInstance = [[IntegrationResourceApi alloc] init];
 
 // Deprecated Get all Integrations
 [apiInstance integrationsGetWith:namespace
-              completionHandler: ^(array[Integration] output, NSError* error) {
+              completionHandler: ^(array[Integration1] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3910,7 +3910,7 @@ namespace Example
             try
             {
                 // Deprecated Get all Integrations
-                array[Integration] result = apiInstance.integrationsGet(namespace);
+                array[Integration1] result = apiInstance.integrationsGet(namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4031,7 +4031,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Integration"
+          "$ref" : "#/components/schemas/Integration1"
         },
         "x-content-type" : "application/json"
       }
@@ -5537,7 +5537,7 @@ public class IntegrationsResourceApiExample {
     public static void main(String[] args) {
         
         IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
-        Integration1 body = ; // Integration1 | 
+        Integration body = ; // Integration | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.v1IntegrationsPost(body, dsl);
@@ -5557,7 +5557,7 @@ public class IntegrationsResourceApiExample {
 
     public static void main(String[] args) {
         IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
-        Integration1 body = ; // Integration1 | 
+        Integration body = ; // Integration | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
             'String' result = apiInstance.v1IntegrationsPost(body, dsl);
@@ -5574,7 +5574,7 @@ public class IntegrationsResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Integration1 *body = ; //  (optional)
+                              <pre class="prettyprint"><code class="language-cpp">Integration *body = ; //  (optional)
 String *dsl = dsl_example; // DSL to use. For example: 'Kamelet Binding'. (optional)
 
 IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
@@ -5598,7 +5598,7 @@ IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
 
 var api = new ApiApi.IntegrationsResourceApi()
 var opts = { 
-  'body':  // {{Integration1}} 
+  'body':  // {{Integration}} 
   'dsl': dsl_example // {{String}} DSL to use. For example: 'Kamelet Binding'.
 };
 var callback = function(error, data, response) {
@@ -5630,7 +5630,7 @@ namespace Example
         {
 
             var apiInstance = new IntegrationsResourceApi();
-            var body = new Integration1(); // Integration1 |  (optional) 
+            var body = new Integration(); // Integration |  (optional) 
             var dsl = dsl_example;  // String | DSL to use. For example: 'Kamelet Binding'. (optional) 
 
             try
@@ -5654,7 +5654,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiIntegrationsResourceApi();
-$body = ; // Integration1 | 
+$body = ; // Integration | 
 $dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
 
 try {
@@ -5672,7 +5672,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::IntegrationsResourceApi;
 
 my $api_instance = WWW::SwaggerClient::IntegrationsResourceApi->new();
-my $body = WWW::SwaggerClient::Object::Integration1->new(); # Integration1 | 
+my $body = WWW::SwaggerClient::Object::Integration->new(); # Integration | 
 my $dsl = dsl_example; # String | DSL to use. For example: 'Kamelet Binding'.
 
 eval { 
@@ -5693,7 +5693,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.IntegrationsResourceApi()
-body =  # Integration1 |  (optional)
+body =  # Integration |  (optional)
 dsl = dsl_example # String | DSL to use. For example: 'Kamelet Binding'. (optional)
 
 try: 
@@ -5725,7 +5725,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration1"
+        "$ref" : "#/components/schemas/Integration"
       }
     },
     "text/yaml" : {
@@ -5811,7 +5811,7 @@ except ApiException as e:
     },
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration1"
+        "$ref" : "#/components/schemas/Integration"
       }
     }
   }
