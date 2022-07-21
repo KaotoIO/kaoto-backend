@@ -212,6 +212,10 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.9.3</version>
+                  <configuration>
+                    <exportLineCoverage>true</exportLineCoverage>
+                    <outputFormats><value>XML</value></outputFormats>
+                  </configuration>
                 <dependencies>
                   <dependency>
                     <groupId>org.pitest</groupId>

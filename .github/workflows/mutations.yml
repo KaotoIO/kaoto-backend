@@ -9,7 +9,8 @@ jobs:
     name: 👩🏼‍🏭 Build 👩🏼‍🏭
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: 📇 Checkout Code
+        uses: actions/checkout@v2
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -23,10 +24,12 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🦾 Build and analyze
-        run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations -T1C
+        run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations
+      - name: 🧾 Aggregate Reports
+        run: mvn -pl api install org.pitest:pitest-maven:report-aggregate -Pmutations
       - name: 💾 Save results
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: videos-edge
-          path: **/target/pit-reports/
+          path: api/target/pit-reports/
