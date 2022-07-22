@@ -174,25 +174,17 @@ class DeploymentServiceTest {
                 steps.toArray(new Step[0]));
 
         String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
-                + "  finalizers: []\n"
-                + "  managedFields: []\n"
+                + "  annotations: null\n"
+                + "  labels: null\n"
                 + "  name: camel-conector-example\n"
-                + "  ownerReferences: []\n"
-                + "plural: kameletbindings\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kameletbinding\n"
                 + "spec:\n"
                 + "  steps:\n"
                 + "  - uri: log:debug?showBody=true&\n"
                 + "  sink:\n"
-                + "    uri: log:info?showBody=false&\n"
-                + "storage: true\n"
-                + "version: v1alpha1";
+                + "    uri: log:info?showBody=false&";
 
         Assertions.assertFalse(res.isEmpty());
         String result = null;

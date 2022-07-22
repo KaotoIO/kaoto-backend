@@ -38,21 +38,13 @@ class KameletBindingDeploymentGeneratorServiceTest {
         String name = "kamelet-binding-test";
         md.put("name", name);
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
-                + "  finalizers: []\n"
-                + "  managedFields: []\n"
+                + "  annotations: null\n"
+                + "  labels: null\n"
                 + "  name: " + name + "\n"
-                + "  ownerReferences: []\n"
-                + "plural: kameletbindings\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kameletbinding\n"
-                + "spec: {}\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "spec: {}\n",
                 service.parse(steps, md, Collections.emptyList()));
 
 
@@ -62,26 +54,18 @@ class KameletBindingDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
-                + "  finalizers: []\n"
-                + "  managedFields: []\n"
+                + "  annotations: null\n"
+                + "  labels: null\n"
                 + "  name: " + name + "\n"
-                + "  ownerReferences: []\n"
-                + "plural: kameletbindings\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kameletbinding\n"
                 + "spec:\n"
                 + "  source:\n"
                 + "    ref:\n"
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
                 + "      name: aws-s3-source\n"
-                + "      kind: Kamelet\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "      kind: Kamelet\n",
                 service.parse(steps, md, Collections.emptyList()));
 
         Step step = catalog.getReadOnlyCatalog()
@@ -98,18 +82,12 @@ class KameletBindingDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
-                + "  finalizers: []\n"
-                + "  managedFields: []\n"
+                + "  annotations: null\n"
+                + "  labels: null\n"
                 + "  name: " + name + "\n"
-                + "  ownerReferences: []\n"
-                + "plural: kameletbindings\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kameletbinding\n"
                 + "spec:\n"
                 + "  source:\n"
                 + "    ref:\n"
@@ -122,9 +100,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "      name: broker-name\n"
                 + "      kind: Broker\n"
                 + "    properties:\n"
-                + "      type: example\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "      type: example\n",
                 service.parse(steps, md, Collections.emptyList()));
     }
 

@@ -28,33 +28,25 @@ class KameletDeploymentGeneratorServiceTest {
         Map<String, Object> md = new HashMap<>();
         md.put("name", "kamelet-test");
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
                 + "  annotations:\n"
                 + "    camel.apache.org/kamelet.icon: ''\n"
-                + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: action\n"
-                + "  managedFields: []\n"
                 + "  name: kamelet-test-action\n"
-                + "  ownerReferences: []\n"
-                + "plural: kamelets\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kamelet\n"
                 + "spec:\n"
                 + "  definition:\n"
+                + "    title: null\n"
+                + "    description: null\n"
                 + "    properties: {}\n"
                 + "  dependencies:\n"
                 + "  - camel:core\n"
                 + "  template:\n"
                 + "    from:\n"
                 + "      uri: null\n"
-                + "      steps: []\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "      steps: []\n",
                 service.parse(steps, md, Collections.emptyList()));
 
         Step step = new Step();
@@ -77,24 +69,18 @@ class KameletDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
                 + "  annotations:\n"
                 + "    camel.apache.org/kamelet.icon: ''\n"
-                + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: source\n"
-                + "  managedFields: []\n"
                 + "  name: kamelet-test-source\n"
-                + "  ownerReferences: []\n"
-                + "plural: kamelets\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kamelet\n"
                 + "spec:\n"
                 + "  definition:\n"
+                + "    title: null\n"
+                + "    description: null\n"
                 + "    properties: {}\n"
                 + "  dependencies:\n"
                 + "  - camel:core\n"
@@ -105,9 +91,7 @@ class KameletDeploymentGeneratorServiceTest {
                 + "        level: info\n"
                 + "      steps:\n"
                 + "      - to:\n"
-                + "          uri: kamelet:sink\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "          uri: kamelet:sink\n",
                 service.parse(steps, md, Collections.emptyList()));
 
         step = new Step();
@@ -121,24 +105,18 @@ class KameletDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
-                + "group: camel.apache.org\n"
                 + "kind: Kamelet\n"
                 + "metadata:\n"
                 + "  additionalProperties: {}\n"
                 + "  annotations:\n"
                 + "    camel.apache.org/kamelet.icon: ''\n"
-                + "  finalizers: []\n"
                 + "  labels:\n"
                 + "    camel.apache.org/kamelet.type: source\n"
-                + "  managedFields: []\n"
                 + "  name: kamelet-test-source\n"
-                + "  ownerReferences: []\n"
-                + "plural: kamelets\n"
-                + "scope: Namespaced\n"
-                + "served: true\n"
-                + "singular: kamelet\n"
                 + "spec:\n"
                 + "  definition:\n"
+                + "    title: null\n"
+                + "    description: null\n"
                 + "    properties: {}\n"
                 + "  dependencies:\n"
                 + "  - camel:core\n"
@@ -151,9 +129,7 @@ class KameletDeploymentGeneratorServiceTest {
                 + "      - set-body:\n"
                 + "          constant: Hello Llama\n"
                 + "      - to:\n"
-                + "          uri: kamelet:sink\n"
-                + "storage: true\n"
-                + "version: v1alpha1\n",
+                + "          uri: kamelet:sink\n",
                 service.parse(steps, md, Collections.emptyList()));
     }
 

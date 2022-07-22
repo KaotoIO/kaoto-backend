@@ -1,5 +1,4 @@
 apiVersion: camel.apache.org/v1alpha1
-group: camel.apache.org
 kind: Kamelet
 metadata:
   additionalProperties: {}
@@ -9,21 +8,14 @@ metadata:
     camel.apache.org/kamelet.icon: whatever
     camel.apache.org/provider: Apache Software Foundation
     camel.apache.org/kamelet.group: Kaoto
-  finalizers: []
   labels:
     camel.apache.org/kamelet.type: action
-  managedFields: []
   name: eip-action
-  ownerReferences: []
-plural: kamelets
-scope: Namespaced
-served: true
-singular: kamelet
 spec:
   definition:
+    title: EIP Kamelet
     description: Used to test all EIP we implement
     properties: {}
-    title: EIP Kamelet
   dependencies:
   - camel:core
   - camel:kamelet
@@ -35,5 +27,3 @@ spec:
           simple: ola ke ase
       - to:
           uri: kamelet:sink
-storage: true
-version: v1alpha1
