@@ -18,6 +18,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -55,7 +56,21 @@ public class KameletRepresenter extends Representer {
         setHeader();
         expression();
 
+        addTypeDescriptions();
+    }
 
+    private void addTypeDescriptions() {
+        TypeDescription setHeaderDesc =
+                new TypeDescription(SetBodyFlowStep.class);
+        setHeaderDesc.substituteProperty("set-header",
+                SetHeaderFlowStep.class, "getSetHeader", "setSetHeader");
+
+        TypeDescription setBodyDesc =
+                new TypeDescription(SetBodyFlowStep.class);
+        setBodyDesc.substituteProperty("set-body", SetBodyFlowStep.class,
+                "getSetBody", "setSetBody");
+        this.addTypeDescription(setBodyDesc);
+        this.addTypeDescription(setHeaderDesc);
     }
 
     private void customResource() {
