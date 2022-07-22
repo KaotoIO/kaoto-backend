@@ -212,7 +212,7 @@ public class KamelPopulator {
         return type;
     }
 
-    private From getFlow(final List<Step> steps) {
+    public From getFlow(final List<Step> steps) {
         final var from = new From();
         from.setSteps(new ArrayList<>());
 

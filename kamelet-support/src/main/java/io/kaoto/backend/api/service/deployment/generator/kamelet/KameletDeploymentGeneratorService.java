@@ -49,9 +49,10 @@ public class KameletDeploymentGeneratorService
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
+        return getYAML(new Kamelet(steps, metadata, parameters));
+    }
 
-        Kamelet kamelet = new Kamelet(steps, metadata, parameters);
-
+    public String getYAML(final CustomResource kamelet) {
         TypeDescription setHeaderDesc =
                 new TypeDescription(SetBodyFlowStep.class);
         setHeaderDesc.substituteProperty("set-header",

@@ -34,7 +34,6 @@ import java.util.Map;
 public final class Kamelet
         extends CustomResource<KameletSpec, KameletBindingStatus>
         implements io.fabric8.kubernetes.api.model.Namespaced, Serializable {
-    public static final KamelPopulator KAMEL_POPULATOR = new KamelPopulator();
 
     @Serial
     private static final long serialVersionUID = -6210736155226440906L;
@@ -46,7 +45,7 @@ public final class Kamelet
                    final Map<String, Object> metadata,
                    final List<Parameter> parameters) {
         this();
-        KAMEL_POPULATOR.populateKamelet(this, metadata, steps, parameters);
+        new KamelPopulator().populateKamelet(this, metadata, steps, parameters);
     }
 
 

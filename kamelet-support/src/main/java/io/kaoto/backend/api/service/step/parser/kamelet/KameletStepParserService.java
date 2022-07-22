@@ -177,7 +177,7 @@ public class KameletStepParserService
 
     //there must be a more elegant solution
     //but a visitor sounds like overengineering
-    private Step processStep(final FlowStep step) {
+    public Step processStep(final FlowStep step) {
         if (step instanceof ChoiceFlowStep choiceFlowStep) {
             return processDefinedStep(choiceFlowStep);
         } else if (step instanceof ToFlowStep toFlowStep) {
