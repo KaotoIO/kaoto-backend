@@ -1,9 +1,14 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
+import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
+import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -33,7 +38,9 @@ public class KameletRepresenter extends Representer {
 
     public KameletRepresenter() {
         getPropertyUtils().setSkipMissingProperties(true);
-        getPropertyUtils().setAllowReadOnlyProperties(true);
+
+        customResource();
+        metadata();
 
         //proper order sink steps and source
         spec();
@@ -47,6 +54,49 @@ public class KameletRepresenter extends Representer {
         setBody();
         setHeader();
         expression();
+
+
+    }
+
+    private void customResource() {
+        this.multiRepresenters.put(CustomResource.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        CustomResource cr = (CustomResource) data;
+                        properties.put("apiVersion", cr.getApiVersion());
+                        properties.put("kind", cr.getKind());
+                        properties.put("metadata", cr.getMetadata());
+                        properties.put("spec", cr.getSpec());
+                        return representMapping(getTag(data.getClass(),
+                                        Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.AUTO);
+                    }
+                });
+    }
+
+    private void metadata() {
+        this.multiRepresenters.put(ObjectMeta.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        ObjectMeta meta = (ObjectMeta) data;
+                        if (meta.getAdditionalProperties() != null) {
+                            properties.put("additionalProperties",
+                                    meta.getAdditionalProperties());
+                        }
+                        properties.put("annotations", meta.getAnnotations());
+                        properties.put("labels", meta.getLabels());
+                        properties.put("name", meta.getName());
+                        return representMapping(getTag(data.getClass(),
+                                        Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
     }
 
     private void spec() {
@@ -72,6 +122,58 @@ public class KameletRepresenter extends Representer {
                 }
             });
 
+        this.multiRepresenters.put(KameletSpec.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        KameletSpec spec = (KameletSpec) data;
+                        properties.put("definition", spec.getDefinition());
+                        properties.put("dependencies", spec.getDependencies());
+                        properties.put("template", spec.getTemplate());
+                        return representMapping(getTag(data.getClass(),
+                                        Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
+
+        this.multiRepresenters.put(KameletDefinition.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        KameletDefinition def = (KameletDefinition) data;
+                        properties.put("title", def.getTitle());
+                        properties.put("description", def.getDescription());
+                        if (def.getRequired() != null) {
+                            properties.put("required", def.getRequired());
+                        }
+                        if (def.getProperties() != null) {
+                            properties.put("properties", def.getProperties());
+                        }
+                        return representMapping(getTag(data.getClass(),
+                                        Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
+        this.multiRepresenters.put(Template.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        Template template = (Template) data;
+                        if (template.getBeans() != null) {
+                            properties.put("beans", template.getBeans());
+                        }
+                        properties.put("from", template.getFrom());
+                        return representMapping(getTag(data.getClass(),
+                                        Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
         this.multiRepresenters.put(KameletBindingStep.class,
             new RepresentMap() {
                 @Override
