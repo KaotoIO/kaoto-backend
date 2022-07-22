@@ -44,6 +44,11 @@ public class LanguageService {
                     .put("step-kinds", parser.getKinds().toString());
             res.get(parser.identifier())
                     .put("output", "true");
+            res.get(parser.identifier())
+                    .put("deployable",
+                            Boolean.toString(
+                                    !parser.supportedCustomResources()
+                                            .isEmpty()));
         }
 
         for (StepParserService parser : getStepParserServices()) {
