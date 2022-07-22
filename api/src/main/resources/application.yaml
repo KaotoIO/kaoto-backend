@@ -14,7 +14,6 @@ crd:
 
 quarkus:
   http:
-    test-port: 8083
     cors: true
     port: 8081
   log:
