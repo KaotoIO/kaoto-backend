@@ -1,15 +1,15 @@
-package io.kaoto.backend.api.service.deployment.generator.kamelet;
+package io.kaoto.backend.api.service.deployment.generator.camelroute;
 
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.model.deployment.camelroute.Integration;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 @ApplicationScoped
-public class KameletDeploymentGeneratorService
+public class IntegrationDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
@@ -26,7 +26,10 @@ public class KameletDeploymentGeneratorService
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
-    public KameletDeploymentGeneratorService() {
+    @Inject
+    private KameletDeploymentGeneratorService kdgs;
+
+    public IntegrationDeploymentGeneratorService() {
     }
 
     @Override
@@ -35,27 +38,19 @@ public class KameletDeploymentGeneratorService
     }
 
     public String identifier() {
-        return "Kamelet";
+        return "Integration";
     }
 
     public String description() {
-        return "A Kamelet is a snippet of a route. It defines meta building "
-                + "blocks or steps that can be reused on integrations.";
+        return "An Integration defines a workflow of actions and steps.";
     }
 
     @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        return getYAML(new Kamelet(steps, metadata, parameters),
-                new KameletRepresenter());
-    }
-
-    public String getYAML(final CustomResource kamelet,
-                          final Representer representer) {
-        final var constructor = new Constructor(Kamelet.class);
-        Yaml yaml = new Yaml(constructor, representer);
-        return yaml.dumpAsMap(kamelet);
+        var representer = new IntegrationRepresenter();
+        return kdgs.getYAML(new Integration(steps, metadata), representer);
     }
 
     @Override
@@ -63,9 +58,9 @@ public class KameletDeploymentGeneratorService
         return steps.stream().filter(Objects::nonNull)
                 .allMatch(
                         s -> getKinds().stream()
-                        .anyMatch(
-                                Predicate.isEqual(
-                                        s.getKind().toUpperCase())));
+                                .anyMatch(
+                                        Predicate.isEqual(
+                                                s.getKind().toUpperCase())));
     }
 
     @Override
@@ -83,9 +78,8 @@ public class KameletDeploymentGeneratorService
         }
         return s;
     }
-
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{Kamelet.class});
+        return Arrays.asList(new Class[]{Integration.class});
     }
 }

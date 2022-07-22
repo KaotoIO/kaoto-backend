@@ -161,6 +161,7 @@
         <module>catalog</module>
         <module>services-interfaces</module>
         <module>kamelet-support</module>
+        <module>camel-route-support</module>
         <module>cluster</module>
         <module>api</module>
     </modules>

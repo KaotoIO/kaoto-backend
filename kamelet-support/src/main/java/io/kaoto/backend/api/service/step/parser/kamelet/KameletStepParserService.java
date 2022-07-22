@@ -339,7 +339,7 @@ public class KameletStepParserService
         }
     }
 
-    private void processMetadata(
+    public void processMetadata(
             final ParseResult<Step> result,
             final ObjectMeta metadata) {
         result.setMetadata(new LinkedHashMap<>());

@@ -21,7 +21,7 @@ class LanguageServiceTest {
     @Test
     public void getAll() {
         var map = languageService.getAll();
-        Assertions.assertEquals(2, map.size());
+        Assertions.assertEquals(3, map.size());
 
         for (var language : map) {
             if (language.get("name").equalsIgnoreCase("KameletBinding")) {
