@@ -10,6 +10,7 @@ import io.kaoto.backend.model.deployment.camelroute.Integration;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
  * 🐱miniclass IntegrationStepParserService (StepParserService)
  */
 @ApplicationScoped
+@RegisterForReflection
 public class IntegrationStepParserService
         implements StepParserService<Step> {
 
