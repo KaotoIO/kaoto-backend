@@ -7,6 +7,7 @@ import io.kaoto.backend.model.deployment.camelroute.Integration;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 @ApplicationScoped
+@RegisterForReflection
 public class IntegrationDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
