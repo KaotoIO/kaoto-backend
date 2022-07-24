@@ -148,6 +148,18 @@ viewsPerStepList(&lt;Step[]&gt; steps):List[ViewDefinition]
 		
 		
 		]
+"CamelRoute" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>CamelRoute</B></TD></TR>
+	
+</TABLE>>]
+
+
+"IntegrationSpec" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>IntegrationSpec</B></TD></TR>
+	
+</TABLE>>]
+
+
 "AbstractCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>AbstractCatalog</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
