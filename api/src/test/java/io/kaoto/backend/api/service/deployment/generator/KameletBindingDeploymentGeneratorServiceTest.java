@@ -19,9 +19,6 @@ class KameletBindingDeploymentGeneratorServiceTest {
             "apiVersion: camel.apache.org/v1alpha1\n"
                     + "kind: KameletBinding\n"
                     + "metadata:\n"
-                    + "  additionalProperties: {}\n"
-                    + "  annotations: null\n"
-                    + "  labels: null\n"
                     + "  name: ''\n"
                     + "spec: {}\n";
     private KameletBindingDeploymentGeneratorService parser;
