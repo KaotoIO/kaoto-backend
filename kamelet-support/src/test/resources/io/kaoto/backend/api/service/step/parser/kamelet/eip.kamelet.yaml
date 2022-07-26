@@ -1,7 +1,6 @@
 apiVersion: camel.apache.org/v1alpha1
 kind: Kamelet
 metadata:
-  additionalProperties: {}
   annotations:
     camel.apache.org/kamelet.support.level: Preview
     camel.apache.org/catalog.version: main-SNAPSHOT

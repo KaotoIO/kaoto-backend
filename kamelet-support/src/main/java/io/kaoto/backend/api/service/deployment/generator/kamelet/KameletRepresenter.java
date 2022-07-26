@@ -99,12 +99,14 @@ public class KameletRepresenter extends Representer {
                     public Node representData(final Object data) {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         ObjectMeta meta = (ObjectMeta) data;
-                        if (meta.getAdditionalProperties() != null) {
-                            properties.put("additionalProperties",
-                                    meta.getAdditionalProperties());
+                        if (meta.getAnnotations() != null) {
+                            properties.put("annotations",
+                                    meta.getAnnotations());
                         }
-                        properties.put("annotations", meta.getAnnotations());
-                        properties.put("labels", meta.getLabels());
+                        if (meta.getLabels() != null) {
+                            properties.put("labels",
+                                    meta.getLabels());
+                        }
                         properties.put("name", meta.getName());
                         return representMapping(getTag(data.getClass(),
                                         Tag.MAP),
