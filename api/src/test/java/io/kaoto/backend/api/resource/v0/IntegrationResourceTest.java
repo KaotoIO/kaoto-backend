@@ -2,13 +2,19 @@ package io.kaoto.backend.api.resource.v0;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodBuilder;
+import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.v0.request.DeploymentResourceYamlRequest;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.kubernetes.client.KubernetesTestServer;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -27,10 +33,12 @@ import static org.junit.Assert.assertNotNull;
 @QuarkusTest
 @WithKubernetesTestServer
 @TestHTTPEndpoint(IntegrationResource.class)
-class IntegrationResourceTest {
+public class IntegrationResourceTest {
 
     private static String jsonRequest;
     private StepCatalog catalog;
+    @KubernetesTestServer
+    private KubernetesServer mockServer;
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
@@ -38,6 +46,22 @@ class IntegrationResourceTest {
                 IntegrationResourceTest.class.getResource(
                                 "../request.json")
                         .toURI()));
+    }
+
+    @BeforeEach
+    public void before() {
+        final Pod pod1 = new PodBuilder()
+                .withNewMetadata()
+                .withName("tralalala")
+                .withNamespace("test")
+                .and().build();
+
+        // Set up Kubernetes so that our "pretend" pods are created
+        if (mockServer.getClient()
+                .pods()
+                .inNamespace("test").list().getItems().isEmpty()) {
+            mockServer.getClient().pods().create(pod1);
+        }
     }
 
     @Test
@@ -100,7 +124,7 @@ class IntegrationResourceTest {
         res = given()
                 .when()
                 .contentType("text/plain")
-                .get("/{name}/logs?tailingLines=1", request.getName())
+                .get("/{name}/logs?lines=1&namespace=test", request.getName())
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         assertFalse(res.extract().response().asString().isEmpty());
