@@ -3,6 +3,7 @@ package io.kaoto.backend.deployment;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.Integration;
@@ -137,7 +138,12 @@ public class ClusterService {
                         }
                     }
 
-                    start(binding, namespace);
+                    try {
+                        start(binding, namespace);
+                    } catch (KubernetesClientException e) {
+                        log.trace("Either the binding is not right or the CRD"
+                                + " is not valid: " + e.getMessage());
+                    }
                     return;
                 }
             }
