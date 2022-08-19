@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.camelroute.Integration;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -68,11 +67,14 @@ public class IntegrationDeploymentGeneratorService
     @Override
     public Status getStatus(final CustomResource cr) {
         Status s = Status.Invalid;
-        if (cr instanceof Kamelet kamelet
-                && kamelet.getStatus() != null) {
-            switch (kamelet.getStatus().getPhase()) {
+        if (cr instanceof Integration integration
+                && integration.getStatus() != null) {
+            switch (integration.getStatus().getPhase()) {
                 case "Ready":
                     s = Status.Running;
+                    break;
+                case "Building Kit":
+                    s = Status.Building;
                     break;
                 default:
                     s = Status.Stopped;
