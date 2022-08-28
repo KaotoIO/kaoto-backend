@@ -88,8 +88,10 @@ public class ClusterService {
 
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
+            log.trace("Trying " + parser.identifier());
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
+                log.debug("Trying with " + c.getCanonicalName());
                 CustomResource binding = null;
                 try {
                     var constructor = new Constructor(c);
@@ -140,11 +142,11 @@ public class ClusterService {
 
                     try {
                         start(binding, namespace);
+                        return;
                     } catch (KubernetesClientException e) {
-                        log.trace("Either the binding is not right or the CRD"
+                        log.info("Either the binding is not right or the CRD"
                                 + " is not valid: " + e.getMessage());
                     }
-                    return;
                 }
             }
         }
