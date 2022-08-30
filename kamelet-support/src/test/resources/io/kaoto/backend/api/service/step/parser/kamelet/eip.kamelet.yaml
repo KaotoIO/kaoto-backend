@@ -22,7 +22,19 @@ spec:
     from:
       uri: kamelet:source
       steps:
-      - set-body:
-          simple: ola ke ase
+      - choice:
+          when:
+          - simple: '{{?foo}}'
+            steps:
+            - set-body:
+                simple: foo
+          - simple: '{{?bar}}'
+            steps:
+            - set-body:
+                simple: bar
+          otherwise:
+            steps:
+            - set-body:
+                simple: ola ke ase
       - to:
           uri: kamelet:sink

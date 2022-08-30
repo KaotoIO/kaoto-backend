@@ -157,7 +157,7 @@ class KameletStepParserServiceTest {
     }
 
     @Test
-    void setBody() {
+    void checkEIP() {
         assertTrue(service.appliesTo(kameletEIP));
         final var parsed = service.deepParse(kameletEIP);
         assertNotNull(parsed);

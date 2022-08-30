@@ -16,6 +16,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
+import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.TypeDescription;
@@ -317,6 +318,18 @@ public class KameletRepresenter extends Representer {
             }
         });
 
+        this.multiRepresenters.put(Otherwise.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                Otherwise step = (Otherwise) data;
+                properties.put(STEPS, step.getSteps());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+
         metaChoice();
         whenChoice();
     }
@@ -325,11 +338,10 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(SuperChoice.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
+                Map<String, Object> properties = new LinkedHashMap<>();
                 SuperChoice step = (SuperChoice) data;
                 properties.put("when", step.getChoice());
-                if (step.getOtherwise() != null
-                       && !step.getOtherwise().isEmpty()) {
+                if (step.getOtherwise() != null) {
                     properties.put("otherwise", step.getOtherwise());
                 }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
