@@ -15,6 +15,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
@@ -270,6 +271,9 @@ public class KamelPopulator {
                 case "set-property":
                     flowStep = getSetPropertyStep(step);
                     break;
+                case "transform":
+                    flowStep = getTransformStep(step);
+                    break;
                 default:
                     break;
             }
@@ -355,6 +359,10 @@ public class KamelPopulator {
            }
         }
         return expression;
+    }
+
+    private FlowStep getTransformStep(final Step step) {
+        return new TransformFlowStep(getExpression(step));
     }
 
     private FlowStep getCamelConnector(final Step step, final boolean to) {

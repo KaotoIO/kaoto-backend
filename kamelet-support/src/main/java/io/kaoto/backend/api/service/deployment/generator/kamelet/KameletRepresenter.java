@@ -15,6 +15,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
@@ -58,6 +59,7 @@ public class KameletRepresenter extends Representer {
         setHeader();
         setProperty();
         expression();
+        transform();
 
         addTypeDescriptions();
     }
@@ -78,9 +80,16 @@ public class KameletRepresenter extends Representer {
         setBodyDesc.substituteProperty("set-property",
                 SetPropertyFlowStep.class,
                 "getSetProperty", "setSetProperty");
+
+        TypeDescription transformDesc =
+                new TypeDescription(TransformFlowStep.class);
+        transformDesc.substituteProperty("transform", TransformFlowStep.class,
+                "getTransform", "setTransform");
+
         this.addTypeDescription(setBodyDesc);
         this.addTypeDescription(setHeaderDesc);
         this.addTypeDescription(setPropertyDesc);
+        this.addTypeDescription(transformDesc);
     }
 
     private void customResource() {
@@ -428,6 +437,19 @@ public class KameletRepresenter extends Representer {
         });
     }
 
+    private void transform() {
+        this.multiRepresenters.put(TransformFlowStep.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                TransformFlowStep step = (TransformFlowStep) data;
+                properties.put("transform", step.getTransform());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+    }
 
     @Override
     protected NodeTuple representJavaBeanProperty(
