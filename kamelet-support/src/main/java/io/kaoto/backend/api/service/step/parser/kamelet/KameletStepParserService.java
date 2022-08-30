@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
@@ -188,6 +189,8 @@ public class KameletStepParserService
             return processDefinedStep(setBodyFlowStep);
         } else if (step instanceof SetHeaderFlowStep setHeaderFlowStep) {
             return processDefinedStep(setHeaderFlowStep);
+        } else if (step instanceof SetPropertyFlowStep setPropertyFlowStep) {
+            return processDefinedStep(setPropertyFlowStep);
         } else {
             log.warn("Unrecognized step -> " + step);
             return null;
@@ -281,7 +284,6 @@ public class KameletStepParserService
     private Step processDefinedStep(final SetHeaderFlowStep step) {
         Step res = catalog.getReadOnlyCatalog().searchStepByName("set-header");
 
-
         for (Parameter p : res.getParameters()) {
             if (p.getId().equalsIgnoreCase("name")) {
                 p.setValue(step.getSetHeaderPairFlowStep().getName());
@@ -292,6 +294,21 @@ public class KameletStepParserService
             }
         }
 
+        return res;
+    }
+    private Step processDefinedStep(final SetPropertyFlowStep step) {
+        Step res = catalog.getReadOnlyCatalog()
+                .searchStepByName("set-property");
+
+        for (Parameter p : res.getParameters()) {
+            if (p.getId().equalsIgnoreCase("name")) {
+                p.setValue(step.getSetPropertyPairFlowStep().getName());
+            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
+                p.setValue(step.getSetPropertyPairFlowStep().getSimple());
+            } else if (p.getId().equalsIgnoreCase("constant")) {
+                p.setValue(step.getSetPropertyPairFlowStep().getConstant());
+            }
+        }
 
         return res;
     }

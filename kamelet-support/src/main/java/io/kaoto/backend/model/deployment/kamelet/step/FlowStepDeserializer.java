@@ -29,6 +29,9 @@ public class FlowStepDeserializer extends JsonDeserializer {
             } else if (n.get("set-header") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         SetHeaderFlowStep.class);
+            }  else if (n.get("set-property") != null) {
+                return new ObjectMapper().readValue(n.toPrettyString(),
+                        SetPropertyFlowStep.class);
             } else if (n.get("to") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         ToFlowStep.class);

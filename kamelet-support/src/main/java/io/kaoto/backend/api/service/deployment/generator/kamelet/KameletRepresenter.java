@@ -13,6 +13,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
@@ -55,6 +56,7 @@ public class KameletRepresenter extends Representer {
         choice();
         setBody();
         setHeader();
+        setProperty();
         expression();
 
         addTypeDescriptions();
@@ -70,8 +72,15 @@ public class KameletRepresenter extends Representer {
                 new TypeDescription(SetBodyFlowStep.class);
         setBodyDesc.substituteProperty("set-body", SetBodyFlowStep.class,
                 "getSetBody", "setSetBody");
+
+        TypeDescription setPropertyDesc =
+                new TypeDescription(SetPropertyFlowStep.class);
+        setBodyDesc.substituteProperty("set-property",
+                SetPropertyFlowStep.class,
+                "getSetProperty", "setSetProperty");
         this.addTypeDescription(setBodyDesc);
         this.addTypeDescription(setHeaderDesc);
+        this.addTypeDescription(setPropertyDesc);
     }
 
     private void customResource() {
@@ -372,6 +381,22 @@ public class KameletRepresenter extends Representer {
                 Map<String, Object> properties = new HashMap<>();
                 SetHeaderFlowStep step = (SetHeaderFlowStep) data;
                 properties.put("set-header", step.getSetHeaderPairFlowStep());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+    }
+
+    private void setProperty() {
+        this.multiRepresenters.put(SetPropertyFlowStep.class,
+                new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                SetPropertyFlowStep step = (SetPropertyFlowStep) data;
+                properties.put("set-property",
+                        step.getSetPropertyPairFlowStep());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
                         properties,
                         DumperOptions.FlowStyle.AUTO);

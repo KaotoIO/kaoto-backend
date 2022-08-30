@@ -26,11 +26,13 @@ spec:
           when:
           - simple: '{{?foo}}'
             steps:
-            - set-body:
+            - set-header:
+                name: bar
                 simple: foo
           - simple: '{{?bar}}'
             steps:
-            - set-body:
+            - set-property:
+                name: property
                 simple: bar
           otherwise:
             steps:
