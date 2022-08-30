@@ -16,6 +16,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.parameter.ArrayParameter;
@@ -191,6 +192,8 @@ public class KameletStepParserService
             return processDefinedStep(setHeaderFlowStep);
         } else if (step instanceof SetPropertyFlowStep setPropertyFlowStep) {
             return processDefinedStep(setPropertyFlowStep);
+        } else if (step instanceof TransformFlowStep transformFlowStep) {
+            return processDefinedStep(transformFlowStep);
         } else {
             log.warn("Unrecognized step -> " + step);
             return null;
@@ -307,6 +310,22 @@ public class KameletStepParserService
                 p.setValue(step.getSetPropertyPairFlowStep().getSimple());
             } else if (p.getId().equalsIgnoreCase("constant")) {
                 p.setValue(step.getSetPropertyPairFlowStep().getConstant());
+            }
+        }
+
+        return res;
+    }
+
+    private Step processDefinedStep(final TransformFlowStep step) {
+        Step res = catalog.getReadOnlyCatalog().searchStepByName("transform");
+
+        for (Parameter p : res.getParameters()) {
+            if (p.getId().equalsIgnoreCase("name")) {
+                p.setValue(step.getTransform().getName());
+            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
+                p.setValue(step.getTransform().getSimple());
+            } else if (p.getId().equalsIgnoreCase("constant")) {
+                p.setValue(step.getTransform().getConstant());
             }
         }
 

@@ -35,6 +35,9 @@ public class FlowStepDeserializer extends JsonDeserializer {
             } else if (n.get("to") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         ToFlowStep.class);
+            } else if (n.get("transform") != null) {
+                return new ObjectMapper().readValue(n.toPrettyString(),
+                        TransformFlowStep.class);
             } else if (n.get("uri") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         UriFlowStep.class);

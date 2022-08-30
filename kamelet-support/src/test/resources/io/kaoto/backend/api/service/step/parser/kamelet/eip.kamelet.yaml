@@ -34,6 +34,10 @@ spec:
             - set-property:
                 name: property
                 simple: bar
+          - simple: '{{?baz}}'
+            steps:
+            - transform:
+                simple: baz
           otherwise:
             steps:
             - set-body:
