@@ -13,6 +13,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
@@ -266,6 +267,9 @@ public class KamelPopulator {
                 case "set-header":
                     flowStep = getSetHeaderStep(step);
                     break;
+                case "set-property":
+                    flowStep = getSetPropertyStep(step);
+                    break;
                 default:
                     break;
             }
@@ -326,23 +330,17 @@ public class KamelPopulator {
     }
 
     private FlowStep getSetBodyStep(final Step step) {
-        Expression expression = new Expression(null, null);
-
-        for (Parameter p : step.getParameters()) {
-            if (p.getValue() == null) {
-                continue;
-            }
-            if (SIMPLE.equalsIgnoreCase(p.getId())) {
-                expression.setSimple(p.getValue().toString());
-            } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
-                expression.setConstant(p.getValue().toString());
-            }
-        }
-
-        return new SetBodyFlowStep(expression);
+        return new SetBodyFlowStep(getExpression(step));
+    }
+    private FlowStep getSetPropertyStep(final Step step) {
+        return new SetPropertyFlowStep(getExpression(step));
     }
 
     private FlowStep getSetHeaderStep(final Step step) {
+        return new SetHeaderFlowStep(getExpression(step));
+    }
+
+    private Expression getExpression(final Step step) {
         Expression expression = new Expression(null, null);
         for (Parameter p : step.getParameters()) {
             if (p.getValue() == null) {
@@ -356,8 +354,7 @@ public class KamelPopulator {
                expression.setConstant(p.getValue().toString());
            }
         }
-
-        return new SetHeaderFlowStep(expression);
+        return expression;
     }
 
     private FlowStep getCamelConnector(final Step step, final boolean to) {
