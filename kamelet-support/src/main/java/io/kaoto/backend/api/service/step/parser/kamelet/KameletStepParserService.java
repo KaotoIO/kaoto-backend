@@ -212,7 +212,8 @@ public class KameletStepParserService
 
             if (choice.getChoice().getOtherwise() != null) {
                 Branch branch = new Branch(OTHERWISE);
-                for (var s : choice.getChoice().getOtherwise()) {
+
+                for (var s : choice.getChoice().getOtherwise().getSteps()) {
                     branch.getSteps().add(processStep(s));
                 }
                 res.getBranches().add(branch);
@@ -244,7 +245,7 @@ public class KameletStepParserService
         if (uri != null
                 && uri.contains(":")
                 && !uri.startsWith("kamelet:")) {
-            connectorName = uri.substring(0, uri.indexOf(":"));
+            connectorName = uri.substring(0, uri.indexOf(':'));
         }
         log.trace("Found connector " + connectorName);
 
@@ -298,9 +299,9 @@ public class KameletStepParserService
     private void setValuesOnParameters(final Step step,
                                        final String uri) {
 
-        String path = uri.substring(uri.indexOf(":") + 1);
+        String path = uri.substring(uri.indexOf(':') + 1);
         if (path.contains("?")) {
-            path = path.substring(0, path.indexOf("?"));
+            path = path.substring(0, path.indexOf('?'));
         }
 
         for (Parameter p : step.getParameters()) {

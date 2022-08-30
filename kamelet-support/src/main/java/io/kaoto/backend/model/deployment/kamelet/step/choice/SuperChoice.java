@@ -3,7 +3,6 @@ package io.kaoto.backend.model.deployment.kamelet.step.choice;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,8 +17,17 @@ public class SuperChoice implements Serializable {
     @JsonProperty("when")
     private List<Choice> choice;
 
+    public Otherwise getOtherwise() {
+        return otherwise;
+    }
+
+    public void setOtherwise(
+            final Otherwise otherwise) {
+        this.otherwise = otherwise;
+    }
+
     @JsonProperty("otherwise")
-    private List<FlowStep> otherwise;
+    private Otherwise otherwise;
 
     public List<Choice> getChoice() {
         return choice;
@@ -30,13 +38,5 @@ public class SuperChoice implements Serializable {
         this.choice = choice;
     }
 
-    public List<FlowStep> getOtherwise() {
-        return otherwise;
-    }
-
-    public void setOtherwise(
-            final List<FlowStep> otherwise) {
-        this.otherwise = otherwise;
-    }
 
 }

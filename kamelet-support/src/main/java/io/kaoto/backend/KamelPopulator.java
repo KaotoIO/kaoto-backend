@@ -16,6 +16,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
+import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
@@ -127,7 +128,7 @@ public class KamelPopulator {
             if (dep != null
                     && s.getKind().equalsIgnoreCase("Camel-Connector")) {
                 if (dep.contains(":")) {
-                    dep = dep.substring(0, dep.indexOf(":"));
+                    dep = dep.substring(0, dep.indexOf(':'));
                 }
                 if (!deps.contains("camel:" + dep)) {
                     deps.add("camel:" + dep);
@@ -291,10 +292,10 @@ public class KamelPopulator {
         for (Branch b : step.getBranches()) {
             if (b.containsKey(CONDITION)) {
                 choices.add(processChoice(b));
-            } else if (choice.getOtherwise() == null) {
-                choice.setOtherwise(processChoice(b).getSteps());
             } else {
-                choices.add(processChoice(b));
+                var otherwise = new Otherwise();
+                otherwise.setSteps(processSteps(b));
+                choice.setOtherwise(otherwise);
             }
         }
         choice.setChoice(choices);
@@ -305,18 +306,23 @@ public class KamelPopulator {
     private Choice processChoice(final Branch b) {
         Choice choice = new Choice();
 
-        choice.setSteps(new LinkedList<>());
-        for (Step step : b.getSteps()) {
-            if (step != null) {
-                choice.getSteps().add(processStep(step, true));
-            }
-        }
+        choice.setSteps(processSteps(b));
 
         if (b.containsKey(CONDITION)) {
             choice.setSimple(b.get(CONDITION).toString());
         }
 
         return choice;
+    }
+
+    private List<FlowStep> processSteps(final Branch b) {
+        var list = new LinkedList<FlowStep>();
+        for (Step step : b.getSteps()) {
+            if (step != null) {
+                list.add(processStep(step, true));
+            }
+        }
+        return list;
     }
 
     private FlowStep getSetBodyStep(final Step step) {
