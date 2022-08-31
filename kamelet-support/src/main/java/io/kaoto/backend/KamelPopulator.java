@@ -10,6 +10,8 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.Filter;
+import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
@@ -282,6 +284,9 @@ public class KamelPopulator {
                 case "choice":
                     flowStep = getChoiceStep(step);
                     break;
+                case "filter":
+                    flowStep = getFilterStep(step);
+                    break;
                 default:
                     break;
             }
@@ -363,6 +368,23 @@ public class KamelPopulator {
 
     private FlowStep getTransformStep(final Step step) {
         return new TransformFlowStep(getExpression(step));
+    }
+
+    private FlowStep getFilterStep(final Step step) {
+        Branch b = step.getBranches().get(0);
+        return new FilterFlowStep(processFilter(b));
+    }
+
+    private Filter processFilter(final Branch b) {
+        Filter filter = new Filter();
+
+        filter.setSteps(processSteps(b));
+
+        if (b.containsKey(CONDITION)) {
+            filter.setSimple(b.get(CONDITION).toString());
+        }
+
+        return filter;
     }
 
     private FlowStep getCamelConnector(final Step step, final boolean to) {

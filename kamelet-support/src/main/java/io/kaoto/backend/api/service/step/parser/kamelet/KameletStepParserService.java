@@ -12,6 +12,8 @@ import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.Filter;
+import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -194,6 +196,8 @@ public class KameletStepParserService
             return processDefinedStep(setPropertyFlowStep);
         } else if (step instanceof TransformFlowStep transformFlowStep) {
             return processDefinedStep(transformFlowStep);
+        } else if (step instanceof FilterFlowStep filterFlowStep) {
+            return processDefinedStep(filterFlowStep);
         } else {
             log.warn("Unrecognized step -> " + step);
             return null;
@@ -331,6 +335,36 @@ public class KameletStepParserService
 
         return res;
     }
+
+    private Step processDefinedStep(final FilterFlowStep filter) {
+        Step res = catalog.getReadOnlyCatalog().searchStepByID("filter");
+        res.setBranches(new LinkedList<>());
+
+        try {
+            var flow = filter.getFilter();
+            Branch branch =
+                    new Branch(getFilterIdentifier(flow));
+            branch.put(CONDITION, getFilterCondition(flow));
+            for (var s : flow.getSteps()) {
+                branch.getSteps().add(processStep(s));
+            }
+            setValueOnStepProperty(res, SIMPLE, branch.get(CONDITION));
+            res.getBranches().add(branch);
+        } catch (Exception e) {
+            log.warn("Can't parse step -> " + e.getMessage());
+        }
+
+        return res;
+    }
+
+    private String getFilterIdentifier(final Filter flow) {
+        return flow.getSimple();
+    }
+
+    private String getFilterCondition(final Filter flow) {
+        return flow.getSimple();
+    }
+
 
     private void setValuesOnParameters(final Step step,
                                        final String uri) {

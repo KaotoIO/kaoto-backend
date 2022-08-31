@@ -20,6 +20,9 @@ public class FlowStepDeserializer extends JsonDeserializer {
             if (n.get("choice") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         ChoiceFlowStep.class);
+            } else if (n.get("filter") != null) {
+                return new ObjectMapper().readValue(n.toPrettyString(),
+                        FilterFlowStep.class);
             } else if (n.get("from") != null) {
                 return new ObjectMapper().readValue(n.toPrettyString(),
                         From.class);
