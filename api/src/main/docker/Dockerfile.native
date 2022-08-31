@@ -1,4 +1,21 @@
+# First stage - install the dependencies in an intermediate container
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5 as BUILD
+RUN microdnf install curl
+
+# Second stage - copy the dependencies
 FROM quay.io/quarkus/quarkus-micro-image:1.0
+
+COPY --from=BUILD /usr/bin/curl   /usr/bin/
+COPY --from=BUILD \
+ /lib64/libcurl.so.4 /lib64/libssl.so.1.1 /lib64/libcrypto.so.1.1  \
+ /lib64/libnghttp2.so.14 /lib64/libidn2.so.0 /lib64/libssh.so.4 \
+ /lib64/libpsl.so.5 /lib64/libgssapi_krb5.so.2 /lib64/libkrb5.so.3 \
+ /lib64/libk5crypto.so.3  /lib64/libcom_err.so.2 /lib64/libldap-2.4.so.2 \
+ /lib64/liblber-2.4.so.2 /lib64/libbrotlidec.so.1 /lib64/libunistring.so.2 \
+ /lib64/libkrb5support.so.0 /lib64/libkeyutils.so.1 /lib64/libsasl2.so.3 \
+ /lib64/libbrotlicommon.so.1 /lib64/libcrypt.so.1 \
+ /lib64/
+
 WORKDIR /work/
 RUN chown 1001 /work \
     && chmod "g+rwX" /work \
