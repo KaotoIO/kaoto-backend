@@ -63,13 +63,33 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Build to test
+        uses: docker/build-push-action@v3
         with:
           context: "api"
-          file: './api/src/main/docker/Dockerfile.jvm'
+          file: './api/src/main/docker/Dockerfile.native'
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Run built image
+        if: ${{ github.event_name == 'pull_request' }}
+        run: docker run -d --rm --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
+      - name: Check health
+        uses: stringbean/docker-healthcheck-action@v1
+        with:
+          container: kaoto-backend
+          wait-time: 50
+          require-status: running
+          require-healthy: true
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          context: "api"
+          file: './api/src/main/docker/Dockerfile.native'
+          platforms: linux/amd64
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Image digest
