@@ -10,6 +10,8 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.Filter;
+import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
@@ -60,6 +62,7 @@ public class KameletRepresenter extends Representer {
         setProperty();
         expression();
         transform();
+        filter();
 
         addTypeDescriptions();
     }
@@ -449,6 +452,40 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
+    }
+
+    private void metaFilter() {
+        this.multiRepresenters.put(FilterFlowStep.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                FilterFlowStep filterFlowStep = (FilterFlowStep) data;
+                properties.put("filter", filterFlowStep.getFilter());
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+    }
+
+    private void filter() {
+        this.multiRepresenters.put(Filter.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                Map<String, Object> properties = new HashMap<>();
+                Filter step = (Filter) data;
+                properties.put(STEPS, step.getSteps());
+                if (step.getSimple() != null
+                        && !step.getSimple().isEmpty()) {
+                    properties.put(SIMPLE, step.getSimple());
+                }
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        properties,
+                        DumperOptions.FlowStyle.AUTO);
+            }
+        });
+
+        metaFilter();
     }
 
     @Override

@@ -42,5 +42,10 @@ spec:
             steps:
             - set-body:
                 simple: ola ke ase
+      - filter:
+          simple: '{{?foo}}'
+          steps:
+          - set-body:
+              simple: abc
       - to:
           uri: kamelet:sink
