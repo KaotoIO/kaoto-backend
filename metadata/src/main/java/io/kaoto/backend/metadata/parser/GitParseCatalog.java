@@ -47,7 +47,7 @@ public class GitParseCatalog<T extends Metadata>
         File file = null;
         try {
             log.trace("Creating temporary folder.");
-            file = Files.createTempDirectory("kaoto-catalog").toFile();
+            file = Files.createTempDirectory("kaoto-git-").toFile();
             file.setExecutable(true, true);
             file.setReadable(true, true);
             file.setWritable(true, true);
