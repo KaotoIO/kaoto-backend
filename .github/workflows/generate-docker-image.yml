@@ -73,7 +73,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run built image
-        if: ${{ github.event_name == 'pull_request' }}
         run: docker run -d --rm --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
       - name: Check health
         uses: stringbean/docker-healthcheck-action@v1
