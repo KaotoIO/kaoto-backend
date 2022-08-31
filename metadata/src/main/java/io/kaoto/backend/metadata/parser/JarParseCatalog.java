@@ -2,6 +2,7 @@ package io.kaoto.backend.metadata.parser;
 
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 
@@ -63,7 +64,7 @@ public class JarParseCatalog<T extends Metadata>
             FileAttribute<Set<PosixFilePermission>> attr =
                     PosixFilePermissions.asFileAttribute(
                             PosixFilePermissions.fromString("rwx------"));
-            tmp = Files.createTempDirectory("remote-", attr);
+            tmp = Files.createTempDirectory("kaoto-zip-", attr);
             tmp.toFile().deleteOnExit();
 
             //Unzip the files
@@ -95,6 +96,14 @@ public class JarParseCatalog<T extends Metadata>
             log.error("Error trying to parse catalog.", e);
         }
 
+        try {
+            FileUtils.deleteDirectory(tmp.toFile());
+            if (!location.equalsIgnoreCase(url)) {
+                FileUtils.deleteQuietly(new File(location));
+            }
+        } catch (IOException e) {
+            log.error("Error cleaning up catalog.", e);
+        }
 
         return metadataList;
     }

@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -118,6 +119,12 @@ public class ClusterParseCatalog<T extends Metadata>
         CompletableFuture.allOf(
                         futureMd.toArray(new CompletableFuture[0]))
                 .join();
+
+        try {
+            FileUtils.deleteDirectory(dir);
+        } catch (IOException e) {
+            log.error("Error cleaning up catalog.", e);
+        }
 
         return metadataList;
     }
