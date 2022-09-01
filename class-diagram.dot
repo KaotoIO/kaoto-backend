@@ -2,10 +2,10 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
-"LanguageResource 🐱relationship compositionOf LanguageService, 0..1" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>LanguageResource 🐱relationship compositionOf LanguageService, 0..1</B></TD></TR>
+"CapabilitiesResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>CapabilitiesResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-getAll():Map
+getAll():Capabilities
 <BR align="left" />
 
 </TD></TR>
@@ -14,16 +14,23 @@ getAll():Map
 </TABLE>>]
 
 
-"DeploymentResource" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentResource</B></TD></TR>
+		"LanguageService" -> "CapabilitiesResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
+"DeploymentsResource" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DeploymentsResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-all():String
+all(&lt;String&gt; namespace):String
 <BR align="left" />
-start():String
+start(&lt;String&gt; crd, &lt;String&gt; namespace, &lt;String&gt; name):String
 <BR align="left" />
-get():String
+get(&lt;String&gt; name, &lt;String&gt; namespace):String
 <BR align="left" />
-stop():String
+stop(&lt;String&gt; name, &lt;String&gt; namespace):String
+<BR align="left" />
+logs(&lt;String&gt; name, &lt;String&gt; namespace):String
 <BR align="left" />
 
 </TD></TR>
@@ -35,7 +42,11 @@ stop():String
 "IntegrationsResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>IntegrationsResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
-crd(&lt;String&gt; dsl):Map&lt;String, Map&lt;String&gt;&gt;
+crd(&lt;String&gt; dsl, &lt;Integration&gt; integration):Map
+<BR align="left" />
+integration(&lt;String&gt; dsl, &lt;String&gt; crd):Map
+<BR align="left" />
+compatibleDSL(&lt;List[Step]&gt; steps):Map
 <BR align="left" />
 
 </TD></TR>
@@ -88,74 +99,8 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		, taillabel="0..1"
 		
 		]
-"Capabilities" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Capabilities</B></TD></TR>
-	
-</TABLE>>]
-
-
-"Integration" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Integration</B></TD></TR>
-	
-</TABLE>>]
-
-
-"DeploymentService This endpoint will return a list of views based on" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentService This endpoint will return a list of views based on</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-yaml(&lt;List[Step]&gt; steps, &lt;String&gt; name):String
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"LanguageService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>LanguageService</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-getAll():Map
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"ViewDefinitionService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewDefinitionService</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-viewsPerStepList(&lt;Step[]&gt; steps):List[ViewDefinition]
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"ViewDefinitionService" -> "StepParserService" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-		"ViewDefinitionService" -> "ViewDefinitionParserService" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "CamelRoute" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>CamelRoute</B></TD></TR>
-	
-</TABLE>>]
-
-
-"IntegrationSpec" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>IntegrationSpec</B></TD></TR>
 	
 </TABLE>>]
 
@@ -166,6 +111,10 @@ viewsPerStepList(&lt;Step[]&gt; steps):List[ViewDefinition]
 waitForWarmUp():CompletableFuture
 <BR align="left" />
 loadParsers():List[ParseCatalog]
+<BR align="left" />
+warmUpCatalog():
+<BR align="left" />
+refresh():
 <BR align="left" />
 
 </TD></TR>
@@ -187,6 +136,22 @@ loadParsers():List[ParseCatalog]
 
 	"StepCatalog" -> "AbstractCatalog"
 
+"StepCatalogParser" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepCatalogParser</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
+getParser(&lt;String&gt; url, &lt;String&gt; tag):ParseCatalog
+<BR align="left" />
+getParserFromCluster():ParseCatalog
+<BR align="left" />
+getLocalFolder(&lt;Path&gt; path):ParseCatalog
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
 "ViewDefinitionCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionCatalog</B></TD></TR>
 	
@@ -199,6 +164,7 @@ loadParsers():List[ParseCatalog]
 	
 </TABLE>>]
 
+	"KameletParseCatalog" -> "StepCatalogParser"
 
 		"KameletParseCatalog" -> "ParseCatalog" [
 		arrowhead=open, style=dashed
@@ -206,12 +172,6 @@ loadParsers():List[ParseCatalog]
 		
 		
 		]
-"Condition" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Condition</B></TD></TR>
-	
-</TABLE>>]
-
-
 "Kamelet" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Kamelet</B></TD></TR>
 	
@@ -343,17 +303,6 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 		
 		
 		]
-"Metadata" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Metadata</B></TD></TR>
-	<TR><TD><I>Properties</I><BR/>
-ID:String<BR align="left" />name:String<BR align="left" />type:String<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
 "Parameter" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Parameter</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
@@ -362,12 +311,6 @@ description:String<BR align="left" />title:String<BR align="left" />id:String<BR
 </TD></TR>
 
 
-</TABLE>>]
-
-
-"Branch" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Branch</B></TD></TR>
-	
 </TABLE>>]
 
 
@@ -398,47 +341,6 @@ properties:Map[String, String]<BR align="left" />step:Step<BR align="left" />url
 		"ViewDefinitionConstraint" -> "ViewDefinition" [dir=both; arrowhead=diamond; arrowtail=none
 		
 		, taillabel="0..n"
-		
-		]
-"ViewDefinitionConstraint" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>ViewDefinitionConstraint</B></TD></TR>
-	<TR><TD><I>Properties</I><BR/>
-mandatory:boolean<BR align="left" />operation:ConstraintOperation<BR align="left" />parameter:String<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-"DeploymentGeneratorService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>DeploymentGeneratorService</B></TD></TR>
-	<TR><TD><I>Methods</I><BR/>
-identifier():String
-<BR align="left" />
-description():String
-<BR align="left" />
-parse(&lt;List[Step]&gt; steps, &lt;List[Parameter]&gt; parameters, &lt;Map&gt; metadata):String
-<BR align="left" />
-appliesTo(&lt;List[Step]&gt; steps):boolean
-<BR align="left" />
-getStatus():CustomResource
-<BR align="left" />
-supportedCustomResources():List&lt;Class&gt;
-<BR align="left" />
-getKinds():String[]
-<BR align="left" />
-
-</TD></TR>
-
-
-</TABLE>>]
-
-
-		"DeploymentGeneratorService" -> "Step" [
-		arrowhead=open, style=dashed
-		
-		
 		
 		]
 "StepParserService" [ label = <<TABLE CELLSPACING="0">
