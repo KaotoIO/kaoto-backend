@@ -62,11 +62,12 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             step.setKind(kind);
 
             if (kamelet.getMetadata() != null) {
-                step.setId(kamelet.getMetadata().getName());
-                step.setName(kamelet.getMetadata().getName());
+                final var metadata = kamelet.getMetadata();
+                step.setId(metadata.getName());
+                step.setName(metadata.getName());
 
-                if (kamelet.getMetadata().getLabels() != null) {
-                    switch (kamelet.getMetadata().getLabels()
+                if (metadata.getLabels() != null) {
+                    switch (metadata.getLabels()
                             .getOrDefault("camel.apache.org/kamelet.type",
                                     "action")
                             .toLowerCase()) {
@@ -76,16 +77,30 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                     }
                 }
 
-                if (kamelet.getMetadata().getAnnotations() != null) {
-                    step.setGroup(kamelet.getMetadata().getAnnotations()
+                if (metadata.getAnnotations() != null) {
+                    final var annotations = metadata.getAnnotations();
+                    step.setGroup(annotations
                             .getOrDefault("camel.apache.org/kamelet.group",
                                     "others"));
 
                     step.setIcon(
-                            kamelet.getMetadata().getAnnotations().getOrDefault(
+                            annotations.getOrDefault(
                                     "camel.apache.org/kamelet.icon", ""));
-                }
 
+                    if (annotations.containsKey("kaoto.io/minbranches")) {
+                        step.setMinBranches(
+                                Integer.valueOf(
+                                        annotations
+                                                .get("kaoto.io/minbranches")));
+                    }
+
+                    if (annotations.containsKey("kaoto.io/maxbranches")) {
+                        step.setMaxBranches(
+                                Integer.valueOf(
+                                        annotations
+                                                .get("kaoto.io/maxbranches")));
+                    }
+                }
             }
 
             if (kamelet.getSpec() != null
