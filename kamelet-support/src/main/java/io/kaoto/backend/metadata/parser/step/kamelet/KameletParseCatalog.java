@@ -17,7 +17,10 @@ import java.nio.file.Path;
 
 /**
  * 🐱class KameletParseCatalog
+ * 🐱inherits StepCatalogParser
+ *
  * 🐱relationship dependsOn ParseCatalog
+ *
  * Reads and parses a kamelet catalog.
  * Extracts all the kamelet definitions it can find
  * and generate a kamelet step for each one.

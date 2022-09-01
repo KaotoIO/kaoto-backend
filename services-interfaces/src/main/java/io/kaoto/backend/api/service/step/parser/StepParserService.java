@@ -47,8 +47,7 @@ public interface StepParserService<T extends Step> {
     boolean appliesTo(String yaml);
 
     /**
-     * 🐱miniclass ParseResult
-     * 🐱relationship dependsOn StepParserService
+     * 🐱miniclass ParseResult (StepParserService)
      *
      */
     class ParseResult<T> {

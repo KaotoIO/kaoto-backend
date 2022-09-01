@@ -1,0 +1,35 @@
+
+🐱class CapabilitiesResource
+🐱class DeploymentsResource
+🐱class IntegrationsResource
+🐱class StepResource
+🐱class ViewDefinitionResource
+
+🐱class Kamelet
+🐱class KameletBinding
+🐱class CamelRoute
+🐱class KameletParseCatalog
+
+🐱class AbstractCatalog
+🐱class CatalogCollection
+🐱class InMemoryCatalog
+🐱class ReadOnlyCatalog
+🐱class MetadataCatalog
+
+🐱class ParseCatalog
+🐱class GitParseCatalog
+🐱class JarParseCatalog
+🐱class LocalFolderParseCatalog
+🐱class ClusterParseCatalog
+🐱class YamlProcessFile
+
+🐱class ViewDefinition
+🐱class ViewDefinitionCatalog
+🐱class ViewDefinitionParseCatalog
+🐱class ViewDefinitionParserService
+
+🐱class Step
+🐱class Parameter
+🐱class StepCatalog
+🐱class StepCatalogParser
+🐱class StepParserService

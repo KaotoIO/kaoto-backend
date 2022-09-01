@@ -8,9 +8,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
 
-/**
- * 🐱class Condition
- */
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )

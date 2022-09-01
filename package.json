@@ -1,11 +1,11 @@
 {
   "scripts": {
     "docs": "npm run docs-api && npm run docs-uml && npm run convert-images",
-    "docs-api": "leafdoc -t leafdoc-templates/plain -o docs/api-reference.html -c \"🐱\" */src/main/java/ -e true -x .java",
+    "docs-api": "leafdoc -t leafdoc-templates/plain -o docs/index.html -c \"🐱\" leafdoc-templates/index.leafdoc */src/main/java/ -e true -x .java",
     "docs-uml": "leafdoc -t leafdoc-templates/graphviz-class-diagram -o docs/class-diagram.dot -c \"🐱\" */src/main/java -x .java",
     "convert-images": "find docs -name \"*.dot\" -exec dot -Tsvg {} -o {}.svg \\; "
   },
   "dependencies": {
-    "leafdoc": "^2.2.1"
+    "leafdoc": "^2.3.0"
   }
 }

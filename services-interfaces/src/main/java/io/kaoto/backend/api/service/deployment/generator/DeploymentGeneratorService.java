@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 🐱class DeploymentGeneratorService
+ * 🐱miniclass DeploymentGeneratorService (StepResource)
  * 🐱relationship dependsOn Step
  *
+ * 🐱section
  * Generic interface to generate yaml deployments
  *
  */

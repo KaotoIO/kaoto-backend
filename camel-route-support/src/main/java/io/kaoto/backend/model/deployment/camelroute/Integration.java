@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * 🐱class CamelRoute
+ *
  * Represents an Integration definition that can be deployed.
  *
  * This generates a flow based on how Camel-K defines YAML routes as

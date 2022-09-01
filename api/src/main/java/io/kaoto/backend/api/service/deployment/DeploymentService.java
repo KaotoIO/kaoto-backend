@@ -16,8 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 🐱class DeploymentService This endpoint will return a list of views based on
- * the parameters.
+ * 🐱miniclass DeploymentService (IntegrationsResource)
+ * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
+ *
+ *
+ * 🐱section
+ * Service to interact with the cluster. This is the utility class the
+ * resource relies on to perform the operations.
+ *
  */
 @ApplicationScoped
 public class DeploymentService {
@@ -28,11 +34,11 @@ public class DeploymentService {
     private Instance<DeploymentGeneratorService> parsers;
 
     /*
-     * 🐱method yaml: String
-     * 🐱param steps: List[Step]
+     * 🐱method integration: Map
      * 🐱param name: String
+     * 🐱param stepArray: List[Step]
      *
-     * Based on the provided steps, return a valid yaml string to deploy
+     * Based on the provided steps, returns a valid CRDs to deploy
      */
     public List<Map<String, String>> crd(final String name,
                                          final Step[] stepArray) {
@@ -63,9 +69,9 @@ public class DeploymentService {
         return res;
     }
     /*
-     * 🐱method yaml: String
-     * 🐱param steps: List[Step]
-     * 🐱param name: String
+     * 🐱method crd: String
+     * 🐱param i: Integration
+     * 🐱param dsl: String
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */

@@ -15,9 +15,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * 🐱class LanguageResource 🐱relationship compositionOf LanguageService, 0..1
+ * 🐱class CapabilitiesResource
  *
- * This endpoint will return information about the supported DSLs.
+ * 🐱relationship compositionOf LanguageService, 0..1
+ *
+ * This endpoint will return information about what are the capabilities of
+ * the backend API of Kaoto.
+ *
+ * For example, the supported DSLs.
  */
 @Path("/v1/capabilities")
 @ApplicationScoped
@@ -33,9 +38,9 @@ public class CapabilitiesResource {
     }
 
     /*
-     * 🐱method getAll: Map
+     * 🐱method getAll: Capabilities
      *
-     * Returns information of all the supported DSLs.
+     * Returns information of all the supported capabilities.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)

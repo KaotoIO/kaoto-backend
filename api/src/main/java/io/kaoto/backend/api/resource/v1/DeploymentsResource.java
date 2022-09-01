@@ -36,7 +36,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * 🐱class DeploymentResource
+ * 🐱class DeploymentsResource
  *
  * This endpoint will interact with the cluster starting, stopping, and listing
  * running resources.
@@ -62,6 +62,7 @@ public class DeploymentsResource {
 
     /*
      * 🐱method all: String
+     * 🐱param namespace: String
      *
      * Returns the list of all resources
      */
@@ -79,6 +80,9 @@ public class DeploymentsResource {
 
     /*
      * 🐱method start: String
+     * 🐱param crd: String
+     * 🐱param namespace: String
+     * 🐱param name: String
      *
      * Deploys a CRD provided.
      */
@@ -135,6 +139,8 @@ public class DeploymentsResource {
 
     /*
      * 🐱method get: String
+     * 🐱param name: String
+     * 🐱param namespace: String
      *
      * Returns the CRD of the running resource, if exists.
      *
@@ -177,6 +183,8 @@ public class DeploymentsResource {
 
     /*
      * 🐱method stop: String
+     * 🐱param name: String
+     * 🐱param namespace: String
      *
      * Stops and deletes a running resource by name
      */
@@ -194,6 +202,14 @@ public class DeploymentsResource {
         return clusterService.stop(name, namespace);
     }
 
+
+    /*
+     * 🐱method logs: String
+     * 🐱param name: String
+     * 🐱param namespace: String
+     *
+     * Returns a stream of the log
+     */
     @GET
     @NoCache
     @Path("/{name}/logs")
