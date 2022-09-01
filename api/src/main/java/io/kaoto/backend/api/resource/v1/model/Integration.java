@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 🐱class Integration
+ * 🐱miniclass Integration (IntegrationsResource)
  */
 public class Integration {
 
@@ -18,14 +18,29 @@ public class Integration {
     private List<Parameter> parameters = Collections.emptyList();
     private String dsl = null;
 
+    /*
+     * 🐱property steps: Step[]
+     *
+     *  Workflow of steps that define this resource.
+     */
     public List<Step> getSteps() {
         return steps;
     }
 
+    /*
+     * 🐱property metadata: Map
+     *
+     *  Metadata associated to this resource.
+     */
     public Map<String, Object> getMetadata() {
         return metadata;
     }
 
+    /*
+     * 🐱property parameters: Parameter[]
+     *
+     *  Input parameters associated to this resource.
+     */
     public List<Parameter> getParameters() {
         return parameters;
     }
@@ -43,6 +58,11 @@ public class Integration {
         this.parameters = parameters;
     }
 
+    /*
+     * 🐱property dsl: String
+     *
+     *  Language to use with this resource.
+     */
     public String getDsl() {
         return dsl;
     }

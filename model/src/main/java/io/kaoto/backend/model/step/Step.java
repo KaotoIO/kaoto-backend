@@ -12,6 +12,7 @@ import java.util.Objects;
 /**
  * 🐱class Step
  * 🐱aka List[Step]
+ * 🐱aka Step[]
  * 🐱inherits Metadata
  * Represents a step inside an integration.
  */

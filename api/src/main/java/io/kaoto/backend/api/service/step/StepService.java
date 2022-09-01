@@ -11,6 +11,10 @@ import java.util.Collection;
  * 🐱miniclass StepService (StepResource)
  * 🐱relationship compositionOf StepCatalog, 0..1
  *
+ * 🐱section
+ * Service to interact with steps. This is the utility class the
+ * resource relies on to perform the operations.
+ *
  */
 @ApplicationScoped
 public class StepService {

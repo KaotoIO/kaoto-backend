@@ -67,11 +67,12 @@ public class IntegrationsResource {
         this.languageService = languageService;
     }
     /*
-     * 🐱method crd: Map<String, Map<String>>
+     * 🐱method crd: Map
      * 🐱param dsl: String
+     * 🐱param integration: Integration
      *
-     * Idempotent operation that given a CRD or given a JSON status, returns
-     * the other one.
+     * Idempotent operation that given given a JSON status, returns
+     * the CRD.
      *
      */
     @POST
@@ -93,11 +94,11 @@ public class IntegrationsResource {
 
 
     /*
-     * 🐱method crd: Map<String, Map<String>>
+     * 🐱method integration: Map
      * 🐱param dsl: String
+     * 🐱param crd: String
      *
-     * Idempotent operation that given a CRD or given a JSON status, returns
-     * the other one.
+     * Idempotent operation that given a CRD, returns the JSON status.
      *
      */
     @POST
@@ -161,11 +162,11 @@ public class IntegrationsResource {
 
 
     /*
-     * 🐱method crd: Map<String, Map<String>>
-     * 🐱param dsl: String
+     * 🐱method compatibleDSL: Map
+     * 🐱param steps: List[Step]
      *
-     * Idempotent operation that given a CRD or given a JSON status, returns
-     * the other one.
+     * Idempotent operation that given list of steps, returns the list of
+     * compatible languages.
      *
      */
     @POST

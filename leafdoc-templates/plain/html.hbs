@@ -1,87 +1,315 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Kaoto backend documentation</title>
-	<link rel="icon" href="./favicon.ico">
-	<meta charset="utf-8">
-	<style>
-	table {
-		border-collapse: separate;
-		border-spacing: 0;
-	}
-	table td, table th {
-		border-right: 1px solid #888;
-		border-bottom: 1px solid #888;
-	}
-	td:first-child, th:first-child {
-		border-left: 1px solid #888;
-	}
-	table tr:first-child td, table tr:first-child th {
-		border-top: 1px solid #888;
-	}
-	table thead th {
-		position:sticky;
-		top: 29px;
-		background: white;
-		border-collapse: separate;
-		border-spacing: 0;
-	}
+    <title>Kaoto API documentation</title>
+    <link rel="icon" href="./favicon.ico">
+    <meta charset="utf-8">
+    <style>
+
+        h1, h2, h3, h4, h5 {
+            font-family: "TeX Gyre Adventor", "URW Gothic L", "Century Gothic", "Futura", Sans Serif;
+            line-height: 150%;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        table td, table th {
+            border-right: 1px solid #888;
+            border-bottom: 1px solid #888;
+        }
+
+        td:first-child, th:first-child {
+            border-left: 1px solid #888;
+        }
+
+        table tr:first-child td, table tr:first-child th {
+            border-top: 1px solid #888;
+        }
+
+        table thead th {
+            position: sticky;
+            {{!-- 		top: 29px; --}}
+            {{!-- 		top: 65px; --}}
+            top: 3.5em;
+            background: white;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        table.invisible td, table.invisible td,
+        table.invisible tr:first-child td, table.invisible tr:first-child th {
+            border: none;
+        }
 
 
-	pre code {
-		display: inline-block;
-		background: #eee;
-	}
-	td:last-child code {
-		background: #eee;
-	}
-	body {
-		font-family: Sans;
-		max-width: 50em;
-		margin: auto;
-	}
+        pre code {
+            display: inline-block;
+            background: #eee;
+        }
 
-	code {
-		font-size: 120%;
-	}
+        td:last-child code {
+            background: #eee;
+        }
 
-	pre > code {
-		font-size: inherit;
-	}
+        td:first-child code {
+            background: transparent;
+        }
 
-	h2 {
-		margin-top: 2em;
-		margin-left: 0;
-		position: sticky;
-		top: 0;
-		z-index: 10;
-		background: white;
-	}
-	section.namespace{
-		margin-left: 1.5em;
-	}
+        body {
+            font-family: Sans;
+            max-width: 60em;
+            margin: auto;
+        }
 
-	h3 {
-		margin-left: -.5em;
-	}
+        #main {
+            max-width: 60em;
+            margin: auto;
+        }
 
-	</style>
+        code {
+            font-size: 120%;
+        }
+
+        pre > code {
+            font-size: inherit;
+        }
+
+        h2 {
+            margin-top: 4em;
+            margin-left: -1em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: white;
+            {{!-- 		height: 29px; --}}
+            height: 1.5em;
+        }
+
+        h3 {
+            margin-left: -.5em;
+            position: sticky;
+            top: 1.8em;
+            height: 1.2em;
+            background: white;
+            z-index: 9;
+        }
+
+        h2 a, h3 a {
+            text-decoration: none;
+            opacity: 0.3;
+        }
+
+        h2 a:hover, h2 a:focus, h3 a:hover, h3 a:focus {
+            text-decoration: underline;
+            opacity: 1;
+        }
+
+        section.namespace {
+            margin-left: 1.5em;
+        }
+
+        /* Hide empty miniclass headers */
+        section.namespace > section.namespace > h2 {
+            display: none;
+        }
+
+
+        nav {
+            display: none;
+        }
+
+        @media screen and (min-width: 60em) {
+            #main {
+                margin-left: 10em;
+            }
+
+            nav {
+                display: block;
+                position: sticky;
+                margin-left: -10em;
+                height: 0;
+                width: 10em;
+                top: 0;
+                font-family: "TeX Gyre Adventor", "URW Gothic L", "Century Gothic", "Futura", Sans Serif;
+                line-height: 150%;
+            }
+
+            nav a {
+                display: block;
+                font-family: monospace;
+                line-height: 120%;
+            }
+
+            nav a.current {
+                font-weight: bold;
+            }
+
+            nav a.current::before {
+                content: "»";
+                margin-left: -1ch;
+            }
+
+            nav a.obscure {
+                /* 			color: #888; */
+                opacity: 0.5;
+            }
+
+            nav a.obscure::before {
+                content: '(';
+            }
+
+            nav a.obscure.current::before {
+                content: '»(';
+            }
+
+            nav a.obscure::after {
+                content: ')';
+            }
+
+            nav #scrollwrap {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: 100vh;
+            }
+
+            nav details {
+                margin-left: .5em;
+            }
+
+            nav details summary {
+                margin-left: -.5em;
+            }
+        }
+
+
+    </style>
 </head>
 <body>
-	<h1>Kaoto backend documentation</h1>
+<h1>Kaoto backend documentation</h1>
 
-	<p>This is an automated documentation generated based on comments in the code.</p>
+<p>This is an automated documentation generated based on comments in the
+    code.</p>
 
-	<p>There is also a static swagger <a href="api/index.html">API documentation</a> available.</p>
+<p>There is also a static swagger <a href="api/index.html">API documentation</a>
+    available.</p>
 
-    <h2>Simplified Class Hierarchy</h2>
+<strong>Simplified Class Hierarchy</strong>
 
-    <a target="_blank" href="./class-diagram.dot.svg" ><img style="max-width:100%" src="./class-diagram.dot.svg"/></a>
-    <p>(click to enlarge)</p>
+<a target="_blank" href="./class-diagram.dot.svg">
+    <img style="max-width:100%" src="./class-diagram.dot.svg"/>
+</a>
+<p>(click to enlarge)</p>
 
-	{{{ body }}}
+<div id="main">
+    <nav id="navscroll">
+        <div id="scrollwrap">
+            <details open>
+                <summary>Endpoints</summary>
+                <a href='#capabilitiesresource'>CapabilitiesResource</a>
+                <a href='#deploymentresource'>DeploymentResource</a>
+                <a href='#integrationsresource'>IntegrationsResource</a>
+                <a href='#stepresource'>StepResource</a>
+                <a href='#viewdefinitionresource'>ViewDefinitionResource</a>
+            </details>
 
-    <br/>
-	<p>You can learn more on <a target="_blank" href="https://kaoto.io">https://kaoto.io</a>.</p>
+            <details open>
+                <summary>Apache Camel</summary>
+                <a href='#kamelet'>Kamelet</a>
+                <a href='#kameletbinding'>KameletBinding</a>
+                <a href='#camelroute'>Camel Route</a>
+                <a href='#kameletparsecatalog'>KameletParseCatalog</a>
+            </details>
 
-</body></html>
+            <details open>
+                <summary>Catalogs</summary>
+                <a href='#abstractcatalog'>AbstractCatalog</a>
+                <a href='#catalogcollection'>CatalogCollection</a>
+                <a href='#inmemorycatalog'>InMemoryCatalog</a>
+                <a href='#readonlycatalog'>ReadOnlyCatalog</a>
+                <a href='#metadatacatalog'>MetadataCatalog</a>
+            </details>
+
+            <details open>
+                <summary>Parsers</summary>
+                <a href='#parsecatalog'>ParseCatalog</a>
+                <a href='#gitparsecatalog'>GitParseCatalog</a>
+                <a href='#jarparsecatalog'>JarParseCatalog</a>
+                <a href='#localfolderparsecatalog'>LocalFolderParseCatalog</a>
+                <a href='#clusterparsecatalog'>ClusterParseCatalog</a>
+                <a href='#yamlprocessfile'>YamlProcessFile</a>
+            </details>
+
+            <details open>
+                <summary>View Definition</summary>
+                <a href='#viewdefinition'>ViewDefinition</a>
+                <a href='#viewdefinitioncatalog'>ViewDefinitionCatalog</a>
+                <a href='#viewdefinitionparsecatalog'>ViewDefinitionParseCatalog
+                </a>
+                <a href='#viewdefinitionparserservice'>ViewDefinitionParserService</a>
+            </details>
+
+            <details open>
+                <summary>Step</summary>
+                <a href='#step'>Step</a>
+                <a href='#parameter'>Parameter</a>
+                <a href='#stepcatalog'>StepCatalog</a>
+                <a href='#stepcatalogparser'>StepCatalogParser</a>
+                <a href='#stepparserservice'>StepParserService</a>
+            </details>
+        </div>
+    </nav>
+
+    {{{ body }}}
+
+</div>
+<script>
+
+    const headers = document.querySelectorAll('body > #main > section[class=namespace]');
+    const headersCount = headers.length;
+    let currentHeader;
+
+    function onScroll(ev) {
+        const scrollY = window.scrollY + 30;
+        let prevHeader;
+
+        for (let i = 0; i < headersCount; i++) {
+            if (headers[i].offsetTop > scrollY) {
+                if (prevHeader === currentHeader) {
+                    return;
+                }
+                //console.log(currentHeader, '→', prevHeader);
+                if (currentHeader) {
+                    const oldLink = document.querySelector(`nav a[href='#${currentHeader.id}']`);
+                    oldLink && oldLink.classList.remove('current');
+                    ;
+                }
+                currentHeader = prevHeader;
+
+                if (currentHeader) {
+                    const currentLink = document.querySelector(`nav a[href='#${currentHeader.id}']`);
+                    if (currentLink) {
+                        currentLink.classList.add('current');
+                        currentLink.parentElement.scrollIntoView({
+// 							behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }
+                }
+
+                return;
+            }
+            prevHeader = headers[i];
+        }
+    };
+
+    window.addEventListener('scroll', onScroll);
+    document.addEventListener('load', onScroll);
+    onScroll();
+
+</script>
+
+</body>
+</html>

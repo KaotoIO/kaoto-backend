@@ -32,6 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 🐱miniclass ClusterService (DeploymentsResource)
+ * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
+ *
+ * 🐱section
+ * Service to interact with the cluster. This is the utility class the
+ * resource relies on to perform the operations.
+ *
+ */
 @ApplicationScoped
 public class ClusterService {
 
@@ -57,6 +66,12 @@ public class ClusterService {
         this.managedExecutor = managedExecutor;
     }
 
+    /*
+     * 🐱method getIntegrations: Integration[]
+     * 🐱param namespace: String
+     *
+     * Returns the list of resources in a given namespace
+     */
     public List<Integration> getIntegrations(final String namespace) {
         List<Integration> res = new ArrayList<>();
 
@@ -86,6 +101,14 @@ public class ClusterService {
         return res;
     }
 
+    /*
+     * 🐱method start
+     * 🐱param namespace: String
+     * 🐱param input: String
+     *
+     * Deploys the given input resource
+     *
+     */
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
             log.trace("Trying " + parser.identifier());
@@ -155,6 +178,13 @@ public class ClusterService {
                 + "not supported.");
     }
 
+    /*
+     * 🐱method stop
+     * 🐱param namespace: String
+     * 🐱param binding: CustomResource
+     *
+     * Stops the given CustomResource.
+     */
     public void start(final CustomResource binding, final String namespace) {
         ResourceDefinitionContext context =
                 new ResourceDefinitionContext.Builder()
@@ -175,6 +205,13 @@ public class ClusterService {
                 .create();
     }
 
+    /*
+     * 🐱method start
+     * 🐱param namespace: String
+     * 🐱param name: String
+     *
+     * Starts the resource with the given name.
+     */
     public boolean stop(final String name, final String namespace) {
         CustomResource cr = get(namespace, name);
         if (cr == null) {
@@ -187,6 +224,13 @@ public class ClusterService {
                 .delete();
     }
 
+    /*
+     * 🐱method get: CustomResource
+     * 🐱param namespace: String
+     * 🐱param name: String
+     *
+     * Returns the given resource.
+     */
     public CustomResource get(final String namespace, final String name) {
         CustomResource cr = null;
         for (var parser : parsers) {
@@ -206,6 +250,14 @@ public class ClusterService {
         return cr;
     }
 
+    /*
+     * 🐱method logs: String
+     * 🐱param namespace: String
+     * 🐱param podName: String
+     * 🐱param lines: Integer
+     *
+     * Returns the log of the given pod.
+     */
     public String logs(final String namespace, final String podName,
                        final int lines) {
         return kubernetesClient.pods()
@@ -215,6 +267,14 @@ public class ClusterService {
                 .getLog(Boolean.TRUE);
     }
 
+    /*
+     * 🐱method streamlogs: String
+     * 🐱param namespace: String
+     * 🐱param name: String
+     * 🐱param lines: Integer
+     *
+     * Streams the log of the given pod, starting with said number of lines.
+     */
     @Blocking
     public Multi<String> streamlogs(final String namespace,
                                     final String name,

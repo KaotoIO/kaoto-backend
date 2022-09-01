@@ -13,9 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 🐱class LanguageService
+ * 🐱miniclass LanguageService (CapabilitiesResource)
+ * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
+ * 🐱relationship compositionOf StepParserService, 0..1
  *
- * This endpoint compiles data about the languages supported.
+ * 🐱section
+ * Service to extract languages from all supported DSL. This is the utility
+ * class the resource relies on to perform the operations.
  */
 @ApplicationScoped
 public class LanguageService {

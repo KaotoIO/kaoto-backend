@@ -7,7 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 🐱class Branch
+ * 🐱miniclass Branch (Step)
+ * 🐱aka List[Branch]
+ * 🐱aka Branch[]
+ *
  */
 public class Branch extends HashMap<String, Object> {
 
@@ -22,12 +25,24 @@ public class Branch extends HashMap<String, Object> {
         this.put(PARAMETERS, new LinkedList<Parameter>());
     }
 
+    /*
+     * 🐱property steps: List[Step]
+     *
+     * List of steps this branch has.
+     *
+     */
     public List<Step> getSteps() {
         this.computeIfAbsent(STEPS, k -> new LinkedList<Step>());
 
         return (List<Step>) this.get(STEPS);
     }
 
+    /*
+     * 🐱property parameters: Parameter[]
+     *
+     * List of parameters of the branch.
+     *
+     */
     public List<Parameter> getParameters() {
         this.computeIfAbsent(PARAMETERS, k -> new LinkedList<Parameter>());
 

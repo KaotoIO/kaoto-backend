@@ -1,9 +1,10 @@
 package io.kaoto.backend.model;
 
 /**
- * 🐱class Metadata
+ * 🐱miniclass Metadata (MetadataCatalog)
  * 🐱aka List[Metadata]
  *
+ * 🐱section
  * Common class for all metadata.
  * Used to simplify the implementation of catalogs.
  *

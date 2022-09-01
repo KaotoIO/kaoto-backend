@@ -1,10 +1,11 @@
 package io.kaoto.backend.model.view;
 
 /**
- * 🐱class ViewDefinitionConstraint
+ * 🐱miniclass ViewDefinitionConstraint (ViewDefinition)
  * 🐱aka List[ViewDefinitionConstraint]
  *
- * Represents a constraint on when to use a view definition.
+ * 🐱section
+ *  Represents a constraint on when to use a view definition.
  */
 public class ViewDefinitionConstraint {
 

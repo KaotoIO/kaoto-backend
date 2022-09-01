@@ -114,5 +114,5 @@ Documentation is generated using [LeafDoc](https://github.com/Leaflet/Leafdoc).
 
 ```shell script
 npm install
-npm test
+npm run docs
 ```

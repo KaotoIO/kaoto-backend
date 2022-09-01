@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 🐱class IntegrationSpec
+ * 🐱miniclass IntegrationSpec (CamelRoute)
  */
 
 @JsonPropertyOrder({"flows"})
@@ -22,6 +22,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IntegrationSpec implements KubernetesResource, Serializable {
 
+    /*
+     * 🐱property flows: Flow[]
+     *
+     * List of flows this route supports.
+     */
     @JsonProperty("flows")
     private List<Flow> flows;
 

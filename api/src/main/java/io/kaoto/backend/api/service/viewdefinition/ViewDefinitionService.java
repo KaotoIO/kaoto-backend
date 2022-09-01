@@ -12,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🐱class ViewDefinitionService
- * 🐱relationship dependsOn StepParserService
- * 🐱relationship dependsOn ViewDefinitionParserService
- * This endpoint will return a list of views based on the parameters.
+ *
+ * 🐱miniclass ViewDefinitionService (ViewDefinitionResource)
+ * 🐱relationship compositionOf ViewDefinitionParserService, 0..1
+ *
+ * 🐱section
+ * Service to interact with view definitions. This is the utility class the
+ * resource relies on to perform the operations.
  */
 @ApplicationScoped
 public class ViewDefinitionService {

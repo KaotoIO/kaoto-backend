@@ -55,7 +55,12 @@ public abstract class AbstractCatalog<T extends Metadata> {
      */
     abstract List<ParseCatalog<T>> loadParsers();
 
-    //Add all steps from the parsers into the catalog
+    /*
+     * 🐱method warmUpCatalog
+     *
+     *  Add all elements from the parsers into the catalog
+     *
+     */
     @PostConstruct
     public void warmUpCatalog() {
         log.debug("Warming up catalog.");
@@ -80,6 +85,15 @@ public abstract class AbstractCatalog<T extends Metadata> {
         return res;
     }
 
+    /*
+     * 🐱method refresh
+     *
+     * Function to be called periodically that refreshes the elements of the
+     * catalog, considering the catalog is dynamic. It prevents any
+     * synchronization error that would show an empty catalog during the
+     * refreshing.
+     *
+     */
     public void refresh() {
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
         for (var catalog : loadParsers()) {
