@@ -96,7 +96,7 @@ class KameletParseCatalogTest {
         String name = "dropbox";
         String[] required = new String[]{
                 "operation", "accessToken"};
-        Step step = catalog.searchStepByName(name);
+        final Step step = catalog.searchStepByName(name);
 
         assertEquals(step.getRequired().size(), required.length);
         assertTrue(Arrays.stream(required).allMatch(
@@ -116,6 +116,16 @@ class KameletParseCatalogTest {
             Assertions.assertNotNull(p.getType());
             Assertions.assertNotNull(p.getDescription());
         }
+
+        name = "choice";
+        Step step2 = catalog.searchStepByName(name);
+        Assertions.assertNotNull(step2);
+        assertEquals(name, step2.getId());
+        assertEquals(name, step2.getName());
+        assertEquals("EIP-BRANCH", step2.getKind());
+        assertEquals("MIDDLE", step2.getType());
+        assertEquals(1, step2.getMinBranches());
+        assertEquals(-1, step2.getMaxBranches());
     }
     @Test
     void wrongUrlSilentlyFails() {

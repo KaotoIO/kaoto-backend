@@ -25,6 +25,8 @@ public class Step extends Metadata {
     private List<Parameter> parameters;
     private List<String> required;
     private List<Branch> branches;
+    private Integer minBranches;
+    private Integer maxBranches;
 
     private String uuid;
     private Map<String, Object> metadata;
@@ -35,6 +37,7 @@ public class Step extends Metadata {
         setKind("UNKNOWN");
     }
 
+    //Used only for testing
     public Step(final String identifier, final String connector,
                 final String icon, final List<Parameter> parameters) {
         this();
@@ -169,6 +172,36 @@ public class Step extends Metadata {
 
     public void setBranches(final List<Branch> branches) {
         this.branches = branches;
+    }
+
+
+    /*
+     * 🐱property minBranches: Integer
+     *
+     * Minimum amount of branches used on this step. Zero by default.
+     *
+     */
+    public Integer getMinBranches() {
+        return minBranches;
+    }
+
+    public void setMinBranches(final Integer minBranches) {
+        this.minBranches = minBranches;
+    }
+
+
+    /*
+     * 🐱property maxBranches: Integer
+     *
+     * Maximum amount of branches used on this step. Zero by default.
+     *
+     */
+    public Integer getMaxBranches() {
+        return maxBranches;
+    }
+
+    public void setMaxBranches(final Integer maxBranches) {
+        this.maxBranches = maxBranches;
     }
 
     public void setSpec(final Map<String, Object> spec) {
