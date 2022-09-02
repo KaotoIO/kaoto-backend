@@ -72,12 +72,12 @@ public class LanguageService {
     private String addNewLanguage(final Map<String, Map<String, String>> res,
                                   final String key,
                                   final String description) {
-        if (!res.containsKey(key)) {
+        res.computeIfAbsent(key, k -> {
             final var language = new HashMap<String, String>();
-            res.put(key, language);
-            res.get(key).put("description", description);
-            res.get(key).put("name", key);
-        }
+            language.put("description", description);
+            language.put("name", k);
+            return language;
+        });
         return key;
     }
 
