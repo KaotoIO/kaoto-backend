@@ -34,5 +34,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: videos-edge
+          name: multation-result
           path: api/target/pit-reports/
