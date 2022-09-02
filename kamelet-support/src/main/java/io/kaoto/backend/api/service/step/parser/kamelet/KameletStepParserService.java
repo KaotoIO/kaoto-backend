@@ -55,6 +55,8 @@ public class KameletStepParserService
     public static final String CONDITION = "condition";
     public static final String SIMPLE = "simple";
     public static final String OTHERWISE = "otherwise";
+    public static final String CONSTANT = "constant";
+    public static final String NAME = "name";
     private final Logger log =
             Logger.getLogger(KameletStepParserService.class);
 
@@ -275,11 +277,11 @@ public class KameletStepParserService
         Step res = catalog.getReadOnlyCatalog().searchStepByName("set-body");
 
         for (var p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase("simple")) {
+            if (p.getId().equalsIgnoreCase(SIMPLE)) {
                 p.setValue(step.getSetBody().getSimple());
-            } else if (p.getId().equalsIgnoreCase("constant")) {
+            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
                 p.setValue(step.getSetBody().getConstant());
-            } else if (p.getId().equalsIgnoreCase("name")) {
+            } else if (p.getId().equalsIgnoreCase(NAME)) {
                 p.setValue(step.getSetBody().getName());
             }
         }
@@ -292,11 +294,11 @@ public class KameletStepParserService
         Step res = catalog.getReadOnlyCatalog().searchStepByName("set-header");
 
         for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase("name")) {
+            if (p.getId().equalsIgnoreCase(NAME)) {
                 p.setValue(step.getSetHeaderPairFlowStep().getName());
             } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
                 p.setValue(step.getSetHeaderPairFlowStep().getSimple());
-            } else if (p.getId().equalsIgnoreCase("constant")) {
+            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
                 p.setValue(step.getSetHeaderPairFlowStep().getConstant());
             }
         }
@@ -308,11 +310,11 @@ public class KameletStepParserService
                 .searchStepByName("set-property");
 
         for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase("name")) {
+            if (p.getId().equalsIgnoreCase(NAME)) {
                 p.setValue(step.getSetPropertyPairFlowStep().getName());
             } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
                 p.setValue(step.getSetPropertyPairFlowStep().getSimple());
-            } else if (p.getId().equalsIgnoreCase("constant")) {
+            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
                 p.setValue(step.getSetPropertyPairFlowStep().getConstant());
             }
         }
@@ -324,11 +326,11 @@ public class KameletStepParserService
         Step res = catalog.getReadOnlyCatalog().searchStepByName("transform");
 
         for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase("name")) {
+            if (p.getId().equalsIgnoreCase(NAME)) {
                 p.setValue(step.getTransform().getName());
             } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
                 p.setValue(step.getTransform().getSimple());
-            } else if (p.getId().equalsIgnoreCase("constant")) {
+            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
                 p.setValue(step.getTransform().getConstant());
             }
         }
@@ -438,7 +440,7 @@ public class KameletStepParserService
                                 Collections.emptyMap()));
         }
 
-        result.getMetadata().put("name", metadata.getName());
+        result.getMetadata().put(NAME, metadata.getName());
     }
 
     @Override
