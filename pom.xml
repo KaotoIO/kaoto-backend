@@ -215,7 +215,16 @@
                 <version>1.9.3</version>
                   <configuration>
                     <exportLineCoverage>true</exportLineCoverage>
-                    <outputFormats><value>XML</value></outputFormats>
+                    <outputFormats>
+                        <value>XML</value>
+                    </outputFormats>
+                    <!-- omitting mutators, testPlugin and verbose for brevity -->
+                    <exportLineCoverage>true</exportLineCoverage>
+                    <!--
+                          it's currently not possible to aggregate timestamped
+                          reports, so it must be disabled.
+                       -->
+                    <timestampedReports>false</timestampedReports>
                   </configuration>
                 <dependencies>
                   <dependency>
