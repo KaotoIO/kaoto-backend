@@ -114,60 +114,15 @@ public class ClusterService {
             log.trace("Trying " + parser.identifier());
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
-                log.debug("Trying with " + c.getCanonicalName());
-                CustomResource binding = null;
-                try {
-                    var constructor = new Constructor(c);
-                    Representer representer = new Representer();
-                    representer.getPropertyUtils()
-                            .setSkipMissingProperties(true);
-                    representer.getPropertyUtils()
-                            .setAllowReadOnlyProperties(true);
-                    representer.getPropertyUtils()
-                            .setBeanAccess(BeanAccess.FIELD);
-                    constructor.getPropertyUtils()
-                            .setSkipMissingProperties(true);
-                    constructor.getPropertyUtils()
-                            .setAllowReadOnlyProperties(true);
-                    constructor.getPropertyUtils()
-                            .setBeanAccess(BeanAccess.FIELD);
-                    Yaml yaml = new Yaml(constructor, representer);
-                    binding = yaml.load(input);
-                } catch (ConstructorException e) {
-                    log.trace("Tried with " + c.getName() + " and it didn't "
-                            + "work.");
-                }
+                log.trace("Trying with " + c.getCanonicalName());
+                CustomResource binding = tryParsing(input, c);
                 if (binding != null) {
-                    if (binding.getMetadata() == null) {
-                        binding.setMetadata(new ObjectMeta());
-                    }
-                    final var name = binding.getMetadata().getName();
-                    if (name == null || name.isEmpty()) {
-                        binding.getMetadata().setName(
-                                "integration-" + System.currentTimeMillis());
-                    }
-                    //force lowercase
-                    binding.getMetadata().setName(
-                            binding.getMetadata().getName()
-                                    .toLowerCase(Locale.ROOT));
-
-                    //check no other deployment has the same name already
-                    for (Integration i
-                           : getIntegrations(getNamespace(namespace))) {
-                        if (i.getName()
-                                .equalsIgnoreCase(
-                                        binding.getMetadata().getName())) {
-                            throw new IllegalArgumentException("There is an "
-                                    + "existing deployment with the same name: "
-                                    + binding.getMetadata().getName());
-                        }
-                    }
-
+                    setName(binding, namespace);
                     try {
                         start(binding, namespace);
                         return;
                     } catch (KubernetesClientException e) {
-                        log.info("Either the binding is not right or the CRD"
+                        log.debug("Either the binding is not right or the CRD"
                                 + " is not valid: " + e.getMessage());
                     }
                 }
@@ -176,6 +131,68 @@ public class ClusterService {
 
         throw new IllegalArgumentException("The provided CRD is invalid or "
                 + "not supported.");
+    }
+
+    private void setName(final CustomResource binding, final String namespace)
+            throws IllegalArgumentException {
+        if (binding.getMetadata() == null) {
+            binding.setMetadata(new ObjectMeta());
+        }
+        final var name = binding.getMetadata().getName();
+        if (name == null || name.isEmpty()) {
+            binding.getMetadata().setName(
+                    "integration-" + System.currentTimeMillis());
+        }
+        //force lowercase
+        binding.getMetadata().setName(
+                binding.getMetadata().getName()
+                        .toLowerCase(Locale.ROOT));
+
+        checkNoDuplicatedNames(namespace, binding);
+    }
+
+    private void checkNoDuplicatedNames(
+            final String namespace,
+            final CustomResource binding)
+            throws IllegalArgumentException {
+        //check no other deployment has the same name already
+        for (Integration i
+                : getIntegrations(getNamespace(namespace))) {
+            if (i.getName()
+                    .equalsIgnoreCase(
+                            binding.getMetadata().getName())) {
+                throw new IllegalArgumentException("There is an "
+                        + "existing deployment with the same name: "
+                        + binding.getMetadata().getName());
+            }
+        }
+    }
+
+    private CustomResource tryParsing(final String input,
+                                      final Class<? extends CustomResource> c) {
+        CustomResource binding = null;
+        try {
+            var constructor = new Constructor(c);
+            Representer representer = new Representer();
+            representer.getPropertyUtils()
+                    .setSkipMissingProperties(true);
+            representer.getPropertyUtils()
+                    .setAllowReadOnlyProperties(true);
+            representer.getPropertyUtils()
+                    .setBeanAccess(BeanAccess.FIELD);
+            constructor.getPropertyUtils()
+                    .setSkipMissingProperties(true);
+            constructor.getPropertyUtils()
+                    .setAllowReadOnlyProperties(true);
+            constructor.getPropertyUtils()
+                    .setBeanAccess(BeanAccess.FIELD);
+            Yaml yaml = new Yaml(constructor, representer);
+            binding = yaml.load(input);
+        } catch (ConstructorException e) {
+            log.trace("Tried with " + c.getName() + " and it didn't "
+                    + "work.");
+        }
+        return binding;
     }
 
     /*
@@ -284,7 +301,7 @@ public class ClusterService {
 
         var list = kubernetesClient.pods()
                 .inNamespace(getNamespace(namespace))
-                        .list().getItems();
+                .list().getItems();
 
         var integrationName = name;
         for (var pod : list) {
@@ -316,9 +333,9 @@ public class ClusterService {
                 () -> 0, (n, emitter) -> {
                     try {
                         reader
-                            .lines()
-                            .forEach(
-                                    line ->  emitter.emit(line + "\n"));
+                                .lines()
+                                .forEach(
+                                        line -> emitter.emit(line + "\n"));
                         emitter.emit(reader.readLine() + "\n");
                     } catch (Exception e) {
                         emitter.fail(e);
