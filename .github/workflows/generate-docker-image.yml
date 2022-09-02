@@ -65,6 +65,7 @@ jobs:
             type=sha
       - name: Build to test
         uses: docker/build-push-action@v3
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           context: "api"
           file: './api/src/main/docker/Dockerfile.native'
@@ -73,9 +74,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run built image
+        if: ${{ github.event_name == 'pull_request' }}
         run: docker run -d --rm --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
       - name: Check health
         uses: stringbean/docker-healthcheck-action@v1
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           container: kaoto-backend
           wait-time: 50
