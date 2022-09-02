@@ -19,19 +19,19 @@ class LanguageServiceTest {
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         var map = languageService.getAll();
         Assertions.assertEquals(3, map.size());
 
         for (var language : map) {
             if (language.get("name").equalsIgnoreCase("KameletBinding")) {
-                Assertions.assertEquals(language.get("default"), "true");
-                Assertions.assertEquals(language.get("input"), "true");
-                Assertions.assertEquals(language.get("output"), "true");
+                Assertions.assertEquals("true", language.get("default"));
+                Assertions.assertEquals("true", language.get("input"));
+                Assertions.assertEquals("true", language.get("output"));
             } else if (language.get("name").equalsIgnoreCase("Kamelet")) {
                 Assertions.assertFalse(language.containsKey("default"));
-                Assertions.assertEquals(language.get("input"), "true");
-                Assertions.assertEquals(language.get("output"), "true");
+                Assertions.assertEquals("true", language.get("input"));
+                Assertions.assertEquals("true", language.get("output"));
             }
         }
     }
