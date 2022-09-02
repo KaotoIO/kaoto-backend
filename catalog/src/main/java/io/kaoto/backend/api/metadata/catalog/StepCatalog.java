@@ -37,36 +37,36 @@ public class StepCatalog extends AbstractCatalog<Step> {
     protected List<ParseCatalog<Step>> loadParsers() {
         List<ParseCatalog<Step>> catalogs = new ArrayList<>();
 
+        boolean clusterAvailable = isClusterAvailable();
+        addCluster(catalogs, clusterAvailable);
+        addZipJar(catalogs, clusterAvailable);
+        addLocalFolder(catalogs, clusterAvailable);
+        addGit(catalogs, clusterAvailable);
+
+        return catalogs;
+    }
+
+    private boolean isClusterAvailable() {
         boolean clusterAvailable = true;
         try {
             kclient.pods().list();
         } catch (KubernetesClientException e) {
             clusterAvailable = false;
         }
+        return clusterAvailable;
+    }
 
+    private void addCluster(final List<ParseCatalog<Step>> catalogs,
+                           final boolean clusterAvailable) {
         if (clusterAvailable) {
             for (StepCatalogParser parser : stepCatalogParsers) {
                 catalogs.add(parser.getParserFromCluster());
             }
         }
+    }
 
-        for (var jar : repository.jar().orElse(
-                Collections.emptyList())) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!jar.ifNoCluster() || !clusterAvailable) {
-                    catalogs.add(parser.getParser(jar.url()));
-                }
-            }
-        }
-        for (var location : repository.localFolder().orElse(
-                Collections.emptyList())) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!location.ifNoCluster() || !clusterAvailable) {
-                    File dir = new File(location.url());
-                    catalogs.add(parser.getLocalFolder(dir.toPath()));
-                }
-            }
-        }
+    private void addGit(final List<ParseCatalog<Step>> catalogs,
+                           final boolean clusterAvailable) {
         for (Repository.Git git : repository.git().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
@@ -76,8 +76,31 @@ public class StepCatalog extends AbstractCatalog<Step> {
                 }
             }
         }
+    }
 
-        return catalogs;
+    private void addLocalFolder(final List<ParseCatalog<Step>> catalogs,
+                           final boolean clusterAvailable) {
+        for (var location : repository.localFolder().orElse(
+                Collections.emptyList())) {
+            for (StepCatalogParser parser : stepCatalogParsers) {
+                if (!location.ifNoCluster() || !clusterAvailable) {
+                    File dir = new File(location.url());
+                    catalogs.add(parser.getLocalFolder(dir.toPath()));
+                }
+            }
+        }
+    }
+
+    private void addZipJar(final List<ParseCatalog<Step>> catalogs,
+                           final boolean clusterAvailable) {
+        for (var jar : repository.jar().orElse(
+                Collections.emptyList())) {
+            for (StepCatalogParser parser : stepCatalogParsers) {
+                if (!jar.ifNoCluster() || !clusterAvailable) {
+                    catalogs.add(parser.getParser(jar.url()));
+                }
+            }
+        }
     }
 
     @Inject
