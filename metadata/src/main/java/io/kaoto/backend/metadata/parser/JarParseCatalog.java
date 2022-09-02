@@ -97,7 +97,9 @@ public class JarParseCatalog<T extends Metadata>
         }
 
         try {
-            FileUtils.deleteDirectory(tmp.toFile());
+            if (tmp != null) {
+                FileUtils.deleteDirectory(tmp.toFile());
+            }
             if (!location.equalsIgnoreCase(url)) {
                 FileUtils.deleteQuietly(new File(location));
             }
