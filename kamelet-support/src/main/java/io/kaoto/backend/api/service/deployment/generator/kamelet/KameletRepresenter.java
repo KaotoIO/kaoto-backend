@@ -261,11 +261,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(ChoiceFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                ChoiceFlowStep uriFlowStep = (ChoiceFlowStep) data;
-                properties.put("choice", uriFlowStep.getChoice());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((ChoiceFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -275,11 +272,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(ToFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                ToFlowStep uriFlowStep = (ToFlowStep) data;
-                properties.put("to", uriFlowStep.getTo());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((ToFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -289,16 +283,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(From.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                From step = (From) data;
-                properties.put(URI, step.getUri());
-                if (step.getParameters() != null
-                        && !step.getParameters().isEmpty()) {
-                    properties.put(PARAMETERS, step.getParameters());
-                }
-                properties.put(STEPS, step.getSteps());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((From) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -308,15 +294,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(UriFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                UriFlowStep step = (UriFlowStep) data;
-                properties.put(URI, step.getUri());
-                if (step.getParameters() != null
-                        && !step.getParameters().isEmpty()) {
-                    properties.put(PARAMETERS, step.getParameters());
-                }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((UriFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -376,11 +355,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(SetBodyFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                SetBodyFlowStep step = (SetBodyFlowStep) data;
-                properties.put("set-body", step.getSetBody());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((SetBodyFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -390,11 +366,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(SetHeaderFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                SetHeaderFlowStep step = (SetHeaderFlowStep) data;
-                properties.put("set-header", step.getSetHeaderPairFlowStep());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((SetHeaderFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -405,12 +378,8 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                SetPropertyFlowStep step = (SetPropertyFlowStep) data;
-                properties.put("set-property",
-                        step.getSetPropertyPairFlowStep());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((SetPropertyFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -420,21 +389,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(Expression.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                Expression step = (Expression) data;
-                if (step.getConstant() != null) {
-                    properties.put("constant", step.getConstant());
-                }
-
-                if (step.getSimple() != null) {
-                    properties.put(SIMPLE, step.getSimple());
-                }
-
-                if (step.getName() != null) {
-                    properties.put(NAME, step.getName());
-                }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((Expression) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -444,11 +400,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(TransformFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                TransformFlowStep step = (TransformFlowStep) data;
-                properties.put("transform", step.getTransform());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((TransformFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -458,11 +411,8 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(FilterFlowStep.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                FilterFlowStep filterFlowStep = (FilterFlowStep) data;
-                properties.put("filter", filterFlowStep.getFilter());
                 return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                        ((FilterFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
