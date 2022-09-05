@@ -15,6 +15,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -265,7 +266,8 @@ public class KameletRepresenter extends Representer {
                 Expression.class,
                 TransformFlowStep.class,
                 FilterFlowStep.class,
-                RemoveHeaderFlowStep.class
+                RemoveHeaderFlowStep.class,
+                RemovePropertyFlowStep.class
         };
 
         for (var eip : eips) {
