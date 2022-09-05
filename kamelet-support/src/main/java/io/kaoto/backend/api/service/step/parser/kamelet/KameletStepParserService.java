@@ -11,16 +11,7 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
-import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
-import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.BooleanParameter;
@@ -29,7 +20,6 @@ import io.kaoto.backend.model.parameter.NumberParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
 
@@ -39,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -182,209 +171,35 @@ public class KameletStepParserService
         res.getMetadata().put("dependencies", spec.getDependencies());
     }
 
-    //there must be a more elegant solution
-    //but a visitor sounds like overengineering
     public Step processStep(final FlowStep step) {
-        if (step instanceof ChoiceFlowStep choiceFlowStep) {
-            return processDefinedStep(choiceFlowStep);
-        } else if (step instanceof ToFlowStep toFlowStep) {
-            return processDefinedStep(toFlowStep);
-        } else if (step instanceof UriFlowStep uriFlowStep) {
-            return processDefinedStep(uriFlowStep);
-        } else if (step instanceof SetBodyFlowStep setBodyFlowStep) {
-            return processDefinedStep(setBodyFlowStep);
-        } else if (step instanceof SetHeaderFlowStep setHeaderFlowStep) {
-            return processDefinedStep(setHeaderFlowStep);
-        }  else if (step instanceof RemoveHeaderFlowStep removeHeaderFlowStep) {
-            return processDefinedStep(removeHeaderFlowStep);
-        } else if (step instanceof SetPropertyFlowStep setPropertyFlowStep) {
-            return processDefinedStep(setPropertyFlowStep);
-        } else if (step instanceof TransformFlowStep transformFlowStep) {
-            return processDefinedStep(transformFlowStep);
-        } else if (step instanceof FilterFlowStep filterFlowStep) {
-            return processDefinedStep(filterFlowStep);
-        } else {
-            log.warn("Unrecognized step -> " + step);
-            return null;
-        }
-    }
-
-    private Step processDefinedStep(final ChoiceFlowStep choice) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByID("choice");
-        res.setBranches(new LinkedList<>());
-
         try {
-            for (var flow : choice.getChoice().getChoice()) {
-                Branch branch =
-                        new Branch(getChoiceIdentifier(flow));
-                branch.put(CONDITION, getChoiceCondition(flow));
-                for (var s : flow.getSteps()) {
-                    branch.getSteps().add(processStep(s));
-                }
-                setValueOnStepProperty(res, SIMPLE, branch.get(CONDITION));
-                res.getBranches().add(branch);
-            }
-
-            if (choice.getChoice().getOtherwise() != null) {
-                Branch branch = new Branch(OTHERWISE);
-
-                for (var s : choice.getChoice().getOtherwise().getSteps()) {
-                    branch.getSteps().add(processStep(s));
-                }
-                res.getBranches().add(branch);
-            }
+            return step.getStep(catalog, this);
         } catch (Exception e) {
             log.warn("Can't parse step -> " + e.getMessage());
         }
-
-        return res;
+        return null;
     }
 
-    private String getChoiceIdentifier(final Choice flow) {
+
+    public String getChoiceIdentifier(final Choice flow) {
         return flow.getSimple();
     }
 
-    private String getChoiceCondition(final Choice flow) {
+    public String getChoiceCondition(final Choice flow) {
         return flow.getSimple();
     }
 
-    private Step processDefinedStep(final ToFlowStep step) {
-        return processStep(step.getTo());
-    }
-
-    private Step processDefinedStep(final UriFlowStep uriFlowStep) {
-        String uri = uriFlowStep.getUri();
-        String connectorName = uri;
-        log.trace("Parsing " + uri);
-
-        if (uri != null
-                && uri.contains(":")
-                && !uri.startsWith("kamelet:")) {
-            connectorName = uri.substring(0, uri.indexOf(':'));
-        }
-        log.trace("Found connector " + connectorName);
-
-        Step step = catalog.getReadOnlyCatalog()
-                .searchStepByName(connectorName);
-
-        if (step != null && uri != null) {
-            log.trace("Found step " + step.getName());
-            setValuesOnParameters(step, uri);
-            setValuesOnParameters(step, uriFlowStep.getParameters());
-        }
-
-        return step;
-    }
-
-    private Step processDefinedStep(final SetBodyFlowStep step) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("set-body");
-
-        for (var p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(SIMPLE)) {
-                p.setValue(step.getSetBody().getSimple());
-            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
-                p.setValue(step.getSetBody().getConstant());
-            } else if (p.getId().equalsIgnoreCase(NAME)) {
-                p.setValue(step.getSetBody().getName());
-            }
-        }
-
-        return res;
-    }
-
-    private Step processDefinedStep(final SetHeaderFlowStep step) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("set-header");
-
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(NAME)) {
-                p.setValue(step.getSetHeaderPairFlowStep().getName());
-            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
-                p.setValue(step.getSetHeaderPairFlowStep().getSimple());
-            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
-                p.setValue(step.getSetHeaderPairFlowStep().getConstant());
-            }
-        }
-
-        return res;
-    }
-    private Step processDefinedStep(final RemoveHeaderFlowStep step) {
-        Step res = catalog.getReadOnlyCatalog()
-                .searchStepByName("remove-header");
-
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(NAME)) {
-                p.setValue(step.getSetHeaderPairFlowStep().getName());
-            }
-        }
-
-        return res;
-    }
-
-    private Step processDefinedStep(final SetPropertyFlowStep step) {
-        Step res = catalog.getReadOnlyCatalog()
-                .searchStepByName("set-property");
-
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(NAME)) {
-                p.setValue(step.getSetPropertyPairFlowStep().getName());
-            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
-                p.setValue(step.getSetPropertyPairFlowStep().getSimple());
-            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
-                p.setValue(step.getSetPropertyPairFlowStep().getConstant());
-            }
-        }
-
-        return res;
-    }
-
-    private Step processDefinedStep(final TransformFlowStep step) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("transform");
-
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(NAME)) {
-                p.setValue(step.getTransform().getName());
-            } else if (p.getId().equalsIgnoreCase(SIMPLE)) {
-                p.setValue(step.getTransform().getSimple());
-            } else if (p.getId().equalsIgnoreCase(CONSTANT)) {
-                p.setValue(step.getTransform().getConstant());
-            }
-        }
-
-        return res;
-    }
-
-    private Step processDefinedStep(final FilterFlowStep filter) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByID("filter");
-        res.setBranches(new LinkedList<>());
-
-        try {
-            var flow = filter.getFilter();
-            Branch branch =
-                    new Branch(getFilterIdentifier(flow));
-            branch.put(CONDITION, getFilterCondition(flow));
-            for (var s : flow.getSteps()) {
-                branch.getSteps().add(processStep(s));
-            }
-            setValueOnStepProperty(res, SIMPLE, branch.get(CONDITION));
-            res.getBranches().add(branch);
-        } catch (Exception e) {
-            log.warn("Can't parse step -> " + e.getMessage());
-        }
-
-        return res;
-    }
-
-    private String getFilterIdentifier(final Filter flow) {
+    public String getFilterIdentifier(final Filter flow) {
         return flow.getSimple();
     }
 
-    private String getFilterCondition(final Filter flow) {
+    public String getFilterCondition(final Filter flow) {
         return flow.getSimple();
     }
 
 
-    private void setValuesOnParameters(final Step step,
-                                       final String uri) {
+    public void setValuesOnParameters(final Step step,
+                                      final String uri) {
 
         String path = uri.substring(uri.indexOf(':') + 1);
         if (path.contains("?")) {
@@ -406,7 +221,7 @@ public class KameletStepParserService
         }
     }
 
-    private void setValuesOnParameters(final Step step,
+    public void setValuesOnParameters(final Step step,
                                        final Map<String, String> properties) {
 
         if (properties != null) {
@@ -417,8 +232,8 @@ public class KameletStepParserService
 
     }
 
-    private void setValueOnStepProperty(final Step step, final String key,
-                                        final Object value) {
+    public void setValueOnStepProperty(final Step step, final String key,
+                                       final Object value) {
         for (Parameter p : step.getParameters()) {
             if (p.getId().equalsIgnoreCase(key)) {
                 p.setValue(value);

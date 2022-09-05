@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -44,5 +47,12 @@ public class ToFlowStep implements FlowStep {
         Map<String, Object> properties = new HashMap<>();
         properties.put("to", this.getTo());
         return properties;
+    }
+
+    @Override
+    public Step getStep(final StepCatalog catalog,
+                        final KameletStepParserService
+                                kameletStepParserService) {
+        return kameletStepParserService.processStep(this.getTo());
     }
 }

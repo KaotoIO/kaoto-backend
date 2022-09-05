@@ -6,11 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
+import io.kaoto.backend.model.step.Branch;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @JsonPropertyOrder({"choice"})
@@ -47,4 +53,47 @@ public class ChoiceFlowStep implements FlowStep {
         properties.put("choice", this.getChoice());
         return properties;
     }
+
+    @Override
+    public Step getStep(final StepCatalog catalog,
+                        final KameletStepParserService
+                                kameletStepParserService) {
+        Step res = catalog.getReadOnlyCatalog().searchStepByID("choice");
+        res.setBranches(new LinkedList<>());
+
+        for (var flow : this.getChoice().getChoice()) {
+            Branch branch =
+                    new Branch(getChoiceIdentifier(flow));
+            branch.put(KameletStepParserService.CONDITION,
+                    getChoiceCondition(flow));
+            for (var s : flow.getSteps()) {
+                branch.getSteps().add(
+                        kameletStepParserService.processStep(s));
+            }
+            kameletStepParserService.setValueOnStepProperty(res,
+                    KameletStepParserService.SIMPLE,
+                    branch.get(KameletStepParserService.CONDITION));
+            res.getBranches().add(branch);
+        }
+
+        if (this.getChoice().getOtherwise() != null) {
+            Branch branch = new Branch(KameletStepParserService.OTHERWISE);
+
+            for (var s : this.getChoice().getOtherwise().getSteps()) {
+                branch.getSteps().add(
+                        kameletStepParserService.processStep(s));
+            }
+            res.getBranches().add(branch);
+        }
+
+        return res;
+    }
+    private String getChoiceIdentifier(final Choice flow) {
+        return flow.getSimple();
+    }
+
+    private String getChoiceCondition(final Choice flow) {
+        return flow.getSimple();
+    }
+
 }

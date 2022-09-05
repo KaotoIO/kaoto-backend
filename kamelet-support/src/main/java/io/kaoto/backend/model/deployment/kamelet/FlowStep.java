@@ -1,7 +1,10 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -12,4 +15,7 @@ import java.util.Map;
 public interface FlowStep extends Serializable {
 
     Map<String, Object> getRepresenterProperties();
+
+    Step getStep(StepCatalog catalog,
+                 KameletStepParserService kameletStepParserService);
 }
