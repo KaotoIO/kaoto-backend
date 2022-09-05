@@ -42,6 +42,8 @@ public class KameletRepresenter extends Representer {
     public static final String PARAMETERS = "parameters";
     public static final String URI = "uri";
     public static final String NAME = "name";
+    public static final String KIND = "kind";
+    public static final String API_VERSION = "apiVersion";
 
     public KameletRepresenter() {
         getPropertyUtils().setSkipMissingProperties(true);
@@ -54,9 +56,6 @@ public class KameletRepresenter extends Representer {
 
         //For each type of FlowStep or custom classes, create a representer
         addEIP();
-
-        choice();
-        filter();
 
         addTypeDescriptions();
     }
@@ -96,8 +95,8 @@ public class KameletRepresenter extends Representer {
                     public Node representData(final Object data) {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         CustomResource cr = (CustomResource) data;
-                        properties.put("apiVersion", cr.getApiVersion());
-                        properties.put("kind", cr.getKind());
+                        properties.put(API_VERSION, cr.getApiVersion());
+                        properties.put(KIND, cr.getKind());
                         properties.put("metadata", cr.getMetadata());
                         properties.put("spec", cr.getSpec());
                         return representMapping(getTag(data.getClass(),
@@ -123,7 +122,7 @@ public class KameletRepresenter extends Representer {
                             properties.put("labels",
                                     meta.getLabels());
                         }
-                        properties.put("name", meta.getName());
+                        properties.put(NAME, meta.getName());
                         return representMapping(getTag(data.getClass(),
                                         Tag.MAP),
                                 properties,
@@ -144,7 +143,7 @@ public class KameletRepresenter extends Representer {
                         properties.put("source", spec.getSource());
                     }
                     if (spec.getSteps() != null) {
-                        properties.put("steps", spec.getSteps());
+                        properties.put(STEPS, spec.getSteps());
                     }
                     if (spec.getSink() != null) {
                         properties.put("sink", spec.getSink());
@@ -217,7 +216,7 @@ public class KameletRepresenter extends Representer {
                         properties.put("ref", step.getRef());
                     }
                     if (step.getUri() != null) {
-                        properties.put("uri", step.getUri());
+                        properties.put(URI, step.getUri());
                     }
                     if (step.getProperties() != null
                             && !step.getProperties().isEmpty()) {
@@ -236,13 +235,13 @@ public class KameletRepresenter extends Representer {
                     Map<String, Object> properties = new LinkedHashMap<>();
                     KameletBindingStepRef ref = (KameletBindingStepRef) data;
                     if (ref.getApiVersion() != null) {
-                        properties.put("apiVersion", ref.getApiVersion());
+                        properties.put(API_VERSION, ref.getApiVersion());
                     }
                     if (ref.getName() != null) {
-                        properties.put("name", ref.getName());
+                        properties.put(NAME, ref.getName());
                     }
                     if (ref.getKind() != null) {
-                        properties.put("kind", ref.getKind());
+                        properties.put(KIND, ref.getKind());
                     }
                     return representMapping(getTag(data.getClass(), Tag.MAP),
                             properties,
@@ -252,6 +251,8 @@ public class KameletRepresenter extends Representer {
     }
 
     private void addEIP() {
+        //Can we dynamically add this without Quarkus removing the classes
+        // and making a mess?
         var eips = new Class[] {
                 ChoiceFlowStep.class,
                 ToFlowStep.class,
@@ -275,6 +276,9 @@ public class KameletRepresenter extends Representer {
                 }
             });
         }
+
+        choice();
+        filter();
     }
 
     private void choice() {
@@ -306,10 +310,6 @@ public class KameletRepresenter extends Representer {
             }
         });
 
-        whenChoice();
-    }
-
-    private void whenChoice() {
         this.multiRepresenters.put(SuperChoice.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
