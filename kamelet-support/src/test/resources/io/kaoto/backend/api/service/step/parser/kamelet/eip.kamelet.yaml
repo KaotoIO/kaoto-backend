@@ -42,6 +42,8 @@ spec:
             steps:
             - set-body:
                 simple: ola ke ase
+            - remove-header:
+                name: removeme
       - filter:
           simple: '{{?foo}}'
           steps:
