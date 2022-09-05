@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FlowStepDeserializer extends JsonDeserializer {
     private final Logger log = Logger.getLogger(FlowStepDeserializer.class);
 
@@ -17,38 +20,33 @@ public class FlowStepDeserializer extends JsonDeserializer {
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
 
-            if (n.get("choice") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        ChoiceFlowStep.class);
-            } else if (n.get("filter") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        FilterFlowStep.class);
-            } else if (n.get("from") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        From.class);
-            } else if (n.get("set-body") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        SetBodyFlowStep.class);
-            } else if (n.get("set-header") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        SetHeaderFlowStep.class);
-            }  else if (n.get("set-property") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        SetPropertyFlowStep.class);
-            } else if (n.get("to") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        ToFlowStep.class);
-            } else if (n.get("transform") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        TransformFlowStep.class);
-            } else if (n.get("uri") != null) {
-                return new ObjectMapper().readValue(n.toPrettyString(),
-                        UriFlowStep.class);
+            for(var step : getFlowSteps().entrySet()) {
+                if (n.get(step.getKey()) != null) {
+                    return new ObjectMapper().readValue(n.toPrettyString(),
+                            step.getValue());
+                }
             }
+
         } catch (Exception e) {
             log.debug("Error trying to deserialize step: " + e.getMessage());
         }
 
         return new UriFlowStep();
+    }
+
+    private Map<String, Class> getFlowSteps() {
+        Map<String, Class> steps = new HashMap<>();
+
+        steps.put("choice", ChoiceFlowStep.class);
+        steps.put("filter", FilterFlowStep.class);
+        steps.put("from", From.class);
+        steps.put("set-body", SetBodyFlowStep.class);
+        steps.put("set-header", SetHeaderFlowStep.class);
+        steps.put("set-property", SetPropertyFlowStep.class);
+        steps.put("to", ToFlowStep.class);
+        steps.put("transform", TransformFlowStep.class);
+        steps.put("uri", UriFlowStep.class);
+        
+        return steps;
     }
 }
