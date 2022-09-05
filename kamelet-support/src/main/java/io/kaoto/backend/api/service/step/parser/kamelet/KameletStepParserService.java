@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -194,6 +195,8 @@ public class KameletStepParserService
             return processDefinedStep(setBodyFlowStep);
         } else if (step instanceof SetHeaderFlowStep setHeaderFlowStep) {
             return processDefinedStep(setHeaderFlowStep);
+        }  else if (step instanceof RemoveHeaderFlowStep removeHeaderFlowStep) {
+            return processDefinedStep(removeHeaderFlowStep);
         } else if (step instanceof SetPropertyFlowStep setPropertyFlowStep) {
             return processDefinedStep(setPropertyFlowStep);
         } else if (step instanceof TransformFlowStep transformFlowStep) {
@@ -289,7 +292,6 @@ public class KameletStepParserService
         return res;
     }
 
-
     private Step processDefinedStep(final SetHeaderFlowStep step) {
         Step res = catalog.getReadOnlyCatalog().searchStepByName("set-header");
 
@@ -305,6 +307,19 @@ public class KameletStepParserService
 
         return res;
     }
+    private Step processDefinedStep(final RemoveHeaderFlowStep step) {
+        Step res = catalog.getReadOnlyCatalog()
+                .searchStepByName("remove-header");
+
+        for (Parameter p : res.getParameters()) {
+            if (p.getId().equalsIgnoreCase(NAME)) {
+                p.setValue(step.getSetHeaderPairFlowStep().getName());
+            }
+        }
+
+        return res;
+    }
+
     private Step processDefinedStep(final SetPropertyFlowStep step) {
         Step res = catalog.getReadOnlyCatalog()
                 .searchStepByName("set-property");
