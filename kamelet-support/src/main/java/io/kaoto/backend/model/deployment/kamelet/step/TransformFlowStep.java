@@ -6,8 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -48,5 +52,27 @@ public class TransformFlowStep implements FlowStep {
         Map<String, Object> properties = new HashMap<>();
         properties.put("transform", this.getTransform());
         return properties;
+    }
+
+    @Override
+    public Step getStep(final StepCatalog catalog,
+                        final KameletStepParserService
+                                kameletStepParserService) {
+        Step res = catalog.getReadOnlyCatalog().searchStepByName("transform");
+
+        for (Parameter p : res.getParameters()) {
+            if (p.getId()
+                    .equalsIgnoreCase(KameletStepParserService.NAME)) {
+                p.setValue(this.getTransform().getName());
+            } else if (p.getId()
+                    .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
+                p.setValue(this.getTransform().getSimple());
+            } else if (p.getId()
+                    .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
+                p.setValue(this.getTransform().getConstant());
+            }
+        }
+
+        return res;
     }
 }

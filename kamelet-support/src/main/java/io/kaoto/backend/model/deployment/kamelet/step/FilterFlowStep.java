@@ -6,10 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.step.Branch;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @JsonPropertyOrder({"filter"})
@@ -23,7 +28,7 @@ public class FilterFlowStep implements FlowStep {
 
     @JsonCreator
     public FilterFlowStep(
-           final @JsonProperty(value = "filter") Filter filter) {
+            final @JsonProperty(value = "filter") Filter filter) {
         super();
         setFilter(filter);
     }
@@ -45,5 +50,28 @@ public class FilterFlowStep implements FlowStep {
         Map<String, Object> properties = new HashMap<>();
         properties.put("filter", this.getFilter());
         return properties;
+    }
+
+    @Override
+    public Step getStep(final StepCatalog catalog,
+                        final KameletStepParserService
+                                kameletStepParserService) {
+        Step res = catalog.getReadOnlyCatalog().searchStepByID("filter");
+        res.setBranches(new LinkedList<>());
+
+        var flow = this.getFilter();
+        Branch branch =
+                new Branch(kameletStepParserService.getFilterIdentifier(flow));
+        branch.put(KameletStepParserService.CONDITION,
+                kameletStepParserService.getFilterCondition(flow));
+        for (var s : flow.getSteps()) {
+            branch.getSteps().add(kameletStepParserService.processStep(s));
+        }
+        kameletStepParserService.setValueOnStepProperty(res,
+                KameletStepParserService.SIMPLE,
+                branch.get(KameletStepParserService.CONDITION));
+        res.getBranches().add(branch);
+
+        return res;
     }
 }

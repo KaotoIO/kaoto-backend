@@ -7,8 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -70,5 +73,31 @@ public class UriFlowStep implements FlowStep {
             properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
         }
         return properties;
+    }
+
+
+    @Override
+    public Step getStep(final StepCatalog catalog,
+                        final KameletStepParserService
+                                kameletStepParserService) {
+        String uri = this.getUri();
+        String connectorName = uri;
+
+        if (uri != null
+                && uri.contains(":")
+                && !uri.startsWith("kamelet:")) {
+            connectorName = uri.substring(0, uri.indexOf(':'));
+        }
+
+        Step step = catalog.getReadOnlyCatalog()
+                .searchStepByName(connectorName);
+
+        if (step != null && uri != null) {
+            kameletStepParserService.setValuesOnParameters(step, uri);
+            kameletStepParserService.setValuesOnParameters(step,
+                    this.getParameters());
+        }
+
+        return step;
     }
 }
