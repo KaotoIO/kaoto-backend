@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
@@ -52,16 +53,9 @@ public class KameletRepresenter extends Representer {
         spec();
 
         //For each type of FlowStep or custom classes, create a representer
-        from();
-        to();
+        addEIP();
 
-        uri();
         choice();
-        setBody();
-        setHeader();
-        setProperty();
-        expression();
-        transform();
         filter();
 
         addTypeDescriptions();
@@ -257,48 +251,30 @@ public class KameletRepresenter extends Representer {
             });
     }
 
-    private void metaChoice() {
-        this.multiRepresenters.put(ChoiceFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((ChoiceFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
+    private void addEIP() {
+        var eips = new Class[] {
+                ChoiceFlowStep.class,
+                ToFlowStep.class,
+                From.class,
+                UriFlowStep.class,
+                SetBodyFlowStep.class,
+                SetHeaderFlowStep.class,
+                SetPropertyFlowStep.class,
+                Expression.class,
+                TransformFlowStep.class,
+                FilterFlowStep.class
+        };
 
-    private void to() {
-        this.multiRepresenters.put(ToFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((ToFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void from() {
-        this.multiRepresenters.put(From.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((From) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void uri() {
-        this.multiRepresenters.put(UriFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((UriFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
+        for (var eip : eips) {
+            this.multiRepresenters.put(eip, new RepresentMap() {
+                @Override
+                public Node representData(final Object data) {
+                    return representMapping(getTag(data.getClass(), Tag.MAP),
+                            ((FlowStep) data).getRepresenterProperties(),
+                            DumperOptions.FlowStyle.AUTO);
+                }
+            });
+        }
     }
 
     private void choice() {
@@ -330,7 +306,6 @@ public class KameletRepresenter extends Representer {
             }
         });
 
-        metaChoice();
         whenChoice();
     }
 
@@ -346,73 +321,6 @@ public class KameletRepresenter extends Representer {
                 }
                 return representMapping(getTag(data.getClass(), Tag.MAP),
                         properties,
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void setBody() {
-        this.multiRepresenters.put(SetBodyFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((SetBodyFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void setHeader() {
-        this.multiRepresenters.put(SetHeaderFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((SetHeaderFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void setProperty() {
-        this.multiRepresenters.put(SetPropertyFlowStep.class,
-                new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((SetPropertyFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void expression() {
-        this.multiRepresenters.put(Expression.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((Expression) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void transform() {
-        this.multiRepresenters.put(TransformFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((TransformFlowStep) data).getRepresenterProperties(),
-                        DumperOptions.FlowStyle.AUTO);
-            }
-        });
-    }
-
-    private void metaFilter() {
-        this.multiRepresenters.put(FilterFlowStep.class, new RepresentMap() {
-            @Override
-            public Node representData(final Object data) {
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        ((FilterFlowStep) data).getRepresenterProperties(),
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -434,8 +342,6 @@ public class KameletRepresenter extends Representer {
                         DumperOptions.FlowStyle.AUTO);
             }
         });
-
-        metaFilter();
     }
 
     @Override
