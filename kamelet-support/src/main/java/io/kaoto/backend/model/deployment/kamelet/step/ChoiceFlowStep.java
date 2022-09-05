@@ -10,6 +10,8 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonPropertyOrder({"choice"})
 @JsonDeserialize(
@@ -39,5 +41,10 @@ public class ChoiceFlowStep implements FlowStep {
         this.choice = choice;
     }
 
-
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("choice", this.getChoice());
+        return properties;
+    }
 }

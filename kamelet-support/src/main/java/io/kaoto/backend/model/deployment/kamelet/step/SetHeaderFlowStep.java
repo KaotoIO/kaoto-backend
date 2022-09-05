@@ -10,6 +10,8 @@ import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @JsonPropertyOrder({"set-header"})
@@ -39,5 +41,12 @@ public class SetHeaderFlowStep implements FlowStep {
     public void setSetHeaderPairFlowStep(
             final Expression setHeaderPairFlowStep) {
         this.setHeaderPairFlowStep = setHeaderPairFlowStep;
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("set-header", this.getSetHeaderPairFlowStep());
+        return properties;
     }
 }

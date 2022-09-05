@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @JsonPropertyOrder({"steps"})
@@ -28,5 +31,17 @@ public class From extends UriFlowStep {
     public void setSteps(
             final List<FlowStep> steps) {
         this.steps = steps;
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(KameletRepresenter.URI, this.getUri());
+        if (this.getParameters() != null
+                && !this.getParameters().isEmpty()) {
+            properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
+        }
+        properties.put(KameletRepresenter.STEPS, this.getSteps());
+        return properties;
     }
 }

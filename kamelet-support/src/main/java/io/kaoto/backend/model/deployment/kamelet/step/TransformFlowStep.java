@@ -10,6 +10,8 @@ import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @JsonPropertyOrder({"transform"})
@@ -39,5 +41,12 @@ public class TransformFlowStep implements FlowStep {
     public void setTransform(
             final Expression transform) {
         this.transform = transform;
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("transform", this.getTransform());
+        return properties;
     }
 }

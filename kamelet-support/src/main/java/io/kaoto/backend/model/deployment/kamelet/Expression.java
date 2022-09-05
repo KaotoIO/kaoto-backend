@@ -6,8 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonPropertyOrder({"constant", "simple"})
 @JsonDeserialize(
@@ -58,5 +61,23 @@ public class Expression implements FlowStep {
 
     public void setSimple(final String simple) {
         this.simple = simple;
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+
+        Map<String, Object> properties = new HashMap<>();
+        if (this.getConstant() != null) {
+            properties.put("constant", this.getConstant());
+        }
+
+        if (this.getSimple() != null) {
+            properties.put(KameletRepresenter.SIMPLE, this.getSimple());
+        }
+
+        if (this.getName() != null) {
+            properties.put(KameletRepresenter.NAME, this.getName());
+        }
+        return properties;
     }
 }

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonPropertyOrder({"to"})
 @JsonDeserialize(
@@ -35,5 +37,12 @@ public class ToFlowStep implements FlowStep {
 
     public void setTo(final FlowStep to) {
         this.to = to;
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("to", this.getTo());
+        return properties;
     }
 }

@@ -20,7 +20,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
 
-            for(var step : getFlowSteps().entrySet()) {
+            for (var step : getFlowSteps().entrySet()) {
                 if (n.get(step.getKey()) != null) {
                     return new ObjectMapper().readValue(n.toPrettyString(),
                             step.getValue());
@@ -46,7 +46,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("to", ToFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("uri", UriFlowStep.class);
-        
+
         return steps;
     }
 }
