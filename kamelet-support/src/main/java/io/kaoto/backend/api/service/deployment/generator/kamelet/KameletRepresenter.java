@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -27,6 +28,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -48,7 +50,12 @@ public class KameletRepresenter extends Representer {
     public static final String API_VERSION = "apiVersion";
 
     public KameletRepresenter() {
-        getPropertyUtils().setSkipMissingProperties(true);
+        this.getPropertyUtils()
+                .setSkipMissingProperties(true);
+        this.getPropertyUtils()
+                .setAllowReadOnlyProperties(true);
+        this.getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD);
 
         customResource();
         metadata();
@@ -271,7 +278,8 @@ public class KameletRepresenter extends Representer {
                 TransformFlowStep.class,
                 FilterFlowStep.class,
                 RemoveHeaderFlowStep.class,
-                RemovePropertyFlowStep.class
+                RemovePropertyFlowStep.class,
+                MarshalFlowStep.class
         };
 
         for (var eip : eips) {

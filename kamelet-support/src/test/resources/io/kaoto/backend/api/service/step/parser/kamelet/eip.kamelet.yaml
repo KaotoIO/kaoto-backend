@@ -29,6 +29,9 @@ spec:
             - set-header:
                 name: bar
                 simple: foo
+            - marshal:
+                json:
+                  library: Gson
           - simple: '{{?bar}}'
             steps:
             - set-property:
@@ -36,6 +39,8 @@ spec:
                 simple: bar
             - remove-property:
                 name: property
+            - marshal:
+                json: {}
           - simple: '{{?baz}}'
             steps:
             - transform:

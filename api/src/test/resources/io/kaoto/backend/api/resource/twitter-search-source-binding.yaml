@@ -1,16 +1,7 @@
 apiVersion: camel.apache.org/v1alpha1
-group: camel.apache.org
 kind: KameletBinding
 metadata:
-  additionalProperties: {}
-  finalizers: []
-  managedFields: []
   name: integration-4
-  ownerReferences: []
-plural: kameletbindings
-scope: Namespaced
-served: true
-singular: kameletbinding
 spec:
   source:
     ref:
@@ -42,5 +33,3 @@ spec:
       password: The Password
       topic: The Topic Names
       user: The Username
-storage: true
-version: v1alpha1

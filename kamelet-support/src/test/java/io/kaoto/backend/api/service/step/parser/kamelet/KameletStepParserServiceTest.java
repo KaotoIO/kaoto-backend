@@ -2,8 +2,13 @@ package io.kaoto.backend.api.service.step.parser.kamelet;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.metadata.catalog.CatalogCollection;
+import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
+import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteParseCatalog;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
+import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,6 +35,8 @@ class KameletStepParserServiceTest {
     private static String incomplete;
     private static String kameletEIP;
 
+
+    private CamelRouteParseCatalog parseCatalog;
     @Inject
     private KameletStepParserService service;
 
@@ -40,6 +48,11 @@ class KameletStepParserServiceTest {
     @Inject
     public void setStepCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
+    }
+
+    @Inject
+    public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
+        this.parseCatalog = parseCatalog;
     }
 
     @BeforeAll
@@ -61,6 +74,18 @@ class KameletStepParserServiceTest {
     @BeforeEach
     void ensureCatalog() {
         catalog.waitForWarmUp().join();
+
+        if (catalog.getReadOnlyCatalog().searchByID("log-producer") == null) {
+            String camelGit = "https://github.com/apache/camel/"
+                    + "archive/refs/tags/camel-3.18.2.zip";
+
+            ParseCatalog<Step> camelParser = parseCatalog.getParser(camelGit);
+            List<Step> steps = camelParser.parse().join();
+            InMemoryCatalog<Step> c2 = new InMemoryCatalog<>();
+            c2.store(steps);
+            c2.store((List<Step>) catalog.getReadOnlyCatalog().getAll());
+            ((CatalogCollection) catalog.getReadOnlyCatalog()).addCatalog(c2);
+        }
     }
 
     @Test

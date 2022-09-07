@@ -13,6 +13,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
@@ -24,6 +25,8 @@ import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
+import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
+import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
@@ -284,6 +287,9 @@ public class KamelPopulator {
                 case "transform":
                     flowStep = getTransformStep(step);
                     break;
+                case "marshal":
+                    flowStep = getMarshalStep(step);
+                    break;
                 default:
                     break;
             }
@@ -383,6 +389,25 @@ public class KamelPopulator {
 
     private FlowStep getTransformStep(final Step step) {
         return new TransformFlowStep(getExpression(step));
+    }
+
+    private FlowStep getMarshalStep(final Step step) {
+        var marshal = new MarshalFlowStep();
+        marshal.setDataFormat(new DataFormat());
+        marshal.getDataFormat().setProperties(new HashMap<>());
+
+        for (Parameter p : step.getParameters()) {
+            if ("dataformat".equalsIgnoreCase(p.getId())) {
+                marshal.getDataFormat().setFormat(p.getValue().toString());
+            } else if ("properties".equalsIgnoreCase(p.getId())) {
+                for (var param : ((ArrayParameter) p).getValue()) {
+                    marshal.getDataFormat().getProperties()
+                            .put(((Map.Entry) param).getKey().toString(),
+                                    ((Map.Entry) param).getValue().toString());
+                }
+            }
+        }
+        return marshal;
     }
 
     private FlowStep getFilterStep(final Step step) {

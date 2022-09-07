@@ -9,6 +9,7 @@ import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;

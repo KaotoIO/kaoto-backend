@@ -1,5 +1,9 @@
 package io.kaoto.backend.api.service.deployment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
@@ -11,10 +15,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -83,7 +83,7 @@ class DeploymentServiceTest {
     }
 
     @Test
-    void yaml() {
+    void yaml() throws JsonProcessingException {
         final var steps = stepParser.deepParse(binding).getSteps();
         var res = deploymentService.crd(
                 "twitter-search-source-binding",
@@ -143,23 +143,14 @@ class DeploymentServiceTest {
             }
         }
 
-        var constructor = new Constructor(KameletBinding.class);
-        Representer representer = new Representer();
-        representer.getPropertyUtils()
-                .setSkipMissingProperties(true);
-        representer.getPropertyUtils()
-                .setAllowReadOnlyProperties(true);
-        representer.getPropertyUtils()
-                .setBeanAccess(BeanAccess.FIELD);
-        constructor.getPropertyUtils()
-                .setSkipMissingProperties(true);
-        constructor.getPropertyUtils()
-                .setAllowReadOnlyProperties(true);
-        constructor.getPropertyUtils()
-                .setBeanAccess(BeanAccess.FIELD);
-        Yaml yaml = new Yaml(constructor, representer);
-        KameletBinding res1 = yaml.load(expectedStr);
-        KameletBinding res2 = yaml.load(result);
+        ObjectMapper yamlMapper =
+                new ObjectMapper(new YAMLFactory())
+                        .configure(
+                                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                false);
+
+        KameletBinding res1 = yamlMapper.readValue(expectedStr, KameletBinding.class);
+        KameletBinding res2 = yamlMapper.readValue(result, KameletBinding.class);
 
         assertEquals(res1, res2);
     }
