@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -51,7 +50,7 @@ public class IntegrationStepParserService
         List<Step> steps = new ArrayList<>();
         try {
             ObjectMapper yamlMapper =
-                    new ObjectMapper(new YAMLFactory())
+                new ObjectMapper(new YAMLFactory())
                         .configure(
                             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
                             false);
@@ -71,7 +70,7 @@ public class IntegrationStepParserService
             }
 
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Error trying to parse.", e);
         }

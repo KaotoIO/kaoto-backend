@@ -53,8 +53,9 @@ public class KameletDeploymentGeneratorService
 
     public String getYAML(final CustomResource kamelet,
                           final Representer representer) {
-        final var constructor = new Constructor(Kamelet.class);
-        Yaml yaml = new Yaml(constructor, representer);
+        Yaml yaml = new Yaml(
+                new Constructor(Kamelet.class),
+                representer);
         return yaml.dumpAsMap(kamelet);
     }
 

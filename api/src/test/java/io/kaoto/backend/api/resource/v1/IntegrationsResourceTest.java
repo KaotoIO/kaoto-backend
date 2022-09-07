@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -98,21 +97,9 @@ class IntegrationsResourceTest {
 
         String yaml2 = res.extract().body().asString();
 
-        var constructor = new Constructor(KameletBinding.class);
-        Representer representer = new Representer();
-        representer.getPropertyUtils()
-                .setSkipMissingProperties(true);
-        representer.getPropertyUtils()
-                .setAllowReadOnlyProperties(true);
-        representer.getPropertyUtils()
-                .setBeanAccess(BeanAccess.FIELD);
-        constructor.getPropertyUtils()
-                .setSkipMissingProperties(true);
-        constructor.getPropertyUtils()
-                .setAllowReadOnlyProperties(true);
-        constructor.getPropertyUtils()
-                .setBeanAccess(BeanAccess.FIELD);
-        Yaml yaml = new Yaml(constructor, representer);
+        Yaml yaml = new Yaml(
+                new Constructor(KameletBinding.class),
+                new KameletRepresenter());
         KameletBinding res1 = yaml.load(yaml1);
         KameletBinding res2 = yaml.load(yaml2);
 

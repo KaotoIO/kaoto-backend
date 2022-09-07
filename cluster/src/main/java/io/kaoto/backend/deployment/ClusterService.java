@@ -1,5 +1,8 @@
 package io.kaoto.backend.deployment;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -13,9 +16,6 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.constructor.ConstructorException;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -80,9 +80,7 @@ public class ClusterService {
                     : parser.supportedCustomResources()) {
                 try {
                     final var resources =
-                            kubernetesClient.resources(c)
-                                    .inNamespace(getNamespace(namespace))
-                                    .list().getItems();
+                            kubernetesClient.resources(c).inNamespace(getNamespace(namespace)).list().getItems();
                     for (CustomResource integration : resources) {
                         Integration i = new Integration();
                         i.setName(integration.getMetadata().getName());
@@ -111,12 +109,14 @@ public class ClusterService {
      */
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
-            log.trace("Trying " + parser.identifier());
+            log.trace("Trying parser for " + parser.identifier());
+            log.trace(input);
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
-                log.trace("Trying with " + c.getCanonicalName());
+                log.trace("Trying with kind " + c.getSimpleName());
                 CustomResource binding = tryParsing(input, c);
                 if (binding != null) {
+                    log.trace("This is a " + binding.getKind());
                     setName(binding, namespace);
                     try {
                         start(binding, namespace);
@@ -172,24 +172,15 @@ public class ClusterService {
                                       final Class<? extends CustomResource> c) {
         CustomResource binding = null;
         try {
-            var constructor = new Constructor(c);
-            Representer representer = new Representer();
-            representer.getPropertyUtils()
-                    .setSkipMissingProperties(true);
-            representer.getPropertyUtils()
-                    .setAllowReadOnlyProperties(true);
-            representer.getPropertyUtils()
-                    .setBeanAccess(BeanAccess.FIELD);
-            constructor.getPropertyUtils()
-                    .setSkipMissingProperties(true);
-            constructor.getPropertyUtils()
-                    .setAllowReadOnlyProperties(true);
-            constructor.getPropertyUtils()
-                    .setBeanAccess(BeanAccess.FIELD);
-            Yaml yaml = new Yaml(constructor, representer);
-            binding = yaml.load(input);
-        } catch (ConstructorException e) {
-            log.trace("Tried with " + c.getName() + " and it didn't "
+            ObjectMapper yamlMapper =
+                    new ObjectMapper(new YAMLFactory())
+                            .configure(
+                                    DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                    false);
+
+            binding = yamlMapper.readValue(input, c);
+        } catch (Exception e) {
+            log.trace("Tried with " + c.getSimpleName() + " and it didn't "
                     + "work.");
         }
         return binding;
@@ -251,12 +242,19 @@ public class ClusterService {
     public CustomResource get(final String namespace, final String name) {
         CustomResource cr = null;
         for (var parser : parsers) {
+            log.trace("Now trying with parser for " + parser.identifier());
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
-                cr = kubernetesClient.customResources(c)
-                        .inNamespace(getNamespace(namespace))
-                        .withName(name).get();
+                log.trace("Trying to parse with " + c.getSimpleName());
+                try {
+                    cr = kubernetesClient.customResources(c)
+                            .inNamespace(getNamespace(namespace))
+                            .withName(name).get();
+                } catch (Exception e) {
+                    log.trace("This is not the proper kind: " + parser.identifier());
+                }
                 if (cr != null) {
+                    log.trace("Found a customResource of kind " + cr.getKind() + " and name " + name);
                     break;
                 }
             }

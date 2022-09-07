@@ -74,4 +74,46 @@ public final class KameletBindingStep implements Serializable {
             final Map<String, String> parameters) {
         this.parameters = parameters;
     }
+
+    @Override
+    public String toString() {
+        return "KameletBindingStep{" +
+                "ref=" + ref +
+                ", uri='" + uri + '\'' +
+                ", properties=" + properties +
+                ", parameters=" + parameters +
+                '}';
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof KameletBindingStep)) {
+            return false;
+        }
+
+        final KameletBindingStep that = (KameletBindingStep) o;
+
+        if (getRef() != null ? !getRef().equals(that.getRef()) : that.getRef() != null) {
+            return false;
+        }
+        if (getUri() != null ? !getUri().equals(that.getUri()) : that.getUri() != null) {
+            return false;
+        }
+        if (getProperties() != null ? !getProperties().equals(that.getProperties()) : that.getProperties() != null) {
+            return false;
+        }
+        return getParameters() != null ? getParameters().equals(that.getParameters()) : that.getParameters() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getRef() != null ? getRef().hashCode() : 0;
+        result = 31 * result + (getUri() != null ? getUri().hashCode() : 0);
+        result = 31 * result + (getProperties() != null ? getProperties().hashCode() : 0);
+        result = 31 * result + (getParameters() != null ? getParameters().hashCode() : 0);
+        return result;
+    }
 }
