@@ -16,6 +16,7 @@ quarkus:
   http:
     cors: true
     port: 8081
+    enable-compression: true
   log:
     category:
       io.kaoto.backend.api:
