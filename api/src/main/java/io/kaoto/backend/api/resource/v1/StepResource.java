@@ -4,6 +4,7 @@ import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.StepService;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.vertx.http.Compressed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
@@ -78,6 +79,7 @@ public class StepResource {
     @Operation(summary = "Get all steps",
             description = "Returns all the available steps that can be added"
                     + " to the integration.")
+    @Compressed
     public Collection<Step> all(
             final @Parameter(description = "Filter by Domain Specific "
                     + "Language (DSL). Examples: "
