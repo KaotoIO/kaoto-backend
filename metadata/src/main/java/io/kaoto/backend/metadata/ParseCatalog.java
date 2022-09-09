@@ -1,6 +1,6 @@
 package io.kaoto.backend.metadata;
 
-import io.kaoto.backend.metadata.parser.YamlProcessFile;
+import io.kaoto.backend.metadata.parser.ProcessFile;
 import io.kaoto.backend.model.Metadata;
 
 import java.util.List;
@@ -26,5 +26,5 @@ public interface ParseCatalog<T extends Metadata> {
      * 🐱param fileVisitor: YamlProcessFile
      *
      */
-    void setFileVisitor(YamlProcessFile<T> fileVisitor);
+    void setFileVisitor(ProcessFile<T> fileVisitor);
 }

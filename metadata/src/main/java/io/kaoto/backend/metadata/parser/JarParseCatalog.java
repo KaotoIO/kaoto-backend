@@ -38,8 +38,13 @@ public class JarParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
     private Logger log = Logger.getLogger(JarParseCatalog.class);
-    private YamlProcessFile<T> yamlProcessFile;
+
     private final String url;
+
+    private final CompletableFuture<List<T>> metadata =
+            new CompletableFuture<>();
+
+    private ProcessFile<T> processFile;
 
     //to avoid bomb attacks
     private int thresholdSize = 1000000000; // 1 GB
@@ -83,9 +88,9 @@ public class JarParseCatalog<T extends Metadata>
 
             //Walk the expanded directory
             log.trace("Parsing all files in the jar");
-            this.yamlProcessFile.setFutureMetadata(futureMd);
-            this.yamlProcessFile.setMetadataList(metadataList);
-            Files.walkFileTree(tmp, this.yamlProcessFile);
+            this.processFile.setFutureMetadata(futureMd);
+            this.processFile.setMetadataList(metadataList);
+            Files.walkFileTree(tmp, this.processFile);
             log.trace("Found " + futureMd.size() + " elements.");
             CompletableFuture.allOf(
                             futureMd.toArray(new CompletableFuture[0]))
@@ -189,7 +194,7 @@ public class JarParseCatalog<T extends Metadata>
         return metadata;
     }
 
-    public void setFileVisitor(final YamlProcessFile<T> fileVisitor) {
-        this.yamlProcessFile = fileVisitor;
+    public void setFileVisitor(final ProcessFile<T> fileVisitor) {
+        this.processFile = fileVisitor;
     }
 }
