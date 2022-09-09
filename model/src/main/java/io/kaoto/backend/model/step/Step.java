@@ -1,12 +1,10 @@
 package io.kaoto.backend.model.step;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.parameter.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,8 +28,6 @@ public class Step extends Metadata {
     private Integer maxBranches;
 
     private String uuid;
-    private Map<String, Object> metadata;
-    private Map<String, Object> spec;
 
     public Step() {
         setType("MIDDLE");
@@ -204,25 +200,6 @@ public class Step extends Metadata {
     public void setMaxBranches(final Integer maxBranches) {
         this.maxBranches = maxBranches;
     }
-
-    public void setSpec(final Map<String, Object> spec) {
-        this.spec = spec;
-    }
-
-    @JsonIgnore
-    public Map<String, Object> getSpec() {
-        return spec;
-    }
-
-    @JsonIgnore
-    public Map<String, Object> getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(final Map<String, Object> metadata) {
-        this.metadata = metadata;
-    }
-
 
     @Override
     public String toString() {
