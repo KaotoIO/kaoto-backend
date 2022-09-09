@@ -28,9 +28,12 @@ public class GitParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
     private Logger log = Logger.getLogger(GitParseCatalog.class);
-    private YamlProcessFile<T> yamlProcessFile;
     private final String url;
     private final String tag;
+    private final CompletableFuture<List<T>> metadata =
+            new CompletableFuture<>();
+
+    private ProcessFile<T> processFile;
 
     public GitParseCatalog(final String url, final String tag) {
         this.url = url;
@@ -66,10 +69,10 @@ public class GitParseCatalog<T extends Metadata>
                     .call()) {
 
                 log.trace("Parsing all files in the repository");
-                this.yamlProcessFile.setFutureMetadata(futureMd);
-                this.yamlProcessFile.setMetadataList(metadataList);
+                this.processFile.setFutureMetadata(futureMd);
+                this.processFile.setMetadataList(metadataList);
                 Files.walkFileTree(file.getAbsoluteFile().toPath(),
-                        this.yamlProcessFile);
+                        this.processFile);
                 log.trace("Found " + futureMd.size() + " elements.");
                 CompletableFuture.allOf(
                         futureMd.toArray(new CompletableFuture[0]))
@@ -98,7 +101,7 @@ public class GitParseCatalog<T extends Metadata>
         return metadata;
     }
 
-    public void setFileVisitor(final YamlProcessFile<T> fileVisitor) {
-        this.yamlProcessFile = fileVisitor;
+    public void setFileVisitor(final ProcessFile<T> fileVisitor) {
+        this.processFile = fileVisitor;
     }
 }

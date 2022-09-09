@@ -4,11 +4,12 @@ import io.kaoto.backend.model.Metadata;
 
 import java.io.File;
 
-public abstract class YamlProcessFile<T extends Metadata>
+public abstract class JsonProcessFile<T extends Metadata>
         extends ProcessFile<T> {
+
+    @Override
     protected boolean isDesiredType(final File file) {
-        return (file.getName().endsWith(".yml")
-                || file.getName().endsWith(".yaml"))
+        return file.getName().endsWith(".json")
                 && !file.getName().startsWith(".");
     }
 }
