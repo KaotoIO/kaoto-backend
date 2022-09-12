@@ -30,8 +30,6 @@ public class GitParseCatalog<T extends Metadata>
     private Logger log = Logger.getLogger(GitParseCatalog.class);
     private final String url;
     private final String tag;
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
 
     private ProcessFile<T> processFile;
 
