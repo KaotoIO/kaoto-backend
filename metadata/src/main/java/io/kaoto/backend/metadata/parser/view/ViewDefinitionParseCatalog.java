@@ -13,6 +13,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 🐱class ViewDefinitionParseCatalog
@@ -51,14 +52,15 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
     }
 
     @Override
-    public ViewDefinition parseFile(final File f) {
+    public List<ViewDefinition> parseFile(final File f) {
         try (FileReader fr = new FileReader(f)) {
             Yaml yaml = new Yaml(new Constructor(ViewDefinition.class));
-            return yaml.load(fr);
+            ViewDefinition viewDefinition = yaml.load(fr);
+            return List.of(viewDefinition);
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
         }
 
-        return null;
+        return List.of();
     }
 }

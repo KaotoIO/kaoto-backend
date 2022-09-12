@@ -38,12 +38,12 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     private KameletStepParserService service;
 
     @Override
-    public Step parseFile(final File f) {
+    public List<Step> parseFile(final File f) {
         String kind = null;
         try {
             final var yaml = Files.readString(f.toPath());
             if (!service.appliesTo(yaml)) {
-                return null;
+                return List.of();
             }
             kind = getKind(yaml);
         } catch (IOException e) {
@@ -121,12 +121,12 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             if (step.getId() == null) {
                 step = null;
             }
-            return step;
+            return List.of(step);
         } catch (IOException | YAMLException e) {
             log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
         }
 
-        return null;
+        return List.of();
     }
 
     private String getKind(final String yaml) {

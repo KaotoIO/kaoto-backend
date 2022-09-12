@@ -54,7 +54,7 @@ public abstract class ProcessFile<T extends Metadata>
         if (isDesiredType(f)) {
             CompletableFuture<Void> metadata =
                     CompletableFuture.runAsync(() ->
-                            metadataList.add(parseFile(f)));
+                            metadataList.addAll(parseFile(f)));
             metadata.thenRun(() -> log.trace(f.getName()
                     + " parsed, now generating metadata."));
             futureMetadata.add(metadata);
@@ -77,7 +77,7 @@ public abstract class ProcessFile<T extends Metadata>
 
     abstract boolean isDesiredType(File file);
 
-    protected abstract T parseFile(File f);
+    protected abstract List<T> parseFile(File f);
 
     public void setMetadataList(final List<T> metadataList) {
         this.metadataList = metadataList;

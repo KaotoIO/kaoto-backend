@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,8 +45,16 @@ public class CamelRouteParseCatalogTest {
 
         assertTrue(catalog.store(steps));
 
-        Step browseComponent = catalog.searchStepByID("browse");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponent, false);
+        Step browseComponentSink = catalog.searchStepByID("browse-sink");
+        Step browseComponentSource = catalog.searchStepByID("browse-source");
+        Step browseComponentAction = catalog.searchStepByID("browse-action");
+
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSource, "source", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSink, "sink", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentAction, "action", false);
     }
 
     @Test
@@ -60,8 +69,16 @@ public class CamelRouteParseCatalogTest {
 
         assertTrue(catalog.store(steps));
 
-        Step browseComponent = catalog.searchStepByID("browse");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponent, false);
+        Step browseComponentSink = catalog.searchStepByID("browse-sink");
+        Step browseComponentSource = catalog.searchStepByID("browse-source");
+        Step browseComponentAction = catalog.searchStepByID("browse-action");
+
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSource, "source", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSink, "sink", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentAction, "action", false);
     }
 
     @Test
@@ -76,21 +93,42 @@ public class CamelRouteParseCatalogTest {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        assertEquals(1, steps.size());
-        assertBrowseJsonHasBeenParsedCorrectly(steps.get(0));
-    }
+        assertEquals(3, steps.size());
 
-    private void assertBrowseJsonHasBeenParsedCorrectly(final Step parsedStep) {
-        assertBrowseJsonHasBeenParsedCorrectly(parsedStep, true);
+        BiFunction<List<Step>, String, Step> fetchBrowse =
+                (stepList, stepType) -> stepList
+                        .stream().filter(
+                                step -> stepType.equals(step.getType())
+                        ).findFirst().get();
+
+        Step browseComponentSink = fetchBrowse.apply(steps, "sink");
+        Step browseComponentSource = fetchBrowse.apply(steps, "source");
+        Step browseComponentAction = fetchBrowse.apply(steps, "action");
+
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSink, "sink", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentSource, "source", false);
+        assertBrowseJsonHasBeenParsedCorrectly(
+                browseComponentAction, "action", false);
     }
 
     private void assertBrowseJsonHasBeenParsedCorrectly(
-            final Step parsedStep, final boolean assertDescription) {
+            final Step parsedStep, final String type) {
+        assertBrowseJsonHasBeenParsedCorrectly(
+                parsedStep, type, true);
+    }
+
+    private void assertBrowseJsonHasBeenParsedCorrectly(
+            final Step parsedStep, final String type,
+            final boolean assertDescription) {
+        assertEquals("browse-" + type, parsedStep.getId());
+        assertEquals("browse-" + type, parsedStep.getName());
         assertEquals("Browse", parsedStep.getTitle());
         assertEquals("Inspect the messages received"
                         + " on endpoints supporting BrowsableEndpoint.",
                 parsedStep.getDescription());
-        assertEquals("action", parsedStep.getType());
+        assertEquals(type, parsedStep.getType());
         assertIterableEquals(List.of("name"), parsedStep.getRequired());
 
         Map<String, Parameter> expectedParameterValues = Map.of(
