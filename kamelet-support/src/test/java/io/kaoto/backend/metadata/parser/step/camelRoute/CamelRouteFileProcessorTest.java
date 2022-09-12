@@ -12,10 +12,11 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 public class CamelRouteFileProcessorTest {
@@ -31,10 +32,22 @@ public class CamelRouteFileProcessorTest {
                         + "io.kaoto.backend.metadata.parser.step.camelRoute/"
                         + "browse.json");
 
-        Step parsedStep = new CamelRouteFileProcessor()
+        List<Step> steps = new CamelRouteFileProcessor()
                 .parseFile(camelRouteJson);
 
-        assertBrowseJsonHasBeenParsedCorrectly(parsedStep);
+        BiFunction<List<Step>, String, Step> fetchBrowse =
+                (stepList, stepType) -> stepList
+                        .stream().filter(
+                                step -> stepType.equals(step.getType())
+                        ).findFirst().get();
+
+        Step browseComponentSink = fetchBrowse.apply(steps, "sink");
+        Step browseComponentSource = fetchBrowse.apply(steps, "source");
+        Step browseComponentAction = fetchBrowse.apply(steps, "action");
+
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, "sink");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, "source");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, "action");
     }
 
     @Test
@@ -49,18 +62,21 @@ public class CamelRouteFileProcessorTest {
                         + "io.kaoto.backend.metadata.parser.step.camelRoute/"
                         + "not.json");
 
-        Step parsedStep = new CamelRouteFileProcessor()
+        List<Step> parsedStep = new CamelRouteFileProcessor()
                 .parseFile(camelRouteJson);
 
-        assertNull(parsedStep);
+        assertTrue(parsedStep.isEmpty());
     }
 
-    private void assertBrowseJsonHasBeenParsedCorrectly(final Step parsedStep) {
+    private void assertBrowseJsonHasBeenParsedCorrectly(
+            final Step parsedStep, final String type) {
+        assertEquals("browse-" + type, parsedStep.getId());
+        assertEquals("browse-" + type, parsedStep.getName());
         assertEquals("Browse", parsedStep.getTitle());
         assertEquals("Inspect the messages received"
                         + " on endpoints supporting BrowsableEndpoint.",
                 parsedStep.getDescription());
-        assertEquals("action", parsedStep.getType());
+        assertEquals(type, parsedStep.getType());
         assertIterableEquals(List.of("name"), parsedStep.getRequired());
 
         Map<String, Parameter> expectedParameterValues = Map.of(

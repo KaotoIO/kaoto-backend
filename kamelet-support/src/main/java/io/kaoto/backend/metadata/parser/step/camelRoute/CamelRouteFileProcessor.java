@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
+    private static final String SOURCE_TYPE = "source";
+    private static final String SINK_TYPE = "sink";
+    private static final String ACTION_TYPE = "action";
+
     record JsonCamelObject(
         String id,
         String kind,
@@ -40,18 +44,27 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     private final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
 
     @Override
-    protected Step parseFile(final File f) {
+    protected List<Step> parseFile(final File f) {
         try (FileReader fr = new FileReader(f)) {
+
             JsonReader reader = Json.createReader(fr);
             JsonObject json = reader.readObject();
             Step step = convertToStep(json);
-            return step;
+
+            List<Step> duplicatedStepsToTypes = List.of();
+
+            if (step != null) {
+                duplicatedStepsToTypes = duplicateStepToOtherTypes(step);
+            }
+
+            return duplicatedStepsToTypes;
         } catch (IOException | JsonException e) {
             log.error("Error parsing '"  + f.getAbsolutePath() + "'", e);
         }
 
-        return null;
+        return List.of();
     }
+
 
     private Step convertToStep(final JsonObject json) {
         if (!isCamelRouteJson(json)) {
@@ -72,8 +85,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         step.setRequired(parsedCamelJson.required());
         step.setType(parsedCamelJson.type());
 
-        //Duplicate component with action if kind Sink or Source
-
         return step;
     }
 
@@ -85,7 +96,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     private JsonCamelObject getDataFromJson(final JsonObject json) {
         final String camelKind = "Camel-Connector";
         final String defaultGroup = "Camel-Component";
-        final String defaultIcon = defaultIconString;
+        final String defaultIcon = DEFAULT_ICON_STRING;
 
         JsonObject component = json.getJsonObject("component");
         JsonObject properties = json.getJsonObject("properties");
@@ -227,10 +238,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     }
 
     private String getStepType(final JsonObject component) {
-        final String sourceType = "source";
-        final String sinkType = "sink";
-        final String actionType = "action";
-
         final boolean canBeSource = component.getBoolean("producerOnly");
         final boolean canBeSink = component.getBoolean("consumerOnly");
 
@@ -238,14 +245,47 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         //Or else, it has to be one of source or sink depending
         //Take care that this later has to be duplicated because
         //of the differences in how Camel components and kaoto components are
-        return canBeSource == canBeSink ? actionType
-                : canBeSource ? sourceType
-                : sinkType;
+        return canBeSource == canBeSink ? ACTION_TYPE
+                : canBeSource ? SOURCE_TYPE
+                : SINK_TYPE;
     }
+
+    private List<Step> duplicateStepToOtherTypes(final Step step) {
+
+        Map<String, List<String>> typesToDuplicateTo =
+                Map.of(
+                    SOURCE_TYPE, List.of(SOURCE_TYPE, ACTION_TYPE),
+                    ACTION_TYPE, List.of(SOURCE_TYPE, ACTION_TYPE, SINK_TYPE),
+                    SINK_TYPE, List.of(ACTION_TYPE, SINK_TYPE)
+                );
+
+        return typesToDuplicateTo.get(step.getType()).stream()
+                .map(type -> duplicateStepToType(step, type))
+                .toList();
+    }
+
+    private Step duplicateStepToType(final Step step, final String type) {
+        Step duplicatedStep = new Step();
+        String typedId = step.getId() + "-" + type;
+
+        duplicatedStep.setId(typedId);
+        duplicatedStep.setName(typedId);
+        duplicatedStep.setKind(step.getKind());
+        duplicatedStep.setTitle(step.getTitle());
+        duplicatedStep.setDescription(step.getDescription());
+        duplicatedStep.setGroup(step.getGroup());
+        duplicatedStep.setParameters(step.getParameters());
+        duplicatedStep.setRequired(step.getRequired());
+        duplicatedStep.setType(type);
+
+        return duplicatedStep;
+    }
+
 
     // Putting it at the end because is just a big string being
     // used as placeholder
-    private final String defaultIconString = "data:image/svg+xml;base64"
+    private static final String DEFAULT_ICON_STRING =
+            "data:image/svg+xml;base64"
             + ",PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4N"
             + "TktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJ"
             + "hdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIF"
