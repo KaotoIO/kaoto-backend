@@ -23,7 +23,7 @@ public class LocalFolderParseCatalog<T extends Metadata>
 
     private Logger log = Logger.getLogger(LocalFolderParseCatalog.class);
 
-    private YamlProcessFile<T> yamlProcessFile;
+    private ProcessFile<T> yamlProcessFile;
 
     private final Path uri;
 
@@ -63,7 +63,8 @@ public class LocalFolderParseCatalog<T extends Metadata>
         return metadata;
     }
 
-    public void setFileVisitor(final YamlProcessFile<T> fileVisitor) {
+    @Override
+    public void setFileVisitor(final ProcessFile<T> fileVisitor) {
         this.yamlProcessFile = fileVisitor;
     }
 }

@@ -45,7 +45,7 @@ public class ClusterParseCatalog<T extends Metadata>
     }
     private KubernetesClient kubernetesClient;
 
-    private YamlProcessFile<T> yamlProcessFile;
+    private ProcessFile<T> yamlProcessFile;
 
     public ClusterParseCatalog(final Class<? extends CustomResource> cr) {
         this.cr = cr;
@@ -136,7 +136,8 @@ public class ClusterParseCatalog<T extends Metadata>
         return metadata;
     }
 
-    public void setFileVisitor(final YamlProcessFile<T> fileVisitor) {
+    @Override
+    public void setFileVisitor(final ProcessFile<T> fileVisitor) {
         this.yamlProcessFile = fileVisitor;
     }
 }
