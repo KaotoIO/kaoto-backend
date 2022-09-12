@@ -208,8 +208,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         final boolean canBeSource = component.getBoolean("producerOnly");
         final boolean canBeSink = component.getBoolean("consumerOnly");
 
-        //Si ambos son falso o verdaderos lo dejamos como intermedio
-        //Si es uno de ambos, se pone el tipo especifico. Luego
+        //If both are true or false we assume it to be an action.
+        //Or else, it has to be one of source or sink depending
+        //Take care that this later has to be duplicated because
+        //of the differences in how Camel components and kaoto components are
         return canBeSource == canBeSink ? ACTION
                 : canBeSource ? SOURCE
                 : SINK;
