@@ -1,6 +1,5 @@
 package io.kaoto.backend.metadata.parser.step.camelRoute;
 
-import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.ClusterParseCatalog;
@@ -11,17 +10,10 @@ import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.step.Step;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.nio.file.Path;
 
 @ApplicationScoped
 public final class CamelRouteParseCatalog implements StepCatalogParser {
-
-    @Inject
-    public void setKubernetesClient(final KubernetesClient kubernetesClient) {
-        this.kubernetesClient = kubernetesClient;
-    }
-    private KubernetesClient kubernetesClient;
 
     private CamelRouteParseCatalog() {
 
@@ -45,13 +37,8 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
 
     @Override
     public ParseCatalog<Step> getParserFromCluster() {
-        //This wont work, maybe
+        //We are not expecting to get Camel Operators from here
         return new ClusterParseCatalog<>(Kamelet.class);
-//        ClusterParseCatalog<Step> parseCatalog =
-//                new ClusterParseCatalog<>(Kamelet.class);
-//        parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
-//        parseCatalog.setKubernetesClient(kubernetesClient);
-//        return parseCatalog;
     }
 
     @Override
