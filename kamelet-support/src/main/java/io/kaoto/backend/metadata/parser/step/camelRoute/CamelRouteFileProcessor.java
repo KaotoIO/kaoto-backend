@@ -90,7 +90,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                             var jsonObject = property.getValue().asJsonObject();
 
                             jsonObject.forEach((key, value) ->
-                                    hashMap.put(key, value.toString().replaceAll("\"", "")));
+                                    hashMap.put(key,
+                                            value.toString()
+                                                    .replaceAll("\"", "")));
 
                             return hashMap;
                         }
