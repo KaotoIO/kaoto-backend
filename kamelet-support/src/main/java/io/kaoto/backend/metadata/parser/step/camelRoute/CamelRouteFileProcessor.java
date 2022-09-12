@@ -16,9 +16,10 @@ import javax.json.JsonReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     }
 
     private Step convertToStep(final JsonObject json) {
+        if (!isCamelRouteJson(json)) {
+            return null;
+        }
+
         JsonCamelObject parsedCamelJson = getDataFromJson(json);
 
         Step step = new Step();
@@ -67,6 +72,11 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         //Duplicate component with action if kind Sink or Source
 
         return step;
+    }
+
+    private boolean isCamelRouteJson(final JsonObject json) {
+        //Naive filtering by file structure
+        return json.keySet().containsAll(Set.of("component", "properties"));
     }
 
     private JsonCamelObject getDataFromJson(final JsonObject json) {
