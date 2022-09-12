@@ -45,11 +45,13 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
 
     @Override
     public ParseCatalog<Step> getParserFromCluster() {
-        ClusterParseCatalog<Step> parseCatalog =
-                new ClusterParseCatalog<>(Kamelet.class);
-        parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
-        parseCatalog.setKubernetesClient(kubernetesClient);
-        return parseCatalog;
+        //This wont work, maybe
+        return new ClusterParseCatalog<>(Kamelet.class);
+//        ClusterParseCatalog<Step> parseCatalog =
+//                new ClusterParseCatalog<>(Kamelet.class);
+//        parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
+//        parseCatalog.setKubernetesClient(kubernetesClient);
+//        return parseCatalog;
     }
 
     @Override

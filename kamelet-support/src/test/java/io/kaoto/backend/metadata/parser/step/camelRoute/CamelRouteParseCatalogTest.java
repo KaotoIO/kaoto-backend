@@ -1,5 +1,6 @@
 package io.kaoto.backend.metadata.parser.step.camelRoute;
 
+import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -8,54 +9,48 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import javax.inject.Inject;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @QuarkusTest
-public class CamelRouteFileProcessorTest {
-    @Test
-    void shouldParseCamelRouteJson() throws URISyntaxException {
-//        File camelRouteJson = Path.of(
-//                getClass().getClassLoader().getResource(
-//                                "./browse.json").toURI()).toFile();
+public class CamelRouteParseCatalogTest {
 
-        File camelRouteJson = new File(
-                "/home/joshiraez/dev/redhat/kaoto/"
-                        + "kaoto-backend/kamelet-support/src/test/resources/"
-                        + "io.kaoto.backend.metadata.parser.step.camelRoute/"
-                        + "browse.json");
-
-        Step parsedStep = new CamelRouteFileProcessor()
-                .parseFile(camelRouteJson);
-
-        assertBrowseJsonHasBeenParsedCorrectly(parsedStep);
+    @Inject
+    public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
+        this.parseCatalog = parseCatalog;
     }
+    private CamelRouteParseCatalog parseCatalog;
 
     @Test
-    void shouldSkipNotCamelRouteJsons() throws URISyntaxException {
-//        File camelRouteJson = Path.of(
-//                getClass().getClassLoader().getResource(
-//                                "./browse.json").toURI()).toFile();
+    void shouldLoadFromLocalFolder() throws URISyntaxException {
+        String resourcesDirectory = "/home/joshiraez/dev/redhat/"
+                + "kaoto/kaoto-backend/kamelet-support/src/test/"
+                + "resources/io.kaoto.backend.metadata.parser.step.camelRoute";
 
-        File camelRouteJson = new File(
-                "/home/joshiraez/dev/redhat/kaoto/"
-                        + "kaoto-backend/kamelet-support/src/test/resources/"
-                        + "io.kaoto.backend.metadata.parser.step.camelRoute/"
-                        + "not.json");
+        ParseCatalog<Step> kameletParser =
+                parseCatalog.getLocalFolder(Path.of(resourcesDirectory));
+        List<Step> steps = kameletParser.parse().join().stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-        Step parsedStep = new CamelRouteFileProcessor()
-                .parseFile(camelRouteJson);
-
-        assertNull(parsedStep);
+        assertEquals(1, steps.size());
+        assertBrowseJsonHasBeenParsedCorrectly(steps.get(0));
     }
 
     private void assertBrowseJsonHasBeenParsedCorrectly(final Step parsedStep) {
+        assertBrowseJsonHasBeenParsedCorrectly(parsedStep, true);
+    }
+
+    private void assertBrowseJsonHasBeenParsedCorrectly(
+            final Step parsedStep, final boolean assertDescription) {
         assertEquals("Browse", parsedStep.getTitle());
         assertEquals("Inspect the messages received"
                         + " on endpoints supporting BrowsableEndpoint.",
@@ -97,11 +92,12 @@ public class CamelRouteFileProcessorTest {
                     assertEquals(parameter.getDefaultValue(),
                             expectedParameterValues.get(parameter.getId())
                                     .getDefaultValue());
-                    assertEquals(parameter.isPath(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .isPath());
+                    if (assertDescription) {
+                        assertEquals(parameter.isPath(),
+                                expectedParameterValues.get(parameter.getId())
+                                        .isPath());
+                    }
                 }
         );
     }
-
 }
