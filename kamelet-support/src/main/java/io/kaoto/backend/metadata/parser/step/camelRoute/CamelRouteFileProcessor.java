@@ -90,7 +90,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                             var jsonObject = property.getValue().asJsonObject();
 
                             jsonObject.forEach((key, value) ->
-                                    hashMap.put(key, value.toString()));
+                                    hashMap.put(key, value.toString().replaceAll("\"", "")));
 
                             return hashMap;
                         }
@@ -121,6 +121,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
                     Parameter parsedParameter = typeToClassConversion
                             .get(parameterData.get("type")).apply(parameter);
+
+                    if ("path".equals(parameterData.get("kind"))) {
+                        parsedParameter.setPath(true);
+                    }
 
                     return parsedParameter;
                 }
