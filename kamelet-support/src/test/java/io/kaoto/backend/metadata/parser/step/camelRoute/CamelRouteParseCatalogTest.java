@@ -1,24 +1,26 @@
 package io.kaoto.backend.metadata.parser.step.camelRoute;
 
 import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class CamelRouteParseCatalogTest {
@@ -29,15 +31,48 @@ public class CamelRouteParseCatalogTest {
     }
     private CamelRouteParseCatalog parseCatalog;
 
+    @Disabled("Git is down")
     @Test
-    void shouldLoadFromLocalFolder() throws URISyntaxException {
+    void shouldLoadFromGit() {
+        String camelGit = "https://github.com/apache/camel.git";
+        String tag = "camel-3.18.2";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+
+        ParseCatalog<Step> camelParser =
+                parseCatalog.getParser(camelGit, tag);
+        List<Step> steps = camelParser.parse().join();
+
+        assertTrue(catalog.store(steps));
+
+        Step browseComponent = catalog.searchStepByID("browse");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponent, false);
+    }
+
+    @Test
+    void shouldLoadFromJar() {
+        String camelGit = "https://github.com/apache/camel/"
+                + "archive/refs/tags/camel-3.18.2.zip";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+
+        ParseCatalog<Step> camelParser =
+                parseCatalog.getParser(camelGit);
+        List<Step> steps = camelParser.parse().join();
+
+        assertTrue(catalog.store(steps));
+
+        Step browseComponent = catalog.searchStepByID("browse");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponent, false);
+    }
+
+    @Test
+    void shouldLoadFromLocalFolder() {
         String resourcesDirectory = "/home/joshiraez/dev/redhat/"
                 + "kaoto/kaoto-backend/kamelet-support/src/test/"
                 + "resources/io.kaoto.backend.metadata.parser.step.camelRoute";
 
-        ParseCatalog<Step> kameletParser =
+        ParseCatalog<Step> camelParser =
                 parseCatalog.getLocalFolder(Path.of(resourcesDirectory));
-        List<Step> steps = kameletParser.parse().join().stream()
+        List<Step> steps = camelParser.parse().join().stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -83,9 +118,9 @@ public class CamelRouteParseCatalogTest {
                     assertEquals(parameter.getId(),
                             expectedParameterValues.get(parameter.getId())
                                     .getId());
-                    assertEquals(parameter.getDescription(),
+                    assertEquals(parameter.isPath(),
                             expectedParameterValues.get(parameter.getId())
-                                    .getDescription());
+                                    .isPath());
                     assertEquals(parameter.getTitle(),
                             expectedParameterValues.get(parameter.getId())
                                     .getTitle());
@@ -93,9 +128,9 @@ public class CamelRouteParseCatalogTest {
                             expectedParameterValues.get(parameter.getId())
                                     .getDefaultValue());
                     if (assertDescription) {
-                        assertEquals(parameter.isPath(),
+                        assertEquals(parameter.getDescription(),
                                 expectedParameterValues.get(parameter.getId())
-                                        .isPath());
+                                        .getDescription());
                     }
                 }
         );

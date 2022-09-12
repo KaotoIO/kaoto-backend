@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
     record JsonCamelObject(
+        String id,
         String kind,
         String icon,
 
@@ -61,6 +62,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         Step step = new Step();
 
+        step.setId(parsedCamelJson.id());
+        step.setName(parsedCamelJson.id());
         step.setKind(parsedCamelJson.kind());
         step.setTitle(parsedCamelJson.title());
         step.setDescription(parsedCamelJson.description());
@@ -87,6 +90,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         JsonObject component = json.getJsonObject("component");
         JsonObject properties = json.getJsonObject("properties");
 
+        String id = component.getString("name");
         String title = component.getString("title");
         String description = component.getString("description");
         String type = getStepType(component);
@@ -132,7 +136,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                     );
 
                     Parameter parsedParameter = typeToClassConversion
-                            .get(parameterData.get("type")).apply(parameter);
+                            .getOrDefault(parameterData.get("type"),
+                                    this::getObjectParameter)
+                            .apply(parameter);
 
                     if ("path".equals(parameterData.get("kind"))) {
                         parsedParameter.setPath(true);
@@ -143,6 +149,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         ).toList();
 
         return new JsonCamelObject(
+                id,
                 camelKind,
                 defaultIcon,
                 title,
@@ -181,7 +188,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 parameterData.get("displayName"),
                 parameterData.get("description"),
                 Long.parseLong(parameterData
-                        .getOrDefault("defaultValue", "0"))
+                        .getOrDefault("defaultValue", "0")
+                        .replaceAll("L", ""))
         );
 
         return parsedParameter;
