@@ -33,7 +33,6 @@ public class CamelRouteParseCatalogTest {
     }
     private CamelRouteParseCatalog parseCatalog;
 
-    @Disabled("Git is down")
     @Test
     void shouldLoadFromGit() {
         String camelGit = "https://github.com/apache/camel.git";
