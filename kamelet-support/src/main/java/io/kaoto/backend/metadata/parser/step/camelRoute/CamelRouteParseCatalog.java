@@ -29,7 +29,6 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
 
     @Override
     public ParseCatalog<Step> getParser(final String url) {
-
         ParseCatalog<Step> parseCatalog = new JarParseCatalog<>(url);
         parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
         return parseCatalog;
