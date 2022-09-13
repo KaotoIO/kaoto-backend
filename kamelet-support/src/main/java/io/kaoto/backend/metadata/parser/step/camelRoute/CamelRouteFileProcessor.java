@@ -28,6 +28,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     private static final String SOURCE_TYPE = "source";
     private static final String SINK_TYPE = "sink";
     private static final String ACTION_TYPE = "action";
+    private static final String INVALID_TYPE = "invalid";
 
     record ParsedCamelComponentFromJson(
         String id,
@@ -228,19 +229,27 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     }
 
     private String getStepType(final JsonObject component) {
-        final boolean canBeSource = component.getBoolean("producerOnly");
-        final boolean canBeSink = component.getBoolean("consumerOnly");
+        final boolean isCamelComponentSourceOnly = component.getBoolean("producerOnly");
+        final boolean isCamelComponentSinkOnly = component.getBoolean("consumerOnly");
+        final boolean canCamelComponentBeSourceAndSink
+                = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
 
-        //If both are true or false we assume it to be an action.
-        //Or else, it has to be one of source or sink depending
-        //Take care that this later has to be duplicated because
-        //of the differences in how Camel components and kaoto components are
-        return canBeSource == canBeSink ? ACTION_TYPE
-                : canBeSource ? SOURCE_TYPE
-                : SINK_TYPE;
+        return isCamelComponentSourceOnly ? SOURCE_TYPE
+                : isCamelComponentSinkOnly ? SINK_TYPE
+                : canCamelComponentBeSourceAndSink ? ACTION_TYPE
+                : INVALID_TYPE;
     }
 
     private List<Step> duplicateCamelOperatorToKameletsOfCompatibleTypes(final Step step) {
+
+        if(INVALID_TYPE.equals(step.getType())) {
+            log.error("Parsed step has an invalid type. This can occur because\n"
+                    + "the parsed camel component has both producerOnly and \n"
+                    + "consumerOnly to true, which can't ever be.\n"
+                    + "The parsed step will be skipped.\n"
+                    + "The parsed step id is "+step.getId());
+            return List.of();
+        }
 
         Map<String, List<String>> typesToDuplicateTo =
                 Map.of(
