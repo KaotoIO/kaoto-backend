@@ -190,14 +190,21 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         //IntegerParameter doesn't fit some long types there are present
         String id = parameter.getKey();
         Map<String, String> parameterData = parameter.getValue();
+        Long value;
+
+        if (parameterData.containsKey("defaultValue")) {
+            value = Long.parseLong(parameterData
+                    .get("defaultValue")
+                    .replaceAll("L", ""));
+        } else {
+            value = null;
+        }
 
         return new NumberParameter(
                 id,
                 parameterData.get("displayName"),
                 parameterData.get("description"),
-                Long.parseLong(parameterData
-                        .getOrDefault("defaultValue", "0")
-                        .replaceAll("L", ""))
+                value
         );
     }
 
