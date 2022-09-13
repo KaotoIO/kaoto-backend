@@ -15,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @QuarkusTest
 public class CamelRouteFileProcessorTest {
