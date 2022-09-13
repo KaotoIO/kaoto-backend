@@ -114,12 +114,6 @@ public class CamelRouteParseCatalogTest {
     }
 
     private void assertBrowseJsonHasBeenParsedCorrectly(
-            final Step parsedStep, final String type) {
-        assertBrowseJsonHasBeenParsedCorrectly(
-                parsedStep, type, true);
-    }
-
-    private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type,
             final boolean assertDescription) {
         assertEquals("browse-" + type, parsedStep.getId());
