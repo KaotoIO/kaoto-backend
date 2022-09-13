@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🐱class ProcessFile
  * 🐱relationship dependsOn GitParseCatalog
- * Helper class to walk around YAML files to parse Metadata objects.
+ * Helper class to walk around files to parse Metadata objects.
  */
 public abstract class ProcessFile<T extends Metadata>
         implements FileVisitor<Path> {
