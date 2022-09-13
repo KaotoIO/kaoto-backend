@@ -244,7 +244,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         if (isCamelComponentSourceOnly) {
             return SOURCE_TYPE;
         } else if (isCamelComponentSinkOnly) {
-            return SOURCE_TYPE;
+            return SINK_TYPE;
         } else if (canCamelComponentBeSourceAndSink) {
             return ACTION_TYPE;
         } else {
