@@ -175,15 +175,13 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String id = parameter.getKey();
         Map<String, String> parameterData = parameter.getValue();
 
-        StringParameter parsedParameter = new StringParameter(
+        return new StringParameter(
                 id,
                 parameterData.get("displayName"),
                 parameterData.get("description"),
                 parameterData.getOrDefault("defaultValue", null),
                 null
         );
-
-        return parsedParameter;
     }
 
     private NumberParameter getNumberParameter(
@@ -192,7 +190,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String id = parameter.getKey();
         Map<String, String> parameterData = parameter.getValue();
 
-        NumberParameter parsedParameter = new NumberParameter(
+        return new NumberParameter(
                 id,
                 parameterData.get("displayName"),
                 parameterData.get("description"),
@@ -200,8 +198,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                         .getOrDefault("defaultValue", "0")
                         .replaceAll("L", ""))
         );
-
-        return parsedParameter;
     }
 
     private ObjectParameter getObjectParameter(
@@ -209,14 +205,12 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String id = parameter.getKey();
         Map<String, String> parameterData = parameter.getValue();
 
-        ObjectParameter parsedParameter = new ObjectParameter(
+        return new ObjectParameter(
                 id,
                 parameterData.get("displayName"),
                 parameterData.get("description"),
                 parameterData.getOrDefault("defaultValue", null)
         );
-
-        return parsedParameter;
     }
 
     private BooleanParameter getBooleanParameter(
@@ -224,15 +218,13 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String id = parameter.getKey();
         Map<String, String> parameterData = parameter.getValue();
 
-        BooleanParameter parsedParameter = new BooleanParameter(
+        return new BooleanParameter(
                 id,
                 parameterData.get("displayName"),
                 parameterData.get("description"),
                 Boolean.parseBoolean(parameterData
                         .getOrDefault("defaultValue", "false"))
         );
-
-        return parsedParameter;
     }
 
     private String getStepType(final JsonObject component) {
