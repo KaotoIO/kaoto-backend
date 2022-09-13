@@ -29,7 +29,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     private static final String SINK_TYPE = "sink";
     private static final String ACTION_TYPE = "action";
 
-    record JsonCamelObject(
+    record ParsedCamelComponentFromJson(
         String id,
         String kind,
         String icon,
@@ -69,7 +69,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             return null;
         }
 
-        JsonCamelObject parsedCamelJson = getDataFromJson(json);
+        ParsedCamelComponentFromJson parsedCamelJson = getDataFromJson(json);
 
         Step step = new Step();
 
@@ -91,7 +91,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         return json.keySet().containsAll(Set.of("component", "properties"));
     }
 
-    private JsonCamelObject getDataFromJson(final JsonObject json) {
+    private ParsedCamelComponentFromJson getDataFromJson(final JsonObject json) {
         final String camelKind = "Camel-Connector";
         final String defaultGroup = "Camel-Component";
         final String defaultIcon = DEFAULT_ICON_STRING;
@@ -157,7 +157,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 }
         ).toList();
 
-        return new JsonCamelObject(
+        return new ParsedCamelComponentFromJson(
                 id,
                 camelKind,
                 defaultIcon,
