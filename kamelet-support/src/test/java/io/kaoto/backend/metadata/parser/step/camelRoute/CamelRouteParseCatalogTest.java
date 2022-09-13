@@ -8,7 +8,6 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;

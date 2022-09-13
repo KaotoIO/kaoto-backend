@@ -41,9 +41,6 @@ public class JarParseCatalog<T extends Metadata>
 
     private final String url;
 
-    private final CompletableFuture<List<T>> metadata =
-            new CompletableFuture<>();
-
     private ProcessFile<T> processFile;
 
     //to avoid bomb attacks

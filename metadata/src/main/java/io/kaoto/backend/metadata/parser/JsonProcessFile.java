@@ -49,7 +49,8 @@ public abstract class JsonProcessFile<T extends Metadata>
 
         final var name = dir.toFile().getName();
         if (SUBDIRECTORIES_TO_SKIP.stream().anyMatch(
-                directoryToSkipName -> directoryToSkipName.equalsIgnoreCase(name))
+                directoryToSkipName ->
+                        directoryToSkipName.equalsIgnoreCase(name))
         ) {
             return FileVisitResult.SKIP_SUBTREE;
         }

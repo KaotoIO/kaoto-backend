@@ -92,7 +92,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         return json.keySet().containsAll(Set.of("component", "properties"));
     }
 
-    private ParsedCamelComponentFromJson getDataFromJson(final JsonObject json) {
+    private ParsedCamelComponentFromJson getDataFromJson(
+            final JsonObject json) {
         final String camelKind = "Camel-Connector";
         final String defaultGroup = "Camel-Component";
         final String defaultIcon = DEFAULT_ICON_STRING;
@@ -236,8 +237,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     }
 
     private String getStepType(final JsonObject component) {
-        final boolean isCamelComponentSourceOnly = component.getBoolean("producerOnly");
-        final boolean isCamelComponentSinkOnly = component.getBoolean("consumerOnly");
+        final boolean isCamelComponentSourceOnly
+                = component.getBoolean("producerOnly");
+        final boolean isCamelComponentSinkOnly
+                = component.getBoolean("consumerOnly");
         final boolean canCamelComponentBeSourceAndSink
                 = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
 
@@ -252,14 +255,15 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         }
     }
 
-    private List<Step> duplicateCamelOperatorToKameletsOfCompatibleTypes(final Step step) {
+    private List<Step> duplicateCamelOperatorToKameletsOfCompatibleTypes(
+            final Step step) {
 
-        if(INVALID_TYPE.equals(step.getType())) {
-            log.error("Parsed step has an invalid type. This can occur because\n"
-                    + "the parsed camel component has both producerOnly and \n"
+        if (INVALID_TYPE.equals(step.getType())) {
+            log.error("Parsed step has an invalid type. This can occur because "
+                    + "the parsed camel component has both producerOnly and "
                     + "consumerOnly to true, which can't ever be.\n"
                     + "The parsed step will be skipped.\n"
-                    + "The parsed step id is "+step.getId());
+                    + "The parsed step id is " + step.getId());
             return List.of();
         }
 
