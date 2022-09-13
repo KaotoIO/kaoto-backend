@@ -51,13 +51,11 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             JsonObject json = reader.readObject();
             Step step = convertToStep(json);
 
-            List<Step> duplicatedStepsToTypes = List.of();
-
             if (step != null) {
-                duplicatedStepsToTypes = duplicateStepToOtherTypes(step);
+                return duplicateCamelOperatorToKameletsOfCompatibleTypes(step);
+            } else {
+                return List.of();
             }
-
-            return duplicatedStepsToTypes;
         } catch (IOException | JsonException e) {
             log.error("Error parsing '"  + f.getAbsolutePath() + "'", e);
         }
@@ -250,7 +248,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 : SINK_TYPE;
     }
 
-    private List<Step> duplicateStepToOtherTypes(final Step step) {
+    private List<Step> duplicateCamelOperatorToKameletsOfCompatibleTypes(final Step step) {
 
         Map<String, List<String>> typesToDuplicateTo =
                 Map.of(
