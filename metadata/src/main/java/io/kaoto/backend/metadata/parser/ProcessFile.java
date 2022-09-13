@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 🐱class YamlProcessFile
+ * 🐱class ProcessFile
  * 🐱relationship dependsOn GitParseCatalog
  * Helper class to walk around YAML files to parse Metadata objects.
  */
