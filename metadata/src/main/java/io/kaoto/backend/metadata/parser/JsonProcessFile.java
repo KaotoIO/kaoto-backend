@@ -7,9 +7,33 @@ import java.io.File;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 
 public abstract class JsonProcessFile<T extends Metadata>
         extends ProcessFile<T> {
+
+    private static final List<String> SUBDIRECTORIES_TO_SKIP = List.of(
+                ".git",
+                ".github",
+                "docs",
+                "library",
+                "script",
+                "templates",
+                "test",
+                ".mvn",
+                "apache-camel",
+                "archetypes",
+                "bom",
+                "buildingtools",
+                "camel-dependencies",
+                "tooling",
+                "test-infra",
+                "parent",
+                "init",
+                "etc",
+                "dsl",
+                "core"
+            );
 
     private Logger log = Logger.getLogger(ProcessFile.class);
 
@@ -22,28 +46,11 @@ public abstract class JsonProcessFile<T extends Metadata>
     @Override
     public FileVisitResult preVisitDirectory(final Path dir,
                                              final BasicFileAttributes attrs) {
+
         final var name = dir.toFile().getName();
-        if (name.equalsIgnoreCase(".git")
-                || name.equalsIgnoreCase(".github")
-                || name.equalsIgnoreCase("docs")
-                || name.equalsIgnoreCase("library")
-                || name.equalsIgnoreCase("script")
-                || name.equalsIgnoreCase("templates")
-                || name.equalsIgnoreCase("test")
-                || name.equalsIgnoreCase(".mvn")
-                || name.equalsIgnoreCase("apache-camel")
-                || name.equalsIgnoreCase("archetypes")
-                || name.equalsIgnoreCase("bom")
-                || name.equalsIgnoreCase("buildingtools")
-                || name.equalsIgnoreCase("camel-dependencies")
-                || name.equalsIgnoreCase("tooling")
-                || name.equalsIgnoreCase("test-infra")
-                || name.equalsIgnoreCase("parent")
-                || name.equalsIgnoreCase("init")
-                || name.equalsIgnoreCase("etc")
-                || name.equalsIgnoreCase("dsl")
-                || name.equalsIgnoreCase("core")
-                ) {
+        if (SUBDIRECTORIES_TO_SKIP.stream().anyMatch(
+                directoryToSkipName -> directoryToSkipName.equalsIgnoreCase(name))
+        ) {
             return FileVisitResult.SKIP_SUBTREE;
         }
 
