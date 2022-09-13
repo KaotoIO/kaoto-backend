@@ -241,10 +241,15 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         final boolean canCamelComponentBeSourceAndSink
                 = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
 
-        return isCamelComponentSourceOnly ? SOURCE_TYPE
-                : isCamelComponentSinkOnly ? SINK_TYPE
-                : canCamelComponentBeSourceAndSink ? ACTION_TYPE
-                : INVALID_TYPE;
+        if (isCamelComponentSourceOnly) {
+            return SOURCE_TYPE;
+        } else if (isCamelComponentSinkOnly) {
+            return SOURCE_TYPE;
+        } else if (canCamelComponentBeSourceAndSink) {
+            return ACTION_TYPE;
+        } else {
+            return INVALID_TYPE;
+        }
     }
 
     private List<Step> duplicateCamelOperatorToKameletsOfCompatibleTypes(final Step step) {
