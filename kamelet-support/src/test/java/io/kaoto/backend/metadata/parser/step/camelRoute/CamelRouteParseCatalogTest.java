@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -82,13 +84,13 @@ public class CamelRouteParseCatalogTest {
     }
 
     @Test
-    void shouldLoadFromLocalFolder() {
-        String resourcesDirectory = "/home/joshiraez/dev/redhat/"
-                + "kaoto/kaoto-backend/kamelet-support/src/test/"
-                + "resources/io.kaoto.backend.metadata.parser.step.camelRoute";
+    void shouldLoadFromLocalFolder() throws URISyntaxException {
+        Path camelJsonRoute = Path.of(
+                CamelRouteFileProcessorTest.class.getResource(
+                        ".").toURI());
 
         ParseCatalog<Step> camelParser =
-                parseCatalog.getLocalFolder(Path.of(resourcesDirectory));
+                parseCatalog.getLocalFolder(camelJsonRoute);
         List<Step> steps = camelParser.parse().join().stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

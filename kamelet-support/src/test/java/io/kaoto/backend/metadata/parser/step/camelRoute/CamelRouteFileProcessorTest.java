@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -22,15 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CamelRouteFileProcessorTest {
     @Test
     void shouldParseCamelRouteJson() throws URISyntaxException {
-//        File camelRouteJson = Path.of(
-//                getClass().getClassLoader().getResource(
-//                                "./browse.json").toURI()).toFile();
 
-        File camelRouteJson = new File(
-                "/home/joshiraez/dev/redhat/kaoto/"
-                        + "kaoto-backend/kamelet-support/src/test/resources/"
-                        + "io.kaoto.backend.metadata.parser.step.camelRoute/"
-                        + "browse.json");
+        File camelRouteJson = Path.of(
+                CamelRouteFileProcessorTest.class.getResource(
+                                "browse.json").toURI()).toFile();
 
         List<Step> steps = new CamelRouteFileProcessor()
                 .parseFile(camelRouteJson);
@@ -52,15 +48,9 @@ public class CamelRouteFileProcessorTest {
 
     @Test
     void shouldSkipNotCamelRouteJsons() throws URISyntaxException {
-//        File camelRouteJson = Path.of(
-//                getClass().getClassLoader().getResource(
-//                                "./browse.json").toURI()).toFile();
-
-        File camelRouteJson = new File(
-                "/home/joshiraez/dev/redhat/kaoto/"
-                        + "kaoto-backend/kamelet-support/src/test/resources/"
-                        + "io.kaoto.backend.metadata.parser.step.camelRoute/"
-                        + "not.json");
+        File camelRouteJson = Path.of(
+                CamelRouteFileProcessorTest.class.getResource(
+                        "not.json").toURI()).toFile();
 
         List<Step> parsedStep = new CamelRouteFileProcessor()
                 .parseFile(camelRouteJson);
