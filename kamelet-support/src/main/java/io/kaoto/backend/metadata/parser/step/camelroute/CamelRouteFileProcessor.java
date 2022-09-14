@@ -121,7 +121,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                             jsonObject.forEach((key, value) ->
                                     hashMap.put(key,
                                             value.toString()
-                                                    .replaceAll("\"", "")));
+                                                    .replace("\"", "")));
 
                             return hashMap;
                         }
@@ -200,7 +200,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         if (parameterData.containsKey("defaultValue")) {
             value = Long.parseLong(parameterData
                     .get("defaultValue")
-                    .replaceAll("L", ""));
+                    .replace("L", ""));
         } else {
             value = null;
         }
