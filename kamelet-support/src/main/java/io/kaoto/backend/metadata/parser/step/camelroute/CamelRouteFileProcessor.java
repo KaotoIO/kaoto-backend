@@ -79,6 +79,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         step.setId(parsedCamelJson.id());
         step.setName(parsedCamelJson.id());
+        step.setIcon(parsedCamelJson.icon());
         step.setKind(parsedCamelJson.kind());
         step.setTitle(parsedCamelJson.title());
         step.setDescription(parsedCamelJson.description());
@@ -284,10 +285,18 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
     private Step duplicateStepToType(final Step step, final String type) {
         Step duplicatedStep = new Step();
-        String typedId = step.getId() + "-" + type;
+
+        Map<String, String> typeToIdConversion = Map.of(
+                ACTION_TYPE, "action",
+                SINK_TYPE, "consumer",
+                SOURCE_TYPE, "producer"
+        );
+
+        String typedId = step.getId() + "-" + typeToIdConversion.get(type);
 
         duplicatedStep.setId(typedId);
-        duplicatedStep.setName(typedId);
+        duplicatedStep.setName(step.getId());
+        duplicatedStep.setIcon(step.getIcon());
         duplicatedStep.setKind(step.getKind());
         duplicatedStep.setTitle(step.getTitle());
         duplicatedStep.setDescription(step.getDescription());

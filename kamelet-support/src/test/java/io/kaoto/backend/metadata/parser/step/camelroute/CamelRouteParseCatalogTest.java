@@ -44,8 +44,8 @@ public class CamelRouteParseCatalogTest {
 
         assertTrue(catalog.store(steps));
 
-        Step browseComponentSink = catalog.searchStepByID("browse-sink");
-        Step browseComponentSource = catalog.searchStepByID("browse-source");
+        Step browseComponentSink = catalog.searchStepByID("browse-consumer");
+        Step browseComponentSource = catalog.searchStepByID("browse-producer");
         Step browseComponentAction = catalog.searchStepByID("browse-action");
 
         assertBrowseJsonHasBeenParsedCorrectly(
@@ -91,8 +91,17 @@ public class CamelRouteParseCatalogTest {
     private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type,
             final boolean assertDescription) {
-        assertEquals("browse-" + type, parsedStep.getId());
-        assertEquals("browse-" + type, parsedStep.getName());
+        Map<String, String> typeToIdConversion = Map.of(
+                "action", "action",
+                "sink", "consumer",
+                "source", "producer"
+        );
+
+        String expectedType = typeToIdConversion.get(type);
+
+        assertEquals("browse-" + expectedType,
+                parsedStep.getId());
+        assertEquals("browse", parsedStep.getName());
         assertEquals("Browse", parsedStep.getTitle());
         assertEquals("Inspect the messages received"
                         + " on endpoints supporting BrowsableEndpoint.",

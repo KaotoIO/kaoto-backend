@@ -61,8 +61,17 @@ public class CamelRouteFileProcessorTest {
 
     private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type) {
-        assertEquals("browse-" + type, parsedStep.getId());
-        assertEquals("browse-" + type, parsedStep.getName());
+        Map<String, String> typeToIdConversion = Map.of(
+                "action", "action",
+                "sink", "consumer",
+                "source", "producer"
+        );
+
+        String expectedType = typeToIdConversion.get(type);
+
+        assertEquals("browse-" + expectedType,
+                parsedStep.getId());
+        assertEquals("browse", parsedStep.getName());
         assertEquals("Browse", parsedStep.getTitle());
         assertEquals("Inspect the messages received"
                         + " on endpoints supporting BrowsableEndpoint.",
