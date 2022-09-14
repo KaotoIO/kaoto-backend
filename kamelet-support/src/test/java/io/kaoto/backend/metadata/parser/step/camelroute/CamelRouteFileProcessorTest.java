@@ -38,13 +38,13 @@ public class CamelRouteFileProcessorTest {
                                 step -> stepType.equals(step.getType())
                         ).findFirst().get();
 
-        Step browseComponentSink = fetchBrowse.apply(steps, "sink");
-        Step browseComponentSource = fetchBrowse.apply(steps, "source");
-        Step browseComponentAction = fetchBrowse.apply(steps, "action");
+        Step browseComponentSink = fetchBrowse.apply(steps, "END");
+        Step browseComponentSource = fetchBrowse.apply(steps, "START");
+        Step browseComponentAction = fetchBrowse.apply(steps, "MIDDLE");
 
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, "sink");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, "source");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, "action");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, "END");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, "START");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, "MIDDLE");
     }
 
     @Test
@@ -62,9 +62,9 @@ public class CamelRouteFileProcessorTest {
     private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type) {
         Map<String, String> typeToIdConversion = Map.of(
-                "action", "action",
-                "sink", "consumer",
-                "source", "producer"
+                "MIDDLE", "action",
+                "END", "consumer",
+                "START", "producer"
         );
 
         String expectedType = typeToIdConversion.get(type);

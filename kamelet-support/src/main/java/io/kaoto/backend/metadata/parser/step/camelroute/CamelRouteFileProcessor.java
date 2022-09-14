@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
-    private static final String SOURCE_TYPE = "source";
-    private static final String SINK_TYPE = "sink";
-    private static final String ACTION_TYPE = "action";
+    private static final String SOURCE_TYPE = "START";
+    private static final String SINK_TYPE = "END";
+    private static final String ACTION_TYPE = "MIDDLE";
     private static final String INVALID_TYPE = "invalid";
 
     record ParsedCamelComponentFromJson(

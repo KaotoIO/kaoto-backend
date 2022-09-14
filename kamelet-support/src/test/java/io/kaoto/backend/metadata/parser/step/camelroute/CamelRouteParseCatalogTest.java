@@ -49,11 +49,11 @@ public class CamelRouteParseCatalogTest {
         Step browseComponentAction = catalog.searchStepByID("browse-action");
 
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSource, "source", false);
+                browseComponentSource, "START", false);
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSink, "sink", false);
+                browseComponentSink, "END", false);
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentAction, "action", false);
+                browseComponentAction, "MIDDLE", false);
     }
 
     @Test
@@ -76,25 +76,25 @@ public class CamelRouteParseCatalogTest {
                                 step -> stepType.equals(step.getType())
                         ).findFirst().get();
 
-        Step browseComponentSink = fetchBrowse.apply(steps, "sink");
-        Step browseComponentSource = fetchBrowse.apply(steps, "source");
-        Step browseComponentAction = fetchBrowse.apply(steps, "action");
+        Step browseComponentSink = fetchBrowse.apply(steps, "END");
+        Step browseComponentSource = fetchBrowse.apply(steps, "START");
+        Step browseComponentAction = fetchBrowse.apply(steps, "MIDDLE");
 
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSink, "sink", false);
+                browseComponentSink, "END", false);
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSource, "source", false);
+                browseComponentSource, "START", false);
         assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentAction, "action", false);
+                browseComponentAction, "MIDDLE", false);
     }
 
     private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type,
             final boolean assertDescription) {
         Map<String, String> typeToIdConversion = Map.of(
-                "action", "action",
-                "sink", "consumer",
-                "source", "producer"
+                "MIDDLE", "action",
+                "END", "consumer",
+                "START", "producer"
         );
 
         String expectedType = typeToIdConversion.get(type);
