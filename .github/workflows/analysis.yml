@@ -21,12 +21,6 @@ jobs:
           distribution: 'adopt'
           java-version: 17
           check-latest: true
-      - name: 😬 Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
       - name: 🔥 Cache Maven packages
         uses: actions/cache@v1
         with:
@@ -37,17 +31,9 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: java
-      - name: 🦾 Build and analyze
+      - name: 🦾 Build and Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{env.SONAR_TOKEN != ''}}
-        run: mvn -T1C -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Panalysis
-      - name: 🦾 Build and analyze without sonar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{env.SONAR_TOKEN == ''}}
         run: mvn -T1C -B verify -Panalysis
       - name: 👀 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
