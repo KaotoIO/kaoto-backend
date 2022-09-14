@@ -1,4 +1,4 @@
-package io.kaoto.backend.metadata.parser.step.camelRoute;
+package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
@@ -31,30 +31,6 @@ public class CamelRouteParseCatalogTest {
         this.parseCatalog = parseCatalog;
     }
     private CamelRouteParseCatalog parseCatalog;
-
-    @Test
-    void shouldLoadFromGit() {
-        String camelGit = "https://github.com/apache/camel.git";
-        String tag = "camel-3.18.2";
-        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
-
-        ParseCatalog<Step> camelParser =
-                parseCatalog.getParser(camelGit, tag);
-        List<Step> steps = camelParser.parse().join();
-
-        assertTrue(catalog.store(steps));
-
-        Step browseComponentSink = catalog.searchStepByID("browse-sink");
-        Step browseComponentSource = catalog.searchStepByID("browse-source");
-        Step browseComponentAction = catalog.searchStepByID("browse-action");
-
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSource, "source", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSink, "sink", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentAction, "action", false);
-    }
 
     @Test
     void shouldLoadFromJar() {
