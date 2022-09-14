@@ -2,11 +2,10 @@ package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
 import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.metadata.parser.ClusterParseCatalog;
+import io.kaoto.backend.metadata.parser.EmptyParseCatalog;
 import io.kaoto.backend.metadata.parser.GitParseCatalog;
 import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.step.Step;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -37,7 +36,7 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
     @Override
     public ParseCatalog<Step> getParserFromCluster() {
         //We are not expecting to get Camel Operators from here
-        return new ClusterParseCatalog<>(Kamelet.class);
+        return new EmptyParseCatalog<>();
     }
 
     @Override
