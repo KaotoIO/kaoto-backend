@@ -47,7 +47,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     @Override
     protected List<Step> parseFile(final File f) {
 
-        log.info("Parsing " +  f.getAbsolutePath());
+        log.trace("Parsing " +  f.getAbsolutePath());
 
         try (FileReader fr = new FileReader(f)) {
 
