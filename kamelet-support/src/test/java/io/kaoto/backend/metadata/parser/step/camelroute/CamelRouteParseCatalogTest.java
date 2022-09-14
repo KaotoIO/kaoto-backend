@@ -1,4 +1,4 @@
-package io.kaoto.backend.metadata.parser.step.camelRoute;
+package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;

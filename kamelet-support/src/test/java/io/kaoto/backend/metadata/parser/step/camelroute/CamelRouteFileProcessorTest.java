@@ -1,4 +1,4 @@
-package io.kaoto.backend.metadata.parser.step.camelRoute;
+package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 
 @QuarkusTest

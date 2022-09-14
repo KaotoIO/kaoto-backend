@@ -1,4 +1,4 @@
-package io.kaoto.backend.metadata.parser.step.camelRoute;
+package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.metadata.parser.JsonProcessFile;
 import io.kaoto.backend.model.parameter.BooleanParameter;
@@ -46,6 +46,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
     @Override
     protected List<Step> parseFile(final File f) {
+
+        log.info("Parsing " +  f.getAbsolutePath());
+
         try (FileReader fr = new FileReader(f)) {
 
             JsonReader reader = Json.createReader(fr);
