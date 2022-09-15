@@ -242,9 +242,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
     private String getStepType(final JsonObject component) {
         final boolean isCamelComponentSourceOnly
-                = component.getBoolean("producerOnly");
-        final boolean isCamelComponentSinkOnly
                 = component.getBoolean("consumerOnly");
+        final boolean isCamelComponentSinkOnly
+                = component.getBoolean("producerOnly");
         final boolean canCamelComponentBeSourceAndSink
                 = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
 
@@ -273,7 +273,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         Map<String, List<String>> typesToDuplicateTo =
                 Map.of(
-                    SOURCE_TYPE, List.of(SOURCE_TYPE, ACTION_TYPE),
+                    SOURCE_TYPE, List.of(SOURCE_TYPE),
                     ACTION_TYPE, List.of(SOURCE_TYPE, ACTION_TYPE, SINK_TYPE),
                     SINK_TYPE, List.of(ACTION_TYPE, SINK_TYPE)
                 );
@@ -288,8 +288,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         Map<String, String> typeToIdConversion = Map.of(
                 ACTION_TYPE, "action",
-                SINK_TYPE, "consumer",
-                SOURCE_TYPE, "producer"
+                SINK_TYPE, "producer",
+                SOURCE_TYPE, "consumer"
         );
 
         String typedId = step.getId() + "-" + typeToIdConversion.get(type);

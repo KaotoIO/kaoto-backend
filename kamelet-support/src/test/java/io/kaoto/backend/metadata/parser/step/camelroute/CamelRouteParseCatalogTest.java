@@ -44,8 +44,8 @@ public class CamelRouteParseCatalogTest {
 
         assertTrue(catalog.store(steps));
 
-        Step browseComponentSink = catalog.searchByID("browse-consumer");
-        Step browseComponentSource = catalog.searchByID("browse-producer");
+        Step browseComponentSink = catalog.searchByID("browse-producer");
+        Step browseComponentSource = catalog.searchByID("browse-consumer");
         Step browseComponentAction = catalog.searchByID("browse-action");
 
         assertBrowseJsonHasBeenParsedCorrectly(
@@ -93,8 +93,8 @@ public class CamelRouteParseCatalogTest {
             final boolean assertDescription) {
         Map<String, String> typeToIdConversion = Map.of(
                 "MIDDLE", "action",
-                "END", "consumer",
-                "START", "producer"
+                "END", "producer",
+                "START", "consumer"
         );
 
         String expectedType = typeToIdConversion.get(type);
