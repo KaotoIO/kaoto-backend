@@ -109,7 +109,7 @@ public class KameletBindingStepParserService
     }
 
     private Step processStep(final KameletBindingStep bindingStep) {
-        Optional<Step> step = null;
+        Optional<Step> step = Optional.empty();
 
         try {
 
