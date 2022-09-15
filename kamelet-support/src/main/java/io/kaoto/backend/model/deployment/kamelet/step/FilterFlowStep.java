@@ -56,7 +56,7 @@ public class FilterFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByID("filter");
+        Step res = catalog.getReadOnlyCatalog().searchByID("filter");
         res.setBranches(new LinkedList<>());
 
         var flow = this.getFilter();

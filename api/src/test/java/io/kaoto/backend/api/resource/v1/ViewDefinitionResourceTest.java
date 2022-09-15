@@ -62,9 +62,9 @@ class ViewDefinitionResourceTest {
     @Test
     void testViews() throws JsonProcessingException {
         List<Step> steps = new LinkedList<Step>();
-        steps.add(stepCatalog.getReadOnlyCatalog().searchStepByID(
+        steps.add(stepCatalog.getReadOnlyCatalog().searchByID(
                                 "kamelet:source"));
-        steps.add(stepCatalog.getReadOnlyCatalog().searchStepByID(
+        steps.add(stepCatalog.getReadOnlyCatalog().searchByID(
                                 "log"));
 
         final var mapper = new ObjectMapper();

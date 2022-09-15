@@ -172,16 +172,6 @@ class DeploymentServiceTest {
                 "camel-conector-example",
                 steps.toArray(new Step[0]));
 
-        String expectedStr = "apiVersion: camel.apache.org/v1alpha1\n"
-                + "kind: KameletBinding\n"
-                + "metadata:\n"
-                + "  name: camel-conector-example\n"
-                + "spec:\n"
-                + "  steps:\n"
-                + "  - uri: log:debug?showBody=true&\n"
-                + "  sink:\n"
-                + "    uri: log:info?showBody=false&";
-
         Assertions.assertFalse(res.isEmpty());
         String result = null;
         for (var crd : res) {
@@ -189,6 +179,6 @@ class DeploymentServiceTest {
                 result = crd.get("crd").trim();
             }
         }
-        Assertions.assertEquals(expectedStr, result);
+        Assertions.assertEquals(bindingRegularCamel.trim(), result);
     }
 }

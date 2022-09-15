@@ -16,6 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @JsonPropertyOrder({"uri", "parameters"})
 @JsonDeserialize(
@@ -89,15 +90,17 @@ public class UriFlowStep implements FlowStep {
             connectorName = uri.substring(0, uri.indexOf(':'));
         }
 
-        Step step = catalog.getReadOnlyCatalog()
-                .searchStepByName(connectorName);
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName(connectorName).stream()
+                .findAny();
 
-        if (step != null && uri != null) {
-            kameletStepParserService.setValuesOnParameters(step, uri);
-            kameletStepParserService.setValuesOnParameters(step,
+
+        if (res.isPresent() && uri != null) {
+            kameletStepParserService.setValuesOnParameters(res.get(), uri);
+            kameletStepParserService.setValuesOnParameters(res.get(),
                     this.getParameters());
         }
 
-        return step;
+        return res.get();
     }
 }

@@ -17,10 +17,14 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +37,12 @@ public class KameletBindingStepParserService
 
     private Logger log =
             Logger.getLogger(KameletBindingStepParserService.class);
+
+    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    private static final String KAMELET = "KAMELET";
+    private static final String KNATIVE = "KNATIVE";
+    private static final List<String> KINDS =
+            Arrays.asList(KAMELET, KNATIVE, CAMEL_CONNECTOR);
 
     private StepCatalog catalog;
 
@@ -99,26 +109,55 @@ public class KameletBindingStepParserService
     }
 
     private Step processStep(final KameletBindingStep bindingStep) {
-        Step step = null;
+        Optional<Step> step = null;
 
         try {
 
             if (bindingStep.getUri() != null) {
-                log.trace("Found uri component.");
+                log.trace("Found uri component. Probably a Camel Conector.");
                 String uri = bindingStep.getUri();
                 step = catalog.getReadOnlyCatalog()
-                        .searchStepByName(uri.substring(0, uri.indexOf(":")));
-                if (step != null) {
-                    log.trace("Found step " + step.getName());
-                    setValuesOnParameters(step, uri);
+                        .searchByName(
+                                uri.substring(0, uri.indexOf(":")))
+                        .stream()
+                        .filter(s -> KINDS.stream()
+                                .anyMatch(k ->
+                                        s.getKind().equalsIgnoreCase(k)))
+                        .sorted(Comparator.comparing(
+                                s -> KINDS.indexOf(((Step) s).getKind()
+                                        .toUpperCase(Locale.ROOT)))
+                                .reversed())
+                        .findFirst();
+
+                if (step.isPresent()) {
+                    setValuesOnParameters(step.get(), uri);
                 }
             } else if (bindingStep.getRef() != null) {
                 log.trace("Found ref component.");
-                if (bindingStep.getRef().getApiVersion().equalsIgnoreCase(
-                        "eventing.knative.dev/v1")) {
-                    step = catalog.getReadOnlyCatalog()
-                            .searchStepByName("knative");
-                    for (Parameter p : new ArrayList<>(step.getParameters())) {
+
+                var name = bindingStep.getRef().getName();
+                var kind = bindingStep.getRef().getKind();
+
+                if (bindingStep.getRef().getApiVersion().contains("knative")) {
+                    name = "knative";
+                    kind = "";
+                }
+
+                var candidates = catalog.getReadOnlyCatalog()
+                            .searchByName(name).stream();
+                if (!kind.isBlank()) {
+                    candidates =
+                            candidates.filter(s ->
+                                    s.getKind().equalsIgnoreCase(
+                                            bindingStep.getRef().getKind()));
+                }
+                step = candidates.findAny();
+
+                //knative
+                if (step.isPresent()
+                        && step.get().getKind().equalsIgnoreCase(KNATIVE)) {
+                    for (Parameter p : new ArrayList<>(
+                            step.get().getParameters())) {
                         if (p.getId().equalsIgnoreCase("kind")) {
                             p.setValue(bindingStep.getRef().getKind());
                         }
@@ -126,33 +165,37 @@ public class KameletBindingStepParserService
                             p.setValue(bindingStep.getRef().getName());
                         }
                     }
-
-                } else {
-                    step = catalog.getReadOnlyCatalog()
-                            .searchStepByName(bindingStep.getRef().getName());
                 }
+            }
 
-                if (step != null) {
-                    log.trace("Found step " + step.getName());
-                    setValuesOnParameters(step, bindingStep.getProperties());
-                }
+            if (step.isPresent()) {
+                log.trace("Found step " + step.get().getName() + " of "
+                        + "kind " + step.get().getKind());
+                setValuesOnParameters(step.get(),
+                        bindingStep.getProperties());
+                setValuesOnParameters(step.get(),
+                        bindingStep.getParameters());
             }
         } catch (Exception e) {
             log.warn("Can't parse step -> " + e.getMessage());
         }
-
-        return step;
+        return step.orElse(null);
     }
 
     private void setValuesOnParameters(final Step step,
                                        final Map<String, String> properties) {
 
         for (Map.Entry<String, String> c : properties.entrySet()) {
+            var valid = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
                     p.setValue(c.getValue());
+                    valid = true;
                     break;
                 }
+            }
+            if (!valid) {
+                log.warn("There is an unknown property: " + c);
             }
         }
 

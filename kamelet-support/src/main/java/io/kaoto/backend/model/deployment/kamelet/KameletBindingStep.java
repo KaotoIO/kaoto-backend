@@ -29,6 +29,9 @@ public final class KameletBindingStep implements Serializable {
     @JsonProperty("properties")
     private Map<String, String> properties = new HashMap<>();
 
+    @JsonProperty("parameters")
+    private Map<String, String> parameters = new HashMap<>();
+
     public KameletBindingStep() {
     }
 
@@ -47,12 +50,12 @@ public final class KameletBindingStep implements Serializable {
         this.ref = ref;
     }
 
-    public Map<String, String> getProperties() {
-        return properties;
-    }
-
     public void setProperties(final Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
     public String getUri() {
@@ -61,5 +64,14 @@ public final class KameletBindingStep implements Serializable {
 
     public void setUri(final String uri) {
         this.uri = uri;
+    }
+
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(
+            final Map<String, String> parameters) {
+        this.parameters = parameters;
     }
 }

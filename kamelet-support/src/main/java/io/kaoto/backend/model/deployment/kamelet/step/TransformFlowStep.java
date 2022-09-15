@@ -16,6 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @JsonPropertyOrder({"transform"})
@@ -58,21 +59,28 @@ public class TransformFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("transform");
 
-        for (Parameter p : res.getParameters()) {
-            if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.NAME)) {
-                p.setValue(this.getTransform().getName());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
-                p.setValue(this.getTransform().getSimple());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
-                p.setValue(this.getTransform().getConstant());
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName("transform").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
+                .findAny();
+
+        if (res.isPresent()) {
+            for (Parameter p : res.get().getParameters()) {
+                if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this.getTransform().getName());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
+                    p.setValue(this.getTransform().getSimple());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
+                    p.setValue(this.getTransform().getConstant());
+                }
             }
+            return res.get();
         }
 
-        return res;
+        return null;
     }
 }

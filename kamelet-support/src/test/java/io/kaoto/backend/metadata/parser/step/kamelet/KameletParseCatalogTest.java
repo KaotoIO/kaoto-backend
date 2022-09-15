@@ -59,7 +59,8 @@ class KameletParseCatalogTest {
         String[] required = new String[]{
                 "connectionHost", "connectionPort",
                 "username", "password", "directoryName"};
-        Step step = catalog.searchStepByName(name);
+        Step step = catalog.searchByName(name)
+                .stream().findAny().get();
 
         assertEquals(step.getRequired().size(), required.length);
         assertTrue(Arrays.stream(required).allMatch(
@@ -96,7 +97,8 @@ class KameletParseCatalogTest {
         String name = "dropbox";
         String[] required = new String[]{
                 "operation", "accessToken"};
-        final Step step = catalog.searchStepByName(name);
+        final Step step = catalog.searchByName(name)
+                .stream().findAny().get();
 
         assertEquals(step.getRequired().size(), required.length);
         assertTrue(Arrays.stream(required).allMatch(
@@ -118,7 +120,8 @@ class KameletParseCatalogTest {
         }
 
         name = "choice";
-        Step step2 = catalog.searchStepByName(name);
+        Step step2 = catalog.searchByName(name)
+                .stream().findAny().get();
         Assertions.assertNotNull(step2);
         assertEquals(name, step2.getId());
         assertEquals(name, step2.getName());
