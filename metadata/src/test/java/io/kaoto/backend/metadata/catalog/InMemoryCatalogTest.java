@@ -23,8 +23,8 @@ class InMemoryCatalogTest {
 
     @Test
     void searchStepByName() {
-        Assertions.assertNull(
-                catalog.searchStepByName("non-existent-empty-catalog"));
+        Assertions.assertEquals(0,
+                catalog.searchByName("non-existent-empty-catalog").size());
 
         List<Step> steps = new ArrayList<>();
         steps.add(new Step("id", "name",
@@ -32,8 +32,9 @@ class InMemoryCatalogTest {
 
         Assertions.assertTrue(catalog.store(steps));
 
-        Assertions.assertNull(
-                catalog.searchStepByName("non-existent-populated-catalog"));
+        Assertions.assertEquals(0,
+                catalog.searchByName(
+                        "non-existent-populated-catalog").size());
     }
 
     @Test
@@ -50,11 +51,10 @@ class InMemoryCatalogTest {
                 "icon", Collections.emptyList()));
         Assertions.assertTrue(catalog.store(steps));
 
-        Assertions.assertEquals(
-                3,
-                catalog.searchStepsByName(connector).size());
-        Assertions.assertTrue(
-                catalog.searchStepsByName(connector)
-                        .contains(catalog.searchStepByName(connector)));
+        Assertions.assertEquals(3,
+                catalog.searchByName(connector).size());
+        Assertions.assertTrue(catalog.searchByName(connector).stream()
+                .allMatch(step ->
+                        catalog.searchByID(step.getId()).equals(step)));
     }
 }

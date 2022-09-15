@@ -220,6 +220,10 @@ public class KameletRepresenter extends Representer {
                     if (step.getUri() != null) {
                         properties.put(URI, step.getUri());
                     }
+                    if (step.getParameters() != null
+                            && !step.getParameters().isEmpty()) {
+                        properties.put("parameters", step.getParameters());
+                    }
                     if (step.getProperties() != null
                             && !step.getProperties().isEmpty()) {
                         properties.put("properties", step.getProperties());

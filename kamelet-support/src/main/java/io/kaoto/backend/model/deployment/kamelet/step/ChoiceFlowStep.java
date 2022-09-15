@@ -58,7 +58,7 @@ public class ChoiceFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByID("choice");
+        Step res = catalog.getReadOnlyCatalog().searchByID("choice");
         res.setBranches(new LinkedList<>());
 
         for (var flow : this.getChoice().getChoice()) {

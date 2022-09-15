@@ -20,27 +20,17 @@ public interface MetadataCatalog<T extends Metadata> {
      * Returns the element identified by the parameter.
      *
      */
-    T searchStepByID(String id);
+    T searchByID(String id);
 
     /*
-     * 🐱method searchStepByName : Metadata
-     * 🐱param name: String
-     *
-     * Returns the first element found (no order warranteed)
-     * identified by the name.
-     *
-     */
-    T searchStepByName(String name);
-
-    /*
-     * 🐱method searchStepByName : List[Metadata]
+     * 🐱method searchByName : List[Metadata]
      * 🐱param name: String
      *
      * Returns all the elements found (no order warranteed)
      * identified by the name.
      *
      */
-    Collection<T> searchStepsByName(String name);
+    Collection<T> searchByName(String name);
 
     /*
      * 🐱method store: boolean

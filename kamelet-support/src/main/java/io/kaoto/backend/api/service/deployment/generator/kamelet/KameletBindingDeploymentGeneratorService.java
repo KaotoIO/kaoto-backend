@@ -96,9 +96,24 @@ public class KameletBindingDeploymentGeneratorService
 
         if (CAMEL_CONNECTOR.equals(kind)) {
             StringBuilder prefix = new StringBuilder(step.getName());
-            prefix.append(processParameters(step, prefix));
+            for (var property : step.getParameters()) {
+                if (property.isPath()) {
+                    prefix.append(":");
+                    prefix.append(property.getValue());
+                    break;
+                }
+            }
             kameletStep.setUri(prefix.toString());
-            kameletStep.setProperties(null);
+
+            if (step.getParameters() != null) {
+                for (var p : step.getParameters()) {
+                    if (p.getValue() != null && !p.isPath()) {
+                        kameletStep.getParameters().put(
+                                p.getId(),
+                                p.getValue().toString());
+                    }
+                }
+            }
         } else {
             KameletBindingStepRef ref = new KameletBindingStepRef();
             ref.setName(step.getName());
@@ -121,42 +136,22 @@ public class KameletBindingDeploymentGeneratorService
                     }
                 }
             }
-            kameletStep.setRef(ref);
 
             if (step.getParameters() != null) {
                 for (var p : step.getParameters()) {
-                    if (p.getValue() != null) {
+                    if (p.getValue() != null && !p.isPath()) {
                         kameletStep.getProperties().put(
                                 p.getId(),
-                                p.getValue()
-                                        .toString());
+                                p.getValue().toString());
                     }
                 }
             }
+            kameletStep.setRef(ref);
         }
 
         return kameletStep;
     }
 
-    private String processParameters(final Step step,
-                                     final StringBuilder prefix) {
-        var sb = new StringBuilder();
-        if (!step.getParameters().isEmpty()) {
-            sb.append("?");
-            for (var property : step.getParameters()) {
-                if (property.isPath()) {
-                    prefix.append(":");
-                    prefix.append(property.getValue());
-                } else if (property.getValue() != null) {
-                    sb.append(property.getId());
-                    sb.append("=");
-                    sb.append(property.getValue());
-                    sb.append("&");
-                }
-            }
-        }
-        return sb.toString();
-    }
 
     @Override
     public boolean appliesTo(final List<Step> steps) {

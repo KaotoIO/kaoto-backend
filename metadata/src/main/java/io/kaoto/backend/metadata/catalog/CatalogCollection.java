@@ -33,9 +33,9 @@ public class CatalogCollection<T extends Metadata>
     }
 
     @Override
-    public T searchStepByID(final String id) {
+    public T searchByID(final String id) {
         for (MetadataCatalog<T> c : catalogs) {
-            T s = c.searchStepByID(id);
+            T s = c.searchByID(id);
             if (s != null) {
                 return s;
             }
@@ -44,21 +44,10 @@ public class CatalogCollection<T extends Metadata>
     }
 
     @Override
-    public T searchStepByName(final String connectionName) {
-        for (MetadataCatalog<T> c : catalogs) {
-            var s = c.searchStepByName(connectionName);
-            if (s != null) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Collection<T> searchStepsByName(final String connectionName) {
+    public Collection<T> searchByName(final String connectionName) {
         Collection<T> steps = new ArrayList<>();
         for (MetadataCatalog<T> c : catalogs) {
-            steps.addAll(c.searchStepsByName(connectionName));
+            steps.addAll(c.searchByName(connectionName));
         }
         return steps;
     }

@@ -16,6 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @JsonPropertyOrder({"set-property"})
@@ -58,22 +59,28 @@ public class SetPropertyFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog()
-                .searchStepByName("set-property");
 
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(KameletStepParserService.NAME)) {
-                p.setValue(this
-                        .getSetPropertyPairFlowStep().getName());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
-                p.setValue(this.getSetPropertyPairFlowStep().getSimple());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
-                p.setValue(this.getSetPropertyPairFlowStep().getConstant());
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName("set-property").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
+                .findAny();
+
+        if (res.isPresent()) {
+            for (Parameter p : res.get().getParameters()) {
+                if (p.getId().equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this
+                            .getSetPropertyPairFlowStep().getName());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
+                    p.setValue(this.getSetPropertyPairFlowStep().getSimple());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
+                    p.setValue(this.getSetPropertyPairFlowStep().getConstant());
+                }
             }
+            return res.get();
         }
 
-        return res;
+        return null;
     }
 }

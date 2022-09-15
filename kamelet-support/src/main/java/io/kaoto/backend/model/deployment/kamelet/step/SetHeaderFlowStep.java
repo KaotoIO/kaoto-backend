@@ -16,6 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @JsonPropertyOrder({"set-header"})
@@ -59,21 +60,28 @@ public class SetHeaderFlowStep implements FlowStep {
                         final KameletStepParserService
                                 kameletStepParserService) {
 
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("set-header");
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName("set-header").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
+                .findAny();
 
-        for (Parameter p : res.getParameters()) {
-            if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.NAME)) {
-                p.setValue(this.getSetHeaderPairFlowStep().getName());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
-                p.setValue(this.getSetHeaderPairFlowStep().getSimple());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
-                p.setValue(this.getSetHeaderPairFlowStep().getConstant());
+        if (res.isPresent()) {
+            for (Parameter p : res.get().getParameters()) {
+                if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this.getSetHeaderPairFlowStep().getName());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
+                    p.setValue(this.getSetHeaderPairFlowStep().getSimple());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
+                    p.setValue(this.getSetHeaderPairFlowStep().getConstant());
+                }
             }
+
+            return res.get();
         }
 
-        return res;
+        return null;
     }
 }

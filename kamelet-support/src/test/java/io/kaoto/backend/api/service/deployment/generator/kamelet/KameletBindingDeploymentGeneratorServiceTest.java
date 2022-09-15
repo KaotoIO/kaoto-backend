@@ -44,9 +44,8 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "spec: {}\n",
                 service.parse(steps, md, Collections.emptyList()));
 
-
-        steps.add(catalog.getReadOnlyCatalog()
-                .searchStepByName("aws-s3-source"));
+        steps.addAll(catalog.getReadOnlyCatalog()
+                .searchByName("aws-s3-source"));
 
         assertTrue(service.appliesTo(steps));
 
@@ -63,7 +62,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 service.parse(steps, md, Collections.emptyList()));
 
         Step step = catalog.getReadOnlyCatalog()
-                .searchStepByName("knative-sink");
+                .searchByName("knative-sink").stream().findAny().get();
         for (Parameter p : step.getParameters()) {
             if (p.getTitle().equalsIgnoreCase("Type")) {
                 p.setValue("example");
