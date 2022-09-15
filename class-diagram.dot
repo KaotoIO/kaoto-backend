@@ -189,7 +189,7 @@ getLocalFolder(&lt;Path&gt; path):ParseCatalog
 	<TR><TD><I>Methods</I><BR/>
 searchStepByID(&lt;String&gt; id):Metadata
 <BR align="left" />
-searchStepByName(&lt;String&gt; name):Metadata
+searchByName(&lt;String&gt; name):List[Metadata]
 <BR align="left" />
 store(&lt;List[Step]&gt; steps):boolean
 <BR align="left" />
@@ -252,6 +252,13 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 
 	"ClusterParseCatalog" -> "ParseCatalog"
 
+"EmptyParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>EmptyParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"EmptyParseCatalog" -> "ParseCatalog"
+
 "GitParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>GitParseCatalog</B></TD></TR>
 	
@@ -279,13 +286,13 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 
 	"LocalFolderParseCatalog" -> "ParseCatalog"
 
-"YamlProcessFile" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>YamlProcessFile</B></TD></TR>
+"ProcessFile" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>ProcessFile</B></TD></TR>
 	
 </TABLE>>]
 
 
-		"YamlProcessFile" -> "GitParseCatalog" [
+		"ProcessFile" -> "GitParseCatalog" [
 		arrowhead=open, style=dashed
 		
 		

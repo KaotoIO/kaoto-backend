@@ -969,13 +969,11 @@ connector with the same ID on this collection of catalogs.</p>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
 		<td>Returns the element identified by the parameter.</td>
 	</tr>
-	<tr id='catalogcollection-searchstepbyname'>
-		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
-		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed)
-identified by the name.
-<p>Returns all the elements found (no order warranteed)
-identified by the name.</p></td>
+	<tr id='catalogcollection-searchbyname'>
+		<td><code><b>searchByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
+		<td>Returns all the elements found (no order warranteed)
+identified by the name.</td>
 	</tr>
 	<tr id='catalogcollection-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -1027,13 +1025,11 @@ on the amount of data stored on the catalog.</td>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
 		<td>Returns the element identified by the parameter.</td>
 	</tr>
-	<tr id='inmemorycatalog-searchstepbyname'>
-		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
-		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed)
-identified by the name.
-<p>Returns all the elements found (no order warranteed)
-identified by the name.</p></td>
+	<tr id='inmemorycatalog-searchbyname'>
+		<td><code><b>searchByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
+		<td>Returns all the elements found (no order warranteed)
+identified by the name.</td>
 	</tr>
 	<tr id='inmemorycatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -1087,13 +1083,11 @@ This is useful to avoid empty catalogs when reloading data.</p>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
 		<td>Returns the element identified by the parameter.</td>
 	</tr>
-	<tr id='readonlycatalog-searchstepbyname'>
-		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
-		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed)
-identified by the name.
-<p>Returns all the elements found (no order warranteed)
-identified by the name.</p></td>
+	<tr id='readonlycatalog-searchbyname'>
+		<td><code><b>searchByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
+		<td>Returns all the elements found (no order warranteed)
+identified by the name.</td>
 	</tr>
 	<tr id='readonlycatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -1143,13 +1137,11 @@ Helper to unify catalog handling implementation.</p>
 		<td><code><a href='#metadata'>Metadata</a></code></td>
 		<td>Returns the element identified by the parameter.</td>
 	</tr>
-	<tr id='metadatacatalog-searchstepbyname'>
-		<td><code><b>searchStepByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
-		<td><code><a href='#metadata'>Metadata</a></code></td>
-		<td>Returns the first element found (no order warranteed)
-identified by the name.
-<p>Returns all the elements found (no order warranteed)
-identified by the name.</p></td>
+	<tr id='metadatacatalog-searchbyname'>
+		<td><code><b>searchByName</b>(<nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><a href='#metadata'>List[Metadata]</a></code></td>
+		<td>Returns all the elements found (no order warranteed)
+identified by the name.</td>
 	</tr>
 	<tr id='metadatacatalog-store'>
 		<td><code><b>store</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
@@ -1408,7 +1400,6 @@ return a completable list of elements to add to a catalog.</td>
 </section>
 <section class='namespace' id='yamlprocessfile'>
 <h2><a href='#yamlprocessfile'>🔗</a>YamlProcessFile</h2>
-<p>Helper class to walk around YAML files to parse Metadata objects.</p>
 
 
 </section>
@@ -2184,6 +2175,50 @@ the metadata associated to the orchestration.</td>
 
 
 </section>
+
+</section>
+<section class='namespace' id='emptyparsecatalog'>
+<h2><a href='#emptyparsecatalog'>🔗</a>EmptyParseCatalog</h2>
+<p>This returns an empty catalog.</p>
+
+<h3 id=''><a href='#'>🔗</a>Methods</h3>
+
+
+
+<details>
+	<summary>Methods inherited from <a href='#parsecatalog'>ParseCatalog</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='emptyparsecatalog-parse'>
+		<td><code><b>parse</b>()</nobr></code></td>
+		<td><code>CompletableFuture[List[T]]</code></td>
+		<td>Load all the source data, parse it and
+return a completable list of elements to add to a catalog.</td>
+	</tr>
+	<tr id='emptyparsecatalog-setfilevisitor'>
+		<td><code><b>setFileVisitor</b>(<nobr>&lt;<a href='#yamlprocessfile'>YamlProcessFile</a>&gt; <i>fileVisitor</i></nobr>)</nobr></code></td>
+		<td><code></code></td>
+		<td></td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
+
+
+</section>
+<section class='namespace' id='processfile'>
+<h2><a href='#processfile'>🔗</a>ProcessFile</h2>
+<p>Helper class to walk around files to parse Metadata objects.</p>
+
 
 </section>
 
