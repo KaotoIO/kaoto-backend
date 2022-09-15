@@ -63,8 +63,8 @@ public class CamelRouteFileProcessorTest {
             final Step parsedStep, final String type) {
         Map<String, String> typeToIdConversion = Map.of(
                 "MIDDLE", "action",
-                "END", "consumer",
-                "START", "producer"
+                "END", "producer",
+                "START", "consumer"
         );
 
         String expectedType = typeToIdConversion.get(type);
