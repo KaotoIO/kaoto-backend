@@ -151,7 +151,11 @@ public class KameletBindingStepParserService
                                     s.getKind().equalsIgnoreCase(
                                             bindingStep.getRef().getKind()));
                 }
-                step = candidates.findAny();
+                step = candidates
+                        .sorted(Comparator.comparing(
+                                s -> KINDS.indexOf(s.getKind()
+                                        .toUpperCase(Locale.ROOT))))
+                        .findFirst();
 
                 //knative
                 if (step.isPresent()

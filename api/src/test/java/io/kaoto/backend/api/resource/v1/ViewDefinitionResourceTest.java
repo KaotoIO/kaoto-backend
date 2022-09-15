@@ -65,7 +65,7 @@ class ViewDefinitionResourceTest {
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID(
                                 "kamelet:source"));
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID(
-                                "log"));
+                                "log-producer"));
 
         final var mapper = new ObjectMapper();
         final var json = mapper.writeValueAsString(steps);

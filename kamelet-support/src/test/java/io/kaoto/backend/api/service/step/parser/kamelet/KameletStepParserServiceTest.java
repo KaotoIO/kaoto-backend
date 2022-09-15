@@ -101,7 +101,7 @@ class KameletStepParserServiceTest {
         assertEquals(2, choiceStep.getBranches().size());
 
         final var dropboxStep = parsed.getSteps().get(2);
-        assertEquals("dropbox", dropboxStep.getId());
+        assertEquals("dropbox-producer", dropboxStep.getId());
 
         KameletDefinition definition =
                 (KameletDefinition) parsed.getMetadata().get("definition");
