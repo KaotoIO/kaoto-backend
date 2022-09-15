@@ -43,22 +43,24 @@ class CatalogCollectionTest {
 
     @Test
     void searchStepByID() {
-        Assertions.assertNotNull(catalogCollection.searchStepByID("id-1"));
-        Assertions.assertNotNull(catalogCollection.searchStepByID("id-3"));
-        Assertions.assertNull(catalogCollection.searchStepByID("non-existent"));
+        Assertions.assertNotNull(catalogCollection.searchByID("id-1"));
+        Assertions.assertNotNull(catalogCollection.searchByID("id-3"));
+        Assertions.assertNull(catalogCollection.searchByID("non-existent"));
     }
 
     @Test
     void searchStepByName() {
-        Step step = catalogCollection.searchStepByName(CONNECTOR_2);
-        Assertions.assertNotNull(step);
-        Assertions.assertEquals(CONNECTOR_2, step.getName());
+        var steps = catalogCollection.searchByName(CONNECTOR_2);
+        Assertions.assertNotNull(steps);
+        Assertions.assertEquals(3, steps.size());
+        Assertions.assertTrue(steps.stream().allMatch(
+                step -> CONNECTOR_2.equalsIgnoreCase(step.getName())));
     }
 
     @Test
     void searchStepsByName() {
         Collection<Step> step =
-                catalogCollection.searchStepsByName(CONNECTOR_2);
+                catalogCollection.searchByName(CONNECTOR_2);
         Assertions.assertNotNull(step);
         Assertions.assertEquals(3, step.size());
         for (Step s : step) {

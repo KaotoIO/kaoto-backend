@@ -34,7 +34,7 @@ public class StepService {
      *
      */
     public Step stepById(final String id) {
-        return catalog.getReadOnlyCatalog().searchStepByID(id);
+        return catalog.getReadOnlyCatalog().searchByID(id);
     }
 
     /*
@@ -45,7 +45,7 @@ public class StepService {
      *
      */
     public Collection<Step> stepsByName(final String name) {
-        return catalog.getReadOnlyCatalog().searchStepsByName(name);
+        return catalog.getReadOnlyCatalog().searchByName(name);
     }
 
     /*

@@ -44,9 +44,9 @@ public class CamelRouteParseCatalogTest {
 
         assertTrue(catalog.store(steps));
 
-        Step browseComponentSink = catalog.searchStepByID("browse-consumer");
-        Step browseComponentSource = catalog.searchStepByID("browse-producer");
-        Step browseComponentAction = catalog.searchStepByID("browse-action");
+        Step browseComponentSink = catalog.searchByID("browse-consumer");
+        Step browseComponentSource = catalog.searchByID("browse-producer");
+        Step browseComponentAction = catalog.searchByID("browse-action");
 
         assertBrowseJsonHasBeenParsedCorrectly(
                 browseComponentSource, "START", false);

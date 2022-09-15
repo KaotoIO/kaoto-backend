@@ -29,6 +29,8 @@ spec:
       name: aws-translate-action
       kind: Kamelet
   sink:
-    uri: log:info?showBody=false&
+    uri: log:info
+    parameters:
+      showBody: 'false'
 storage: true
 version: v1alpha1

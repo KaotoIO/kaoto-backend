@@ -15,6 +15,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @JsonPropertyOrder({"set-body"})
@@ -57,21 +58,30 @@ public class SetBodyFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog().searchStepByName("set-body");
 
-        for (var p : res.getParameters()) {
-            if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
-                p.setValue(this.getSetBody().getSimple());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
-                p.setValue(this.getSetBody().getConstant());
-            } else if (p.getId()
-                    .equalsIgnoreCase(KameletStepParserService.NAME)) {
-                p.setValue(this.getSetBody().getName());
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName("set-body").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
+                .findAny();
+
+
+        if (res.isPresent()) {
+            for (var p : res.get().getParameters()) {
+                if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
+                    p.setValue(this.getSetBody().getSimple());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
+                    p.setValue(this.getSetBody().getConstant());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this.getSetBody().getName());
+                }
             }
+
+            return res.get();
         }
 
-        return res;
+        return null;
     }
 }

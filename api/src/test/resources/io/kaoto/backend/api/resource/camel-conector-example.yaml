@@ -4,7 +4,10 @@ metadata:
   name: camel-conector-example
 spec:
   source:
-    uri: "log:debug?showBody=true"
+    uri: timer:earthquake
+    parameters:
+      period: '500'
   sink:
-    uri: "log:info?showBody=false"
-
+    uri: log:info
+    parameters:
+      showBody: 'false'

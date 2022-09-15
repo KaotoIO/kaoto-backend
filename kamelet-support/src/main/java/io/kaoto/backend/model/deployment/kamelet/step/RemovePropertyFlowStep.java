@@ -16,6 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @JsonPropertyOrder({"remove-property"})
@@ -58,15 +59,23 @@ public class RemovePropertyFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        Step res = catalog.getReadOnlyCatalog()
-                .searchStepByName("remove-property");
 
-        for (Parameter p : res.getParameters()) {
-            if (p.getId().equalsIgnoreCase(KameletStepParserService.NAME)) {
-                p.setValue(this.getRemovePropertyFlowStep().getName());
+        Optional<Step> res = catalog.getReadOnlyCatalog()
+                .searchByName("remove-property").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
+                .findAny();
+
+
+        if (res.isPresent()) {
+            for (Parameter p : res.get().getParameters()) {
+                if (p.getId().equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this.getRemovePropertyFlowStep().getName());
+                }
             }
+
+            return res.get();
         }
 
-        return res;
+        return null;
     }
 }
