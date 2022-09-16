@@ -5,7 +5,6 @@ This is the backend companion of the Kaoto project.
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/kaotoio/kaoto-backend?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/kaotoio/kaoto-backend)
 
-
 ![Docker Pulls](https://img.shields.io/docker/pulls/kaotoio/frontend)
 [![Docker generation](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml/badge.svg)](https://github.com/KaotoIO/kaoto-backend/actions/workflows/generate-docker-image.yml)
 
@@ -24,9 +23,9 @@ This is the backend companion of the Kaoto project.
 
 ## Using Kaoto
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This is the [API companion](https://kaotoio.github.io/kaoto-backend/api/index.html) for the Kaoto frontend. It is designed as an [hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/), decoupled and modularized to be able to easily [add your own DSL](https://kaoto.io/docs/add-dsl/), and with [maintainability in mind](https://kaoto.io/docs/architecture/). 
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+This project uses Quarkus, the Supersonic Subatomic Java Framework. If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
 ### Running as a docker container
 
