@@ -12,7 +12,7 @@ import java.util.Map;
  * 🐱relationship dependsOn Step
  *
  * 🐱section
- * Generic interface to generate yaml deployments
+ * Generic interface to generate deployments
  *
  */
 public interface DeploymentGeneratorService {
@@ -42,6 +42,14 @@ public interface DeploymentGeneratorService {
      */
     String parse(List<Step> steps, Map<String, Object> metadata,
                  List<Parameter> parameters);
+
+    /*
+     * 🐱method parse: CustomResource
+     * 🐱param input: String
+     *
+     * Based on the source code, returns the resource to deploy.
+     */
+    CustomResource parse(String input);
 
     /*
      * 🐱method appliesTo: boolean

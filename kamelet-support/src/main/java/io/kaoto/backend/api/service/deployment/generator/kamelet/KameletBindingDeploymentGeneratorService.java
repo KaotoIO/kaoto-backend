@@ -1,18 +1,24 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +33,12 @@ public class KameletBindingDeploymentGeneratorService
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
     private static final String KNATIVE = "KNATIVE";
-    private static final List<String> KINDS =
-            Arrays.asList(CAMEL_CONNECTOR, KAMELET, KNATIVE);
+    private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, KAMELET, KNATIVE);
+
+    @Inject
+    private KameletBindingStepParserService stepParserService;
+
+    private Logger log = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     public String identifier() {
         return "KameletBinding";
@@ -176,6 +186,7 @@ public class KameletBindingDeploymentGeneratorService
                     s = Status.Building;
                     break;
                 default:
+                    log.warn("Detected unrecognized status " + binding.getStatus().getPhase());
                     s = Status.Stopped;
             }
         }
@@ -185,5 +196,24 @@ public class KameletBindingDeploymentGeneratorService
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{KameletBinding.class});
+    }
+
+    @Override
+    public CustomResource parse(final String input) {
+        if (stepParserService.appliesTo(input)) {
+            try {
+                ObjectMapper yamlMapper =
+                        new ObjectMapper(new YAMLFactory())
+                                .configure(
+                                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                        false);
+
+                return yamlMapper.readValue(input, KameletBinding.class);
+            } catch (Exception e) {
+                log.trace("Tried creating a kamelet binding and it didn't work.");
+            }
+        }
+
+        return null;
     }
 }
