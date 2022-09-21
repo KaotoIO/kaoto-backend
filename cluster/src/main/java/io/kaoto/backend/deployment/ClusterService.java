@@ -9,6 +9,7 @@ import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorServ
 import io.kaoto.backend.model.deployment.Integration;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -45,6 +46,10 @@ public class ClusterService {
     private KubernetesClient kubernetesClient;
     private Instance<DeploymentGeneratorService> parsers;
     private ManagedExecutor managedExecutor;
+
+    @ConfigProperty(name = "kaoto.openshift.namespace",
+            defaultValue = "default")
+    private String namespace;
 
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
@@ -331,8 +336,12 @@ public class ClusterService {
     private String getNamespace(final String namespace) {
         String ns = namespace;
         if (ns == null || ns.isBlank()) {
-            ns = "default";
+            ns = this.namespace;
         }
         return ns;
+    }
+
+    public String getDefaultNamespace() {
+        return this.namespace;
     }
 }

@@ -2,6 +2,7 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Capabilities;
 import io.kaoto.backend.api.service.language.LanguageService;
+import io.kaoto.backend.deployment.ClusterService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -28,6 +29,8 @@ import javax.ws.rs.core.Response;
 @ApplicationScoped
 public class CapabilitiesResource {
 
+    private ClusterService clusterService;
+
     private Logger log = Logger.getLogger(CapabilitiesResource.class);
 
     private LanguageService languageService;
@@ -37,6 +40,11 @@ public class CapabilitiesResource {
         this.languageService = languageService;
     }
 
+    @Inject
+    public void setClusterService(
+            final ClusterService clusterService) {
+        this.clusterService = clusterService;
+    }
     /*
      * 🐱method getAll: Capabilities
      *
@@ -52,6 +60,16 @@ public class CapabilitiesResource {
         Capabilities capabilities = new Capabilities();
         capabilities.setDsls(languageService.getAll());
         return capabilities;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/namespace")
+    @Operation(summary = "Get Namespace",
+    description = "Returns namespace where Kaoto backend is currently running")
+    public String getNamespace() {
+        return String.format("{\"namespace\": \"%s\"}",
+                clusterService.getDefaultNamespace());
     }
 
     @ServerExceptionMapper
