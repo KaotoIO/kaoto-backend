@@ -647,7 +647,7 @@ resource relies on to perform the operations.
 
 <section>
 
-Generic interface to generate yaml deployments
+Generic interface to generate deployments
 <table><thead>
 	<tr>
 		<th>Method</th>
@@ -666,10 +666,11 @@ Generic interface to generate yaml deployments
 		<td>Returns the description of the supported language.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parameter'>List[Parameter]</a>&gt; <i>parameters</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>)</nobr></code></td>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parameter'>List[Parameter]</a>&gt; <i>parameters</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the list of steps, returns the yaml to deploy it.
-If applies, the name will be the name used on the integration deployed.</td>
+If applies, the name will be the name used on the integration deployed.
+<p>Based on the source code, returns the resource to deploy.</p></td>
 	</tr>
 	<tr id='deploymentgeneratorservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
