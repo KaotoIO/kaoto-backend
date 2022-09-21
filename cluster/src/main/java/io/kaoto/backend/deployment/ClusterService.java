@@ -1,8 +1,5 @@
 package io.kaoto.backend.deployment;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -111,20 +108,17 @@ public class ClusterService {
         for (var parser : parsers) {
             log.trace("Trying parser for " + parser.identifier());
             log.trace(input);
-            for (Class<? extends CustomResource> c
-                    : parser.supportedCustomResources()) {
-                log.trace("Trying with kind " + c.getSimpleName());
-                CustomResource binding = tryParsing(input, c);
-                if (binding != null) {
-                    log.trace("This is a " + binding.getKind());
-                    setName(binding, namespace);
-                    try {
-                        start(binding, namespace);
-                        return;
-                    } catch (KubernetesClientException e) {
-                        log.debug("Either the binding is not right or the CRD"
-                                + " is not valid: " + e.getMessage());
-                    }
+
+            CustomResource binding = parser.parse(input);
+            if (binding != null) {
+                log.trace("This is a " + binding.getKind());
+                setName(binding, namespace);
+                try {
+                    start(binding, namespace);
+                    return;
+                } catch (KubernetesClientException e) {
+                    log.debug("Either the binding is not right or the CRD"
+                            + " is not valid: " + e.getMessage());
                 }
             }
         }
@@ -161,29 +155,10 @@ public class ClusterService {
             if (i.getName()
                     .equalsIgnoreCase(
                             binding.getMetadata().getName())) {
-                throw new IllegalArgumentException("There is an "
-                        + "existing deployment with the same name: "
+                throw new IllegalArgumentException("There is an existing deployment with the same name: "
                         + binding.getMetadata().getName());
             }
         }
-    }
-
-    private CustomResource tryParsing(final String input,
-                                      final Class<? extends CustomResource> c) {
-        CustomResource binding = null;
-        try {
-            ObjectMapper yamlMapper =
-                    new ObjectMapper(new YAMLFactory())
-                            .configure(
-                                    DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                    false);
-
-            binding = yamlMapper.readValue(input, c);
-        } catch (Exception e) {
-            log.trace("Tried with " + c.getSimpleName() + " and it didn't "
-                    + "work.");
-        }
-        return binding;
     }
 
     /*
@@ -243,13 +218,10 @@ public class ClusterService {
         CustomResource cr = null;
         for (var parser : parsers) {
             log.trace("Now trying with parser for " + parser.identifier());
-            for (Class<? extends CustomResource> c
-                    : parser.supportedCustomResources()) {
+            for (Class<? extends CustomResource> c : parser.supportedCustomResources()) {
                 log.trace("Trying to parse with " + c.getSimpleName());
                 try {
-                    cr = kubernetesClient.customResources(c)
-                            .inNamespace(getNamespace(namespace))
-                            .withName(name).get();
+                    cr = kubernetesClient.customResources(c).inNamespace(getNamespace(namespace)).withName(name).get();
                 } catch (Exception e) {
                     log.trace("This is not the proper kind: " + parser.identifier());
                 }

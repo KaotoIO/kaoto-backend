@@ -1,15 +1,21 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +32,10 @@ public class KameletDeploymentGeneratorService
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
+    @Inject
+    private KameletStepParserService stepParserService;
+
+    private Logger log = Logger.getLogger(KameletDeploymentGeneratorService.class);
     public KameletDeploymentGeneratorService() {
     }
 
@@ -79,6 +89,7 @@ public class KameletDeploymentGeneratorService
                     s = Status.Running;
                     break;
                 default:
+                    log.warn("Detected unrecognized status " + kamelet.getStatus().getPhase());
                     s = Status.Stopped;
             }
         }
@@ -88,5 +99,24 @@ public class KameletDeploymentGeneratorService
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{Kamelet.class});
+    }
+
+    @Override
+    public CustomResource parse(final String input) {
+        if (stepParserService.appliesTo(input)) {
+            try {
+                ObjectMapper yamlMapper =
+                        new ObjectMapper(new YAMLFactory())
+                                .configure(
+                                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                        false);
+
+                return yamlMapper.readValue(input, Kamelet.class);
+            } catch (Exception e) {
+                log.trace("Tried creating a kamelet and it didn't work.");
+            }
+        }
+
+        return null;
     }
 }
