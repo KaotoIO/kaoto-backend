@@ -1,0 +1,3 @@
+kaoto:
+  kubernetes:
+    namespace: "default"
