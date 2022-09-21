@@ -96,6 +96,7 @@ public class IntegrationDeploymentGeneratorService
         if (cr instanceof Integration integration && integration.getStatus() != null) {
             switch (integration.getStatus().getPhase()) {
                 case "Ready":
+                case "Running":
                     s = Status.Running;
                     break;
                 case "Building Kit":

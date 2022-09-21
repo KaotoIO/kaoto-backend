@@ -180,9 +180,11 @@ public class KameletBindingDeploymentGeneratorService
                 && binding.getStatus() != null) {
             switch (binding.getStatus().getPhase()) {
                 case "Ready":
+                case "Running":
                     s = Status.Running;
                     break;
                 case "Creating":
+                case "Building Kit":
                     s = Status.Building;
                     break;
                 default:
