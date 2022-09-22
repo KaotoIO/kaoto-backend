@@ -28,4 +28,4 @@ USER 1001
 
 HEALTHCHECK --interval=3s --start-period=1s CMD curl --fail http://localhost:8081/ || exit 1
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dkaoto.openshift.namespace=${NAMESPACE}"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dkaoto.openshift.namespace=${NAMESPACE}", "-Xmx2G"]
