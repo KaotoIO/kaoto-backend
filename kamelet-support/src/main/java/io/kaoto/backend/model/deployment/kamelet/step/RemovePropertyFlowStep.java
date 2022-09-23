@@ -36,9 +36,6 @@ public class RemovePropertyFlowStep implements FlowStep {
         setRemovePropertyFlowStep(e);
     }
 
-    @JsonProperty("remove-property")
-    private Expression removePropertyFlowStep;
-
     public Expression getRemovePropertyFlowStep() {
         return removePropertyFlowStep;
     }
@@ -47,6 +44,9 @@ public class RemovePropertyFlowStep implements FlowStep {
             final Expression removePropertyFlowStep) {
         this.removePropertyFlowStep = removePropertyFlowStep;
     }
+
+    @JsonProperty("remove-property")
+    private Expression removePropertyFlowStep;
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
