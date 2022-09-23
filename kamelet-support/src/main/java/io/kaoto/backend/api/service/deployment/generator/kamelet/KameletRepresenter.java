@@ -27,7 +27,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.Node;
@@ -65,36 +64,6 @@ public class KameletRepresenter extends Representer {
 
         //For each type of FlowStep or custom classes, create a representer
         addEIP();
-
-        addTypeDescriptions();
-    }
-
-    private void addTypeDescriptions() {
-        TypeDescription setHeaderDesc =
-                new TypeDescription(SetBodyFlowStep.class);
-        setHeaderDesc.substituteProperty("set-header",
-                SetHeaderFlowStep.class, "getSetHeader", "setSetHeader");
-
-        TypeDescription setBodyDesc =
-                new TypeDescription(SetBodyFlowStep.class);
-        setBodyDesc.substituteProperty("set-body", SetBodyFlowStep.class,
-                "getSetBody", "setSetBody");
-
-        TypeDescription setPropertyDesc =
-                new TypeDescription(SetPropertyFlowStep.class);
-        setBodyDesc.substituteProperty("set-property",
-                SetPropertyFlowStep.class,
-                "getSetProperty", "setSetProperty");
-
-        TypeDescription transformDesc =
-                new TypeDescription(TransformFlowStep.class);
-        transformDesc.substituteProperty("transform", TransformFlowStep.class,
-                "getTransform", "setTransform");
-
-        this.addTypeDescription(setBodyDesc);
-        this.addTypeDescription(setHeaderDesc);
-        this.addTypeDescription(setPropertyDesc);
-        this.addTypeDescription(transformDesc);
     }
 
     private void customResource() {
