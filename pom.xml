@@ -166,6 +166,16 @@
         <module>cluster</module>
         <module>api</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
+        </dependency>
+    </dependencies>
     <profiles>
         <profile>
             <id>analysis</id>

@@ -2,6 +2,8 @@ package io.kaoto.backend.api.service.step;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.SpanAttribute;
+import io.opentelemetry.extension.annotations.WithSpan;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -33,7 +35,8 @@ public class StepService {
      *  Returns the first step identified by the parameter.
      *
      */
-    public Step stepById(final String id) {
+    @WithSpan
+    public Step stepById(@SpanAttribute(value = "id") final String id) {
         return catalog.getReadOnlyCatalog().searchByID(id);
     }
 
@@ -44,7 +47,8 @@ public class StepService {
      *  Returns all the steps identified by the name.
      *
      */
-    public Collection<Step> stepsByName(final String name) {
+    @WithSpan
+    public Collection<Step> stepsByName(@SpanAttribute(value = "name") final String name) {
         return catalog.getReadOnlyCatalog().searchByName(name);
     }
 
@@ -54,6 +58,7 @@ public class StepService {
      *  Returns all the steps.
      *
      */
+    @WithSpan
     public Collection<Step> allSteps() {
         return catalog.getReadOnlyCatalog().getAll();
     }

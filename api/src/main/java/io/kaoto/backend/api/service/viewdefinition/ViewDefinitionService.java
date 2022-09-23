@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.viewdefinition;
 import io.kaoto.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
+import io.opentelemetry.extension.annotations.WithSpan;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -34,6 +35,7 @@ public class ViewDefinitionService {
      * Based on the provided list of steps, offer a list of compatible
      * ViewDefinitions.
      */
+    @WithSpan
     public List<ViewDefinition> viewsPerStepList(final List<Step> steps) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var viewParser : getViewParsers()) {

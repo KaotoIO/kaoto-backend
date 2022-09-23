@@ -4,6 +4,8 @@ import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.StepService;
 import io.kaoto.backend.model.step.Step;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.opentelemetry.api.trace.Span;
 import io.quarkus.vertx.http.Compressed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -64,6 +66,12 @@ public class StepResource {
     }
     private DeploymentService deploymentService;
 
+    @Inject
+    public void setRegistry(final MeterRegistry registry) {
+        this.registry = registry;
+    }
+    private MeterRegistry registry;
+
     /*
      * 🐱method allSteps : List[Step]
      * 🐱param type: String
@@ -91,7 +99,16 @@ public class StepResource {
             final @Parameter(description = "Filter by kind of step. Examples: "
                     + "'Kamelet' 'Kamelet,KameletBinding'")
             @QueryParam("kind") String kind) {
-        var steps = stepService.allSteps().stream().parallel();
+        final var allSteps = stepService.allSteps();
+        var steps = allSteps.stream().parallel();
+        Span span = Span.current();
+        if (span != null) {
+            span.setAttribute("steps.total", allSteps.size());
+            span.setAttribute("steps.dsl", dsl);
+            span.setAttribute("steps.type", type);
+            span.setAttribute("steps.kind", kind);
+            registry.gauge("steps", allSteps.size());
+        }
 
         //DSL first because it is usually the parameter we will use
         if (dsl != null && !dsl.isEmpty()) {
@@ -121,7 +138,11 @@ public class StepResource {
                     .anyMatch(k -> k.equalsIgnoreCase(step.getKind())));
         }
 
-        return steps.toList();
+        final var result = steps.toList();
+        if (span != null) {
+            span.setAttribute("steps.return", result.size());
+        }
+        return result;
     }
 
 

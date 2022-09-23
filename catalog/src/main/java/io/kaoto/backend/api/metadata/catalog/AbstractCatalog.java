@@ -5,6 +5,7 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.metadata.catalog.ReadOnlyCatalog;
 import io.kaoto.backend.model.Metadata;
+import io.opentelemetry.extension.annotations.WithSpan;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -44,6 +45,7 @@ public abstract class AbstractCatalog<T extends Metadata> {
      *
      * Completable reference to when the loadParsers method finishes.
      */
+    @WithSpan
     public CompletableFuture<Void> waitForWarmUp() {
         return waitingForWarmUp;
     }
@@ -62,6 +64,7 @@ public abstract class AbstractCatalog<T extends Metadata> {
      *
      */
     @PostConstruct
+    @WithSpan
     public void warmUpCatalog() {
         log.debug("Warming up catalog.");
         List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
