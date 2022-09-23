@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>api API</title>
+  <title>kaoto-backend API</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8" />
@@ -1002,7 +1002,7 @@
       <div id="content">
         <div id="project">
           <div class="pull-left">
-            <h1>api API</h1>
+            <h1>kaoto-backend API</h1>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -1117,9 +1117,9 @@ CapabilitiesResourceApi *apiInstance = [[CapabilitiesResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.CapabilitiesResourceApi()
+var api = new KaotoBackendApi.CapabilitiesResourceApi()
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -1375,9 +1375,9 @@ CapabilitiesResourceApi *apiInstance = [[CapabilitiesResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-CapabilitiesResource-v1CapabilitiesNamespaceGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.CapabilitiesResourceApi()
+var api = new KaotoBackendApi.CapabilitiesResourceApi()
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -1640,9 +1640,9 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.DeploymentsResourceApi()
+var api = new KaotoBackendApi.DeploymentsResourceApi()
 var opts = { 
   'namespace': namespace_example // {{String}} Namespace of the cluster where the resources are running.
 };
@@ -1942,9 +1942,9 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.DeploymentsResourceApi()
+var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource to stop.
 var opts = { 
   'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
@@ -2275,9 +2275,9 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.DeploymentsResourceApi()
+var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource to get.
 var opts = { 
   'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
@@ -2612,9 +2612,9 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.DeploymentsResourceApi()
+var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource of which logs should be retrieved.
 var opts = { 
   'lines': 56, // {{Integer}} Number of last N lines to be retrieved.
@@ -2980,9 +2980,9 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNamePost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.DeploymentsResourceApi()
+var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource to start.
 var opts = { 
   'body':  // {{String}} 
@@ -3360,9 +3360,9 @@ IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsDslsPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.IntegrationsResourceApi()
+var api = new KaotoBackendApi.IntegrationsResourceApi()
 var opts = { 
   'body':  // {{array[Step]}} 
 };
@@ -3682,9 +3682,9 @@ IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-IntegrationsResource-v1IntegrationsPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.IntegrationsResourceApi()
+var api = new KaotoBackendApi.IntegrationsResourceApi()
 var opts = { 
   'body':  // {{Integration}} 
   'dsl': dsl_example // {{String}} DSL to use. For example: 'Kamelet Binding'.
@@ -4045,9 +4045,9 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.StepResourceApi()
+var api = new KaotoBackendApi.StepResourceApi()
 var opts = { 
   'dsl': dsl_example, // {{String}} Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
   'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
@@ -4391,9 +4391,9 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-StepResource-v1StepsIdIdGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.StepResourceApi()
+var api = new KaotoBackendApi.StepResourceApi()
 var id = id_example; // {{String}} Identifier of the step we want to retrieve.
 
 var callback = function(error, data, response) {
@@ -4687,9 +4687,9 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-StepResource-v1StepsNameNameGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.StepResourceApi()
+var api = new KaotoBackendApi.StepResourceApi()
 var name = name_example; // {{String}} Name of the steps we want to retrieve.
 
 var callback = function(error, data, response) {
@@ -4991,9 +4991,9 @@ ViewDefinitionResourceApi *apiInstance = [[ViewDefinitionResourceApi alloc] init
                             </div>
 
                             <div class="tab-pane" id="examples-ViewDefinitionResource-v1ViewDefinitionsPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var ApiApi = require('api_api');
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
-var api = new ApiApi.ViewDefinitionResourceApi()
+var api = new KaotoBackendApi.ViewDefinitionResourceApi()
 var opts = { 
   'body':  // {{array[Step]}} 
 };
