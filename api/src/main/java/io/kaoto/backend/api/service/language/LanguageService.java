@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.language;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.WithSpan;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,6 +39,7 @@ public class LanguageService {
      *
      * Returns the supported languages.
      */
+    @WithSpan
     public Collection<Map<String, String>> getAll() {
 
         Map<String, Map<String, String>> res = new HashMap<>();

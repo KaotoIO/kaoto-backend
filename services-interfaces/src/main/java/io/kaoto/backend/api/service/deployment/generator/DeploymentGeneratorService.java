@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.WithSpan;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public interface DeploymentGeneratorService {
      * Based on the list of steps, returns the yaml to deploy it.
      * If applies, the name will be the name used on the integration deployed.
      */
+    @WithSpan
     String parse(List<Step> steps, Map<String, Object> metadata,
                  List<Parameter> parameters);
 
@@ -49,6 +51,7 @@ public interface DeploymentGeneratorService {
      *
      * Based on the source code, returns the resource to deploy.
      */
+    @WithSpan
     CustomResource parse(String input);
 
     /*
@@ -57,6 +60,7 @@ public interface DeploymentGeneratorService {
      *
      * Check if the parser applies to the steps
      */
+    @WithSpan
     boolean appliesTo(List<Step> steps);
 
     /*
@@ -65,6 +69,7 @@ public interface DeploymentGeneratorService {
      * Returns the status of the custom resource provided. It must be one of
      * the supported types in #supportedCustomResources() .
      */
+    @WithSpan
     Status getStatus(CustomResource cr);
 
     /*

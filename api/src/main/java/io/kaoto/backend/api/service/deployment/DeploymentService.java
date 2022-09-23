@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.WithSpan;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -40,6 +41,7 @@ public class DeploymentService {
      *
      * Based on the provided steps, returns a valid CRDs to deploy
      */
+    @WithSpan
     public List<Map<String, String>> crd(final String name,
                                          final Step[] stepArray) {
 
@@ -75,8 +77,8 @@ public class DeploymentService {
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
-    public String crd(final Integration i,
-                                         final String dsl) {
+    @WithSpan
+    public String crd(final Integration i, final String dsl) {
 
         for (DeploymentGeneratorService parser : getParsers()) {
             try {

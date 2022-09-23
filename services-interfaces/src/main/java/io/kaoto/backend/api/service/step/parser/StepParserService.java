@@ -2,6 +2,7 @@ package io.kaoto.backend.api.service.step.parser;
 
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.WithSpan;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public interface StepParserService<T extends Step> {
      * Based on the YAML provided, offer a list of steps defined on it and
      * the metadata associated to the orchestration.
      */
+    @WithSpan
     ParseResult<T> deepParse(String yaml);
 
     /*
@@ -44,6 +46,7 @@ public interface StepParserService<T extends Step> {
      *
      * Check if this parser knows how to parse the provided string
      */
+    @WithSpan
     boolean appliesTo(String yaml);
 
     /**

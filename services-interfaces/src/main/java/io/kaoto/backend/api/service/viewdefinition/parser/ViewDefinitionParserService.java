@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.viewdefinition.parser;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
+import io.opentelemetry.extension.annotations.WithSpan;
 
 import java.util.List;
 /**
@@ -18,6 +19,7 @@ public interface ViewDefinitionParserService<T extends ViewDefinition> {
      *
      * Based on the list of steps, offer a list of compatible ViewDefinitions.
      */
+    @WithSpan
     List<T> parse(List<Step> steps);
 
     /*
@@ -28,6 +30,7 @@ public interface ViewDefinitionParserService<T extends ViewDefinition> {
      * If the ViewDefinition is a stepView, it returns all
      * possible ViewDefinitions associated to steps.
      */
+    @WithSpan
     List<ViewDefinition> getViewsPerStep(List<Step> steps,
                                          ViewDefinition view);
 
@@ -38,6 +41,7 @@ public interface ViewDefinitionParserService<T extends ViewDefinition> {
      *
      * Check if the viewDefinition applies to the steps
      */
+    @WithSpan
     boolean appliesTo(List<Step> steps, ViewDefinition viewDefinition);
 
 }

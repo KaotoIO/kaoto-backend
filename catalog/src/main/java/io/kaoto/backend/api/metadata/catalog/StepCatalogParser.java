@@ -2,6 +2,7 @@ package io.kaoto.backend.api.metadata.catalog;
 
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.extension.annotations.WithSpan;
 
 import java.nio.file.Path;
 
@@ -20,6 +21,7 @@ public interface StepCatalogParser {
      * Loads all the elements on the given url.
      *
      */
+    @WithSpan
     ParseCatalog<Step> getParser(String url);
 
     /*
@@ -30,6 +32,7 @@ public interface StepCatalogParser {
      * Loads all the elements on the git repository.
      *
      */
+    @WithSpan
     ParseCatalog<Step> getParser(String url, String tag);
 
     /*
@@ -38,6 +41,7 @@ public interface StepCatalogParser {
      * Loads all the elements on the connected cluster.
      *
      */
+    @WithSpan
     ParseCatalog<Step> getParserFromCluster();
 
     /*
@@ -47,5 +51,6 @@ public interface StepCatalogParser {
      * Loads all the elements on the given path.
      *
      */
+    @WithSpan
     ParseCatalog<Step> getLocalFolder(Path path);
 }

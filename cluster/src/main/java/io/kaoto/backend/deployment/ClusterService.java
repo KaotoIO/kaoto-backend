@@ -7,6 +7,8 @@ import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.Integration;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.extension.annotations.WithSpan;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -74,6 +76,7 @@ public class ClusterService {
      *
      * Returns the list of resources in a given namespace
      */
+    @WithSpan
     public List<Integration> getIntegrations(final String namespace) {
         List<Integration> res = new ArrayList<>();
 
@@ -92,6 +95,12 @@ public class ClusterService {
                                 .getCreationTimestamp());
                         i.setType(integration.getKind());
                         res.add(i);
+
+                        Span span = Span.current();
+                        if (span != null) {
+                            span.setAttribute("integration[" + res.size() + "].name", i.getName());
+                            span.setAttribute("integration[" + res.size() + "].date", i.getDate());
+                        }
                     }
                 } catch (Exception e) {
                     log.warn("Error extracting the list of integrations.", e);
@@ -109,6 +118,7 @@ public class ClusterService {
      * Deploys the given input resource
      *
      */
+    @WithSpan
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
             log.trace("Trying parser for " + parser.identifier());
@@ -120,6 +130,11 @@ public class ClusterService {
                 setName(binding, namespace);
                 try {
                     start(binding, namespace);
+
+                    Span span = Span.current();
+                    if (span != null) {
+                        span.setAttribute("integration", binding.toString());
+                    }
                     return;
                 } catch (KubernetesClientException e) {
                     log.debug("Either the binding is not right or the CRD"
@@ -131,7 +146,7 @@ public class ClusterService {
         throw new IllegalArgumentException("The provided CRD is invalid or "
                 + "not supported.");
     }
-
+    @WithSpan
     private void setName(final CustomResource binding, final String namespace)
             throws IllegalArgumentException {
         if (binding.getMetadata() == null) {
@@ -150,6 +165,7 @@ public class ClusterService {
         checkNoDuplicatedNames(namespace, binding);
     }
 
+    @WithSpan
     private void checkNoDuplicatedNames(
             final String namespace,
             final CustomResource binding)
@@ -173,6 +189,7 @@ public class ClusterService {
      *
      * Stops the given CustomResource.
      */
+    @WithSpan
     public void start(final CustomResource binding, final String namespace) {
         ResourceDefinitionContext context =
                 new ResourceDefinitionContext.Builder()
@@ -200,6 +217,7 @@ public class ClusterService {
      *
      * Starts the resource with the given name.
      */
+    @WithSpan
     public boolean stop(final String name, final String namespace) {
         CustomResource cr = get(namespace, name);
         if (cr == null) {
@@ -219,6 +237,7 @@ public class ClusterService {
      *
      * Returns the given resource.
      */
+    @WithSpan
     public CustomResource get(final String namespace, final String name) {
         CustomResource cr = null;
         for (var parser : parsers) {
@@ -250,6 +269,7 @@ public class ClusterService {
      *
      * Returns the log of the given pod.
      */
+    @WithSpan
     public String logs(final String namespace, final String podName,
                        final int lines) {
         return kubernetesClient.pods()
@@ -267,6 +287,7 @@ public class ClusterService {
      *
      * Streams the log of the given pod, starting with said number of lines.
      */
+    @WithSpan
     @Blocking
     public Multi<String> streamlogs(final String namespace,
                                     final String name,
