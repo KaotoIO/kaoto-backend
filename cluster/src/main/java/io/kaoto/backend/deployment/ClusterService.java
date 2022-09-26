@@ -262,30 +262,14 @@ public class ClusterService {
     }
 
     /*
-     * 🐱method logs: String
-     * 🐱param namespace: String
-     * 🐱param podName: String
-     * 🐱param lines: Integer
-     *
-     * Returns the log of the given pod.
-     */
-    @WithSpan
-    public String logs(final String namespace, final String podName,
-                       final int lines) {
-        return kubernetesClient.pods()
-                .inNamespace(getNamespace(namespace))
-                .withName(podName)
-                .tailingLines(lines)
-                .getLog(Boolean.TRUE);
-    }
-
-    /*
      * 🐱method streamlogs: String
      * 🐱param namespace: String
      * 🐱param name: String
      * 🐱param lines: Integer
      *
      * Streams the log of the given pod, starting with said number of lines.
+     *
+     *
      */
     @WithSpan
     @Blocking
@@ -295,23 +279,20 @@ public class ClusterService {
         final var out = new PipedOutputStream();
         final var in = new PipedInputStream();
 
+        //This is strongly tied with camel, we should delegate to each DSL
         var list = kubernetesClient.pods()
                 .inNamespace(getNamespace(namespace))
+                .withLabel("camel.apache.org/integration=" + name)
                 .list().getItems();
 
-        var integrationName = name;
-        for (var pod : list) {
-            if (pod.getMetadata().getName().startsWith(name)) {
-                integrationName = pod.getMetadata().getName();
-            }
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException("No running resource found in " + namespace + " with name " + name);
         }
-
-        final var podName = integrationName;
 
         managedExecutor.execute(() ->
                 kubernetesClient.pods()
                         .inNamespace(getNamespace(namespace))
-                        .withName(podName)
+                        .withName(list.get(0).getMetadata().getName())
                         .tailingLines(lines)
                         .watchLog(out));
 
