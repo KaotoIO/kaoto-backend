@@ -35,7 +35,7 @@ public abstract class JsonProcessFile<T extends Metadata>
                 "core"
             );
 
-    private Logger log = Logger.getLogger(ProcessFile.class);
+    private Logger log = Logger.getLogger(JsonProcessFile.class);
 
     @Override
     protected boolean isDesiredType(final File file) {
