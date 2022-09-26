@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.StepService;
+import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.step.Step;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.opentelemetry.api.trace.Span;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -89,7 +91,8 @@ public class StepResource {
                     + " to the integration.")
     @Compressed
     public Collection<Step> all(
-            final @Parameter(description = "Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'")
+            final @Parameter(description = "Filter by Domain Specific Language (DSL). "
+                    + "Examples: 'KameletBinding' 'KameletBinding,Kamelet'")
             @QueryParam("dsl") String dsl,
             final @Parameter(description = "Filter by step type. Example: 'START' 'MIDDLE,END")
             @QueryParam("type") String type,
@@ -100,15 +103,15 @@ public class StepResource {
             final @Parameter(description = "Start returning from the nth element (combine with limit).")
             @QueryParam("start") Long start) {
         final var allSteps = stepService.allSteps();
-        var steps = allSteps.stream().sorted();
+        var steps = allSteps.stream().sorted(Comparator.comparing(Metadata::getId));
         Span span = Span.current();
         if (span != null) {
             span.setAttribute("steps.total", allSteps.size());
             span.setAttribute("steps.dsl", dsl);
             span.setAttribute("steps.type", type);
             span.setAttribute("steps.kind", kind);
-            span.setAttribute("steps.limit", (limit != null ? limit.toString() : "null"));
-            span.setAttribute("steps.start", (start != null ? start.toString() : "null"));
+            span.setAttribute("steps.limit", limit != null ? limit.toString() : "null");
+            span.setAttribute("steps.start", start != null ? start.toString() : "null");
             registry.gauge("steps", allSteps.size());
         }
 

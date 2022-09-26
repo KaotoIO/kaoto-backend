@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -75,17 +77,24 @@ class StepResourceTest {
         stepResource.all("KameletBinding", "MIDDLE", null, null, null);
     }
 
-    @Test
-    void limitAndStart() {
-        Assertions.assertTrue(stepResource.all(null, null, null, null, null).size() > 10);
-        List<Step> limit = stepResource.all(null, null, null, 10l, null).stream().toList();
-        Assertions.assertEquals(10, limit.size());
+    @ParameterizedTest
+    @ValueSource(longs = {10l, 25l, 42l})
+    @Timeout(100)
+    void limitAndStart(long limitParameter) {
+        Assertions.assertTrue(stepResource.all(null, null, null, null, null).size() > limitParameter);
+        List<Step> limit = stepResource.all(null, null, null, limitParameter, null).stream().toList();
+        Assertions.assertEquals(limitParameter, limit.size());
 
-        List<Step> start = stepResource.all(null, null, null, 10l, 5l).stream().toList();
-        Assertions.assertEquals(10, start.size());
+        Long[] startParameters = new Long[]{0l, 3l, 5l};
 
-        for (int i = 0; i <= 5; i++) {
-            Assertions.assertEquals(limit.get(5 + i), start.get(i));
+        for (Long startParameter : startParameters) {
+            List<Step> start =
+                    stepResource.all(null, null, null, limitParameter, startParameter).stream().toList();
+            Assertions.assertEquals(limitParameter, start.size());
+
+            for (int i = 0; i < startParameter; i++) {
+                Assertions.assertEquals(limit.get((int) (startParameter + i)), start.get(i));
+            }
         }
     }
 
