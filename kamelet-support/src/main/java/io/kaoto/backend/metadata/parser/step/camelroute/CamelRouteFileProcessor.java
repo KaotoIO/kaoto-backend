@@ -29,6 +29,11 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     private static final String SINK_TYPE = "END";
     private static final String ACTION_TYPE = "MIDDLE";
     private static final String INVALID_TYPE = "invalid";
+    public static final String DESCRIPTION = "description";
+    public static final String DEFAULT_VALUE = "defaultValue";
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String COMPONENT = "component";
+    public static final String PROPERTIES = "properties";
 
     record ParsedCamelComponentFromJson(
         String id,
@@ -93,7 +98,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
     private boolean isCamelRouteJson(final JsonObject json) {
         //Naive filtering by file structure
-        return json.keySet().containsAll(Set.of("component", "properties"));
+        return json.keySet().containsAll(Set.of(COMPONENT, PROPERTIES));
     }
 
     private ParsedCamelComponentFromJson getDataFromJson(
@@ -102,12 +107,12 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         final String defaultGroup = "Camel-Component";
         final String defaultIcon = DEFAULT_ICON_STRING;
 
-        JsonObject component = json.getJsonObject("component");
-        JsonObject properties = json.getJsonObject("properties");
+        JsonObject component = json.getJsonObject(COMPONENT);
+        JsonObject properties = json.getJsonObject(PROPERTIES);
 
         String id = component.getString("name");
         String title = component.getString("title");
-        String description = component.getString("description");
+        String description = component.getString(DESCRIPTION);
         String type = getStepType(component);
 
         Map<String, Map<String, String>> propertiesParsed = properties
@@ -183,9 +188,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return new StringParameter(
                 id,
-                parameterData.get("displayName"),
-                parameterData.get("description"),
-                parameterData.getOrDefault("defaultValue", null),
+                parameterData.get(DISPLAY_NAME),
+                parameterData.get(DESCRIPTION),
+                parameterData.getOrDefault(DEFAULT_VALUE, null),
                 null
         );
     }
@@ -197,9 +202,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         Map<String, String> parameterData = parameter.getValue();
         Long value;
 
-        if (parameterData.containsKey("defaultValue")) {
+        if (parameterData.containsKey(DEFAULT_VALUE)) {
             value = Long.parseLong(parameterData
-                    .get("defaultValue")
+                    .get(DEFAULT_VALUE)
                     .replace("L", ""));
         } else {
             value = null;
@@ -207,8 +212,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return new NumberParameter(
                 id,
-                parameterData.get("displayName"),
-                parameterData.get("description"),
+                parameterData.get(DISPLAY_NAME),
+                parameterData.get(DESCRIPTION),
                 value
         );
     }
@@ -220,9 +225,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return new ObjectParameter(
                 id,
-                parameterData.get("displayName"),
-                parameterData.get("description"),
-                parameterData.getOrDefault("defaultValue", null)
+                parameterData.get(DISPLAY_NAME),
+                parameterData.get(DESCRIPTION),
+                parameterData.getOrDefault(DEFAULT_VALUE, null)
         );
     }
 
@@ -233,10 +238,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return new BooleanParameter(
                 id,
-                parameterData.get("displayName"),
-                parameterData.get("description"),
+                parameterData.get(DISPLAY_NAME),
+                parameterData.get(DESCRIPTION),
                 Boolean.parseBoolean(parameterData
-                        .getOrDefault("defaultValue", "false"))
+                        .getOrDefault(DEFAULT_VALUE, "false"))
         );
     }
 

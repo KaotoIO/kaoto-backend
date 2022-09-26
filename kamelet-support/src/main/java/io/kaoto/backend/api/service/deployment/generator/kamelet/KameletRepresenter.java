@@ -198,7 +198,7 @@ public class KameletRepresenter extends Representer {
                     }
                     if (step.getParameters() != null
                             && !step.getParameters().isEmpty()) {
-                        properties.put("parameters", step.getParameters());
+                        properties.put(PARAMETERS, step.getParameters());
                     }
                     if (step.getProperties() != null
                             && !step.getProperties().isEmpty()) {
