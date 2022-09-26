@@ -16,6 +16,10 @@ import javax.json.JsonReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
@@ -34,6 +38,20 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     public static final String DISPLAY_NAME = "displayName";
     public static final String COMPONENT = "component";
     public static final String PROPERTIES = "properties";
+    
+    private static String DEFAULT_ICON_STRING;
+
+    private static final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
+
+    static {
+        try {
+            DEFAULT_ICON_STRING =
+                    Files.readString(Path.of(CamelRouteFileProcessor.class.getResource("default-icon.txt").toURI()));
+        } catch (Exception e) {
+            log.error("Couldn't find the default icon for camel routes.", e);
+        }
+
+    }
 
     record ParsedCamelComponentFromJson(
         String id,
@@ -47,7 +65,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         List<Parameter> parameters,
         List<String> required
     ) { }
-    private final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
 
     @Override
     protected List<Step> parseFile(final File f) {
@@ -312,36 +329,4 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return duplicatedStep;
     }
-
-
-    // Putting it at the end because is just a big string being
-    // used as placeholder
-    private static final String DEFAULT_ICON_STRING =
-            "data:image/svg+xml;base64"
-            + ",PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4N"
-            + "TktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJ"
-            + "hdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIF"
-            + "ZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBF"
-            + "IHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIi"
-            + "AiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9E"
-            + "VEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD"
-            + "0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAw"
-            + "MC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy"
-            + "8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9"
-            + "IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgNT"
-            + "EyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAw"
-            + "IDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPG"
-            + "c+DQoJPHBhdGggZD0iTTQ0OCwwSDY0QzQ2LjMyOCwwLDMyLDE0"
-            + "LjMxMywzMiwzMnY0NDhjMCwxNy42ODgsMTQuMzI4LDMyLDMyLD"
-            + "MyaDM4NGMxNy42ODgsMCwzMi0xNC4zMTIsMzItMzJWMzINCgkJ"
-            + "QzQ4MCwxNC4zMTMsNDY1LjY4OCwwLDQ0OCwweiBNNjQsNDgwVj"
-            + "EyOGg4MHY2NEg5NnYxNmg0OHY0OEg5NnYxNmg0OHY0OEg5NnYx"
-            + "Nmg0OHY0OEg5NnYxNmg0OHY4MEg2NHogTTQ0OCw0ODBIMTYwdi"
-            + "04MGgyNTZ2LTE2DQoJCUgxNjB2LTQ4aDI1NnYtMTZIMTYwdi00"
-            + "OGgyNTZ2LTE2SDE2MHYtNDhoMjU2di0xNkgxNjB2LTY0aDI4OF"
-            + "Y0ODB6Ii8+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0K"
-            + "PGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQ"
-            + "o8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+"
-            + "DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz"
-            + "4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==";
 }
