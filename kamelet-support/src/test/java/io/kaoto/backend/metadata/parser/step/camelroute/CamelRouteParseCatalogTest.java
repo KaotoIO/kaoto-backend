@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-public class CamelRouteParseCatalogTest {
+class CamelRouteParseCatalogTest {
 
     @Inject
     public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
