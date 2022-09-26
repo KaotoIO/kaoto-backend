@@ -81,13 +81,12 @@ public class UriFlowStep implements FlowStep {
     public Step getStep(final StepCatalog catalog,
                         final KameletStepParserService
                                 kameletStepParserService) {
-        String uri = this.getUri();
-        String connectorName = uri;
+        String connectorName = this.getUri();
 
-        if (uri != null
-                && uri.contains(":")
-                && !uri.startsWith("kamelet:")) {
-            connectorName = uri.substring(0, uri.indexOf(':'));
+        if (this.getUri() != null
+                && this.getUri().contains(":")
+                && !this.getUri().startsWith("kamelet:")) {
+            connectorName = this.getUri().substring(0, this.getUri().indexOf(':'));
         }
 
         Optional<Step> res = catalog.getReadOnlyCatalog()
@@ -95,8 +94,8 @@ public class UriFlowStep implements FlowStep {
                 .findAny();
 
 
-        if (res.isPresent() && uri != null) {
-            kameletStepParserService.setValuesOnParameters(res.get(), uri);
+        if (res.isPresent() && this.getUri() != null) {
+            kameletStepParserService.setValuesOnParameters(res.get(), this.getUri());
             kameletStepParserService.setValuesOnParameters(res.get(),
                     this.getParameters());
         }
