@@ -89,26 +89,38 @@ public class StepResource {
                     + " to the integration.")
     @Compressed
     public Collection<Step> all(
-            final @Parameter(description = "Filter by Domain Specific "
-                    + "Language (DSL). Examples: "
-                    + "'KameletBinding' 'KameletBinding,Kamelet'")
+            final @Parameter(description = "Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'")
             @QueryParam("dsl") String dsl,
-            final @Parameter(description = "Filter by step type. Example: "
-                    + "'START' 'MIDDLE,END")
+            final @Parameter(description = "Filter by step type. Example: 'START' 'MIDDLE,END")
             @QueryParam("type") String type,
-            final @Parameter(description = "Filter by kind of step. Examples: "
-                    + "'Kamelet' 'Kamelet,KameletBinding'")
-            @QueryParam("kind") String kind) {
+            final @Parameter(description = "Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'")
+            @QueryParam("kind") String kind,
+            final @Parameter(description = "Maximum number of elements to return.")
+            @QueryParam("limit") Long limit,
+            final @Parameter(description = "Start returning from the nth element (combine with limit).")
+            @QueryParam("start") Long start) {
         final var allSteps = stepService.allSteps();
-        var steps = allSteps.stream().parallel();
+        var steps = allSteps.stream().sorted();
         Span span = Span.current();
         if (span != null) {
             span.setAttribute("steps.total", allSteps.size());
             span.setAttribute("steps.dsl", dsl);
             span.setAttribute("steps.type", type);
             span.setAttribute("steps.kind", kind);
+            span.setAttribute("steps.limit", (limit != null ? limit.toString() : "null"));
+            span.setAttribute("steps.start", (start != null ? start.toString() : "null"));
             registry.gauge("steps", allSteps.size());
         }
+
+        if (start != null && start > 0) {
+            steps = steps.skip(start);
+        }
+
+        if (limit != null && limit > 0) {
+            steps = steps.limit(limit);
+        }
+
+        steps = steps.parallel();
 
         //DSL first because it is usually the parameter we will use
         if (dsl != null && !dsl.isEmpty()) {
