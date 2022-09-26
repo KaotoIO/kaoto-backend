@@ -22,5 +22,6 @@ public class EmptyParseCatalog<T extends Metadata> implements ParseCatalog<T> {
 
     @Override
     public void setFileVisitor(final ProcessFile<T> fileVisitor) {
+        //We are not going to visit anything, we don't need a fileVisitor
     }
 }
