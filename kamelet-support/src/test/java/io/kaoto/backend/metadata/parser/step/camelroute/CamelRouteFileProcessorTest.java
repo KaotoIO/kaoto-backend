@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 
 @QuarkusTest
-public class CamelRouteFileProcessorTest {
+class CamelRouteFileProcessorTest {
     @Test
     void shouldParseCamelRouteJson() throws URISyntaxException {
 
