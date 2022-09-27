@@ -727,32 +727,6 @@
             defs["Integration"] = {
   "type" : "object",
   "properties" : {
-    "steps" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/Step"
-      }
-    },
-    "metadata" : {
-      "type" : "object",
-      "additionalProperties" : {
-        "type" : "object"
-      }
-    },
-    "parameters" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/Parameter"
-      }
-    },
-    "dsl" : {
-      "type" : "string"
-    }
-  }
-};
-            defs["Integration1"] = {
-  "type" : "object",
-  "properties" : {
     "name" : {
       "type" : "string"
     },
@@ -772,6 +746,32 @@
       "type" : "string"
     },
     "type" : {
+      "type" : "string"
+    }
+  }
+};
+            defs["Integration1"] = {
+  "type" : "object",
+  "properties" : {
+    "steps" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Step"
+      }
+    },
+    "metadata" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "object"
+      }
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter"
+      }
+    },
+    "dsl" : {
       "type" : "string"
     }
   }
@@ -1589,7 +1589,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1608,7 +1608,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1628,7 +1628,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Get all Resources
 [apiInstance v1DeploymentsGetWith:namespace
-              completionHandler: ^(array[Integration1] output, NSError* error) {
+              completionHandler: ^(array[Integration] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1680,7 +1680,7 @@ namespace Example
             try
             {
                 // Get all Resources
-                array[Integration1] result = apiInstance.v1DeploymentsGet(namespace);
+                array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1801,7 +1801,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Integration1"
+          "$ref" : "#/components/schemas/Integration"
         },
         "x-content-type" : "application/json"
       }
@@ -3628,7 +3628,7 @@ public class IntegrationsResourceApiExample {
         String body = ; // String | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
-            Integration result = apiInstance.v1IntegrationsPost(body, dsl);
+            Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
@@ -3648,7 +3648,7 @@ public class IntegrationsResourceApiExample {
         String body = ; // String | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
-            Integration result = apiInstance.v1IntegrationsPost(body, dsl);
+            Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
@@ -3670,7 +3670,7 @@ IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
 // Get CRD
 [apiInstance v1IntegrationsPostWith:body
     dsl:dsl
-              completionHandler: ^(Integration output, NSError* error) {
+              completionHandler: ^(Integration1 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3724,7 +3724,7 @@ namespace Example
             try
             {
                 // Get CRD
-                Integration result = apiInstance.v1IntegrationsPost(body, dsl);
+                Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -3818,7 +3818,7 @@ except ApiException as e:
     },
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration"
+        "$ref" : "#/components/schemas/Integration1"
       }
     }
   }
@@ -3893,7 +3893,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration"
+        "$ref" : "#/components/schemas/Integration1"
       }
     },
     "text/yaml" : {
@@ -3967,7 +3967,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-StepResource-v1StepsGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//v1/steps?dsl=&kind=&type="</code></pre>
+"//v1/steps?dsl=&kind=&limit=&start=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3985,9 +3985,11 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        Long limit = 789; // Long | Maximum number of elements to return.
+        Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+            array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4006,9 +4008,11 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+        Long limit = 789; // Long | Maximum number of elements to return.
+        Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+            array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4024,6 +4028,8 @@ public class StepResourceApiExample {
                             <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *dsl = dsl_example; // Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
 String *kind = kind_example; // Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+Long *limit = 789; // Maximum number of elements to return. (optional)
+Long *start = 789; // Start returning from the nth element (combine with limit). (optional)
 String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
@@ -4031,6 +4037,8 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 // Get all steps
 [apiInstance v1StepsGetWith:dsl
     kind:kind
+    limit:limit
+    start:start
     type:type
               completionHandler: ^(array[Step] output, NSError* error) {
                             if (output) {
@@ -4050,6 +4058,8 @@ var api = new KaotoBackendApi.StepResourceApi()
 var opts = { 
   'dsl': dsl_example, // {{String}} Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
   'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+  'limit': 789, // {{Long}} Maximum number of elements to return.
+  'start': 789, // {{Long}} Start returning from the nth element (combine with limit).
   'type': type_example // {{String}} Filter by step type. Example: 'START' 'MIDDLE,END
 };
 var callback = function(error, data, response) {
@@ -4083,12 +4093,14 @@ namespace Example
             var apiInstance = new StepResourceApi();
             var dsl = dsl_example;  // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
             var kind = kind_example;  // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional) 
+            var limit = 789;  // Long | Maximum number of elements to return. (optional) 
+            var start = 789;  // Long | Start returning from the nth element (combine with limit). (optional) 
             var type = type_example;  // String | Filter by step type. Example: 'START' 'MIDDLE,END (optional) 
 
             try
             {
                 // Get all steps
-                array[Step] result = apiInstance.v1StepsGet(dsl, kind, type);
+                array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4108,10 +4120,12 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiStepResourceApi();
 $dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
 $kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+$limit = 789; // Long | Maximum number of elements to return.
+$start = 789; // Long | Start returning from the nth element (combine with limit).
 $type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 try {
-    $result = $api_instance->v1StepsGet($dsl, $kind, $type);
+    $result = $api_instance->v1StepsGet($dsl, $kind, $limit, $start, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling StepResourceApi->v1StepsGet: ', $e->getMessage(), PHP_EOL;
@@ -4127,10 +4141,12 @@ use WWW::SwaggerClient::StepResourceApi;
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
 my $dsl = dsl_example; # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
 my $kind = kind_example; # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
+my $limit = 789; # Long | Maximum number of elements to return.
+my $start = 789; # Long | Start returning from the nth element (combine with limit).
 my $type = type_example; # String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 eval { 
-    my $result = $api_instance->v1StepsGet(dsl => $dsl, kind => $kind, type => $type);
+    my $result = $api_instance->v1StepsGet(dsl => $dsl, kind => $kind, limit => $limit, start => $start, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -4149,11 +4165,13 @@ from pprint import pprint
 api_instance = swagger_client.StepResourceApi()
 dsl = dsl_example # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
 kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
+limit = 789 # Long | Maximum number of elements to return. (optional)
+start = 789 # Long | Start returning from the nth element (combine with limit). (optional)
 type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 try: 
     # Get all steps
-    api_response = api_instance.v1_steps_get(dsl=dsl, kind=kind, type=type)
+    api_response = api_instance.v1_steps_get(dsl=dsl, kind=kind, limit=limit, start=start, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling StepResourceApi->v1StepsGet: %s\n" % e)</code></pre>
@@ -4204,6 +4222,50 @@ except ApiException as e:
                                 
                                                     <div class="inner description">
                                                         Filter by kind of step. Examples: &#x27;Kamelet&#x27; &#x27;Kamelet,KameletBinding&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">limit</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_limit">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Long
+                                                </span>
+                                                    <span class="format">
+                                                        (int64)
+                                                    </span>
+                                
+                                                    <div class="inner description">
+                                                        Maximum number of elements to return.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">start</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_start">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    Long
+                                                </span>
+                                                    <span class="format">
+                                                        (int64)
+                                                    </span>
+                                
+                                                    <div class="inner description">
+                                                        Start returning from the nth element (combine with limit).
                                                     </div>
                                             </div>
                                         </div>
