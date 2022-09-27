@@ -59,9 +59,17 @@ public class KamelPopulator {
         kamelet.setSpec(new KameletSpec());
         kamelet.getSpec().setTemplate(new Template());
         kamelet.getSpec().getTemplate().setFrom(getFlow(steps));
-        if (metadata.containsKey("definition")
-            && metadata.get("definition") instanceof KameletDefinition def) {
-            kamelet.getSpec().setDefinition(def);
+        if (metadata.containsKey("definition")) {
+            if (metadata.get("definition") instanceof KameletDefinition def) {
+                kamelet.getSpec().setDefinition(def);
+            } else if (metadata.get("definition") instanceof HashMap map) {
+                KameletDefinition def = new KameletDefinition();
+                def.setTitle(map.getOrDefault("title", "").toString());
+                def.setDescription(map.getOrDefault("description", "").toString());
+                def.setRequired((List<String>) map.getOrDefault("required", null));
+                def.setProperties((Map<String, KameletDefinitionProperty>) map.getOrDefault("required", null));
+                kamelet.getSpec().setDefinition(def);
+            }
         }
 
         kamelet.setMetadata(new ObjectMeta());
@@ -317,7 +325,7 @@ public class KamelPopulator {
         List<Choice> choices = new LinkedList<>();
 
         for (Branch b : step.getBranches()) {
-            if (b.containsKey(CONDITION)) {
+            if (b.getCondition() != null) {
                 choices.add(processChoice(b));
             } else {
                 var otherwise = new Otherwise();
@@ -334,10 +342,7 @@ public class KamelPopulator {
         Choice choice = new Choice();
 
         choice.setSteps(processSteps(b));
-
-        if (b.containsKey(CONDITION)) {
-            choice.setSimple(b.get(CONDITION).toString());
-        }
+        choice.setSimple(b.getCondition());
 
         return choice;
     }
@@ -419,10 +424,7 @@ public class KamelPopulator {
         Filter filter = new Filter();
 
         filter.setSteps(processSteps(b));
-
-        if (b.containsKey(CONDITION)) {
-            filter.setSimple(b.get(CONDITION).toString());
-        }
+        filter.setSimple(b.getCondition());
 
         return filter;
     }

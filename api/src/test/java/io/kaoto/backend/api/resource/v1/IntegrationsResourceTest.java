@@ -106,4 +106,34 @@ class IntegrationsResourceTest {
         assertEquals(res1, res2);
 
     }
+
+
+    @Test
+    void complexEIP() throws URISyntaxException, IOException {
+
+        String yaml = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../eip.kamelet.yaml")
+                        .toURI()));
+
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Kamelet")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        String json = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Kamelet")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        assertEquals(yaml, res.extract().body().asString());
+    }
 }
