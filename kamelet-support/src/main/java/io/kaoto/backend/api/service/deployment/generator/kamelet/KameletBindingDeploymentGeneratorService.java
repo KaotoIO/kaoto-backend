@@ -31,9 +31,11 @@ public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
+    private static final String EIP = "EIP";
     private static final String KAMELET = "KAMELET";
     private static final String KNATIVE = "KNATIVE";
-    private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, KAMELET, KNATIVE);
+    private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE, EIP);
+    private static final boolean IGNORE_CAMEL_COMPONENTS = true;
 
     @Inject
     private KameletBindingStepParserService stepParserService;
@@ -104,7 +106,7 @@ public class KameletBindingDeploymentGeneratorService
             kind = KAMELET;
         }
 
-        if (CAMEL_CONNECTOR.equals(kind)) {
+        if (CAMEL_CONNECTOR.equals(kind) && !IGNORE_CAMEL_COMPONENTS) {
             StringBuilder prefix = new StringBuilder(step.getName());
             for (var property : step.getParameters()) {
                 if (property.isPath()) {

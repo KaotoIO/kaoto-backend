@@ -100,12 +100,12 @@ class KameletBindingDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         Step step = new Step();
-        step.setKind("Camel-Connector");
+        step.setKind("Kamelet");
         steps.add(step);
         assertTrue(service.appliesTo(steps));
 
         step = new Step();
-        step.setKind("Camel-Connector");
+        step.setKind("Eip");
         steps.add(step);
         assertTrue(service.appliesTo(steps));
 
@@ -127,7 +127,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
 
         step = new Step();
-        step.setKind("Camel-Connector");
+        step.setKind("Eip");
         steps.add(step);
         assertTrue(service.appliesTo(steps));
 
