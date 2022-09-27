@@ -11,9 +11,12 @@ import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
+
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -156,6 +159,7 @@ class DeploymentServiceTest {
     }
 
 
+    @Disabled("Disabled until camel-connector aren't supported again in KameletBindings")
     @Test
     void regularCamelConnector() {
         final var steps = stepParser.deepParse(bindingRegularCamel).getSteps();
