@@ -64,15 +64,14 @@ public class ChoiceFlowStep implements FlowStep {
         for (var flow : this.getChoice().getChoice()) {
             Branch branch =
                     new Branch(getChoiceIdentifier(flow));
-            branch.put(KameletStepParserService.CONDITION,
-                    getChoiceCondition(flow));
+            branch.setCondition(getChoiceCondition(flow));
             for (var s : flow.getSteps()) {
                 branch.getSteps().add(
                         kameletStepParserService.processStep(s));
             }
             kameletStepParserService.setValueOnStepProperty(res,
                     KameletStepParserService.SIMPLE,
-                    branch.get(KameletStepParserService.CONDITION));
+                    branch.getCondition());
             res.getBranches().add(branch);
         }
 

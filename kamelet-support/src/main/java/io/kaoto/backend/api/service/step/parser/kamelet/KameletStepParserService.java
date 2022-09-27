@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 public class KameletStepParserService
         implements StepParserService<Step> {
 
-    public static final String CONDITION = "condition";
     public static final String SIMPLE = "simple";
     public static final String OTHERWISE = "otherwise";
     public static final String CONSTANT = "constant";

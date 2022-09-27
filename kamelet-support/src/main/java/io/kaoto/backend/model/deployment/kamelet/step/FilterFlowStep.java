@@ -62,14 +62,13 @@ public class FilterFlowStep implements FlowStep {
         var flow = this.getFilter();
         Branch branch =
                 new Branch(kameletStepParserService.getFilterIdentifier(flow));
-        branch.put(KameletStepParserService.CONDITION,
-                kameletStepParserService.getFilterCondition(flow));
+        branch.setCondition(kameletStepParserService.getFilterCondition(flow));
         for (var s : flow.getSteps()) {
             branch.getSteps().add(kameletStepParserService.processStep(s));
         }
         kameletStepParserService.setValueOnStepProperty(res,
                 KameletStepParserService.SIMPLE,
-                branch.get(KameletStepParserService.CONDITION));
+                branch.getCondition());
         res.getBranches().add(branch);
 
         return res;

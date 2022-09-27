@@ -71,8 +71,7 @@ public class IntegrationsResource {
      * 🐱param dsl: String
      * 🐱param integration: Integration
      *
-     * Idempotent operation that given given a JSON status, returns
-     * the CRD.
+     * Idempotent operation that given given a JSON status, returns the CRD.
      *
      */
     @POST
@@ -80,13 +79,10 @@ public class IntegrationsResource {
     @Produces("text/yaml")
     @Path("/")
     @Operation(summary = "Get CRD",
-            description = "Returns the associated custom "
-                    + "resource definition."
-                    + " This is an idempotent operation.")
+            description = "Returns the associated custom resource definition. This is an idempotent operation.")
     public String cdr(
             final @RequestBody Integration request,
-            final @Parameter(description = "DSL to use. For example: "
-                    + "'Kamelet Binding'.")
+            final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
         return deploymentService.crd(request, dsl);
     }

@@ -2,7 +2,6 @@ package io.kaoto.backend.model.step;
 
 import io.kaoto.backend.model.parameter.Parameter;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,17 +11,20 @@ import java.util.List;
  * 🐱aka Branch[]
  *
  */
-public class Branch extends HashMap<String, Object> {
+public class Branch {
 
-    public static final String STEPS = "steps";
-    public static final String PARAMETERS = "parameters";
-    public static final String IDENTIFIER = "identifier";
+    private List<Step> steps = new LinkedList<>();
+    private List<Parameter> parameters = new LinkedList<>();
+    private String identifier;
+    private String condition;
+
+    public Branch() {
+        super();
+    }
 
     public Branch(final String identifier) {
         super();
-        this.put(IDENTIFIER, identifier);
-        this.put(STEPS, new LinkedList<Step>());
-        this.put(PARAMETERS, new LinkedList<Parameter>());
+        this.identifier = identifier;
     }
 
     /*
@@ -32,9 +34,7 @@ public class Branch extends HashMap<String, Object> {
      *
      */
     public List<Step> getSteps() {
-        this.computeIfAbsent(STEPS, k -> new LinkedList<Step>());
-
-        return (List<Step>) this.get(STEPS);
+        return this.steps;
     }
 
     /*
@@ -44,8 +44,30 @@ public class Branch extends HashMap<String, Object> {
      *
      */
     public List<Parameter> getParameters() {
-        this.computeIfAbsent(PARAMETERS, k -> new LinkedList<Parameter>());
+        return this.parameters;
+    }
 
-        return (List<Parameter>) this.get(PARAMETERS);
+    public void setSteps(final List<Step> steps) {
+        this.steps = steps;
+    }
+
+    public void setParameters(final List<Parameter> parameters) {
+        this.parameters = parameters;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(final String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(final String condition) {
+        this.condition = condition;
     }
 }
