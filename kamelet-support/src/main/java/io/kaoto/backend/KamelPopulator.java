@@ -406,9 +406,11 @@ public class KamelPopulator {
                 marshal.getDataFormat().setFormat(p.getValue().toString());
             } else if ("properties".equalsIgnoreCase(p.getId())) {
                 for (var param : ((ArrayParameter) p).getValue()) {
-                    marshal.getDataFormat().getProperties()
-                            .put(((Map.Entry) param).getKey().toString(),
-                                    ((Map.Entry) param).getValue().toString());
+                    if (param instanceof Object[] array) {
+                        marshal.getDataFormat().getProperties().put(array[0].toString(), array[1].toString());
+                    } else if (param instanceof List list) {
+                        marshal.getDataFormat().getProperties().put(list.get(0).toString(), list.get(1).toString());
+                    }
                 }
             }
         }
