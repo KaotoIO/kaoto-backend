@@ -8,10 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.kaoto.backend.model.deployment.kamelet.step.marshal.MarshalDeserializer;
 import io.kaoto.backend.model.step.Step;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -29,36 +25,6 @@ public class MarshalFlowStep implements FlowStep {
     public MarshalFlowStep() {
 
     }
-
-    public MarshalFlowStep(final Node value) {
-        if (value instanceof MappingNode mappingNode) {
-            for (var df : mappingNode.getValue()) {
-                if (df.getKeyNode() instanceof ScalarNode key) {
-                    extractDataFormat(df, key);
-                }
-            }
-        }
-    }
-
-    private void extractDataFormat(final NodeTuple df, final ScalarNode key) {
-        this.setDataFormat(new DataFormat());
-        this.getDataFormat().setFormat(key.getValue());
-
-        if (df.getValueNode()
-                instanceof MappingNode props) {
-            this.getDataFormat().setProperties(new HashMap<>());
-            for (var property : props.getValue()) {
-                if (property.getKeyNode() instanceof ScalarNode k
-                        && property.getValueNode()
-                        instanceof ScalarNode v) {
-                    this.getDataFormat().getProperties().put(
-                            k.getValue(),
-                            v.getValue());
-                }
-            }
-        }
-    }
-
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> step = new HashMap<>();

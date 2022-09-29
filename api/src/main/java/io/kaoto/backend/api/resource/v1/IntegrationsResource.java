@@ -102,8 +102,7 @@ public class IntegrationsResource {
     @Consumes("text/yaml")
     @Path("/")
     @Operation(summary = "Get Integration Object",
-            description = "Given the associated custom "
-                    + "resource definition, returns the JSON object."
+            description = "Given the associated custom resource definition, returns the JSON object."
                     + " This is an idempotent operation.")
     public Integration integration(
             final @RequestBody String crd,
@@ -140,8 +139,7 @@ public class IntegrationsResource {
                         integration.setMetadata(parsed.getMetadata());
                         integration.setParameters(parsed.getParameters());
                         integration.setDsl(stepParserService.identifier());
-                        log.warn("Gurl, the DSL you gave me is so wrong. This"
-                                + " is a " + stepParserService.identifier()
+                        log.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
                                 + " not a " + dsl);
                         break;
                     }

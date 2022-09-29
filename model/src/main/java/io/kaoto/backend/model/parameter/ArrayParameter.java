@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * 🐱miniclass ArrayParameter (Parameter)
  *
  */
-@JsonTypeName("object")
+@JsonTypeName("array")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArrayParameter extends Parameter<Object[]> {
     private Integer maxItems;
