@@ -23,7 +23,7 @@ public class MarshalFlowStep implements FlowStep {
     private DataFormat dataFormat;
 
     public MarshalFlowStep() {
-
+        //Needed for the serialization
     }
     @Override
     public Map<String, Object> getRepresenterProperties() {
@@ -45,8 +45,12 @@ public class MarshalFlowStep implements FlowStep {
                 param.setValue(this.getDataFormat().getFormat());
             } else if ("properties".equalsIgnoreCase(param.getId())
                             && this.getDataFormat().getProperties() != null) {
-                param.setValue(this.getDataFormat()
-                        .getProperties().entrySet().toArray());
+                Object[] array = new Object[this.getDataFormat().getProperties().size()];
+                int i = 0;
+                for (var entry : this.getDataFormat().getProperties().entrySet()) {
+                    array[i++] = new Object[]{entry.getKey(), entry.getValue()};
+                }
+                param.setValue(array);
             }
         }
 

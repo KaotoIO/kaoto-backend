@@ -33,7 +33,8 @@ spec:
             - remove-property:
                 name: property
             - marshal:
-                json: {}
+                json:
+                  library: Gson
           - simple: '{{?baz}}'
             steps:
             - transform:
