@@ -152,7 +152,7 @@ jobs:
           flavor: |
             latest=auto
             prefix=
-            suffix=arm64,onlatest=true
+            suffix=-arm64,onlatest=true
           tags: |
             type=schedule
             type=ref,event=branch
