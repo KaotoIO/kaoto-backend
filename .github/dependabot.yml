@@ -4,5 +4,4 @@ updates:
     directory: "/" 
     schedule:
       interval: "daily"
-    reviewers:
-      - "Delawen"
+    open-pull-requests-limit: 0
