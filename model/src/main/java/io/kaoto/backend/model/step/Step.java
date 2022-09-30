@@ -1,6 +1,8 @@
 package io.kaoto.backend.model.step;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.kaoto.backend.model.Metadata;
+import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.model.parameter.Parameter;
 
 import java.util.LinkedList;
@@ -16,17 +18,27 @@ import java.util.Objects;
  */
 public class Step extends Metadata {
 
+    @JsonView(Views.Summary.class)
     private String kind;
+    @JsonView(Views.Summary.class)
     private String icon;
+    @JsonView(Views.Summary.class)
     private String title;
+    @JsonView(Views.Summary.class)
     private String description;
+    @JsonView(Views.Summary.class)
     private String group;
+    @JsonView(Views.Complete.class)
     private List<Parameter> parameters;
+    @JsonView(Views.Complete.class)
     private List<String> required;
+    @JsonView(Views.Complete.class)
     private List<Branch> branches;
+    @JsonView(Views.Summary.class)
     private Integer minBranches;
+    @JsonView(Views.Summary.class)
     private Integer maxBranches;
-
+    @JsonView(Views.Summary.class)
     private String uuid;
 
     public Step() {

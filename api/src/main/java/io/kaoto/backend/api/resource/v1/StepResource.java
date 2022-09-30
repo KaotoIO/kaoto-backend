@@ -1,5 +1,7 @@
 package io.kaoto.backend.api.resource.v1;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.StepService;
@@ -86,6 +88,7 @@ public class StepResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @JsonView(Views.Summary.class)
     @Operation(summary = "Get all steps",
             description = "Returns all the available steps that can be added"
                     + " to the integration.")
@@ -170,6 +173,7 @@ public class StepResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @JsonView(Views.Complete.class)
     @Path("/id/{id}")
     @Operation(summary = "Get step by ID",
             description = "Returns all the details of a specific step "
@@ -190,6 +194,7 @@ public class StepResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @JsonView(Views.Complete.class)
     @Path("/name/{name}")
     @Operation(summary = "Get step by name",
             description = "Returns all the details of steps based on the name. "
