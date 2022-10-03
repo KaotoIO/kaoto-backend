@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 
 import java.util.Arrays;
 
-public class Integration {
+public class Deployment {
 
     private String name;
     private String date;
@@ -15,6 +15,16 @@ public class Integration {
     private String type;
     @JsonIgnore
     private CustomResource resource;
+
+    public Deployment(final CustomResource customResource, final Object status) {
+        this.setName(customResource.getMetadata().getName());
+        this.setDate(customResource.getMetadata().getCreationTimestamp());
+        this.setType(customResource.getKind());
+        this.setNamespace(customResource.getMetadata().getNamespace());
+        this.setResource(customResource);
+        this.setStatus(status);
+    }
+
 
     public String getName() {
         return name;
@@ -73,5 +83,16 @@ public class Integration {
 
     public void setType(final String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Deployment{" +
+                "name='" + name + '\'' +
+                ", date='" + date + '\'' +
+                ", status=" + status +
+                ", namespace='" + namespace + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }

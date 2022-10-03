@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.model.deployment.Integration;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.extension.annotations.WithSpan;
 import io.smallrye.common.annotation.Blocking;
@@ -77,36 +77,13 @@ public class ClusterService {
      * Returns the list of resources in a given namespace
      */
     @WithSpan
-    public List<Integration> getIntegrations(final String namespace) {
-        List<Integration> res = new ArrayList<>();
+    public List<Deployment> getIntegrations(final String namespace) {
+        List<Deployment> res = new ArrayList<>();
 
         for (var parser : parsers) {
-            for (Class<? extends CustomResource> c
-                    : parser.supportedCustomResources()) {
-                try {
-                    final var resources =
-                            kubernetesClient.resources(c).inNamespace(getNamespace(namespace)).list().getItems();
-                    for (CustomResource integration : resources) {
-                        Integration i = new Integration();
-                        i.setName(integration.getMetadata().getName());
-                        i.setNamespace(getNamespace(namespace));
-                        i.setStatus(parser.getStatus(integration));
-                        i.setDate(integration.getMetadata()
-                                .getCreationTimestamp());
-                        i.setType(integration.getKind());
-                        res.add(i);
-
-                        Span span = Span.current();
-                        if (span != null) {
-                            span.setAttribute("integration[" + res.size() + "].name", i.getName());
-                            span.setAttribute("integration[" + res.size() + "].date", i.getDate());
-                        }
-                    }
-                } catch (Exception e) {
-                    log.warn("Error extracting the list of integrations.", e);
-                }
-            }
+            res.addAll(parser.getResources(getNamespace(namespace), kubernetesClient));
         }
+
         return res;
     }
 
@@ -132,7 +109,7 @@ public class ClusterService {
                     start(binding, namespace);
 
                     Span span = Span.current();
-                    if (span != null) {
+                    if (span != null && binding != null) {
                         span.setAttribute("integration", binding.toString());
                     }
                     return;
@@ -154,13 +131,10 @@ public class ClusterService {
         }
         final var name = binding.getMetadata().getName();
         if (name == null || name.isEmpty()) {
-            binding.getMetadata().setName(
-                    "integration-" + System.currentTimeMillis());
+            binding.getMetadata().setName("integration-" + System.currentTimeMillis());
         }
         //force lowercase
-        binding.getMetadata().setName(
-                binding.getMetadata().getName()
-                        .toLowerCase(Locale.ROOT));
+        binding.getMetadata().setName(binding.getMetadata().getName().toLowerCase(Locale.ROOT));
 
         checkNoDuplicatedNames(namespace, binding);
     }

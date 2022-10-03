@@ -7,7 +7,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.deployment.ClusterService;
-import io.kaoto.backend.model.deployment.Integration;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -71,7 +71,7 @@ public class DeploymentsResource {
     @Path("/")
     @Operation(summary = "Get all Resources",
             description = "Returns all the resources on the cluster.")
-    public List<Integration> all(
+    public List<Deployment> all(
             final @Parameter(description = "Namespace of the cluster where "
                     + "the resources are running.")
             @QueryParam("namespace") String namespace) {
