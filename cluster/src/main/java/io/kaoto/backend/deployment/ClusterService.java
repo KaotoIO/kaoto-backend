@@ -136,22 +136,25 @@ public class ClusterService {
         //force lowercase
         binding.getMetadata().setName(binding.getMetadata().getName().toLowerCase(Locale.ROOT));
 
-        checkNoDuplicatedNames(namespace, binding);
+        checkNoDuplicatedNames(namespace, binding, 0);
     }
 
     @WithSpan
-    private void checkNoDuplicatedNames(
-            final String namespace,
-            final CustomResource binding)
+    private void checkNoDuplicatedNames(final String namespace, final CustomResource binding, final Integer iterations)
             throws IllegalArgumentException {
+        //This could lead to an infinite loop, very weird, but just in case
+        if (iterations > 5) {
+            throw new IllegalArgumentException("Couldn't find a proper renaming for the iteration.");
+        }
+
         //check no other deployment has the same name already
-        for (Integration i
-                : getIntegrations(getNamespace(namespace))) {
-            if (i.getName()
-                    .equalsIgnoreCase(
-                            binding.getMetadata().getName())) {
-                throw new IllegalArgumentException("There is an existing deployment with the same name: "
-                        + binding.getMetadata().getName());
+        for (Deployment i : getIntegrations(getNamespace(namespace))) {
+            if (i.getName().equalsIgnoreCase(binding.getMetadata().getName())) {
+                log.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
+                binding.getMetadata().setName(binding.getMetadata().getName() + System.currentTimeMillis());
+                log.warn("Renaming to: " + binding.getMetadata().getName());
+                checkNoDuplicatedNames(namespace, binding, iterations + 1);
+                break;
             }
         }
     }
