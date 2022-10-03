@@ -75,7 +75,7 @@ public class DeploymentsResource {
             final @Parameter(description = "Namespace of the cluster where "
                     + "the resources are running.")
             @QueryParam("namespace") String namespace) {
-        return clusterService.getIntegrations(namespace);
+        return clusterService.getResources(namespace);
     }
 
     /*

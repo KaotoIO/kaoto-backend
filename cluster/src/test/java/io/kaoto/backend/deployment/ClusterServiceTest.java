@@ -1,10 +1,23 @@
 package io.kaoto.backend.deployment;
 
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
+import io.kaoto.backend.model.deployment.camelroute.Integration;
+import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
+import org.codehaus.plexus.util.StringInputStream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.inject.Inject;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,32 +29,107 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @QuarkusTest
 class ClusterServiceTest {
 
-    private String binding = "apiVersion: camel.apache.org/v1alpha1\n"
+    private String kameletBinding = "apiVersion: camel.apache.org/v1alpha1\n"
             + "kind: KameletBinding\n"
+            + "metadata:\n"
+            + "  name: abinding\n"
             + "spec:\n"
             + "  source:\n"
             + "    uri: timer:foo\n"
             + "  sink: \n"
             + "    uri: log:bar";
 
+    private String kameletBinding2 = "apiVersion: camel.apache.org/v1alpha1\n"
+            + "kind: KameletBinding\n"
+            + "metadata:\n"
+            + "  name: anotherbinding\n"
+            + "spec:\n"
+            + "  source:\n"
+            + "    uri: timer:foo\n"
+            + "  sink: \n"
+            + "    uri: log:bar";
+
+    private String kamelet = "apiVersion: camel.apache.org/v1alpha1\n"
+            + "kind: Kamelet\n"
+            + "metadata:\n"
+            + "  name: kamelet-test-sink\n"
+            + "spec:\n"
+            + "  definition:\n"
+            + "    title: \"Test Sink\"\n"
+            + "    description: Test Sink\n"
+            + "    required:\n"
+            + "    type: object\n"
+            + "    properties:\n"
+            + "      property:\n"
+            + "        title: Token\n"
+            + "        description: Blablax\n"
+            + "        type: string\n"
+            + "  template:\n"
+            + "    from:\n"
+            + "      uri: kamelet:source\n"
+            + "      steps:\n"
+            + "      - to:\n"
+            + "          uri: kamelet:sink\n";
+
+    private String integration = "apiVersion: camel.apache.org/v1\n"
+            + "kind: Integration\n"
+            + "metadata:\n"
+            + "  labels: \n"
+            + "    camel.apache.org/created.by.kind: KameletBinding\n"
+            + "    camel.apache.org/created.by.name: abinding\n\n"
+            + "  name: hello.yaml\n"
+            + "spec:\n"
+            + "  flows:\n"
+            + "  - from:\n"
+            + "      uri: timer:tick\n"
+            + "      parameters:\n"
+            + "        period: '5000'\n"
+            + "      steps:\n"
+            + "      - to:\n"
+            + "          uri: log:tick\n";
+    private String integration2 = "apiVersion: camel.apache.org/v1\n"
+            + "kind: Integration\n"
+            + "metadata:\n"
+            + "  name: asdf.yaml\n"
+            + "spec:\n"
+            + "  flows:\n"
+            + "  - from:\n"
+            + "      uri: timer:tick\n"
+            + "      parameters:\n"
+            + "        period: '5000'\n"
+            + "      steps:\n"
+            + "      - to:\n"
+            + "          uri: log:tick\n";
+
     @Inject
     private ClusterService clusterService;
 
+    @Inject
+    private KubernetesClient kubernetesClient;
+
+
+    @BeforeEach
+    void cleanResources() {
+        var resources = clusterService.getResources("default");
+        for (var d : resources) {
+            clusterService.stop(d.getName(), "default");
+        }
+    }
 
     @Test
     void testAll() {
         String ns = "default";
-        assertTrue(clusterService.getIntegrations(ns).isEmpty());
+        assertTrue(clusterService.getResources(ns).isEmpty());
 
         assertThrows(IllegalArgumentException.class,
                 () -> clusterService.start("Wrong text", ns));
 
-        assertTrue(clusterService.getIntegrations(ns).isEmpty());
+        assertTrue(clusterService.getResources(ns).isEmpty());
 
-        clusterService.start(binding, ns);
-        assertFalse(clusterService.getIntegrations(ns).isEmpty());
+        clusterService.start(kameletBinding, ns);
+        assertFalse(clusterService.getResources(ns).isEmpty());
 
-        final var integrations = clusterService.getIntegrations(ns);
+        final var integrations = clusterService.getResources(ns);
         assertEquals(1, integrations.size());
         final var integration = integrations.get(0);
 
@@ -51,7 +139,79 @@ class ClusterServiceTest {
         assertNotNull(integration.getNamespace());
 
         clusterService.stop(integration.getName(), ns);
-        assertTrue(clusterService.getIntegrations(ns).isEmpty());
+        assertTrue(clusterService.getResources(ns).isEmpty());
+    }
+
+    @Test
+    void testGetDeployments() {
+        String ns = "default";
+
+        assertTrue(clusterService.getResources(ns).isEmpty());
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("Kamelet")
+                        .withPlural("Kamelets")
+                        .withVersion("v1alpha1")
+                        .build())
+                .inNamespace(ns)
+                .load(new ByteArrayInputStream(kamelet.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        assertEquals(1, clusterService.getResources(ns).size());
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("Integration")
+                        .withPlural("Integrations")
+                        .withVersion("v1")
+                        .build())
+                .inNamespace(ns)
+                .load(new ByteArrayInputStream(integration.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        assertEquals(1, clusterService.getResources(ns).size());
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("Integration")
+                        .withPlural("Integrations")
+                        .withVersion("v1")
+                        .build())
+                .inNamespace(ns)
+                .load(new ByteArrayInputStream(integration2.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        assertEquals(2, clusterService.getResources(ns).size());
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("KameletBinding")
+                        .withPlural("KameletBindings")
+                        .withVersion("v1alpha1")
+                        .build())
+                .inNamespace(ns)
+                .load(new ByteArrayInputStream(kameletBinding.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        assertEquals(3, clusterService.getResources(ns).size());
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("KameletBinding")
+                        .withPlural("KameletBindings")
+                        .withVersion("v1alpha1")
+                        .build())
+                .inNamespace(ns)
+                .load(new ByteArrayInputStream(kameletBinding2.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        assertEquals(4, clusterService.getResources(ns).size());
     }
 
     public ClusterService getClusterService() {
@@ -60,5 +220,13 @@ class ClusterServiceTest {
 
     public void setClusterService(final ClusterService clusterService) {
         this.clusterService = clusterService;
+    }
+
+    public KubernetesClient getKubernetesClient() {
+        return kubernetesClient;
+    }
+
+    public void setKubernetesClient(final KubernetesClient kubernetesClient) {
+        this.kubernetesClient = kubernetesClient;
     }
 }

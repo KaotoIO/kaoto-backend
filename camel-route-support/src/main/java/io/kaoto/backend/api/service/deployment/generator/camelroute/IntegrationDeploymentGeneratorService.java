@@ -123,13 +123,18 @@ public class IntegrationDeploymentGeneratorService
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
         List<Deployment> res = new LinkedList<>();
         try {
+            String createdLabel = "camel.apache.org/created.by.kind";
             final var resources = kclient.resources(Integration.class).inNamespace(namespace).list();
             for (CustomResource customResource : resources.getItems()) {
-                res.add(new Deployment(customResource, getStatus(customResource)));
+                if (customResource.getMetadata() == null
+                        || customResource.getMetadata().getLabels() == null
+                        || !customResource.getMetadata().getLabels().containsKey(createdLabel)) {
+                    res.add(new Deployment(customResource, getStatus(customResource)));
 
-                if (Span.current() != null) {
-                    Span.current().setAttribute("Integration[" + res.size() + "]",
-                            res.get(res.size() - 1).toString());
+                    if (Span.current() != null) {
+                        Span.current().setAttribute("CustomResource[" + res.size() + "]",
+                                res.get(res.size() - 1).toString());
+                    }
                 }
             }
         } catch (Exception e) {

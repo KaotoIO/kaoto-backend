@@ -71,13 +71,13 @@ public class ClusterService {
     }
 
     /*
-     * 🐱method getIntegrations: Integration[]
+     * 🐱method getResources: Deployment[]
      * 🐱param namespace: String
      *
      * Returns the list of resources in a given namespace
      */
     @WithSpan
-    public List<Deployment> getIntegrations(final String namespace) {
+    public List<Deployment> getResources(final String namespace) {
         List<Deployment> res = new ArrayList<>();
 
         for (var parser : parsers) {
@@ -148,7 +148,7 @@ public class ClusterService {
         }
 
         //check no other deployment has the same name already
-        for (Deployment i : getIntegrations(getNamespace(namespace))) {
+        for (Deployment i : getResources(getNamespace(namespace))) {
             if (i.getName().equalsIgnoreCase(binding.getMetadata().getName())) {
                 log.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
                 binding.getMetadata().setName(binding.getMetadata().getName() + System.currentTimeMillis());
