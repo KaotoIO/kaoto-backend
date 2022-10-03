@@ -408,9 +408,9 @@ resource relies on to perform the operations.
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='clusterservice-getintegrations'>
-		<td><code><b>getIntegrations</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
-		<td><code>Integration[]</code></td>
+	<tr id='clusterservice-getresources'>
+		<td><code><b>getResources</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
+		<td><code>Deployment[]</code></td>
 		<td>Returns the list of resources in a given namespace</td>
 	</tr>
 	<tr id='clusterservice-start'>
@@ -428,11 +428,6 @@ resource relies on to perform the operations.
 		<td><code><b>get</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code>CustomResource</code></td>
 		<td>Returns the given resource.</td>
-	</tr>
-	<tr id='clusterservice-logs'>
-		<td><code><b>logs</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>podName</i></nobr>, <nobr>&lt;Integer&gt; <i>lines</i></nobr>)</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the log of the given pod.</td>
 	</tr>
 	<tr id='clusterservice-streamlogs'>
 		<td><code><b>streamlogs</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;Integer&gt; <i>lines</i></nobr>)</nobr></code></td>
@@ -691,6 +686,11 @@ the types of custom resources supported in the cluster.</td>
 	<tr id='deploymentgeneratorservice-getkinds'>
 		<td><code><b>getKinds</b>()</nobr></code></td>
 		<td><code>String[]</code></td>
+		<td>Return the step kinds compatible with this service.</td>
+	</tr>
+	<tr id='deploymentgeneratorservice-getresources'>
+		<td><code><b>getResources</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
+		<td><code>Deployment[]</code></td>
 		<td>Return the step kinds compatible with this service.</td>
 	</tr>
 </tbody></table>
