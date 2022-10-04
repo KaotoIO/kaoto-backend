@@ -2,10 +2,10 @@ repository:
   step:
     jar:
       -
-        url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.6.0/camel-kamelets-0.6.0.jar"
+        url: "resource://camel-kamelets-0.9.0.jar"
         if-no-cluster: true
       - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
-      - url: "https://github.com/apache/camel/archive/refs/tags/camel-3.18.2.zip"
+      - url: "resource://camel-3.19.0.zip"
   viewdefinition:
     jar:
       - url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/heads/main.zip"
