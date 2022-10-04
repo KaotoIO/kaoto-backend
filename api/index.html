@@ -730,7 +730,7 @@
   "type" : "string",
   "enum" : [ "CONTAINS_STEP_IDENTIFIER", "CONTAINS_STEP_NAME", "CONTAINS_STEP_TYPE", "SIZE_GREATER_THAN", "SIZE_SMALLER_THAN", "SIZE_EQUALS" ]
 };
-            defs["Integration"] = {
+            defs["Deployment"] = {
   "type" : "object",
   "properties" : {
     "name" : {
@@ -756,7 +756,7 @@
     }
   }
 };
-            defs["Integration1"] = {
+            defs["Integration"] = {
   "type" : "object",
   "properties" : {
     "steps" : {
@@ -1595,7 +1595,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Deployment] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1614,7 +1614,7 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String namespace = namespace_example; // String | Namespace of the cluster where the resources are running.
         try {
-            array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+            array[Deployment] result = apiInstance.v1DeploymentsGet(namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsGet");
@@ -1634,7 +1634,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Get all Resources
 [apiInstance v1DeploymentsGetWith:namespace
-              completionHandler: ^(array[Integration] output, NSError* error) {
+              completionHandler: ^(array[Deployment] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1686,7 +1686,7 @@ namespace Example
             try
             {
                 // Get all Resources
-                array[Integration] result = apiInstance.v1DeploymentsGet(namespace);
+                array[Deployment] result = apiInstance.v1DeploymentsGet(namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1807,7 +1807,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Integration"
+          "$ref" : "#/components/schemas/Deployment"
         },
         "x-content-type" : "application/json"
       }
@@ -3634,7 +3634,7 @@ public class IntegrationsResourceApiExample {
         String body = ; // String | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
-            Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
+            Integration result = apiInstance.v1IntegrationsPost(body, dsl);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
@@ -3654,7 +3654,7 @@ public class IntegrationsResourceApiExample {
         String body = ; // String | 
         String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
         try {
-            Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
+            Integration result = apiInstance.v1IntegrationsPost(body, dsl);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling IntegrationsResourceApi#v1IntegrationsPost");
@@ -3676,7 +3676,7 @@ IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
 // Get CRD
 [apiInstance v1IntegrationsPostWith:body
     dsl:dsl
-              completionHandler: ^(Integration1 output, NSError* error) {
+              completionHandler: ^(Integration output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3730,7 +3730,7 @@ namespace Example
             try
             {
                 // Get CRD
-                Integration1 result = apiInstance.v1IntegrationsPost(body, dsl);
+                Integration result = apiInstance.v1IntegrationsPost(body, dsl);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -3824,7 +3824,7 @@ except ApiException as e:
     },
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration1"
+        "$ref" : "#/components/schemas/Integration"
       }
     }
   }
@@ -3899,7 +3899,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Integration1"
+        "$ref" : "#/components/schemas/Integration"
       }
     },
     "text/yaml" : {
