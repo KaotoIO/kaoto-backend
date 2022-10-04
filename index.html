@@ -689,9 +689,14 @@ the types of custom resources supported in the cluster.</td>
 		<td>Return the step kinds compatible with this service.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-getresources'>
-		<td><code><b>getResources</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
+		<td><code><b>getResources</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;KubernetesClient&gt; <i>kclient</i></nobr>)</nobr></code></td>
 		<td><code>Deployment[]</code></td>
 		<td>Return the step kinds compatible with this service.</td>
+	</tr>
+	<tr id='deploymentgeneratorservice-getpod'>
+		<td><code><b>getPod</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;KubernetesClient&gt; <i>kclient</i></nobr>)</nobr></code></td>
+		<td><code>Pod</code></td>
+		<td>Return the pod associated to the resource by name. If no pod associated, returns null.</td>
 	</tr>
 </tbody></table>
 </section>
