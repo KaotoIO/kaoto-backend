@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.deployment.generator;
 
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.model.deployment.Deployment;
@@ -94,11 +95,23 @@ public interface DeploymentGeneratorService {
     /*
      * 🐱method getResources: Deployment[]
      * 🐱param namespace: String
+     * 🐱param kclient: KubernetesClient
      *
      * Return the step kinds compatible with this service.
      */
     @WithSpan
     Collection<? extends Deployment> getResources(String namespace, KubernetesClient kclient);
+
+    /*
+     * 🐱method getPod: Pod
+     * 🐱param namespace: String
+     * 🐱param name: String
+     * 🐱param kclient: KubernetesClient
+     *
+     * Return the pod associated to the resource by name. If no pod associated, returns null.
+     */
+    @WithSpan
+    Pod getPod(String namespace, String name, KubernetesClient kclient);
 
     enum Status {
         Stopped, Building, Ready, Running, Invalid

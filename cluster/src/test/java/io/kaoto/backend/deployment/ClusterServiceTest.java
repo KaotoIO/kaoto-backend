@@ -214,6 +214,47 @@ class ClusterServiceTest {
         assertEquals(4, clusterService.getResources(ns).size());
     }
 
+    @Test
+    void logs() {
+        var pod = "apiVersion: v1\n"
+                + "kind: Pod\n"
+                + "metadata:\n"
+                + "  generateName: abinding-759497b44d-\n"
+                + "  labels:\n"
+                + "    camel.apache.org/integration: abinding\n"
+                + "spec:\n"
+                + "  containers:\n"
+                + "status:\n"
+                + "  phase: Running";
+
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withKind("Pod")
+                        .withPlural("Pods")
+                        .withVersion("v1")
+                        .build())
+                .inNamespace("default")
+                .load(new ByteArrayInputStream(pod.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("KameletBinding")
+                        .withPlural("KameletBindings")
+                        .withVersion("v1alpha1")
+                        .build())
+                .inNamespace("default")
+                .load(new ByteArrayInputStream(kameletBinding.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        var logs = clusterService.streamlogs("default", "abinding", "KameletBinding", 50);
+        assertNotNull(logs);
+        assertTrue(logs.subscribe().asStream().allMatch(s -> s != null));
+    }
+
     public ClusterService getClusterService() {
         return clusterService;
     }
