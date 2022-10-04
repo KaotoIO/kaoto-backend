@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.step;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.jsonviews.Views;
@@ -39,6 +40,7 @@ public class Step extends Metadata {
     @JsonView(Views.Summary.class)
     private Integer maxBranches;
     @JsonView(Views.Summary.class)
+    @JsonProperty("UUID")
     private String uuid;
 
     public Step() {
