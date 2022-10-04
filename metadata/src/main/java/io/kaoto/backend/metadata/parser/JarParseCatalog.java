@@ -102,7 +102,7 @@ public class JarParseCatalog<T extends Metadata>
             if (tmp != null) {
                 FileUtils.deleteDirectory(tmp.toFile());
             }
-            if (!location.equalsIgnoreCase(url)) {
+            if (!location.equalsIgnoreCase(url) && !url.startsWith("resource:/")) {
                 FileUtils.deleteQuietly(new File(location));
             }
         } catch (IOException e) {
@@ -164,11 +164,9 @@ public class JarParseCatalog<T extends Metadata>
         if (url.startsWith("http://") || url.startsWith("https://")) {
             try {
                 FileAttribute<Set<PosixFilePermission>> attr =
-                        PosixFilePermissions.asFileAttribute(
-                                PosixFilePermissions.fromString("rwx------"));
+                        PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
                 Path tmp = Files.createTempFile("remote-", ".jar", attr);
-                try (FileOutputStream fos =
-                             new FileOutputStream(tmp.toFile())) {
+                try (FileOutputStream fos = new FileOutputStream(tmp.toFile())) {
                     URL remote = new URL(url);
                     URLConnection connection = remote.openConnection();
                     IOUtils.copy(connection.getInputStream(), fos);
@@ -177,6 +175,14 @@ public class JarParseCatalog<T extends Metadata>
                 }
             } catch (IOException e) {
                 log.error("Error trying to create temporary file.", e);
+            }
+        } else if (location.startsWith("resource://")) {
+            try {
+                location = location.substring(10);
+                location = this.getClass().getResource(location).toURI().getPath();
+            } catch (Exception e) {
+                location = url;
+                log.error("We had issues accessing " + location);
             }
         }
 
