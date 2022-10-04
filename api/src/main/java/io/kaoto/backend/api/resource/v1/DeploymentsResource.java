@@ -218,17 +218,16 @@ public class DeploymentsResource {
             description = "Get the resource's log.")
     @Blocking
     public Multi<String> logs(
-            final @Parameter(description = "Name of the resource "
-                    + "of which logs should be retrieved.")
+            final @Parameter(description = "Name of the resource of which logs should be retrieved.")
             @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster "
-                    + "where the resource is running.")
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace,
-            final @Parameter(description = "Number of last N lines to be "
-                    + "retrieved.")
+            final @Parameter(description = "The log we want is of this DSL type.")
+            @QueryParam("dsl") String dsl,
+            final @Parameter(description = "Number of last N lines to be retrieved.")
             @QueryParam("lines") int lines) {
 
-        return clusterService.streamlogs(namespace, name, lines);
+        return clusterService.streamlogs(namespace, name, dsl, lines);
 
     }
 

@@ -1,6 +1,7 @@
 package io.kaoto.backend.deployment;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
@@ -252,27 +253,38 @@ public class ClusterService {
     @Blocking
     public Multi<String> streamlogs(final String namespace,
                                     final String name,
+                                    final String dsl,
                                     final Integer lines) {
         final var out = new PipedOutputStream();
         final var in = new PipedInputStream();
 
-        //This is strongly tied with camel, we should delegate to each DSL
-        var list = kubernetesClient.pods()
-                .inNamespace(getNamespace(namespace))
-                .withLabel("camel.apache.org/integration=" + name)
-                .list().getItems();
+        Pod pod = null;
+        //We are going to assume no repeated names
+        //When we find a pod, that's the one.
+        for (var parser : parsers) {
+            if (dsl == null || dsl.isEmpty() || dsl.equalsIgnoreCase(parser.identifier())) {
+                pod = parser.getPod(namespace, name, kubernetesClient);
+                if (pod != null) {
+                    break;
+                }
+            }
+        }
 
-        if (list.isEmpty()) {
+        if (pod == null) {
             throw new IllegalArgumentException("No running resource found in " + namespace + " with name " + name);
         }
 
+        final Pod finalPod = pod;
+
+        //Send stream of log to PipedOutputStream
         managedExecutor.execute(() ->
                 kubernetesClient.pods()
                         .inNamespace(getNamespace(namespace))
-                        .withName(list.get(0).getMetadata().getName())
+                        .withName(finalPod.getMetadata().getName())
                         .tailingLines(lines)
                         .watchLog(out));
 
+        //Pipe both streams
         managedExecutor.execute(() -> {
             try {
                 out.connect(in);
@@ -281,15 +293,13 @@ public class ClusterService {
             }
         });
 
+        //Connect InputStream to response
         var reader = new BufferedReader(new InputStreamReader(in));
 
         Multi<String> logs = Multi.createFrom().generator(
                 () -> 0, (n, emitter) -> {
                     try {
-                        reader
-                                .lines()
-                                .forEach(
-                                        line -> emitter.emit(line + "\n"));
+                        reader.lines().forEach(line -> emitter.emit(line + "\n"));
                         emitter.emit(reader.readLine() + "\n");
                     } catch (Exception e) {
                         emitter.fail(e);

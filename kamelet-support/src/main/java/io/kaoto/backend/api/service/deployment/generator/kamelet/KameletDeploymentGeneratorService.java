@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
@@ -140,5 +141,11 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
         }
 
         return res;
+    }
+
+    @Override
+    public Pod getPod(final String namespace, final String name, final KubernetesClient kubernetesClient) {
+        //There is no pod associated to Kamelets
+        return null;
     }
 }
