@@ -34,17 +34,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestHTTPEndpoint(IntegrationsResource.class)
 class IntegrationsResourceTest {
 
+    private StepCatalog catalog;
+    private LanguageService languageService;
     @Inject
     public void setStepCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
     }
-    private StepCatalog catalog;
 
     @Inject
     public void setLanguageService(final LanguageService languageService) {
         this.languageService = languageService;
     }
-    private LanguageService languageService;
 
     @BeforeEach
     void ensureCatalog() {
@@ -54,13 +54,13 @@ class IntegrationsResourceTest {
     @Test
     void thereAndBackAgain() throws URISyntaxException, IOException {
 
+        final var alldsl = languageService.getAll();
         ObjectMapper mapper = new ObjectMapper();
 
         String yaml1 = Files.readString(Path.of(
                 DeploymentsResourceTest.class.getResource(
                                 "../twitter-search-source-binding.yaml")
                         .toURI()));
-
 
         var res = given()
                 .when()
@@ -69,9 +69,18 @@ class IntegrationsResourceTest {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        List<String> dsls =
-                mapper.readValue(res.extract().body().asString(), List.class);
-        assertFalse(dsls.isEmpty());
+        final var dsllist = mapper.readValue(res.extract().body().asString(), List.class);
+        assertEquals(alldsl.size(), dsllist.size());
+        assertTrue(alldsl.stream().allMatch(l -> dsllist.contains(l.get("name"))));
+
+        //It will return a valid value even if we are useless users with the DSL
+        given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml1)
+                .post("?dsl=SomethingWrong")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
 
        res = given()
                .when()
@@ -91,10 +100,9 @@ class IntegrationsResourceTest {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        final var dsllist = mapper.readValue(res.extract().body().asString(), List.class);
-        final var alldsl = languageService.getAll();
-        assertEquals(alldsl.size(), dsllist.size());
-        assertTrue(alldsl.stream().allMatch(l -> dsllist.contains(l.get("name"))));
+        final var dsllist2 = mapper.readValue(res.extract().body().asString(), List.class);
+        assertEquals(alldsl.size(), dsllist2.size());
+        assertTrue(alldsl.stream().allMatch(l -> dsllist2.contains(l.get("name"))));
 
         res = given()
                 .when()
@@ -103,7 +111,7 @@ class IntegrationsResourceTest {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        dsls = mapper.readValue(res.extract().body().asString(), List.class);
+        var dsls = mapper.readValue(res.extract().body().asString(), List.class);
         assertEquals(1, dsls.size());
         assertTrue(dsls.contains("KameletBinding"));
 
