@@ -144,6 +144,22 @@ class ClusterServiceTest {
     }
 
     @Test
+    void testDuplicatedName() {
+        String ns = "default";
+        clusterService.start(kameletBinding, ns);
+        assertEquals(1, clusterService.getResources(ns).size());
+        clusterService.start(kameletBinding, ns);
+        assertEquals(2, clusterService.getResources(ns).size());
+        clusterService.start(kameletBinding, ns);
+        assertEquals(3, clusterService.getResources(ns).size());
+
+        final var integrations = clusterService.getResources(ns);
+        assertTrue(integrations.stream().allMatch(i -> i.getName().startsWith("abinding")));
+        integrations.stream().forEach(i -> clusterService.stop(i.getName(), ns));
+        assertTrue(clusterService.getResources(ns).isEmpty());
+    }
+
+    @Test
     void testGetDeployments() {
         String ns = "default";
 
