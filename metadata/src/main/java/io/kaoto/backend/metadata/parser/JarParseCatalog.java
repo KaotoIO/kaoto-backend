@@ -52,20 +52,15 @@ public class JarParseCatalog<T extends Metadata>
 
     private List<T> getJarAndParse(final String url) {
         log.trace("Warming up repository in " + url);
-        List<T> metadataList =
-                Collections.synchronizedList(new CopyOnWriteArrayList<>());
-        final List<CompletableFuture<Void>> futureMd =
-                Collections.synchronizedList(new CopyOnWriteArrayList<>());
+        List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
+        final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         String location = downloadIfRemote(url);
 
         Path tmp = null;
         long totalSize = 0;
-        try (ZipInputStream zis =
-                     new ZipInputStream(new FileInputStream(location))) {
-            FileAttribute<Set<PosixFilePermission>> attr =
-                    PosixFilePermissions.asFileAttribute(
-                            PosixFilePermissions.fromString("rwx------"));
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(location))) {
+            var attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
             tmp = Files.createTempDirectory("kaoto-zip-", attr);
             tmp.toFile().deleteOnExit();
 
@@ -76,8 +71,7 @@ public class JarParseCatalog<T extends Metadata>
                 totalSize += processExtractedFile(tmp, zis, zipEntry);
 
                 if (totalSize > thresholdSize) {
-                    throw new IOException(
-                            "This jar file unzipped is too big.");
+                    throw new IOException("This jar file unzipped is too big.");
                 }
 
                 zipEntry = zis.getNextEntry();
@@ -89,9 +83,7 @@ public class JarParseCatalog<T extends Metadata>
             this.processFile.setMetadataList(metadataList);
             Files.walkFileTree(tmp, this.processFile);
             log.trace("Found " + futureMd.size() + " elements.");
-            CompletableFuture.allOf(
-                            futureMd.toArray(new CompletableFuture[0]))
-                    .join();
+            CompletableFuture.allOf(futureMd.toArray(new CompletableFuture[0])).join();
         } catch (FileNotFoundException e) {
             log.error("No jar file found.", e);
         } catch (IOException e) {

@@ -41,8 +41,7 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
 
     @Override
     public ParseCatalog<Step> getLocalFolder(final Path path) {
-        ParseCatalog<Step> parseCatalog =
-                new LocalFolderParseCatalog<>(path);
+        ParseCatalog<Step> parseCatalog = new LocalFolderParseCatalog<>(path);
         parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
         return parseCatalog;
     }
