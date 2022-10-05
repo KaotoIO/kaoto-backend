@@ -11,6 +11,7 @@ import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.codehaus.plexus.util.StringInputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -251,6 +252,40 @@ class ClusterServiceTest {
                 .create();
 
         var logs = clusterService.streamlogs("default", "abinding", "KameletBinding", 50);
+        assertNotNull(logs);
+        assertTrue(logs.subscribe().asStream().allMatch(s -> s != null));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> {clusterService.streamlogs("default", "abinding", "Integration", 50);});
+        assertThrows(IllegalArgumentException.class,
+                () -> {clusterService.streamlogs("default", "abinding", "Kamelet", 50);});
+
+        String intyaml = "apiVersion: camel.apache.org/v1\n"
+                + "kind: Integration\n"
+                + "metadata:\n"
+                + "  name: abinding\n"
+                + "spec:\n"
+                + "  flows:\n"
+                + "  - from:\n"
+                + "      uri: timer:tick\n"
+                + "      parameters:\n"
+                + "        period: '5000'\n"
+                + "      steps:\n"
+                + "      - to:\n"
+                + "          uri: log:tick\n";
+
+        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
+                        .withNamespaced(true)
+                        .withGroup("camel.apache.org")
+                        .withKind("Integration")
+                        .withPlural("Integrations")
+                        .withVersion("v1")
+                        .build())
+                .inNamespace("default")
+                .load(new ByteArrayInputStream(intyaml.getBytes(StandardCharsets.UTF_8)))
+                .create();
+
+        logs = clusterService.streamlogs("default", "abinding", "Integration", 50);
         assertNotNull(logs);
         assertTrue(logs.subscribe().asStream().allMatch(s -> s != null));
     }
