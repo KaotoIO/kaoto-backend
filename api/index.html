@@ -2541,7 +2541,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: text/plain"\
-"//v1/deployments/{name}/logs?lines=&namespace="</code></pre>
+"//v1/deployments/{name}/logs?dsl=&lines=&namespace="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2558,10 +2558,11 @@ public class DeploymentsResourceApiExample {
         
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource of which logs should be retrieved.
+        String dsl = dsl_example; // String | The log we want is of this DSL type.
         Integer lines = 56; // Integer | Number of last N lines to be retrieved.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
-            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, dsl, lines, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
@@ -2579,10 +2580,11 @@ public class DeploymentsResourceApiExample {
     public static void main(String[] args) {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource of which logs should be retrieved.
+        String dsl = dsl_example; // String | The log we want is of this DSL type.
         Integer lines = 56; // Integer | Number of last N lines to be retrieved.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
-            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+            array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, dsl, lines, namespace);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameLogsGet");
@@ -2597,6 +2599,7 @@ public class DeploymentsResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameLogsGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource of which logs should be retrieved.
+String *dsl = dsl_example; // The log we want is of this DSL type. (optional)
 Integer *lines = 56; // Number of last N lines to be retrieved. (optional)
 String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
 
@@ -2604,6 +2607,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Get logs
 [apiInstance v1DeploymentsNameLogsGetWith:name
+    dsl:dsl
     lines:lines
     namespace:namespace
               completionHandler: ^(array['String'] output, NSError* error) {
@@ -2623,6 +2627,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource of which logs should be retrieved.
 var opts = { 
+  'dsl': dsl_example, // {{String}} The log we want is of this DSL type.
   'lines': 56, // {{Integer}} Number of last N lines to be retrieved.
   'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
 };
@@ -2656,13 +2661,14 @@ namespace Example
 
             var apiInstance = new DeploymentsResourceApi();
             var name = name_example;  // String | Name of the resource of which logs should be retrieved.
+            var dsl = dsl_example;  // String | The log we want is of this DSL type. (optional) 
             var lines = 56;  // Integer | Number of last N lines to be retrieved. (optional) 
             var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
 
             try
             {
                 // Get logs
-                array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, lines, namespace);
+                array['String'] result = apiInstance.v1DeploymentsNameLogsGet(name, dsl, lines, namespace);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2681,11 +2687,12 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
 $name = name_example; // String | Name of the resource of which logs should be retrieved.
+$dsl = dsl_example; // String | The log we want is of this DSL type.
 $lines = 56; // Integer | Number of last N lines to be retrieved.
 $namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
 
 try {
-    $result = $api_instance->v1DeploymentsNameLogsGet($name, $lines, $namespace);
+    $result = $api_instance->v1DeploymentsNameLogsGet($name, $dsl, $lines, $namespace);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameLogsGet: ', $e->getMessage(), PHP_EOL;
@@ -2700,11 +2707,12 @@ use WWW::SwaggerClient::DeploymentsResourceApi;
 
 my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
 my $name = name_example; # String | Name of the resource of which logs should be retrieved.
+my $dsl = dsl_example; # String | The log we want is of this DSL type.
 my $lines = 56; # Integer | Number of last N lines to be retrieved.
 my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
 
 eval { 
-    my $result = $api_instance->v1DeploymentsNameLogsGet(name => $name, lines => $lines, namespace => $namespace);
+    my $result = $api_instance->v1DeploymentsNameLogsGet(name => $name, dsl => $dsl, lines => $lines, namespace => $namespace);
     print Dumper($result);
 };
 if ($@) {
@@ -2722,12 +2730,13 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.DeploymentsResourceApi()
 name = name_example # String | Name of the resource of which logs should be retrieved.
+dsl = dsl_example # String | The log we want is of this DSL type. (optional)
 lines = 56 # Integer | Number of last N lines to be retrieved. (optional)
 namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
 
 try: 
     # Get logs
-    api_response = api_instance.v1_deployments_name_logs_get(name, lines=lines, namespace=namespace)
+    api_response = api_instance.v1_deployments_name_logs_get(name, dsl=dsl, lines=lines, namespace=namespace)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameLogsGet: %s\n" % e)</code></pre>
@@ -2775,6 +2784,25 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameLogsGet_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        The log we want is of this DSL type.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
                                 <tr><td style="width:150px;">lines</td>
                                 <td>
                                 
