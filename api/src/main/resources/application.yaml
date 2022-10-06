@@ -14,6 +14,8 @@ crd:
   default: "KameletBinding"
 
 quarkus:
+  native:
+    additional-build-args: -H:ResourceConfigurationFiles=resources-config.json
   application:
     name: kaoto-backend
   http:

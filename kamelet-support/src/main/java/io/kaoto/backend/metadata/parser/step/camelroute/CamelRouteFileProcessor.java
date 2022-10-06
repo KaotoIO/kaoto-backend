@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -46,7 +47,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     static {
         try {
             DEFAULT_ICON_STRING =
-                    Files.readString(Path.of(CamelRouteFileProcessor.class.getResource("default-icon.txt").toURI()));
+                    new String(CamelRouteFileProcessor.class.getResourceAsStream("default-icon.txt").readAllBytes(),
+                            StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("Couldn't find the default icon for camel routes.", e);
         }
@@ -141,9 +143,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                             var jsonObject = property.getValue().asJsonObject();
 
                             jsonObject.forEach((key, value) ->
-                                    hashMap.put(key,
-                                            value.toString()
-                                                    .replace("\"", "")));
+                                    hashMap.put(key, value.toString().replace("\"", "")));
 
                             return hashMap;
                         }

@@ -3,25 +3,20 @@ package io.kaoto.backend.metadata.parser;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.ZipEntry;
@@ -55,11 +50,9 @@ public class JarParseCatalog<T extends Metadata>
         List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
-        String location = downloadIfRemote(url);
-
         Path tmp = null;
         long totalSize = 0;
-        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(location))) {
+        try (ZipInputStream zis = new ZipInputStream(getInputStream(url))) {
             var attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
             tmp = Files.createTempDirectory("kaoto-zip-", attr);
             tmp.toFile().deleteOnExit();
@@ -86,16 +79,13 @@ public class JarParseCatalog<T extends Metadata>
             CompletableFuture.allOf(futureMd.toArray(new CompletableFuture[0])).join();
         } catch (FileNotFoundException e) {
             log.error("No jar file found.", e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error trying to parse catalog.", e);
         }
 
         try {
             if (tmp != null) {
                 FileUtils.deleteDirectory(tmp.toFile());
-            }
-            if (!location.equalsIgnoreCase(url) && !url.startsWith("resource:/")) {
-                FileUtils.deleteQuietly(new File(location));
             }
         } catch (IOException e) {
             log.error("Error cleaning up catalog.", e);
@@ -114,15 +104,11 @@ public class JarParseCatalog<T extends Metadata>
             Files.createDirectories(destinationFile.toPath());
         } else {
             //Make sure we have the path created
-            if (destinationFile.getParent() != null
-                    && Files.notExists(destinationFile
-                    .toPath().getParent())) {
-                Files.createDirectories(
-                        destinationFile.toPath().getParent());
+            if (destinationFile.getParent() != null && Files.notExists(destinationFile.toPath().getParent())) {
+                Files.createDirectories(destinationFile.toPath().getParent());
             }
 
-            Files.copy(zis, destinationFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(zis, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
         destinationFile.deleteOnExit();
         return Files.size(tmp);
@@ -133,52 +119,42 @@ public class JarParseCatalog<T extends Metadata>
     private File getDestinationFile(final Path tmp,
                                     final ZipEntry zipEntry)
             throws IOException {
-        String canonicalDestinationDirPath =
-                tmp.toFile().getCanonicalPath();
-        File destinationFile =
-                new File(tmp.toFile(), zipEntry.getName());
-        String canonicalDestinationFile =
-                destinationFile.getCanonicalPath();
-        if (!canonicalDestinationFile.startsWith(
-                canonicalDestinationDirPath + File.separator)) {
-            throw new IOException(
-                    "Potential vulnerability: "
-                            + "entry outside of target dir: "
-                            + zipEntry.getName());
+        String canonicalDestinationDirPath = tmp.toFile().getCanonicalPath();
+        File destinationFile = new File(tmp.toFile(), zipEntry.getName());
+        String canonicalDestinationFile = destinationFile.getCanonicalPath();
+        if (!canonicalDestinationFile.startsWith(canonicalDestinationDirPath + File.separator)) {
+            throw new IOException("Potential vulnerability: entry outside of target dir: " + zipEntry.getName());
         }
         return destinationFile;
     }
 
     //If it is a remote file, download it
-    private String downloadIfRemote(final String url) {
-        String location = url;
+    private InputStream getInputStream(final String url) {
+        InputStream res = null;
 
         if (url.startsWith("http://") || url.startsWith("https://")) {
             try {
-                FileAttribute<Set<PosixFilePermission>> attr =
-                        PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
-                Path tmp = Files.createTempFile("remote-", ".jar", attr);
-                try (FileOutputStream fos = new FileOutputStream(tmp.toFile())) {
-                    URL remote = new URL(url);
-                    URLConnection connection = remote.openConnection();
-                    IOUtils.copy(connection.getInputStream(), fos);
-                    location = tmp.toFile().getAbsolutePath();
-                    tmp.toFile().deleteOnExit();
-                }
+                URL remote = new URL(url);
+                URLConnection connection = remote.openConnection();
+                res = connection.getInputStream();
             } catch (IOException e) {
-                log.error("Error trying to create temporary file.", e);
+                log.error("Error trying to access remote file.", e);
             }
-        } else if (location.startsWith("resource://")) {
+        } else if (url.startsWith("resource://")) {
             try {
-                location = location.substring(10);
-                location = this.getClass().getResource(location).toURI().getPath();
+                res = this.getClass().getResourceAsStream(url.substring(10));
             } catch (Exception e) {
-                location = url;
-                log.error("We had issues accessing " + location);
+                log.error("We had issues accessing " + url);
+            }
+        } else {
+            try {
+                res = this.getClass().getResourceAsStream(url);
+            } catch (Exception e) {
+                log.error("We had issues accessing " + url);
             }
         }
 
-        return location;
+        return res;
     }
 
 
