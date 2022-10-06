@@ -42,12 +42,10 @@ import java.util.Map;
 
 public class KamelPopulator {
 
-    public static final String CONDITION = "condition";
     public static final String SIMPLE = "simple";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
-    public static final String CAMEL_APACHE_ORG_KAMELET_ICON =
-            "camel.apache.org/kamelet.icon";
+    public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
 
     public void populateKamelet(
@@ -73,22 +71,15 @@ public class KamelPopulator {
         }
 
         kamelet.setMetadata(new ObjectMeta());
-        populateLabels(kamelet, (Map<String, String>) metadata.getOrDefault(
-                "labels",
-                Collections.emptyMap()));
+        populateLabels(kamelet, (Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
         populateAdditionalProperties(kamelet,
-                (Map<String, String>) metadata.getOrDefault(
-                "additionalProperties",
-                Collections.emptyMap()));
+                (Map<String, String>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
         populateAnnotations(kamelet,
-                (Map<String, String>) metadata.getOrDefault(
-                        "annotations",
-                        Collections.emptyMap()));
+                (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
 
         //override in case this is outdated from the graphic side
         Type type = defineType(steps);
-        kamelet.getMetadata().getLabels().put(group + "/kamelet.type",
-                type.name());
+        kamelet.getMetadata().getLabels().put(group + "/kamelet.type", type.name());
 
         //consistent naming for kamelets
         String name = metadata.getOrDefault(NAME, "").toString();
@@ -98,17 +89,14 @@ public class KamelPopulator {
         kamelet.getMetadata().setName(name);
 
         //do we have an icon?
-        if (kamelet.getMetadata().getAnnotations().getOrDefault(
-                CAMEL_APACHE_ORG_KAMELET_ICON, "").isBlank()) {
-            kamelet.getMetadata().getAnnotations().put(
-                    CAMEL_APACHE_ORG_KAMELET_ICON,
+        if (kamelet.getMetadata().getAnnotations().getOrDefault(CAMEL_APACHE_ORG_KAMELET_ICON, "").isBlank()) {
+            kamelet.getMetadata().getAnnotations().put(CAMEL_APACHE_ORG_KAMELET_ICON,
                     metadata.getOrDefault("icon", "").toString());
         }
 
         setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
-        kamelet.getSpec().getTemplate().setBeans(
-                (List<Bean>) metadata.getOrDefault("beans", null));
+        kamelet.getSpec().getTemplate().setBeans((List<Bean>) metadata.getOrDefault("beans", null));
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
@@ -127,8 +115,7 @@ public class KamelPopulator {
                                      final List<Step> steps,
                                      final Map<String, Object> metadata) {
 
-        spec.setDependencies((List<String>)
-                metadata.getOrDefault("dependencies", new LinkedList<>()));
+        spec.setDependencies((List<String>) metadata.getOrDefault("dependencies", new LinkedList<>()));
 
         if (spec.getDependencies() == null) {
             spec.setDependencies(new LinkedList<>());
@@ -142,8 +129,7 @@ public class KamelPopulator {
 
         for (Step s : steps) {
             var dep = s.getId();
-            if (dep != null
-                    && s.getKind().equalsIgnoreCase("Camel-Connector")) {
+            if (dep != null && s.getKind().equalsIgnoreCase("Camel-Connector")) {
                 if (dep.contains(":")) {
                     dep = dep.substring(0, dep.indexOf(':'));
                 }
@@ -179,8 +165,7 @@ public class KamelPopulator {
                                      final Map<String, String> annotations) {
         kamelet.getMetadata().setAnnotations(new LinkedHashMap<>());
         for (Map.Entry<String, String> entry : annotations.entrySet()) {
-            kamelet.getMetadata().getAnnotations().put(entry.getKey(),
-                    entry.getValue());
+            kamelet.getMetadata().getAnnotations().put(entry.getKey(), entry.getValue());
         }
 
         kamelet.getMetadata().getAnnotations().remove("icon");
@@ -191,9 +176,7 @@ public class KamelPopulator {
                             final Map<String, String> additionalProperties) {
         kamelet.getMetadata().setAdditionalProperties(new HashMap<>());
         for (var entry : additionalProperties.entrySet()) {
-            kamelet.getMetadata().getAdditionalProperties()
-                    .put(entry.getKey(),
-                            entry.getValue());
+            kamelet.getMetadata().getAdditionalProperties().put(entry.getKey(), entry.getValue());
         }
 
     }
@@ -202,9 +185,7 @@ public class KamelPopulator {
                                 final Map<String, String> labels) {
         kamelet.getMetadata().setLabels(new HashMap<>());
         for (Map.Entry<String, String> entry : labels.entrySet()) {
-            kamelet.getMetadata().getLabels().put(entry.getKey(),
-                    entry.getValue());
-
+            kamelet.getMetadata().getLabels().put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -215,11 +196,8 @@ public class KamelPopulator {
         // If it has both, it is an action.
         Type type = Type.action;
         if (steps.size() > 1) {
-            boolean source = steps.get(0).getName()
-                    .equalsIgnoreCase("kamelet:source");
-            boolean sink =
-                    steps.get(steps.size() - 1).getName().equalsIgnoreCase(
-                            "kamelet:sink");
+            boolean source = steps.get(0).getName().equalsIgnoreCase("kamelet:source");
+            boolean sink = steps.get(steps.size() - 1).getName().equalsIgnoreCase("kamelet:sink");
 
             if (source && !sink) {
                 type = Type.sink;
@@ -256,8 +234,7 @@ public class KamelPopulator {
             for (Parameter p : s.getParameters()) {
                 if (p.isPath()) {
                     uri.append(":");
-                    uri.append(p.getValue() != null ? p.getValue()
-                            : p.getDefaultValue());
+                    uri.append(p.getValue() != null ? p.getValue() : p.getDefaultValue());
                 } else if (p.getValue() != null) {
                     params.put(p.getId(), p.getValue().toString());
                 }
