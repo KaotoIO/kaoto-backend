@@ -34,6 +34,9 @@ spec:
                   library: Gson
           - simple: '{{?bar}}'
             steps:
+            - unmarshal:
+                json:
+                  unmarshal-type-name: MyClass
             - set-property:
                 name: property
                 simple: bar

@@ -50,5 +50,8 @@ spec:
           steps:
           - set-body:
               simple: abc
+          - unmarshal:
+              json:
+                unmarshal-type-name: MyClass
       - to:
           uri: kamelet:sink

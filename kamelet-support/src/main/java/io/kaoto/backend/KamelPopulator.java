@@ -21,6 +21,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
@@ -275,6 +276,9 @@ public class KamelPopulator {
                 case "marshal":
                     flowStep = getMarshalStep(step);
                     break;
+                case "unmarshal":
+                    flowStep = getUnmarshalStep(step);
+                    break;
                 default:
                     break;
             }
@@ -375,6 +379,17 @@ public class KamelPopulator {
 
     private FlowStep getMarshalStep(final Step step) {
         var marshal = new MarshalFlowStep();
+        assignParameters(step, marshal);
+        return marshal;
+    }
+
+    private FlowStep getUnmarshalStep(final Step step) {
+        var marshal = new UnmarshalFlowStep();
+        assignParameters(step, marshal);
+        return marshal;
+    }
+
+    private void assignParameters(final Step step, final MarshalFlowStep marshal) {
         marshal.setDataFormat(new DataFormat());
         marshal.getDataFormat().setProperties(new HashMap<>());
 
@@ -391,7 +406,6 @@ public class KamelPopulator {
                 }
             }
         }
-        return marshal;
     }
 
     private FlowStep getFilterStep(final Step step) {
