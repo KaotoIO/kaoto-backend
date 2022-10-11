@@ -24,8 +24,8 @@ public class Step extends Metadata {
     private List<Parameter> parameters;
     private List<String> required;
     private List<Branch> branches;
-    private Integer minBranches;
-    private Integer maxBranches;
+    private Integer minBranches = 0;
+    private Integer maxBranches = 0;
 
     private String uuid;
 
