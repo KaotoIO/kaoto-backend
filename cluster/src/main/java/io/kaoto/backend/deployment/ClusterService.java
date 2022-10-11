@@ -7,6 +7,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.extension.annotations.WithSpan;
@@ -179,7 +180,7 @@ public class ClusterService {
                         .build();
 
         var constructor = new Constructor(binding.getClass());
-        Yaml yaml = new Yaml(constructor);
+        Yaml yaml = new Yaml(constructor, new KameletRepresenter());
         kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
                 .load(new ByteArrayInputStream(
