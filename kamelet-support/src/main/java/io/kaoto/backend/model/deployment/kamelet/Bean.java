@@ -35,6 +35,10 @@ import java.util.List;
 public class Bean implements Serializable {
     private static final long serialVersionUID = -4601560033032557024L;
 
+    public Bean() {
+        super();
+    }
+
     @JsonProperty("name")
     private String name;
     @JsonProperty("type")
