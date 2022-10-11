@@ -27,7 +27,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🦾 Build and analyze
-        run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations site
+        run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations
       - name: 💾 Save results
         if: always()
         uses: actions/upload-artifact@v2
