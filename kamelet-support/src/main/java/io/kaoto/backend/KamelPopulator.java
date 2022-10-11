@@ -130,7 +130,8 @@ public class KamelPopulator {
 
         for (Step s : steps) {
             var dep = s.getName();
-            if (dep != null && s.getKind().equalsIgnoreCase("Camel-Connector")) {
+            if (dep != null && s.getKind().equalsIgnoreCase("Camel-Connector")
+                    && !dep.startsWith("kamelet")) {
                 if (dep.contains(":")) {
                     dep = dep.substring(0, dep.indexOf(':'));
                 }
