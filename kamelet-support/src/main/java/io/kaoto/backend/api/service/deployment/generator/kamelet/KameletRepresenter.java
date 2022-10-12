@@ -78,9 +78,7 @@ public class KameletRepresenter extends Representer {
                         properties.put(KIND, cr.getKind());
                         properties.put("metadata", cr.getMetadata());
                         properties.put("spec", cr.getSpec());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
-                                properties,
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.AUTO);
                     }
                 });
@@ -94,16 +92,13 @@ public class KameletRepresenter extends Representer {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         ObjectMeta meta = (ObjectMeta) data;
                         if (meta.getAnnotations() != null) {
-                            properties.put("annotations",
-                                    meta.getAnnotations());
+                            properties.put("annotations", meta.getAnnotations());
                         }
                         if (meta.getLabels() != null) {
-                            properties.put("labels",
-                                    meta.getLabels());
+                            properties.put("labels", meta.getLabels());
                         }
                         properties.put(NAME, meta.getName());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
@@ -127,9 +122,7 @@ public class KameletRepresenter extends Representer {
                     if (spec.getSink() != null) {
                         properties.put("sink", spec.getSink());
                     }
-                    return representMapping(getTag(data.getClass(), Tag.MAP),
-                            properties,
-                            DumperOptions.FlowStyle.AUTO);
+                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
 
@@ -142,9 +135,7 @@ public class KameletRepresenter extends Representer {
                         properties.put("definition", spec.getDefinition());
                         properties.put("dependencies", spec.getDependencies());
                         properties.put("template", spec.getTemplate());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
-                                properties,
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });

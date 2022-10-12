@@ -73,9 +73,6 @@ public class SetBodyFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
                     p.setValue(this.getSetBody().getConstant());
-                } else if (p.getId()
-                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
-                    p.setValue(this.getSetBody().getName());
                 }
             }
 

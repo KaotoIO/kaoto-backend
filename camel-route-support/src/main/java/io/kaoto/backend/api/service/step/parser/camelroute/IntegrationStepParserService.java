@@ -71,8 +71,7 @@ public class IntegrationStepParserService
 
 
         } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    "Error trying to parse.", e);
+            throw new IllegalArgumentException("Error trying to parse.", e);
         }
 
         res.setSteps(steps.stream()

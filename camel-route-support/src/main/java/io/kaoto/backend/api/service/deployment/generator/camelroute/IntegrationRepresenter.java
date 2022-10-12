@@ -26,8 +26,7 @@ public class IntegrationRepresenter extends KameletRepresenter {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         IntegrationSpec spec = (IntegrationSpec) data;
                         properties.put("flows", spec.getFlows());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);
                     }
@@ -39,8 +38,7 @@ public class IntegrationRepresenter extends KameletRepresenter {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         Flow flow = (Flow) data;
                         properties.put("from", flow.getFrom());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);
                     }
