@@ -483,6 +483,10 @@ compatible languages.</td>
 
 <section class='namespace' id='integration'>
 <h2><a href='#integration'>🔗</a></h2>
+<p>Represents an Integration definition that can be deployed.</p>
+<p>This generates a flow based on how Camel-K defines YAML routes as
+described in https://camel.apache.org/components/latest/others/yaml-dsl.html
+This implementation models the steps as &quot;Loading Camel K Integrations&quot;.</p>
 
 <h3 id='integration-property'><a href='#integration-property'>🔗</a>Integration</h3>
 
@@ -819,38 +823,7 @@ spec:
 </section>
 <section class='namespace' id='camelroute'>
 <h2><a href='#camelroute'>🔗</a>CamelRoute</h2>
-<p>Represents an Integration definition that can be deployed.</p>
-<p>This generates a flow based on how Camel-K defines YAML routes as
-described in https://camel.apache.org/components/latest/others/yaml-dsl.html
-This implementation models the steps as &quot;Loading Camel K Integrations&quot;.</p>
 
-<section class='namespace' id='integrationspec'>
-<h2><a href='#integrationspec'>🔗</a></h2>
-
-<h3 id='integrationspec-property'><a href='#integrationspec-property'>🔗</a>IntegrationSpec</h3>
-
-
-<section>
-
-
-<table><thead>
-	<tr>
-		<th>Property</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='integrationspec-flows'>
-		<td><code><b>flows</b>
-		<td><code>Flow[]</code></td>
-		<td>List of flows this route supports.</td>
-	</tr>
-</tbody></table>
-</section>
-
-
-
-</section>
 
 </section>
 <section class='namespace' id='kameletparsecatalog'>
@@ -2160,6 +2133,11 @@ the metadata associated to the orchestration.</td>
 </section>
 
 
+<section class='namespace' id='camelroutestepparserservice'>
+<h2><a href='#camelroutestepparserservice'>🔗</a></h2>
+
+
+</section>
 <section class='namespace' id='integrationstepparserservice'>
 <h2><a href='#integrationstepparserservice'>🔗</a></h2>
 
