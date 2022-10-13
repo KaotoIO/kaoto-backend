@@ -373,12 +373,12 @@ running resources.</p>
 		<td>Deploys a CRD provided.</td>
 	</tr>
 	<tr id='deploymentsresource-get'>
-		<td><code><b>get</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
+		<td><code><b>get</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;String&gt; <i>type</i></nobr>, <nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Returns the CRD of the running resource, if exists.</td>
 	</tr>
 	<tr id='deploymentsresource-stop'>
-		<td><code><b>stop</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
+		<td><code><b>stop</b>(<nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;String&gt; <i>type</i></nobr>, <nobr>&lt;String&gt; <i>namespace</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Stops and deletes a running resource by name</td>
 	</tr>
@@ -414,15 +414,15 @@ resource relies on to perform the operations.
 		<td>Returns the list of resources in a given namespace</td>
 	</tr>
 	<tr id='clusterservice-start'>
-		<td><code><b>start</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
+		<td><code><b>start</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>, <nobr>&lt;CustomResource&gt; <i>binding</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
 		<td>Deploys the given input resource
-<p>Starts the resource with the given name.</p></td>
+<p>Starts the given CustomResource.</p></td>
 	</tr>
 	<tr id='clusterservice-stop'>
-		<td><code><b>stop</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;CustomResource&gt; <i>binding</i></nobr>)</nobr></code></td>
+		<td><code><b>stop</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>
 		<td><code></code></td>
-		<td>Stops the given CustomResource.</td>
+		<td>Stops the resource with the given name.</td>
 	</tr>
 	<tr id='clusterservice-get'>
 		<td><code><b>get</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;String&gt; <i>name</i></nobr>)</nobr></code></td>

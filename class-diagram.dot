@@ -26,9 +26,9 @@ all(&lt;String&gt; namespace):String
 <BR align="left" />
 start(&lt;String&gt; crd, &lt;String&gt; namespace, &lt;String&gt; name):String
 <BR align="left" />
-get(&lt;String&gt; name, &lt;String&gt; namespace):String
+get(&lt;String&gt; name, &lt;String&gt; type, &lt;String&gt; namespace):String
 <BR align="left" />
-stop(&lt;String&gt; name, &lt;String&gt; namespace):String
+stop(&lt;String&gt; name, &lt;String&gt; type, &lt;String&gt; namespace):String
 <BR align="left" />
 logs(&lt;String&gt; name, &lt;String&gt; namespace):String
 <BR align="left" />
