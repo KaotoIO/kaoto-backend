@@ -125,7 +125,7 @@ public class ClusterService {
         throw new IllegalArgumentException("The provided CRD is invalid or "
                 + "not supported.");
     }
-    @WithSpan
+
     private void setName(final CustomResource binding, final String namespace)
             throws IllegalArgumentException {
         if (binding.getMetadata() == null) {
@@ -141,7 +141,7 @@ public class ClusterService {
         checkNoDuplicatedNames(namespace, binding, 0);
     }
 
-    @WithSpan
+
     private void checkNoDuplicatedNames(final String namespace, final CustomResource binding, final Integer iterations)
             throws IllegalArgumentException {
         //This could lead to an infinite loop, very weird, but just in case
@@ -162,11 +162,11 @@ public class ClusterService {
     }
 
     /*
-     * 🐱method stop
+     * 🐱method start
      * 🐱param namespace: String
      * 🐱param binding: CustomResource
      *
-     * Stops the given CustomResource.
+     * Starts the given CustomResource.
      */
     @WithSpan
     public void start(final CustomResource binding, final String namespace) {
@@ -183,30 +183,28 @@ public class ClusterService {
         Yaml yaml = new Yaml(constructor, new KameletRepresenter());
         kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
-                .load(new ByteArrayInputStream(
-                        yaml.dumpAsMap(binding)
-                                .getBytes(StandardCharsets.UTF_8)))
+                .load(new ByteArrayInputStream(yaml.dumpAsMap(binding).getBytes(StandardCharsets.UTF_8)))
                 .create();
     }
 
     /*
-     * 🐱method start
+     * 🐱method stop
      * 🐱param namespace: String
      * 🐱param name: String
      *
-     * Starts the resource with the given name.
+     * Stops the resource with the given name.
      */
     @WithSpan
     public boolean stop(final String name, final String namespace) {
         CustomResource cr = get(namespace, name);
+
         if (cr == null) {
-            throw new NotFoundException("Resource with name " + name + " not "
-                    + "found.");
+            throw new NotFoundException("Resource with name " + name + " not found.");
         }
-        return kubernetesClient.resources(cr.getClass())
-                .inNamespace(getNamespace(namespace))
-                .withName(name)
-                .delete();
+
+        log.info("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
+
+        return kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace)).withName(name).delete();
     }
 
     /*
@@ -218,25 +216,17 @@ public class ClusterService {
      */
     @WithSpan
     public CustomResource get(final String namespace, final String name) {
+
         CustomResource cr = null;
-        for (var parser : parsers) {
-            log.trace("Now trying with parser for " + parser.identifier());
-            for (Class<? extends CustomResource> c : parser.supportedCustomResources()) {
-                log.trace("Trying to parse with " + c.getSimpleName());
-                try {
-                    cr = kubernetesClient.customResources(c).inNamespace(getNamespace(namespace)).withName(name).get();
-                } catch (Exception e) {
-                    log.trace("This is not the proper kind: " + parser.identifier());
-                }
-                if (cr != null) {
-                    log.trace("Found a customResource of kind " + cr.getKind() + " and name " + name);
-                    break;
-                }
-            }
-            if (cr != null) {
+        var crs = getResources(namespace);
+
+        for (var resource : crs) {
+            if (resource.getName().equalsIgnoreCase(name)) {
+                cr = resource.getResource();
                 break;
             }
         }
+
         return cr;
     }
 
