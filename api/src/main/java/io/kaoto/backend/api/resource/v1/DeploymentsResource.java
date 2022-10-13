@@ -140,6 +140,7 @@ public class DeploymentsResource {
     /*
      * 🐱method get: String
      * 🐱param name: String
+     * 🐱param type: String
      * 🐱param namespace: String
      *
      * Returns the CRD of the running resource, if exists.
@@ -151,12 +152,11 @@ public class DeploymentsResource {
     @Operation(summary = "Get CRD",
             description = "Returns the custom resource identified by name.")
     public String resource(
-            final @Parameter(description = "Name of the resource to get.")
-            @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster where "
-                    + "the resource is running.")
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
+            final @Parameter(description = "Type of the resource to get") @PathParam("type") String type,
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
-        CustomResource cr = clusterService.get(namespace, name);
+        CustomResource cr = clusterService.get(namespace, name, type);
         if (cr == null) {
             throw new NotFoundException("Resource with name " + name + " not "
                     + "found.");
@@ -184,6 +184,7 @@ public class DeploymentsResource {
     /*
      * 🐱method stop: String
      * 🐱param name: String
+     * 🐱param type: String
      * 🐱param namespace: String
      *
      * Stops and deletes a running resource by name
@@ -194,12 +195,11 @@ public class DeploymentsResource {
     @Operation(summary = "Stop/Remove",
             description = "Remove the resource identified by name.")
     public boolean stop(
-            final @Parameter(description = "Name of the resource to stop.")
-            @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster where "
-                    + "the resource is running.")
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
+            final @Parameter(description = "Type of the resource to get") @PathParam("type") String type,
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
-        return clusterService.stop(name, namespace);
+        return clusterService.stop(name, namespace, type);
     }
 
 

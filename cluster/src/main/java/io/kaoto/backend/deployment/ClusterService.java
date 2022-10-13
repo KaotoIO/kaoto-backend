@@ -195,8 +195,8 @@ public class ClusterService {
      * Stops the resource with the given name.
      */
     @WithSpan
-    public boolean stop(final String name, final String namespace) {
-        CustomResource cr = get(namespace, name);
+    public boolean stop(final String name, final String namespace, final String type) {
+        CustomResource cr = get(namespace, name, type);
 
         if (cr == null) {
             throw new NotFoundException("Resource with name " + name + " not found.");
@@ -215,13 +215,14 @@ public class ClusterService {
      * Returns the given resource.
      */
     @WithSpan
-    public CustomResource get(final String namespace, final String name) {
+    public CustomResource get(final String namespace, final String name, final String type) {
 
         CustomResource cr = null;
         var crs = getResources(namespace);
 
         for (var resource : crs) {
-            if (resource.getName().equalsIgnoreCase(name)) {
+            if (resource.getName().equalsIgnoreCase(name)
+                    && (type == null || resource.getType().equalsIgnoreCase(type))) {
                 cr = resource.getResource();
                 break;
             }

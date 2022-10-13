@@ -1,30 +1,21 @@
 package io.kaoto.backend.deployment;
 
-import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
-import io.kaoto.backend.model.deployment.camelroute.Integration;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
-import org.codehaus.plexus.util.StringInputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.inject.Inject;
-
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WithKubernetesTestServer
 @QuarkusTest
@@ -113,7 +104,7 @@ class ClusterServiceTest {
     void cleanResources() {
         var resources = clusterService.getResources("default");
         for (var d : resources) {
-            clusterService.stop(d.getName(), "default");
+            clusterService.stop(d.getName(), "default", null);
         }
     }
 
@@ -139,7 +130,7 @@ class ClusterServiceTest {
         assertNotNull(integration.getErrors());
         assertNotNull(integration.getNamespace());
 
-        clusterService.stop(integration.getName(), ns);
+        clusterService.stop(integration.getName(), ns, integration.getType());
         assertTrue(clusterService.getResources(ns).isEmpty());
     }
 
@@ -155,7 +146,7 @@ class ClusterServiceTest {
 
         final var integrations = clusterService.getResources(ns);
         assertTrue(integrations.stream().allMatch(i -> i.getName().startsWith("abinding")));
-        integrations.stream().forEach(i -> clusterService.stop(i.getName(), ns));
+        integrations.stream().forEach(i -> clusterService.stop(i.getName(), ns, null));
         assertTrue(clusterService.getResources(ns).isEmpty());
     }
 
