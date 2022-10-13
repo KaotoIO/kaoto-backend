@@ -202,7 +202,7 @@ public class ClusterService {
             throw new NotFoundException("Resource with name " + name + " not found.");
         }
 
-        log.info("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
+        log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
 
         return kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace)).withName(name).delete();
     }
