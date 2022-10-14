@@ -1891,7 +1891,7 @@ public class DeploymentsResourceApiExample {
     public static void main(String[] args) {
         
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
-        String name = name_example; // String | Name of the resource to stop.
+        String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
             'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
@@ -1911,7 +1911,7 @@ public class DeploymentsResourceApiExample {
 
     public static void main(String[] args) {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
-        String name = name_example; // String | Name of the resource to stop.
+        String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
         try {
             'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
@@ -1928,7 +1928,7 @@ public class DeploymentsResourceApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to stop.
+                              <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to get.
 String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
 
 DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
@@ -1951,7 +1951,7 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
 
 var api = new KaotoBackendApi.DeploymentsResourceApi()
-var name = name_example; // {{String}} Name of the resource to stop.
+var name = name_example; // {{String}} Name of the resource to get.
 var opts = { 
   'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
 };
@@ -1984,7 +1984,7 @@ namespace Example
         {
 
             var apiInstance = new DeploymentsResourceApi();
-            var name = name_example;  // String | Name of the resource to stop.
+            var name = name_example;  // String | Name of the resource to get.
             var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
 
             try
@@ -2008,7 +2008,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
-$name = name_example; // String | Name of the resource to stop.
+$name = name_example; // String | Name of the resource to get.
 $namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
 
 try {
@@ -2026,7 +2026,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DeploymentsResourceApi;
 
 my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
-my $name = name_example; # String | Name of the resource to stop.
+my $name = name_example; # String | Name of the resource to get.
 my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
 
 eval { 
@@ -2047,7 +2047,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DeploymentsResourceApi()
-name = name_example # String | Name of the resource to stop.
+name = name_example # String | Name of the resource to get.
 namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
 
 try: 
@@ -2079,7 +2079,7 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          Name of the resource to stop.
+                                                          Name of the resource to get.
                                                       </div>
                                               </div>
                                                   <div class="inner required">
