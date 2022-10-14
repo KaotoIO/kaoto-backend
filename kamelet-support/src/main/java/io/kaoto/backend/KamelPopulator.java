@@ -306,13 +306,15 @@ public class KamelPopulator {
 
         List<Choice> choices = new LinkedList<>();
 
-        for (Branch b : step.getBranches()) {
-            if (b.getCondition() != null) {
-                choices.add(processChoice(b));
-            } else {
-                var otherwise = new Otherwise();
-                otherwise.setSteps(processSteps(b));
-                choice.setOtherwise(otherwise);
+        if (step.getBranches() != null) {
+            for (Branch b : step.getBranches()) {
+                if (b.getCondition() != null) {
+                    choices.add(processChoice(b));
+                } else {
+                    var otherwise = new Otherwise();
+                    otherwise.setSteps(processSteps(b));
+                    choice.setOtherwise(otherwise);
+                }
             }
         }
         choice.setChoice(choices);
