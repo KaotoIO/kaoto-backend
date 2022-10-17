@@ -17,6 +17,7 @@ jobs:
       with:
         project: 'https://github.com/orgs/KaotoIO/projects/3'
         column_name: 'WishList'
+        
   assign_to_newcomers_list:
     runs-on: ubuntu-latest
     name: 🎯 Move to Newcomers List 🎯
@@ -33,3 +34,13 @@ jobs:
       with:
         project: 'https://github.com/orgs/KaotoIO/projects/4'
         column_name: 'What To Do'
+    
+        
+  assign_to_Kaoto_private:
+    runs-on: ubuntu-latest
+    name: 🎯 Move to Kaoto List 🎯
+    steps:
+      - uses: actions/add-to-project@v0.3.0
+        with:
+          project-url: https://github.com/orgs/KaotoIO/projects/10
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
