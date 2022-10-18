@@ -153,7 +153,7 @@ public class DeploymentsResource {
             description = "Returns the custom resource identified by name.")
     public String resource(
             final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
-            final @Parameter(description = "Type of the resource to get") @PathParam("type") String type,
+            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
         CustomResource cr = clusterService.get(namespace, name, type);
@@ -196,7 +196,7 @@ public class DeploymentsResource {
             description = "Remove the resource identified by name.")
     public boolean stop(
             final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
-            final @Parameter(description = "Type of the resource to get") @PathParam("type") String type,
+            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
         return clusterService.stop(name, namespace, type);
