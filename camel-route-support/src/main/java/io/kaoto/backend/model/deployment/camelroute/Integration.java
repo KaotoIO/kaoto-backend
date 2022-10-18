@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 /**
- * 🐱class CamelRoute
+ * 🐱class Integration
  *
  * Represents an Integration definition that can be deployed.
  *

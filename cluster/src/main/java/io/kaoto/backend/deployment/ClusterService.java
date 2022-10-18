@@ -1,12 +1,14 @@
 package io.kaoto.backend.deployment;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.model.deployment.Integration;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.extension.annotations.WithSpan;
 import io.smallrye.common.annotation.Blocking;
@@ -71,42 +73,19 @@ public class ClusterService {
     }
 
     /*
-     * 🐱method getIntegrations: Integration[]
+     * 🐱method getResources: Deployment[]
      * 🐱param namespace: String
      *
      * Returns the list of resources in a given namespace
      */
     @WithSpan
-    public List<Integration> getIntegrations(final String namespace) {
-        List<Integration> res = new ArrayList<>();
+    public List<Deployment> getResources(final String namespace) {
+        List<Deployment> res = new ArrayList<>();
 
         for (var parser : parsers) {
-            for (Class<? extends CustomResource> c
-                    : parser.supportedCustomResources()) {
-                try {
-                    final var resources =
-                            kubernetesClient.resources(c).inNamespace(getNamespace(namespace)).list().getItems();
-                    for (CustomResource integration : resources) {
-                        Integration i = new Integration();
-                        i.setName(integration.getMetadata().getName());
-                        i.setNamespace(getNamespace(namespace));
-                        i.setStatus(parser.getStatus(integration));
-                        i.setDate(integration.getMetadata()
-                                .getCreationTimestamp());
-                        i.setType(integration.getKind());
-                        res.add(i);
-
-                        Span span = Span.current();
-                        if (span != null) {
-                            span.setAttribute("integration[" + res.size() + "].name", i.getName());
-                            span.setAttribute("integration[" + res.size() + "].date", i.getDate());
-                        }
-                    }
-                } catch (Exception e) {
-                    log.warn("Error extracting the list of integrations.", e);
-                }
-            }
+            res.addAll(parser.getResources(getNamespace(namespace), kubernetesClient));
         }
+
         return res;
     }
 
@@ -132,7 +111,7 @@ public class ClusterService {
                     start(binding, namespace);
 
                     Span span = Span.current();
-                    if (span != null) {
+                    if (span != null && binding != null) {
                         span.setAttribute("integration", binding.toString());
                     }
                     return;
@@ -146,7 +125,7 @@ public class ClusterService {
         throw new IllegalArgumentException("The provided CRD is invalid or "
                 + "not supported.");
     }
-    @WithSpan
+
     private void setName(final CustomResource binding, final String namespace)
             throws IllegalArgumentException {
         if (binding.getMetadata() == null) {
@@ -154,40 +133,40 @@ public class ClusterService {
         }
         final var name = binding.getMetadata().getName();
         if (name == null || name.isEmpty()) {
-            binding.getMetadata().setName(
-                    "integration-" + System.currentTimeMillis());
+            binding.getMetadata().setName("integration-" + System.currentTimeMillis());
         }
         //force lowercase
-        binding.getMetadata().setName(
-                binding.getMetadata().getName()
-                        .toLowerCase(Locale.ROOT));
+        binding.getMetadata().setName(binding.getMetadata().getName().toLowerCase(Locale.ROOT));
 
-        checkNoDuplicatedNames(namespace, binding);
+        checkNoDuplicatedNames(namespace, binding, 0);
     }
 
-    @WithSpan
-    private void checkNoDuplicatedNames(
-            final String namespace,
-            final CustomResource binding)
+
+    private void checkNoDuplicatedNames(final String namespace, final CustomResource binding, final Integer iterations)
             throws IllegalArgumentException {
+        //This could lead to an infinite loop, very weird, but just in case
+        if (iterations > 5) {
+            throw new IllegalArgumentException("Couldn't find a proper renaming for the iteration.");
+        }
+
         //check no other deployment has the same name already
-        for (Integration i
-                : getIntegrations(getNamespace(namespace))) {
-            if (i.getName()
-                    .equalsIgnoreCase(
-                            binding.getMetadata().getName())) {
-                throw new IllegalArgumentException("There is an existing deployment with the same name: "
-                        + binding.getMetadata().getName());
+        for (Deployment i : getResources(getNamespace(namespace))) {
+            if (i.getName().equalsIgnoreCase(binding.getMetadata().getName())) {
+                log.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
+                binding.getMetadata().setName(binding.getMetadata().getName() + System.currentTimeMillis());
+                log.warn("Renaming to: " + binding.getMetadata().getName());
+                checkNoDuplicatedNames(namespace, binding, iterations + 1);
+                break;
             }
         }
     }
 
     /*
-     * 🐱method stop
+     * 🐱method start
      * 🐱param namespace: String
      * 🐱param binding: CustomResource
      *
-     * Stops the given CustomResource.
+     * Starts the given CustomResource.
      */
     @WithSpan
     public void start(final CustomResource binding, final String namespace) {
@@ -201,33 +180,31 @@ public class ClusterService {
                         .build();
 
         var constructor = new Constructor(binding.getClass());
-        Yaml yaml = new Yaml(constructor);
+        Yaml yaml = new Yaml(constructor, new KameletRepresenter());
         kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
-                .load(new ByteArrayInputStream(
-                        yaml.dumpAsMap(binding)
-                                .getBytes(StandardCharsets.UTF_8)))
+                .load(new ByteArrayInputStream(yaml.dumpAsMap(binding).getBytes(StandardCharsets.UTF_8)))
                 .create();
     }
 
     /*
-     * 🐱method start
+     * 🐱method stop
      * 🐱param namespace: String
      * 🐱param name: String
      *
-     * Starts the resource with the given name.
+     * Stops the resource with the given name.
      */
     @WithSpan
-    public boolean stop(final String name, final String namespace) {
-        CustomResource cr = get(namespace, name);
+    public boolean stop(final String name, final String namespace, final String type) {
+        CustomResource cr = get(namespace, name, type);
+
         if (cr == null) {
-            throw new NotFoundException("Resource with name " + name + " not "
-                    + "found.");
+            throw new NotFoundException("Resource with name " + name + " not found.");
         }
-        return kubernetesClient.resources(cr.getClass())
-                .inNamespace(getNamespace(namespace))
-                .withName(name)
-                .delete();
+
+        log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
+
+        return kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace)).withName(name).delete();
     }
 
     /*
@@ -238,45 +215,20 @@ public class ClusterService {
      * Returns the given resource.
      */
     @WithSpan
-    public CustomResource get(final String namespace, final String name) {
+    public CustomResource get(final String namespace, final String name, final String type) {
+
         CustomResource cr = null;
-        for (var parser : parsers) {
-            log.trace("Now trying with parser for " + parser.identifier());
-            for (Class<? extends CustomResource> c : parser.supportedCustomResources()) {
-                log.trace("Trying to parse with " + c.getSimpleName());
-                try {
-                    cr = kubernetesClient.customResources(c).inNamespace(getNamespace(namespace)).withName(name).get();
-                } catch (Exception e) {
-                    log.trace("This is not the proper kind: " + parser.identifier());
-                }
-                if (cr != null) {
-                    log.trace("Found a customResource of kind " + cr.getKind() + " and name " + name);
-                    break;
-                }
-            }
-            if (cr != null) {
+        var crs = getResources(namespace);
+
+        for (var resource : crs) {
+            if (resource.getName().equalsIgnoreCase(name)
+                    && (type == null || resource.getType().equalsIgnoreCase(type))) {
+                cr = resource.getResource();
                 break;
             }
         }
-        return cr;
-    }
 
-    /*
-     * 🐱method logs: String
-     * 🐱param namespace: String
-     * 🐱param podName: String
-     * 🐱param lines: Integer
-     *
-     * Returns the log of the given pod.
-     */
-    @WithSpan
-    public String logs(final String namespace, final String podName,
-                       final int lines) {
-        return kubernetesClient.pods()
-                .inNamespace(getNamespace(namespace))
-                .withName(podName)
-                .tailingLines(lines)
-                .getLog(Boolean.TRUE);
+        return cr;
     }
 
     /*
@@ -286,35 +238,45 @@ public class ClusterService {
      * 🐱param lines: Integer
      *
      * Streams the log of the given pod, starting with said number of lines.
+     *
+     *
      */
     @WithSpan
     @Blocking
     public Multi<String> streamlogs(final String namespace,
                                     final String name,
+                                    final String dsl,
                                     final Integer lines) {
         final var out = new PipedOutputStream();
         final var in = new PipedInputStream();
 
-        var list = kubernetesClient.pods()
-                .inNamespace(getNamespace(namespace))
-                .list().getItems();
-
-        var integrationName = name;
-        for (var pod : list) {
-            if (pod.getMetadata().getName().startsWith(name)) {
-                integrationName = pod.getMetadata().getName();
+        Pod pod = null;
+        //We are going to assume no repeated names
+        //When we find a pod, that's the one.
+        for (var parser : parsers) {
+            if (dsl == null || dsl.isEmpty() || dsl.equalsIgnoreCase(parser.identifier())) {
+                pod = parser.getPod(namespace, name, kubernetesClient);
+                if (pod != null) {
+                    break;
+                }
             }
         }
 
-        final var podName = integrationName;
+        if (pod == null) {
+            throw new IllegalArgumentException("No running resource found in " + namespace + " with name " + name);
+        }
 
+        final Pod finalPod = pod;
+
+        //Send stream of log to PipedOutputStream
         managedExecutor.execute(() ->
                 kubernetesClient.pods()
                         .inNamespace(getNamespace(namespace))
-                        .withName(podName)
+                        .withName(finalPod.getMetadata().getName())
                         .tailingLines(lines)
                         .watchLog(out));
 
+        //Pipe both streams
         managedExecutor.execute(() -> {
             try {
                 out.connect(in);
@@ -323,15 +285,13 @@ public class ClusterService {
             }
         });
 
+        //Connect InputStream to response
         var reader = new BufferedReader(new InputStreamReader(in));
 
         Multi<String> logs = Multi.createFrom().generator(
                 () -> 0, (n, emitter) -> {
                     try {
-                        reader
-                                .lines()
-                                .forEach(
-                                        line -> emitter.emit(line + "\n"));
+                        reader.lines().forEach(line -> emitter.emit(line + "\n"));
                         emitter.emit(reader.readLine() + "\n");
                     } catch (Exception e) {
                         emitter.fail(e);

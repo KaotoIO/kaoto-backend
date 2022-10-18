@@ -39,7 +39,11 @@ public class MarshalFlowStep implements FlowStep {
                         final KameletStepParserService
                                 kameletStepParserService) {
         Step res = catalog.getReadOnlyCatalog().searchByID("marshal");
+        assignParameters(res);
+        return res;
+    }
 
+    protected void assignParameters(final Step res) {
         for (var param : res.getParameters()) {
             if ("dataformat".equalsIgnoreCase(param.getId())) {
                 param.setValue(this.getDataFormat().getFormat());
@@ -53,8 +57,6 @@ public class MarshalFlowStep implements FlowStep {
                 param.setValue(array);
             }
         }
-
-        return res;
     }
 
     @JsonIgnore

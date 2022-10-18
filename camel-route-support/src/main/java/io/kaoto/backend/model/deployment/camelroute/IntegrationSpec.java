@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 🐱miniclass IntegrationSpec (CamelRoute)
+ * 🐱miniclass IntegrationSpec (Integration)
  */
 
 @JsonPropertyOrder({"flows"})

@@ -26,7 +26,7 @@ public class ToFlowStep implements FlowStep {
 
     @JsonCreator
     public ToFlowStep(
-           final @JsonProperty(value = "to", required = true) FlowStep to) {
+            final @JsonProperty(value = "to") FlowStep to) {
         super();
         setTo(to);
     }

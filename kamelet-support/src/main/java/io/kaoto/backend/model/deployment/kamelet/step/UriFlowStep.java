@@ -29,9 +29,11 @@ public class UriFlowStep implements FlowStep {
 
     @JsonCreator
     public UriFlowStep(
-           final @JsonProperty(value = "uri", required = true) String uri) {
+            final @JsonProperty(value = "uri") String uri,
+            final @JsonProperty(value = "parameters") Map<String, String> parameters) {
         super();
         setUri(uri);
+        setParameters(parameters);
     }
 
     @JsonProperty("uri")
@@ -42,11 +44,6 @@ public class UriFlowStep implements FlowStep {
     private Map<String, String> parameters;
 
     public UriFlowStep() {
-    }
-
-    public UriFlowStep(final String uri, final Map<String, String> params) {
-        setUri(uri);
-        setParameters(params);
     }
 
     public Map<String, String> getParameters() {

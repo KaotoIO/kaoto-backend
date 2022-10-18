@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import org.jboss.logging.Logger;
 
@@ -20,6 +21,10 @@ public class MarshalDeserializer extends JsonDeserializer {
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
             var marshal = n.get("marshal");
+            if (marshal == null) {
+                marshal = n.get("unmarshal");
+                step = new UnmarshalFlowStep();
+            }
 
             final var fields = marshal.fields();
             if (fields.hasNext()) {

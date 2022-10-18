@@ -21,7 +21,7 @@
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>2.12.3.Final</quarkus.platform.version>
-        <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
+        <quarkus-plugin.version>2.13.0.Final</quarkus-plugin.version>
 
         <!-- SonarCloud analysis -->
         <sonar.projectKey>KaotoIO_kaoto-backend</sonar.projectKey>
@@ -30,7 +30,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <!-- Shared dependencies -->
-        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <compiler-plugin.version>3.10.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     </properties>
     <build>
@@ -124,7 +124,7 @@
             <plugin>
                 <groupId>org.jboss.jandex</groupId>
                 <artifactId>jandex-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>1.2.3</version>
                 <executions>
                     <execution>
                         <id>make-index</id>
@@ -141,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
             </plugin>
         </plugins>
     </reporting>
@@ -209,44 +209,47 @@
             </build>
         </profile>
         <profile>
-          <id>mutations</id>
-          <dependencies>
-            <dependency>
-              <groupId>org.pitest</groupId>
-              <artifactId>pitest-parent</artifactId>
-              <version>1.9.3</version>
-              <type>pom</type>
-          </dependency>
-          </dependencies>
-          <build>
-            <plugins>
-              <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.9.3</version>
-                  <configuration>
-                    <exportLineCoverage>true</exportLineCoverage>
-                    <outputFormats>
-                        <value>XML</value>
-                    </outputFormats>
-                    <!-- omitting mutators, testPlugin and verbose for brevity -->
-                    <exportLineCoverage>true</exportLineCoverage>
-                    <!--
-                          it's currently not possible to aggregate timestamped
-                          reports, so it must be disabled.
-                       -->
-                    <timestampedReports>false</timestampedReports>
-                  </configuration>
-                <dependencies>
-                  <dependency>
+            <id>mutations</id>
+            <dependencies>
+                <dependency>
                     <groupId>org.pitest</groupId>
-                    <artifactId>pitest-junit5-plugin</artifactId>
-                    <version>1.0.0</version>
-                  </dependency>
-                </dependencies>
-              </plugin>
-            </plugins>
-          </build>
+                    <artifactId>pitest-parent</artifactId>
+                    <version>1.9.3</version>
+                    <type>pom</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.9.5</version>
+                        <configuration>
+                            <exportLineCoverage>true</exportLineCoverage>
+                            <outputFormats>
+                                <value>XML</value>
+                                <value>HTML</value>
+                            </outputFormats>
+                            <!-- omitting mutators, testPlugin and verbose for brevity -->
+                            <exportLineCoverage>true</exportLineCoverage>
+                            <!--
+                                  it's currently not possible to aggregate timestamped
+                                  reports, so it must be disabled.
+                               -->
+                            <timestampedReports>false</timestampedReports>
+                            <threads>5</threads>
+                            <maxMutationsPerClass>4</maxMutationsPerClass>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>1.0.0</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

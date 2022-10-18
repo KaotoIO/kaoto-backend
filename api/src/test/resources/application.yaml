@@ -4,7 +4,7 @@ repository:
       -
         url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar"
         if-no-cluster: false
-      - url: "https://github.com/apache/camel/archive/refs/tags/camel-3.18.2.zip"
+      - url: "resource://camel-3.19.0.zip"
     git:
       -
         url: "https://github.com/KaotoIO/camel-component-metadata.git"

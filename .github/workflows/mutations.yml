@@ -28,11 +28,9 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: 🦾 Build and analyze
         run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations
-      - name: 🧾 Aggregate Reports
-        run: mvn -pl api install org.pitest:pitest-maven:report-aggregate -Pmutations
       - name: 💾 Save results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: multation-result
-          path: api/target/pit-reports/
+          name: multation-results
+          path: "*/target/pit-reports/"

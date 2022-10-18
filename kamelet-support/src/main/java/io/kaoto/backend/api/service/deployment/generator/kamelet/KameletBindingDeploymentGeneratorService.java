@@ -4,15 +4,19 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.api.trace.Span;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -21,6 +25,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -215,6 +221,51 @@ public class KameletBindingDeploymentGeneratorService
                 return yamlMapper.readValue(input, KameletBinding.class);
             } catch (Exception e) {
                 log.trace("Tried creating a kamelet binding and it didn't work.");
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
+        List<Deployment> res = new LinkedList<>();
+        try {
+            final var resources = kclient.resources(KameletBinding.class).inNamespace(namespace).list();
+            for (CustomResource customResource : resources.getItems()) {
+                res.add(new Deployment(customResource, getStatus(customResource)));
+
+                if (Span.current() != null) {
+                    Span.current().setAttribute("KameletBinding[" + res.size() + "]",
+                            res.get(res.size() - 1).toString());
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Error extracting the list of integrations.", e);
+        }
+
+        return res;
+    }
+
+    @Override
+    public Pod getPod(final String namespace, final String name, final KubernetesClient kubernetesClient) {
+
+        for (var d : getResources(namespace, kubernetesClient)) {
+            if (d.getName().equalsIgnoreCase(name)) {
+                var pods = kubernetesClient.pods()
+                        .inNamespace(namespace)
+                        .withLabel("camel.apache.org/integration=" + d.getName())
+                        .list().getItems();
+
+                for (var pod : pods) {
+                    if (pod.getStatus() != null
+                            && pod.getStatus().getPhase() != null
+                            && (pod.getStatus().getPhase().equalsIgnoreCase("Running")
+                            || pod.getStatus().getPhase().equalsIgnoreCase("Succeeded"))) {
+                        return pod;
+                    }
+                }
+
             }
         }
 

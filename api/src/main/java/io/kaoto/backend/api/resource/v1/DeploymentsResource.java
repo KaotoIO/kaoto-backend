@@ -7,7 +7,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.deployment.ClusterService;
-import io.kaoto.backend.model.deployment.Integration;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -71,11 +71,11 @@ public class DeploymentsResource {
     @Path("/")
     @Operation(summary = "Get all Resources",
             description = "Returns all the resources on the cluster.")
-    public List<Integration> all(
+    public List<Deployment> all(
             final @Parameter(description = "Namespace of the cluster where "
                     + "the resources are running.")
             @QueryParam("namespace") String namespace) {
-        return clusterService.getIntegrations(namespace);
+        return clusterService.getResources(namespace);
     }
 
     /*
@@ -140,6 +140,7 @@ public class DeploymentsResource {
     /*
      * 🐱method get: String
      * 🐱param name: String
+     * 🐱param type: String
      * 🐱param namespace: String
      *
      * Returns the CRD of the running resource, if exists.
@@ -151,12 +152,11 @@ public class DeploymentsResource {
     @Operation(summary = "Get CRD",
             description = "Returns the custom resource identified by name.")
     public String resource(
-            final @Parameter(description = "Name of the resource to get.")
-            @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster where "
-                    + "the resource is running.")
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
+            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
-        CustomResource cr = clusterService.get(namespace, name);
+        CustomResource cr = clusterService.get(namespace, name, type);
         if (cr == null) {
             throw new NotFoundException("Resource with name " + name + " not "
                     + "found.");
@@ -184,6 +184,7 @@ public class DeploymentsResource {
     /*
      * 🐱method stop: String
      * 🐱param name: String
+     * 🐱param type: String
      * 🐱param namespace: String
      *
      * Stops and deletes a running resource by name
@@ -194,12 +195,11 @@ public class DeploymentsResource {
     @Operation(summary = "Stop/Remove",
             description = "Remove the resource identified by name.")
     public boolean stop(
-            final @Parameter(description = "Name of the resource to stop.")
-            @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster where "
-                    + "the resource is running.")
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
+            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
-        return clusterService.stop(name, namespace);
+        return clusterService.stop(name, namespace, type);
     }
 
 
@@ -218,17 +218,16 @@ public class DeploymentsResource {
             description = "Get the resource's log.")
     @Blocking
     public Multi<String> logs(
-            final @Parameter(description = "Name of the resource "
-                    + "of which logs should be retrieved.")
+            final @Parameter(description = "Name of the resource of which logs should be retrieved.")
             @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster "
-                    + "where the resource is running.")
+            final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace,
-            final @Parameter(description = "Number of last N lines to be "
-                    + "retrieved.")
+            final @Parameter(description = "The log we want is of this DSL type.")
+            @QueryParam("dsl") String dsl,
+            final @Parameter(description = "Number of last N lines to be retrieved.")
             @QueryParam("lines") int lines) {
 
-        return clusterService.streamlogs(namespace, name, lines);
+        return clusterService.streamlogs(namespace, name, dsl, lines);
 
     }
 

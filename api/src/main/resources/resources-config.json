@@ -1,0 +1,15 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "camel-3.19.0.zip$"
+      },
+      {
+        "pattern": "camel-kamelets-0.9.0.jar$"
+      },
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/default-icon.txt$"
+      }
+    ]
+  }
+}

@@ -36,9 +36,9 @@ public class Step extends Metadata {
     @JsonView(Views.Complete.class)
     private List<Branch> branches;
     @JsonView(Views.Summary.class)
-    private Integer minBranches;
+    private Integer minBranches = 0;
     @JsonView(Views.Summary.class)
-    private Integer maxBranches;
+    private Integer maxBranches = 0;
     @JsonView(Views.Summary.class)
     @JsonProperty("UUID")
     private String uuid;
