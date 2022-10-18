@@ -1875,7 +1875,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"//v1/deployments/{name}?namespace="</code></pre>
+"//v1/deployments/{name}?namespace=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1893,8 +1893,9 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        String type = type_example; // String | Type of the resource to get
         try {
-            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameDelete");
@@ -1913,8 +1914,9 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        String type = type_example; // String | Type of the resource to get
         try {
-            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+            'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameDelete");
@@ -1930,12 +1932,14 @@ public class DeploymentsResourceApiExample {
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameDelete-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to get.
 String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
+String *type = type_example; // Type of the resource to get (optional)
 
 DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Stop/Remove
 [apiInstance v1DeploymentsNameDeleteWith:name
     namespace:namespace
+    type:type
               completionHandler: ^('Boolean' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -1953,7 +1957,8 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource to get.
 var opts = { 
-  'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
+  'namespace': namespace_example, // {{String}} Namespace of the cluster where the resource is running.
+  'type': type_example // {{String}} Type of the resource to get
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -1986,11 +1991,12 @@ namespace Example
             var apiInstance = new DeploymentsResourceApi();
             var name = name_example;  // String | Name of the resource to get.
             var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
+            var type = type_example;  // String | Type of the resource to get (optional) 
 
             try
             {
                 // Stop/Remove
-                'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace);
+                'Boolean' result = apiInstance.v1DeploymentsNameDelete(name, namespace, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2010,9 +2016,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
 $name = name_example; // String | Name of the resource to get.
 $namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+$type = type_example; // String | Type of the resource to get
 
 try {
-    $result = $api_instance->v1DeploymentsNameDelete($name, $namespace);
+    $result = $api_instance->v1DeploymentsNameDelete($name, $namespace, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameDelete: ', $e->getMessage(), PHP_EOL;
@@ -2028,9 +2035,10 @@ use WWW::SwaggerClient::DeploymentsResourceApi;
 my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
 my $name = name_example; # String | Name of the resource to get.
 my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
+my $type = type_example; # String | Type of the resource to get
 
 eval { 
-    my $result = $api_instance->v1DeploymentsNameDelete(name => $name, namespace => $namespace);
+    my $result = $api_instance->v1DeploymentsNameDelete(name => $name, namespace => $namespace, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2049,10 +2057,11 @@ from pprint import pprint
 api_instance = swagger_client.DeploymentsResourceApi()
 name = name_example # String | Name of the resource to get.
 namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
+type = type_example # String | Type of the resource to get (optional)
 
 try: 
     # Stop/Remove
-    api_response = api_instance.v1_deployments_name_delete(name, namespace=namespace)
+    api_response = api_instance.v1_deployments_name_delete(name, namespace=namespace, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameDelete: %s\n" % e)</code></pre>
@@ -2113,6 +2122,25 @@ except ApiException as e:
                                 
                                                     <div class="inner description">
                                                         Namespace of the cluster where the resource is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameDelete_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Type of the resource to get
                                                     </div>
                                             </div>
                                         </div>
@@ -2208,7 +2236,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: text/yaml"\
-"//v1/deployments/{name}?namespace="</code></pre>
+"//v1/deployments/{name}?namespace=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2226,8 +2254,9 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        String type = type_example; // String | Type of the resource to get
         try {
-            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameGet");
@@ -2246,8 +2275,9 @@ public class DeploymentsResourceApiExample {
         DeploymentsResourceApi apiInstance = new DeploymentsResourceApi();
         String name = name_example; // String | Name of the resource to get.
         String namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+        String type = type_example; // String | Type of the resource to get
         try {
-            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+            'String' result = apiInstance.v1DeploymentsNameGet(name, namespace, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DeploymentsResourceApi#v1DeploymentsNameGet");
@@ -2263,12 +2293,14 @@ public class DeploymentsResourceApiExample {
                             <div class="tab-pane" id="examples-DeploymentsResource-v1DeploymentsNameGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *name = name_example; // Name of the resource to get.
 String *namespace = namespace_example; // Namespace of the cluster where the resource is running. (optional)
+String *type = type_example; // Type of the resource to get (optional)
 
 DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 
 // Get CRD
 [apiInstance v1DeploymentsNameGetWith:name
     namespace:namespace
+    type:type
               completionHandler: ^('String' output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2286,7 +2318,8 @@ DeploymentsResourceApi *apiInstance = [[DeploymentsResourceApi alloc] init];
 var api = new KaotoBackendApi.DeploymentsResourceApi()
 var name = name_example; // {{String}} Name of the resource to get.
 var opts = { 
-  'namespace': namespace_example // {{String}} Namespace of the cluster where the resource is running.
+  'namespace': namespace_example, // {{String}} Namespace of the cluster where the resource is running.
+  'type': type_example // {{String}} Type of the resource to get
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -2319,11 +2352,12 @@ namespace Example
             var apiInstance = new DeploymentsResourceApi();
             var name = name_example;  // String | Name of the resource to get.
             var namespace = namespace_example;  // String | Namespace of the cluster where the resource is running. (optional) 
+            var type = type_example;  // String | Type of the resource to get (optional) 
 
             try
             {
                 // Get CRD
-                'String' result = apiInstance.v1DeploymentsNameGet(name, namespace);
+                'String' result = apiInstance.v1DeploymentsNameGet(name, namespace, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2343,9 +2377,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiDeploymentsResourceApi();
 $name = name_example; // String | Name of the resource to get.
 $namespace = namespace_example; // String | Namespace of the cluster where the resource is running.
+$type = type_example; // String | Type of the resource to get
 
 try {
-    $result = $api_instance->v1DeploymentsNameGet($name, $namespace);
+    $result = $api_instance->v1DeploymentsNameGet($name, $namespace, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DeploymentsResourceApi->v1DeploymentsNameGet: ', $e->getMessage(), PHP_EOL;
@@ -2361,9 +2396,10 @@ use WWW::SwaggerClient::DeploymentsResourceApi;
 my $api_instance = WWW::SwaggerClient::DeploymentsResourceApi->new();
 my $name = name_example; # String | Name of the resource to get.
 my $namespace = namespace_example; # String | Namespace of the cluster where the resource is running.
+my $type = type_example; # String | Type of the resource to get
 
 eval { 
-    my $result = $api_instance->v1DeploymentsNameGet(name => $name, namespace => $namespace);
+    my $result = $api_instance->v1DeploymentsNameGet(name => $name, namespace => $namespace, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -2382,10 +2418,11 @@ from pprint import pprint
 api_instance = swagger_client.DeploymentsResourceApi()
 name = name_example # String | Name of the resource to get.
 namespace = namespace_example # String | Namespace of the cluster where the resource is running. (optional)
+type = type_example # String | Type of the resource to get (optional)
 
 try: 
     # Get CRD
-    api_response = api_instance.v1_deployments_name_get(name, namespace=namespace)
+    api_response = api_instance.v1_deployments_name_get(name, namespace=namespace, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DeploymentsResourceApi->v1DeploymentsNameGet: %s\n" % e)</code></pre>
@@ -2446,6 +2483,25 @@ except ApiException as e:
                                 
                                                     <div class="inner description">
                                                         Namespace of the cluster where the resource is running.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">type</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1DeploymentsNameGet_type">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Type of the resource to get
                                                     </div>
                                             </div>
                                         </div>
