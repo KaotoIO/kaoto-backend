@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,8 +35,7 @@ class CamelRouteParseCatalogTest {
 
     @Test
     void shouldLoadFromJar() {
-        String camelGit = "https://github.com/apache/camel/"
-                + "archive/refs/tags/camel-3.18.2.zip";
+        String camelGit = "https://github.com/apache/camel/archive/refs/tags/camel-3.18.2.zip";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         ParseCatalog<Step> camelParser =
@@ -59,8 +59,7 @@ class CamelRouteParseCatalogTest {
     @Test
     void shouldLoadFromLocalFolder() throws URISyntaxException {
         Path camelJsonRoute = Path.of(
-                CamelRouteFileProcessorTest.class.getResource(
-                        ".").toURI());
+                CamelRouteFileProcessorTest.class.getResource(".").toURI());
 
         ParseCatalog<Step> camelParser =
                 parseCatalog.getLocalFolder(camelJsonRoute);
@@ -86,6 +85,21 @@ class CamelRouteParseCatalogTest {
                 browseComponentSource, "START", false);
         assertBrowseJsonHasBeenParsedCorrectly(
                 browseComponentAction, "MIDDLE", false);
+    }
+
+    @Test
+    void loadFromLocalZip() {
+        String camelZip = "resource://camel-3.19.0.zip";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        List<Step> steps = camelParser.parse().join();
+
+        assertTrue(catalog.store(steps));
+
+        var salesforces = catalog.searchByName("salesforce");
+        assertNotNull(salesforces);
+        assertEquals(3, salesforces.size());
     }
 
     private void assertBrowseJsonHasBeenParsedCorrectly(

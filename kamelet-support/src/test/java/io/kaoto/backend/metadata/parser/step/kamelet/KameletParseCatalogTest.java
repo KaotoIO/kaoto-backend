@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -46,9 +47,7 @@ class KameletParseCatalogTest {
     @Test
     void getSteps() {
         ParseCatalog<Step> kameletParser =
-                parseCatalog.getParser(
-                        "https://github.com/apache/camel-kamelets.git",
-                        "v0.5.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v0.5.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -56,15 +55,11 @@ class KameletParseCatalogTest {
         assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "ftp-source";
-        String[] required = new String[]{
-                "connectionHost", "connectionPort",
-                "username", "password", "directoryName"};
-        Step step = catalog.searchByName(name)
-                .stream().findAny().get();
+        String[] required = new String[]{"connectionHost", "connectionPort", "username", "password", "directoryName"};
+        Step step = catalog.searchByName(name).stream().findAny().get();
 
         assertEquals(step.getRequired().size(), required.length);
-        assertTrue(Arrays.stream(required).allMatch(
-                property -> step.getRequired().contains(property)));
+        assertTrue(Arrays.stream(required).allMatch(property -> step.getRequired().contains(property)));
 
         Assertions.assertNotNull(step);
         assertEquals(name, step.getId());
@@ -85,9 +80,7 @@ class KameletParseCatalogTest {
     @Test
     void getCamelConnector() {
         ParseCatalog<Step> kameletParser =
-            parseCatalog.getParser(
-                "https://github.com/KaotoIO/camel-component-metadata.git",
-                "test");
+            parseCatalog.getParser("https://github.com/KaotoIO/camel-component-metadata.git", "test");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -101,8 +94,7 @@ class KameletParseCatalogTest {
                 .stream().findAny().get();
 
         assertEquals(step.getRequired().size(), required.length);
-        assertTrue(Arrays.stream(required).allMatch(
-                property -> step.getRequired().contains(property)));
+        assertTrue(Arrays.stream(required).allMatch(property -> step.getRequired().contains(property)));
 
         Assertions.assertNotNull(step);
         assertEquals(name, step.getId());
@@ -120,8 +112,7 @@ class KameletParseCatalogTest {
         }
 
         name = "choice";
-        Step step2 = catalog.searchByName(name)
-                .stream().findAny().get();
+        Step step2 = catalog.searchByName(name).stream().findAny().get();
         Assertions.assertNotNull(step2);
         assertEquals(name, step2.getId());
         assertEquals(name, step2.getName());
@@ -132,10 +123,7 @@ class KameletParseCatalogTest {
     }
     @Test
     void wrongUrlSilentlyFails() {
-        ParseCatalog<Step> kameletParser =
-                parseCatalog.getParser(
-                        "https://nothing/wrong/url.git",
-                        "");
+        ParseCatalog<Step> kameletParser = parseCatalog.getParser("https://nothing/wrong/url.git", "");
 
         List<Step> steps = kameletParser.parse().join();
         Assertions.assertNotNull(steps);
@@ -147,13 +135,9 @@ class KameletParseCatalogTest {
 
         ParseCatalog<Step> kameletParser =
                 parseCatalog.getLocalFolder(Path.of(
-                        KameletParseCatalogTest.class.getResource(
-                                        "../../../../api/service/step/parser"
-                                                + "/kamelet/")
+                        KameletParseCatalogTest.class.getResource("../../../../api/service/step/parser/kamelet/")
                                 .toURI()));
-        List<Step> steps = kameletParser.parse().join().stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<Step> steps = kameletParser.parse().join().stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         assertEquals(3, steps.size());
     }
@@ -163,13 +147,10 @@ class KameletParseCatalogTest {
         kubernetesClient.resources(Kamelet.class)
                 .inNamespace("default")
                 .load(KameletParseCatalogTest.class
-                        .getResource(
-                            "../../../../api/service/step/parser"
-                                    + "/kamelet/dropbox-sink.kamelet.yaml"))
+                        .getResource("../../../../api/service/step/parser/kamelet/dropbox-sink.kamelet.yaml"))
                 .create();
 
-        ParseCatalog<Step> kameletParser =
-                parseCatalog.getParserFromCluster();
+        ParseCatalog<Step> kameletParser = parseCatalog.getParserFromCluster();
         List<Step> steps = kameletParser.parse().join();
         assertEquals(1, steps.size());
     }
@@ -178,9 +159,7 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                parseCatalog.getParser(
-                        "https://github.com/apache/camel-kamelets.git",
-                        "v0.4.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v0.4.0");
         List<Step> stepsGit = kameletParserGit.parse().join();
 
 
@@ -201,4 +180,22 @@ class KameletParseCatalogTest {
         Assertions.assertIterableEquals(stepsJar, stepsGit);
     }
 
+    @Test
+    void loadFromLocalZip() {
+        String camelZip = "resource://camel-kamelets-0.9.0.jar";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        List<Step> steps = camelParser.parse().join();
+
+        assertTrue(catalog.store(steps));
+
+        var salesforces = catalog.searchByName("salesforce-create-sink");
+        assertNotNull(salesforces);
+        assertTrue(!salesforces.isEmpty());
+
+        salesforces = catalog.searchByName("salesforce-source");
+        assertNotNull(salesforces);
+        assertTrue(!salesforces.isEmpty());
+    }
 }
