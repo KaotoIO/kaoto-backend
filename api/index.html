@@ -712,6 +712,52 @@
     }
   }
 };
+            defs["Branch_Complete_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "steps" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Step_Complete_Summary"
+      }
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter_Complete_Summary"
+      }
+    },
+    "identifier" : {
+      "type" : "string"
+    },
+    "condition" : {
+      "type" : "string"
+    }
+  }
+};
+            defs["Branch_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "steps" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Step_Summary"
+      }
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter_Summary"
+      }
+    },
+    "identifier" : {
+      "type" : "string"
+    },
+    "condition" : {
+      "type" : "string"
+    }
+  }
+};
             defs["Capabilities"] = {
   "type" : "object",
   "properties" : {
@@ -829,6 +875,100 @@
     }
   }
 };
+            defs["Parameter_Complete_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "path" : {
+      "type" : "boolean"
+    },
+    "value" : {
+      "type" : "object"
+    },
+    "title" : {
+      "type" : "string"
+    },
+    "description" : {
+      "type" : "string"
+    },
+    "nullable" : {
+      "type" : "boolean"
+    },
+    "enumeration" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    },
+    "defaultValue" : {
+      "type" : "object"
+    },
+    "examples" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    },
+    "type" : {
+      "type" : "string"
+    },
+    "enum" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    }
+  }
+};
+            defs["Parameter_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "path" : {
+      "type" : "boolean"
+    },
+    "value" : {
+      "type" : "object"
+    },
+    "title" : {
+      "type" : "string"
+    },
+    "description" : {
+      "type" : "string"
+    },
+    "nullable" : {
+      "type" : "boolean"
+    },
+    "enumeration" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    },
+    "defaultValue" : {
+      "type" : "object"
+    },
+    "examples" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    },
+    "type" : {
+      "type" : "string"
+    },
+    "enum" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
+    }
+  }
+};
             defs["Step"] = {
   "type" : "object",
   "properties" : {
@@ -882,11 +1022,133 @@
       "type" : "integer",
       "format" : "int32"
     },
-    "uuid" : {
+    "UUID" : {
       "type" : "string"
     },
     "uUID" : {
       "type" : "string"
+    }
+  }
+};
+            defs["Step_Complete_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "name" : {
+      "type" : "string"
+    },
+    "type" : {
+      "type" : "string"
+    },
+    "id" : {
+      "type" : "string"
+    },
+    "kind" : {
+      "type" : "string"
+    },
+    "icon" : {
+      "type" : "string"
+    },
+    "title" : {
+      "type" : "string"
+    },
+    "description" : {
+      "type" : "string"
+    },
+    "group" : {
+      "type" : "string"
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter_Complete_Summary"
+      }
+    },
+    "required" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "branches" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Branch_Complete_Summary"
+      }
+    },
+    "minBranches" : {
+      "type" : "integer",
+      "format" : "int32"
+    },
+    "maxBranches" : {
+      "type" : "integer",
+      "format" : "int32"
+    },
+    "UUID" : {
+      "type" : "string"
+    },
+    "uUID" : {
+      "type" : "string"
+    }
+  }
+};
+            defs["Step_Summary"] = {
+  "type" : "object",
+  "properties" : {
+    "name" : {
+      "type" : "string"
+    },
+    "type" : {
+      "type" : "string"
+    },
+    "id" : {
+      "type" : "string"
+    },
+    "kind" : {
+      "type" : "string"
+    },
+    "icon" : {
+      "type" : "string"
+    },
+    "title" : {
+      "type" : "string"
+    },
+    "description" : {
+      "type" : "string"
+    },
+    "group" : {
+      "type" : "string"
+    },
+    "minBranches" : {
+      "type" : "integer",
+      "format" : "int32"
+    },
+    "maxBranches" : {
+      "type" : "integer",
+      "format" : "int32"
+    },
+    "UUID" : {
+      "type" : "string"
+    },
+    "parameters" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Parameter_Summary"
+      }
+    },
+    "uUID" : {
+      "type" : "string"
+    },
+    "required" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "branches" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Branch_Summary"
+      }
     }
   }
 };
@@ -4079,7 +4341,7 @@ public class StepResourceApiExample {
         Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4102,7 +4364,7 @@ public class StepResourceApiExample {
         Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4130,7 +4392,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
     limit:limit
     start:start
     type:type
-              completionHandler: ^(array[Step] output, NSError* error) {
+              completionHandler: ^(array[Step_Summary] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -4190,7 +4452,7 @@ namespace Example
             try
             {
                 // Get all steps
-                array[Step] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+                array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4405,7 +4667,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Step"
+          "$ref" : "#/components/schemas/Step_Summary"
         },
         "x-content-type" : "application/json"
       }
@@ -4491,7 +4753,7 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String id = id_example; // String | Identifier of the step we want to retrieve.
         try {
-            Step result = apiInstance.v1StepsIdIdGet(id);
+            Step_Complete_Summary result = apiInstance.v1StepsIdIdGet(id);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsIdIdGet");
@@ -4510,7 +4772,7 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String id = id_example; // String | Identifier of the step we want to retrieve.
         try {
-            Step result = apiInstance.v1StepsIdIdGet(id);
+            Step_Complete_Summary result = apiInstance.v1StepsIdIdGet(id);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsIdIdGet");
@@ -4530,7 +4792,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 // Get step by ID
 [apiInstance v1StepsIdIdGetWith:id
-              completionHandler: ^(Step output, NSError* error) {
+              completionHandler: ^(Step_Complete_Summary output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -4581,7 +4843,7 @@ namespace Example
             try
             {
                 // Get step by ID
-                Step result = apiInstance.v1StepsIdIdGet(id);
+                Step_Complete_Summary result = apiInstance.v1StepsIdIdGet(id);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4703,7 +4965,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Step"
+        "$ref" : "#/components/schemas/Step_Complete_Summary"
       }
     }
   }
@@ -4787,7 +5049,7 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String name = name_example; // String | Name of the steps we want to retrieve.
         try {
-            array[Step] result = apiInstance.v1StepsNameNameGet(name);
+            array[Step_Complete_Summary] result = apiInstance.v1StepsNameNameGet(name);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsNameNameGet");
@@ -4806,7 +5068,7 @@ public class StepResourceApiExample {
         StepResourceApi apiInstance = new StepResourceApi();
         String name = name_example; // String | Name of the steps we want to retrieve.
         try {
-            array[Step] result = apiInstance.v1StepsNameNameGet(name);
+            array[Step_Complete_Summary] result = apiInstance.v1StepsNameNameGet(name);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsNameNameGet");
@@ -4826,7 +5088,7 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 // Get step by name
 [apiInstance v1StepsNameNameGetWith:name
-              completionHandler: ^(array[Step] output, NSError* error) {
+              completionHandler: ^(array[Step_Complete_Summary] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -4877,7 +5139,7 @@ namespace Example
             try
             {
                 // Get step by name
-                array[Step] result = apiInstance.v1StepsNameNameGet(name);
+                array[Step_Complete_Summary] result = apiInstance.v1StepsNameNameGet(name);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -5001,7 +5263,7 @@ except ApiException as e:
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Step"
+          "$ref" : "#/components/schemas/Step_Complete_Summary"
         },
         "x-content-type" : "application/json"
       }
