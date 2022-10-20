@@ -9,6 +9,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
+import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
@@ -256,6 +257,9 @@ public class KamelPopulator {
             flowStep = getCamelConnector(step, to);
         } else  if ("EIP".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
+                case "aggregate":
+                    flowStep = getAggregateStep(step);
+                    break;
                 case "set-body":
                     flowStep = getSetBodyStep(step);
                     break;
@@ -281,6 +285,7 @@ public class KamelPopulator {
                     flowStep = getUnmarshalStep(step);
                     break;
                 default:
+                    flowStep = getCamelConnector(step, to);
                     break;
             }
         } else  if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
@@ -297,6 +302,10 @@ public class KamelPopulator {
         }
 
         return flowStep;
+    }
+
+    private FlowStep getAggregateStep(final Step step) {
+        return new AggregateFlowStep(step);
     }
 
     private FlowStep getChoiceStep(final Step step) {

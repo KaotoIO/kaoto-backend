@@ -48,6 +48,11 @@ spec:
             steps:
             - transform:
                 simple: baz
+            - aggregate:
+                correlation-expression:
+                  simple: ${header.StockSymbol}
+                aggregation-strategy: myAggregatorStrategy
+                completion-size: 2
           otherwise:
             steps:
             - set-body:

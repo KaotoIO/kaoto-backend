@@ -33,6 +33,10 @@ public class Expression implements FlowStep {
         setSimple(simple);
     }
 
+    public Expression() {
+
+    }
+
     @JsonProperty("constant")
     private String constant;
 

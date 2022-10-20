@@ -10,6 +10,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
+import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
@@ -228,6 +229,7 @@ public class KameletRepresenter extends Representer {
         //Can we dynamically add this without Quarkus removing the classes
         // and making a mess?
         var eips = new Class[] {
+                AggregateFlowStep.class,
                 ChoiceFlowStep.class,
                 ToFlowStep.class,
                 From.class,
