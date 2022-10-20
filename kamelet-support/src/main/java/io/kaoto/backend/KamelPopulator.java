@@ -258,7 +258,16 @@ public class KamelPopulator {
         } else  if ("EIP".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
                 case "aggregate":
-                    flowStep = getAggregateStep(step);
+                    flowStep = new AggregateFlowStep(step);
+                    break;
+                case "marshal":
+                    flowStep = getMarshalStep(step);
+                    break;
+                case "remove-header":
+                    flowStep = getRemoveHeaderStep(step);
+                    break;
+                case "remove-property":
+                    flowStep = getRemovePropertyStep(step);
                     break;
                 case "set-body":
                     flowStep = getSetBodyStep(step);
@@ -266,20 +275,11 @@ public class KamelPopulator {
                 case "set-header":
                     flowStep = getSetHeaderStep(step);
                     break;
-                case "remove-header":
-                    flowStep = getRemoveHeaderStep(step);
-                    break;
                 case "set-property":
                     flowStep = getSetPropertyStep(step);
                     break;
-                case "remove-property":
-                    flowStep = getRemovePropertyStep(step);
-                    break;
                 case "transform":
                     flowStep = getTransformStep(step);
-                    break;
-                case "marshal":
-                    flowStep = getMarshalStep(step);
                     break;
                 case "unmarshal":
                     flowStep = getUnmarshalStep(step);
@@ -302,10 +302,6 @@ public class KamelPopulator {
         }
 
         return flowStep;
-    }
-
-    private FlowStep getAggregateStep(final Step step) {
-        return new AggregateFlowStep(step);
     }
 
     private FlowStep getChoiceStep(final Step step) {
