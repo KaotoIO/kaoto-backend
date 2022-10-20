@@ -77,12 +77,9 @@ public class KameletStepParserService
         List<Step> steps = new ArrayList<>();
         try {
             ObjectMapper yamlMapper =
-                    new ObjectMapper(new YAMLFactory())
-                            .configure(
-                              DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                              false);
-            Kamelet kamelet = yamlMapper.readValue(input,
-                    Kamelet.class);
+                    new ObjectMapper(
+                            new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,  false);
+            Kamelet kamelet = yamlMapper.readValue(input, Kamelet.class);
 
             processMetadata(res, kamelet.getMetadata());
             processSpec(steps, res, kamelet.getSpec());
@@ -158,8 +155,7 @@ public class KameletStepParserService
             steps.add(processStep(spec.getTemplate().getFrom()));
 
             if (spec.getTemplate().getFrom().getSteps() != null) {
-                for (FlowStep flowStep : spec.getTemplate().getFrom()
-                        .getSteps()) {
+                for (FlowStep flowStep : spec.getTemplate().getFrom().getSteps()) {
                     steps.add(processStep(flowStep));
                 }
             }
@@ -174,7 +170,7 @@ public class KameletStepParserService
         try {
             return step.getStep(catalog, this);
         } catch (Exception e) {
-            log.warn("Can't parse step -> " + e.getMessage());
+            log.warn("Can't parse step -> " + step.getClass());
         }
         return null;
     }

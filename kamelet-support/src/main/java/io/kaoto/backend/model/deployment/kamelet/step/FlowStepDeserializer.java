@@ -22,8 +22,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
 
             for (var step : getFlowSteps().entrySet()) {
                 if (n.get(step.getKey()) != null) {
-                    return new ObjectMapper().readValue(n.toPrettyString(),
-                            step.getValue());
+                    return new ObjectMapper().readValue(n.toPrettyString(), step.getValue());
                 }
             }
 
@@ -37,6 +36,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
     private Map<String, Class> getFlowSteps() {
         Map<String, Class> steps = new HashMap<>();
 
+        steps.put("aggregate", AggregateFlowStep.class);
         steps.put("choice", ChoiceFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);

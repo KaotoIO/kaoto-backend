@@ -1,0 +1,57 @@
+package io.kaoto.backend.model.deployment.kamelet.step;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.step.Step;
+
+import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
+
+
+@JsonPropertyOrder({"aggregate"})
+@JsonDeserialize(
+        using = JsonDeserializer.None.class
+)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AggregateFlowStep implements FlowStep {
+    @Serial
+    private static final long serialVersionUID = 7630089193555236497L;
+
+
+    @JsonProperty("aggregate")
+    private Aggregate aggregate;
+
+    public AggregateFlowStep() {
+    }
+
+    public AggregateFlowStep(Step step) {
+        aggregate = new Aggregate(step);
+    }
+
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> aggregator = new HashMap<>();
+        aggregator.put("aggregate", aggregate.getRepresenterProperties());
+        return aggregator;
+    }
+
+    @Override
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
+        return aggregate.getStep(catalog, kameletStepParserService);
+    }
+
+    public Aggregate getAggregate() {
+        return aggregate;
+    }
+
+    public void setAggregate(final Aggregate aggregate) {
+        this.aggregate = aggregate;
+    }
+}

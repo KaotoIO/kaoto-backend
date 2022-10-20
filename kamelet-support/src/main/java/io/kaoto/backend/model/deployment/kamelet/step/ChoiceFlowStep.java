@@ -62,15 +62,12 @@ public class ChoiceFlowStep implements FlowStep {
         res.setBranches(new LinkedList<>());
 
         for (var flow : this.getChoice().getChoice()) {
-            Branch branch =
-                    new Branch(getChoiceIdentifier(flow));
+            Branch branch = new Branch(getChoiceIdentifier(flow));
             branch.setCondition(getChoiceCondition(flow));
             for (var s : flow.getSteps()) {
-                branch.getSteps().add(
-                        kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s));
             }
-            kameletStepParserService.setValueOnStepProperty(res,
-                    KameletStepParserService.SIMPLE,
+            kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
                     branch.getCondition());
             res.getBranches().add(branch);
         }
@@ -79,8 +76,7 @@ public class ChoiceFlowStep implements FlowStep {
             Branch branch = new Branch(KameletStepParserService.OTHERWISE);
 
             for (var s : this.getChoice().getOtherwise().getSteps()) {
-                branch.getSteps().add(
-                        kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s));
             }
             res.getBranches().add(branch);
         }
