@@ -12,6 +12,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -231,6 +232,7 @@ public class KameletRepresenter extends Representer {
         // and making a mess?
         var eips = new Class[] {
                 AggregateFlowStep.class,
+                CircuitBreakerFlowStep.class,
                 ChoiceFlowStep.class,
                 Expression.class,
                 FilterFlowStep.class,
@@ -341,7 +343,6 @@ public class KameletRepresenter extends Representer {
             return null;
         }
 
-        return super.representJavaBeanProperty(javaBean, property,
-                propertyValue, customTag);
+        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
     }
 }

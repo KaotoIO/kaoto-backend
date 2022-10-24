@@ -32,6 +32,24 @@ spec:
             - marshal:
                 json:
                   library: Gson
+            - circuit-breaker:
+                configuration: config
+                description:
+                  text: Test circuit breaker
+                  lang: eng
+                steps:
+                - to:
+                    uri: dropbox:put
+                    parameters:
+                      remotePath: '{{remotePath}}'
+                      clientIdentifier: '{{clientIdentifier}}'
+                      uploadMode: '{{uploadMode}}'
+                on-fallback:
+                  steps:
+                  - log:
+                      message: test
+                      logging-level: INFO
+                      log-name: yaml
           - simple: '{{?bar}}'
             steps:
             - unmarshal:
