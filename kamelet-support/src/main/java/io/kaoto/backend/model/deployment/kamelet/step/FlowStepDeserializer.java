@@ -27,7 +27,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
             }
 
         } catch (Exception e) {
-            log.debug("Error trying to deserialize step: " + e.getMessage());
+            log.error("Error trying to deserialize step: " + e.getMessage());
         }
 
         return new UriFlowStep();
@@ -37,6 +37,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         Map<String, Class> steps = new HashMap<>();
 
         steps.put("aggregate", AggregateFlowStep.class);
+        steps.put("circuit-breaker", CircuitBreakerFlowStep.class);
         steps.put("choice", ChoiceFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);

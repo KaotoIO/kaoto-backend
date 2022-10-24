@@ -11,6 +11,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -294,6 +295,9 @@ public class KamelPopulator {
             }
         } else  if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
+                case "circuit-breaker":
+                    flowStep = new CircuitBreakerFlowStep(step, this);
+                    break;
                 case "choice":
                     flowStep = getChoiceStep(step);
                     break;
@@ -301,6 +305,7 @@ public class KamelPopulator {
                     flowStep = new FilterFlowStep(processFilter(step.getBranches().get(0)));
                     break;
                 default:
+                    flowStep = getCamelConnector(step, to);
                     break;
             }
         }
@@ -340,11 +345,13 @@ public class KamelPopulator {
         return choice;
     }
 
-    private List<FlowStep> processSteps(final Branch b) {
+    public List<FlowStep> processSteps(final Branch b) {
         var list = new LinkedList<FlowStep>();
-        for (Step step : b.getSteps()) {
-            if (step != null) {
-                list.add(processStep(step, true));
+        if (b.getSteps() != null) {
+            for (Step step : b.getSteps()) {
+                if (step != null) {
+                    list.add(processStep(step, true));
+                }
             }
         }
         return list;

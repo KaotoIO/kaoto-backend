@@ -1,4 +1,4 @@
-package io.kaoto.backend.model.deployment.kamelet.step.choice;
+package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,14 +10,11 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@JsonPropertyOrder({"simple", "steps"})
+@JsonPropertyOrder({"steps"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Choice implements Serializable {
+public class CircuitBreakerOnFallback implements Serializable {
     @Serial
-    private static final long serialVersionUID = -7206333633897407153L;
-
-    @JsonProperty("simple")
-    private String simple;
+    private static final long serialVersionUID = 3541785323L;
 
     @JsonProperty("steps")
     private List<FlowStep> steps;
@@ -26,15 +23,8 @@ public class Choice implements Serializable {
         return steps;
     }
 
-    public void setSteps(final List<FlowStep> steps) {
+    public void setSteps(
+            final List<FlowStep> steps) {
         this.steps = steps;
-    }
-
-    public String getSimple() {
-        return simple;
-    }
-
-    public void setSimple(final String simple) {
-        this.simple = simple;
     }
 }

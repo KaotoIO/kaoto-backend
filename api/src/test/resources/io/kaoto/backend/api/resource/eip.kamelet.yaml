@@ -62,5 +62,20 @@ spec:
           - unmarshal:
               json:
                 unmarshal-type-name: MyClass
+          - circuit-breaker:
+              description:
+                text: Another one
+                lang: eng
+              steps:
+              - to:
+                  uri: dropbox:put
+                  parameters:
+                    accessToken: '{{accessToken}}'
+              on-fallback:
+                steps:
+                - log:
+                    message: test
+                    logging-level: INFO
+                    log-name: yaml
       - to:
           uri: kamelet:sink

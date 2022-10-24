@@ -29,9 +29,7 @@ public class SetHeaderFlowStep implements FlowStep {
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public SetHeaderFlowStep(
-            final @JsonProperty(value = "set-header", required = true)
-                    Expression e) {
+    public SetHeaderFlowStep(final @JsonProperty(value = "set-header", required = true) Expression e) {
         super();
         setSetHeaderPairFlowStep(e);
     }
