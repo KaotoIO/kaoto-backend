@@ -268,22 +268,22 @@ public class KamelPopulator {
                     flowStep = getMarshalStep(step);
                     break;
                 case "remove-header":
-                    flowStep = getRemoveHeaderStep(step);
+                    flowStep = new RemoveHeaderFlowStep(getExpression(step));
                     break;
                 case "remove-property":
-                    flowStep = getRemovePropertyStep(step);
+                    flowStep = new RemovePropertyFlowStep(getExpression(step));
                     break;
                 case "set-body":
-                    flowStep = getSetBodyStep(step);
+                    flowStep = new SetBodyFlowStep(getExpression(step));
                     break;
                 case "set-header":
-                    flowStep = getSetHeaderStep(step);
+                    flowStep = new SetHeaderFlowStep(getExpression(step));
                     break;
                 case "set-property":
-                    flowStep = getSetPropertyStep(step);
+                    flowStep = new SetPropertyFlowStep(getExpression(step));
                     break;
                 case "transform":
-                    flowStep = getTransformStep(step);
+                    flowStep = new TransformFlowStep(getExpression(step));
                     break;
                 case "unmarshal":
                     flowStep = getUnmarshalStep(step);
@@ -298,7 +298,7 @@ public class KamelPopulator {
                     flowStep = getChoiceStep(step);
                     break;
                 case "filter":
-                    flowStep = getFilterStep(step);
+                    flowStep = new FilterFlowStep(processFilter(step.getBranches().get(0)));
                     break;
                 default:
                     break;
@@ -350,23 +350,7 @@ public class KamelPopulator {
         return list;
     }
 
-    private FlowStep getSetBodyStep(final Step step) {
-        return new SetBodyFlowStep(getExpression(step));
-    }
-    private FlowStep getSetPropertyStep(final Step step) {
-        return new SetPropertyFlowStep(getExpression(step));
-    }
-    private FlowStep getRemovePropertyStep(final Step step) {
-        return new RemovePropertyFlowStep(getExpression(step));
-    }
 
-    private FlowStep getSetHeaderStep(final Step step) {
-        return new SetHeaderFlowStep(getExpression(step));
-    }
-
-    private FlowStep getRemoveHeaderStep(final Step step) {
-        return new RemoveHeaderFlowStep(getExpression(step));
-    }
 
     private Expression getExpression(final Step step) {
         Expression expression = new Expression(null, null);
@@ -383,10 +367,6 @@ public class KamelPopulator {
            }
         }
         return expression;
-    }
-
-    private FlowStep getTransformStep(final Step step) {
-        return new TransformFlowStep(getExpression(step));
     }
 
     private FlowStep getMarshalStep(final Step step) {
@@ -420,10 +400,6 @@ public class KamelPopulator {
         }
     }
 
-    private FlowStep getFilterStep(final Step step) {
-        Branch b = step.getBranches().get(0);
-        return new FilterFlowStep(processFilter(b));
-    }
 
     private Filter processFilter(final Branch b) {
         Filter filter = new Filter();
