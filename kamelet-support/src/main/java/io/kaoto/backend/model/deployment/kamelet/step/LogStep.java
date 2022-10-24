@@ -22,13 +22,21 @@ public class LogStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 854654615436852L;
     private static final Logger log = Logger.getLogger(LogStep.class);
+    public static final String MESSAGE = "message";
+    public static final String MARKER = "marker";
+    public static final String LOGGER = "logger";
+    public static final String DESCRIPTION = "description";
+    public static final String LOGGING_LEVEL = "logging-level";
+    public static final String LOG_NAME = "log-name";
+    public static final String LOGGING_LEVEL1 = "loggingLevel";
+    public static final String LOG_NAME1 = "logName";
 
     private String message;
 
-    @JsonProperty("logging-level")
+    @JsonProperty(LOGGING_LEVEL)
     private String loggingLevel;
 
-    @JsonProperty("log-name")
+    @JsonProperty(LOG_NAME)
     private String logName;
     private String marker;
     private String logger;
@@ -42,24 +50,24 @@ public class LogStep implements FlowStep {
             if (parameter.getValue() != null) {
                 try {
                     switch (parameter.getId()) {
-                        case "message":
+                        case MESSAGE:
                             this.setMessage(parameter.getValue().toString());
                             break;
-                        case "loggingLevel":
-                        case "logging-level":
+                        case LOGGING_LEVEL1:
+                        case LOGGING_LEVEL:
                             this.setLoggingLevel(parameter.getValue().toString());
                             break;
-                        case "logName":
-                        case "log-name":
+                        case LOG_NAME1:
+                        case LOG_NAME:
                             this.setLogName(parameter.getValue().toString());
                             break;
-                        case "marker":
+                        case MARKER:
                             this.setMarker(parameter.getValue().toString());
                             break;
-                        case "logger":
+                        case LOGGER:
                             this.setLogger(parameter.getValue().toString());
                             break;
-                        case "description":
+                        case DESCRIPTION:
                             this.setDescription(parameter.getValue().toString());
                             break;
                         default:
@@ -77,22 +85,22 @@ public class LogStep implements FlowStep {
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new LinkedHashMap<>();
         if (this.message != null) {
-            properties.put("message", this.getMessage());
+            properties.put(MESSAGE, this.getMessage());
         }
         if (this.loggingLevel != null) {
-            properties.put("logging-level", this.getLoggingLevel());
+            properties.put(LOGGING_LEVEL, this.getLoggingLevel());
         }
         if (this.logName != null) {
-            properties.put("log-name", this.getLogName());
+            properties.put(LOG_NAME, this.getLogName());
         }
         if (this.marker != null) {
-            properties.put("marker", this.getMarker());
+            properties.put(MARKER, this.getMarker());
         }
         if (this.logger != null) {
-            properties.put("logger", this.getLogger());
+            properties.put(LOGGER, this.getLogger());
         }
         if (this.description != null) {
-            properties.put("description", this.getDescription());
+            properties.put(DESCRIPTION, this.getDescription());
         }
         return properties;
     }
@@ -111,22 +119,24 @@ public class LogStep implements FlowStep {
             for (var parameter : step.getParameters()) {
                 try {
                     switch (parameter.getId()) {
-                        case "message":
+                        case MESSAGE:
                             parameter.setValue(this.getMessage());
                             break;
-                        case "loggingLevel":
+                        case LOGGING_LEVEL1:
+                        case LOGGING_LEVEL:
                             parameter.setValue(this.getLoggingLevel());
                             break;
-                        case "logName":
+                        case LOG_NAME1:
+                        case LOG_NAME:
                             parameter.setValue(this.getLogName());
                             break;
-                        case "marker":
+                        case MARKER:
                             parameter.setValue(this.getMarker());
                             break;
-                        case "logger":
+                        case LOGGER:
                             parameter.setValue(this.getLogger());
                             break;
-                        case "description":
+                        case DESCRIPTION:
                             parameter.setValue(this.getDescription());
                             break;
                         default:
