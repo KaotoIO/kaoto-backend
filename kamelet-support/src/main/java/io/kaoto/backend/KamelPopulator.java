@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
@@ -259,6 +260,9 @@ public class KamelPopulator {
             switch (step.getName()) {
                 case "aggregate":
                     flowStep = new AggregateFlowStep(step);
+                    break;
+                case "log":
+                    flowStep = new LogFlowStep(step);
                     break;
                 case "marshal":
                     flowStep = getMarshalStep(step);

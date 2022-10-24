@@ -15,6 +15,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
@@ -231,19 +232,20 @@ public class KameletRepresenter extends Representer {
         var eips = new Class[] {
                 AggregateFlowStep.class,
                 ChoiceFlowStep.class,
-                ToFlowStep.class,
+                Expression.class,
+                FilterFlowStep.class,
                 From.class,
-                UriFlowStep.class,
+                LogFlowStep.class,
+                MarshalFlowStep.class,
+                RemoveHeaderFlowStep.class,
+                RemovePropertyFlowStep.class,
                 SetBodyFlowStep.class,
                 SetHeaderFlowStep.class,
                 SetPropertyFlowStep.class,
-                Expression.class,
+                ToFlowStep.class,
                 TransformFlowStep.class,
-                FilterFlowStep.class,
-                RemoveHeaderFlowStep.class,
-                RemovePropertyFlowStep.class,
-                MarshalFlowStep.class,
-                UnmarshalFlowStep.class
+                UnmarshalFlowStep.class,
+                UriFlowStep.class
         };
 
         for (var eip : eips) {

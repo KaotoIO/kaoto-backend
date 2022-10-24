@@ -44,6 +44,10 @@ spec:
                   simple: ${header.StockSymbol}
                 aggregation-strategy: myAggregatorStrategy
                 completion-size: 2
+            - log:
+                message: test
+                logging-level: INFO
+                log-name: yaml
           otherwise:
             steps:
             - set-body:
