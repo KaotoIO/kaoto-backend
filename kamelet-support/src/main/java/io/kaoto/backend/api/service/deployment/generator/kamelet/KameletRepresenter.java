@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -236,6 +237,7 @@ public class KameletRepresenter extends Representer {
                 ClaimCheckFlowStep.class,
                 CircuitBreakerFlowStep.class,
                 ChoiceFlowStep.class,
+                ConvertBodyToFlowStep.class,
                 Expression.class,
                 FilterFlowStep.class,
                 From.class,

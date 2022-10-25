@@ -38,17 +38,26 @@ public class FlowStepDeserializer extends JsonDeserializer {
 
         steps.put("aggregate", AggregateFlowStep.class);
         steps.put("claim-check", ClaimCheckFlowStep.class);
+        steps.put("claimCheck", ClaimCheckFlowStep.class);
+        steps.put("circuitBreaker", CircuitBreakerFlowStep.class);
         steps.put("circuit-breaker", CircuitBreakerFlowStep.class);
         steps.put("choice", ChoiceFlowStep.class);
+        steps.put("convertBodyTo", ConvertBodyToFlowStep.class);
+        steps.put("convert-body-to", ConvertBodyToFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);
         steps.put("marshal", MarshalFlowStep.class);
         steps.put("log", LogFlowStep.class);
+        steps.put("removeHeader", RemoveHeaderFlowStep.class);
         steps.put("remove-header", RemoveHeaderFlowStep.class);
         steps.put("remove-property", RemovePropertyFlowStep.class);
+        steps.put("removeProperty", RemovePropertyFlowStep.class);
         steps.put("set-body", SetBodyFlowStep.class);
+        steps.put("setBody", SetBodyFlowStep.class);
         steps.put("set-header", SetHeaderFlowStep.class);
+        steps.put("setHeader", SetHeaderFlowStep.class);
         steps.put("set-property", SetPropertyFlowStep.class);
+        steps.put("setProperty", SetPropertyFlowStep.class);
         steps.put("to", ToFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("unmarshal", UnmarshalFlowStep.class);

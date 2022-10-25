@@ -50,6 +50,9 @@ spec:
                       message: test
                       logging-level: INFO
                       log-name: yaml
+                  - convert-body-to:
+                      type: java.lang.String
+                      charset: UTF8
           - simple: '{{?bar}}'
             steps:
             - unmarshal:
