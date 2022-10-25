@@ -62,6 +62,10 @@ spec:
                 name: property
             - marshal:
                 json: {}
+            - claim-check:
+                operation: Get
+                key: foo
+                filter: header:(foo|bar)
           - simple: '{{?baz}}'
             steps:
             - transform:

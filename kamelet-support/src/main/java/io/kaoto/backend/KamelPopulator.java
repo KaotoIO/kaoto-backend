@@ -12,6 +12,7 @@ import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -261,6 +262,9 @@ public class KamelPopulator {
             switch (step.getName()) {
                 case "aggregate":
                     flowStep = new AggregateFlowStep(step);
+                    break;
+                case "claim-check":
+                    flowStep = new ClaimCheckFlowStep(step);
                     break;
                 case "log":
                     flowStep = new LogFlowStep(step);
