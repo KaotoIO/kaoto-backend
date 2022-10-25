@@ -19,6 +19,7 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClaimCheck implements Serializable {
 
+    public static final String DESCRIPTION_LABEL = "description";
     private static final Logger log = Logger.getLogger(ClaimCheck.class);
     public static final String OPERATION_LABEL = "operation";
     public static final String KEY_LABEL = "key";
@@ -43,7 +44,7 @@ public class ClaimCheck implements Serializable {
     @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL)
     private String aggregationStrategyMethodName;
 
-    @JsonProperty("description")
+    @JsonProperty(DESCRIPTION_LABEL)
     private String description;
 
 
@@ -73,6 +74,9 @@ public class ClaimCheck implements Serializable {
                         case AGGREGATION_STRATEGY_METHOD_NAME_LABEL:
                         case AGGREGATION_STRATEGY_METHOD_NAME_LABEL2:
                             this.setAggregationStrategyMethodName(parameter.getValue().toString());
+                            break;
+                        case DESCRIPTION_LABEL:
+                            this.setDescription(parameter.getValue().toString());
                             break;
                         default:
                             log.error("Unknown property: " + parameter.getId());
@@ -134,6 +138,9 @@ public class ClaimCheck implements Serializable {
                         case AGGREGATION_STRATEGY_METHOD_NAME_LABEL:
                         case AGGREGATION_STRATEGY_METHOD_NAME_LABEL2:
                             parameter.setValue(this.aggregationStrategyMethodName);
+                            break;
+                        case DESCRIPTION_LABEL:
+                            parameter.setValue(this.description);
                             break;
                         default:
                             log.error("Unknown property: " + parameter.getId());

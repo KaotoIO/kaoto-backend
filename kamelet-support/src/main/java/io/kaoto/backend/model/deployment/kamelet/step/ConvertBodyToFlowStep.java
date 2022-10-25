@@ -16,46 +16,51 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@JsonPropertyOrder({"claim-check"})
+@JsonPropertyOrder({"convert-body-to"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClaimCheckFlowStep implements FlowStep {
+public class ConvertBodyToFlowStep implements FlowStep {
     @Serial
-    private static final long serialVersionUID = 76302498136497L;
+    private static final long serialVersionUID = 15438685786797L;
 
     @JsonCreator
-    public ClaimCheckFlowStep(final @JsonProperty("claim-check") ClaimCheck claimCheck,
-                              final @JsonProperty("claimCheck") ClaimCheck claimCheck2) {
-        setClaimCheck(claimCheck != null ? claimCheck : claimCheck2);
+    public ConvertBodyToFlowStep(
+            final @JsonProperty(value = "convert-body-to") ConvertBodyTo convertBodyTo,
+            final @JsonProperty(value = "convertBodyTo") ConvertBodyTo convertBodyTo2) {
+        if (convertBodyTo != null) {
+            setConvertBodyTo(convertBodyTo);
+        } else if (convertBodyTo2 != null) {
+            setConvertBodyTo(convertBodyTo2);
+        }
     }
 
-    public ClaimCheckFlowStep() {
+    public ConvertBodyToFlowStep() {
         //Needed for serialization
     }
 
-    public ClaimCheckFlowStep(Step step) {
-        setClaimCheck(new ClaimCheck(step));
+    public ConvertBodyToFlowStep(Step step) {
+        setConvertBodyTo(new ConvertBodyTo(step));
     }
 
-    private ClaimCheck claimCheck;
+    private ConvertBodyTo convertBodyTo;
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("claim-check", this.getClaimCheck().getRepresenterProperties());
+        properties.put("convert-body-to", this.getConvertBodyTo().getRepresenterProperties());
         return properties;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return getClaimCheck().getStep(catalog, kameletStepParserService);
+        return getConvertBodyTo().getStep(catalog, kameletStepParserService);
     }
 
-    public ClaimCheck getClaimCheck() {
-        return claimCheck;
+    public ConvertBodyTo getConvertBodyTo() {
+        return convertBodyTo;
     }
 
-    public void setClaimCheck(final ClaimCheck claimCheck) {
-        this.claimCheck = claimCheck;
+    public void setConvertBodyTo(final ConvertBodyTo convertBodyTo) {
+        this.convertBodyTo = convertBodyTo;
     }
 }

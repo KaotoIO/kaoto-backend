@@ -29,9 +29,18 @@ public class SetPropertyFlowStep implements FlowStep {
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public SetPropertyFlowStep(
-            final @JsonProperty(value = "set-property", required = true)
-                    Expression e) {
+    public SetPropertyFlowStep(final @JsonProperty("set-property") Expression e,
+                               final @JsonProperty("setProperty") Expression e2) {
+        super();
+        if (e != null) {
+            setSetPropertyPairFlowStep(e);
+        } else if (e2 != null) {
+            setSetPropertyPairFlowStep(e2);
+        }
+    }
+
+
+    public SetPropertyFlowStep(final Expression e) {
         super();
         setSetPropertyPairFlowStep(e);
     }
@@ -45,7 +54,6 @@ public class SetPropertyFlowStep implements FlowStep {
         this.setPropertyPairFlowStep = setPropertyPairFlowStep;
     }
 
-    @JsonProperty("set-property")
     private Expression setPropertyPairFlowStep;
 
     @Override

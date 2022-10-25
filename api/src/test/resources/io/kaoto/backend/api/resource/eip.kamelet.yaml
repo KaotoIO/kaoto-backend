@@ -75,6 +75,9 @@ spec:
                   uri: dropbox:put
                   parameters:
                     accessToken: '{{accessToken}}'
+              - convert-body-to:
+                  type: java.lang.String
+                  charset: UTF8
               on-fallback:
                 steps:
                 - log:

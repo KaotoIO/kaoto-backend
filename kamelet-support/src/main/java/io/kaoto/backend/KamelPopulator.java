@@ -13,6 +13,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -251,7 +252,7 @@ public class KamelPopulator {
 
     /** This implementation generates code "Using URI and parameters." as
      * defined in the "Defining Endpoints" section of
-     * https://camel.apache.org/camel-k/1.6.x/languages/yaml.html
+     * https://camel.apache.org/camel-k/latest/languages/yaml.html
      **/
     private FlowStep processStep(final Step step, final boolean to) {
         FlowStep flowStep = null;
@@ -265,6 +266,9 @@ public class KamelPopulator {
                     break;
                 case "claim-check":
                     flowStep = new ClaimCheckFlowStep(step);
+                    break;
+                case "convert-body-to":
+                    flowStep = new ConvertBodyToFlowStep(step);
                     break;
                 case "log":
                     flowStep = new LogFlowStep(step);
