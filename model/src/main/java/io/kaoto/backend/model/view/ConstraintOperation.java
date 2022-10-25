@@ -6,15 +6,15 @@ package io.kaoto.backend.model.view;
  */
 public enum ConstraintOperation {
     /**
-     * 🐱option CONTAINS_STEP_IDENTIFIER: String ; True if the list of steps in the integration contains a step with this identifier.
+     * 🐱option CONTAINS_STEP_IDENTIFIER: String ; True if the list of steps contains a step with this identifier.
      */
     CONTAINS_STEP_IDENTIFIER,
     /**
-     * 🐱option CONTAINS_STEP_NAME: String ; True if the list of steps in the integration contains a step with this identifier.
+     * 🐱option CONTAINS_STEP_NAME: String ; True if the list of steps contains a step with this identifier.
      */
     CONTAINS_STEP_NAME,
     /**
-     * 🐱option CONTAINS_STEP_TYPE: String ; True if the list of steps in the integration contains a step with this name.
+     * 🐱option CONTAINS_STEP_TYPE: String ; True if the list of steps contains a step with this name.
      */
     CONTAINS_STEP_TYPE,
     /**
