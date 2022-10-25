@@ -13,6 +13,7 @@ import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -232,6 +233,7 @@ public class KameletRepresenter extends Representer {
         // and making a mess?
         var eips = new Class[] {
                 AggregateFlowStep.class,
+                ClaimCheckFlowStep.class,
                 CircuitBreakerFlowStep.class,
                 ChoiceFlowStep.class,
                 Expression.class,

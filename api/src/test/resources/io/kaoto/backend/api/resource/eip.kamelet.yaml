@@ -54,6 +54,10 @@ spec:
                 simple: ola ke ase
             - remove-header:
                 name: removeme
+            - claim-check:
+                operation: Push
+                key: foo
+                filter: header:(foo|bar)
       - filter:
           simple: '{{?foo}}'
           steps:
