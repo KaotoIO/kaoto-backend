@@ -1,0 +1,76 @@
+name: 👩‍💻 Publish Executables 👩‍💻
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: 👩🏼‍🏭 Build Native Quarkus for ${{ matrix.os }} 👩🏼‍🏭
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: kaoto-linux-amd64
+            file: api-1.0.0-SNAPSHOT-runner
+          - os: windows-latest
+            asset_name: kaoto-windows-amd64
+            file: api-1.0.0-SNAPSHOT-runner.exe
+          - os: macos-latest
+            asset_name: kaoto-macos-amd64
+            file: api-1.0.0-SNAPSHOT-runner
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: '22.2.0'
+          cache: 'maven'
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Build Native Quarkus
+        run: mvn install -Pnative -DskipTests
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/${{ matrix.file }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+
+  build-jar:
+    name: 👩🏼‍🏭 Build JAR 👩🏼‍🏭
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 17
+          check-latest: true
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Build Jar
+        run: mvn install -DskipTests
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/api-1.0.0-SNAPSHOT.jar
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
