@@ -24,8 +24,9 @@ public class ClaimCheckFlowStep implements FlowStep {
     private static final long serialVersionUID = 76302498136497L;
 
     @JsonCreator
-    public ClaimCheckFlowStep(final @JsonProperty(value = "claim-check", required = true) ClaimCheck claimCheck) {
-        setClaimCheck(claimCheck);
+    public ClaimCheckFlowStep(final @JsonProperty("claim-check") ClaimCheck claimCheck,
+                              final @JsonProperty("claimCheck") ClaimCheck claimCheck2) {
+        setClaimCheck(claimCheck != null ? claimCheck : claimCheck2);
     }
 
     public ClaimCheckFlowStep() {
@@ -36,7 +37,6 @@ public class ClaimCheckFlowStep implements FlowStep {
         setClaimCheck(new ClaimCheck(step));
     }
 
-    @JsonProperty("claim-check")
     private ClaimCheck claimCheck;
 
     @Override

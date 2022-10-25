@@ -19,26 +19,27 @@ import java.util.Optional;
 
 
 @JsonPropertyOrder({"set-body"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SetBodyFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public SetBodyFlowStep(
-            final @JsonProperty(value = "set-body", required = true)
-                    Expression setBody) {
+    public SetBodyFlowStep(final @JsonProperty("set-body") Expression setBody,
+                           final @JsonProperty("setBody") Expression setBody2) {
+        super();
+        setSetBody(setBody != null ? setBody : setBody2);
+    }
+
+
+    public SetBodyFlowStep(final Expression setBody) {
         super();
         setSetBody(setBody);
     }
 
-    @JsonProperty("set-body")
     private Expression setBody;
 
-    @JsonProperty("set-body")
     public Expression getSetBody() {
         return setBody;
     }

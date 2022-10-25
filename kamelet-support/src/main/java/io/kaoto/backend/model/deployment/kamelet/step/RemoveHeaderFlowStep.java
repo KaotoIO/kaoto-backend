@@ -29,14 +29,17 @@ public class RemoveHeaderFlowStep implements FlowStep {
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public RemoveHeaderFlowStep(
-            final @JsonProperty(value = "remove-header", required = true)
-                    Expression e) {
+    public RemoveHeaderFlowStep(final @JsonProperty("remove-header") Expression e,
+                                final @JsonProperty("removeHeader") Expression e2) {
+        super();
+        setSetHeaderPairFlowStep(e != null ? e : e2);
+    }
+
+    public RemoveHeaderFlowStep(final Expression e) {
         super();
         setSetHeaderPairFlowStep(e);
     }
 
-    @JsonProperty("remove-header")
     private Expression setHeaderPairFlowStep;
 
     public Expression getSetHeaderPairFlowStep() {

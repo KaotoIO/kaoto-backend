@@ -20,18 +20,20 @@ import java.util.Optional;
 
 
 @JsonPropertyOrder({"remove-property"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RemovePropertyFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 7630089193555236497L;
 
     @JsonCreator
-    public RemovePropertyFlowStep(
-            final @JsonProperty(value = "remove-property", required = true)
-                    Expression e) {
+    public RemovePropertyFlowStep(final @JsonProperty("remove-property") Expression e,
+                                  final @JsonProperty("removeProperty") Expression e2) {
+        super();
+        setRemovePropertyFlowStep(e != null ? e : e2);
+    }
+
+    public RemovePropertyFlowStep(final Expression e) {
         super();
         setRemovePropertyFlowStep(e);
     }
@@ -45,7 +47,6 @@ public class RemovePropertyFlowStep implements FlowStep {
         this.removePropertyFlowStep = removePropertyFlowStep;
     }
 
-    @JsonProperty("remove-property")
     private Expression removePropertyFlowStep;
 
     @Override

@@ -54,11 +54,11 @@ public class ConvertBodyTo implements Serializable {
                         case MANDATORY_LABEL:
                             this.setMandatory(Boolean.valueOf(parameter.getValue().toString()));
                             break;
-                        case CHARSET_LABEL:
-                            this.setCharset(parameter.getValue().toString());
-                            break;
                         case DESCRIPTION_LABEL:
                             this.setDescription(parameter.getValue().toString());
+                            break;
+                        case CHARSET_LABEL:
+                            this.setCharset(parameter.getValue().toString());
                             break;
                         default:
                             log.error("Unknown property: " + parameter.getId());
