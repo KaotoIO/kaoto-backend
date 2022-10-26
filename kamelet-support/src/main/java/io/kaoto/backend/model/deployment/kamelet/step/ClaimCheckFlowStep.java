@@ -11,7 +11,6 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +19,11 @@ import java.util.Map;
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClaimCheckFlowStep implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 76302498136497L;
+
+    public static final String CLAIM_CHECK_LABEL = "claim-check";
 
     @JsonCreator
-    public ClaimCheckFlowStep(final @JsonProperty("claim-check") ClaimCheck claimCheck,
+    public ClaimCheckFlowStep(final @JsonProperty(CLAIM_CHECK_LABEL) ClaimCheck claimCheck,
                               final @JsonProperty("claimCheck") ClaimCheck claimCheck2) {
         setClaimCheck(claimCheck != null ? claimCheck : claimCheck2);
     }
@@ -42,13 +41,13 @@ public class ClaimCheckFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("claim-check", this.getClaimCheck().getRepresenterProperties());
+        properties.put(CLAIM_CHECK_LABEL, this.getClaimCheck().getRepresenterProperties());
         return properties;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return getClaimCheck().getStep(catalog, kameletStepParserService);
+        return getClaimCheck().getStep(catalog, CLAIM_CHECK_LABEL, kameletStepParserService);
     }
 
     public ClaimCheck getClaimCheck() {

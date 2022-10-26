@@ -22,10 +22,11 @@ import java.util.Map;
 public class ConvertBodyToFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 15438685786797L;
+    public static final String CONVERT_BODY_TO_LABEL = "convert-body-to";
 
     @JsonCreator
     public ConvertBodyToFlowStep(
-            final @JsonProperty(value = "convert-body-to") ConvertBodyTo convertBodyTo,
+            final @JsonProperty(value = CONVERT_BODY_TO_LABEL) ConvertBodyTo convertBodyTo,
             final @JsonProperty(value = "convertBodyTo") ConvertBodyTo convertBodyTo2) {
         if (convertBodyTo != null) {
             setConvertBodyTo(convertBodyTo);
@@ -47,13 +48,13 @@ public class ConvertBodyToFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("convert-body-to", this.getConvertBodyTo().getRepresenterProperties());
+        properties.put(CONVERT_BODY_TO_LABEL, this.getConvertBodyTo().getRepresenterProperties());
         return properties;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return getConvertBodyTo().getStep(catalog, kameletStepParserService);
+        return getConvertBodyTo().getStep(catalog, CONVERT_BODY_TO_LABEL, kameletStepParserService);
     }
 
     public ConvertBodyTo getConvertBodyTo() {

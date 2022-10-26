@@ -1,9 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -12,8 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-@JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Delay extends EIPStep {
     public static final String EXPRESSION_LABEL = "expression";
     public static final String ASYNC_DELAYED_LABEL = "asyncDelayed";
@@ -52,7 +47,7 @@ public class Delay extends EIPStep {
     void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
             case EXPRESSION_LABEL:
-                this.setExpression((Expression) parameter.getValue());
+                this.setExpression(new Expression(parameter.getValue()));
                 break;
             case ASYNC_DELAYED_LABEL:
             case ASYNC_DELAYED_LABEL2:

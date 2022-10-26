@@ -20,33 +20,35 @@ import java.util.Map;
 public class LogFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 371852467185246852L;
+    public static final String LOG_LABEL = "log";
 
-    @JsonProperty("log")
+    @JsonProperty(LOG_LABEL)
     private LogStep log;
 
     public LogFlowStep() {
+        //Needed for serialization
     }
 
     @JsonCreator
-    public LogFlowStep(final @JsonProperty(value = "log", required = true) LogStep log) {
+    public LogFlowStep(final @JsonProperty(value = LOG_LABEL, required = true) LogStep log) {
         super();
         this.setLog(log);
     }
 
     public LogFlowStep(Step step) {
-        log = new LogStep(step);
+        setLog(new LogStep(step));
     }
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> res = new HashMap<>();
-        res.put("log", log.getRepresenterProperties());
+        res.put(LOG_LABEL, log.getRepresenterProperties());
         return res;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return log.getStep(catalog, kameletStepParserService);
+        return getLog().getStep(catalog, LOG_LABEL,  kameletStepParserService);
     }
 
     public LogStep getLog() {

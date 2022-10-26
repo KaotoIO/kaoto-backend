@@ -1,27 +1,14 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
 
-import java.io.Serial;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 
-@JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class LogStep implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 854654615436852L;
-    private static final Logger log = Logger.getLogger(LogStep.class);
+public class LogStep extends EIPStep {
     public static final String MESSAGE = "message";
     public static final String MARKER = "marker";
     public static final String LOGGER = "logger";
@@ -46,39 +33,7 @@ public class LogStep implements FlowStep {
     }
 
     public LogStep(Step step) {
-        for (var parameter : step.getParameters()) {
-            if (parameter.getValue() != null) {
-                try {
-                    switch (parameter.getId()) {
-                        case MESSAGE:
-                            this.setMessage(parameter.getValue().toString());
-                            break;
-                        case LOGGING_LEVEL1:
-                        case LOGGING_LEVEL:
-                            this.setLoggingLevel(parameter.getValue().toString());
-                            break;
-                        case LOG_NAME1:
-                        case LOG_NAME:
-                            this.setLogName(parameter.getValue().toString());
-                            break;
-                        case MARKER:
-                            this.setMarker(parameter.getValue().toString());
-                            break;
-                        case LOGGER:
-                            this.setLogger(parameter.getValue().toString());
-                            break;
-                        case DESCRIPTION:
-                            this.setDescription(parameter.getValue().toString());
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
-        }
+        super(step);
     }
 
     @Override
@@ -105,51 +60,63 @@ public class LogStep implements FlowStep {
         return properties;
     }
 
+
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-
-        Optional<Step> res = catalog.getReadOnlyCatalog()
-                .searchByName("log").stream()
-                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
-                .findAny();
-
-
-        if (res.isPresent()) {
-            var step = res.get();
-            for (var parameter : step.getParameters()) {
-                try {
-                    switch (parameter.getId()) {
-                        case MESSAGE:
-                            parameter.setValue(this.getMessage());
-                            break;
-                        case LOGGING_LEVEL1:
-                        case LOGGING_LEVEL:
-                            parameter.setValue(this.getLoggingLevel());
-                            break;
-                        case LOG_NAME1:
-                        case LOG_NAME:
-                            parameter.setValue(this.getLogName());
-                            break;
-                        case MARKER:
-                            parameter.setValue(this.getMarker());
-                            break;
-                        case LOGGER:
-                            parameter.setValue(this.getLogger());
-                            break;
-                        case DESCRIPTION:
-                            parameter.setValue(this.getDescription());
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
+    void assignAttribute(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case MESSAGE:
+                this.setMessage(parameter.getValue().toString());
+                break;
+            case LOGGING_LEVEL1:
+            case LOGGING_LEVEL:
+                this.setLoggingLevel(parameter.getValue().toString());
+                break;
+            case LOG_NAME1:
+            case LOG_NAME:
+                this.setLogName(parameter.getValue().toString());
+                break;
+            case MARKER:
+                this.setMarker(parameter.getValue().toString());
+                break;
+            case LOGGER:
+                this.setLogger(parameter.getValue().toString());
+                break;
+            case DESCRIPTION:
+                this.setDescription(parameter.getValue().toString());
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
         }
+    }
 
-        return res.orElse(null);
+    @Override
+    void assignProperty(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case MESSAGE:
+                parameter.setValue(this.getMessage());
+                break;
+            case LOGGING_LEVEL1:
+            case LOGGING_LEVEL:
+                parameter.setValue(this.getLoggingLevel());
+                break;
+            case LOG_NAME1:
+            case LOG_NAME:
+                parameter.setValue(this.getLogName());
+                break;
+            case MARKER:
+                parameter.setValue(this.getMarker());
+                break;
+            case LOGGER:
+                parameter.setValue(this.getLogger());
+                break;
+            case DESCRIPTION:
+                parameter.setValue(this.getDescription());
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
+        }
     }
 
     public String getMessage() {

@@ -46,7 +46,7 @@ public class DelayFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return getDelay().getStep(catalog, DELAY_LABEL);
+        return getDelay().getStep(catalog, DELAY_LABEL, kameletStepParserService);
     }
 
     public Delay getDelay() {
