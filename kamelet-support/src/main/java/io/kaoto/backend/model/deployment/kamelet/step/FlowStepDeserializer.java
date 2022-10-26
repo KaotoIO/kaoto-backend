@@ -44,6 +44,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("choice", ChoiceFlowStep.class);
         steps.put("convertBodyTo", ConvertBodyToFlowStep.class);
         steps.put("convert-body-to", ConvertBodyToFlowStep.class);
+        steps.put("delay", DelayFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);
         steps.put("marshal", MarshalFlowStep.class);
