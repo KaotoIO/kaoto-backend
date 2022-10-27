@@ -1,32 +1,22 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-@JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class CircuitBreaker implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = -5678816415304269535L;
+public class CircuitBreaker extends EIPStep {
 
-    private static final Logger log = Logger.getLogger(CircuitBreaker.class);
     public static final String STEPS_LABEL = "steps";
     public static final String ON_FALLBACK_LABEL = "on-fallback";
     public static final String RESILIENCE_4_J_CONFIGURATION_LABEL = "resilience-4j-configuration";
@@ -77,32 +67,7 @@ public class CircuitBreaker implements FlowStep {
     }
 
     public CircuitBreaker(final Step step, final KamelPopulator kameletPopulator) {
-        super();
-        for (var parameter : step.getParameters()) {
-            if (parameter.getValue() != null) {
-                try {
-                    switch (parameter.getId()) {
-                        case RESILIENCE_4_J_CONFIGURATION_LABEL2:
-                            this.setResilience4jConfiguration((Map<String, String>) parameter.getValue());
-                            break;
-                        case FAULT_TOLERANCE_CONFIGURATION_LABEL2:
-                            this.setFaultToleranceConfiguration((Map<String, String>) parameter.getValue());
-                            break;
-                        case CONFIGURATION_LABEL:
-                            this.setConfiguration(parameter.getValue().toString());
-                            break;
-                        case DESCRIPTION_LABEL:
-                            this.setDescription((Map<String, String>) parameter.getValue());
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
-        }
+        super(step);
 
         if (step.getBranches() != null) {
             if (step.getBranches().size() > 0) {
@@ -141,62 +106,71 @@ public class CircuitBreaker implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        Optional<Step> res = catalog.getReadOnlyCatalog()
-                .searchByName(CIRCUIT_BREAKER_LABEL).stream()
-                .filter(step -> step.getKind().equalsIgnoreCase("EIP-BRANCH"))
-                .findAny();
+    public void processBranches(final Step step, final StepCatalog catalog,
+                        final KameletStepParserService kameletStepParserService) {
+        step.setBranches(new LinkedList<>());
 
-        if (res.isPresent()) {
-
-            var step = res.get();
-            for (var parameter : step.getParameters()) {
-                try {
-                    switch (parameter.getId()) {
-                        case RESILIENCE_4_J_CONFIGURATION_LABEL2:
-                            parameter.setValue(this.getResilience4jConfiguration());
-                            break;
-                        case FAULT_TOLERANCE_CONFIGURATION_LABEL2:
-                            parameter.setValue(this.getFaultToleranceConfiguration());
-                            break;
-                        case CONFIGURATION_LABEL:
-                            parameter.setValue(this.getConfiguration());
-                            break;
-                        case DESCRIPTION_LABEL:
-                            parameter.setValue(this.getDescription());
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
-
-            step.setBranches(new LinkedList<>());
-
-            var identifier = STEPS_LABEL;
-            if (this.getDescription() != null) {
-                identifier = this.getDescription().toString();
-            }
-            Branch branch = new Branch(identifier);
-            step.getBranches().add(branch);
-            if (this.getSteps() != null) {
-                for (var s : this.getSteps()) {
-                    branch.getSteps().add(kameletStepParserService.processStep(s));
-                }
-            }
-            branch = new Branch(ON_FALLBACK_LABEL);
-            step.getBranches().add(branch);
-            if (this.getOnFallback() != null && this.getOnFallback().getSteps() != null) {
-                for (var s : this.getOnFallback().getSteps()) {
-                    branch.getSteps().add(kameletStepParserService.processStep(s));
-                }
+        var identifier = STEPS_LABEL;
+        if (this.getDescription() != null) {
+            identifier = this.getDescription().toString();
+        }
+        Branch branch = new Branch(identifier);
+        step.getBranches().add(branch);
+        if (this.getSteps() != null) {
+            for (var s : this.getSteps()) {
+                branch.getSteps().add(kameletStepParserService.processStep(s));
             }
         }
+        branch = new Branch(ON_FALLBACK_LABEL);
+        step.getBranches().add(branch);
+        if (this.getOnFallback() != null && this.getOnFallback().getSteps() != null) {
+            for (var s : this.getOnFallback().getSteps()) {
+                branch.getSteps().add(kameletStepParserService.processStep(s));
+            }
+        }
+    }
 
-        return res.orElse(null);
+
+    @Override
+    void assignAttribute(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case RESILIENCE_4_J_CONFIGURATION_LABEL2:
+                this.setResilience4jConfiguration((Map<String, String>) parameter.getValue());
+                break;
+            case FAULT_TOLERANCE_CONFIGURATION_LABEL2:
+                this.setFaultToleranceConfiguration((Map<String, String>) parameter.getValue());
+                break;
+            case CONFIGURATION_LABEL:
+                this.setConfiguration(parameter.getValue().toString());
+                break;
+            case DESCRIPTION_LABEL:
+                this.setDescription((Map<String, String>) parameter.getValue());
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
+        }
+    }
+
+    @Override
+    void assignProperty(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case RESILIENCE_4_J_CONFIGURATION_LABEL2:
+                parameter.setValue(this.getResilience4jConfiguration());
+                break;
+            case FAULT_TOLERANCE_CONFIGURATION_LABEL2:
+                parameter.setValue(this.getFaultToleranceConfiguration());
+                break;
+            case CONFIGURATION_LABEL:
+                parameter.setValue(this.getConfiguration());
+                break;
+            case DESCRIPTION_LABEL:
+                parameter.setValue(this.getDescription());
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
+        }
     }
 
     public List<FlowStep> getSteps() {

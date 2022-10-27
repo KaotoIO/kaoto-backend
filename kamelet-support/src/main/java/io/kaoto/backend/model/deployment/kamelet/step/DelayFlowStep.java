@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -10,49 +11,49 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
 
-@JsonPropertyOrder({"aggregate"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonPropertyOrder({"delay"})
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AggregateFlowStep implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 7630089193555236497L;
-    public static final String AGGREGATE_LABEL = "aggregate";
+public class DelayFlowStep implements FlowStep {
 
+    public static final String DELAY_LABEL = "delay";
 
-    @JsonProperty(AGGREGATE_LABEL)
-    private Aggregate aggregate;
-
-    public AggregateFlowStep() {
+    @JsonCreator
+    public DelayFlowStep(final @JsonProperty(DELAY_LABEL) Delay delay) {
+        setDelay(delay);
     }
 
-    public AggregateFlowStep(Step step) {
-        setAggregate(new Aggregate(step));
+    public DelayFlowStep() {
+        //Needed for serialization
     }
+
+    public DelayFlowStep(Step step) {
+        setDelay(new Delay(step));
+    }
+
+    private Delay delay;
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> aggregator = new HashMap<>();
-        aggregator.put(AGGREGATE_LABEL, aggregate.getRepresenterProperties());
-        return aggregator;
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(DELAY_LABEL, this.getDelay().getRepresenterProperties());
+        return properties;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return aggregate.getStep(catalog, AGGREGATE_LABEL, kameletStepParserService);
+        return getDelay().getStep(catalog, DELAY_LABEL, kameletStepParserService);
     }
 
-    public Aggregate getAggregate() {
-        return aggregate;
+    public Delay getDelay() {
+        return delay;
     }
 
-    public void setAggregate(final Aggregate aggregate) {
-        this.aggregate = aggregate;
+    public void setDelay(final Delay delay) {
+        this.delay = delay;
     }
 }

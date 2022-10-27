@@ -20,12 +20,13 @@ import java.util.Map;
 public class CircuitBreakerFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 2863336982210367342L;
+    public static final String CIRCUIT_BREAKER_LABEL = "circuit-breaker";
 
-    @JsonProperty("circuit-breaker")
+    @JsonProperty(CIRCUIT_BREAKER_LABEL)
     private CircuitBreaker circuitBreaker;
 
     @JsonCreator
-    public CircuitBreakerFlowStep(final @JsonProperty("circuit-breaker") CircuitBreaker circuitBreaker) {
+    public CircuitBreakerFlowStep(final @JsonProperty(CIRCUIT_BREAKER_LABEL) CircuitBreaker circuitBreaker) {
         super();
         setCircuitBreaker(circuitBreaker);
     }
@@ -38,13 +39,13 @@ public class CircuitBreakerFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> circuitbreaker = new HashMap<>();
-        circuitbreaker.put("circuit-breaker", getCircuitBreaker().getRepresenterProperties());
+        circuitbreaker.put(CIRCUIT_BREAKER_LABEL, getCircuitBreaker().getRepresenterProperties());
         return circuitbreaker;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-        return getCircuitBreaker().getStep(catalog, kameletStepParserService);
+        return getCircuitBreaker().getStep(catalog, CIRCUIT_BREAKER_LABEL, kameletStepParserService);
     }
 
     public CircuitBreaker getCircuitBreaker() {

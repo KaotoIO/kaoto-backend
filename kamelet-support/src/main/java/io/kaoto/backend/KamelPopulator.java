@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.DelayFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -270,6 +271,9 @@ public class KamelPopulator {
                 case "convert-body-to":
                     flowStep = new ConvertBodyToFlowStep(step);
                     break;
+                case "delay":
+                    flowStep = new DelayFlowStep(step);
+                    break;
                 case "log":
                     flowStep = new LogFlowStep(step);
                     break;
@@ -367,7 +371,7 @@ public class KamelPopulator {
 
 
 
-    private Expression getExpression(final Step step) {
+    public static Expression getExpression(final Step step) {
         Expression expression = new Expression(null, null);
         for (Parameter p : step.getParameters()) {
             if (p.getValue() == null) {

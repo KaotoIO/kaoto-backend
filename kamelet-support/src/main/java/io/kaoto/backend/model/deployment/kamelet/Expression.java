@@ -16,9 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({"constant", "simple"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Expression implements FlowStep {
     @Serial
@@ -31,6 +29,22 @@ public class Expression implements FlowStep {
         super();
         setConstant(constant);
         setSimple(simple);
+    }
+
+    public Expression(Object obj) {
+        super();
+
+        if (obj instanceof Expression e) {
+            setConstant(e.getConstant());
+            setSimple(e.getSimple());
+        } else if (obj instanceof Map map) {
+            if (map.containsKey("constant") && map.get("constant") != null) {
+                setConstant(map.get("constant").toString());
+            }
+            if (map.containsKey("simple") && map.get("simple") != null) {
+                setSimple(map.get("simple").toString());
+            }
+        }
     }
 
     public Expression() {

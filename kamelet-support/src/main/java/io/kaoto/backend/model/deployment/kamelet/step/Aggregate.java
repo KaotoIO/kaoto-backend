@@ -2,37 +2,22 @@ package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 
-@JsonPropertyOrder({"correlation-expression", "completion-predicate", "completion-timeout-expression",
-        "completion-size-expression", "optimistic-lock-retry-policy", "parallel-processing", "optimistic-locking",
-        "executor-service", "timeout-checker-executor-service", "aggregate-controller", "aggregation-repository",
-        "aggregation-strategy", "aggregation-strategy-method-name", "aggregation-strategy-method-allow-null",
-        "completion-size", "completion-interval", "completion-timeout", "completion-timeout-checker-interval",
-        "completion-from-batch-consumer", "completion-on-new-correlation-group", "eager-check-completion",
-        "ignore-invalid-correlation-keys", "close-correlation-key-on-completion", "discard-on-completion-timeout",
-        "discard-on-aggregation-failure", "force-completion-on-stop", "complete-all-on-stop", "description"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Aggregate implements Serializable {
+public class Aggregate extends EIPStep {
 
     public static final String OPTIMISTIC_LOCK_RETRY_POLICY = "optimisticLockRetryPolicy";
-    private static final Logger log = Logger.getLogger(Aggregate.class);
     public static final String CORRELATION_EXPRESSION = "correlation-expression";
     public static final String CORRELATION_EXPRESSION1 = "correlationExpression";
     public static final String COMPLETION_PREDICATE = "completionPredicate";
@@ -87,7 +72,6 @@ public class Aggregate implements Serializable {
     public static final String COMPLETE_ALL_ON_STOP = "completeAllOnStop";
     public static final String COMPLETE_ALL_ON_STOP1 = "complete-all-on-stop";
     public static final String DESCRIPTION_LABEL = "description";
-
 
     @JsonProperty("correlation-expression")
     private Expression correlationExpression;
@@ -177,153 +161,9 @@ public class Aggregate implements Serializable {
     }
 
     public Aggregate(Step step) {
-
-        for (var parameter : step.getParameters()) {
-            if (parameter.getValue() != null) {
-                try {
-                    switch (parameter.getId()) {
-                        case CORRELATION_EXPRESSION1:
-                        case CORRELATION_EXPRESSION:
-                            this.setCorrelationExpression(getExpression(parameter.getValue()));
-                            break;
-                        case COMPLETION_PREDICATE:
-                        case COMPLETION_PREDICATE1:
-                            this.setCompletionPredicate(parameter.getValue().toString());
-                            break;
-                        case COMPLETION_TIMEOUT_EXPRESSION:
-                        case COMPLETION_TIMEOUT_EXPRESSION1:
-                            this.setCompletionTimeoutExpression(getExpression(parameter.getValue()));
-                            break;
-                        case COMPLETION_SIZE_EXPRESSION:
-                        case COMPLETION_SIZE_EXPRESSION1:
-                            this.setCompletionSizeExpression(parameter.getValue().toString());
-                            break;
-                        case OPTIMISTIC_LOCK_RETRY_POLICY:
-                        case OPTIMISTIC_LOCK_RETRY_POLICY1:
-                            this.setOptimisticLockRetryPolicy(parameter.getValue().toString());
-                            break;
-                        case PARALLEL_PROCESSING1:
-                        case PARALLEL_PROCESSING:
-                            this.setParallelProcessing(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case OPTIMISTIC_LOCKING:
-                        case OPTIMISTIC_LOCKING1:
-                            this.setOptimisticLocking(parameter.getValue().toString());
-                            break;
-                        case EXECUTOR_SERVICE:
-                        case EXECUTOR_SERVICE1:
-                            this.setExecutorService(parameter.getValue().toString());
-                            break;
-                        case TIMEOUT_CHECKER_EXECUTOR_SERVICE:
-                        case TIMEOUT_CHECKER_EXECUTOR_SERVICE1:
-                            this.setTimeoutCheckerExecutorService(parameter.getValue().toString());
-                            break;
-                        case AGGREGATE_CONTROLLER:
-                        case AGGREGATE_CONTROLLER1:
-                            this.setAggregateController(parameter.getValue().toString());
-                            break;
-                        case AGGREGATION_REPOSITORY:
-                        case AGGREGATION_REPOSITORY1:
-                            this.setAggregationRepository(parameter.getValue().toString());
-                            break;
-                        case AGGREGATION_STRATEGY:
-                        case AGGREGATION_STRATEGY1:
-                            this.setAggregationStrategy(parameter.getValue().toString());
-                            break;
-                        case AGGREGATION_STRATEGY_METHOD_NAME:
-                        case AGGREGATION_STRATEGY_METHOD_NAME1:
-                            this.setAggregationStrategyMethodName(parameter.getValue().toString());
-                            break;
-                        case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL:
-                        case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL1:
-                            this.setAggregationStrategyMethodAllowNull(
-                                    Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case COMPLETION_SIZE:
-                        case COMPLETION_SIZE1:
-                            this.setCompletionSize(Integer.valueOf(parameter.getValue().toString()));
-                            break;
-                        case COMPLETION_INTERVAL:
-                        case COMPLETION_INTERVAL1:
-                            this.setCompletionInterval(parameter.getValue().toString());
-                            break;
-                        case COMPLETION_TIMEOUT:
-                        case COMPLETION_TIMEOUT1:
-                            this.setCompletionTimeout(parameter.getValue().toString());
-                            break;
-                        case COMPLETION_TIMEOUT_CHECKER_INTERVAL:
-                        case COMPLETION_TIMEOUT_CHECKER_INTERVAL1:
-                            this.setCompletionTimeoutCheckerInterval(parameter.getValue().toString());
-                            break;
-                        case COMPLETION_FROM_BATCH_CONSUMER:
-                        case COMPLETION_FROM_BATCH_CONSUMER1:
-                            this.setCompletionFromBatchConsumer(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case COMPLETION_ON_NEW_CORRELATION_GROUP:
-                        case COMPLETION_ON_NEW_CORRELATION_GROUP1:
-                            this.setCompletionOnNewCorrelationGroup(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case EAGER_CHECK_COMPLETION:
-                        case EAGER_CHECK_COMPLETION1:
-                            this.setEagerCheckCompletion(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case IGNORE_INVALID_CORRELATION_KEYS:
-                        case IGNORE_INVALID_CORRELATION_KEYS1:
-                            this.setIgnoreInvalidCorrelationKeys(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case CLOSE_CORRELATION_KEY_ON_COMPLETION:
-                        case CLOSE_CORRELATION_KEY_ON_COMPLETION1:
-                            this.setCloseCorrelationKeyOnCompletion(Integer.valueOf(parameter.getValue().toString()));
-                            break;
-                        case DISCARD_ON_COMPLETION_TIMEOUT:
-                        case DISCARD_ON_COMPLETION_TIMEOUT1:
-                            this.setDiscardOnCompletionTimeout(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case DISCARD_ON_AGGREGATION_FAILURE:
-                        case DISCARD_ON_AGGREGATION_FAILURE1:
-                            this.setDiscardOnAggregationFailure(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case FORCE_COMPLETION_ON_STOP:
-                        case FORCE_COMPLETION_ON_STOP1:
-                            this.setForceCompletionOnStop(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case COMPLETE_ALL_ON_STOP:
-                        case COMPLETE_ALL_ON_STOP1:
-                            this.setCompleteAllOnStop(Boolean.valueOf(parameter.getValue().toString()));
-                            break;
-                        case DESCRIPTION_LABEL:
-                            this.setDescription(parameter.getValue().toString());
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
-        }
+        super(step);
     }
 
-    private Expression getExpression(final Object value) {
-        if (value instanceof Expression e) {
-            return e;
-        }
-
-        if (value instanceof Map map) {
-            Expression e = new Expression();
-            if (map.containsKey("constant") && map.get("constant") != null) {
-                e.setConstant(map.get("constant").toString());
-            }
-            if (map.containsKey("simple") && map.get("simple") != null) {
-                e.setSimple(map.get("simple").toString());
-            }
-            return e;
-        }
-
-        log.error("Couldn't recognize the expression " + value);
-        return null;
-    }
 
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new LinkedHashMap<>();
@@ -415,142 +255,245 @@ public class Aggregate implements Serializable {
         return properties;
     }
 
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
-
-        Optional<Step> res = catalog.getReadOnlyCatalog()
-                .searchByName("aggregate").stream()
-                .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
-                .findAny();
-
-
-        if (res.isPresent()) {
-            var step = res.get();
-            for (var parameter : step.getParameters()) {
-                try {
-                    switch (parameter.getId()) {
-                        case CORRELATION_EXPRESSION:
-                        case CORRELATION_EXPRESSION1:
-                            parameter.setValue(this.correlationExpression);
-                            break;
-                        case COMPLETION_PREDICATE:
-                        case COMPLETION_PREDICATE1:
-                            parameter.setValue(this.completionPredicate);
-                            break;
-                        case COMPLETION_TIMEOUT_EXPRESSION:
-                        case COMPLETION_TIMEOUT_EXPRESSION1:
-                            parameter.setValue(this.completionTimeoutExpression);
-                            break;
-                        case COMPLETION_SIZE_EXPRESSION:
-                        case COMPLETION_SIZE_EXPRESSION1:
-                            parameter.setValue(this.completionSizeExpression);
-                            break;
-                        case OPTIMISTIC_LOCK_RETRY_POLICY:
-                        case OPTIMISTIC_LOCK_RETRY_POLICY1:
-                            parameter.setValue(this.optimisticLockRetryPolicy);
-                            break;
-                        case PARALLEL_PROCESSING:
-                        case PARALLEL_PROCESSING1:
-                            parameter.setValue(this.parallelProcessing);
-                            break;
-                        case OPTIMISTIC_LOCKING:
-                        case OPTIMISTIC_LOCKING1:
-                            parameter.setValue(this.optimisticLocking);
-                            break;
-                        case EXECUTOR_SERVICE:
-                        case EXECUTOR_SERVICE1:
-                            parameter.setValue(this.executorService);
-                            break;
-                        case TIMEOUT_CHECKER_EXECUTOR_SERVICE:
-                        case TIMEOUT_CHECKER_EXECUTOR_SERVICE1:
-                            parameter.setValue(this.timeoutCheckerExecutorService);
-                            break;
-                        case AGGREGATE_CONTROLLER:
-                        case AGGREGATE_CONTROLLER1:
-                            parameter.setValue(this.aggregateController);
-                            break;
-                        case AGGREGATION_REPOSITORY:
-                        case AGGREGATION_REPOSITORY1:
-                            parameter.setValue(this.aggregationRepository);
-                            break;
-                        case AGGREGATION_STRATEGY:
-                        case AGGREGATION_STRATEGY1:
-                            parameter.setValue(this.aggregationStrategy);
-                            break;
-                        case AGGREGATION_STRATEGY_METHOD_NAME:
-                        case AGGREGATION_STRATEGY_METHOD_NAME1:
-                            parameter.setValue(this.aggregationStrategyMethodName);
-                            break;
-                        case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL:
-                        case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL1:
-                            parameter.setValue(this.aggregationStrategyMethodAllowNull);
-                            break;
-                        case COMPLETION_SIZE:
-                        case COMPLETION_SIZE1:
-                            parameter.setValue(this.completionSize);
-                            break;
-                        case COMPLETION_INTERVAL:
-                        case COMPLETION_INTERVAL1:
-                            parameter.setValue(this.completionInterval);
-                            break;
-                        case COMPLETION_TIMEOUT:
-                        case COMPLETION_TIMEOUT1:
-                            parameter.setValue(this.completionTimeout);
-                            break;
-                        case COMPLETION_TIMEOUT_CHECKER_INTERVAL:
-                        case COMPLETION_TIMEOUT_CHECKER_INTERVAL1:
-                            parameter.setValue(this.completionTimeoutCheckerInterval);
-                            break;
-                        case COMPLETION_FROM_BATCH_CONSUMER:
-                        case COMPLETION_FROM_BATCH_CONSUMER1:
-                            parameter.setValue(this.completionFromBatchConsumer);
-                            break;
-                        case COMPLETION_ON_NEW_CORRELATION_GROUP:
-                        case COMPLETION_ON_NEW_CORRELATION_GROUP1:
-                            parameter.setValue(this.completionOnNewCorrelationGroup);
-                            break;
-                        case EAGER_CHECK_COMPLETION:
-                        case EAGER_CHECK_COMPLETION1:
-                            parameter.setValue(this.eagerCheckCompletion);
-                            break;
-                        case IGNORE_INVALID_CORRELATION_KEYS:
-                        case IGNORE_INVALID_CORRELATION_KEYS1:
-                            parameter.setValue(this.ignoreInvalidCorrelationKeys);
-                            break;
-                        case CLOSE_CORRELATION_KEY_ON_COMPLETION:
-                        case CLOSE_CORRELATION_KEY_ON_COMPLETION1:
-                            parameter.setValue(this.closeCorrelationKeyOnCompletion);
-                            break;
-                        case DISCARD_ON_COMPLETION_TIMEOUT:
-                        case DISCARD_ON_COMPLETION_TIMEOUT1:
-                            parameter.setValue(this.discardOnCompletionTimeout);
-                            break;
-                        case DISCARD_ON_AGGREGATION_FAILURE:
-                        case DISCARD_ON_AGGREGATION_FAILURE1:
-                            parameter.setValue(this.discardOnAggregationFailure);
-                            break;
-                        case FORCE_COMPLETION_ON_STOP:
-                        case FORCE_COMPLETION_ON_STOP1:
-                            parameter.setValue(this.forceCompletionOnStop);
-                            break;
-                        case COMPLETE_ALL_ON_STOP:
-                        case COMPLETE_ALL_ON_STOP1:
-                            parameter.setValue(this.completeAllOnStop);
-                            break;
-                        case DESCRIPTION_LABEL:
-                            parameter.setValue(this.description);
-                            break;
-                        default:
-                            log.error("Unknown property: " + parameter.getId());
-                            break;
-                    }
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to parameter " + parameter.getId(), e);
-                }
-            }
-
+    @Override
+    void assignAttribute(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case CORRELATION_EXPRESSION1:
+            case CORRELATION_EXPRESSION:
+                this.setCorrelationExpression(new Expression(parameter.getValue()));
+                break;
+            case COMPLETION_PREDICATE:
+            case COMPLETION_PREDICATE1:
+                this.setCompletionPredicate(parameter.getValue().toString());
+                break;
+            case COMPLETION_TIMEOUT_EXPRESSION:
+            case COMPLETION_TIMEOUT_EXPRESSION1:
+                this.setCompletionTimeoutExpression(new Expression(parameter.getValue()));
+                break;
+            case COMPLETION_SIZE_EXPRESSION:
+            case COMPLETION_SIZE_EXPRESSION1:
+                this.setCompletionSizeExpression(parameter.getValue().toString());
+                break;
+            case OPTIMISTIC_LOCK_RETRY_POLICY:
+            case OPTIMISTIC_LOCK_RETRY_POLICY1:
+                this.setOptimisticLockRetryPolicy(parameter.getValue().toString());
+                break;
+            case PARALLEL_PROCESSING1:
+            case PARALLEL_PROCESSING:
+                this.setParallelProcessing(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case OPTIMISTIC_LOCKING:
+            case OPTIMISTIC_LOCKING1:
+                this.setOptimisticLocking(parameter.getValue().toString());
+                break;
+            case EXECUTOR_SERVICE:
+            case EXECUTOR_SERVICE1:
+                this.setExecutorService(parameter.getValue().toString());
+                break;
+            case TIMEOUT_CHECKER_EXECUTOR_SERVICE:
+            case TIMEOUT_CHECKER_EXECUTOR_SERVICE1:
+                this.setTimeoutCheckerExecutorService(parameter.getValue().toString());
+                break;
+            case AGGREGATE_CONTROLLER:
+            case AGGREGATE_CONTROLLER1:
+                this.setAggregateController(parameter.getValue().toString());
+                break;
+            case AGGREGATION_REPOSITORY:
+            case AGGREGATION_REPOSITORY1:
+                this.setAggregationRepository(parameter.getValue().toString());
+                break;
+            case AGGREGATION_STRATEGY:
+            case AGGREGATION_STRATEGY1:
+                this.setAggregationStrategy(parameter.getValue().toString());
+                break;
+            case AGGREGATION_STRATEGY_METHOD_NAME:
+            case AGGREGATION_STRATEGY_METHOD_NAME1:
+                this.setAggregationStrategyMethodName(parameter.getValue().toString());
+                break;
+            case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL:
+            case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL1:
+                this.setAggregationStrategyMethodAllowNull(
+                        Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case COMPLETION_SIZE:
+            case COMPLETION_SIZE1:
+                this.setCompletionSize(Integer.valueOf(parameter.getValue().toString()));
+                break;
+            case COMPLETION_INTERVAL:
+            case COMPLETION_INTERVAL1:
+                this.setCompletionInterval(parameter.getValue().toString());
+                break;
+            case COMPLETION_TIMEOUT:
+            case COMPLETION_TIMEOUT1:
+                this.setCompletionTimeout(parameter.getValue().toString());
+                break;
+            case COMPLETION_TIMEOUT_CHECKER_INTERVAL:
+            case COMPLETION_TIMEOUT_CHECKER_INTERVAL1:
+                this.setCompletionTimeoutCheckerInterval(parameter.getValue().toString());
+                break;
+            case COMPLETION_FROM_BATCH_CONSUMER:
+            case COMPLETION_FROM_BATCH_CONSUMER1:
+                this.setCompletionFromBatchConsumer(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case COMPLETION_ON_NEW_CORRELATION_GROUP:
+            case COMPLETION_ON_NEW_CORRELATION_GROUP1:
+                this.setCompletionOnNewCorrelationGroup(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case EAGER_CHECK_COMPLETION:
+            case EAGER_CHECK_COMPLETION1:
+                this.setEagerCheckCompletion(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case IGNORE_INVALID_CORRELATION_KEYS:
+            case IGNORE_INVALID_CORRELATION_KEYS1:
+                this.setIgnoreInvalidCorrelationKeys(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case CLOSE_CORRELATION_KEY_ON_COMPLETION:
+            case CLOSE_CORRELATION_KEY_ON_COMPLETION1:
+                this.setCloseCorrelationKeyOnCompletion(Integer.valueOf(parameter.getValue().toString()));
+                break;
+            case DISCARD_ON_COMPLETION_TIMEOUT:
+            case DISCARD_ON_COMPLETION_TIMEOUT1:
+                this.setDiscardOnCompletionTimeout(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case DISCARD_ON_AGGREGATION_FAILURE:
+            case DISCARD_ON_AGGREGATION_FAILURE1:
+                this.setDiscardOnAggregationFailure(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case FORCE_COMPLETION_ON_STOP:
+            case FORCE_COMPLETION_ON_STOP1:
+                this.setForceCompletionOnStop(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case COMPLETE_ALL_ON_STOP:
+            case COMPLETE_ALL_ON_STOP1:
+                this.setCompleteAllOnStop(Boolean.valueOf(parameter.getValue().toString()));
+                break;
+            case DESCRIPTION_LABEL:
+                this.setDescription(parameter.getValue().toString());
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
         }
+    }
 
-        return res.orElse(null);
+    @Override
+    void assignProperty(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case CORRELATION_EXPRESSION:
+            case CORRELATION_EXPRESSION1:
+                parameter.setValue(this.correlationExpression);
+                break;
+            case COMPLETION_PREDICATE:
+            case COMPLETION_PREDICATE1:
+                parameter.setValue(this.completionPredicate);
+                break;
+            case COMPLETION_TIMEOUT_EXPRESSION:
+            case COMPLETION_TIMEOUT_EXPRESSION1:
+                parameter.setValue(this.completionTimeoutExpression);
+                break;
+            case COMPLETION_SIZE_EXPRESSION:
+            case COMPLETION_SIZE_EXPRESSION1:
+                parameter.setValue(this.completionSizeExpression);
+                break;
+            case OPTIMISTIC_LOCK_RETRY_POLICY:
+            case OPTIMISTIC_LOCK_RETRY_POLICY1:
+                parameter.setValue(this.optimisticLockRetryPolicy);
+                break;
+            case PARALLEL_PROCESSING:
+            case PARALLEL_PROCESSING1:
+                parameter.setValue(this.parallelProcessing);
+                break;
+            case OPTIMISTIC_LOCKING:
+            case OPTIMISTIC_LOCKING1:
+                parameter.setValue(this.optimisticLocking);
+                break;
+            case EXECUTOR_SERVICE:
+            case EXECUTOR_SERVICE1:
+                parameter.setValue(this.executorService);
+                break;
+            case TIMEOUT_CHECKER_EXECUTOR_SERVICE:
+            case TIMEOUT_CHECKER_EXECUTOR_SERVICE1:
+                parameter.setValue(this.timeoutCheckerExecutorService);
+                break;
+            case AGGREGATE_CONTROLLER:
+            case AGGREGATE_CONTROLLER1:
+                parameter.setValue(this.aggregateController);
+                break;
+            case AGGREGATION_REPOSITORY:
+            case AGGREGATION_REPOSITORY1:
+                parameter.setValue(this.aggregationRepository);
+                break;
+            case AGGREGATION_STRATEGY:
+            case AGGREGATION_STRATEGY1:
+                parameter.setValue(this.aggregationStrategy);
+                break;
+            case AGGREGATION_STRATEGY_METHOD_NAME:
+            case AGGREGATION_STRATEGY_METHOD_NAME1:
+                parameter.setValue(this.aggregationStrategyMethodName);
+                break;
+            case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL:
+            case AGGREGATION_STRATEGY_METHOD_ALLOW_NULL1:
+                parameter.setValue(this.aggregationStrategyMethodAllowNull);
+                break;
+            case COMPLETION_SIZE:
+            case COMPLETION_SIZE1:
+                parameter.setValue(this.completionSize);
+                break;
+            case COMPLETION_INTERVAL:
+            case COMPLETION_INTERVAL1:
+                parameter.setValue(this.completionInterval);
+                break;
+            case COMPLETION_TIMEOUT:
+            case COMPLETION_TIMEOUT1:
+                parameter.setValue(this.completionTimeout);
+                break;
+            case COMPLETION_TIMEOUT_CHECKER_INTERVAL:
+            case COMPLETION_TIMEOUT_CHECKER_INTERVAL1:
+                parameter.setValue(this.completionTimeoutCheckerInterval);
+                break;
+            case COMPLETION_FROM_BATCH_CONSUMER:
+            case COMPLETION_FROM_BATCH_CONSUMER1:
+                parameter.setValue(this.completionFromBatchConsumer);
+                break;
+            case COMPLETION_ON_NEW_CORRELATION_GROUP:
+            case COMPLETION_ON_NEW_CORRELATION_GROUP1:
+                parameter.setValue(this.completionOnNewCorrelationGroup);
+                break;
+            case EAGER_CHECK_COMPLETION:
+            case EAGER_CHECK_COMPLETION1:
+                parameter.setValue(this.eagerCheckCompletion);
+                break;
+            case IGNORE_INVALID_CORRELATION_KEYS:
+            case IGNORE_INVALID_CORRELATION_KEYS1:
+                parameter.setValue(this.ignoreInvalidCorrelationKeys);
+                break;
+            case CLOSE_CORRELATION_KEY_ON_COMPLETION:
+            case CLOSE_CORRELATION_KEY_ON_COMPLETION1:
+                parameter.setValue(this.closeCorrelationKeyOnCompletion);
+                break;
+            case DISCARD_ON_COMPLETION_TIMEOUT:
+            case DISCARD_ON_COMPLETION_TIMEOUT1:
+                parameter.setValue(this.discardOnCompletionTimeout);
+                break;
+            case DISCARD_ON_AGGREGATION_FAILURE:
+            case DISCARD_ON_AGGREGATION_FAILURE1:
+                parameter.setValue(this.discardOnAggregationFailure);
+                break;
+            case FORCE_COMPLETION_ON_STOP:
+            case FORCE_COMPLETION_ON_STOP1:
+                parameter.setValue(this.forceCompletionOnStop);
+                break;
+            case COMPLETE_ALL_ON_STOP:
+            case COMPLETE_ALL_ON_STOP1:
+                parameter.setValue(this.completeAllOnStop);
+                break;
+            case DESCRIPTION_LABEL:
+                parameter.setValue(this.description);
+                break;
+            default:
+                log.error("Unknown property: " + parameter.getId());
+                break;
+        }
     }
 
     public Expression getCorrelationExpression() {
