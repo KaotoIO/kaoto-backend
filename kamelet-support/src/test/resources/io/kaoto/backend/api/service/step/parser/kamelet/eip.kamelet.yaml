@@ -30,6 +30,12 @@ spec:
           when:
           - simple: '{{?foo}}'
             steps:
+            - dynamic-router:
+                expression:
+                  simple: ${body}
+                description:
+                  text: Dynamic Routing
+                  lang: eng
             - set-header:
                 name: bar
                 simple: foo
