@@ -48,6 +48,7 @@ import java.util.Map;
 public class KameletRepresenter extends Representer {
 
     public static final String SIMPLE = "simple";
+    public static final String CONSTANT = "constant";
     public static final String STEPS = "steps";
     public static final String PARAMETERS = "parameters";
     public static final String URI = "uri";

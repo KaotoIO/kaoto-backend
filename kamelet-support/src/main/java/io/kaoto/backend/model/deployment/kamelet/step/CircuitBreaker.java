@@ -25,7 +25,6 @@ public class CircuitBreaker extends EIPStep {
     public static final String DESCRIPTION_LABEL = "description";
     public static final String RESILIENCE_4_J_CONFIGURATION_LABEL2 = "resilience4jConfiguration";
     public static final String FAULT_TOLERANCE_CONFIGURATION_LABEL2 = "faultToleranceConfiguration";
-    public static final String CIRCUIT_BREAKER_LABEL = "circuit-breaker";
 
     @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
@@ -70,7 +69,7 @@ public class CircuitBreaker extends EIPStep {
         super(step);
 
         if (step.getBranches() != null) {
-            if (step.getBranches().size() > 0) {
+            if (!step.getBranches().isEmpty()) {
                 setSteps(kameletPopulator.processSteps(step.getBranches().get(0)));
             }
             if (step.getBranches().size() > 1) {
@@ -98,9 +97,9 @@ public class CircuitBreaker extends EIPStep {
         }
 
         properties.put(STEPS_LABEL, this.getSteps());
-        Map<String, Object> steps = new HashMap<>();
-        properties.put(ON_FALLBACK_LABEL, steps);
-        steps.put(STEPS_LABEL, this.getOnFallback().getSteps());
+        Map<String, Object> fallbacksteps = new HashMap<>();
+        properties.put(ON_FALLBACK_LABEL, fallbacksteps);
+        fallbacksteps.put(STEPS_LABEL, this.getOnFallback().getSteps());
 
         return properties;
     }
