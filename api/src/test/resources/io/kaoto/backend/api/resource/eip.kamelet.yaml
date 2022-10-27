@@ -78,6 +78,9 @@ spec:
                 text: Another one
                 lang: eng
               steps:
+              - enrich:
+                  expression:
+                    simple: ${body}
               - to:
                   uri: dropbox:put
                   parameters:

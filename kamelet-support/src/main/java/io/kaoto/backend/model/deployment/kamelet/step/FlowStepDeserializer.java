@@ -47,6 +47,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("delay", DelayFlowStep.class);
         steps.put("dynamic-router", DynamicRouterFlowStep.class);
         steps.put("dynamicRouter", DynamicRouterFlowStep.class);
+        steps.put("enrich", EnrichFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);
         steps.put("marshal", MarshalFlowStep.class);

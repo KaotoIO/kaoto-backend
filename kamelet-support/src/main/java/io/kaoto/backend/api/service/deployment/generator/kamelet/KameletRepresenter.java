@@ -17,6 +17,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DelayFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DynamicRouterFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.EnrichFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -243,6 +244,7 @@ public class KameletRepresenter extends Representer {
                 ConvertBodyToFlowStep.class,
                 DelayFlowStep.class,
                 DynamicRouterFlowStep.class,
+                EnrichFlowStep.class,
                 Expression.class,
                 FilterFlowStep.class,
                 From.class,
