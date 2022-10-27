@@ -6,6 +6,7 @@ import io.kaoto.backend.model.Metadata;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +46,9 @@ public class CatalogCollection<T extends Metadata>
 
     @Override
     public Collection<T> searchByName(final String connectionName) {
+        if (connectionName == null) {
+            return Collections.emptyList();
+        }
         Collection<T> steps = new ArrayList<>();
         for (MetadataCatalog<T> c : catalogs) {
             steps.addAll(c.searchByName(connectionName));

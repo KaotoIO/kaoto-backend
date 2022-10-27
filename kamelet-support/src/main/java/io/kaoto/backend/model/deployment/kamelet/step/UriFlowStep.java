@@ -97,6 +97,6 @@ public class UriFlowStep implements FlowStep {
                     this.getParameters());
         }
 
-        return res.get();
+        return res.orElse(null);
     }
 }

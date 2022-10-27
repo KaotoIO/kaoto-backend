@@ -15,6 +15,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DelayFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.DynamicRouterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
@@ -273,6 +274,9 @@ public class KamelPopulator {
                     break;
                 case "delay":
                     flowStep = new DelayFlowStep(step);
+                    break;
+                case "dynamic-router":
+                    flowStep = new DynamicRouterFlowStep(step);
                     break;
                 case "log":
                     flowStep = new LogFlowStep(step);

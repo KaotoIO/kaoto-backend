@@ -26,6 +26,9 @@ spec:
           when:
           - simple: '{{?foo}}'
             steps:
+            - dynamic-router:
+                expression:
+                  simple: ${body}
             - set-header:
                 name: bar
                 simple: foo

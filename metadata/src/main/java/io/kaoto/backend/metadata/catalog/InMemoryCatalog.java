@@ -52,10 +52,11 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     @Override
     public Collection<T> searchByName(final String name) {
+        if (name == null) {
+            return Collections.emptyList();
+        }
         return metadataCatalog.entrySet().stream().parallel()
-                .filter(
-                        entry -> name.equalsIgnoreCase(
-                                entry.getValue().getName()))
+                .filter(entry -> name.equalsIgnoreCase(entry.getValue().getName()))
                 .map(Map.Entry::getValue)
                 .map(t -> (T) t.clone())
                 .toList();
