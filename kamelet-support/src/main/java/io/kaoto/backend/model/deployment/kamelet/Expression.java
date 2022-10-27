@@ -21,11 +21,14 @@ import java.util.Map;
 public class Expression implements FlowStep {
     @Serial
     private static final long serialVersionUID = 7630089193555236497L;
+    public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
+    public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
+    public static final String NAME_LABEL = KameletRepresenter.NAME;
 
     @JsonCreator
     public Expression(
-            final @JsonProperty(value = "constant") String constant,
-            final @JsonProperty(value = "simple") String simple) {
+            final @JsonProperty(value = CONSTANT_LABEL) String constant,
+            final @JsonProperty(value = SIMPLE_LABEL) String simple) {
         super();
         setConstant(constant);
         setSimple(simple);
@@ -38,11 +41,11 @@ public class Expression implements FlowStep {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
         } else if (obj instanceof Map map) {
-            if (map.containsKey("constant") && map.get("constant") != null) {
-                setConstant(map.get("constant").toString());
+            if (map.containsKey(CONSTANT_LABEL) && map.get(CONSTANT_LABEL) != null) {
+                setConstant(map.get(CONSTANT_LABEL).toString());
             }
-            if (map.containsKey("simple") && map.get("simple") != null) {
-                setSimple(map.get("simple").toString());
+            if (map.containsKey(SIMPLE_LABEL) && map.get(SIMPLE_LABEL) != null) {
+                setSimple(map.get(SIMPLE_LABEL).toString());
             }
         }
     }
@@ -51,13 +54,13 @@ public class Expression implements FlowStep {
 
     }
 
-    @JsonProperty("constant")
+    @JsonProperty(CONSTANT_LABEL)
     private String constant;
 
-    @JsonProperty("simple")
+    @JsonProperty(SIMPLE_LABEL)
     private String simple;
 
-    @JsonProperty("name")
+    @JsonProperty(KameletRepresenter.NAME)
     private String name;
 
     public String getName() {
@@ -89,15 +92,15 @@ public class Expression implements FlowStep {
 
         Map<String, Object> properties = new HashMap<>();
         if (this.getConstant() != null) {
-            properties.put("constant", this.getConstant());
+            properties.put(CONSTANT_LABEL, this.getConstant());
         }
 
         if (this.getSimple() != null) {
-            properties.put(KameletRepresenter.SIMPLE, this.getSimple());
+            properties.put(SIMPLE_LABEL, this.getSimple());
         }
 
         if (this.getName() != null) {
-            properties.put(KameletRepresenter.NAME, this.getName());
+            properties.put(NAME_LABEL, this.getName());
         }
         return properties;
     }
