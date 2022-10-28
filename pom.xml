@@ -238,7 +238,6 @@
                                -->
                             <timestampedReports>false</timestampedReports>
                             <threads>5</threads>
-                            <maxMutationsPerClass>4</maxMutationsPerClass>
                         </configuration>
                         <dependencies>
                             <dependency>
