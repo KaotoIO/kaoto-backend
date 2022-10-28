@@ -15,7 +15,7 @@ jobs:
       - name: 📇 Checkout Code
         uses: actions/checkout@v2
       - name: 🥸 Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: 17
