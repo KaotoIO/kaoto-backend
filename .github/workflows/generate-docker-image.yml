@@ -47,7 +47,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: 📥 Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: kaotoio/backend
           tags: |
@@ -146,7 +146,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: 📥 Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: kaotoio/backend
           flavor: |
