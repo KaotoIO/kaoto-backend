@@ -132,7 +132,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: 📨 Retrieve saved MacOS native build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: macos-native-build
           path: api/target/kaoto-runner
