@@ -16,13 +16,13 @@ import java.util.Optional;
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class EIPStep implements Serializable {
-    static final Logger log = Logger.getLogger(EIPStep.class);
+    protected static final Logger log = Logger.getLogger(EIPStep.class);
 
-    EIPStep() {
+    protected EIPStep() {
         //Needed for serialization
     }
 
-    EIPStep(Step step) {
+    protected EIPStep(Step step) {
         for (var parameter : step.getParameters()) {
             if (parameter.getValue() != null) {
                 try {
@@ -59,14 +59,14 @@ public abstract class EIPStep implements Serializable {
         return res.orElse(null);
     }
 
-    abstract void assignAttribute(final Parameter parameter);
+    protected abstract void assignAttribute(final Parameter parameter);
 
-    void processBranches(final Step step, final StepCatalog catalog,
+    protected void processBranches(final Step step, final StepCatalog catalog,
                          final KameletStepParserService kameletStepParserService) {
         //Ready to override
     }
 
-    abstract void assignProperty(final Parameter parameter);
+    protected abstract void assignProperty(final Parameter parameter);
 
-    abstract Map<String, Object> getRepresenterProperties();
+    public abstract Map<String, Object> getRepresenterProperties();
 }

@@ -22,6 +22,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
@@ -59,12 +60,9 @@ public class KameletRepresenter extends Representer {
     public static final String API_VERSION = "apiVersion";
 
     public KameletRepresenter() {
-        this.getPropertyUtils()
-                .setSkipMissingProperties(true);
-        this.getPropertyUtils()
-                .setAllowReadOnlyProperties(true);
-        this.getPropertyUtils()
-                .setBeanAccess(BeanAccess.FIELD);
+        this.getPropertyUtils().setSkipMissingProperties(true);
+        this.getPropertyUtils().setAllowReadOnlyProperties(true);
+        this.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
 
         customResource();
         metadata();
@@ -107,8 +105,7 @@ public class KameletRepresenter extends Representer {
                             properties.put("labels", meta.getLabels());
                         }
                         properties.put(NAME, meta.getName());
-                        return representMapping(getTag(data.getClass(), Tag.MAP),
-                                properties,
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });
@@ -163,9 +160,7 @@ public class KameletRepresenter extends Representer {
                         if (def.getProperties() != null) {
                             properties.put("properties", def.getProperties());
                         }
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
-                                properties,
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });
@@ -179,9 +174,7 @@ public class KameletRepresenter extends Representer {
                             properties.put("beans", template.getBeans());
                         }
                         properties.put("from", template.getFrom());
-                        return representMapping(getTag(data.getClass(),
-                                        Tag.MAP),
-                                properties,
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });
@@ -197,17 +190,13 @@ public class KameletRepresenter extends Representer {
                     if (step.getUri() != null) {
                         properties.put(URI, step.getUri());
                     }
-                    if (step.getParameters() != null
-                            && !step.getParameters().isEmpty()) {
+                    if (step.getParameters() != null && !step.getParameters().isEmpty()) {
                         properties.put(PARAMETERS, step.getParameters());
                     }
-                    if (step.getProperties() != null
-                            && !step.getProperties().isEmpty()) {
+                    if (step.getProperties() != null && !step.getProperties().isEmpty()) {
                         properties.put("properties", step.getProperties());
                     }
-                    return representMapping(getTag(data.getClass(), Tag.MAP),
-                            properties,
-                            DumperOptions.FlowStyle.AUTO);
+                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
 
@@ -226,9 +215,7 @@ public class KameletRepresenter extends Representer {
                     if (ref.getKind() != null) {
                         properties.put(KIND, ref.getKind());
                     }
-                    return representMapping(getTag(data.getClass(), Tag.MAP),
-                            properties,
-                            DumperOptions.FlowStyle.AUTO);
+                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
     }
@@ -249,6 +236,7 @@ public class KameletRepresenter extends Representer {
                 FilterFlowStep.class,
                 From.class,
                 LogFlowStep.class,
+                LoopFlowStep.class,
                 MarshalFlowStep.class,
                 RemoveHeaderFlowStep.class,
                 RemovePropertyFlowStep.class,
@@ -266,11 +254,18 @@ public class KameletRepresenter extends Representer {
                 @Override
                 public Node representData(final Object data) {
                     return representMapping(getTag(data.getClass(), Tag.MAP),
-                            ((FlowStep) data).getRepresenterProperties(),
-                            DumperOptions.FlowStyle.AUTO);
+                            ((FlowStep) data).getRepresenterProperties(), DumperOptions.FlowStyle.AUTO);
                 }
             });
         }
+
+        this.multiRepresenters.put(Expression.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        ((Expression) data).getRepresenterProperties(), DumperOptions.FlowStyle.AUTO);
+            }
+        });
 
         choice();
         filter();
@@ -283,12 +278,10 @@ public class KameletRepresenter extends Representer {
                 Map<String, Object> properties = new HashMap<>();
                 Choice step = (Choice) data;
                 properties.put(STEPS, step.getSteps());
-                if (step.getSimple() != null
-                        && !step.getSimple().isEmpty()) {
+                if (step.getSimple() != null && !step.getSimple().isEmpty()) {
                     properties.put(SIMPLE, step.getSimple());
                 }
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -299,8 +292,7 @@ public class KameletRepresenter extends Representer {
                 Map<String, Object> properties = new HashMap<>();
                 Otherwise step = (Otherwise) data;
                 properties.put(STEPS, step.getSteps());
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -314,8 +306,7 @@ public class KameletRepresenter extends Representer {
                 if (step.getOtherwise() != null) {
                     properties.put("otherwise", step.getOtherwise());
                 }
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                         DumperOptions.FlowStyle.AUTO);
             }
         });
@@ -328,12 +319,10 @@ public class KameletRepresenter extends Representer {
                 Map<String, Object> properties = new HashMap<>();
                 Filter step = (Filter) data;
                 properties.put(STEPS, step.getSteps());
-                if (step.getSimple() != null
-                        && !step.getSimple().isEmpty()) {
+                if (step.getSimple() != null && !step.getSimple().isEmpty()) {
                     properties.put(SIMPLE, step.getSimple());
                 }
-                return representMapping(getTag(data.getClass(), Tag.MAP),
-                        properties,
+                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                         DumperOptions.FlowStyle.AUTO);
             }
         });

@@ -86,13 +86,11 @@ public class KameletStepParserService
             processParameters(res, kamelet.getSpec());
 
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(
-                    "Error trying to parse.", e);
+            throw new IllegalArgumentException("Error trying to parse.", e);
         }
 
-        res.setSteps(steps.stream()
-                .filter(Objects::nonNull)
-                .toList());
+        res.setSteps(steps.stream().filter(Objects::nonNull).toList());
+
         return res;
     }
 
@@ -111,8 +109,7 @@ public class KameletStepParserService
                 switch (def.getType()) {
                     case "string":
                         p = new StringParameter(key, def.getTitle(),
-                        def.getDescription(), def.getDefault(),
-                                def.getFormat());
+                        def.getDescription(), def.getDefault(), def.getFormat());
                         break;
                     case "number":
                         p = new NumberParameter(key, def.getTitle(),
@@ -121,26 +118,20 @@ public class KameletStepParserService
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null
-                                        ? Integer.valueOf(def.getDefault())
-                                        : null));
+                                (def.getDefault() != null? Integer.valueOf(def.getDefault()) : null));
                         break;
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null
-                                        ? Boolean.valueOf(def.getDefault())
-                                        : null));
+                                (def.getDefault() != null? Boolean.valueOf(def.getDefault()) : null));
                         break;
                     case "array":
                         p = new ArrayParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null
-                                    ? def.getDefault().split(",") : null));
+                                (def.getDefault() != null? def.getDefault().split(",") : null));
                         break;
                     default:
-                        p = new ObjectParameter(key, def.getTitle(),
-                                def.getDescription(), def.getDefault());
+                        p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getDefault());
                 }
                 res.getParameters().add(p);
             }
@@ -150,8 +141,7 @@ public class KameletStepParserService
     private void processSpec(final List<Step> steps,
                              final ParseResult<Step> res,
                              final KameletSpec spec) {
-        if (spec.getTemplate() != null
-                && spec.getTemplate().getFrom() != null) {
+        if (spec.getTemplate() != null && spec.getTemplate().getFrom() != null) {
             steps.add(processStep(spec.getTemplate().getFrom()));
 
             if (spec.getTemplate().getFrom().getSteps() != null) {
@@ -170,7 +160,7 @@ public class KameletStepParserService
         try {
             return step.getStep(catalog, this);
         } catch (Exception e) {
-            log.warn("Can't parse step -> " + step.getClass());
+            log.warn("Can't parse step -> " + step.getClass(), e);
         }
         return null;
     }
@@ -193,8 +183,7 @@ public class KameletStepParserService
     }
 
 
-    public void setValuesOnParameters(final Step step,
-                                      final String uri) {
+    public void setValuesOnParameters(final Step step, final String uri) {
 
         String path = uri.substring(uri.indexOf(':') + 1);
         if (path.contains("?")) {
@@ -207,8 +196,7 @@ public class KameletStepParserService
             }
         }
 
-        Pattern pattern = Pattern.compile(
-                "[?&]([^=]+)=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("[?&]([^=]+)=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(uri);
 
         while (matcher.find()) {
@@ -216,8 +204,7 @@ public class KameletStepParserService
         }
     }
 
-    public void setValuesOnParameters(final Step step,
-                                       final Map<String, String> properties) {
+    public void setValuesOnParameters(final Step step, final Map<String, String> properties) {
 
         if (properties != null) {
             for (Map.Entry<String, String> c : properties.entrySet()) {
@@ -227,8 +214,7 @@ public class KameletStepParserService
 
     }
 
-    public void setValueOnStepProperty(final Step step, final String key,
-                                       final Object value) {
+    public void setValueOnStepProperty(final Step step, final String key, final Object value) {
         for (Parameter p : step.getParameters()) {
             if (p.getId().equalsIgnoreCase(key)) {
                 p.setValue(value);
@@ -237,9 +223,7 @@ public class KameletStepParserService
         }
     }
 
-    public void processMetadata(
-            final ParseResult<Step> result,
-            final ObjectMeta metadata) {
+    public void processMetadata(final ParseResult<Step> result, final ObjectMeta metadata) {
         result.setMetadata(new LinkedHashMap<>());
 
         var labels = new LinkedHashMap<String, String>();
@@ -252,17 +236,14 @@ public class KameletStepParserService
         result.getMetadata().put("annotations", annotations);
         if (metadata.getAnnotations() != null) {
             annotations.putAll(metadata.getAnnotations());
-            annotations.put("icon",
-                    annotations.get("camel.apache.org/kamelet.icon"));
+            annotations.put("icon", annotations.get("camel.apache.org/kamelet.icon"));
         }
 
         var additionalProperties = new LinkedHashMap<String, Object>();
         result.getMetadata().put("additionalProperties", additionalProperties);
         if (metadata.getAdditionalProperties() != null) {
             additionalProperties.putAll((Map<String, Object>)
-                    metadata.getAdditionalProperties()
-                            .getOrDefault("additionalProperties",
-                                Collections.emptyMap()));
+                    metadata.getAdditionalProperties().getOrDefault("additionalProperties", Collections.emptyMap()));
         }
 
         result.getMetadata().put(NAME, metadata.getName());
@@ -270,15 +251,12 @@ public class KameletStepParserService
 
     @Override
     public boolean appliesTo(final String yaml) {
-        String[] kinds = new String[]{
-                "Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
+        String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
 
-        Pattern pattern = Pattern.compile(
-                "(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
         if (matcher.find()) {
-            return Arrays.stream(kinds).anyMatch(
-                    k -> k.equalsIgnoreCase(matcher.group(2).trim()));
+            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(2).trim()));
         }
 
         return false;

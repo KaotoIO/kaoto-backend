@@ -21,6 +21,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
@@ -324,6 +325,9 @@ public class KamelPopulator {
                 case "filter":
                     flowStep = new FilterFlowStep(processFilter(step.getBranches().get(0)));
                     break;
+                case "loop":
+                    flowStep = new LoopFlowStep(step, this);
+                    break;
                 default:
                     flowStep = getCamelConnector(step, to);
                     break;
@@ -380,7 +384,7 @@ public class KamelPopulator {
 
 
     public static Expression getExpression(final Step step) {
-        Expression expression = new Expression(null, null);
+        Expression expression = new Expression(null, null, null);
         for (Parameter p : step.getParameters()) {
             if (p.getValue() == null) {
                 continue;
