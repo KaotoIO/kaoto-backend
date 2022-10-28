@@ -30,7 +30,7 @@ jobs:
         run: mvn install org.pitest:pitest-maven:mutationCoverage -Pmutations -Dfeatures=+CLASSLIMIT(limit[4])
       - name: 💾 Save results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: multation-results
           path: "*/target/pit-reports/"
