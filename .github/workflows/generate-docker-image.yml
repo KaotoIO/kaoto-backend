@@ -38,7 +38,7 @@ jobs:
       - name: 🤳 Build Native Quarkus
         run: mvn -B install -Pnative
       - name: 📤 Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         env:
           username: ${{ secrets.DOCKER_USERNAME }}
         if: ${{env.username != ''}}
@@ -137,7 +137,7 @@ jobs:
           name: macos-native-build
           path: api/target/kaoto-runner
       - name: 📤 Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         env:
           username: ${{ secrets.DOCKER_USERNAME }}
         if: ${{env.username != ''}}
