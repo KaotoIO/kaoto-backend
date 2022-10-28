@@ -113,7 +113,7 @@ jobs:
       - name: 🤳 Build Native Quarkus
         run: mvn -B install -DskipTests -Pnative
       - name: 📩 Save MacOS native build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: macos-native-build
           path: api/target/*-runner
