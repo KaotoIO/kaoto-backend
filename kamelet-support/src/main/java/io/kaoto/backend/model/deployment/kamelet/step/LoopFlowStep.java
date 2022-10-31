@@ -45,15 +45,18 @@ public class LoopFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Step res = this.getLoop().getStep(catalog, LOOP_LABEL, kameletStepParserService);
 
         res.setBranches(new LinkedList<>());
 
         if (this.getLoop() != null) {
+            int i = 0;
             for (var flow : this.getLoop().getSteps()) {
                 Branch branch = new Branch(LOOP_LABEL);
-                branch.getSteps().add(kameletStepParserService.processStep(flow));
+                branch.getSteps().add(kameletStepParserService.processStep(flow, i == 0,
+                        i == this.getLoop().getSteps().size() - 1));
                 kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
                         branch.getCondition());
                 res.getBranches().add(branch);

@@ -106,7 +106,7 @@ public class CircuitBreaker extends EIPStep {
 
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
-                        final KameletStepParserService kameletStepParserService) {
+                                final KameletStepParserService kameletStepParserService) {
         step.setBranches(new LinkedList<>());
 
         var identifier = STEPS_LABEL;
@@ -116,15 +116,19 @@ public class CircuitBreaker extends EIPStep {
         Branch branch = new Branch(identifier);
         step.getBranches().add(branch);
         if (this.getSteps() != null) {
+            int i = 0;
             for (var s : this.getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
+                        i++ == this.getSteps().size() - 1));
             }
         }
         branch = new Branch(ON_FALLBACK_LABEL);
         step.getBranches().add(branch);
         if (this.getOnFallback() != null && this.getOnFallback().getSteps() != null) {
             for (var s : this.getOnFallback().getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s));
+                int i = 0;
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
+                        i++ == this.getSteps().size() - 1));
             }
         }
     }

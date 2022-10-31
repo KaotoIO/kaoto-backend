@@ -53,22 +53,20 @@ public class FilterFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Step res = catalog.getReadOnlyCatalog().searchByID("filter");
         res.setBranches(new LinkedList<>());
 
         var flow = this.getFilter();
-        Branch branch =
-                new Branch(kameletStepParserService.getFilterIdentifier(flow));
+        Branch branch = new Branch(kameletStepParserService.getFilterIdentifier(flow));
         branch.setCondition(kameletStepParserService.getFilterCondition(flow));
+
+        int i = 0;
         for (var s : flow.getSteps()) {
-            branch.getSteps().add(kameletStepParserService.processStep(s));
+            branch.getSteps().add(kameletStepParserService.processStep(s, i == 0, i == flow.getSteps().size() -1 ));
         }
-        kameletStepParserService.setValueOnStepProperty(res,
-                KameletStepParserService.SIMPLE,
-                branch.getCondition());
+        kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE, branch.getCondition());
         res.getBranches().add(branch);
 
         return res;

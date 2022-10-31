@@ -59,9 +59,8 @@ public class RemoveHeaderFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Optional<Step> res = catalog.getReadOnlyCatalog()
                 .searchByName("remove-header").stream()
                 .filter(step -> step.getKind().equalsIgnoreCase("EIP"))

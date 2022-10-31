@@ -27,9 +27,8 @@ public class UnmarshalFlowStep extends MarshalFlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Step res = catalog.getReadOnlyCatalog().searchByID("unmarshal");
         assignParameters(res);
         return res;

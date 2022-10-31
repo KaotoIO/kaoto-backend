@@ -64,9 +64,8 @@ public class SetPropertyFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
 
         Optional<Step> res = catalog.getReadOnlyCatalog()
                 .searchByName("set-property").stream()

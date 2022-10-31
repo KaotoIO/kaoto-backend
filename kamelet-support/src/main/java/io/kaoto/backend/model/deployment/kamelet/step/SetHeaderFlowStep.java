@@ -25,12 +25,12 @@ import java.util.Optional;
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SetHeaderFlowStep implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 7630089193555236497L;
+    public static final String SET_HEADER_LABEL = "set-header";
+    public static final String SET_HEADER_LABEL2 = "setHeader";
 
     @JsonCreator
-    public SetHeaderFlowStep(final @JsonProperty("set-header") Expression e,
-                             final @JsonProperty("setHeader") Expression e2) {
+    public SetHeaderFlowStep(final @JsonProperty(SET_HEADER_LABEL) Expression e,
+                             final @JsonProperty(SET_HEADER_LABEL2) Expression e2) {
         super();
         if (e != null) {
             setSetHeaderPairFlowStep(e);
@@ -59,31 +59,30 @@ public class SetHeaderFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("set-header", this.getSetHeaderPairFlowStep());
+        properties.put(SET_HEADER_LABEL, this.getSetHeaderPairFlowStep());
         return properties;
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
 
         Optional<Step> res = catalog.getReadOnlyCatalog()
-                .searchByName("set-header").stream()
+                .searchByName(SET_HEADER_LABEL).stream()
                 .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
                 .findAny();
 
         if (res.isPresent()) {
             for (Parameter p : res.get().getParameters()) {
                 if (p.getId()
-                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
-                    p.setValue(this.getSetHeaderPairFlowStep().getName());
-                } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.SIMPLE)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getSimple());
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getConstant());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.NAME)) {
+                    p.setValue(this.getSetHeaderPairFlowStep().getName());
                 }
             }
 

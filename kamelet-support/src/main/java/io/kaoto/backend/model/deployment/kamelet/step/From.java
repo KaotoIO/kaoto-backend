@@ -37,8 +37,7 @@ public class From extends UriFlowStep {
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(KameletRepresenter.URI, this.getUri());
-        if (this.getParameters() != null
-                && !this.getParameters().isEmpty()) {
+        if (this.getParameters() != null && !this.getParameters().isEmpty()) {
             properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
         }
         properties.put(KameletRepresenter.STEPS, this.getSteps());

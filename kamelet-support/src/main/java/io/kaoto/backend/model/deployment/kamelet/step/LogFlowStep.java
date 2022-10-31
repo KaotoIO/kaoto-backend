@@ -47,7 +47,8 @@ public class LogFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         return getLog().getStep(catalog, LOG_LABEL,  kameletStepParserService);
     }
 

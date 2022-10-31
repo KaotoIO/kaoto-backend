@@ -35,9 +35,8 @@ public class MarshalFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Step res = catalog.getReadOnlyCatalog().searchByID("marshal");
         assignParameters(res);
         return res;

@@ -61,10 +61,11 @@ public class IntegrationStepParserService
             res.setParameters(new ArrayList<>());
 
             for (Flow flow : integration.getSpec().getFlows()) {
-                steps.add(ksps.processStep(flow.getFrom()));
+                steps.add(ksps.processStep(flow.getFrom(), true, false));
                 if (flow.getFrom().getSteps() != null) {
+                    int i = 0;
                     for (FlowStep step : flow.getFrom().getSteps()) {
-                        steps.add(ksps.processStep(step));
+                        steps.add(ksps.processStep(step, i == 0, i++ == flow.getFrom().getSteps().size() - 1));
                     }
                 }
             }

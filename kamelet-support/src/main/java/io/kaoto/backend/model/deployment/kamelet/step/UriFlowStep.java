@@ -75,9 +75,8 @@ public class UriFlowStep implements FlowStep {
 
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         String connectorName = this.getUri();
 
         if (this.getUri() != null
@@ -86,9 +85,35 @@ public class UriFlowStep implements FlowStep {
             connectorName = this.getUri().substring(0, this.getUri().indexOf(':'));
         }
 
-        Optional<Step> res = catalog.getReadOnlyCatalog()
-                .searchByName(connectorName).stream()
-                .findAny();
+        var candidates = catalog.getReadOnlyCatalog().searchByName(connectorName).stream();
+
+        //Make sure we do the smartest pick: don't put an end step at the beginning or a start at the end
+        //unless there is no other option, sure, then whatever the user is doing
+        if (start) {
+            candidates = candidates.sorted((step, t1) -> {
+                var type = step.getType();
+                if (type.equalsIgnoreCase("START")) {
+                    return 0;
+                } else if (type.equalsIgnoreCase("MIDDLE")) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            });
+        } else if (end) {
+            candidates = candidates.sorted((step, t1) -> {
+                var type = step.getType();
+                if (type.equalsIgnoreCase("END")) {
+                    return 0;
+                } else if (type.equalsIgnoreCase("MIDDLE")) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            });
+        }
+
+        Optional<Step> res = candidates.findFirst();
 
 
         if (res.isPresent() && this.getUri() != null) {

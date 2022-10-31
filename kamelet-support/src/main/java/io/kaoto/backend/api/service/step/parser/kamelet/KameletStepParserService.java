@@ -142,11 +142,13 @@ public class KameletStepParserService
                              final ParseResult<Step> res,
                              final KameletSpec spec) {
         if (spec.getTemplate() != null && spec.getTemplate().getFrom() != null) {
-            steps.add(processStep(spec.getTemplate().getFrom()));
+            steps.add(processStep(spec.getTemplate().getFrom(), true, false));
 
-            if (spec.getTemplate().getFrom().getSteps() != null) {
-                for (FlowStep flowStep : spec.getTemplate().getFrom().getSteps()) {
-                    steps.add(processStep(flowStep));
+            final var fromSteps = spec.getTemplate().getFrom().getSteps();
+            if (fromSteps != null) {
+                int i = 0;
+                for (FlowStep flowStep : fromSteps) {
+                    steps.add(processStep(flowStep, (i == 0), (i++ == fromSteps.size() - 1)));
                 }
             }
         }
@@ -156,9 +158,9 @@ public class KameletStepParserService
         res.getMetadata().put("dependencies", spec.getDependencies());
     }
 
-    public Step processStep(final FlowStep step) {
+    public Step processStep(final FlowStep step, final Boolean start, final Boolean end) {
         try {
-            return step.getStep(catalog, this);
+            return step.getStep(catalog, this, start, end);
         } catch (Exception e) {
             log.warn("Can't parse step -> " + step.getClass(), e);
         }
