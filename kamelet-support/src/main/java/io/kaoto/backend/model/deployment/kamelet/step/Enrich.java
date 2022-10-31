@@ -69,7 +69,7 @@ public class Enrich extends EIPStep {
     }
 
     @Override
-    Map<String, Object> getRepresenterProperties() {
+    public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new LinkedHashMap<>();
         if (this.expression != null) {
             properties.put(EXPRESSION_LABEL, this.expression);
@@ -105,7 +105,7 @@ public class Enrich extends EIPStep {
     }
 
     @Override
-    void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter parameter) {
         switch (parameter.getId()) {
             case EXPRESSION_LABEL:
                 parameter.setValue(this.expression);
@@ -153,7 +153,7 @@ public class Enrich extends EIPStep {
 
 
     @Override
-    void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
             case EXPRESSION_LABEL:
                 this.setExpression(new Expression(parameter.getValue()));

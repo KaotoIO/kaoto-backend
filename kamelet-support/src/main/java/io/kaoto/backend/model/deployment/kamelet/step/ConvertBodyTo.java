@@ -55,7 +55,7 @@ public class ConvertBodyTo extends EIPStep {
 
 
     @Override
-    void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
             case TYPE_LABEL:
                 this.setType(parameter.getValue().toString());
@@ -76,7 +76,7 @@ public class ConvertBodyTo extends EIPStep {
     }
 
     @Override
-    void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter parameter) {
         switch (parameter.getId()) {
             case TYPE_LABEL:
                 parameter.setValue(this.type);

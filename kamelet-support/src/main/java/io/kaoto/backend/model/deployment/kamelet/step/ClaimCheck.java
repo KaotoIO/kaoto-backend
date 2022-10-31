@@ -67,7 +67,7 @@ public class ClaimCheck extends EIPStep {
     }
 
     @Override
-    void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
             case OPERATION_LABEL:
                 this.setOperation(parameter.getValue().toString());
@@ -96,7 +96,7 @@ public class ClaimCheck extends EIPStep {
     }
 
     @Override
-    void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter parameter) {
         switch (parameter.getId()) {
             case OPERATION_LABEL:
                 parameter.setValue(this.operation);

@@ -9,13 +9,10 @@ import io.kaoto.backend.model.step.Step;
 import java.io.Serializable;
 import java.util.Map;
 
-@JsonDeserialize(
-        using = FlowStepDeserializer.class
-)
+@JsonDeserialize(using = FlowStepDeserializer.class)
 public interface FlowStep extends Serializable {
 
     Map<String, Object> getRepresenterProperties();
 
-    Step getStep(StepCatalog catalog,
-                 KameletStepParserService kameletStepParserService);
+    Step getStep(StepCatalog catalog, KameletStepParserService kameletStepParserService);
 }

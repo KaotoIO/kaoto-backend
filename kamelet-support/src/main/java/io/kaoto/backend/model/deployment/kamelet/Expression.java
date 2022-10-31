@@ -1,42 +1,50 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({"constant", "simple"})
-@JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Expression implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 7630089193555236497L;
+public class Expression extends EIPStep {
     public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
     public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
     public static final String NAME_LABEL = KameletRepresenter.NAME;
 
+    @JsonProperty(CONSTANT_LABEL)
+    private String constant;
+
+    @JsonProperty(SIMPLE_LABEL)
+    private String simple;
+
+    @JsonProperty(KameletRepresenter.NAME)
+    private String name;
+
+    public Expression() {
+        //Needed for serialization
+    }
+
     @JsonCreator
     public Expression(
-            final @JsonProperty(value = CONSTANT_LABEL) String constant,
-            final @JsonProperty(value = SIMPLE_LABEL) String simple) {
-        super();
+            final @JsonProperty(CONSTANT_LABEL) String constant,
+            final @JsonProperty(SIMPLE_LABEL) String simple,
+            final @JsonProperty(NAME_LABEL) String name) {
         setConstant(constant);
         setSimple(simple);
+        setName(name);
+    }
+
+    public Expression(Step step) {
+        super(step);
     }
 
     public Expression(Object obj) {
-        super();
-
         if (obj instanceof Expression e) {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
@@ -47,21 +55,65 @@ public class Expression implements FlowStep {
             if (map.containsKey(SIMPLE_LABEL) && map.get(SIMPLE_LABEL) != null) {
                 setSimple(map.get(SIMPLE_LABEL).toString());
             }
+            if (map.containsKey(NAME_LABEL) && map.get(NAME_LABEL) != null) {
+                setName(map.get(NAME_LABEL).toString());
+            }
         }
     }
 
-    public Expression() {
-
+    @Override
+    protected void assignAttribute(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case CONSTANT_LABEL:
+                this.setConstant(parameter.getValue().toString());
+                break;
+            case SIMPLE_LABEL:
+                this.setSimple(parameter.getValue().toString());
+                break;
+            case NAME_LABEL:
+                this.setName(parameter.getValue().toString());
+                break;
+            default:
+                log.trace("Unknown attribute in Expression: " + parameter.getId());
+                break;
+        }
     }
 
-    @JsonProperty(CONSTANT_LABEL)
-    private String constant;
+    @Override
+    protected void assignProperty(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case CONSTANT_LABEL:
+                parameter.setValue(this.constant);
+                break;
+            case SIMPLE_LABEL:
+                parameter.setValue(this.simple);
+                break;
+            case NAME_LABEL:
+                parameter.setValue(this.name);
+                break;
+            default:
+                log.trace("Unknown property in Expression: " + parameter.getId());
+                break;
+        }
+    }
 
-    @JsonProperty(SIMPLE_LABEL)
-    private String simple;
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
 
-    @JsonProperty(KameletRepresenter.NAME)
-    private String name;
+        Map<String, Object> properties = new HashMap<>();
+        if (this.getConstant() != null) {
+            properties.put(CONSTANT_LABEL, this.getConstant());
+        }
+
+        if (this.getSimple() != null) {
+            properties.put(SIMPLE_LABEL, this.getSimple());
+        }
+
+        if (this.getName() != null) {
+            properties.put(NAME_LABEL, this.getName());
+        }
+        return properties;
+    }
 
     public String getName() {
         return name;
@@ -85,30 +137,5 @@ public class Expression implements FlowStep {
 
     public void setSimple(final String simple) {
         this.simple = simple;
-    }
-
-    @Override
-    public Map<String, Object> getRepresenterProperties() {
-
-        Map<String, Object> properties = new HashMap<>();
-        if (this.getConstant() != null) {
-            properties.put(CONSTANT_LABEL, this.getConstant());
-        }
-
-        if (this.getSimple() != null) {
-            properties.put(SIMPLE_LABEL, this.getSimple());
-        }
-
-        if (this.getName() != null) {
-            properties.put(NAME_LABEL, this.getName());
-        }
-        return properties;
-    }
-
-    @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
-        return null;
     }
 }

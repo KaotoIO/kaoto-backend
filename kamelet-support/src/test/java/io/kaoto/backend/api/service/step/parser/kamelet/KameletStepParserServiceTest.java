@@ -187,8 +187,8 @@ class KameletStepParserServiceTest {
         final var parsed = service.deepParse(kameletEIP);
         assertNotNull(parsed);
         assertTrue(deploymentService.appliesTo(parsed.getSteps()));
-        assertEquals(kameletEIP, deploymentService.parse(parsed.getSteps(),
-                parsed.getMetadata(), parsed.getParameters()));
+        assertEquals(kameletEIP, deploymentService.parse(parsed.getSteps(), parsed.getMetadata(),
+                parsed.getParameters()));
 
     }
 

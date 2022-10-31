@@ -47,15 +47,13 @@ public class IntegrationsResource {
     private DeploymentService deploymentService;
 
     @Inject
-    public void setStepParserServices(
-            final Instance<StepParserService<Step>> stepParserServices) {
+    public void setStepParserServices(final Instance<StepParserService<Step>> stepParserServices) {
         this.stepParserServices = stepParserServices;
     }
     private Instance<StepParserService<Step>> stepParserServices;
 
     @Inject
-    public void setParsers(
-            final Instance<DeploymentGeneratorService> services) {
+    public void setParsers(final Instance<DeploymentGeneratorService> services) {
         this.deploymentGeneratorServices = services;
     }
     private Instance<DeploymentGeneratorService> deploymentGeneratorServices;
@@ -114,8 +112,7 @@ public class IntegrationsResource {
         boolean found = false;
         for (StepParserService<Step> stepParserService : stepParserServices) {
             try {
-                if (stepParserService.identifier().equalsIgnoreCase(dsl)
-                        && stepParserService.appliesTo(crd)) {
+                if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
                     var parsed = stepParserService.deepParse(crd);
                     integration.setSteps(parsed.getSteps());
                     integration.setMetadata(parsed.getMetadata());
@@ -125,8 +122,7 @@ public class IntegrationsResource {
                     break;
                 }
             } catch (Exception e) {
-                log.warn("Parser " + stepParserService.getClass() + "threw an"
-                        + " unexpected error.", e);
+                log.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
             }
         }
 

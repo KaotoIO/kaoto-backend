@@ -256,7 +256,7 @@ public class Aggregate extends EIPStep {
     }
 
     @Override
-    void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
             case CORRELATION_EXPRESSION1:
             case CORRELATION_EXPRESSION:
@@ -377,7 +377,7 @@ public class Aggregate extends EIPStep {
     }
 
     @Override
-    void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter parameter) {
         switch (parameter.getId()) {
             case CORRELATION_EXPRESSION:
             case CORRELATION_EXPRESSION1:
