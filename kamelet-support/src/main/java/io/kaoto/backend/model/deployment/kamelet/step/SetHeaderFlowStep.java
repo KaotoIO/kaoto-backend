@@ -13,7 +13,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
