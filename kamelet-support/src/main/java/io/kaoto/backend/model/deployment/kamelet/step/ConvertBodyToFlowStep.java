@@ -53,7 +53,8 @@ public class ConvertBodyToFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         return getConvertBodyTo().getStep(catalog, CONVERT_BODY_TO_LABEL, kameletStepParserService);
     }
 

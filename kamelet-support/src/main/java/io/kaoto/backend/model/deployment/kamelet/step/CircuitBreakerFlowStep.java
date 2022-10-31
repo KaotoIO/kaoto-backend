@@ -44,7 +44,8 @@ public class CircuitBreakerFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         return getCircuitBreaker().getStep(catalog, CIRCUIT_BREAKER_LABEL, kameletStepParserService);
     }
 

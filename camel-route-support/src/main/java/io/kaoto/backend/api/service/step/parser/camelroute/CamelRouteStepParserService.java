@@ -53,10 +53,11 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
             var flows = route.getFlows();
             for (var flow : flows) {
                 var from = flow.getFrom();
-                steps.add(ksps.processStep(from));
+                steps.add(ksps.processStep(from, true, false));
                 if (from.getSteps() != null) {
+                    int i = 0;
                     for (FlowStep step : from.getSteps()) {
-                        steps.add(ksps.processStep(step));
+                        steps.add(ksps.processStep(step, i == 0, i++ == from.getSteps().size() - 1));
                     }
                 }
 

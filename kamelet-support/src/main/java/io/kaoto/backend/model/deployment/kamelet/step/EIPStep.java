@@ -23,12 +23,14 @@ public abstract class EIPStep implements Serializable {
     }
 
     protected EIPStep(Step step) {
-        for (var parameter : step.getParameters()) {
-            if (parameter.getValue() != null) {
-                try {
-                    assignAttribute(parameter);
-                } catch (Exception e) {
-                    log.error("Couldn't assign value to attribute " + parameter.getId(), e);
+        if (step.getParameters() != null) {
+            for (var parameter : step.getParameters()) {
+                if (parameter.getValue() != null) {
+                    try {
+                        assignAttribute(parameter);
+                    } catch (Exception e) {
+                        log.error("Couldn't assign value to attribute " + parameter.getId(), e);
+                    }
                 }
             }
         }

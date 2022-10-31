@@ -160,8 +160,10 @@ public class Loop extends Expression {
 
         Branch branch = new Branch(STEPS_LABEL);
         if (this.getSteps() != null) {
+            int i = 0;
             for (var s : this.getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
+                        i++ == this.getSteps().size() - 1));
             }
         }
         step.getBranches().add(branch);

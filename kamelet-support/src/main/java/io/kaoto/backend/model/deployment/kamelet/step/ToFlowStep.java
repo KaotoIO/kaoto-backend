@@ -50,9 +50,8 @@ public class ToFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
-        return kameletStepParserService.processStep(this.getTo());
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
+        return kameletStepParserService.processStep(this.getTo(), start, end);
     }
 }

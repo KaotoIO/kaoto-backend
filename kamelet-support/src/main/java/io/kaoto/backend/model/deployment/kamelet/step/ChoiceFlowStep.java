@@ -55,17 +55,18 @@ public class ChoiceFlowStep implements FlowStep {
     }
 
     @Override
-    public Step getStep(final StepCatalog catalog,
-                        final KameletStepParserService
-                                kameletStepParserService) {
+    public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
+                        final Boolean start, final Boolean end) {
         Step res = catalog.getReadOnlyCatalog().searchByID("choice");
         res.setBranches(new LinkedList<>());
 
         for (var flow : this.getChoice().getChoice()) {
             Branch branch = new Branch(getChoiceIdentifier(flow));
             branch.setCondition(getChoiceCondition(flow));
+            int i = 0;
             for (var s : flow.getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
+                        i++ == flow.getSteps().size() - 1));
             }
             kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
                     branch.getCondition());
@@ -75,8 +76,10 @@ public class ChoiceFlowStep implements FlowStep {
         if (this.getChoice().getOtherwise() != null) {
             Branch branch = new Branch(KameletStepParserService.OTHERWISE);
 
+            int i = 0;
             for (var s : this.getChoice().getOtherwise().getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s));
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
+                        i++ == this.getChoice().getOtherwise().getSteps().size() - 1));
             }
             res.getBranches().add(branch);
         }
