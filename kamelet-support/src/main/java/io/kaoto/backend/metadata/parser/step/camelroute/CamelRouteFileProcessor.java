@@ -30,9 +30,6 @@ import java.util.stream.Collectors;
 
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
-    private static final String SOURCE_TYPE = "START";
-    private static final String SINK_TYPE = "END";
-    private static final String ACTION_TYPE = "MIDDLE";
     private static final String INVALID_TYPE = "invalid";
     public static final String DESCRIPTION = "description";
     public static final String DEFAULT_VALUE = "defaultValue";
@@ -263,19 +260,16 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     }
 
     private String getStepType(final JsonObject component) {
-        final boolean isCamelComponentSourceOnly
-                = component.getBoolean("consumerOnly");
-        final boolean isCamelComponentSinkOnly
-                = component.getBoolean("producerOnly");
-        final boolean canCamelComponentBeSourceAndSink
-                = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
+        final boolean isCamelComponentSourceOnly = component.getBoolean("consumerOnly");
+        final boolean isCamelComponentSinkOnly = component.getBoolean("producerOnly");
+        final boolean canCamelComponentBeSourceAndSink = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
 
         if (isCamelComponentSourceOnly) {
-            return SOURCE_TYPE;
+            return Step.START;
         } else if (isCamelComponentSinkOnly) {
-            return SINK_TYPE;
+            return Step.END;
         } else if (canCamelComponentBeSourceAndSink) {
-            return ACTION_TYPE;
+            return Step.MIDDLE;
         } else {
             return INVALID_TYPE;
         }
@@ -295,23 +289,21 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         Map<String, List<String>> typesToDuplicateTo =
                 Map.of(
-                    SOURCE_TYPE, List.of(SOURCE_TYPE),
-                    ACTION_TYPE, List.of(SOURCE_TYPE, ACTION_TYPE, SINK_TYPE),
-                    SINK_TYPE, List.of(ACTION_TYPE, SINK_TYPE)
+                        Step.START, List.of(Step.START),
+                        Step.MIDDLE, List.of(Step.START, Step.MIDDLE, Step.END),
+                        Step.END, List.of(Step.MIDDLE, Step.END)
                 );
 
-        return typesToDuplicateTo.get(step.getType()).stream()
-                .map(type -> duplicateStepToType(step, type))
-                .toList();
+        return typesToDuplicateTo.get(step.getType()).stream().map(type -> duplicateStepToType(step, type)).toList();
     }
 
     private Step duplicateStepToType(final Step step, final String type) {
         Step duplicatedStep = new Step();
 
         Map<String, String> typeToIdConversion = Map.of(
-                ACTION_TYPE, "action",
-                SINK_TYPE, "producer",
-                SOURCE_TYPE, "consumer"
+                Step.MIDDLE, "action",
+                Step.END, "producer",
+                Step.START, "consumer"
         );
 
         String typedId = step.getId() + "-" + typeToIdConversion.get(type);

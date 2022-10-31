@@ -69,12 +69,12 @@ class StepResourceTest {
     @Test
     @Timeout(100)
     void speedKameletAndBindingEnd() {
-        stepResource.all("KameletBinding,Kamelet", "END", null, null, null);
+        stepResource.all("KameletBinding,Kamelet", Step.END, null, null, null);
     }
     @Test
     @Timeout(100)
     void speedKameletBindingMiddle() {
-        stepResource.all("KameletBinding", "MIDDLE", null, null, null);
+        stepResource.all("KameletBinding", Step.MIDDLE, null, null, null);
     }
 
     @ParameterizedTest
@@ -119,7 +119,7 @@ class StepResourceTest {
                 stepResource.all(null, null, kind, null, null)
                         .stream().allMatch(s ->
                                 kind.equalsIgnoreCase(s.getKind())));
-        var type = "START";
+        var type = Step.START;
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
                 stepResource.all(type, null, null, null, null)

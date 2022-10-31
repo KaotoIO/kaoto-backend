@@ -65,7 +65,7 @@ class KameletParseCatalogTest {
         assertEquals(name, step.getId());
         assertEquals(name, step.getName());
         assertEquals("Kamelet", step.getKind());
-        assertEquals("START", step.getType());
+        assertEquals(Step.START, step.getType());
         Assertions.assertNotNull(step.getParameters());
         assertEquals(8, step.getParameters().size());
         for (var p : step.getParameters()) {
@@ -88,10 +88,8 @@ class KameletParseCatalogTest {
         assertEquals(catalog.getAll().size(), steps.size());
 
         String name = "dropbox";
-        String[] required = new String[]{
-                "operation", "accessToken"};
-        final Step step = catalog.searchByName(name)
-                .stream().findAny().get();
+        String[] required = new String[]{"operation", "accessToken"};
+        final Step step = catalog.searchByName(name).stream().findAny().get();
 
         assertEquals(step.getRequired().size(), required.length);
         assertTrue(Arrays.stream(required).allMatch(property -> step.getRequired().contains(property)));
@@ -100,7 +98,7 @@ class KameletParseCatalogTest {
         assertEquals(name, step.getId());
         assertEquals(name, step.getName());
         assertEquals("Camel-Connector", step.getKind());
-        assertEquals("MIDDLE", step.getType());
+        assertEquals(Step.MIDDLE, step.getType());
         Assertions.assertNotNull(step.getParameters());
         assertEquals(6, step.getParameters().size());
         for (var p : step.getParameters()) {
@@ -117,7 +115,7 @@ class KameletParseCatalogTest {
         assertEquals(name, step2.getId());
         assertEquals(name, step2.getName());
         assertEquals("EIP-BRANCH", step2.getKind());
-        assertEquals("MIDDLE", step2.getType());
+        assertEquals(Step.MIDDLE, step2.getType());
         assertEquals(1, step2.getMinBranches());
         assertEquals(-1, step2.getMaxBranches());
     }

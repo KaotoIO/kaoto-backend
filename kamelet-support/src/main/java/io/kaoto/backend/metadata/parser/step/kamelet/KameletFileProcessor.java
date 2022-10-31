@@ -52,10 +52,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
         try (FileReader fr = new FileReader(f)) {
             ObjectMapper yamlMapper =
-                new ObjectMapper(new YAMLFactory())
-                        .configure(
-                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                            false);
+                new ObjectMapper(new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             Kamelet kamelet = yamlMapper.readValue(fr, Kamelet.class);
 
             Step step = new Step();
@@ -68,47 +65,33 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
                 if (metadata.getLabels() != null) {
                     switch (metadata.getLabels()
-                            .getOrDefault("camel.apache.org/kamelet.type",
-                                    "action")
-                            .toLowerCase()) {
-                        case "source" -> step.setType("START");
-                        case "sink" -> step.setType("END");
-                        default -> step.setType("MIDDLE");
+                            .getOrDefault("camel.apache.org/kamelet.type", "action").toLowerCase()) {
+                        case "source" -> step.setType(Step.START);
+                        case "sink" -> step.setType(Step.END);
+                        default -> step.setType(Step.MIDDLE);
                     }
                 }
 
                 if (metadata.getAnnotations() != null) {
                     final var annotations = metadata.getAnnotations();
-                    step.setGroup(annotations
-                            .getOrDefault("camel.apache.org/kamelet.group",
-                                    "others"));
+                    step.setGroup(annotations.getOrDefault("camel.apache.org/kamelet.group", "others"));
 
-                    step.setIcon(
-                            annotations.getOrDefault(
-                                    "camel.apache.org/kamelet.icon", ""));
+                    step.setIcon(annotations.getOrDefault("camel.apache.org/kamelet.icon", ""));
 
                     if (annotations.containsKey("kaoto.io/minbranches")) {
-                        step.setMinBranches(
-                                Integer.valueOf(
-                                        annotations
-                                                .get("kaoto.io/minbranches")));
+                        step.setMinBranches(Integer.valueOf(annotations.get("kaoto.io/minbranches")));
                     }
 
                     if (annotations.containsKey("kaoto.io/maxbranches")) {
-                        step.setMaxBranches(
-                                Integer.valueOf(
-                                        annotations
-                                                .get("kaoto.io/maxbranches")));
+                        step.setMaxBranches(Integer.valueOf(annotations.get("kaoto.io/maxbranches")));
                     }
                 }
             }
 
             if (kamelet.getSpec() != null
                     && kamelet.getSpec().getDefinition() != null) {
-                step.setTitle(kamelet.getSpec()
-                        .getDefinition().getTitle());
-                step.setDescription(kamelet.getSpec()
-                        .getDefinition().getDescription());
+                step.setTitle(kamelet.getSpec().getDefinition().getTitle());
+                step.setDescription(kamelet.getSpec().getDefinition().getDescription());
 
 
                 if (kamelet.getSpec().getDefinition().getProperties() != null) {
