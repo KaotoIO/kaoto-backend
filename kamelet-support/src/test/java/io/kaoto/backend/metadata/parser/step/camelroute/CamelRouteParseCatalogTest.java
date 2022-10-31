@@ -48,12 +48,9 @@ class CamelRouteParseCatalogTest {
         Step browseComponentSource = catalog.searchByID("browse-consumer");
         Step browseComponentAction = catalog.searchByID("browse-action");
 
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSource, "START", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSink, "END", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentAction, "MIDDLE", false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, Step.START, false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, Step.END, false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, Step.MIDDLE, false);
     }
 
     @Test
@@ -70,21 +67,16 @@ class CamelRouteParseCatalogTest {
         assertEquals(3, steps.size());
 
         BiFunction<List<Step>, String, Step> fetchBrowse =
-                (stepList, stepType) -> stepList
-                        .stream().filter(
-                                step -> stepType.equals(step.getType())
-                        ).findFirst().get();
+                (stepList, stepType) -> stepList.stream()
+                        .filter(step -> stepType.equals(step.getType())).findFirst().get();
 
-        Step browseComponentSink = fetchBrowse.apply(steps, "END");
-        Step browseComponentSource = fetchBrowse.apply(steps, "START");
-        Step browseComponentAction = fetchBrowse.apply(steps, "MIDDLE");
+        Step browseComponentSink = fetchBrowse.apply(steps,  Step.END);
+        Step browseComponentSource = fetchBrowse.apply(steps, Step.START);
+        Step browseComponentAction = fetchBrowse.apply(steps, Step.MIDDLE);
 
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSink, "END", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentSource, "START", false);
-        assertBrowseJsonHasBeenParsedCorrectly(
-                browseComponentAction, "MIDDLE", false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, Step.END, false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, Step.START, false);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, Step.MIDDLE, false);
     }
 
     @Test
@@ -106,9 +98,9 @@ class CamelRouteParseCatalogTest {
             final Step parsedStep, final String type,
             final boolean assertDescription) {
         Map<String, String> typeToIdConversion = Map.of(
-                "MIDDLE", "action",
-                "END", "producer",
-                "START", "consumer"
+                Step.MIDDLE, "action",
+                Step.END, "producer",
+                Step.START, "consumer"
         );
 
         String expectedType = typeToIdConversion.get(type);

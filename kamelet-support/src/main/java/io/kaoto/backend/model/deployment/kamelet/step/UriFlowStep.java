@@ -92,9 +92,9 @@ public class UriFlowStep implements FlowStep {
         if (start) {
             candidates = candidates.sorted((step, t1) -> {
                 var type = step.getType();
-                if (type.equalsIgnoreCase("START")) {
+                if (type.equalsIgnoreCase(Step.START)) {
                     return 0;
-                } else if (type.equalsIgnoreCase("MIDDLE")) {
+                } else if (type.equalsIgnoreCase(Step.MIDDLE)) {
                     return 1;
                 } else {
                     return 2;
@@ -103,9 +103,9 @@ public class UriFlowStep implements FlowStep {
         } else if (end) {
             candidates = candidates.sorted((step, t1) -> {
                 var type = step.getType();
-                if (type.equalsIgnoreCase("END")) {
+                if (type.equalsIgnoreCase(Step.END)) {
                     return 0;
-                } else if (type.equalsIgnoreCase("MIDDLE")) {
+                } else if (type.equalsIgnoreCase(Step.MIDDLE)) {
                     return 1;
                 } else {
                     return 2;

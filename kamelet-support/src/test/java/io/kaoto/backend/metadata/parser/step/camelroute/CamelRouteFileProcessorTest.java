@@ -25,33 +25,27 @@ class CamelRouteFileProcessorTest {
     @Test
     void shouldParseCamelRouteJson() throws URISyntaxException {
 
-        File camelRouteJson = Path.of(
-                CamelRouteFileProcessorTest.class.getResource(
-                                "browse.json").toURI()).toFile();
+        File camelRouteJson = Path.of(CamelRouteFileProcessorTest.class.getResource("browse.json").toURI()).toFile();
 
-        List<Step> steps = new CamelRouteFileProcessor()
-                .parseFile(camelRouteJson);
+        List<Step> steps = new CamelRouteFileProcessor().parseFile(camelRouteJson);
 
         BiFunction<List<Step>, String, Step> fetchBrowse =
-                (stepList, stepType) -> stepList
-                        .stream().filter(
-                                step -> stepType.equals(step.getType())
-                        ).findFirst().get();
+                (stepList, stepType) -> stepList.stream()
+                        .filter(step -> stepType.equals(step.getType())).findFirst().get();
 
-        Step browseComponentSink = fetchBrowse.apply(steps, "END");
-        Step browseComponentSource = fetchBrowse.apply(steps, "START");
-        Step browseComponentAction = fetchBrowse.apply(steps, "MIDDLE");
+        Step browseComponentSink = fetchBrowse.apply(steps, Step.END);
+        Step browseComponentSource = fetchBrowse.apply(steps, Step.START);
+        Step browseComponentAction = fetchBrowse.apply(steps, Step.MIDDLE);
 
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, "END");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, "START");
-        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, "MIDDLE");
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSink, Step.END);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentSource, Step.START);
+        assertBrowseJsonHasBeenParsedCorrectly(browseComponentAction, Step.MIDDLE);
     }
 
     @Test
     void shouldSkipNotCamelRouteJsons() throws URISyntaxException {
         File camelRouteJson = Path.of(
-                CamelRouteFileProcessorTest.class.getResource(
-                        "not.json").toURI()).toFile();
+                CamelRouteFileProcessorTest.class.getResource("not.json").toURI()).toFile();
 
         List<Step> parsedStep = new CamelRouteFileProcessor()
                 .parseFile(camelRouteJson);
@@ -62,9 +56,9 @@ class CamelRouteFileProcessorTest {
     private void assertBrowseJsonHasBeenParsedCorrectly(
             final Step parsedStep, final String type) {
         Map<String, String> typeToIdConversion = Map.of(
-                "MIDDLE", "action",
-                "END", "producer",
-                "START", "consumer"
+                Step.MIDDLE, "action",
+                Step.END, "producer",
+                Step.START, "consumer"
         );
 
         String expectedType = typeToIdConversion.get(type);
@@ -101,21 +95,13 @@ class CamelRouteFileProcessorTest {
 
         parsedStep.getParameters().forEach(
                 parameter -> {
-                    assertEquals(parameter.getId(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getId());
+                    assertEquals(parameter.getId(), expectedParameterValues.get(parameter.getId()).getId());
                     assertEquals(parameter.getDescription(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getDescription());
-                    assertEquals(parameter.getTitle(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getTitle());
+                            expectedParameterValues.get(parameter.getId()).getDescription());
+                    assertEquals(parameter.getTitle(), expectedParameterValues.get(parameter.getId()).getTitle());
                     assertEquals(parameter.getDefaultValue(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getDefaultValue());
-                    assertEquals(parameter.isPath(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .isPath());
+                            expectedParameterValues.get(parameter.getId()).getDefaultValue());
+                    assertEquals(parameter.isPath(), expectedParameterValues.get(parameter.getId()).isPath());
                 }
         );
     }

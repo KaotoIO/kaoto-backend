@@ -19,6 +19,10 @@ import java.util.Objects;
  */
 public class Step extends Metadata {
 
+    public static final String START = "START";
+    public static final String MIDDLE = "MIDDLE";
+    public static final String END = "END";
+
     @JsonView(Views.Summary.class)
     private String kind;
     @JsonView(Views.Summary.class)
@@ -44,7 +48,7 @@ public class Step extends Metadata {
     private String uuid;
 
     public Step() {
-        setType("MIDDLE");
+        setType(MIDDLE);
         setKind("UNKNOWN");
     }
 

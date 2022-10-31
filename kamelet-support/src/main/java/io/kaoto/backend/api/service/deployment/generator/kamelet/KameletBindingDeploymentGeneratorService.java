@@ -77,7 +77,7 @@ public class KameletBindingDeploymentGeneratorService
 
         if (!steps.isEmpty()) {
             Step step = steps.get(i);
-            if ("START".equalsIgnoreCase(step.getType())) {
+            if (Step.START.equalsIgnoreCase(step.getType())) {
                 spec.setSource(createKameletBindingStep(steps.get(i++)));
             }
         }
