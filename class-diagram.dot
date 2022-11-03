@@ -292,12 +292,6 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 </TABLE>>]
 
 
-		"ProcessFile" -> "GitParseCatalog" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
 "ViewDefinitionParseCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>ViewDefinitionParseCatalog</B></TD></TR>
 	
