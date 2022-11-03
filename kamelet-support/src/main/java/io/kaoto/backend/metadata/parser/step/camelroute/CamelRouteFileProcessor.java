@@ -2,29 +2,25 @@ package io.kaoto.backend.metadata.parser.step.camelroute;
 
 import io.kaoto.backend.metadata.parser.JsonProcessFile;
 import io.kaoto.backend.model.parameter.BooleanParameter;
-import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.NumberParameter;
-import io.kaoto.backend.model.parameter.StringParameter;
+import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 
 import javax.json.Json;
 import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.URISyntaxException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -66,13 +62,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     ) { }
 
     @Override
-    protected List<Step> parseFile(final File f) {
-
-        log.trace("Parsing " +  f.getAbsolutePath());
-
-        try (FileReader fr = new FileReader(f)) {
-
-            JsonReader reader = Json.createReader(fr);
+    protected List<Step> parseInputStream(final Reader input) {
+        try {
+            JsonReader reader = Json.createReader(input);
             JsonObject json = reader.readObject();
             Step step = convertToStep(json);
 
@@ -81,8 +73,8 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             } else {
                 return List.of();
             }
-        } catch (IOException | JsonException e) {
-            log.error("Error parsing '"  + f.getAbsolutePath() + "'", e);
+        } catch (JsonException e) {
+            log.error("Error parsing CamelRoute", e);
         }
 
         return List.of();

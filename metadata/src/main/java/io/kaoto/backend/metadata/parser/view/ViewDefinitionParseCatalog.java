@@ -5,15 +5,18 @@ import io.kaoto.backend.metadata.parser.GitParseCatalog;
 import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.view.ViewDefinition;
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 🐱class ViewDefinitionParseCatalog
@@ -52,15 +55,31 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
     }
 
     @Override
-    public List<ViewDefinition> parseFile(final File f) {
-        try (FileReader fr = new FileReader(f)) {
+    public List<ViewDefinition> parseInputStream(final Reader reader) {
+        try {
+            final var content = IOUtils.toString(reader);
+            if (!appliesTo(content)) {
+                return List.of();
+            }
             Yaml yaml = new Yaml(new Constructor(ViewDefinition.class));
-            ViewDefinition viewDefinition = yaml.load(fr);
+            ViewDefinition viewDefinition = yaml.load(content);
             return List.of(viewDefinition);
-        } catch (IOException | YAMLException e) {
-            log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
+        } catch (YAMLException | IOException e) {
+            log.error("Error parsing ViewDefinition.", e);
         }
 
         return List.of();
+    }
+
+    private boolean appliesTo(final String yaml) {
+        String[] kinds = new String[]{"generic", "step"};
+
+        Pattern pattern = Pattern.compile("(\ntype:)(.+)\n", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(yaml);
+        if (matcher.find()) {
+            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(2).trim()));
+        }
+
+        return false;
     }
 }
