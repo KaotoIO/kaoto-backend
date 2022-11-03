@@ -111,7 +111,7 @@ jobs:
           key: ${{ runner.os }}-m2-macos-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-macos
       - name: 🤳 Build Native Quarkus
-        run: mvn -B install -DskipTests -Pnative
+        run: mvn install -DskipTests -Pnative
       - name: 📩 Save MacOS native build
         uses: actions/upload-artifact@v3
         with:
