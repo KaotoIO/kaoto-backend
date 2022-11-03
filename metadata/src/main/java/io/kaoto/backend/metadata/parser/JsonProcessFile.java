@@ -3,7 +3,6 @@ package io.kaoto.backend.metadata.parser;
 import io.kaoto.backend.model.Metadata;
 import org.jboss.logging.Logger;
 
-import java.io.File;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -38,9 +37,8 @@ public abstract class JsonProcessFile<T extends Metadata>
     private Logger log = Logger.getLogger(JsonProcessFile.class);
 
     @Override
-    protected boolean isDesiredType(final File file) {
-        return file.getName().endsWith(".json")
-                && !file.getName().startsWith(".");
+    protected boolean isDesiredType(final String filename ) {
+        return filename != null && !filename.isEmpty() && filename.endsWith(".json") && !filename.startsWith(".");
     }
 
     @Override

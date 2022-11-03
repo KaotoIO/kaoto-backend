@@ -15,13 +15,12 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,22 +37,16 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     private KameletStepParserService service;
 
     @Override
-    public List<Step> parseFile(final File f) {
-        String kind = null;
+    public List<Step> parseInputStream(Reader reader) {
         try {
-            final var yaml = Files.readString(f.toPath());
+            final var yaml = IOUtils.toString(reader);
             if (!service.appliesTo(yaml)) {
                 return List.of();
             }
-            kind = getKind(yaml);
-        } catch (IOException e) {
-            log.trace("Skipping file as I can't read it: " + f.getName());
-        }
-
-        try (FileReader fr = new FileReader(f)) {
+            var kind = getKind(yaml);
             ObjectMapper yamlMapper =
                 new ObjectMapper(new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            Kamelet kamelet = yamlMapper.readValue(fr, Kamelet.class);
+            Kamelet kamelet = yamlMapper.readValue(yaml, Kamelet.class);
 
             Step step = new Step();
             step.setKind(kind);
@@ -88,8 +81,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 }
             }
 
-            if (kamelet.getSpec() != null
-                    && kamelet.getSpec().getDefinition() != null) {
+            if (kamelet.getSpec() != null && kamelet.getSpec().getDefinition() != null) {
                 step.setTitle(kamelet.getSpec().getDefinition().getTitle());
                 step.setDescription(kamelet.getSpec().getDefinition().getDescription());
 
@@ -106,7 +98,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             }
             return List.of(step);
         } catch (IOException | YAMLException e) {
-            log.error("Error parsing '" + f.getAbsolutePath() + "'", e);
+            log.error("Error parsing Kamelet." , e);
         }
 
         return List.of();
