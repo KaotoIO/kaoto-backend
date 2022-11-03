@@ -8,6 +8,12 @@
         "pattern": "camel-kamelets-0.9.0.jar$"
       },
       {
+        "pattern": "view-definition.zip$"
+      },
+      {
+        "pattern": "camel-component-metadata.zip$"
+      },
+      {
         "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/default-icon.txt$"
       }
     ]

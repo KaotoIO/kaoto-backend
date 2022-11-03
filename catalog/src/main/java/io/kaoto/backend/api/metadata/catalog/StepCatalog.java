@@ -67,8 +67,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
 
     private void addGit(final List<ParseCatalog<Step>> catalogs,
                            final boolean clusterAvailable) {
-        for (Repository.Git git : repository.git().orElse(
-                Collections.emptyList())) {
+        for (Repository.Git git : repository.git().orElse(Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
                 if (!git.ifNoCluster() || !clusterAvailable) {
                     catalogs.add(parser.getParser(
@@ -93,8 +92,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
 
     private void addZipJar(final List<ParseCatalog<Step>> catalogs,
                            final boolean clusterAvailable) {
-        for (var jar : repository.jar().orElse(
-                Collections.emptyList())) {
+        for (var jar : repository.jar().orElse(Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
                 if (!jar.ifNoCluster() || !clusterAvailable) {
                     catalogs.add(parser.getParser(jar.url()));
@@ -113,8 +111,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
     }
 
     @Inject
-    public void setStepCatalogParsers(
-            final Instance<StepCatalogParser> stepCatalogParsers) {
+    public void setStepCatalogParsers(final Instance<StepCatalogParser> stepCatalogParsers) {
         this.stepCatalogParsers = stepCatalogParsers;
     }
 
@@ -123,14 +120,13 @@ public class StepCatalog extends AbstractCatalog<Step> {
         this.kclient = kclient;
     }
 
-    @ConfigMapping(prefix = "repository.step", namingStrategy =
-            ConfigMapping.NamingStrategy.KEBAB_CASE)
+    @ConfigMapping(prefix = "repository.step", namingStrategy = ConfigMapping.NamingStrategy.KEBAB_CASE)
     interface StepRepository extends Repository {
     }
 
     @Override
-    @Scheduled(every = "60s", identity = "refresh-step-catalog",
-            concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "120s", identity = "refresh-step-catalog", concurrentExecution =
+            Scheduled.ConcurrentExecution.SKIP)
     public void refresh() {
         super.refresh();
     }

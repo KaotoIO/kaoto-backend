@@ -1,14 +1,26 @@
-repository:
-  step:
-    jar:
-      -
-        url: "resource://camel-kamelets-0.9.0.jar"
-        if-no-cluster: true
-      - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
-      - url: "resource://camel-3.19.0.zip"
-  viewdefinition:
-    jar:
-      - url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/heads/main.zip"
+"%dev":
+  repository:
+    step:
+      jar:
+        -
+          url: "resource://camel-kamelets-0.9.0.jar"
+          if-no-cluster: true
+        - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
+        - url: "resource://camel-3.19.0.zip"
+    viewdefinition:
+      jar:
+        - url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/heads/main.zip"
+"%prod":
+  repository:
+    step:
+      jar:
+        - url: "resource://camel-kamelets-0.9.0.jar"
+          if-no-cluster: true
+        - url: "resource://camel-component-metadata.zip"
+        - url: "resource://camel-3.19.0.zip"
+    viewdefinition:
+      jar:
+        - url: "resource://view-definition.zip"
 
 crd:
   default: "KameletBinding"
