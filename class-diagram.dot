@@ -145,6 +145,8 @@ getParserFromCluster():ParseCatalog
 <BR align="left" />
 getLocalFolder(&lt;Path&gt; path):ParseCatalog
 <BR align="left" />
+generatesKind(&lt;String&gt; kind):Boolean
+<BR align="left" />
 
 </TD></TR>
 
