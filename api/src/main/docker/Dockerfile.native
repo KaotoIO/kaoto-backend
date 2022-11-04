@@ -5,6 +5,7 @@ RUN microdnf install curl
 # Second stage - copy the dependencies
 FROM quay.io/quarkus/quarkus-micro-image:1.0
 ENV NAMESPACE='default'
+ENV CATALOG_NAMESPACE=''
 
 COPY --from=BUILD /usr/bin/curl   /usr/bin/
 COPY --from=BUILD \
@@ -28,4 +29,4 @@ USER 1001
 
 HEALTHCHECK --interval=3s --start-period=1s CMD curl --fail http://localhost:8081/ || exit 1
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dkaoto.openshift.namespace=${NAMESPACE}", "-Xmx2G"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dkaoto.openshift.namespace=${NAMESPACE}","-Dkaoto.openshift.catalog-namespace=${NAMESPACE}", "-Xmx2G"]
