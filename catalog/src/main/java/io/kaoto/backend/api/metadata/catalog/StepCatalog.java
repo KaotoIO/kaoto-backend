@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 🐱class StepCatalog
@@ -27,6 +28,7 @@ import java.util.List;
 @ApplicationScoped
 public class StepCatalog extends AbstractCatalog<Step> {
 
+    public static final String ALL = "all";
     private StepRepository repository;
 
     private Instance<StepCatalogParser> stepCatalogParsers;
@@ -65,24 +67,23 @@ public class StepCatalog extends AbstractCatalog<Step> {
         }
     }
 
-    private void addGit(final List<ParseCatalog<Step>> catalogs,
-                           final boolean clusterAvailable) {
+    private void addGit(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         for (Repository.Git git : repository.git().orElse(Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!git.ifNoCluster() || !clusterAvailable) {
-                    catalogs.add(parser.getParser(
-                            git.url(), git.tag()));
+                if ((!git.ifNoCluster() || !clusterAvailable)
+                        && (ALL.equalsIgnoreCase(git.kind()) || parser.generatesKind(git.kind()))) {
+                    catalogs.add(parser.getParser(git.url(), git.tag()));
                 }
             }
         }
     }
 
-    private void addLocalFolder(final List<ParseCatalog<Step>> catalogs,
-                           final boolean clusterAvailable) {
+    private void addLocalFolder(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         for (var location : repository.localFolder().orElse(
                 Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!location.ifNoCluster() || !clusterAvailable) {
+                if ((!location.ifNoCluster() || !clusterAvailable)
+                        && (ALL.equalsIgnoreCase(location.kind()) || parser.generatesKind(location.kind()))) {
                     File dir = new File(location.url());
                     catalogs.add(parser.getLocalFolder(dir.toPath()));
                 }
@@ -90,11 +91,11 @@ public class StepCatalog extends AbstractCatalog<Step> {
         }
     }
 
-    private void addZipJar(final List<ParseCatalog<Step>> catalogs,
-                           final boolean clusterAvailable) {
+    private void addZipJar(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         for (var jar : repository.jar().orElse(Collections.emptyList())) {
             for (StepCatalogParser parser : stepCatalogParsers) {
-                if (!jar.ifNoCluster() || !clusterAvailable) {
+                if ((!jar.ifNoCluster() || !clusterAvailable)
+                        && (ALL.equalsIgnoreCase(jar.kind()) || parser.generatesKind(jar.kind()))) {
                     catalogs.add(parser.getParser(jar.url()));
                 }
             }
@@ -124,9 +125,10 @@ public class StepCatalog extends AbstractCatalog<Step> {
     interface StepRepository extends Repository {
     }
 
+
     @Override
-    @Scheduled(every = "120s", identity = "refresh-step-catalog", concurrentExecution =
-            Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "${repository.step.every:off}", identity = "refresh-step-catalog", concurrentExecution =
+            Scheduled.ConcurrentExecution.SKIP, delay = 200, delayUnit = TimeUnit.SECONDS)
     public void refresh() {
         super.refresh();
     }

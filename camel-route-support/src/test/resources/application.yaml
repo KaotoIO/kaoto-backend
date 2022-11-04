@@ -2,7 +2,9 @@ repository:
   step:
     jar:
       - url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar"
+        kind: "Kamelet"
       - url: "resource://camel-3.19.0.zip"
+        kind: "Camel-Connector"
     git:
       -
         url: "https://github.com/KaotoIO/camel-component-metadata.git"

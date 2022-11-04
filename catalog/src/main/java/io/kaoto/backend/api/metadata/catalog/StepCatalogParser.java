@@ -53,4 +53,14 @@ public interface StepCatalogParser {
      */
     @WithSpan
     ParseCatalog<Step> getLocalFolder(Path path);
+
+
+    /*
+     * 🐱method generatesKind : Boolean
+     * 🐱param kind : String
+     *
+     * Does this parser generate steps of this kind?
+     *
+     */
+    Boolean generatesKind(String kind);
 }

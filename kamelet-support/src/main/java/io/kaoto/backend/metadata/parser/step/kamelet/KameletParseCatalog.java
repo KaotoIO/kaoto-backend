@@ -14,6 +14,7 @@ import io.kaoto.backend.model.step.Step;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  * 🐱class KameletParseCatalog
@@ -69,5 +70,11 @@ public final class KameletParseCatalog implements StepCatalogParser {
                 new LocalFolderParseCatalog<>(path);
         parseCatalog.setFileVisitor(new KameletFileProcessor(service));
         return parseCatalog;
+    }
+
+    @Override
+    public Boolean generatesKind(final String kind) {
+        String[] kinds = new String[]{"Kamelet", "EIP", "EIP-BRANCH"};
+        return kind.isBlank() || Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(kind));
     }
 }
