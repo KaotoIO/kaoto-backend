@@ -45,4 +45,9 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
         parseCatalog.setFileVisitor(new CamelRouteFileProcessor());
         return parseCatalog;
     }
+
+    @Override
+    public Boolean generatesKind(final String kind) {
+        return kind.isBlank() || "Camel-Connector".equalsIgnoreCase(kind);
+    }
 }
