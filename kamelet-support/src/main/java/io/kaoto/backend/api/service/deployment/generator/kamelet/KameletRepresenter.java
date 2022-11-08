@@ -2,7 +2,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
-import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
@@ -29,6 +29,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SplitFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
@@ -243,6 +244,7 @@ public class KameletRepresenter extends Representer {
                 SetBodyFlowStep.class,
                 SetHeaderFlowStep.class,
                 SetPropertyFlowStep.class,
+                SplitFlowStep.class,
                 ToFlowStep.class,
                 TransformFlowStep.class,
                 UnmarshalFlowStep.class,

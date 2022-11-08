@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
@@ -117,8 +117,9 @@ public class Loop extends Expression {
         if (this.description != null) {
             properties.put(DESCRIPTION_LABEL, this.description);
         }
-
-        properties.put(STEPS_LABEL, this.getSteps());
+        if (this.getSteps() != null) {
+            properties.put(STEPS_LABEL, this.getSteps());
+        }
 
         return properties;
     }
@@ -148,7 +149,7 @@ public class Loop extends Expression {
                 parameter.setValue(this.description);
                 break;
             default:
-                log.error("Unknown property: " + parameter.getId());
+                log.error("Unknown property in Loop: " + parameter.getId());
                 break;
         }
     }

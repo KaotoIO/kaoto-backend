@@ -1,7 +1,7 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 

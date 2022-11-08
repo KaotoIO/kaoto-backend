@@ -41,8 +41,11 @@ spec:
             - set-property:
                 name: property
                 simple: bar
-            - remove-property:
-                name: property
+            - split:
+                steps:
+                - remove-property:
+                    name: property
+                tokenize: ','
             - marshal:
                 json:
                   library: Gson

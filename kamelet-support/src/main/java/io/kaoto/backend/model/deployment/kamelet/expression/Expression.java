@@ -1,4 +1,4 @@
-package io.kaoto.backend.model.deployment.kamelet;
+package io.kaoto.backend.model.deployment.kamelet.expression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -49,15 +49,19 @@ public class Expression extends EIPStep {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
         } else if (obj instanceof Map map) {
-            if (map.containsKey(CONSTANT_LABEL) && map.get(CONSTANT_LABEL) != null) {
-                setConstant(map.get(CONSTANT_LABEL).toString());
-            }
-            if (map.containsKey(SIMPLE_LABEL) && map.get(SIMPLE_LABEL) != null) {
-                setSimple(map.get(SIMPLE_LABEL).toString());
-            }
-            if (map.containsKey(NAME_LABEL) && map.get(NAME_LABEL) != null) {
-                setName(map.get(NAME_LABEL).toString());
-            }
+            setPropertiesFromMap(map);
+        }
+    }
+
+    protected void setPropertiesFromMap(final Map map) {
+        if (map.containsKey(CONSTANT_LABEL) && map.get(CONSTANT_LABEL) != null) {
+            setConstant(map.get(CONSTANT_LABEL).toString());
+        }
+        if (map.containsKey(SIMPLE_LABEL) && map.get(SIMPLE_LABEL) != null) {
+            setSimple(map.get(SIMPLE_LABEL).toString());
+        }
+        if (map.containsKey(NAME_LABEL) && map.get(NAME_LABEL) != null) {
+            setName(map.get(NAME_LABEL).toString());
         }
     }
 
@@ -74,7 +78,6 @@ public class Expression extends EIPStep {
                 this.setName(parameter.getValue().toString());
                 break;
             default:
-                log.trace("Unknown attribute in Expression: " + parameter.getId());
                 break;
         }
     }
@@ -92,7 +95,6 @@ public class Expression extends EIPStep {
                 parameter.setValue(this.name);
                 break;
             default:
-                log.trace("Unknown property in Expression: " + parameter.getId());
                 break;
         }
     }

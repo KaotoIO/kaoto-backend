@@ -17,60 +17,60 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-@JsonPropertyOrder({"loop"})
+@JsonPropertyOrder({"split"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LoopFlowStep implements FlowStep {
+public class SplitFlowStep implements FlowStep {
 
-    public static final String LOOP_LABEL = "loop";
+    public static final String LABEL = "split";
 
-    @JsonProperty(LOOP_LABEL)
-    private Loop loop;
+    @JsonProperty(LABEL)
+    private Split split;
 
     @JsonCreator
-    public LoopFlowStep(final @JsonProperty(LOOP_LABEL) Loop loop) {
+    public SplitFlowStep(final @JsonProperty(LABEL) Split split) {
         super();
-        setLoop(loop);
+        setSplit(split);
     }
 
-    public LoopFlowStep(final Step step, final KamelPopulator kameletPopulator) {
-        setLoop(new Loop(step, kameletPopulator));
+    public SplitFlowStep(final Step step, final KamelPopulator kameletPopulator) {
+        setSplit(new Split(step, kameletPopulator));
     }
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(LOOP_LABEL, this.getLoop().getRepresenterProperties());
+        properties.put(LABEL, this.getSplit().getRepresenterProperties());
         return properties;
     }
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = this.getLoop().getStep(catalog, LOOP_LABEL, kameletStepParserService);
+        Step res = this.getSplit().getStep(catalog, LABEL, kameletStepParserService);
 
         res.setBranches(new LinkedList<>());
 
-        if (this.getLoop() != null) {
+        if (this.getSplit() != null) {
             int i = 0;
-            for (var flow : this.getLoop().getSteps()) {
-                Branch branch = new Branch(LOOP_LABEL);
-                branch.getSteps().add(kameletStepParserService.processStep(flow, i == 0,
-                        i++ == this.getLoop().getSteps().size() - 1));
-                kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
-                        branch.getCondition());
-                res.getBranches().add(branch);
+            if (this.getSplit().getSteps() != null) {
+                for (var flow : this.getSplit().getSteps()) {
+                    Branch branch = new Branch(LABEL);
+                    branch.getSteps().add(kameletStepParserService.processStep(flow, i == 0,
+                            i++ == this.getSplit().getSteps().size() - 1));
+                    res.getBranches().add(branch);
+                }
             }
         }
 
         return res;
     }
 
-    public Loop getLoop() {
-        return loop;
+    public Split getSplit() {
+        return split;
     }
 
-    public void setLoop(final Loop loop) {
-        this.loop = loop;
+    public void setSplit(final Split split) {
+        this.split = split;
     }
 }

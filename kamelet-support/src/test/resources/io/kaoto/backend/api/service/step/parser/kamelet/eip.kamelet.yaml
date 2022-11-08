@@ -75,10 +75,16 @@ spec:
             - set-property:
                 name: property
                 simple: bar
-            - remove-property:
-                name: property
-            - marshal:
-                json: {}
+            - split:
+                steps:
+                - remove-property:
+                    name: property
+                tokenize: ','
+            - split:
+                simple: ${body}
+                steps:
+                - marshal:
+                    json: {}
             - claim-check:
                 operation: Get
                 key: foo
