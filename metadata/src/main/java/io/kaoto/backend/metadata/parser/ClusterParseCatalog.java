@@ -39,12 +39,17 @@ public class ClusterParseCatalog<T extends Metadata>
     private final Class<? extends CustomResource> cr;
     private Logger log = Logger.getLogger(ClusterParseCatalog.class);
 
+    private String namespace;
+
+    public void setNamespace(final String namespace) {
+        this.namespace = namespace;
+    }
+    private KubernetesClient kubernetesClient;
+
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
         log.error(kubernetesClient);
         this.kubernetesClient = kubernetesClient;
     }
-    private KubernetesClient kubernetesClient;
-
     private ProcessFile<T> yamlProcessFile;
 
     public ClusterParseCatalog(final Class<? extends CustomResource> cr) {
@@ -72,11 +77,18 @@ public class ClusterParseCatalog<T extends Metadata>
         try {
             var constructor = new Constructor(cr);
             Yaml yaml = new Yaml(constructor);
+            final List<?extends CustomResource> resources;
 
-            final var resources =
-                kubernetesClient.resources(cr)
-                        .inAnyNamespace()
+            //if the backend is deployed cluster-wide
+            if ("".equals(namespace)) {
+                 resources = kubernetesClient.resources(cr)
+                                .inAnyNamespace()
+                                .list().getItems();
+            } else {
+                resources = kubernetesClient.resources(cr)
+                        .inNamespace(namespace)
                         .list().getItems();
+            }
 
             for (CustomResource integration : resources) {
                 try {

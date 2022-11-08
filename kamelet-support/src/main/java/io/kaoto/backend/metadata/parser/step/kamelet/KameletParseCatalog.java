@@ -10,6 +10,7 @@ import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.step.Step;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,6 +30,9 @@ import java.util.Arrays;
 @ApplicationScoped
 public final class KameletParseCatalog implements StepCatalogParser {
 
+    @ConfigProperty(name = "kaoto.openshift.catalog-namespace",
+            defaultValue = "default")
+    private String namespace;
     @Inject
     public void setService(final KameletStepParserService service) {
         this.service = service;
@@ -61,6 +65,7 @@ public final class KameletParseCatalog implements StepCatalogParser {
                 new ClusterParseCatalog<>(Kamelet.class);
         parseCatalog.setFileVisitor(new KameletFileProcessor(service));
         parseCatalog.setKubernetesClient(kubernetesClient);
+        parseCatalog.setNamespace(namespace);
         return parseCatalog;
     }
 
