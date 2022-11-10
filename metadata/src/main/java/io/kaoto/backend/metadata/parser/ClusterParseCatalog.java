@@ -47,7 +47,6 @@ public class ClusterParseCatalog<T extends Metadata>
     private KubernetesClient kubernetesClient;
 
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
-        log.error(kubernetesClient);
         this.kubernetesClient = kubernetesClient;
     }
     private ProcessFile<T> yamlProcessFile;
@@ -80,7 +79,7 @@ public class ClusterParseCatalog<T extends Metadata>
             final List<?extends CustomResource> resources;
 
             //if the backend is deployed cluster-wide
-            if ("".equals(namespace)) {
+            if ( "false".equals(namespace) || "".equals(namespace)) {
                  resources = kubernetesClient.resources(cr)
                                 .inAnyNamespace()
                                 .list().getItems();
