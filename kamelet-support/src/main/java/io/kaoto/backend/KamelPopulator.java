@@ -2,7 +2,7 @@ package io.kaoto.backend;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
-import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
@@ -28,6 +28,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SplitFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
@@ -327,6 +328,9 @@ public class KamelPopulator {
                     break;
                 case "loop":
                     flowStep = new LoopFlowStep(step, this);
+                    break;
+                case "split":
+                    flowStep = new SplitFlowStep(step, this);
                     break;
                 default:
                     flowStep = getCamelConnector(step, to);

@@ -3,7 +3,7 @@ package io.kaoto.backend.model.deployment.kamelet.step.choice;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.kaoto.backend.model.deployment.kamelet.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 
 
 @JsonPropertyOrder({"expression", "suppress-exceptions"})
