@@ -64,6 +64,8 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("set-property", SetPropertyFlowStep.class);
         steps.put("setProperty", SetPropertyFlowStep.class);
         steps.put("split", SplitFlowStep.class);
+        steps.put("poll-enrich", PollEnrichFlowStep.class);
+        steps.put("pollEnrich", PollEnrichFlowStep.class);
         steps.put("to", ToFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("unmarshal", UnmarshalFlowStep.class);

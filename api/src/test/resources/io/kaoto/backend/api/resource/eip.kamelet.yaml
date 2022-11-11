@@ -95,6 +95,10 @@ spec:
               - convert-body-to:
                   type: java.lang.String
                   charset: UTF8
+              - poll-enrich:
+                  expression:
+                    simple: "${body}"
+                  aggregation-strategy: "myStrategy"
               on-fallback:
                 steps:
                 - log:

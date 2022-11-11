@@ -58,6 +58,10 @@ spec:
                       remotePath: '{{remotePath}}'
                       clientIdentifier: '{{clientIdentifier}}'
                       uploadMode: '{{uploadMode}}'
+                - poll-enrich:
+                    expression:
+                      simple: "${body}"
+                    aggregation-strategy: "myStrategy"
                 on-fallback:
                   steps:
                   - log:
