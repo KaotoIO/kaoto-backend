@@ -72,10 +72,10 @@ public class KamelPopulator {
         if (metadata.containsKey("definition")) {
             if (metadata.get("definition") instanceof KameletDefinition def) {
                 kamelet.getSpec().setDefinition(def);
-            } else if (metadata.get("definition") instanceof HashMap map) {
+            } else if (metadata.get("definition") instanceof Map map) {
                 KameletDefinition def = new KameletDefinition();
-                def.setTitle(map.getOrDefault("title", "").toString());
-                def.setDescription(map.getOrDefault("description", "").toString());
+                def.setTitle(String.valueOf(map.getOrDefault("title", "")));
+                def.setDescription(String.valueOf(map.getOrDefault("description", "")));
                 def.setRequired((List<String>) map.getOrDefault("required", null));
                 def.setProperties((Map<String, KameletDefinitionProperty>) map.getOrDefault("required", null));
                 kamelet.getSpec().setDefinition(def);
