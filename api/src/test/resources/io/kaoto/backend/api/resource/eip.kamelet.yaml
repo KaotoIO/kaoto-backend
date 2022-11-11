@@ -97,8 +97,8 @@ spec:
                   charset: UTF8
               - poll-enrich:
                   expression:
-                    simple: "${body}"
-                  aggregation-strategy: "myStrategy"
+                    simple: ${body}
+                  aggregation-strategy: myStrategy
               on-fallback:
                 steps:
                 - log:
