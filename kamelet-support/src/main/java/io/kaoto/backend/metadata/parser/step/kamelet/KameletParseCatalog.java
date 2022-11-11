@@ -31,7 +31,7 @@ import java.util.Arrays;
 public final class KameletParseCatalog implements StepCatalogParser {
 
     @ConfigProperty(name = "kaoto.openshift.catalog-namespace",
-            defaultValue = "default")
+            defaultValue = "false")
     private String namespace;
     @Inject
     public void setService(final KameletStepParserService service) {
