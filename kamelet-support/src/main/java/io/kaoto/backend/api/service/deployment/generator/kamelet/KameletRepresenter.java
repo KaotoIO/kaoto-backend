@@ -21,6 +21,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.EnrichFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
@@ -237,6 +238,7 @@ public class KameletRepresenter extends Representer {
                 Expression.class,
                 FilterFlowStep.class,
                 From.class,
+                IdempotentConsumerFlowStep.class,
                 LogFlowStep.class,
                 LoopFlowStep.class,
                 MarshalFlowStep.class,

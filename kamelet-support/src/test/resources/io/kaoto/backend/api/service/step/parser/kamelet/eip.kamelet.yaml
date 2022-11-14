@@ -111,8 +111,6 @@ spec:
                 log-name: yaml
           otherwise:
             steps:
-            - set-body:
-                simple: ola ke ase
             - remove-header:
                 name: removeme
       - filter:
@@ -120,5 +118,11 @@ spec:
           steps:
           - set-body:
               simple: abc
+          - idempotent-consumer:
+              idempotent-repository: myRepo
+              simple: ${header.id}
+              steps:
+              - set-body:
+                  simple: ola ke ase
       - to:
           uri: kamelet:sink

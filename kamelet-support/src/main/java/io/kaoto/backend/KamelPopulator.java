@@ -20,6 +20,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.EnrichFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
@@ -329,6 +330,9 @@ public class KamelPopulator {
                     break;
                 case "filter":
                     flowStep = new FilterFlowStep(processFilter(step.getBranches().get(0)));
+                    break;
+                case "idempotent-consumer":
+                    flowStep = new IdempotentConsumerFlowStep(step, this);
                     break;
                 case "loop":
                     flowStep = new LoopFlowStep(step, this);
