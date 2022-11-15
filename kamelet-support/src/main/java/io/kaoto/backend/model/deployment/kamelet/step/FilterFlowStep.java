@@ -64,7 +64,7 @@ public class FilterFlowStep implements FlowStep {
 
         int i = 0;
         for (var s : flow.getSteps()) {
-            branch.getSteps().add(kameletStepParserService.processStep(s, i == 0, i == flow.getSteps().size() -1 ));
+            branch.getSteps().add(kameletStepParserService.processStep(s, i == 0, i++ == flow.getSteps().size() - 1));
         }
         kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE, branch.getCondition());
         res.getBranches().add(branch);

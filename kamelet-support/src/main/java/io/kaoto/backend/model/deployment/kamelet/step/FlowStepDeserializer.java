@@ -50,6 +50,8 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("enrich", EnrichFlowStep.class);
         steps.put("filter", FilterFlowStep.class);
         steps.put("from", From.class);
+        steps.put("idempotent-consumer", IdempotentConsumerFlowStep.class);
+        steps.put("idempotentConsumer", IdempotentConsumerFlowStep.class);
         steps.put("marshal", MarshalFlowStep.class);
         steps.put("log", LogFlowStep.class);
         steps.put("loop", LoopFlowStep.class);

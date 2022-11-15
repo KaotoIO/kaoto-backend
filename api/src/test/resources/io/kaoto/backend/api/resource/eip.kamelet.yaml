@@ -64,8 +64,6 @@ spec:
                 log-name: yaml
           otherwise:
             steps:
-            - set-body:
-                simple: ola ke ase
             - remove-header:
                 name: removeme
             - claim-check:
@@ -105,5 +103,11 @@ spec:
                     message: test
                     logging-level: INFO
                     log-name: yaml
+                - idempotent-consumer:
+                    idempotent-repository: myRepo
+                    simple: ${header.id}
+                    steps:
+                    - set-body:
+                        simple: ola ke ase
       - to:
           uri: kamelet:sink
