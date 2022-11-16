@@ -24,6 +24,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.MulticastFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.PollEnrichFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
@@ -336,6 +337,9 @@ public class KamelPopulator {
                     break;
                 case "loop":
                     flowStep = new LoopFlowStep(step, this);
+                    break;
+                case "multicast":
+                    flowStep = new MulticastFlowStep(step, this);
                     break;
                 case "split":
                     flowStep = new SplitFlowStep(step, this);

@@ -84,15 +84,19 @@ spec:
                 - remove-property:
                     name: property
                 tokenize: ','
-            - split:
-                simple: ${body}
+            - multicast:
+                stop-on-exception: true
+                parallel-processing: true
                 steps:
-                - marshal:
-                    json: {}
-            - claim-check:
-                operation: Get
-                key: foo
-                filter: header:(foo|bar)
+                - split:
+                    simple: ${body}
+                    steps:
+                    - marshal:
+                        json: {}
+                - claim-check:
+                    operation: Get
+                    key: foo
+                    filter: header:(foo|bar)
           - simple: '{{?baz}}'
             steps:
             - enrich:
