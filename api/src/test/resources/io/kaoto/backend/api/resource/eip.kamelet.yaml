@@ -90,13 +90,17 @@ spec:
                   uri: dropbox:put
                   parameters:
                     accessToken: '{{accessToken}}'
-              - convert-body-to:
-                  type: java.lang.String
-                  charset: UTF8
-              - poll-enrich:
-                  expression:
-                    simple: ${body}
-                  aggregation-strategy: myStrategy
+              - multicast:
+                  stop-on-exception: true
+                  parallel-processing: true
+                  steps:
+                  - convert-body-to:
+                      type: java.lang.String
+                      charset: UTF8
+                  - poll-enrich:
+                      expression:
+                        simple: ${body}
+                      aggregation-strategy: myStrategy
               on-fallback:
                 steps:
                 - log:
