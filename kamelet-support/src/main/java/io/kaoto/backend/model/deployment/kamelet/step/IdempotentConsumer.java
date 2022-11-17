@@ -7,10 +7,8 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -177,22 +175,12 @@ public class IdempotentConsumer extends Expression {
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
-
         var filter_ids = this.getRepresenterProperties();
         var id = STEPS_LABEL;
         if (filter_ids.size() > 0) {
             id = String.valueOf(filter_ids.entrySet().stream().findFirst().get().getValue());
         }
-        Branch branch = new Branch(id);
-        if (steps != null) {
-            int i = 0;
-            for (var s : steps) {
-                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
-                        i++ == steps.size() - 1));
-            }
-        }
-        step.getBranches().add(branch);
+        step.setBranches(List.of(createBranch(id, this.getSteps(), kameletStepParserService)));
     }
 
     public Expression getExpression() {

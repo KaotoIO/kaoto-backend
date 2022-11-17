@@ -6,11 +6,9 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,21 +47,11 @@ public class Filter extends EIPStep {
     @Override
     protected void processBranches(final Step step, final StepCatalog catalog,
                                    final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
-
         var id = STEPS_LABEL;
         if (getSimple() != null && !getSimple().isBlank()) {
             id = String.valueOf(getSimple());
         }
-        Branch branch = new Branch(id);
-        if (getSteps() != null) {
-            int i = 0;
-            for (var s : steps) {
-                final var size = getSteps().size();
-                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0, ++i == size));
-            }
-        }
-        step.getBranches().add(branch);
+        step.setBranches(List.of(createBranch(id, this.getSteps(), kameletStepParserService)));
     }
     @Override
     public Map<String, Object> getRepresenterProperties() {

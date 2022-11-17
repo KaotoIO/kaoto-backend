@@ -7,7 +7,6 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.HashMap;
@@ -239,16 +238,7 @@ public class Multicast extends EIPStep {
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
-
-        Branch branch = new Branch(STEPS_LABEL);
-        step.setBranches(List.of(branch));
-        if (this.getSteps() != null) {
-            int i = 0;
-            for (var s : this.getSteps()) {
-                branch.getSteps().add(
-                        kameletStepParserService.processStep(s, i == 0, i++ == this.getSteps().size() - 1));
-            }
-        }
+        step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
     }
 
     @Override

@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.expression.Tokenizer;
 import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -243,17 +241,7 @@ public class Split extends Tokenizer {
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
-
-        Branch branch = new Branch(STEPS_LABEL);
-        step.getBranches().add(branch);
-        List<Step> steps = branch.getSteps();
-        if (this.getSteps() != null) {
-            int i = 0;
-            for (var s : this.getSteps()) {
-                steps.add(kameletStepParserService.processStep(s, i == 0, i++ == this.getSteps().size() - 1));
-            }
-        }
+        step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
     }
 
     @Override
