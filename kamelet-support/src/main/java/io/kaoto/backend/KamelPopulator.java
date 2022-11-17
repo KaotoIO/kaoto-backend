@@ -331,7 +331,7 @@ public class KamelPopulator {
                     flowStep = getChoiceStep(step);
                     break;
                 case "filter":
-                    flowStep = new FilterFlowStep(processFilter(step.getBranches().get(0)));
+                    flowStep = new FilterFlowStep(step, this);
                     break;
                 case "idempotent-consumer":
                     flowStep = new IdempotentConsumerFlowStep(step, this);
@@ -449,16 +449,6 @@ public class KamelPopulator {
                 }
             }
         }
-    }
-
-
-    private Filter processFilter(final Branch b) {
-        Filter filter = new Filter();
-
-        filter.setSteps(processSteps(b));
-        filter.setSimple(b.getCondition());
-
-        return filter;
     }
 
     private FlowStep getCamelConnector(final Step step, final boolean to) {

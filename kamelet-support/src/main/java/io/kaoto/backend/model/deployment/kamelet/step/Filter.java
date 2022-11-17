@@ -1,26 +1,41 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.kaoto.backend.KamelPopulator;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Branch;
+import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
-@JsonPropertyOrder({"simple", "steps"})
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Filter implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -7206333633897407153L;
+public class Filter extends EIPStep {
 
-    @JsonProperty("simple")
+    public static final String STEPS_LABEL = "steps";
+    public static final String SIMPLE_LABEL = "simple";
+    @JsonProperty(SIMPLE_LABEL)
     private String simple;
 
-    @JsonProperty("steps")
+    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
+
+    public Filter(Step step, final KamelPopulator kameletPopulator) {
+        super(step);
+
+        if (step.getBranches() != null && !step.getBranches().isEmpty()) {
+            setSteps(kameletPopulator.processSteps(step.getBranches().get(0)));
+        }
+    }
+
+    public Filter() {
+        //Needed for serialization
+    }
 
     public List<FlowStep> getSteps() {
         return steps;
@@ -29,6 +44,62 @@ public class Filter implements Serializable {
     public void setSteps(
             final List<FlowStep> steps) {
         this.steps = steps;
+    }
+
+    @Override
+    protected void processBranches(final Step step, final StepCatalog catalog,
+                                   final KameletStepParserService kameletStepParserService) {
+        step.setBranches(new LinkedList<>());
+
+        var id = STEPS_LABEL;
+        if (getSimple() != null && !getSimple().isBlank()) {
+            id = String.valueOf(getSimple());
+        }
+        Branch branch = new Branch(id);
+        if (getSteps() != null) {
+            int i = 0;
+            for (var s : steps) {
+                final var size = getSteps().size();
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0, ++i == size));
+            }
+        }
+        step.getBranches().add(branch);
+    }
+    @Override
+    public Map<String, Object> getRepresenterProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        if (this.getSimple() != null) {
+            properties.put(SIMPLE_LABEL, this.getSimple());
+        }
+        if (this.getSteps() != null) {
+            properties.put(STEPS_LABEL, this.getSteps());
+        }
+
+        return properties;
+    }
+
+
+
+    @Override
+    protected void assignProperty(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case SIMPLE_LABEL:
+                parameter.setValue(this.getSimple());
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void assignAttribute(final Parameter parameter) {
+        switch (parameter.getId()) {
+            case SIMPLE_LABEL:
+                this.setSimple(String.valueOf(parameter.getValue()));
+                break;
+            default:
+                break;
+        }
     }
 
     public String getSimple() {
