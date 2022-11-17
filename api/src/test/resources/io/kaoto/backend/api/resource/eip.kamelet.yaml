@@ -94,6 +94,8 @@ spec:
                   stop-on-exception: true
                   parallel-processing: true
                   steps:
+                  - process:
+                      ref: '{{myProcessor}}'
                   - pipeline:
                       steps:
                       - convert-body-to:
