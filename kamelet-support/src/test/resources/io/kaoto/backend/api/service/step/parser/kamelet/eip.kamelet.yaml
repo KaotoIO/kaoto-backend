@@ -81,6 +81,8 @@ spec:
                 simple: bar
             - split:
                 steps:
+                - process:
+                    ref: '{{myProcessor}}'
                 - remove-property:
                     name: property
                 tokenize: ','
