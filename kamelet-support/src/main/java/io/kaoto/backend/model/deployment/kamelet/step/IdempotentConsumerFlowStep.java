@@ -44,9 +44,7 @@ public class IdempotentConsumerFlowStep implements FlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = this.getIdempotentConsumer().getStep(catalog, LABEL, kameletStepParserService);
-        this.getIdempotentConsumer().processBranches(res, catalog, kameletStepParserService);
-        return res;
+        return this.getIdempotentConsumer().getStep(catalog, LABEL, kameletStepParserService);
     }
 
     public IdempotentConsumer getIdempotentConsumer() {

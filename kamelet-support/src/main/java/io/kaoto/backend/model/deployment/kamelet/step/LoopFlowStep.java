@@ -10,11 +10,9 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 @JsonPropertyOrder({"loop"})
@@ -47,23 +45,7 @@ public class LoopFlowStep implements FlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = this.getLoop().getStep(catalog, LOOP_LABEL, kameletStepParserService);
-
-        res.setBranches(new LinkedList<>());
-
-        if (this.getLoop() != null) {
-            int i = 0;
-            for (var flow : this.getLoop().getSteps()) {
-                Branch branch = new Branch(LOOP_LABEL);
-                branch.getSteps().add(kameletStepParserService.processStep(flow, i == 0,
-                        i++ == this.getLoop().getSteps().size() - 1));
-                kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
-                        branch.getCondition());
-                res.getBranches().add(branch);
-            }
-        }
-
-        return res;
+        return this.getLoop().getStep(catalog, LOOP_LABEL, kameletStepParserService);
     }
 
     public Loop getLoop() {
