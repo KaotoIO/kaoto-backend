@@ -10,11 +10,9 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 @JsonPropertyOrder({"pipeline"})
@@ -47,23 +45,7 @@ public class PipelineFlowStep implements FlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = this.getPipeline().getStep(catalog, LABEL, kameletStepParserService);
-
-        res.setBranches(new LinkedList<>());
-
-        if (this.getPipeline() != null) {
-            int i = 0;
-            Branch branch = new Branch(LABEL);
-            for (var flow : this.getPipeline().getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(flow, i == 0,
-                        ++i == this.getPipeline().getSteps().size()));
-                kameletStepParserService.setValueOnStepProperty(res, KameletStepParserService.SIMPLE,
-                        branch.getCondition());
-            }
-            res.getBranches().add(branch);
-        }
-
-        return res;
+        return this.getPipeline().getStep(catalog, LABEL, kameletStepParserService);
     }
 
     public Pipeline getPipeline() {
