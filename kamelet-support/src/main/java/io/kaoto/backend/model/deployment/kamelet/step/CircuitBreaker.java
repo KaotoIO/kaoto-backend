@@ -7,7 +7,6 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
 import java.util.HashMap;
@@ -108,28 +107,14 @@ public class CircuitBreaker extends EIPStep {
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
         step.setBranches(new LinkedList<>());
-
         var identifier = STEPS_LABEL;
         if (this.getDescription() != null) {
             identifier = this.getDescription().toString();
         }
-        Branch branch = new Branch(identifier);
-        step.getBranches().add(branch);
-        if (this.getSteps() != null) {
-            int i = 0;
-            for (var s : this.getSteps()) {
-                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
-                        i++ == this.getSteps().size() - 1));
-            }
-        }
-        branch = new Branch(ON_FALLBACK_LABEL);
-        step.getBranches().add(branch);
-        if (this.getOnFallback() != null && this.getOnFallback().getSteps() != null) {
-            for (var s : this.getOnFallback().getSteps()) {
-                int i = 0;
-                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,
-                        i++ == this.getSteps().size() - 1));
-            }
+        step.getBranches().add(createBranch(identifier, this.getSteps(), kameletStepParserService));
+        if (this.getOnFallback() != null) {
+            step.getBranches()
+                    .add(createBranch(ON_FALLBACK_LABEL, this.getOnFallback().getSteps(), kameletStepParserService));
         }
     }
 

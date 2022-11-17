@@ -5,11 +5,14 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,6 +69,19 @@ public abstract class EIPStep implements Serializable {
     protected void processBranches(final Step step, final StepCatalog catalog,
                          final KameletStepParserService kameletStepParserService) {
         //Ready to override
+    }
+
+    protected Branch createBranch(final String id, final List<FlowStep> steps,
+                           final KameletStepParserService kameletStepParserService) {
+        Branch branch = new Branch(id);
+        if (steps != null) {
+            int i = 0;
+            int size = steps.size();
+            for (var s : steps) {
+                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,++i == size));
+            }
+        }
+        return branch;
     }
 
     protected abstract void assignProperty(final Parameter parameter);
