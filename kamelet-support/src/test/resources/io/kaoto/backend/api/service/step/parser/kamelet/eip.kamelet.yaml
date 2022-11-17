@@ -88,15 +88,19 @@ spec:
                 stop-on-exception: true
                 parallel-processing: true
                 steps:
-                - split:
-                    simple: ${body}
+                - pipeline:
                     steps:
-                    - marshal:
-                        json: {}
-                - claim-check:
-                    operation: Get
-                    key: foo
-                    filter: header:(foo|bar)
+                    - split:
+                        simple: ${body}
+                        steps:
+                        - marshal:
+                            json: {}
+                - pipeline:
+                    steps:
+                    - claim-check:
+                        operation: Get
+                        key: foo
+                        filter: header:(foo|bar)
           - simple: '{{?baz}}'
             steps:
             - enrich:
