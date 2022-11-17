@@ -332,7 +332,7 @@ public class KamelPopulator {
                     flowStep = new CircuitBreakerFlowStep(step, this);
                     break;
                 case "choice":
-                    flowStep = getChoiceStep(step);
+                    flowStep = new ChoiceFlowStep(step, this);
                     break;
                 case "filter":
                     flowStep = new FilterFlowStep(step, this);
@@ -361,38 +361,6 @@ public class KamelPopulator {
         return flowStep;
     }
 
-    private FlowStep getChoiceStep(final Step step) {
-
-        final var choice = new SuperChoice();
-        final var flowStep = new ChoiceFlowStep(choice);
-
-        List<Choice> choices = new LinkedList<>();
-
-        if (step.getBranches() != null) {
-            for (Branch b : step.getBranches()) {
-                if (b.getCondition() != null) {
-                    choices.add(processChoice(b));
-                } else {
-                    var otherwise = new Otherwise();
-                    otherwise.setSteps(processSteps(b));
-                    choice.setOtherwise(otherwise);
-                }
-            }
-        }
-        choice.setChoice(choices);
-
-        return flowStep;
-    }
-
-    private Choice processChoice(final Branch b) {
-        Choice choice = new Choice();
-
-        choice.setSteps(processSteps(b));
-        choice.setSimple(b.getCondition());
-
-        return choice;
-    }
-
     public List<FlowStep> processSteps(final Branch b) {
         var list = new LinkedList<FlowStep>();
         if (b.getSteps() != null) {
@@ -404,7 +372,6 @@ public class KamelPopulator {
         }
         return list;
     }
-
 
 
     public static Expression getExpression(final Step step) {
