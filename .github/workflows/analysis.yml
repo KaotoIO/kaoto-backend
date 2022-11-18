@@ -39,3 +39,61 @@ jobs:
         uses: github/codeql-action/analyze@v2
       - name: 💅 Codecov Analysis
         run: bash <(curl -s https://codecov.io/bash)
+
+  native-tests:
+    name: 👩🏼‍🏭 Native tests for ${{ matrix.os }} 👩🏼‍🏭
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: macos-latest
+          - os: windows-latest
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: '22.2.0'
+          cache: 'maven'
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Run native tests
+        run: mvn install -Pnative
+
+  jvm-tests:
+    name: 👩🏼‍🏭 JVM tests for ${{ matrix.os }} 👩🏼‍🏭
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: macos-latest
+          - os: windows-latest
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 17
+          check-latest: true
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Run tests
+        run: mvn install
