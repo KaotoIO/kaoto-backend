@@ -110,15 +110,20 @@ spec:
                   simple: ${body}
             - transform:
                 simple: baz
-            - aggregate:
-                correlation-expression:
-                  simple: ${header.StockSymbol}
-                aggregation-strategy: myAggregatorStrategy
-                completion-size: 2
-            - log:
-                message: test
-                logging-level: INFO
-                log-name: yaml
+            - load-balance:
+                weighted:
+                  distribution-ratio: 2,1
+                  round-robin: false
+                steps:
+                - aggregate:
+                    correlation-expression:
+                      simple: ${header.StockSymbol}
+                    aggregation-strategy: myAggregatorStrategy
+                    completion-size: 2
+                - log:
+                    message: test
+                    logging-level: INFO
+                    log-name: yaml
           otherwise:
             steps:
             - remove-header:
