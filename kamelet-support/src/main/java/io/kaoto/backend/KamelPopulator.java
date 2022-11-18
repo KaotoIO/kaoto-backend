@@ -1,6 +1,8 @@
 package io.kaoto.backend;
 
+import io.fabric8.kubernetes.api.model.LoadBalancerIngressFluent;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.grpc.LoadBalancer;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
@@ -21,6 +23,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.LoadBalanceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
@@ -158,7 +161,7 @@ public class KamelPopulator {
     }
 
     private void setParameters(final List<Parameter> parameters,
-                           final KameletDefinition def) {
+                               final KameletDefinition def) {
         for (Parameter p : parameters) {
             //this will override anything that comes from the metadata set
             //which means there are edited changes
@@ -190,7 +193,7 @@ public class KamelPopulator {
     }
 
     private void populateAdditionalProperties(final Kamelet kamelet,
-                            final Map<String, String> additionalProperties) {
+                                              final Map<String, String> additionalProperties) {
         kamelet.getMetadata().setAdditionalProperties(new HashMap<>());
         for (var entry : additionalProperties.entrySet()) {
             kamelet.getMetadata().getAdditionalProperties().put(entry.getKey(), entry.getValue());
@@ -260,8 +263,8 @@ public class KamelPopulator {
         return params;
     }
 
-    /** This implementation generates code "Using URI and parameters." as
-     * defined in the "Defining Endpoints" section of
+    /**
+     * This implementation generates code "Using URI and parameters." as defined in the "Defining Endpoints" section of
      * https://camel.apache.org/camel-k/latest/languages/yaml.html
      **/
     private FlowStep processStep(final Step step, final boolean to) {
@@ -269,7 +272,7 @@ public class KamelPopulator {
 
         if ("Camel-Connector".equalsIgnoreCase(step.getKind())) {
             flowStep = getCamelConnector(step, to);
-        } else  if ("EIP".equalsIgnoreCase(step.getKind())) {
+        } else if ("EIP".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
                 case "aggregate":
                     flowStep = new AggregateFlowStep(step);
@@ -326,7 +329,7 @@ public class KamelPopulator {
                     flowStep = getCamelConnector(step, to);
                     break;
             }
-        } else  if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
+        } else if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
                 case "circuit-breaker":
                     flowStep = new CircuitBreakerFlowStep(step, this);
@@ -339,6 +342,9 @@ public class KamelPopulator {
                     break;
                 case "idempotent-consumer":
                     flowStep = new IdempotentConsumerFlowStep(step, this);
+                    break;
+                case "load-balance":
+                    flowStep = new LoadBalanceFlowStep(step, this);
                     break;
                 case "loop":
                     flowStep = new LoopFlowStep(step, this);
@@ -380,13 +386,13 @@ public class KamelPopulator {
             if (p.getValue() == null) {
                 continue;
             }
-           if (NAME.equalsIgnoreCase(p.getId())) {
-               expression.setName(p.getValue().toString());
-           } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
-               expression.setSimple(p.getValue().toString());
-           } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
-               expression.setConstant(p.getValue().toString());
-           }
+            if (NAME.equalsIgnoreCase(p.getId())) {
+                expression.setName(p.getValue().toString());
+            } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
+                expression.setSimple(p.getValue().toString());
+            } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
+                expression.setConstant(p.getValue().toString());
+            }
         }
         return expression;
     }
@@ -432,5 +438,5 @@ public class KamelPopulator {
         return flowStep;
     }
 
-    enum Type { source, sink, action }
+    enum Type {source, sink, action}
 }
