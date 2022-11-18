@@ -14,7 +14,7 @@ then
   echo "Downloading camel component metadata."
   wget https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip
   mv "main.zip" "api/src/main/resources/camel-component-metadata.zip"
-  git add api/src/main/resources/camel-component-metadata.zip
+  git add -f "api/src/main/resources/camel-component-metadata.zip"
 
   echo "Downloading kamelets."
   echo "Enter kamelets version:"
@@ -22,20 +22,21 @@ then
   read -r versionKamelets
 
   path=$(pwd)
+  git rm $path"/api/src/main/resources/camel-kamelets-*.jar"
   cd /tmp
   mkdir kamelets
   cd kamelets
   wget "https://github.com/apache/camel-kamelets/archive/refs/tags/v"$versionKamelets".zip"
   unzip *zip
-  cd camel-kamelets-0.9.3/kamelets/
+  cd "camel-kamelets-"$versionKamelets"/kamelets/"
   zip "camel-kamelets-"$versionKamelets".jar" *
   mv "camel-kamelets-"$versionKamelets".jar" $path"/api/src/main/resources/"
   cd $path
-  git add "api/src/main/resources/camel-kamelets-"$versionKamelets".jar"
+  git add -f "api/src/main/resources/camel-kamelets-"$versionKamelets".jar"
   sed -i 's/kamelets-.*/kamelets-'$versionKamelets'.jar$"/g' api/src/main/resources/resources-config.json
   git add api/src/main/resources/resources-config.json
 
-  git commit -m "Updating zip files with step catalog components."
+  git commit -m "chore(resources): Updating zip files with step catalog components."
 fi
 
 echo "Enter version of Kaoto to release:"
