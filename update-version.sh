@@ -59,7 +59,7 @@ read -r version2
 
 mvn versions:set -DnewVersion="$version2"-SNAPSHOT
 git add .
-git commit -m "Updating to version $version2-SNAPSHOT"
+git commit -m "chore(release): Updating to version $version2-SNAPSHOT"
 
 echo ""
 echo "Check the git log and if you like what you see, just do"
