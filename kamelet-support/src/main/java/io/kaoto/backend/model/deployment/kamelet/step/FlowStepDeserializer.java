@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import org.jboss.logging.Logger;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,27 +17,25 @@ public class FlowStepDeserializer extends JsonDeserializer {
     private final Logger log = Logger.getLogger(FlowStepDeserializer.class);
 
     @Override
-    public Object deserialize(
-            final JsonParser jsonParser,
-            final DeserializationContext deserializationContext) {
+    public Object deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext) {
         try {
-            JsonNode n = jsonParser.getCodec().readTree(jsonParser);
-            return deserializeFlowStep(n);
-        } catch (Exception e) {
-            log.error("Error trying to deserialize step: " + e.getMessage());
+            return deserializeFlowStep(jsonParser.getCodec().readTree(jsonParser));
+        } catch (IOException e) {
+            log.warn("Error trying to deserialize step: ", e);
         }
 
-        return new UriFlowStep();
+        return new InvalidStep();
     }
 
     public FlowStep deserializeFlowStep(final JsonNode n) throws JsonProcessingException {
+        final var content = n.toPrettyString();
         for (var step : getFlowSteps().entrySet()) {
             if (n.get(step.getKey()) != null) {
-                return (FlowStep) new ObjectMapper().readValue(n.toPrettyString(), step.getValue());
+                return (FlowStep) new ObjectMapper().readValue(content, step.getValue());
             }
         }
 
-        return new UriFlowStep();
+        return new ObjectMapper().readValue(content, InvalidStep.class);
     }
 
     private Map<String, Class> getFlowSteps() {

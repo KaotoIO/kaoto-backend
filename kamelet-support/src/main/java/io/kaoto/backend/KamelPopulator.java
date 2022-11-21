@@ -23,6 +23,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.InvalidStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoadBalanceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LogFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.LoopFlowStep;
@@ -326,7 +327,7 @@ public class KamelPopulator {
                     flowStep = getUnmarshalStep(step);
                     break;
                 default:
-                    flowStep = getCamelConnector(step, to);
+                    flowStep = new InvalidStep(step, this);
                     break;
             }
         } else if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
@@ -359,7 +360,7 @@ public class KamelPopulator {
                     flowStep = new PipelineFlowStep(step, this);
                     break;
                 default:
-                    flowStep = getCamelConnector(step, to);
+                    flowStep = new InvalidStep(step, this);
                     break;
             }
         }
