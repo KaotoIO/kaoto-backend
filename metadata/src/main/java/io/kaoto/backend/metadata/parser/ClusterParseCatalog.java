@@ -91,22 +91,16 @@ public class ClusterParseCatalog<T extends Metadata>
 
             for (CustomResource integration : resources) {
                 try {
-                    FileAttribute<Set<PosixFilePermission>> attr =
-                            PosixFilePermissions.asFileAttribute(
-                                    PosixFilePermissions
-                                            .fromString("rwx------"));
-                    Path tmp = Files.createTempFile(
-                            dir.toPath(), "remote-", ".yaml", attr);
+                	File tmpFile = createTmpFileWithFullOwnerRights(dir);
+                	tmpFile.deleteOnExit();
                     try (FileOutputStream fos =
-                                 new FileOutputStream(tmp.toFile())) {
-
+                                 new FileOutputStream(tmpFile)) {
                         InputStreamReader isr =
                                 new InputStreamReader(new ByteArrayInputStream(
                                         yaml.dumpAsMap(integration)
                                             .getBytes(StandardCharsets.UTF_8)));
 
                         IOUtils.copy(isr, fos, StandardCharsets.UTF_8);
-                        tmp.toFile().deleteOnExit();
                     }
                 } catch (IOException e) {
                     log.error("Error trying to create temporary file.", e);
@@ -138,6 +132,29 @@ public class ClusterParseCatalog<T extends Metadata>
         }
 
         return metadataList;
+    }
+
+    private File createTmpFileWithFullOwnerRights(File dir) throws IOException {
+        File tmpFile;
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            Path tmp = Files.createTempFile(dir.toPath(), "remote-", ".yaml");
+            tmpFile = tmp.toFile();
+            if (!tmpFile.setWritable(true, true)) {
+                log.trace("Cannot set Writeable rights for owner on "+tmpFile.getAbsolutePath());
+            }
+            if (!tmpFile.setExecutable(true, true)) {
+                log.trace("Cannot set Executable rights for owner on "+tmpFile.getAbsolutePath());
+            }
+            if (!tmpFile.setReadable(true, true)) {
+                log.trace("Cannot set Readable rights for owner on "+tmpFile.getAbsolutePath());
+            }
+        } else {
+            FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions
+                    .asFileAttribute(PosixFilePermissions.fromString("rwx------"));
+            Path tmp = Files.createTempFile(dir.toPath(), "remote-", ".yaml", attr);
+            tmpFile = tmp.toFile();
+        }
+        return tmpFile;
     }
 
     @Override
