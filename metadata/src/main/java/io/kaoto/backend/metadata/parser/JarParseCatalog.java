@@ -5,7 +5,6 @@ import io.kaoto.backend.model.Metadata;
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,7 +80,7 @@ public class JarParseCatalog<T extends Metadata>
                                       final List<CompletableFuture<Void>> futureMd, final List<T> metadataList)
             throws IOException {
         long size = zipEntry.getSize();
-        if (!zipEntry.getName().endsWith(File.separator) && this.processFile.isDesiredType(zipEntry.getName())) {
+        if (!zipEntry.isDirectory() && this.processFile.isDesiredType(zipEntry.getName())) {
             final InputStreamReader isr = new InputStreamReader(zis);
             final String content = IOUtils.toString(isr);
             size = content.length();
