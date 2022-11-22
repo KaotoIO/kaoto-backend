@@ -49,6 +49,7 @@ jobs:
         include:
           - os: ubuntu-latest
           - os: macos-latest
+          - os: windows-latest
     steps:
       - name: 🗄️ Checkout Source Code
         uses: actions/checkout@v3
@@ -78,6 +79,7 @@ jobs:
         include:
           - os: ubuntu-latest
           - os: macos-latest
+          - os: windows-latest
     steps:
       - name: 🗄️ Checkout Source Code
         uses: actions/checkout@v3
