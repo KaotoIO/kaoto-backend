@@ -162,7 +162,7 @@ public class KameletStepParserService
         try {
             return step.getStep(catalog, this, start, end);
         } catch (Exception e) {
-            log.warn("Can't parse step -> " + step.getClass(), e);
+            log.warn("Can't parse step -> " + step, e);
         }
         return null;
     }

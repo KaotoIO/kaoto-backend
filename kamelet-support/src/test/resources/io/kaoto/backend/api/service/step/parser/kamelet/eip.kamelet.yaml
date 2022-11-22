@@ -105,6 +105,10 @@ spec:
                         filter: header:(foo|bar)
           - simple: '{{?baz}}'
             steps:
+            - recipient-list:
+                stop-on-exception: true
+                constant: direct:a,direct:b
+                parallel-processing: true
             - enrich:
                 expression:
                   simple: ${body}

@@ -51,6 +51,10 @@ spec:
                   library: Gson
           - simple: '{{?baz}}'
             steps:
+            - recipient-list:
+                stop-on-exception: true
+                constant: direct:a,direct:b
+                parallel-processing: true
             - transform:
                 simple: baz
             - aggregate:
