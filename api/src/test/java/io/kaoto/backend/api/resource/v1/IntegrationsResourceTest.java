@@ -1,6 +1,27 @@
 package io.kaoto.backend.api.resource.v1;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
@@ -8,27 +29,6 @@ import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
@@ -162,6 +162,6 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        assertEquals(yaml, res.extract().body().asString());
+        assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
     }
 }
