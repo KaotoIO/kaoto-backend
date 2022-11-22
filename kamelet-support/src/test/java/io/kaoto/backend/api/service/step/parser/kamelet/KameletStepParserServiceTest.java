@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -187,9 +188,8 @@ class KameletStepParserServiceTest {
         final var parsed = service.deepParse(kameletEIP);
         assertNotNull(parsed);
         assertTrue(deploymentService.appliesTo(parsed.getSteps()));
-        assertEquals(kameletEIP, deploymentService.parse(parsed.getSteps(), parsed.getMetadata(),
-                parsed.getParameters()));
-
+        String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
+        assertThat(parsedString).isEqualToNormalizingNewlines(kameletEIP);
     }
 
     @Test

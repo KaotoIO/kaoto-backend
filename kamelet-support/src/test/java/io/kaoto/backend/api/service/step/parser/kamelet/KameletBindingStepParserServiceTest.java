@@ -9,6 +9,7 @@ import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletBindingD
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -71,7 +73,7 @@ class KameletBindingStepParserServiceTest {
         assertTrue(parsed.getParameters().isEmpty());
         var yaml = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
 
-        assertEquals(binding, yaml);
+        assertThat(yaml).isEqualToNormalizingNewlines(binding);
     }
 
     @Test
@@ -84,7 +86,7 @@ class KameletBindingStepParserServiceTest {
         assertEquals(2, parsed.getSteps().size());
        var yaml = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
 
-        assertEquals(binding, yaml);
+       assertThat(yaml).isEqualToNormalizingNewlines(binding);
     }
 
     @Test

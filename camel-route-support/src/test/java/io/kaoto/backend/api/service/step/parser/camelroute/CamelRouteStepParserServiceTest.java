@@ -1,19 +1,21 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class CamelRouteStepParserServiceTest {
@@ -57,7 +59,7 @@ class CamelRouteStepParserServiceTest {
 
         var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
                 steps.getParameters());
-        assertEquals(route, yaml);
+        assertThat(yaml).isEqualToNormalizingNewlines(route);
         assertTrue(camelRouteDeploymentGeneratorService.supportedCustomResources().isEmpty());
     }
 }
