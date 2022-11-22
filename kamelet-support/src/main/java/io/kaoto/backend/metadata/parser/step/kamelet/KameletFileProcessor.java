@@ -106,10 +106,10 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
     private String getKind(final String yaml) {
         Pattern pattern = Pattern.compile(
-                "(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
+                "[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
         if (matcher.find()) {
-            return matcher.group(2).trim();
+            return matcher.group(1).trim();
         } else {
             return null;
         }

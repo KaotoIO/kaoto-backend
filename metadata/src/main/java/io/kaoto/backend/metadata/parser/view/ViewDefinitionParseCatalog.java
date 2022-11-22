@@ -74,10 +74,10 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
     private boolean appliesTo(final String yaml) {
         String[] kinds = new String[]{"generic", "step"};
 
-        Pattern pattern = Pattern.compile("(\ntype:)(.+)\n", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("[\r|\n]type:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
         if (matcher.find()) {
-            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(2).trim()));
+            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(1).trim()));
         }
 
         return false;
