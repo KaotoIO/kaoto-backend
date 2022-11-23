@@ -31,7 +31,7 @@
 
         <!-- Shared dependencies -->
         <compiler-plugin.version>3.10.1</compiler-plugin.version>
-        <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+        <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
     </properties>
     <build>
         <plugins>
