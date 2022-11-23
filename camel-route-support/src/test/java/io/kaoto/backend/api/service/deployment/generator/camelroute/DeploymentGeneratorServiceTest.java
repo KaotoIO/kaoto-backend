@@ -29,7 +29,6 @@ class DeploymentGeneratorServiceTest {
         String yaml = "apiVersion: camel.apache.org/v1\n"
                 + "kind: Integration\n"
                 + "metadata:\n"
-                + "  labels: {}\n"
                 + "  name: hello.yaml\n"
                 + "spec:\n"
                 + "  flows:\n"

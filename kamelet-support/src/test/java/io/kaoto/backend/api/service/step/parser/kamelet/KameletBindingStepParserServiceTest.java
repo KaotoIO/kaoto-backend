@@ -67,10 +67,8 @@ class KameletBindingStepParserServiceTest {
 
     @Test
     void parseKnative() throws URISyntaxException, IOException {
-        final String binding = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "knative-binding.yaml")
-                        .toURI()));
+        final String binding = Files.readString(
+                Path.of(KameletBindingStepParserServiceTest.class.getResource("knative-binding.yaml").toURI()));
         var parsed = service.deepParse(binding);
         assertEquals(2, parsed.getSteps().size());
        var yaml = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
