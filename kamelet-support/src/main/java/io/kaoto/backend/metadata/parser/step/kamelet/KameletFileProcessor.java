@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
+import io.kaoto.backend.model.deployment.kamelet.SimplifiedKamelet;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.IntegerParameter;
@@ -46,7 +46,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             var kind = getKind(yaml);
             ObjectMapper yamlMapper =
                 new ObjectMapper(new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            Kamelet kamelet = yamlMapper.readValue(yaml, Kamelet.class);
+            SimplifiedKamelet kamelet = yamlMapper.readValue(yaml, SimplifiedKamelet.class);
 
             Step step = new Step();
             step.setKind(kind);
