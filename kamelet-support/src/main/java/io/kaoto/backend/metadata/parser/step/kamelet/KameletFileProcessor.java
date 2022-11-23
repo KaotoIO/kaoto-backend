@@ -150,15 +150,15 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         return switch (type) {
             //number, integer, string, boolean, array, object, or null
             case "number" -> new NumberParameter(title, title, description,
-                    (value != null ? Double.valueOf(value) : null));
+                    value != null ? Double.valueOf(value) : null);
             case "integer" -> new IntegerParameter(title, title, description,
-                    (value != null ? Integer.valueOf(value) : null));
+                    value != null ? Integer.valueOf(value) : null);
             case "string" -> new StringParameter(title, title, description,
                     value, property.getFormat());
             case "boolean" -> new BooleanParameter(title, title, description,
-                    (value != null ? Boolean.valueOf(value) : null));
+                    value != null ? Boolean.valueOf(value) : null);
             case "array" -> new ArrayParameter(title, title, description,
-                    (value != null ? value.split(",") : null));
+                    value != null ? value.split(",") : null);
             default -> new ObjectParameter(title, title, description,
                     value);
         };

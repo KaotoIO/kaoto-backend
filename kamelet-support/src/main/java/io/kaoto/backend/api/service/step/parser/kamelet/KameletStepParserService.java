@@ -118,17 +118,17 @@ public class KameletStepParserService
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null? Integer.valueOf(def.getDefault()) : null));
+                                def.getDefault() != null? Integer.valueOf(def.getDefault()) : null);
                         break;
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null? Boolean.valueOf(def.getDefault()) : null));
+                                def.getDefault() != null? Boolean.valueOf(def.getDefault()) : null);
                         break;
                     case "array":
                         p = new ArrayParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                (def.getDefault() != null? def.getDefault().split(",") : null));
+                                def.getDefault() != null? def.getDefault().split(",") : null);
                         break;
                     default:
                         p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getDefault());
@@ -148,7 +148,7 @@ public class KameletStepParserService
             if (fromSteps != null) {
                 int i = 0;
                 for (FlowStep flowStep : fromSteps) {
-                    steps.add(processStep(flowStep, (i == 0), (i++ == fromSteps.size() - 1)));
+                    steps.add(processStep(flowStep, i == 0, i++ == fromSteps.size() - 1));
                 }
             }
         }
