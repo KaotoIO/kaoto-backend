@@ -204,7 +204,8 @@ public class ClusterService {
 
         log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
 
-        return kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace)).withName(name).delete();
+        return !kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace))
+                            .withName(name).delete().isEmpty();
     }
 
     /*
