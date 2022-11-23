@@ -55,6 +55,9 @@ spec:
                 stop-on-exception: true
                 constant: direct:a,direct:b
                 parallel-processing: true
+            - remove-headers:
+                exclude-pattern: toExclude
+                pattern: toRemove
             - transform:
                 simple: baz
             - aggregate:
