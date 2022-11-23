@@ -42,8 +42,7 @@ public class KameletBindingStepParserService
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
     private static final String KNATIVE = "KNATIVE";
-    private static final List<String> KINDS =
-            Arrays.asList(KAMELET, KNATIVE, CAMEL_CONNECTOR);
+    private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE, CAMEL_CONNECTOR);
 
     private StepCatalog catalog;
 
@@ -65,8 +64,7 @@ public class KameletBindingStepParserService
     @Override
     public ParseResult<Step> deepParse(final String input) {
         if (!appliesTo(input)) {
-            throw new IllegalArgumentException(
-                    "Wrong format provided. This is not parseable by us");
+            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
         }
 
         ParseResult<Step> res = new ParseResult<>();
@@ -74,24 +72,17 @@ public class KameletBindingStepParserService
         List<Step> steps = new ArrayList<>();
         Map<String, Object> md = new LinkedHashMap<>();
         try {
-            ObjectMapper yamlMapper =
-                    new ObjectMapper(new YAMLFactory())
-                    .configure(
-                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                            false);
-            KameletBinding binding = yamlMapper.readValue(input,
-                    KameletBinding.class);
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory())
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            KameletBinding binding = yamlMapper.readValue(input, KameletBinding.class);
             processMetadata(md, binding.getMetadata());
             processSpec(steps, binding.getSpec());
 
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(
-                    "Wrong format provided. This is not parseable by us");
+            throw new IllegalArgumentException("Wrong format provided. This is not parseable by us");
         }
 
-        res.setSteps(steps.stream()
-                .filter(Objects::nonNull)
-                .toList());
+        res.setSteps(steps.stream().filter(Objects::nonNull).toList());
         res.setMetadata(md);
         res.setParameters(Collections.emptyList());
         return res;
@@ -119,16 +110,11 @@ public class KameletBindingStepParserService
                 log.trace("Found uri component. Probably a Camel Conector.");
                 String uri = bindingStep.getUri();
                 step = catalog.getReadOnlyCatalog()
-                        .searchByName(
-                                uri.substring(0, uri.indexOf(":")))
+                        .searchByName(uri.substring(0, uri.indexOf(":")))
                         .stream()
-                        .filter(s -> KINDS.stream()
-                                .anyMatch(k ->
-                                        s.getKind().equalsIgnoreCase(k)))
+                        .filter(s -> KINDS.stream().anyMatch(k -> s.getKind().equalsIgnoreCase(k)))
                         .sorted(Comparator.comparing(
-                                s -> KINDS.indexOf(((Step) s).getKind()
-                                        .toUpperCase(Locale.ROOT)))
-                                .reversed())
+                                s -> KINDS.indexOf(((Step) s).getKind().toUpperCase(Locale.ROOT))).reversed())
                         .findFirst();
 
                 if (step.isPresent()) {
@@ -146,24 +132,19 @@ public class KameletBindingStepParserService
                 }
 
                 var candidates = catalog.getReadOnlyCatalog()
-                            .searchByName(name).stream();
+                        .searchByName(name).stream();
                 if (!kind.isBlank()) {
                     candidates =
-                            candidates.filter(s ->
-                                    s.getKind().equalsIgnoreCase(
-                                            bindingStep.getRef().getKind()));
+                            candidates.filter(s -> s.getKind().equalsIgnoreCase(bindingStep.getRef().getKind()));
                 }
                 step = candidates
-                        .sorted(Comparator.comparing(
-                                s -> KINDS.indexOf(s.getKind()
-                                        .toUpperCase(Locale.ROOT))))
+                        .sorted(Comparator.comparing(s -> KINDS.indexOf(s.getKind().toUpperCase(Locale.ROOT))))
                         .findFirst();
 
                 //knative
                 if (step.isPresent()
                         && step.get().getKind().equalsIgnoreCase(KNATIVE)) {
-                    for (Parameter p : new ArrayList<>(
-                            step.get().getParameters())) {
+                    for (Parameter p : new ArrayList<>(step.get().getParameters())) {
                         if (p.getId().equalsIgnoreCase("kind")) {
                             p.setValue(bindingStep.getRef().getKind());
                         }
@@ -175,12 +156,9 @@ public class KameletBindingStepParserService
             }
 
             if (step.isPresent()) {
-                log.trace("Found step " + step.get().getName() + " of "
-                        + "kind " + step.get().getKind());
-                setValuesOnParameters(step.get(),
-                        bindingStep.getProperties());
-                setValuesOnParameters(step.get(),
-                        bindingStep.getParameters());
+                log.trace("Found step " + step.get().getName() + " of kind " + step.get().getKind());
+                setValuesOnParameters(step.get(), bindingStep.getProperties());
+                setValuesOnParameters(step.get(), bindingStep.getParameters());
             }
         } catch (Exception e) {
             log.warn("Can't parse step -> " + e.getMessage());
@@ -188,8 +166,7 @@ public class KameletBindingStepParserService
         return step.orElse(null);
     }
 
-    private void setValuesOnParameters(final Step step,
-                                       final Map<String, String> properties) {
+    private void setValuesOnParameters(final Step step, final Map<String, String> properties) {
 
         for (Map.Entry<String, String> c : properties.entrySet()) {
             var valid = false;
@@ -238,8 +215,7 @@ public class KameletBindingStepParserService
         }
     }
 
-    private void processMetadata(final Map<String, Object> res,
-            final ObjectMeta metadata) {
+    private void processMetadata(final Map<String, Object> res, final ObjectMeta metadata) {
         res.put("name", metadata.getName());
         res.put("additionalProperties", metadata.getAdditionalProperties());
         res.put("finalizers", metadata.getFinalizers());

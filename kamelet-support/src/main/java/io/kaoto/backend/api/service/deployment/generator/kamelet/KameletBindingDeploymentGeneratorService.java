@@ -93,11 +93,9 @@ public class KameletBindingDeploymentGeneratorService
         if (steps.size() > 1) {
             spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
         }
-        KameletBinding binding = new KameletBinding(String.valueOf(
-                metadata.getOrDefault("name", "")), spec);
+        KameletBinding binding = new KameletBinding(String.valueOf(metadata.getOrDefault("name", "")), spec);
 
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class),
-                new KameletRepresenter());
+        Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
         return yaml.dumpAsMap(binding);
     }
 

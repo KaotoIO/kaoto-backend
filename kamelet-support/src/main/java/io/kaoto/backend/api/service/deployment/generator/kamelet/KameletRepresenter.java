@@ -69,6 +69,7 @@ public class KameletRepresenter extends Representer {
     public static final String API_VERSION = "apiVersion";
 
     public KameletRepresenter() {
+        super(new DumperOptions());
         this.getPropertyUtils().setSkipMissingProperties(true);
         this.getPropertyUtils().setAllowReadOnlyProperties(true);
         this.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
@@ -92,7 +93,17 @@ public class KameletRepresenter extends Representer {
                         CustomResource cr = (CustomResource) data;
                         properties.put(API_VERSION, cr.getApiVersion());
                         properties.put(KIND, cr.getKind());
-                        properties.put("metadata", cr.getMetadata());
+                        final var metadata = cr.getMetadata();
+
+                        //The JsonInclude.Include.NON_EMPTY of annotations and labels in CustomResource is
+                        //blatantly ignored on newer versions of jackson library. Let's cleanup with nulls then.
+                        if (metadata.getAnnotations() != null && metadata.getAnnotations().isEmpty()) {
+                            metadata.setAnnotations(null);
+                        }
+                        if (metadata.getLabels() != null && metadata.getLabels().isEmpty()) {
+                            metadata.setLabels(null);
+                        }
+                        properties.put("metadata", metadata);
                         properties.put("spec", cr.getSpec());
                         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.AUTO);

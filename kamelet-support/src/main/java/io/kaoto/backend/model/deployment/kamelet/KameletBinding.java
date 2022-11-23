@@ -59,7 +59,7 @@ import java.io.Serializable;
  */
 
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Group("camel.apache.org")
 @Version("v1alpha1")
 @Kind("KameletBinding")
