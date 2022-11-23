@@ -1,8 +1,6 @@
 package io.kaoto.backend;
 
-import io.fabric8.kubernetes.api.model.LoadBalancerIngressFluent;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.grpc.LoadBalancer;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
@@ -19,7 +17,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DelayFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DynamicRouterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.EnrichFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.FilterFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.IdempotentConsumerFlowStep;
@@ -42,9 +39,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
-import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
-import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
-import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.Parameter;
