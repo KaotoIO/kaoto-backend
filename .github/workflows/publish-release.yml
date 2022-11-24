@@ -37,13 +37,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
         run: mvn install -Pnative -DskipTests
-      - name: 🛂 Find the version
-        run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/api-${{ env.version }}${{ matrix.file }}
+          file: api/target/api-*${{ matrix.file }}
+          file_glob: true
           asset_name: ${{ matrix.asset_name }}
           
   build-windows:
