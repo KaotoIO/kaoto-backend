@@ -15,6 +15,9 @@ jobs:
           - os: ubuntu-latest
             asset_name: kaoto-linux-amd64
             file: -runner
+          - os: windows-latest
+            asset_name: kaoto-windows-amd64
+            file: -runner.exe
           - os: macos-latest
             asset_name: kaoto-macos-amd64
             file: -runner
@@ -42,36 +45,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: api/target/api-*${{ matrix.file }}
-          file_glob: true
-          asset_name: ${{ matrix.asset_name }}
-          
-  build-windows:
-    name: 👩🏼‍🏭 Build Native Quarkus for windows-latest 👩🏼‍🏭
-    runs-on: windows-latest
-    steps:
-      - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
-      - name: 🥸 Set up GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: '22.2.0'
-          cache: 'maven'
-      - name: 🔥 Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: 🤳 Build Native Quarkus
-        run: mvn install -Pnative -DskipTests
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/api-*-runner.exe
           file_glob: true
 
   build-jar:
