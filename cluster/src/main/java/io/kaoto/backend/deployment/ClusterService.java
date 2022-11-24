@@ -1,5 +1,6 @@
 package io.kaoto.backend.deployment;
 
+import com.google.common.base.Strings;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -25,23 +26,18 @@ import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * 🐱miniclass ClusterService (DeploymentsResource)
- * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
+ * 🐱miniclass ClusterService (DeploymentsResource) 🐱relationship compositionOf DeploymentGeneratorService, 0..1
  *
- * 🐱section
- * Service to interact with the cluster. This is the utility class the
- * resource relies on to perform the operations.
- *
+ * 🐱section Service to interact with the cluster. This is the utility class the resource relies on to perform the
+ * operations.
  */
 @ApplicationScoped
 public class ClusterService {
@@ -205,7 +201,7 @@ public class ClusterService {
         log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
 
         return !kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace))
-                            .withName(name).delete().isEmpty();
+                .withName(name).delete().isEmpty();
     }
 
     /*
@@ -248,14 +244,11 @@ public class ClusterService {
                                     final String name,
                                     final String dsl,
                                     final Integer lines) {
-        final var out = new PipedOutputStream();
-        final var in = new PipedInputStream();
-
         Pod pod = null;
         //We are going to assume no repeated names
         //When we find a pod, that's the one.
         for (var parser : parsers) {
-            if (dsl == null || dsl.isEmpty() || dsl.equalsIgnoreCase(parser.identifier())) {
+            if (Strings.isNullOrEmpty(dsl) || dsl.equalsIgnoreCase(parser.identifier())) {
                 pod = parser.getPod(namespace, name, kubernetesClient);
                 if (pod != null) {
                     break;
@@ -267,52 +260,31 @@ public class ClusterService {
             throw new IllegalArgumentException("No running resource found in " + namespace + " with name " + name);
         }
 
-        final Pod finalPod = pod;
+        final var podResource = kubernetesClient.pods().inNamespace(getNamespace(namespace))
+                .withName(pod.getMetadata().getName());
+        try (InputStream in = podResource.tailingLines(lines).watchLog().getOutput();
+                     InputStreamReader isr = new InputStreamReader(in);
+                     BufferedReader reader = new BufferedReader(isr)) {
 
-        //Send stream of log to PipedOutputStream
-        managedExecutor.execute(() ->
-                kubernetesClient.pods()
-                        .inNamespace(getNamespace(namespace))
-                        .withName(finalPod.getMetadata().getName())
-                        .tailingLines(lines)
-                        .watchLog(out));
-
-        //Pipe both streams
-        managedExecutor.execute(() -> {
-            try {
-                out.connect(in);
-            } catch (IOException e) {
-                log.error("Pipeline broken", e);
-            }
-        });
-
-        //Connect InputStream to response
-        var reader = new BufferedReader(new InputStreamReader(in));
-
-        Multi<String> logs = Multi.createFrom().generator(
-                () -> 0, (n, emitter) -> {
-                    try {
-                        reader.lines().forEach(line -> emitter.emit(line + "\n"));
-                        emitter.emit(reader.readLine() + "\n");
-                    } catch (Exception e) {
-                        emitter.fail(e);
-                    } finally {
+            Multi<String> logs = Multi.createFrom().generator(
+                    () -> 0, (n, emitter) -> {
                         try {
-                            in.close();
-                            out.close();
-                            reader.close();
+                            reader.lines().forEach(line -> emitter.emit(line + "\n"));
                         } catch (Exception e) {
-                            log.error(e);
+                            log.error("Can't get more information from log: " + e.getMessage());
+                        } finally {
+                            emitter.complete();
                         }
+                        return ++n;
                     }
-                    emitter.complete();
-                    return ++n;
-                }
-        );
-        logs.runSubscriptionOn(managedExecutor);
-        logs.onOverflow().buffer(3);
-
-        return logs;
+            );
+            logs.runSubscriptionOn(managedExecutor);
+            logs.onOverflow().buffer(3);
+            return logs;
+        } catch (Exception e) {
+            log.error("Error trying to read the log.", e);
+        }
+        return Multi.createFrom().nothing();
     }
 
     private String getNamespace(final String namespace) {

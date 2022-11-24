@@ -6,6 +6,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
@@ -223,6 +224,7 @@ class ClusterServiceTest {
     }
 
     @Test
+    @Timeout(value=60)
     void logs() {
         var pod = "apiVersion: v1\n"
                 + "kind: Pod\n"
