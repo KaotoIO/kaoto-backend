@@ -34,7 +34,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 🐱miniclass ClusterService (DeploymentsResource) 🐱relationship compositionOf DeploymentGeneratorService, 0..1
+ * 🐱miniclass ClusterService (DeploymentsResource)
+ * 
+ * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
  *
  * 🐱section Service to interact with the cluster. This is the utility class the resource relies on to perform the
  * operations.
