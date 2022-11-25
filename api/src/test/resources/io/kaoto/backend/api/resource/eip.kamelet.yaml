@@ -58,11 +58,17 @@ spec:
             - remove-headers:
                 exclude-pattern: toExclude
                 pattern: toRemove
-            - transform:
-                simple: baz
-            - remove-properties:
-                exclude-pattern: toExclude
-                pattern: toRemove
+            - resequence:
+                simple: ${in.header.seqnum}
+                stream-config:
+                  capacity: '5000'
+                  timeout: '4000'
+                steps:
+                - transform:
+                    simple: baz
+                - remove-properties:
+                    exclude-pattern: toExclude
+                    pattern: toRemove
             - aggregate:
                 correlation-expression:
                   simple: ${header.StockSymbol}
