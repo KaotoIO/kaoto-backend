@@ -60,6 +60,9 @@ spec:
                 pattern: toRemove
             - transform:
                 simple: baz
+            - remove-properties:
+                pattern: toRemove
+                exclude-pattern: toExclude
             - aggregate:
                 correlation-expression:
                   simple: ${header.StockSymbol}

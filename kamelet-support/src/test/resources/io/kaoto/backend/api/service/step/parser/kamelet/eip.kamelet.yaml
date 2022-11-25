@@ -117,6 +117,9 @@ spec:
                   simple: ${body}
             - transform:
                 simple: baz
+            - remove-properties:
+                pattern: toRemove
+                exclude-pattern: toExclude
             - load-balance:
                 weighted:
                   distribution-ratio: 2,1

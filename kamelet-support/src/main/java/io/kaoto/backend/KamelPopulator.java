@@ -31,6 +31,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ProcessFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RecipientListFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeadersFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertiesFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
@@ -299,6 +300,9 @@ public class KamelPopulator {
                     break;
                 case "remove-headers":
                     flowStep = new RemoveHeadersFlowStep(step);
+                    break;
+                case "remove-properties":
+                    flowStep = new RemovePropertiesFlowStep(step);
                     break;
                 case "remove-property":
                     flowStep = new RemovePropertyFlowStep(getExpression(step));
