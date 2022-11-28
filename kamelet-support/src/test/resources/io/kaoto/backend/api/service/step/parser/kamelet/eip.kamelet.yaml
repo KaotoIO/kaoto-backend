@@ -30,6 +30,9 @@ spec:
               expression:
                 simple: ${body}
               async-delayed: true
+          - routing-slip:
+              uri-delimiter: '|'
+              simple: ${body}
       - choice:
           when:
           - simple: '{{?foo}}'
