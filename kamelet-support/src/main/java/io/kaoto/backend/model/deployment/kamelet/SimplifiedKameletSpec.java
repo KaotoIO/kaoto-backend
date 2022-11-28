@@ -13,6 +13,7 @@ public final class SimplifiedKameletSpec {
     private KameletDefinition definition;
 
     public SimplifiedKameletSpec() {
+        //Needed for serialization
     }
 
     public KameletDefinition getDefinition() {

@@ -29,6 +29,7 @@ public final class SimplifiedKamelet {
     private ObjectMeta metadata = new ObjectMeta();
 
     public SimplifiedKamelet() {
+        //Needed for serialization
     }
 
     public SimplifiedKameletSpec getSpec() {

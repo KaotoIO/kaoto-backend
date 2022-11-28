@@ -34,6 +34,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     private final Logger log = Logger.getLogger(KameletFileProcessor.class);
 
     public KameletFileProcessor() {
+        //Nothing needed here
     }
 
     @Override
@@ -42,7 +43,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             final var yaml = IOUtils.toString(reader);
             String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
             var kind = getKind(yaml);
-            if (!Arrays.stream(kinds).anyMatch( k -> k.equalsIgnoreCase(kind))) {
+            if (Arrays.stream(kinds).noneMatch(k -> k.equalsIgnoreCase(kind))) {
                 return List.of();
             }
             SimplifiedKamelet kamelet = YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
