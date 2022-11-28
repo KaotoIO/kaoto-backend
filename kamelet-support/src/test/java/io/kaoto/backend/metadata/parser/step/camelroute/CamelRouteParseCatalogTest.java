@@ -140,7 +140,7 @@ class CamelRouteParseCatalogTest {
 
 
     @Test
-    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)
+//    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
         String camelZip = "resource://camel-3.19.0.zip";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
