@@ -201,7 +201,7 @@ class KameletParseCatalogTest {
 
 
     @Test
-    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
+//    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
         String camelZip = "resource://camel-kamelets-0.9.0.jar";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
