@@ -62,5 +62,5 @@ public interface StepCatalogParser {
      * Does this parser generate steps of this kind?
      *
      */
-    Boolean generatesKind(String kind);
+    boolean generatesKind(String kind);
 }

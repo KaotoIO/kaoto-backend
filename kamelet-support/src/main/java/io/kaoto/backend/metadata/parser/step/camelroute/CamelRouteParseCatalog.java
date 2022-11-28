@@ -47,7 +47,7 @@ public final class CamelRouteParseCatalog implements StepCatalogParser {
     }
 
     @Override
-    public Boolean generatesKind(final String kind) {
+    public boolean generatesKind(final String kind) {
         return kind.isBlank() || "Camel-Connector".equalsIgnoreCase(kind);
     }
 }
