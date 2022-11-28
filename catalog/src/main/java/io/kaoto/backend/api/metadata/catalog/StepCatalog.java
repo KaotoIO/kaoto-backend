@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 🐱class StepCatalog
+ *
  * 🐱inherits AbstractCatalog
  *
  * This is a singleton that will contain all catalogs with steps.
@@ -49,9 +50,11 @@ public class StepCatalog extends AbstractCatalog<Step> {
     }
 
     private boolean isClusterAvailable() {
-        boolean clusterAvailable = true;
+        boolean clusterAvailable = kclient != null;
         try {
-            kclient.pods().list();
+            if (clusterAvailable) {
+                kclient.pods().inAnyNamespace().list();
+            }
         } catch (KubernetesClientException e) {
             clusterAvailable = false;
         }
@@ -59,47 +62,54 @@ public class StepCatalog extends AbstractCatalog<Step> {
     }
 
     private void addCluster(final List<ParseCatalog<Step>> catalogs,
-                           final boolean clusterAvailable) {
+                            final boolean clusterAvailable) {
         if (clusterAvailable) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                catalogs.add(parser.getParserFromCluster());
-            }
+            stepCatalogParsers.stream().parallel().forEach(parser -> catalogs.add(parser.getParserFromCluster()));
         }
     }
 
     private void addGit(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
-        for (Repository.Git git : repository.git().orElse(Collections.emptyList())) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                if ((!git.ifNoCluster() || !clusterAvailable)
-                        && (ALL.equalsIgnoreCase(git.kind()) || parser.generatesKind(git.kind()))) {
-                    catalogs.add(parser.getParser(git.url(), git.tag()));
-                }
-            }
-        }
+        //For all git in the configuration
+        repository.git().orElse(Collections.emptyList()).stream().parallel()
+                //Filter depending on the cluster
+                .filter(git -> !git.ifNoCluster() || !clusterAvailable)
+                //And call only the parsers that apply
+                .forEach(git -> stepCatalogParsers.stream().parallel()
+                        .forEach(parser -> {
+                            if (ALL.equalsIgnoreCase(git.kind()) || parser.generatesKind(git.kind())) {
+                                catalogs.add(parser.getParser(git.url(), git.tag()));
+                            }
+                        }));
+
     }
 
     private void addLocalFolder(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
-        for (var location : repository.localFolder().orElse(
-                Collections.emptyList())) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                if ((!location.ifNoCluster() || !clusterAvailable)
-                        && (ALL.equalsIgnoreCase(location.kind()) || parser.generatesKind(location.kind()))) {
-                    File dir = new File(location.url());
-                    catalogs.add(parser.getLocalFolder(dir.toPath()));
-                }
-            }
-        }
+        //For all folders in the configuration
+        repository.localFolder().orElse(Collections.emptyList()).stream().parallel()
+                //Filter depending on the cluster
+                .filter(folder -> !folder.ifNoCluster() || !clusterAvailable)
+                //And call only the parsers that apply
+                .forEach(folder -> stepCatalogParsers.stream().parallel()
+                        .forEach(parser -> {
+                            if (ALL.equalsIgnoreCase(folder.kind()) || parser.generatesKind(folder.kind())) {
+                                File dir = new File(folder.url());
+                                catalogs.add(parser.getLocalFolder(dir.toPath()));
+                            }
+                        }));
     }
 
     private void addZipJar(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
-        for (var jar : repository.jar().orElse(Collections.emptyList())) {
-            for (StepCatalogParser parser : stepCatalogParsers) {
-                if ((!jar.ifNoCluster() || !clusterAvailable)
-                        && (ALL.equalsIgnoreCase(jar.kind()) || parser.generatesKind(jar.kind()))) {
-                    catalogs.add(parser.getParser(jar.url()));
-                }
-            }
-        }
+        //For all jars in the configuration
+        repository.jar().orElse(Collections.emptyList()).stream().parallel()
+                //Filter depending on the cluster
+                .filter(jar -> !jar.ifNoCluster() || !clusterAvailable)
+                //And call only the parsers that apply
+                .forEach(jar -> stepCatalogParsers.stream().parallel()
+                        .forEach(parser -> {
+                            if (ALL.equalsIgnoreCase(jar.kind()) || parser.generatesKind(jar.kind())) {
+                                catalogs.add(parser.getParser(jar.url()));
+                            }
+                        }));
     }
 
     @Inject

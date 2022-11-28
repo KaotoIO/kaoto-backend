@@ -46,6 +46,7 @@ public class KameletStepParserService
     public static final String OTHERWISE = "otherwise";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
+    public static final Pattern PATTERN = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
     private final Logger log =
             Logger.getLogger(KameletStepParserService.class);
 
@@ -255,8 +256,7 @@ public class KameletStepParserService
     public boolean appliesTo(final String yaml) {
         String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
 
-        Pattern pattern = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(yaml);
+        Matcher matcher = PATTERN.matcher(yaml);
         if (matcher.find()) {
             return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(1).trim()));
         }

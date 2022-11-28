@@ -2,7 +2,6 @@ package io.kaoto.backend.metadata.parser.step.kamelet;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.ClusterParseCatalog;
 import io.kaoto.backend.metadata.parser.GitParseCatalog;
@@ -33,11 +32,6 @@ public final class KameletParseCatalog implements StepCatalogParser {
     @ConfigProperty(name = "kaoto.openshift.catalog-namespace",
             defaultValue = "false")
     private String namespace;
-    @Inject
-    public void setService(final KameletStepParserService service) {
-        this.service = service;
-    }
-    private KameletStepParserService service;
 
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
@@ -45,17 +39,19 @@ public final class KameletParseCatalog implements StepCatalogParser {
     }
     private KubernetesClient kubernetesClient;
 
+    private KameletFileProcessor kameletFileProcessor = new KameletFileProcessor();
+
     @Override
     public ParseCatalog<Step> getParser(final String url, final String tag) {
         ParseCatalog<Step> parseCatalog = new GitParseCatalog<>(url, tag);
-        parseCatalog.setFileVisitor(new KameletFileProcessor(service));
+        parseCatalog.setFileVisitor(kameletFileProcessor);
         return parseCatalog;
     }
 
     @Override
     public ParseCatalog<Step> getParser(final String url) {
         ParseCatalog<Step> parseCatalog = new JarParseCatalog<>(url);
-        parseCatalog.setFileVisitor(new KameletFileProcessor(service));
+        parseCatalog.setFileVisitor(kameletFileProcessor);
         return parseCatalog;
     }
 
@@ -63,7 +59,7 @@ public final class KameletParseCatalog implements StepCatalogParser {
     public ParseCatalog<Step> getParserFromCluster() {
         ClusterParseCatalog<Step> parseCatalog =
                 new ClusterParseCatalog<>(Kamelet.class);
-        parseCatalog.setFileVisitor(new KameletFileProcessor(service));
+        parseCatalog.setFileVisitor(new KameletFileProcessor());
         parseCatalog.setKubernetesClient(kubernetesClient);
         parseCatalog.setNamespace(namespace);
         return parseCatalog;
@@ -73,7 +69,7 @@ public final class KameletParseCatalog implements StepCatalogParser {
     public ParseCatalog<Step> getLocalFolder(final Path path) {
         ParseCatalog<Step> parseCatalog =
                 new LocalFolderParseCatalog<>(path);
-        parseCatalog.setFileVisitor(new KameletFileProcessor(service));
+        parseCatalog.setFileVisitor(kameletFileProcessor);
         return parseCatalog;
     }
 
