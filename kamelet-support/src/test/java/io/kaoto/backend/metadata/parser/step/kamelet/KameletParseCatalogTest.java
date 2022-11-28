@@ -10,6 +10,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -195,5 +197,16 @@ class KameletParseCatalogTest {
         salesforces = catalog.searchByName("salesforce-source");
         assertNotNull(salesforces);
         assertTrue(!salesforces.isEmpty());
+    }
+
+
+    @Test
+    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
+    void testSpeed() {
+        String camelZip = "resource://camel-kamelets-0.9.0.jar";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        List<Step> steps = camelParser.parse().join();
+        assertTrue(catalog.store(steps));
     }
 }

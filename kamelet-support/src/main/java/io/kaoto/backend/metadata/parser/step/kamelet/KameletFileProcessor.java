@@ -3,7 +3,6 @@ package io.kaoto.backend.metadata.parser.step.kamelet;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.SimplifiedKamelet;
@@ -22,6 +21,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -29,25 +29,23 @@ import java.util.regex.Pattern;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
 
+    public static final ObjectMapper YAML_MAPPER =
+            new ObjectMapper(new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private final Logger log = Logger.getLogger(KameletFileProcessor.class);
 
-    public KameletFileProcessor(final KameletStepParserService service) {
-        this.service = service;
+    public KameletFileProcessor() {
     }
-    private KameletStepParserService service;
 
     @Override
     public List<Step> parseInputStream(Reader reader) {
         try {
             final var yaml = IOUtils.toString(reader);
-            if (!service.appliesTo(yaml)) {
+            String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
+            var kind = getKind(yaml);
+            if (!Arrays.stream(kinds).anyMatch( k -> k.equalsIgnoreCase(kind))) {
                 return List.of();
             }
-            var kind = getKind(yaml);
-            ObjectMapper yamlMapper =
-                new ObjectMapper(new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            SimplifiedKamelet kamelet = yamlMapper.readValue(yaml, SimplifiedKamelet.class);
-
+            SimplifiedKamelet kamelet = YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
             Step step = new Step();
             step.setKind(kind);
 
@@ -98,7 +96,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             }
             return List.of(step);
         } catch (IOException | YAMLException e) {
-            log.error("Error parsing Kamelet." , e);
+            log.trace("Error parsing Kamelet." , e);
         }
 
         return List.of();

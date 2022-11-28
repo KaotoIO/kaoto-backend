@@ -67,23 +67,25 @@ public abstract class AbstractCatalog<T extends Metadata> {
     @WithSpan
     public void warmUpCatalog() {
         log.debug("Warming up catalog.");
-        List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
+        final var time = System.currentTimeMillis();
+        final List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
+        loadParsers().stream().parallel().forEach(parser -> futureSteps.add(addCatalog(parser)));
 
-        for (var catalog : loadParsers()) {
-            futureSteps.add(addCatalog(catalog));
-        }
-
-        waitingForWarmUp = CompletableFuture.allOf(
-                futureSteps.toArray(new CompletableFuture[0]));
-        waitingForWarmUp.thenAccept(complete -> initializing.complete(null))
-                .thenRun(() -> log.info("Catalog warmed up."));
+        waitingForWarmUp = CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0]));
+        waitingForWarmUp
+                .thenAccept(complete -> initializing.complete(null))
+                .thenRun(() ->
+                        log.info("Catalog " + this.getClass() + " warmed up in "
+                                + (System.currentTimeMillis() - time) + "ms."));
     }
 
-    private CompletableFuture<Boolean> addCatalog(
-            final ParseCatalog<T> catalog) {
+    private CompletableFuture<Boolean> addCatalog(final ParseCatalog<T> catalog) {
         CompletableFuture<Boolean> res = new CompletableFuture<>();
+        final var time = System.currentTimeMillis();
         catalog.parse()
                 .thenApply(md -> c.store(md))
+                .thenRun(() -> log.info("Parser " + catalog.getClass() + " processed in "
+                        + (System.currentTimeMillis() - time) + "ms."))
                 .thenAccept(md -> res.complete(true));
         return res;
     }

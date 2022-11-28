@@ -9,6 +9,7 @@ import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
@@ -16,6 +17,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ class CamelRouteParseCatalogTest {
     public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
         this.parseCatalog = parseCatalog;
     }
+
     private CamelRouteParseCatalog parseCatalog;
 
     @Test
@@ -58,11 +61,8 @@ class CamelRouteParseCatalogTest {
         Path camelJsonRoute = Path.of(
                 CamelRouteFileProcessorTest.class.getResource(".").toURI());
 
-        ParseCatalog<Step> camelParser =
-                parseCatalog.getLocalFolder(camelJsonRoute);
-        List<Step> steps = camelParser.parse().join().stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        ParseCatalog<Step> camelParser = parseCatalog.getLocalFolder(camelJsonRoute);
+        List<Step> steps = camelParser.parse().join().stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         assertEquals(3, steps.size());
 
@@ -70,7 +70,7 @@ class CamelRouteParseCatalogTest {
                 (stepList, stepType) -> stepList.stream()
                         .filter(step -> stepType.equals(step.getType())).findFirst().get();
 
-        Step browseComponentSink = fetchBrowse.apply(steps,  Step.END);
+        Step browseComponentSink = fetchBrowse.apply(steps, Step.END);
         Step browseComponentSource = fetchBrowse.apply(steps, Step.START);
         Step browseComponentAction = fetchBrowse.apply(steps, Step.MIDDLE);
 
@@ -105,56 +105,47 @@ class CamelRouteParseCatalogTest {
 
         String expectedType = typeToIdConversion.get(type);
 
-        assertEquals("browse-" + expectedType,
-                parsedStep.getId());
+        assertEquals("browse-" + expectedType, parsedStep.getId());
         assertEquals("browse", parsedStep.getName());
         assertEquals("Browse", parsedStep.getTitle());
-        assertEquals("Inspect the messages received"
-                        + " on endpoints supporting BrowsableEndpoint.",
+        assertEquals("Inspect the messages received on endpoints supporting BrowsableEndpoint.",
                 parsedStep.getDescription());
         assertEquals(type, parsedStep.getType());
         assertIterableEquals(List.of("name"), parsedStep.getRequired());
 
         Map<String, Parameter> expectedParameterValues = Map.of(
-                "name", new StringParameter(
-                        "name", "Name", "d1",
-                        null, null),
-                "bridgeErrorHandler", new BooleanParameter(
-                        "bridgeErrorHandler", "Bridge Error Handler",
-                        "d2", false),
-                "exceptionHandler", new ObjectParameter(
-                        "exceptionHandler", "Exception Handler",
-                        "d3", null),
-                "exchangePattern", new ObjectParameter(
-                        "exchangePattern", "Exchange Pattern",
-                        "d4", null),
-                "lazyStartProducer", new BooleanParameter(
-                        "lazyStartProducer", "Lazy Start Producer",
-                        "d5", false)
+                "name", new StringParameter("name", "Name", "d1", null, null),
+                "bridgeErrorHandler", new BooleanParameter("bridgeErrorHandler", "Bridge Error Handler", "d2", false),
+                "exceptionHandler", new ObjectParameter("exceptionHandler", "Exception Handler", "d3", null),
+                "exchangePattern", new ObjectParameter("exchangePattern", "Exchange Pattern", "d4", null),
+                "lazyStartProducer", new BooleanParameter("lazyStartProducer", "Lazy Start Producer", "d5", false)
         );
 
         expectedParameterValues.get("name").setPath(true);
 
         parsedStep.getParameters().forEach(
                 parameter -> {
-                    assertEquals(parameter.getId(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getId());
-                    assertEquals(parameter.isPath(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .isPath());
-                    assertEquals(parameter.getTitle(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getTitle());
+                    assertEquals(parameter.getId(), expectedParameterValues.get(parameter.getId()).getId());
+                    assertEquals(parameter.isPath(), expectedParameterValues.get(parameter.getId()).isPath());
+                    assertEquals(parameter.getTitle(), expectedParameterValues.get(parameter.getId()).getTitle());
                     assertEquals(parameter.getDefaultValue(),
-                            expectedParameterValues.get(parameter.getId())
-                                    .getDefaultValue());
+                            expectedParameterValues.get(parameter.getId()).getDefaultValue());
                     if (assertDescription) {
                         assertEquals(parameter.getDescription(),
-                                expectedParameterValues.get(parameter.getId())
-                                        .getDescription());
+                                expectedParameterValues.get(parameter.getId()).getDescription());
                     }
                 }
         );
+    }
+
+
+    @Test
+    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)
+    void testSpeed() {
+        String camelZip = "resource://camel-3.19.0.zip";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        List<Step> steps = camelParser.parse().join();
+        assertTrue(catalog.store(steps));
     }
 }
