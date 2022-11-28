@@ -74,7 +74,7 @@ public final class KameletParseCatalog implements StepCatalogParser {
     }
 
     @Override
-    public Boolean generatesKind(final String kind) {
+    public boolean generatesKind(final String kind) {
         String[] kinds = new String[]{"Kamelet", "EIP", "EIP-BRANCH"};
         return kind.isBlank() || Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(kind));
     }
