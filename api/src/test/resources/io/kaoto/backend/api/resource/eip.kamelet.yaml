@@ -91,6 +91,9 @@ spec:
                 operation: Push
                 key: foo
                 filter: header:(foo|bar)
+            - rollback:
+                mark-rollback-only: true
+                message: test
       - filter:
           simple: '{{?foo}}'
           steps:

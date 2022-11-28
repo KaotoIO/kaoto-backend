@@ -144,6 +144,9 @@ spec:
             steps:
             - remove-header:
                 name: removeme
+            - rollback:
+                mark-rollback-only: true
+                message: test
       - filter:
           simple: '{{?foo}}'
           steps:
