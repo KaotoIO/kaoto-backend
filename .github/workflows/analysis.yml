@@ -69,6 +69,19 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Run native tests
         run: mvn install -Pnative
+      - name: Archive Quarkus log for native tests
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: quarkus-logs-${{ matrix.os }}
+          path: '**/target/quarkus.log'
+      - name: Archive native binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: kaoto-runner-${{ matrix.os }}
+          path: |
+            api/target/*-runner
+            api\target\*-runner.exe
 
   jvm-tests:
     name: 👩🏼‍🏭 JVM tests for ${{ matrix.os }} 👩🏼‍🏭
