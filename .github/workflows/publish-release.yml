@@ -40,12 +40,19 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
         run: mvn install -Pnative -DskipTests
+      - name: 🛂 Find the version - non-Windows
+        run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+        if: ${{ runner.os != windows-latest}}
+      - name: 🛂 Find the version - Windows
+        run: |
+          $version = & mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+          echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+        if: ${{ runner.os == windows-latest}}
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/api-*${{ matrix.file }}
-          file_glob: true
+          file: api/target/api-${{ env.version }}${{ matrix.file }}
 
   build-jar:
     name: 👩🏼‍🏭 Build JAR 👩🏼‍🏭
