@@ -18,7 +18,7 @@ jobs:
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: 17
           check-latest: true
       - name: 🔥 Cache Maven packages
@@ -99,7 +99,7 @@ jobs:
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: 17
           check-latest: true
       - name: 🔥 Cache Maven packages
