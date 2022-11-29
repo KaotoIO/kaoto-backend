@@ -108,5 +108,13 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: 🤳 Run tests
-        run: mvn install
+      - name: 🛂 Find the version - non-Windows
+        run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+        if: ${{ matrix.os != 'windows-latest' }}
+      - name: 🛂 Find the version - Windows
+        run: |
+          $version = & mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout
+          echo "version=$version" >> $env:GITHUB_ENV
+        if: ${{ matrix.os == 'windows-latest' }}
+      - name: test the value of github env
+        run: echo ${{ env.version }}
