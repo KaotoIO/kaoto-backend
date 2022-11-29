@@ -186,6 +186,12 @@ generatesKind(&lt;String&gt; kind):Boolean
 </TABLE>>]
 
 
+"SimplifiedKamelet" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>SimplifiedKamelet</B></TD></TR>
+	
+</TABLE>>]
+
+
 "MetadataCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>MetadataCatalog</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
