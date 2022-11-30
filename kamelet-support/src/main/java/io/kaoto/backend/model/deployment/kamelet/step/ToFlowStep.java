@@ -12,23 +12,34 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 
 import java.io.Serial;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-@JsonPropertyOrder({"to"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ToFlowStep implements FlowStep {
-    @Serial
-    private static final long serialVersionUID = 6334914135393038266L;
 
     @JsonCreator
-    public ToFlowStep(
-            final @JsonProperty(value = "to") FlowStep to) {
+    public ToFlowStep(final @JsonProperty(value = "to") Object to) {
         super();
-        setTo(to);
+        if (to instanceof FlowStep flowStep) {
+            setTo(flowStep);
+        } else if (to instanceof String sto) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(sto);
+            setTo(uri);
+        } else if (to instanceof Map map) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(map.getOrDefault("uri", "").toString());
+            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
+            if (parameters != null && !parameters.isEmpty()) {
+                uri.setParameters(new LinkedHashMap<>());
+                uri.getParameters().putAll(parameters);
+            }
+            setTo(uri);
+        }
     }
 
     @JsonProperty("to")
