@@ -78,6 +78,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("rollback", RollbackFlowStep.class);
         steps.put("routing-slip", RoutingSlipFlowStep.class);
         steps.put("routingSlip", RoutingSlipFlowStep.class);
+        steps.put("saga", SagaFlowStep.class);
         steps.put("set-body", SetBodyFlowStep.class);
         steps.put("setBody", SetBodyFlowStep.class);
         steps.put("set-header", SetHeaderFlowStep.class);

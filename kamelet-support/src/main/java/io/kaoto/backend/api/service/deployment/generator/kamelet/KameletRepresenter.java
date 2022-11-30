@@ -38,6 +38,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ResequenceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RollbackFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RoutingSlipFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SagaFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -280,6 +281,7 @@ public class KameletRepresenter extends Representer {
                 PollEnrichFlowStep.class,
                 ProcessFlowStep.class,
                 RecipientListFlowStep.class,
+                SagaFlowStep.class,
                 ToFlowStep.class,
                 TransformFlowStep.class,
                 UnmarshalFlowStep.class,
