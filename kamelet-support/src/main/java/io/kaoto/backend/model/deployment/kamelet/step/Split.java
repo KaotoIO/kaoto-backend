@@ -177,7 +177,6 @@ public class Split extends Tokenizer {
                     this.setShareUnitOfWork(Boolean.valueOf(parameter.getValue().toString()));
                     break;
                 default:
-                    log.error("Unknown property in Split: " + parameter.getId());
                     break;
             }
         }
@@ -303,7 +302,6 @@ public class Split extends Tokenizer {
                 parameter.setValue(this.description);
                 break;
             default:
-                log.error("Unknown property in Split: " + parameter.getId());
                 break;
         }
 

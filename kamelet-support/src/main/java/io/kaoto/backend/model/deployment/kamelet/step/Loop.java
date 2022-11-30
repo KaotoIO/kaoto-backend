@@ -89,7 +89,6 @@ public class Loop extends Expression {
                 this.setDescription((Map<String, String>) parameter.getValue());
                 break;
             default:
-                log.error("Unknown property: " + parameter.getId());
                 break;
         }
     }
@@ -147,7 +146,6 @@ public class Loop extends Expression {
                 parameter.setValue(this.description);
                 break;
             default:
-                log.error("Unknown property in Loop: " + parameter.getId());
                 break;
         }
     }
