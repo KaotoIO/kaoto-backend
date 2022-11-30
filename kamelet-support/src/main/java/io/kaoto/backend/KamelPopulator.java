@@ -34,8 +34,12 @@ import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeadersFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertiesFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ResequenceFlowStep;
+<<<<<<< HEAD
 import io.kaoto.backend.model.deployment.kamelet.step.RollbackFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RoutingSlipFlowStep;
+=======
+import io.kaoto.backend.model.deployment.kamelet.step.SagaFlowStep;
+>>>>>>> 8ae557b (feature(eip): Add Saga EIP)
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -50,6 +54,7 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
+import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +65,8 @@ import java.util.List;
 import java.util.Map;
 
 public class KamelPopulator {
+
+    protected static final Logger log = Logger.getLogger(KamelPopulator.class);
 
     public static final String SIMPLE = "simple";
     public static final String CONSTANT = "constant";
@@ -370,6 +377,9 @@ public class KamelPopulator {
                 case "resequence":
                     flowStep = new ResequenceFlowStep(step, this);
                     break;
+                case "saga":
+                    flowStep = new SagaFlowStep(step, this);
+                    break;
                 case "split":
                     flowStep = new SplitFlowStep(step, this);
                     break;
@@ -380,6 +390,8 @@ public class KamelPopulator {
                     flowStep = getCamelConnector(step, to);
                     break;
             }
+        } else {
+            log.error("We don't recognize this kind of step: " + step.getKind());
         }
 
         return flowStep;
