@@ -34,12 +34,9 @@ import io.kaoto.backend.model.deployment.kamelet.step.RemoveHeadersFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertiesFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RemovePropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ResequenceFlowStep;
-<<<<<<< HEAD
 import io.kaoto.backend.model.deployment.kamelet.step.RollbackFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RoutingSlipFlowStep;
-=======
 import io.kaoto.backend.model.deployment.kamelet.step.SagaFlowStep;
->>>>>>> 8ae557b (feature(eip): Add Saga EIP)
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
