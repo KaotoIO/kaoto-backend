@@ -3,7 +3,6 @@ package io.kaoto.backend.model.deployment.kamelet.step;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -11,7 +10,6 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 
-import java.io.Serial;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

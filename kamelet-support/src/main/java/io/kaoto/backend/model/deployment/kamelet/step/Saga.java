@@ -5,7 +5,6 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -17,23 +16,23 @@ import java.util.Map;
 public class Saga extends EIPStep {
     public static final String STEPS_LABEL = "steps";
 
-    public final String SAGA_SERVICE_LABEL = "saga-service";
-    public final String SAGA_SERVICE_LABEL2 = "sagaService";
+    public static final String SAGA_SERVICE_LABEL = "saga-service";
+    public static final String SAGA_SERVICE_LABEL2 = "sagaService";
 
-    public final String PROPAGATION_LABEL = "propagation";
+    public static final String PROPAGATION_LABEL = "propagation";
 
-    public final String COMPLETION_MODE_LABEL = "completion-mode";
-    public final String COMPLETION_MODE_LABEL2 = "completionMode";
+    public static final String COMPLETION_MODE_LABEL = "completion-mode";
+    public static final String COMPLETION_MODE_LABEL2 = "completionMode";
 
-    public final String TIMEOUT_LABEL = "timeout";
+    public static final String TIMEOUT_LABEL = "timeout";
 
-    public final String COMPENSATION_LABEL = "compensation";
+    public static final String COMPENSATION_LABEL = "compensation";
 
-    public final String COMPLETION_LABEL = "completion";
+    public static final String COMPLETION_LABEL = "completion";
 
-    public final String OPTION_LABEL = "option";
+    public static final String OPTION_LABEL = "option";
 
-    public final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = "description";
 
     private List<FlowStep> steps;
 
@@ -45,9 +44,9 @@ public class Saga extends EIPStep {
 
     private String timeout;
 
-    private FlowStep compensation;
+    private Object compensation;
 
-    private FlowStep completion;
+    private Object completion;
 
     private Object option;
 
@@ -64,8 +63,8 @@ public class Saga extends EIPStep {
                 final @JsonProperty(COMPLETION_MODE_LABEL) String completionMode,
                 final @JsonProperty(COMPLETION_MODE_LABEL2) String completionMode2,
                 final @JsonProperty(TIMEOUT_LABEL) String timeout,
-                final @JsonProperty(COMPENSATION_LABEL) FlowStep compensation,
-                final @JsonProperty(COMPLETION_LABEL) FlowStep completion,
+                final @JsonProperty(COMPENSATION_LABEL) Object compensation,
+                final @JsonProperty(COMPLETION_LABEL) Object completion,
                 final @JsonProperty(OPTION_LABEL) Object option,
                 final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
         setSagaService(sagaService != null ? sagaService : sagaService2);
@@ -87,12 +86,6 @@ public class Saga extends EIPStep {
         }
     }
 
-    @Override
-    public void processBranches(final Step step, final StepCatalog catalog,
-                                final KameletStepParserService kameletStepParserService) {
-        step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
-    }
-
 
     @Override
     protected void assignAttribute(final Parameter parameter) {
@@ -112,10 +105,10 @@ public class Saga extends EIPStep {
                 this.setTimeout(String.valueOf(parameter.getValue()));
                 break;
             case COMPENSATION_LABEL:
-                this.setCompensation((FlowStep) parameter.getValue());
+                this.setCompensation(parameter.getValue());
                 break;
             case COMPLETION_LABEL:
-                this.setCompletion((FlowStep) parameter.getValue());
+                this.setCompletion(parameter.getValue());
                 break;
             case OPTION_LABEL:
                 this.setOption(parameter.getValue());
@@ -126,6 +119,12 @@ public class Saga extends EIPStep {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void processBranches(final Step step, final StepCatalog catalog,
+                                final KameletStepParserService kameletStepParserService) {
+        step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
     }
 
     @Override
@@ -228,19 +227,19 @@ public class Saga extends EIPStep {
         this.timeout = timeout;
     }
 
-    public FlowStep getCompensation() {
+    public Object getCompensation() {
         return compensation;
     }
 
-    public void setCompensation(final FlowStep compensation) {
+    public void setCompensation(final Object compensation) {
         this.compensation = compensation;
     }
 
-    public FlowStep getCompletion() {
+    public Object getCompletion() {
         return completion;
     }
 
-    public void setCompletion(final FlowStep completion) {
+    public void setCompletion(final Object completion) {
         this.completion = completion;
     }
 
