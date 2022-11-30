@@ -101,7 +101,6 @@ public class IdempotentConsumer extends Expression {
                 this.setDescription((Map<String, String>) parameter.getValue());
                 break;
             default:
-                log.error("Unknown property in Idempotent Consumer: " + parameter.getId());
                 break;
         }
     }
@@ -167,7 +166,6 @@ public class IdempotentConsumer extends Expression {
                 parameter.setValue(this.getDescription());
                 break;
             default:
-                log.error("Unknown property in Idempotent Consumer: " + parameter.getId());
                 break;
         }
     }
