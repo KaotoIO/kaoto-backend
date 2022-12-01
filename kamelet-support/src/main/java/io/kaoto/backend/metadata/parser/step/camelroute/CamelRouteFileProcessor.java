@@ -136,14 +136,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                         }
                 ));
 
-        List<String> requiredProperties = propertiesParsed
-                .entrySet().stream().filter(
-                    property -> Boolean.parseBoolean(
-                            property.getValue().getOrDefault(
-                                    "required", "false"))
-        ).map(
-                Map.Entry::getKey
-        ).toList();
+        List<String> requiredProperties = propertiesParsed.entrySet().stream()
+                .filter(property -> Boolean.parseBoolean(property.getValue().getOrDefault("required", "false")))
+                .map(Map.Entry::getKey).toList();
 
 
         List<Parameter> parameters = propertiesParsed.entrySet().stream().map(
@@ -160,8 +155,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                     );
 
                     Parameter parsedParameter = typeToClassConversion
-                            .getOrDefault(parameterData.get("type"),
-                                    this::getObjectParameter)
+                            .getOrDefault(parameterData.get("type"), this::getObjectParameter)
                             .apply(parameter);
 
                     if ("path".equals(parameterData.get("kind"))) {
