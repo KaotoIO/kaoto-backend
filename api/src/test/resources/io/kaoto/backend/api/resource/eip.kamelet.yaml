@@ -30,14 +30,14 @@ spec:
                 uri: direct:compensation
               completion-mode: MANUAL
               steps:
-                - to:
-                    uri: direct:something
+              - to:
+                  uri: direct:something
               option:
-                - key: o1
+              - key: o1
+                simple: ${body}
+              - key: o2
+                expression:
                   simple: ${body}
-                - key: o2
-                  expression:
-                    simple: ${body}
           - delay:
               expression:
                 simple: ${body}
