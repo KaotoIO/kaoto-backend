@@ -58,6 +58,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class KamelPopulator {
 
@@ -386,13 +387,15 @@ public class KamelPopulator {
     }
 
     public List<FlowStep> processSteps(final Branch b) {
-        var list = new LinkedList<FlowStep>();
+        final var list = new LinkedList<FlowStep>();
         if (b.getSteps() != null) {
-            for (Step step : b.getSteps()) {
-                if (step != null) {
-                    list.add(processStep(step, true));
-                }
-            }
+            b.getSteps().stream()
+                    //make sure we don't try to process null steps from the branch
+                    .filter(s -> !Objects.isNull(s))
+                    .map(s -> processStep(s, true))
+                    //make sure we don't add null steps, the unrecognized ones
+                    .filter(s -> !Objects.isNull(s))
+                    .forEachOrdered(step -> list.add(step));
         }
         return list;
     }
