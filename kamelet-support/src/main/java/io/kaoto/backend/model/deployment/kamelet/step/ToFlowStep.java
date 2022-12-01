@@ -33,8 +33,7 @@ public class ToFlowStep implements FlowStep {
             uri.setUri(map.getOrDefault("uri", "").toString());
             var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
             if (parameters != null && !parameters.isEmpty()) {
-                uri.setParameters(new LinkedHashMap<>());
-                uri.getParameters().putAll(parameters);
+                uri.setParameters(new LinkedHashMap<>(parameters));
             }
             setTo(uri);
         }
