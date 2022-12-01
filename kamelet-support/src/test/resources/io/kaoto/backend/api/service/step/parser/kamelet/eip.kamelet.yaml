@@ -30,12 +30,16 @@ spec:
               completion:
                 uri: direct:completion
               propagation: MANDATORY
+              description:
+                text: SAGA powered step
+                lang: eng
               compensation:
                 uri: direct:compensation
               completion-mode: MANUAL
               steps:
               - to:
                   uri: direct:something
+              timeout: '500'
               option:
               - key: o1
                 simple: ${body}
