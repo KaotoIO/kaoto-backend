@@ -90,31 +90,37 @@ public class UriFlowStep implements FlowStep {
         //Make sure we do the smartest pick: don't put an end step at the beginning or a start at the end
         //unless there is no other option, sure, then whatever the user is doing
         if (start) {
-            candidates = candidates.sorted((step, t1) -> {
-                var type = step.getType();
-                if (type.equalsIgnoreCase(Step.START)) {
-                    return 0;
-                } else if (type.equalsIgnoreCase(Step.MIDDLE)) {
-                    return 1;
-                } else {
-                    return 2;
-                }
+            candidates = candidates.sorted((step, step2) -> {
+                var type = Step.Type.valueOf(step.getType());
+                var type2 = Step.Type.valueOf(step2.getType());
+                return type.compareTo(type2);
             });
-        } else if (end) {
-            candidates = candidates.sorted((step, t1) -> {
-                var type = step.getType();
-                if (type.equalsIgnoreCase(Step.END)) {
+        } else {
+            candidates = candidates.sorted((step, step2) -> {
+                var type = Step.Type.valueOf(step.getType());
+                var type2 = Step.Type.valueOf(step2.getType());
+                if (type.equals(type2)) {
                     return 0;
-                } else if (type.equalsIgnoreCase(Step.MIDDLE)) {
-                    return 1;
-                } else {
-                    return 2;
                 }
+
+                if (type == Step.Type.MIDDLE) {
+                    return -1;
+                }
+                if (type2 == Step.Type.MIDDLE) {
+                    return 1;
+                }
+
+                if (type == Step.Type.START) {
+                    return -1;
+                }
+                if (type2 == Step.Type.START) {
+                    return 1;
+                }
+                return 0;
             });
         }
 
         Optional<Step> res = candidates.findFirst();
-
 
         if (res.isPresent() && this.getUri() != null) {
             kameletStepParserService.setValuesOnParameters(res.get(), this.getUri());

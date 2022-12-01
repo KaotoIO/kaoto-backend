@@ -19,9 +19,9 @@ import java.util.Objects;
  */
 public class Step extends Metadata {
 
-    public static final String START = "START";
-    public static final String MIDDLE = "MIDDLE";
-    public static final String END = "END";
+    public static final String START = Type.START.name();
+    public static final String MIDDLE = Type.MIDDLE.name();
+    public static final String END = Type.END.name();
 
     @JsonView(Views.Summary.class)
     private String kind;
@@ -274,5 +274,9 @@ public class Step extends Metadata {
         }
 
         return step;
+    }
+
+    public enum Type {
+        START, MIDDLE, END
     }
 }

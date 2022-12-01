@@ -78,7 +78,7 @@ public abstract class EIPStep implements Serializable {
             int i = 0;
             int size = steps.size();
             for (var s : steps) {
-                branch.getSteps().add(kameletStepParserService.processStep(s, i == 0,++i == size));
+                branch.getSteps().add(kameletStepParserService.processStep(s, false, ++i == size));
             }
         }
         return branch;

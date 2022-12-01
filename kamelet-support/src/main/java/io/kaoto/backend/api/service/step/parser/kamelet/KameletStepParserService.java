@@ -149,7 +149,7 @@ public class KameletStepParserService
             if (fromSteps != null) {
                 int i = 0;
                 for (FlowStep flowStep : fromSteps) {
-                    steps.add(processStep(flowStep, i == 0, i++ == fromSteps.size() - 1));
+                    steps.add(processStep(flowStep, false, i++ == fromSteps.size() - 1));
                 }
             }
         }
