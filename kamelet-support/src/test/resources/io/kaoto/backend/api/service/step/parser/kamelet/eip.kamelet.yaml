@@ -39,6 +39,12 @@ spec:
               steps:
               - to:
                   uri: direct:something
+              - sample:
+                  description:
+                    text: Message Sampler
+                    lang: eng
+                  sample-period: '1500'
+                  message-frequency: 5
               timeout: '500'
               option:
               - key: o1
