@@ -40,6 +40,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.RollbackFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RoutingSlipFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SagaFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SampleFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ScriptFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -284,6 +285,7 @@ public class KameletRepresenter extends Representer {
                 RecipientListFlowStep.class,
                 SagaFlowStep.class,
                 SampleFlowStep.class,
+                ScriptFlowStep.class,
                 ToFlowStep.class,
                 TransformFlowStep.class,
                 UnmarshalFlowStep.class,

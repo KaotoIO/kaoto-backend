@@ -38,6 +38,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.RollbackFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.RoutingSlipFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SagaFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SampleFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ScriptFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
@@ -342,6 +343,9 @@ public class KamelPopulator {
                     break;
                 case "sample":
                     flowStep = new SampleFlowStep(step);
+                    break;
+                case "script":
+                    flowStep = new ScriptFlowStep(step);
                     break;
                 case "transform":
                     flowStep = new TransformFlowStep(getExpression(step));

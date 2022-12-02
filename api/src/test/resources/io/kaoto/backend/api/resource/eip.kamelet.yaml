@@ -38,6 +38,9 @@ spec:
                     lang: eng
                   sample-period: '1500'
                   message-frequency: 5
+              - script:
+                  expression:
+                    simple: ${body}
               option:
               - key: o1
                 simple: ${body}

@@ -45,6 +45,9 @@ spec:
                     lang: eng
                   sample-period: '1500'
                   message-frequency: 5
+              - script:
+                  expression:
+                    simple: ${body}
               timeout: '500'
               option:
               - key: o1
