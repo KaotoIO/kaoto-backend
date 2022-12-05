@@ -17,6 +17,15 @@ public class BooleanParameter extends Parameter<Boolean> {
     }
 
     @Override
+    public Boolean convertToType(final Object value) {
+        try {
+            return Boolean.valueOf(String.valueOf(value));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
     public String getType() {
         return "boolean";
     }

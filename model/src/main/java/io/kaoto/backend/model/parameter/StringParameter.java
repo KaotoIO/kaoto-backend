@@ -28,6 +28,11 @@ public class StringParameter extends Parameter<String> {
         super();
     }
 
+    @Override
+    public String convertToType(final Object value) {
+        return String.valueOf(value);
+    }
+
     /*
      * 🐱property maxLength: Integer
      *
