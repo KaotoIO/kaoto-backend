@@ -96,6 +96,8 @@ public abstract class Parameter<T> implements Cloneable {
         this.value = value;
     }
 
+    public abstract T convertToType(final Object value);
+
     /*
      * 🐱property value: Object
      *

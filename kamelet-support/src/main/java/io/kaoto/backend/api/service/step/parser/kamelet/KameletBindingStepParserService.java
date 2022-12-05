@@ -172,7 +172,7 @@ public class KameletBindingStepParserService
             var valid = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
-                    p.setValue(c.getValue());
+                    p.setValue(p.convertToType(c.getValue()));
                     valid = true;
                     break;
                 }
@@ -208,7 +208,7 @@ public class KameletBindingStepParserService
 
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(key)) {
-                    p.setValue(value);
+                    p.setValue(p.convertToType(value));
                     break;
                 }
             }

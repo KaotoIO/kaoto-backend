@@ -22,6 +22,16 @@ public class IntegerParameter extends Parameter<Integer> {
     public IntegerParameter() {
         super();
     }
+
+    @Override
+    public Integer convertToType(final Object value) {
+        try {
+            return Integer.valueOf(String.valueOf(value));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     /*
      * 🐱property maximum: Integer
      *

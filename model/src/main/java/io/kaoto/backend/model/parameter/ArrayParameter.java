@@ -23,6 +23,11 @@ public class ArrayParameter extends Parameter<Object[]> {
         super();
     }
 
+    @Override
+    public Object[] convertToType(final Object value) {
+        return (Object[]) value;
+    }
+
     /*
      * 🐱property maxItems: Integer
      *

@@ -195,7 +195,7 @@ public class KameletStepParserService
 
         for (Parameter p : step.getParameters()) {
             if (p.isPath()) {
-                p.setValue(path);
+                p.setValue(p.convertToType(path));
             }
         }
 
@@ -220,7 +220,7 @@ public class KameletStepParserService
     public void setValueOnStepProperty(final Step step, final String key, final Object value) {
         for (Parameter p : step.getParameters()) {
             if (p.getId().equalsIgnoreCase(key)) {
-                p.setValue(value);
+                p.setValue(p.convertToType(value));
                 break;
             }
         }

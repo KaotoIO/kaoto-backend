@@ -23,6 +23,15 @@ public class NumberParameter extends Parameter<Number> {
         super();
     }
 
+    @Override
+    public Number convertToType(final Object value) {
+        try {
+            return Long.valueOf(String.valueOf(value));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     /*
      * 🐱property maximum: Number
      *

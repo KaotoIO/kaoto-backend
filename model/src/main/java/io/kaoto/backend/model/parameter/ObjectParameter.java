@@ -23,6 +23,11 @@ public class ObjectParameter extends Parameter<Object> {
         super();
     }
 
+    @Override
+    public Object convertToType(final Object value) {
+        return value;
+    }
+
     /*
      * 🐱property maxProperties: Integer
      *
