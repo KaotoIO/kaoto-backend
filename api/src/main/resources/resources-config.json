@@ -5,7 +5,7 @@
         "pattern": "camel-3.19.0.zip$"
       },
       {
-        "pattern": "camel-kamelets-0.9.3.jar$"
+        "pattern": "camel-kamelets-0.10.0.jar$"
       },
       {
         "pattern": "view-definition.zip$"
