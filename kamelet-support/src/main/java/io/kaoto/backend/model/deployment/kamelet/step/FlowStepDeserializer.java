@@ -64,6 +64,10 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("log", LogFlowStep.class);
         steps.put("loop", LoopFlowStep.class);
         steps.put("multicast", MulticastFlowStep.class);
+        steps.put("pipeline", PipelineFlowStep.class);
+        steps.put("poll-enrich", PollEnrichFlowStep.class);
+        steps.put("pollEnrich", PollEnrichFlowStep.class);
+        steps.put("process", ProcessFlowStep.class);
         steps.put("recipient-list", RecipientListFlowStep.class);
         steps.put("recipientList", RecipientListFlowStep.class);
         steps.put("removeHeader", RemoveHeaderFlowStep.class);
@@ -86,12 +90,10 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("setHeader", SetHeaderFlowStep.class);
         steps.put("set-property", SetPropertyFlowStep.class);
         steps.put("setProperty", SetPropertyFlowStep.class);
+        steps.put("service-call", ServiceCallFlowStep.class);
+        steps.put("serviceCall", ServiceCallFlowStep.class);
         steps.put("script", ScriptFlowStep.class);
         steps.put("split", SplitFlowStep.class);
-        steps.put("pipeline", PipelineFlowStep.class);
-        steps.put("poll-enrich", PollEnrichFlowStep.class);
-        steps.put("pollEnrich", PollEnrichFlowStep.class);
-        steps.put("process", ProcessFlowStep.class);
         steps.put("to", ToFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("unmarshal", UnmarshalFlowStep.class);

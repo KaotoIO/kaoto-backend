@@ -172,6 +172,15 @@ spec:
                     message: test
                     logging-level: INFO
                     log-name: yaml
+                - service-call:
+                    blacklist-service-filter:
+                      servers:
+                      - service2@host1
+                    name: sc
+                    static-service-discovery:
+                      servers:
+                      - service1@host1
+                      - service1@host2
           otherwise:
             steps:
             - remove-header:
