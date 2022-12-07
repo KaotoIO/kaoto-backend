@@ -12,3 +12,6 @@ jobs:
     steps:
     - name: Create Release
       uses: ncipollo/release-action@v1.11.2
+      with:
+        draft: true
+        generateReleaseNotes: true
