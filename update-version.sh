@@ -34,7 +34,9 @@ then
   cd $path
   git add -f "api/src/main/resources/camel-kamelets-"$versionKamelets".jar"
   sed -i 's/kamelets-.*/kamelets-'$versionKamelets'.jar$"/g' api/src/main/resources/resources-config.json
+  sed -i 's/kamelets-.*/kamelets-'$versionKamelets'.jar$"/g' api/src/main/resources/application.yaml
   git add api/src/main/resources/resources-config.json
+  git add api/src/main/resources/application.yaml
 
   git commit -m "chore(resources): Updating zip files with step catalog components."
 fi
