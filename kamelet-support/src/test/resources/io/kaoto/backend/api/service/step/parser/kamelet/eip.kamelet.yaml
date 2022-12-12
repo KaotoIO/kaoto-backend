@@ -188,6 +188,7 @@ spec:
             - rollback:
                 mark-rollback-only: true
                 message: test
+            - stop: {}
       - filter:
           simple: '{{?foo}}'
           steps:
