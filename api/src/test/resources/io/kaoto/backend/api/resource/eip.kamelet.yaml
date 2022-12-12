@@ -181,5 +181,7 @@ spec:
                     steps:
                     - set-body:
                         simple: ola ke ase
+          - sort:
+              comparator: myComparator
       - to:
           uri: kamelet:sink
