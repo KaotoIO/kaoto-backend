@@ -140,6 +140,7 @@ spec:
           - unmarshal:
               json:
                 unmarshal-type-name: MyClass
+          - set-exchange-pattern: InOut
           - circuit-breaker:
               description:
                 text: Another one

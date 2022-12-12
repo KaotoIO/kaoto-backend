@@ -43,6 +43,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SampleFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ScriptFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ServiceCallFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetBodyFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.SetExchangePatternFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetHeaderFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SetPropertyFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SplitFlowStep;
@@ -290,6 +291,7 @@ public class KameletRepresenter extends Representer {
                 ScriptFlowStep.class,
                 ServiceCallFlowStep.class,
                 StopFlowStep.class,
+                SetExchangePatternFlowStep.class,
                 ToFlowStep.class,
                 TransformFlowStep.class,
                 UnmarshalFlowStep.class,

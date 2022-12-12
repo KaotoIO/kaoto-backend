@@ -194,6 +194,7 @@ spec:
           steps:
           - set-body:
               simple: abc
+          - set-exchange-pattern: InOut
           - idempotent-consumer:
               idempotent-repository: myRepo
               simple: ${header.id}
