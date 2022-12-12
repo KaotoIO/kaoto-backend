@@ -93,6 +93,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("service-call", ServiceCallFlowStep.class);
         steps.put("serviceCall", ServiceCallFlowStep.class);
         steps.put("script", ScriptFlowStep.class);
+        steps.put("sort", SortFlowStep.class);
         steps.put("split", SplitFlowStep.class);
         steps.put("stop", StopFlowStep.class);
         steps.put("to", ToFlowStep.class);
