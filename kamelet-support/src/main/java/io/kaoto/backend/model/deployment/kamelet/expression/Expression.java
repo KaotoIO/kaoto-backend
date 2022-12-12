@@ -17,6 +17,8 @@ public class Expression extends EIPStep {
     public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
     public static final String NAME_LABEL = KameletRepresenter.NAME;
 
+    public static final String EXPRESSION_LABEL = "expression";
+
     @JsonProperty(CONSTANT_LABEL)
     private String constant;
 
@@ -32,12 +34,16 @@ public class Expression extends EIPStep {
 
     @JsonCreator
     public Expression(
+            final @JsonProperty(EXPRESSION_LABEL) Expression expression,
             final @JsonProperty(CONSTANT_LABEL) String constant,
             final @JsonProperty(SIMPLE_LABEL) String simple,
             final @JsonProperty(NAME_LABEL) String name) {
         setConstant(constant);
         setSimple(simple);
         setName(name);
+        if (expression != null) {
+            setProperties(expression);
+        }
     }
 
     public Expression(Step step) {
@@ -45,9 +51,14 @@ public class Expression extends EIPStep {
     }
 
     public Expression(Object obj) {
+        setProperties(obj);
+    }
+
+    protected void setProperties(final Object obj) {
         if (obj instanceof Expression e) {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
+            setName(e.getName());
         } else if (obj instanceof Map map) {
             setPropertiesFromMap(map);
         }
@@ -77,6 +88,9 @@ public class Expression extends EIPStep {
             case NAME_LABEL:
                 this.setName(parameter.getValue().toString());
                 break;
+            case EXPRESSION_LABEL:
+                setProperties(parameter.getValue());
+                break;
             default:
                 break;
         }
@@ -93,6 +107,9 @@ public class Expression extends EIPStep {
                 break;
             case NAME_LABEL:
                 parameter.setValue(this.name);
+                break;
+            case EXPRESSION_LABEL:
+                parameter.setValue(this);
                 break;
             default:
                 break;

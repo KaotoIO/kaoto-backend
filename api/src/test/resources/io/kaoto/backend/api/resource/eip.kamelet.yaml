@@ -163,6 +163,8 @@ spec:
                       - convert-body-to:
                           type: java.lang.String
                           charset: UTF8
+                      - validate:
+                          simple: ${body} == 100
                       - poll-enrich:
                           expression:
                             simple: ${body}
