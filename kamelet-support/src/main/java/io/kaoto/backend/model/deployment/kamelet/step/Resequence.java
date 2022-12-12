@@ -14,8 +14,6 @@ import java.util.Map;
 
 
 public class Resequence extends Expression {
-    public static final String EXPRESSION_LABEL = "expression";
-
     public static final String RESEQUENCER_CONFIG_LABEL= "stream-config";
     public static final String RESEQUENCER_CONFIG_LABEL2= "batch-config";
     public static final String RESEQUENCER_CONFIG_LABEL3= "streamConfig";
@@ -24,8 +22,6 @@ public class Resequence extends Expression {
     public static final String DESCRIPTION_LABEL = "description";
 
     public static final String STEPS_LABEL = "steps";
-
-    private Expression expression;
 
     private Map<String, String> streamConfig;
 
@@ -55,9 +51,9 @@ public class Resequence extends Expression {
                       final @JsonProperty(RESEQUENCER_CONFIG_LABEL3)  Map<String, String> resequencerConfig3,
                       final @JsonProperty(RESEQUENCER_CONFIG_LABEL4)  Map<String, String> resequencerConfig4,
                       final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                      final @JsonProperty("simple") String simple,
-                      final @JsonProperty("constant") String constant) {
-        setExpression(expression);
+                      final @JsonProperty(SIMPLE_LABEL) String simple,
+                      final @JsonProperty(CONSTANT_LABEL) String constant) {
+        super(expression, constant, simple, null);
         if (resequencerConfig != null) {
             setStreamConfig(resequencerConfig);
         } else if (resequencerConfig2 != null) {
@@ -67,8 +63,6 @@ public class Resequence extends Expression {
         } else if (resequencerConfig4 != null) {
             setBatchConfig(resequencerConfig4);
         }
-        setSimple(simple);
-        setConstant(constant);
         setDescription(description);
     }
 
@@ -76,9 +70,6 @@ public class Resequence extends Expression {
     protected void assignAttribute(final Parameter parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
-                break;
             case RESEQUENCER_CONFIG_LABEL:
             case RESEQUENCER_CONFIG_LABEL3:
                 this.setStreamConfig((Map<String, String>) parameter.getValue());
@@ -98,9 +89,6 @@ public class Resequence extends Expression {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.getExpression() != null) {
-            properties.putAll(this.getExpression().getRepresenterProperties());
-        }
         if (this.getStreamConfig() != null) {
             properties.put(RESEQUENCER_CONFIG_LABEL, this.getStreamConfig());
         }
@@ -121,9 +109,6 @@ public class Resequence extends Expression {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.getExpression());
-                break;
             case RESEQUENCER_CONFIG_LABEL:
             case RESEQUENCER_CONFIG_LABEL3:
                 parameter.setValue(this.getStreamConfig());
@@ -144,14 +129,6 @@ public class Resequence extends Expression {
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
         step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public Map<String, String> getStreamConfig() {

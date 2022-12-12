@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -9,7 +10,6 @@ import java.util.Map;
 
 
 public class RecipientList extends Expression {
-    public static final String EXPRESSION_LABEL = "expression";
 
     public static final String DELIMITER_LABEL = "delimiter";
 
@@ -52,8 +52,6 @@ public class RecipientList extends Expression {
 
     public static final String DESCRIPTION_LABEL = "description";
 
-    private Expression expression;
-
     private String delimiter;
 
     private Boolean parallelProcessing;
@@ -89,6 +87,7 @@ public class RecipientList extends Expression {
          //Needed for serialization
     }
 
+    @JsonCreator
     public RecipientList(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
                          final @JsonProperty(DELIMITER_LABEL)  String delimiter,
                          final @JsonProperty(PARALLEL_PROCESSING_LABEL) Boolean parallelProcessing,
@@ -116,11 +115,9 @@ public class RecipientList extends Expression {
                          final @JsonProperty(PARALLEL_AGGREGATE_LABEL) Boolean parallelAggregate,
                          final @JsonProperty(PARALLEL_AGGREGATE_LABEL2) Boolean parallelAggregate2,
                          final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                         final @JsonProperty("simple") String simple,
-                         final @JsonProperty("constant") String constant) {
-        setExpression(expression);
-        setSimple(simple);
-        setConstant(constant);
+                         final @JsonProperty(SIMPLE_LABEL) String simple,
+                         final @JsonProperty(CONSTANT_LABEL) String constant) {
+        super(expression, constant, simple, null);
         setDelimiter(delimiter);
         setParallelProcessing(parallelProcessing != null ? parallelProcessing : parallelProcessing2);
         setStrategyRef(strategyRef != null ? strategyRef : strategyRef2);
@@ -146,9 +143,6 @@ public class RecipientList extends Expression {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.getExpression() != null) {
-            properties.put(EXPRESSION_LABEL, this.getExpression());
-        }
 
         if (this.getDelimiter() != null) {
             properties.put(DELIMITER_LABEL, this.getDelimiter());
@@ -215,9 +209,6 @@ public class RecipientList extends Expression {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.getExpression());
-                break;
             case DELIMITER_LABEL:
                 parameter.setValue(this.getDelimiter());
                 break;
@@ -284,9 +275,6 @@ public class RecipientList extends Expression {
     protected void assignAttribute(final Parameter parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
-                break;
             case DELIMITER_LABEL:
                 this.setDelimiter(String.valueOf(parameter.getValue()));
                 break;
@@ -346,14 +334,6 @@ public class RecipientList extends Expression {
             default:
                 break;
         }
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public String getDelimiter() {

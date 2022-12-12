@@ -19,18 +19,18 @@ public class DynamicRouterFlowStep implements FlowStep {
     public static final String LABEL = "dynamic-router";
     public static final String LABEL2 = "dynamicRouter";
 
-    private DynamicRouter dynamicRouter;
+    private RoutingSlip dynamicRouter;
 
     @JsonCreator
-    public DynamicRouterFlowStep(final @JsonProperty(LABEL) DynamicRouter dynamicRouter,
-                                 final @JsonProperty(LABEL2) DynamicRouter dynamicRouter2) {
+    public DynamicRouterFlowStep(final @JsonProperty(LABEL) RoutingSlip dynamicRouter,
+                                 final @JsonProperty(LABEL2) RoutingSlip dynamicRouter2) {
         super();
         setDynamicRouter(dynamicRouter != null ? dynamicRouter : dynamicRouter2);
     }
 
     public DynamicRouterFlowStep(final Step step) {
         super();
-        setDynamicRouter(new DynamicRouter(step));
+        setDynamicRouter(new RoutingSlip(step));
     }
 
     @Override
@@ -46,11 +46,11 @@ public class DynamicRouterFlowStep implements FlowStep {
         return getDynamicRouter().getStep(catalog, LABEL, kameletStepParserService);
     }
 
-    public DynamicRouter getDynamicRouter() {
+    public RoutingSlip getDynamicRouter() {
         return dynamicRouter;
     }
 
-    public void setDynamicRouter(final DynamicRouter dynamicRouter) {
+    public void setDynamicRouter(final RoutingSlip dynamicRouter) {
         this.dynamicRouter = dynamicRouter;
     }
 }

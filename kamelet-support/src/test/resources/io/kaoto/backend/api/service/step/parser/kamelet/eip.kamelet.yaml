@@ -67,11 +67,10 @@ spec:
           - simple: '{{?foo}}'
             steps:
             - dynamic-router:
-                expression:
-                  simple: ${body}
                 description:
                   text: Dynamic Routing
                   lang: eng
+                simple: ${body}
             - set-header:
                 name: bar
                 simple: foo

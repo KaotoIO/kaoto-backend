@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -14,8 +15,6 @@ import java.util.Map;
 
 
 public class Loop extends Expression {
-    public static final String EXPRESSION_LABEL = "expression";
-
     public static final String COPY_LABEL= "copy";
 
     public static final String DO_WHILE_LABEL = "do-while";
@@ -30,25 +29,16 @@ public class Loop extends Expression {
 
     public static final String STEPS_LABEL = "steps";
 
-    @JsonProperty(EXPRESSION_LABEL)
-    private Expression expression;
-
-    @JsonProperty(COPY_LABEL)
     private Boolean copy;
 
-    @JsonProperty(DO_WHILE_LABEL)
     private Boolean doWhile;
 
-    @JsonProperty(BREAK_ON_SHUTDOWN_LABEL)
     private Boolean breakOnShutdown;
 
-    @JsonProperty(DISABLED_LABEL)
     private Boolean disabled;
 
-    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
 
-    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
 
 
@@ -64,13 +54,31 @@ public class Loop extends Expression {
         }
     }
 
+    @JsonCreator
+    public Loop(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
+                              final @JsonProperty(SIMPLE_LABEL) String simple,
+                              final @JsonProperty(CONSTANT_LABEL) String constant,
+                              final @JsonProperty(COPY_LABEL) Boolean copy,
+                              final @JsonProperty(DO_WHILE_LABEL) Boolean doWhile,
+                              final @JsonProperty(DO_WHILE_LABEL2) Boolean doWhile2,
+                              final @JsonProperty(BREAK_ON_SHUTDOWN_LABEL) Boolean breakOnShutdown,
+                              final @JsonProperty(BREAK_ON_SHUTDOWN_LABEL2) Boolean breakOnShutdown2,
+                              final @JsonProperty(DISABLED_LABEL) Boolean disabled,
+                              final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+                              final @JsonProperty(STEPS_LABEL) List<FlowStep> steps) {
+        super(expression, constant, simple, null);
+        setCopy(copy);
+        setDoWhile(doWhile != null ? doWhile : doWhile2);
+        setBreakOnShutdown(breakOnShutdown != null ? breakOnShutdown : breakOnShutdown2);
+        setDisabled(disabled);
+        setDescription(description);
+        setSteps(steps);
+    }
+
     @Override
     protected void assignAttribute(final Parameter parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
-                break;
             case COPY_LABEL:
                 this.setCopy(Boolean.valueOf(parameter.getValue().toString()));
                 break;
@@ -96,9 +104,6 @@ public class Loop extends Expression {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.expression != null) {
-            properties.putAll(this.expression.getRepresenterProperties());
-        }
         if (this.copy != null) {
             properties.put(COPY_LABEL, this.copy);
         }
@@ -125,9 +130,6 @@ public class Loop extends Expression {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.expression);
-                break;
             case COPY_LABEL:
                 parameter.setValue(this.copy);
                 break;
@@ -154,14 +156,6 @@ public class Loop extends Expression {
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
         step.setBranches(List.of(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService)));
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public Boolean getCopy() {
