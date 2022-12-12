@@ -20,8 +20,6 @@ public class ServiceCall extends Expression {
 
     public static final String NAME_LABEL = "name";
 
-    public static final String EXPRESSION_LABEL = "expression";
-
     public static final String URI_LABEL = "uri";
 
     public static final String COMPONENT_LABEL = "component";
@@ -71,8 +69,6 @@ public class ServiceCall extends Expression {
 
     private String name;
 
-    private Expression expression;
-
     private String uri;
 
     private String component;
@@ -106,6 +102,8 @@ public class ServiceCall extends Expression {
     @JsonCreator
     public ServiceCall(final @JsonProperty(NAME_LABEL) String name,
                        final @JsonProperty(EXPRESSION_LABEL) Expression expression,
+                       final @JsonProperty(SIMPLE_LABEL) String simple,
+                       final @JsonProperty(CONSTANT_LABEL) String constant,
                        final @JsonProperty(URI_LABEL) String uri,
                        final @JsonProperty(COMPONENT_LABEL) String component,
                        final @JsonProperty(PATTERN_LABEL) String pattern,
@@ -156,9 +154,8 @@ public class ServiceCall extends Expression {
                        final @JsonProperty(
                                LOAD_BALANCER_CONFIGURATION_LABEL2) Map<String, Object> loadBalancerConfiguration2,
                        final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super();
+        super(expression, constant, simple, null);
         setName(name);
-        setExpression(expression);
         setUri(uri);
         setComponent(component);
         setPattern(pattern);
@@ -235,9 +232,6 @@ public class ServiceCall extends Expression {
         if (this.getName() != null) {
             properties.put(NAME_LABEL, this.getName());
         }
-        if (this.getExpression() != null) {
-            properties.put(EXPRESSION_LABEL, this.getExpression());
-        }
         if (this.getUri() != null) {
             properties.put(URI_LABEL, this.getUri());
         }
@@ -287,9 +281,6 @@ public class ServiceCall extends Expression {
         switch (parameter.getId()) {
             case NAME_LABEL:
                 this.setName(String.valueOf(parameter.getValue()));
-                break;
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
                 break;
             case URI_LABEL:
                 this.setUri(String.valueOf(parameter.getValue()));
@@ -364,9 +355,6 @@ public class ServiceCall extends Expression {
             case NAME_LABEL:
                 parameter.setValue(this.getName());
                 break;
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.getExpression());
-                break;
             case URI_LABEL:
                 parameter.setValue(this.getUri());
                 break;
@@ -440,14 +428,6 @@ public class ServiceCall extends Expression {
     @Override
     public void setName(final String name) {
         this.name = name;
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public String getUri() {

@@ -59,8 +59,7 @@ spec:
           - simple: '{{?foo}}'
             steps:
             - dynamic-router:
-                expression:
-                  simple: ${body}
+                simple: ${body}
             - set-header:
                 name: bar
                 simple: foo

@@ -14,8 +14,6 @@ import java.util.Map;
 
 
 public class IdempotentConsumer extends Expression {
-    public static final String EXPRESSION_LABEL = "expression";
-
     public static final String IDEMPOTENT_REPOSITORY_LABEL = "idempotent-repository";
     public static final String IDEMPOTENT_REPOSITORY_LABEL2 = "idempotentRepository";
 
@@ -34,28 +32,18 @@ public class IdempotentConsumer extends Expression {
 
     public static final String STEPS_LABEL = "steps";
 
-    @JsonProperty(EXPRESSION_LABEL)
-    private Expression expression;
-
-    @JsonProperty(IDEMPOTENT_REPOSITORY_LABEL)
     private Object idempotentRepository;
 
-    @JsonProperty(EAGER_LABEL)
     private Boolean eager;
 
-    @JsonProperty(COMPLETION_EAGER_LABEL)
     private Boolean completionEager;
 
-    @JsonProperty(SKIP_DUPLICATE_LABEL)
     private Boolean skipDuplicate;
 
-    @JsonProperty(REMOVE_ON_FAILURE_LABEL)
     private Boolean removeOnFailure;
 
-    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
 
-    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
 
 
@@ -71,6 +59,30 @@ public class IdempotentConsumer extends Expression {
          //Needed for serialization
     }
 
+
+    public IdempotentConsumer(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
+                       final @JsonProperty(SIMPLE_LABEL) String simple,
+                       final @JsonProperty(CONSTANT_LABEL) String constant,
+                       final @JsonProperty(IDEMPOTENT_REPOSITORY_LABEL) Object idempotentRepository,
+                       final @JsonProperty(IDEMPOTENT_REPOSITORY_LABEL2) Object idempotentRepository2,
+                       final @JsonProperty(EAGER_LABEL) Boolean eager,
+                       final @JsonProperty(COMPLETION_EAGER_LABEL) Boolean completionEager,
+                       final @JsonProperty(COMPLETION_EAGER_LABEL2) Boolean completionEager2,
+                       final @JsonProperty(SKIP_DUPLICATE_LABEL) Boolean skipDuplicate,
+                       final @JsonProperty(SKIP_DUPLICATE_LABEL2) Boolean skipDuplicate2,
+                       final @JsonProperty(REMOVE_ON_FAILURE_LABEL) Boolean removeOnFailure,
+                       final @JsonProperty(REMOVE_ON_FAILURE_LABEL2) Boolean removeOnFailure2,
+                       final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
+
+        super(expression, constant, simple, null);
+        setIdempotentRepository(idempotentRepository != null ? idempotentRepository : idempotentRepository2);
+        setEager(eager);
+        setCompletionEager(completionEager != null ? completionEager : completionEager2);
+        setSkipDuplicate(skipDuplicate != null ? skipDuplicate : skipDuplicate2);
+        setRemoveOnFailure(removeOnFailure != null ? removeOnFailure : removeOnFailure2);
+        setDescription(description);
+    }
+
     @Override
     protected void assignAttribute(final Parameter parameter) {
         super.assignAttribute(parameter);
@@ -78,9 +90,6 @@ public class IdempotentConsumer extends Expression {
             case IDEMPOTENT_REPOSITORY_LABEL:
             case IDEMPOTENT_REPOSITORY_LABEL2:
                 this.setIdempotentRepository(parameter.getValue());
-                break;
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
                 break;
             case EAGER_LABEL:
                 this.setEager(Boolean.valueOf(String.valueOf(parameter.getValue())));
@@ -108,9 +117,6 @@ public class IdempotentConsumer extends Expression {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.getExpression() != null) {
-            properties.putAll(this.getExpression().getRepresenterProperties());
-        }
         if (this.getIdempotentRepository() != null) {
             properties.put(IDEMPOTENT_REPOSITORY_LABEL, this.getIdempotentRepository());
         }
@@ -140,9 +146,6 @@ public class IdempotentConsumer extends Expression {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.getExpression());
-                break;
             case IDEMPOTENT_REPOSITORY_LABEL:
             case IDEMPOTENT_REPOSITORY_LABEL2:
                 parameter.setValue(this.getIdempotentRepository());
@@ -179,14 +182,6 @@ public class IdempotentConsumer extends Expression {
             id = String.valueOf(filter_ids.entrySet().stream().findFirst().get().getValue());
         }
         step.setBranches(List.of(createBranch(id, this.getSteps(), kameletStepParserService)));
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public Object getIdempotentRepository() {

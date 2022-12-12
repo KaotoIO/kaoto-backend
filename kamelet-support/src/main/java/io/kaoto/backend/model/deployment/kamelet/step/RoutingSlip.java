@@ -9,8 +9,6 @@ import java.util.Map;
 
 
 public class RoutingSlip extends Expression {
-    public static final String EXPRESSION_LABEL = "expression";
-
     public static final String URI_DELIMITER_LABEL = "uri-delimiter";
     public static final String URI_DELIMITER_LABEL2 = "uriDelimiter";
 
@@ -21,8 +19,6 @@ public class RoutingSlip extends Expression {
     public static final String CACHE_SIZE_LABEL2 = "cacheSize";
 
     public static final String DESCRIPTION_LABEL = "description";
-
-    private Expression expression;
 
     private String uriDelimiter;
 
@@ -49,14 +45,12 @@ public class RoutingSlip extends Expression {
                        final @JsonProperty(CACHE_SIZE_LABEL) Integer cacheSize,
                        final @JsonProperty(CACHE_SIZE_LABEL2) Integer cacheSize2,
                        final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                       final @JsonProperty("simple") String simple,
-                       final @JsonProperty("constant") String constant) {
-        setExpression(expression);
+                       final @JsonProperty(SIMPLE_LABEL) String simple,
+                       final @JsonProperty(CONSTANT_LABEL) String constant) {
+        super(expression, constant, simple, null);
         setUriDelimiter(uriDelimiter != null ? uriDelimiter : uriDelimiter2);
         setIgnoreInvalidEndpoints(ignoreInvalidEndpoints != null ? ignoreInvalidEndpoints : ignoreInvalidEndpoints2);
         setCacheSize(cacheSize != null ? cacheSize : cacheSize2);
-        setSimple(simple);
-        setConstant(constant);
         setDescription(description);
     }
 
@@ -64,9 +58,6 @@ public class RoutingSlip extends Expression {
     protected void assignAttribute(final Parameter parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                this.setExpression(new Expression(parameter.getValue()));
-                break;
             case URI_DELIMITER_LABEL:
             case URI_DELIMITER_LABEL2:
                 this.setUriDelimiter(String.valueOf(parameter.getValue()));
@@ -90,9 +81,6 @@ public class RoutingSlip extends Expression {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.getExpression() != null) {
-            properties.putAll(this.getExpression().getRepresenterProperties());
-        }
         if (this.getUriDelimiter() != null) {
             properties.put(URI_DELIMITER_LABEL, this.getUriDelimiter());
         }
@@ -113,9 +101,6 @@ public class RoutingSlip extends Expression {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.getExpression());
-                break;
             case URI_DELIMITER_LABEL:
             case URI_DELIMITER_LABEL2:
                 parameter.setValue(getUriDelimiter());
@@ -151,13 +136,6 @@ public class RoutingSlip extends Expression {
 
     public void setIgnoreInvalidEndpoints(final Boolean ignoreInvalidEndpoints) {
         this.ignoreInvalidEndpoints = ignoreInvalidEndpoints;
-    }
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public Integer getCacheSize() {

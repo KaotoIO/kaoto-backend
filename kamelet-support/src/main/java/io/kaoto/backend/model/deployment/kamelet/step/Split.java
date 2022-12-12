@@ -5,7 +5,6 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.expression.Tokenizer;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -15,7 +14,6 @@ import java.util.Map;
 
 
 public class Split extends Tokenizer {
-    public static final String EXPRESSION_LABEL = "expression";
 
     public static final String TOKENIZE_LABEL = "tokenize";
 
@@ -55,9 +53,6 @@ public class Split extends Tokenizer {
 
     public static final String SHARE_UNIT_OF_WORK_LABEL = "shareUnitOfWork";
     public static final String SHARE_UNIT_OF_WORK_LABEL2 = "share-init-of-work";
-
-    @JsonProperty(EXPRESSION_LABEL)
-    private Expression expression;
 
     @JsonProperty(TOKENIZE_LABEL)
     private Tokenizer tokenize;
@@ -122,9 +117,6 @@ public class Split extends Tokenizer {
         if (parameter.getValue() != null) {
             super.assignAttribute(parameter);
             switch (parameter.getId()) {
-                case EXPRESSION_LABEL:
-                    this.setExpression(new Expression(parameter.getValue()));
-                    break;
                 case TOKENIZE_LABEL:
                     this.setTokenize(new Tokenizer(parameter.getValue()));
                     break;
@@ -185,9 +177,6 @@ public class Split extends Tokenizer {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        if (this.expression != null) {
-            properties.putAll(this.expression.getRepresenterProperties());
-        }
         if (this.getTokenize() != null) {
             properties.putAll(this.tokenize.getRepresenterProperties());
         }
@@ -247,9 +236,6 @@ public class Split extends Tokenizer {
     protected void assignProperty(final Parameter parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
-            case EXPRESSION_LABEL:
-                parameter.setValue(this.expression);
-                break;
             case TOKENIZE_LABEL:
                 parameter.setValue(this.getTokenize());
                 break;
@@ -414,14 +400,6 @@ public class Split extends Tokenizer {
 
     public void setTokenize(final Tokenizer tokenize) {
         this.tokenize = tokenize;
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(final Expression expression) {
-        this.expression = expression;
     }
 
     public String getDelimiter() {

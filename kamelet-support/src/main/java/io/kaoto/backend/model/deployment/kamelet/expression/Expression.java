@@ -11,7 +11,7 @@ import io.kaoto.backend.model.step.Step;
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonPropertyOrder({"constant", "simple"})
+@JsonPropertyOrder({"name", "constant", "simple"})
 public class Expression extends EIPStep {
     public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
     public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
@@ -25,7 +25,7 @@ public class Expression extends EIPStep {
     @JsonProperty(SIMPLE_LABEL)
     private String simple;
 
-    @JsonProperty(KameletRepresenter.NAME)
+    @JsonProperty(NAME_LABEL)
     private String name;
 
     public Expression() {
