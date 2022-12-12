@@ -147,6 +147,8 @@ spec:
             - enrich:
                 expression:
                   simple: ${body}
+            - validate:
+                simple: ${body} == 100
             - resequence:
                 simple: ${in.header.seqnum}
                 stream-config:

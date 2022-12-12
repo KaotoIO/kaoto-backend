@@ -49,6 +49,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -361,6 +362,9 @@ public class KamelPopulator {
                 case "unmarshal":
                     flowStep = getUnmarshalStep(step);
                     break;
+                case "validate":
+                    flowStep = new ValidateFlowStep(step);
+                    break;
                 default:
                     flowStep = getCamelConnector(step, to);
                     break;
@@ -427,7 +431,7 @@ public class KamelPopulator {
 
 
     public static Expression getExpression(final Step step) {
-        Expression expression = new Expression(null, null, null);
+        Expression expression = new Expression(null, null, null, null);
         for (Parameter p : step.getParameters()) {
             if (p.getValue() == null) {
                 continue;

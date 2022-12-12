@@ -51,6 +51,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
@@ -293,7 +294,8 @@ public class KameletRepresenter extends Representer {
                 ToFlowStep.class,
                 TransformFlowStep.class,
                 UnmarshalFlowStep.class,
-                UriFlowStep.class
+                UriFlowStep.class,
+                ValidateFlowStep.class
         };
 
         for (var eip : eips) {
