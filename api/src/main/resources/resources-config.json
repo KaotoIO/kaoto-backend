@@ -2,7 +2,7 @@
   "resources": {
     "includes": [
       {
-        "pattern": "camel-3.19.0.zip$"
+        "pattern": "camel-connectors-3.19.0.zip$"
       },
       {
         "pattern": "camel-kamelets-0.10.0.jar$"

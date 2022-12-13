@@ -5,7 +5,7 @@
         - url: "resource://camel-kamelets-0.10.0.jar"
           if-no-cluster: true
         - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
-        - url: "resource://camel-3.19.0.zip"
+        - url: "resource://camel-connectors-3.19.0.zip"
           kind: "Camel-Connector"
     viewdefinition:
       jar:
@@ -18,7 +18,7 @@
           if-no-cluster: true
           kind: "Kamelet"
         - url: "resource://camel-component-metadata.zip"
-        - url: "resource://camel-3.19.0.zip"
+        - url: "resource://camel-connectors-3.19.0.zip"
           kind: "Camel-Connector"
     viewdefinition:
       jar:
