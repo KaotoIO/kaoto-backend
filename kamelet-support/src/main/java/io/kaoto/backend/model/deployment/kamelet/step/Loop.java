@@ -57,6 +57,7 @@ public class Loop extends Expression {
     @JsonCreator
     public Loop(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
                               final @JsonProperty(SIMPLE_LABEL) String simple,
+                              final @JsonProperty(JQ_LABEL) String jq,
                               final @JsonProperty(CONSTANT_LABEL) String constant,
                               final @JsonProperty(COPY_LABEL) Boolean copy,
                               final @JsonProperty(DO_WHILE_LABEL) Boolean doWhile,
@@ -66,7 +67,7 @@ public class Loop extends Expression {
                               final @JsonProperty(DISABLED_LABEL) Boolean disabled,
                               final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
                               final @JsonProperty(STEPS_LABEL) List<FlowStep> steps) {
-        super(expression, constant, simple, null);
+        super(expression, constant, simple, jq, null);
         setCopy(copy);
         setDoWhile(doWhile != null ? doWhile : doWhile2);
         setBreakOnShutdown(breakOnShutdown != null ? breakOnShutdown : breakOnShutdown2);

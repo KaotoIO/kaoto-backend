@@ -43,6 +43,7 @@ public class KameletStepParserService
         implements StepParserService<Step> {
 
     public static final String SIMPLE = "simple";
+    public static final String JQ = "jq";
     public static final String OTHERWISE = "otherwise";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
@@ -170,19 +171,19 @@ public class KameletStepParserService
 
 
     public String getChoiceIdentifier(final Choice flow) {
-        return flow.getSimple();
+        return getChoiceCondition(flow);
     }
 
     public String getChoiceCondition(final Choice flow) {
-        return flow.getSimple();
+        return flow.getJq() != null && !flow.getJq().isEmpty() ? flow.getJq() : flow.getSimple();
     }
 
     public String getFilterIdentifier(final Filter flow) {
-        return flow.getSimple();
+        return getFilterCondition(flow);
     }
 
     public String getFilterCondition(final Filter flow) {
-        return flow.getSimple();
+        return flow.getJq() != null && !flow.getJq().isEmpty() ? flow.getJq() : flow.getSimple();
     }
 
 

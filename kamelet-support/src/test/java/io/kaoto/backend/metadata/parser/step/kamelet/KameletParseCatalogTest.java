@@ -139,7 +139,7 @@ class KameletParseCatalogTest {
                                 .toURI()));
         List<Step> steps = kameletParser.parse().join().stream().filter(Objects::nonNull).collect(Collectors.toList());
 
-        assertEquals(3, steps.size());
+        assertEquals(4, steps.size());
     }
 
     @Test

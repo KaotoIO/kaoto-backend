@@ -34,7 +34,14 @@ public class SuperChoice extends EIPStep {
                 if (b.getCondition() != null) {
                     Choice choice = new Choice();
                     choice.setSteps(kameletPopulator.processSteps(b));
-                    choice.setSimple(b.getCondition());
+                    switch (b.getConditionSyntax()) {
+                        case SIMPLE:
+                            choice.setSimple(b.getCondition());
+                            break;
+                        case JQ:
+                            choice.setJq(b.getCondition());
+                            break;
+                    }
                     getChoice().add(choice);
                 } else {
                     var otherwise = new Otherwise();
@@ -58,8 +65,10 @@ public class SuperChoice extends EIPStep {
         if (getChoice() != null) {
             for (var flow : getChoice()) {
                 Branch branch = createBranch(getChoiceIdentifier(flow), flow.getSteps(), kameletStepParserService);
+                branch.setConditionSyntax(getChoiceConditionSyntax(flow));
                 branch.setCondition(getChoiceCondition(flow));
-                kameletStepParserService.setValueOnStepProperty(step, KameletStepParserService.SIMPLE,
+                kameletStepParserService.setValueOnStepProperty(step,
+                        branch.getConditionSyntax().value(),
                         branch.getCondition());
                 step.getBranches().add(branch);
             }
@@ -72,12 +81,18 @@ public class SuperChoice extends EIPStep {
     }
 
     private String getChoiceIdentifier(final Choice flow) {
-        return flow.getSimple();
+        return getChoiceCondition(flow);
     }
 
     private String getChoiceCondition(final Choice flow) {
-        return flow.getSimple();
+        return getChoiceConditionSyntax(flow) == Branch.ConditionSyntax.JQ ? flow.getJq() : flow.getSimple();
     }
+
+    private Branch.ConditionSyntax getChoiceConditionSyntax(final Choice flow) {
+        return flow.getJq() != null && !flow.getJq().isEmpty()
+                ? Branch.ConditionSyntax.JQ : Branch.ConditionSyntax.SIMPLE;
+    }
+
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();

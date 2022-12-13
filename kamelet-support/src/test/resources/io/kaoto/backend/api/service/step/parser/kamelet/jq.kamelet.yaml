@@ -1,0 +1,67 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    camel.apache.org/kamelet.support.level: Preview
+    camel.apache.org/catalog.version: main-SNAPSHOT
+    camel.apache.org/kamelet.icon: whatever
+    camel.apache.org/provider: Apache Software Foundation
+    camel.apache.org/kamelet.group: Kaoto
+  labels:
+    camel.apache.org/kamelet.type: action
+  name: jq-action
+spec:
+  definition:
+    title: Jq Kamelet
+    description: Used to test jq usage
+    properties: {}
+  dependencies:
+  - camel:core
+  - camel:kamelet
+  - camel:jq
+  template:
+    from:
+      uri: kamelet:source
+      steps:
+      - set-header:
+          jq: '{ field1, field3 }'
+          name: kafka.KEY
+      - set-property:
+          jq: .field3
+          name: foo
+      - set-body:
+          jq: .field1
+      - filter:
+          jq: .foo == "baz"
+          steps:
+          - log:
+              message: foobar
+      - transform:
+          jq: .suit
+      - transform:
+          jq: to_entries | map(if .key == "field3" then .key = "field3-modified" else
+            . end) | from_entries
+      - choice:
+          when:
+          - jq: .destination == "NA"
+            steps:
+            - set-header:
+                constant: TOPIC.NA
+                name: kafka.OVERRIDE_TOPIC
+          - jq: .destination == "EMEA"
+            steps:
+            - set-header:
+                constant: TOPIC.EMEA
+                name: kafka.OVERRIDE_TOPIC
+          - jq: .destination == "LATAM"
+            steps:
+            - set-header:
+                constant: TOPIC.LATAM
+                name: kafka.OVERRIDE_TOPIC
+          - jq: .destination == "APAC"
+            steps:
+            - set-header:
+                constant: TOPIC.APAC
+                name: kafka.OVERRIDE_TOPIC
+      - to:
+          uri: kamelet:sink

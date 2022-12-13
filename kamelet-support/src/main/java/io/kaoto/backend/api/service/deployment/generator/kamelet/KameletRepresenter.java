@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ClaimCheckFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ConditionBlock;
 import io.kaoto.backend.model.deployment.kamelet.step.ConvertBodyToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DelayFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.DynamicRouterFlowStep;
@@ -79,6 +80,7 @@ import java.util.Map;
 public class KameletRepresenter extends Representer {
 
     public static final String SIMPLE = "simple";
+    public static final String JQ = "jq";
     public static final String CONSTANT = "constant";
     public static final String STEPS = "steps";
     public static final String PARAMETERS = "parameters";
@@ -342,14 +344,7 @@ public class KameletRepresenter extends Representer {
         this.multiRepresenters.put(Choice.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                Choice step = (Choice) data;
-                properties.put(STEPS, step.getSteps());
-                if (step.getSimple() != null && !step.getSimple().isEmpty()) {
-                    properties.put(SIMPLE, step.getSimple());
-                }
-                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
-                        DumperOptions.FlowStyle.AUTO);
+                return representConditionBlock(data);
             }
         });
 
@@ -379,18 +374,24 @@ public class KameletRepresenter extends Representer {
         });
     }
 
+    private Node representConditionBlock(final Object data) {
+        Map<String, Object> properties = new HashMap<>();
+        ConditionBlock step = (ConditionBlock) data;
+        properties.put(STEPS, step.getSteps());
+        if (step.getSimple() != null && !step.getSimple().isEmpty()) {
+            properties.put(SIMPLE, step.getSimple());
+        } else if (step.getJq() != null && !step.getJq().isEmpty()) {
+            properties.put(JQ, step.getJq());
+        }
+        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
+                DumperOptions.FlowStyle.AUTO);
+    }
+
     private void filter() {
         this.multiRepresenters.put(Filter.class, new RepresentMap() {
             @Override
             public Node representData(final Object data) {
-                Map<String, Object> properties = new HashMap<>();
-                Filter step = (Filter) data;
-                properties.put(STEPS, step.getSteps());
-                if (step.getSimple() != null && !step.getSimple().isEmpty()) {
-                    properties.put(SIMPLE, step.getSimple());
-                }
-                return representMapping(getTag(data.getClass(), Tag.MAP), properties,
-                        DumperOptions.FlowStyle.AUTO);
+                return representConditionBlock(data);
             }
         });
     }
