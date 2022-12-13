@@ -85,6 +85,7 @@ public class Tokenizer extends Expression {
         if (obj instanceof Tokenizer e) {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
+            setJq(e.getJq());
 
             this.setToken(e.getToken());
             this.setEndToken(e.getEndToken());

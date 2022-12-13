@@ -35,6 +35,7 @@ class KameletStepParserServiceTest {
     private static String kamelet;
     private static String incomplete;
     private static String kameletEIP;
+    private static String kameletJq;
 
 
     private CamelRouteParseCatalog parseCatalog;
@@ -69,6 +70,10 @@ class KameletStepParserServiceTest {
         kameletEIP = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "eip.kamelet.yaml")
+                        .toURI()));
+        kameletJq = Files.readString(Path.of(
+                KameletBindingStepParserServiceTest.class.getResource(
+                                "jq.kamelet.yaml")
                         .toURI()));
     }
 
@@ -190,6 +195,16 @@ class KameletStepParserServiceTest {
         assertTrue(deploymentService.appliesTo(parsed.getSteps()));
         String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
         assertThat(parsedString).isEqualToNormalizingNewlines(kameletEIP);
+    }
+
+    @Test
+    void checkJq() {
+        assertTrue(service.appliesTo(kameletJq));
+        final var parsed = service.deepParse(kameletJq);
+        assertNotNull(parsed);
+        assertTrue(deploymentService.appliesTo(parsed.getSteps()));
+        String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
+        assertThat(parsedString).isEqualToNormalizingNewlines(kameletJq);
     }
 
     @Test

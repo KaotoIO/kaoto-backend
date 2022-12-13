@@ -116,8 +116,9 @@ public class RecipientList extends Expression {
                          final @JsonProperty(PARALLEL_AGGREGATE_LABEL2) Boolean parallelAggregate2,
                          final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
                          final @JsonProperty(SIMPLE_LABEL) String simple,
+                         final @JsonProperty(JQ_LABEL) String jq,
                          final @JsonProperty(CONSTANT_LABEL) String constant) {
-        super(expression, constant, simple, null);
+        super(expression, constant, simple, jq, null);
         setDelimiter(delimiter);
         setParallelProcessing(parallelProcessing != null ? parallelProcessing : parallelProcessing2);
         setStrategyRef(strategyRef != null ? strategyRef : strategyRef2);

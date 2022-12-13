@@ -103,6 +103,7 @@ public class ServiceCall extends Expression {
     public ServiceCall(final @JsonProperty(NAME_LABEL) String name,
                        final @JsonProperty(EXPRESSION_LABEL) Expression expression,
                        final @JsonProperty(SIMPLE_LABEL) String simple,
+                       final @JsonProperty(JQ_LABEL) String jq,
                        final @JsonProperty(CONSTANT_LABEL) String constant,
                        final @JsonProperty(URI_LABEL) String uri,
                        final @JsonProperty(COMPONENT_LABEL) String component,
@@ -154,7 +155,7 @@ public class ServiceCall extends Expression {
                        final @JsonProperty(
                                LOAD_BALANCER_CONFIGURATION_LABEL2) Map<String, Object> loadBalancerConfiguration2,
                        final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super(expression, constant, simple, null);
+        super(expression, constant, simple, jq, null);
         setName(name);
         setUri(uri);
         setComponent(component);

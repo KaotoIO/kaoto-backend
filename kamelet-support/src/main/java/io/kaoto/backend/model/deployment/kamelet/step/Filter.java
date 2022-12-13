@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Filter extends EIPStep {
+public class Filter extends EIPStep implements ConditionBlock {
 
     public static final String STEPS_LABEL = "steps";
     public static final String SIMPLE_LABEL = "simple";
+    public static final String JQ_LABEL = "jq";
     @JsonProperty(SIMPLE_LABEL)
     private String simple;
+    @JsonProperty(JQ_LABEL)
+    private String jq;
 
     @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
@@ -50,6 +53,8 @@ public class Filter extends EIPStep {
         var id = STEPS_LABEL;
         if (getSimple() != null && !getSimple().isBlank()) {
             id = String.valueOf(getSimple());
+        } else if (getJq() != null && !getJq().isBlank()) {
+            id = String.valueOf(getJq());
         }
         step.setBranches(List.of(createBranch(id, this.getSteps(), kameletStepParserService)));
     }
@@ -58,6 +63,9 @@ public class Filter extends EIPStep {
         Map<String, Object> properties = new HashMap<>();
         if (this.getSimple() != null) {
             properties.put(SIMPLE_LABEL, this.getSimple());
+        }
+        if (this.getJq() != null) {
+            properties.put(JQ_LABEL, this.getJq());
         }
         if (this.getSteps() != null) {
             properties.put(STEPS_LABEL, this.getSteps());
@@ -74,6 +82,9 @@ public class Filter extends EIPStep {
             case SIMPLE_LABEL:
                 parameter.setValue(this.getSimple());
                 break;
+            case JQ_LABEL:
+                parameter.setValue(this.getJq());
+                break;
             default:
                 break;
         }
@@ -84,6 +95,9 @@ public class Filter extends EIPStep {
         switch (parameter.getId()) {
             case SIMPLE_LABEL:
                 this.setSimple(String.valueOf(parameter.getValue()));
+                break;
+            case JQ_LABEL:
+                this.setJq(String.valueOf(parameter.getValue()));
                 break;
             default:
                 break;
@@ -96,5 +110,12 @@ public class Filter extends EIPStep {
 
     public void setSimple(final String simple) {
         this.simple = simple;
+    }
+    public String getJq() {
+        return jq;
+    }
+
+    public void setJq(final String jq) {
+        this.jq = jq;
     }
 }

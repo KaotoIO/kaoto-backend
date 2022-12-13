@@ -62,7 +62,11 @@ public class ChoiceFlowStep implements FlowStep {
         Choice choice = new Choice();
 
         choice.setSteps(kameletPopulator.processSteps(b));
-        choice.setSimple(b.getCondition());
+        if (b.getConditionSyntax() == Branch.ConditionSyntax.JQ) {
+            choice.setJq(b.getCondition());
+        } else {
+            choice.setSimple(b.getCondition());
+        }
 
         return choice;
     }

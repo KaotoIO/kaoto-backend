@@ -52,6 +52,7 @@ public class Throttle extends Expression {
     public Throttle(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
                     final @JsonProperty(CONSTANT_LABEL) String constant,
                     final @JsonProperty(SIMPLE_LABEL) String simple,
+                    final @JsonProperty(JQ_LABEL) String jq,
                     final @JsonProperty(CORRELATION_EXPRESSION_LABEL) Expression correlationExpression,
                     final @JsonProperty(CORRELATION_EXPRESSION_LABEL2) Expression correlationExpression2,
                     final @JsonProperty(EXECUTOR_SERVICE_LABEL) Object executorService,
@@ -65,7 +66,7 @@ public class Throttle extends Expression {
                     final @JsonProperty(REJECT_EXECUTION_LABEL) Boolean rejectExecution,
                     final @JsonProperty(REJECT_EXECUTION_LABEL2) Boolean rejectExecution2,
                     final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super(expression, constant, simple, null);
+        super(expression, constant, simple, jq, null);
         setCorrelationExpression(correlationExpression != null ? correlationExpression : correlationExpression2);
         setExecutorService(executorService != null ? executorService : executorService2);
         setTimePeriodMillis(timePeriodMillis != null ? timePeriodMillis : timePeriodMillis2);

@@ -13,10 +13,26 @@ import java.util.List;
  */
 public class Branch {
 
+    public enum ConditionSyntax {
+        SIMPLE ("simple"),
+        JQ ("jq");
+
+        private final String value;
+
+        ConditionSyntax(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
+    }
+
     private List<Step> steps = new LinkedList<>();
     private List<Parameter> parameters = new LinkedList<>();
     private String identifier;
     private String condition;
+    private ConditionSyntax conditionSyntax = ConditionSyntax.SIMPLE;
 
     public Branch() {
         super();
@@ -70,4 +86,8 @@ public class Branch {
     public void setCondition(final String condition) {
         this.condition = condition;
     }
+
+    public ConditionSyntax getConditionSyntax() { return conditionSyntax; }
+
+    public void setConditionSyntax(final ConditionSyntax syntax) { this.conditionSyntax = syntax; }
 }

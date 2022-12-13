@@ -80,6 +80,9 @@ public class SetHeaderFlowStep implements FlowStep {
                         .equalsIgnoreCase(KameletStepParserService.CONSTANT)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getConstant());
                 } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.JQ)) {
+                    p.setValue(this.getSetHeaderPairFlowStep().getJq());
+                } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.NAME)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getName());
                 }
