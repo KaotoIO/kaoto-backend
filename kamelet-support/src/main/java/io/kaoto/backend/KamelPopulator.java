@@ -48,6 +48,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.SortFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.SplitFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.StopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ThreadsFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ThrowExceptionFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransactedFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
@@ -368,6 +369,9 @@ public class KamelPopulator {
                     break;
                 case "threads":
                     flowStep = new ThreadsFlowStep(step);
+                    break;
+                case "throw-exception":
+                    flowStep = new ThrowExceptionFlowStep(step);
                     break;
                 case "transacted":
                     flowStep = new TransactedFlowStep(step);

@@ -61,6 +61,9 @@ spec:
               expression:
                 simple: ${body}
               async-delayed: true
+          - throw-exception:
+              exception-type: java.lang.IllegalArgumentException
+              message: test
           - routing-slip:
               uri-delimiter: '|'
               simple: ${body}
