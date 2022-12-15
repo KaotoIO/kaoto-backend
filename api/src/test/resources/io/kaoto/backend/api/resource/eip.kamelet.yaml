@@ -134,6 +134,9 @@ spec:
             - rollback:
                 mark-rollback-only: true
                 message: test
+            - throw-exception:
+                exception-type: java.lang.IllegalArgumentException
+                message: test
             - stop: {}
       - filter:
           simple: '{{?foo}}'
