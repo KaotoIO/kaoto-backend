@@ -22,6 +22,8 @@ spec:
     from:
       uri: kamelet:source
       steps:
+      - transacted:
+          ref: required
       - loop:
           constant: '3'
           copy: true
