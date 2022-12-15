@@ -98,6 +98,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("sort", SortFlowStep.class);
         steps.put("split", SplitFlowStep.class);
         steps.put("stop", StopFlowStep.class);
+        steps.put("threads", ThreadsFlowStep.class);
         steps.put("to", ToFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("unmarshal", UnmarshalFlowStep.class);

@@ -68,6 +68,8 @@ spec:
             - set-property:
                 name: property
                 simple: bar
+            - threads:
+                pool-size: 8
             - split:
                 steps:
                 - remove-property:
