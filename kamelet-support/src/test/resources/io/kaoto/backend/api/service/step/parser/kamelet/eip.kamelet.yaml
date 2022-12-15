@@ -77,6 +77,15 @@ spec:
             - marshal:
                 json:
                   library: Gson
+            - threads:
+                pool-size: 5
+                max-pool-size: 10
+                description:
+                  text: Hilos
+                  lang: spa
+                thread-name: threads
+                max-queue-size: 12
+                keep-alive-time: 5
             - circuit-breaker:
                 configuration: config
                 description:
