@@ -54,6 +54,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -260,7 +261,7 @@ public class KamelPopulator {
         return from;
     }
 
-    private HashMap<String, String> buildUri(
+    public HashMap<String, String> buildUri(
             final Step s,
             final StringBuilder uri) {
         var params = new HashMap<String, String>();
@@ -420,6 +421,9 @@ public class KamelPopulator {
                 case "pipeline":
                     flowStep = new PipelineFlowStep(step, this);
                     break;
+                case "wire-tap":
+                    flowStep = new WireTapFlowStep(step, this);
+                    break;
                 default:
                     flowStep = getCamelConnector(step, to);
                     break;
@@ -502,6 +506,28 @@ public class KamelPopulator {
             flowStep = new ToFlowStep(flowStep);
         }
         return flowStep;
+    }
+
+    public static FlowStep deserializeToFlowStep(Object to)  {
+        FlowStep res = null;
+
+        if (to instanceof FlowStep flowStep) {
+            res = flowStep;
+        } else if (to instanceof String sto) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(sto);
+            res = uri;
+        } else if (to instanceof Map map) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(map.getOrDefault("uri", "").toString());
+            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
+            if (parameters != null && !parameters.isEmpty()) {
+                uri.setParameters(new LinkedHashMap<>(parameters));
+            }
+            res = uri;
+        }
+
+        return res;
     }
 
     enum Type {source, sink, action}
