@@ -116,6 +116,15 @@ spec:
                   - convert-body-to:
                       type: java.lang.String
                       charset: UTF8
+                  - wire-tap:
+                      allow-optimised-components: false
+                      cache-size: 23
+                      auto-start-components: true
+                      ignore-invalid-endpoint: false
+                      copy: true
+                      uri: direct:somewhere
+                      parameters:
+                        bridgeErrorHandler: 'true'
           - simple: '{{?bar}}'
             steps:
             - unmarshal:

@@ -84,6 +84,11 @@ spec:
             - marshal:
                 json:
                   library: Gson
+            - wire-tap:
+                uri: direct:infiniteandbeyond
+                parameters:
+                  failIfNoConsumers: 'true'
+                  block: 'false'
           - simple: '{{?baz}}'
             steps:
             - recipient-list:

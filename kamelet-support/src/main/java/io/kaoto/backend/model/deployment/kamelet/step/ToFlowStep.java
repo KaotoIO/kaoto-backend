@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
@@ -22,21 +21,7 @@ public class ToFlowStep implements FlowStep {
     @JsonCreator
     public ToFlowStep(final @JsonProperty(value = "to") Object to) {
         super();
-        if (to instanceof FlowStep flowStep) {
-            setTo(flowStep);
-        } else if (to instanceof String sto) {
-            UriFlowStep uri = new UriFlowStep();
-            uri.setUri(sto);
-            setTo(uri);
-        } else if (to instanceof Map map) {
-            UriFlowStep uri = new UriFlowStep();
-            uri.setUri(map.getOrDefault("uri", "").toString());
-            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
-            if (parameters != null && !parameters.isEmpty()) {
-                uri.setParameters(new LinkedHashMap<>(parameters));
-            }
-            setTo(uri);
-        }
+        setTo(KamelPopulator.deserializeToFlowStep(to));
     }
 
     @JsonProperty("to")
