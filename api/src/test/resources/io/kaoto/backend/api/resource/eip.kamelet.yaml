@@ -32,8 +32,12 @@ spec:
                 uri: direct:compensation
               completion-mode: MANUAL
               steps:
-              - to:
-                  uri: direct:something
+              - throttle:
+                  caller-runs-when-rejected: false
+                  constant: '5'
+                  executor-service: myExecutor
+                  reject-execution: false
+                  async-delayed: true
               - sample:
                   description:
                     text: Message Sampler
