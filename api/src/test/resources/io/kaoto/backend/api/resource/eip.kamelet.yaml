@@ -211,5 +211,9 @@ spec:
             - enrich:
                 expression:
                   simple: ${body}
+            - to-d:
+                uri: direct
+                parameters:
+                  name: start
       - to:
           uri: kamelet:sink

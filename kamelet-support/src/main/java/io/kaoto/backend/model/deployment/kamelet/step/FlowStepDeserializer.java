@@ -102,6 +102,8 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("throw-exception", ThrowExceptionFlowStep.class);
         steps.put("throwException", ThrowExceptionFlowStep.class);
         steps.put("to", ToFlowStep.class);
+        steps.put("to-d", ToDynamicFlowStep.class);
+        steps.put("toD", ToDynamicFlowStep.class);
         steps.put("transacted", TransactedFlowStep.class);
         steps.put("transform", TransformFlowStep.class);
         steps.put("do-try", TryCatchFlowStep.class);

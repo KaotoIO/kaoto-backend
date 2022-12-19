@@ -229,5 +229,14 @@ spec:
             - enrich:
                 expression:
                   simple: ${body}
+            - to-d:
+                uri: direct
+                parameters:
+                  name: start
+                pattern: InOptionalOut
+                cache-size: 10
+                ignore-invalid-endpoint: true
+                allow-optimised-components: true
+                auto-start-components: true
       - to:
           uri: kamelet:sink
