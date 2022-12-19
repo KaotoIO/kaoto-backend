@@ -29,7 +29,7 @@ public class CircuitBreaker extends EIPStep {
     private List<FlowStep> steps;
 
     @JsonProperty(ON_FALLBACK_LABEL)
-    private CircuitBreakerOnFallback onFallback;
+    private GenericFlowWithSteps onFallback;
 
     @JsonProperty(RESILIENCE_4_J_CONFIGURATION_LABEL)
     private Map<String, String> resilience4jConfiguration;
@@ -50,7 +50,7 @@ public class CircuitBreaker extends EIPStep {
     @JsonCreator
     public CircuitBreaker(
             final @JsonProperty(STEPS_LABEL) List<FlowStep> steps,
-            final @JsonProperty(ON_FALLBACK_LABEL) CircuitBreakerOnFallback onFallback,
+            final @JsonProperty(ON_FALLBACK_LABEL) GenericFlowWithSteps onFallback,
             final @JsonProperty(RESILIENCE_4_J_CONFIGURATION_LABEL) Map<String, String>  resilience4jConfiguration,
             final @JsonProperty(FAULT_TOLERANCE_CONFIGURATION_LABEL) Map<String, String>  faultToleranceConfiguration,
             final @JsonProperty(CONFIGURATION_LABEL) String configuration,
@@ -72,7 +72,7 @@ public class CircuitBreaker extends EIPStep {
                 setSteps(kameletPopulator.processSteps(step.getBranches().get(0)));
             }
             if (step.getBranches().size() > 1) {
-                setOnFallback(new CircuitBreakerOnFallback());
+                setOnFallback(new GenericFlowWithSteps());
                 getOnFallback().setSteps(kameletPopulator.processSteps(step.getBranches().get(1)));
             }
         }
@@ -169,11 +169,11 @@ public class CircuitBreaker extends EIPStep {
         this.steps = steps;
     }
 
-    public CircuitBreakerOnFallback getOnFallback() {
+    public GenericFlowWithSteps getOnFallback() {
         return onFallback;
     }
 
-    public void setOnFallback(final CircuitBreakerOnFallback onFallback) {
+    public void setOnFallback(final GenericFlowWithSteps onFallback) {
         this.onFallback = onFallback;
     }
 

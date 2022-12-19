@@ -157,9 +157,6 @@ spec:
             - remove-headers:
                 exclude-pattern: toExclude
                 pattern: toRemove
-            - enrich:
-                expression:
-                  simple: ${body}
             - validate:
                 simple: ${body} == 100
             - resequence:
@@ -183,10 +180,6 @@ spec:
                       simple: ${header.StockSymbol}
                     aggregation-strategy: myAggregatorStrategy
                     completion-size: 2
-                - log:
-                    message: test
-                    logging-level: INFO
-                    log-name: yaml
                 - service-call:
                     blacklist-service-filter:
                       servers:
@@ -207,9 +200,6 @@ spec:
       - filter:
           simple: '{{?foo}}'
           steps:
-          - set-body:
-              simple: abc
-          - set-exchange-pattern: InOut
           - idempotent-consumer:
               idempotent-repository: myRepo
               simple: ${header.id}
@@ -218,5 +208,26 @@ spec:
                   simple: ola ke ase
           - sort:
               comparator: myComparator
+      - do-try:
+          steps:
+          - set-body:
+              simple: abc
+          - set-exchange-pattern: InOut
+          do-catch:
+          - exception:
+            - java.io.FileNotFoundException
+            - java.io.IOException
+            on-when:
+              simple: ${body.size()} == 1
+            steps:
+            - log:
+                message: test
+                logging-level: INFO
+                log-name: yaml
+          do-finally:
+            steps:
+            - enrich:
+                expression:
+                  simple: ${body}
       - to:
           uri: kamelet:sink
