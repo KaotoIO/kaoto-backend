@@ -190,5 +190,26 @@ spec:
                         simple: ola ke ase
           - sort:
               comparator: myComparator
+      - do-try:
+          steps:
+          - set-body:
+              simple: abc
+          - set-exchange-pattern: InOut
+          do-catch:
+          - exception:
+            - java.io.FileNotFoundException
+            - java.io.IOException
+            on-when:
+              simple: ${body.size()} == 1
+            steps:
+            - log:
+                message: test
+                logging-level: INFO
+                log-name: yaml
+          do-finally:
+            steps:
+            - enrich:
+                expression:
+                  simple: ${body}
       - to:
           uri: kamelet:sink

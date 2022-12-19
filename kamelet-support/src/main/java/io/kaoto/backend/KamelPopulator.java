@@ -52,6 +52,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.ThrowExceptionFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransactedFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.TryCatchFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
@@ -396,6 +397,9 @@ public class KamelPopulator {
                     break;
                 case "choice":
                     flowStep = new ChoiceFlowStep(step, this);
+                    break;
+                case "do-try":
+                    flowStep = new TryCatchFlowStep(step, this);
                     break;
                 case "filter":
                     flowStep = new FilterFlowStep(step, this);
