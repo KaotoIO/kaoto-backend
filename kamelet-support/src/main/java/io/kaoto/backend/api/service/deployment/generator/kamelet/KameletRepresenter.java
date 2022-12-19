@@ -52,6 +52,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.StopFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ThreadsFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ThrottleFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ThrowExceptionFlowStep;
+import io.kaoto.backend.model.deployment.kamelet.step.ToDynamicFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ToFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransactedFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.TransformFlowStep;
@@ -305,6 +306,7 @@ public class KameletRepresenter extends Representer {
                 ThrottleFlowStep.class,
                 ThrowExceptionFlowStep.class,
                 ToFlowStep.class,
+                ToDynamicFlowStep.class,
                 TransactedFlowStep.class,
                 TransformFlowStep.class,
                 TryCatchFlowStep.class,
