@@ -709,6 +709,9 @@
     },
     "condition" : {
       "type" : "string"
+    },
+    "conditionSyntax" : {
+      "$ref" : "#/components/schemas/ConditionSyntax"
     }
   }
 };
@@ -732,6 +735,9 @@
     },
     "condition" : {
       "type" : "string"
+    },
+    "conditionSyntax" : {
+      "$ref" : "#/components/schemas/ConditionSyntax_Complete_Summary"
     }
   }
 };
@@ -755,6 +761,9 @@
     },
     "condition" : {
       "type" : "string"
+    },
+    "conditionSyntax" : {
+      "$ref" : "#/components/schemas/ConditionSyntax_Summary"
     }
   }
 };
@@ -771,6 +780,18 @@
       }
     }
   }
+};
+            defs["ConditionSyntax"] = {
+  "type" : "string",
+  "enum" : [ "SIMPLE", "JQ" ]
+};
+            defs["ConditionSyntax_Complete_Summary"] = {
+  "type" : "string",
+  "enum" : [ "SIMPLE", "JQ" ]
+};
+            defs["ConditionSyntax_Summary"] = {
+  "type" : "string",
+  "enum" : [ "SIMPLE", "JQ" ]
 };
             defs["ConstraintOperation"] = {
   "type" : "string",
