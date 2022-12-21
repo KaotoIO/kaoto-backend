@@ -37,6 +37,14 @@ public interface DeploymentGeneratorService {
     String description();
 
     /*
+     * 🐱 method description: String
+     *
+     * Returns validationSchema/validationSchema URL if exists.
+
+     */
+    String validationSchema();
+
+    /*
      * 🐱method parse: String
      * 🐱param steps: List[Step]
      * 🐱param parameters: List[Parameter]

@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -20,6 +21,7 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -55,6 +57,18 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String description() {
         return "A Kamelet is a snippet of a route. It defines meta building "
                 + "blocks or steps that can be reused on integrations.";
+    }
+
+    @Override
+    public String validationSchema() {
+        try {
+            String schema = new String(CamelRouteFileProcessor.class
+                    .getResourceAsStream("kamelet.json").readAllBytes());
+            return schema;
+        } catch (IOException e) {
+            log.error("Can't load Kamelet DSL schema", e);
+        }
+        return "";
     }
 
     @Override
