@@ -4,6 +4,7 @@ import io.kaoto.backend.api.resource.v1.model.Capabilities;
 import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.deployment.ClusterService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
@@ -11,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -71,6 +73,17 @@ public class CapabilitiesResource {
         return String.format("{\"namespace\": \"%s\"}",
                 clusterService.getDefaultNamespace());
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{dsl}/schema/")
+    @Operation(summary = "Get validation schema for particular dsl",
+            description = "Returns a validation schema of specified DSL if exists. If not empty string is returned.")
+    public String getValidationSchema(
+            @Parameter (description = "Target DSL for the validation schema") @PathParam("dsl") String dsl) {
+        return languageService.getValidationSchema(dsl);
+    }
+
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {

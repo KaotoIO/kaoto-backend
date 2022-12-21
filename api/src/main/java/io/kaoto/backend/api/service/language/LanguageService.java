@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 🐱miniclass LanguageService (CapabilitiesResource)
@@ -45,6 +46,9 @@ public class LanguageService {
         Map<String, Map<String, String>> res = new HashMap<>();
 
         for (DeploymentGeneratorService parser : getGeneratorServices()) {
+            String validationSchemaURI = parser.validationSchema()
+                    .equals("")?"":String.format("/v1/capabilities/%s/schema",parser.identifier());
+
             addNewLanguage(res, parser.identifier(), parser.description());
             res.get(parser.identifier())
                     .put("step-kinds", parser.getKinds().toString());
@@ -55,6 +59,8 @@ public class LanguageService {
                             Boolean.toString(
                                     !parser.supportedCustomResources()
                                             .isEmpty()));
+            res.get(parser.identifier())
+                    .put("validationSchema",validationSchemaURI);
         }
 
         for (StepParserService parser : getStepParserServices()) {
@@ -69,6 +75,18 @@ public class LanguageService {
         }
 
         return res.values();
+    }
+
+    public String getValidationSchema(String dsl) {
+        String schema = "";
+
+        Optional<DeploymentGeneratorService> found = getGeneratorServices().stream()
+                .filter( p -> p.identifier().equalsIgnoreCase(dsl))
+                .findFirst();
+        if (found.isPresent()) {
+            schema = found.get().validationSchema();
+        }
+        return  schema;
     }
 
     private String addNewLanguage(final Map<String, Map<String, String>> res,

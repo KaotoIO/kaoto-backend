@@ -9,12 +9,15 @@ import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,6 +36,8 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
+    private Logger log = Logger.getLogger(CamelRouteDeploymentGeneratorService.class);
+
     public CamelRouteDeploymentGeneratorService() {
         //Empty for injection
     }
@@ -48,6 +53,18 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
 
     public String description() {
         return "A camel route is a non deployable in cluster workflow of actions and steps.";
+    }
+
+    @Override
+    public String validationSchema() {
+        try {
+            String schema = new String(CamelRouteDeploymentGeneratorService.class
+                    .getResourceAsStream("camel-yaml-dsl.json").readAllBytes());
+            return schema;
+        } catch (IOException e) {
+            log.error("Can't load Camel YAML DSL schema", e);
+        }
+        return  "";
     }
 
     @Override

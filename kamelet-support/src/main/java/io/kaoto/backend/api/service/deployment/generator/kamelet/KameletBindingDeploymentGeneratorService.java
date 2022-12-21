@@ -9,6 +9,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
@@ -23,6 +24,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -56,6 +58,18 @@ public class KameletBindingDeploymentGeneratorService
         return "Kamelet Bindings are used to create simple integrations that "
                 + "link a start step to an end step with optional "
                 + "intermediate action steps.";
+    }
+
+    @Override
+    public String validationSchema() {
+        try {
+            String schema = new String(CamelRouteFileProcessor.class
+                    .getResourceAsStream("kameletbinding.json").readAllBytes());
+            return schema;
+        } catch (IOException e) {
+            log.error("Can't load Kamelet Binding DSL schema", e);
+        }
+        return "";
     }
 
     @Override

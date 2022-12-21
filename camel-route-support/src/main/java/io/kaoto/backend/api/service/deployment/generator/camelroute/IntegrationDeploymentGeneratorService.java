@@ -19,6 +19,7 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -60,6 +61,18 @@ public class IntegrationDeploymentGeneratorService
 
     public String description() {
         return "An Integration defines a workflow of actions and steps.";
+    }
+
+    @Override
+    public String validationSchema() {
+        try {
+            String schema = new String(CamelRouteDeploymentGeneratorService.class
+                    .getResourceAsStream("integration.json").readAllBytes());
+            return schema;
+        } catch (IOException e) {
+            log.error("Can't load Integration DSL schema", e);
+        }
+        return  "";
     }
 
     @Override
