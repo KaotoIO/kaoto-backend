@@ -37,10 +37,9 @@ public class KameletBindingDeploymentGeneratorService
         implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    private static final String EIP = "EIP";
     private static final String KAMELET = "KAMELET";
     private static final String KNATIVE = "KNATIVE";
-    private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE, EIP);
+    private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
     private static final boolean IGNORE_CAMEL_COMPONENTS = true;
 
     @Inject
