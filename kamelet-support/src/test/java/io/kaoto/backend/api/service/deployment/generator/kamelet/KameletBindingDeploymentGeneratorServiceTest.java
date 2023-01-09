@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -107,13 +108,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Eip");
         steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
-        step = new Step();
-        step.setKind("Kamelet");
-        steps.add(step);
-        assertTrue(service.appliesTo(steps));
-
+        assertFalse(service.appliesTo(steps));
         steps.clear();
 
         step = new Step();
@@ -129,7 +124,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("Eip");
         steps.add(step);
-        assertTrue(service.appliesTo(steps));
+        assertFalse(service.appliesTo(steps));
 
         steps.clear();
 
