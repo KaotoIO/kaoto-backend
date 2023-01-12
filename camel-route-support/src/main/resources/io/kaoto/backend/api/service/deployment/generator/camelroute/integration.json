@@ -337,9 +337,46 @@
             "array",
             "null"
           ],
-          "items": {
-            "description": "Flow is an unstructured object representing a Camel Flow in YAML/JSON DSL",
-            "x-kubernetes-preserve-unknown-fields": true
+          "items" : {
+            "maxProperties" : 1,
+            "properties" : {
+              "beans" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.BeansDeserializer"
+              },
+              "error-handler" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.ErrorHandlerBuilderDeserializer"
+              },
+              "errorHandler" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.ErrorHandlerBuilderDeserializer"
+              },
+              "from" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.RouteFromDefinitionDeserializer"
+              },
+              "on-exception" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.OnExceptionDefinition"
+              },
+              "onException" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.OnExceptionDefinition"
+              },
+              "route" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.RouteDefinition"
+              },
+              "route-template" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.RouteTemplateDefinition"
+              },
+              "routeTemplate" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.RouteTemplateDefinition"
+              },
+              "templated-route" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.TemplatedRouteDefinition"
+              },
+              "templatedRoute" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.TemplatedRouteDefinition"
+              },
+              "rest" : {
+                "$ref" : "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.model.rest.RestDefinition"
+              }
+            }
           }
         },
         "integrationKit": {

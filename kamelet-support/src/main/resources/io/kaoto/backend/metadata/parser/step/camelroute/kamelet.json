@@ -656,7 +656,21 @@
         },
         "template": {
           "description": "Template is an unstructured object representing a Kamelet template in YAML/JSON DSL",
-          "x-kubernetes-preserve-unknown-fields": true
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "from"
+          ],
+          "properties": {
+            "beans": {
+              "$ref": "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.BeansDeserializer"
+            },
+            "from": {
+              "$ref": "https://raw.githubusercontent.com/KaotoIO/kaoto-backend/main/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json#/items/definitions/org.apache.camel.dsl.yaml.deserializers.RouteFromDefinitionDeserializer"
+            }
+          }
         },
         "types": {
           "type": [
