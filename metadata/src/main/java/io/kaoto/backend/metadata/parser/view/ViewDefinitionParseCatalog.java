@@ -3,6 +3,7 @@ package io.kaoto.backend.metadata.parser.view;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.GitParseCatalog;
 import io.kaoto.backend.metadata.parser.JarParseCatalog;
+import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.view.ViewDefinition;
 import org.apache.commons.io.IOUtils;
@@ -13,6 +14,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,7 +22,9 @@ import java.util.regex.Pattern;
 
 /**
  * 🐱class ViewDefinitionParseCatalog
+ *
  * 🐱relationship dependsOn ParseCatalog
+ *
  * Reads and parses a view definition catalog.
  * Extracts all the view definitions it can find
  * and generate a ViewDefinition for each one.
@@ -40,8 +44,13 @@ public final class ViewDefinitionParseCatalog {
 
     public static ParseCatalog<ViewDefinition> getParser(
             final String url, final String tag) {
-        ParseCatalog<ViewDefinition> parseCatalog =
-                new GitParseCatalog<>(url, tag);
+        ParseCatalog<ViewDefinition> parseCatalog = new GitParseCatalog<>(url, tag);
+        parseCatalog.setFileVisitor(new ViewDefinitionProcessFile());
+        return parseCatalog;
+    }
+
+    public static ParseCatalog<ViewDefinition> getParser(final Path toPath) {
+        ParseCatalog<ViewDefinition> parseCatalog = new LocalFolderParseCatalog<>(toPath);
         parseCatalog.setFileVisitor(new ViewDefinitionProcessFile());
         return parseCatalog;
     }
