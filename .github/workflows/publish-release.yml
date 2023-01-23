@@ -38,6 +38,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: configure Pagefile
+        uses: al-cheb/configure-pagefile-action@v1.2
+        with:
+          minimum-size: 16GB
+          disk-root: "C:"
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Build Native Quarkus
         run: mvn install -Pnative -DskipTests
       - name: 🛂 Find the version - non-Windows
@@ -47,7 +53,7 @@ jobs:
         run: |
           $version = & mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout
           echo "version=$version" >> $env:GITHUB_ENV
-        if: ${{ matrix.os == 'windows-latest' }}}
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:

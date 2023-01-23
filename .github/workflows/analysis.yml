@@ -67,6 +67,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: configure Pagefile
+        uses: al-cheb/configure-pagefile-action@v1.2
+        with:
+          minimum-size: 16GB
+          disk-root: "C:"
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run native tests
         run: mvn install -Pnative
       - name: Archive Quarkus log for native tests
