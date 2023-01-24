@@ -1,0 +1,18 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/default-icon.txt$"
+      },
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/kamelet.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/kameletbinding.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/kamelet-dsl.json$"
+      }
+    ]
+  }
+}

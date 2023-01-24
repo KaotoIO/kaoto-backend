@@ -1,0 +1,12 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/api/service/deployment/generator/camelroute/integration.json$"
+      }
+    ]
+  }
+}
