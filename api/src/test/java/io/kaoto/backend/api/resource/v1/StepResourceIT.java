@@ -2,10 +2,7 @@ package io.kaoto.backend.api.resource.v1;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.language.LanguageService;
 import org.assertj.core.api.Condition;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +11,6 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-
-import javax.inject.Inject;
 
 @QuarkusIntegrationTest
 class StepResourceIT {
