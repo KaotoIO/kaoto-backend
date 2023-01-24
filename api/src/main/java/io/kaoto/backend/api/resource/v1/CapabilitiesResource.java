@@ -87,7 +87,7 @@ public class CapabilitiesResource {
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
-        log.error("Error getting capabilities.");
+        log.error("Error getting capabilities.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("Error parsing capabilities.")
