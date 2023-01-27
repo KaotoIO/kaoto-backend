@@ -102,8 +102,9 @@ public class TryCatch extends EIPStep {
         var identifier = STEPS_LABEL;
         step.getBranches().add(createBranch(identifier, this.getSteps(), kameletStepParserService));
         if (this.getDoCatch() != null) {
+            int i = 1;
             for (DoCatch doC : this.getDoCatch()) {
-                final var branch = createBranch(DO_CATCH_LABEL, doC.getSteps(), kameletStepParserService);
+                final var branch = createBranch(DO_CATCH_LABEL + "-" + i++, doC.getSteps(), kameletStepParserService);
                 branch.setParameters(new LinkedList<>());
                 setExceptions(doC, branch);
                 setOnWhen(doC, branch);
