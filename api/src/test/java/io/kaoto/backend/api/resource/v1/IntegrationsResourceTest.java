@@ -29,6 +29,7 @@ import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.response.ValidatableResponse;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
@@ -183,7 +184,7 @@ class IntegrationsResourceTest {
 
         String json = res.extract().body().asString();
         System.out.println(json);
-        // the goal is top produce similar content than what Kaoto UI from within VS Code is sending to try to reproduce
+        // the goal is to produce similar content than what Kaoto UI from within VS Code is sending to try to reproduce
         // not exactly the same: missing metadatas and there are duplicated types attributes
 
         res = given()
@@ -191,8 +192,31 @@ class IntegrationsResourceTest {
                 .contentType("application/json")
                 .body(json)
                 .post("?dsl=Camel%20Route")
-                .then();
-                //.statusCode(Response.Status.OK.getStatusCode()); // returns a 204? Why not 200 like other tests?
+                .then()
+                .statusCode(204); // returns a 204? Why not 200 like other tests?
+
+        assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
+    }
+    
+    @Test
+    void activeMQWithPayloadFromKaotoUI() throws URISyntaxException, IOException {
+
+        String yaml = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../activemq.camel.yaml")
+                        .toURI()));
+
+        String withMetadataAndParams = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                        "../requestFromKaotoUI.json")
+                .toURI()));
+        ValidatableResponse res = given()
+                .when()
+                .contentType("application/json")
+                .body(withMetadataAndParams)
+                .post("?dsl=Camel%20Route")
+                .then()
+                .statusCode(204); // returns a 204? Why not 200 like other tests?
 
         assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
     }
