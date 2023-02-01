@@ -48,7 +48,16 @@ class CamelRouteStepParserServiceTest {
 
     @Test
     void deepParse() throws IOException {
-        var route = new String(this.getClass().getResourceAsStream("route.yaml").readAllBytes(),
+        deepParse("route.yaml");
+    }
+
+    @Test
+    void deepParseUriWithMultiplePathParameter() throws IOException {
+        deepParse("activemq.camel.yaml");
+    }
+
+    private void deepParse(String fileNameUsedToTest) throws IOException {
+        var route = new String(this.getClass().getResourceAsStream(fileNameUsedToTest).readAllBytes(),
                 StandardCharsets.UTF_8);
         assertTrue(camelRouteStepParserService.appliesTo(route));
         var steps = camelRouteStepParserService.deepParse(route);
@@ -62,4 +71,6 @@ class CamelRouteStepParserServiceTest {
         assertThat(yaml).isEqualToNormalizingNewlines(route);
         assertTrue(camelRouteDeploymentGeneratorService.supportedCustomResources().isEmpty());
     }
+    
+
 }
