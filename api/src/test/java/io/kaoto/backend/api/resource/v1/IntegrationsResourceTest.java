@@ -164,4 +164,36 @@ class IntegrationsResourceTest {
 
         assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
     }
+    
+    @Test
+    void activeMQ() throws URISyntaxException, IOException {
+
+        String yaml = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../activemq.camel.yaml")
+                        .toURI()));
+
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel%20Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        String json = res.extract().body().asString();
+        System.out.println(json);
+        // the goal is top produce similar content than what Kaoto UI from within VS Code is sending to try to reproduce
+        // not exactly the same: missing metadatas and there are duplicated types attributes
+
+        res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel%20Route")
+                .then();
+                //.statusCode(Response.Status.OK.getStatusCode()); // returns a 204? Why not 200 like other tests?
+
+        assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
+    }
 }
