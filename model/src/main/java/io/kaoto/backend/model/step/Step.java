@@ -36,7 +36,7 @@ public class Step extends Metadata {
     @JsonView(Views.Complete.class)
     private List<Parameter> parameters;
     @JsonView(Views.Complete.class)
-    private List<String> required;
+    private List<String> required = new LinkedList<>();
     @JsonView(Views.Complete.class)
     private List<Branch> branches;
     @JsonView(Views.Summary.class)
@@ -143,7 +143,9 @@ public class Step extends Metadata {
     }
 
     public void setRequired(final List<String> required) {
-        this.required = required;
+        if (required != null) {
+            this.required = required;
+        }
     }
 
     /*
