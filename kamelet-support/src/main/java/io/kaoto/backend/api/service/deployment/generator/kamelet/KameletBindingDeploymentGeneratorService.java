@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class KameletBindingDeploymentGeneratorService
@@ -281,5 +282,10 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         return null;
+    }
+
+    @Override
+    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+        return steps;
     }
 }
