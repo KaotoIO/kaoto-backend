@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -181,5 +182,10 @@ public class IntegrationDeploymentGeneratorService
         }
 
         return null;
+    }
+
+    @Override
+    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+        return steps;
     }
 }

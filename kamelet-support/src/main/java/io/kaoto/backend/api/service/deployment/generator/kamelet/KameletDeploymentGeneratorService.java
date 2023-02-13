@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class KameletDeploymentGeneratorService implements DeploymentGeneratorService {
@@ -161,5 +162,10 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public Pod getPod(final String namespace, final String name, final KubernetesClient kubernetesClient) {
         //There is no pod associated to Kamelets
         return null;
+    }
+
+    @Override
+    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+        return steps;
     }
 }

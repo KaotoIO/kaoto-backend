@@ -11,6 +11,7 @@ import io.opentelemetry.extension.annotations.WithSpan;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * 🐱miniclass DeploymentGeneratorService (StepResource)
@@ -120,6 +121,18 @@ public interface DeploymentGeneratorService {
      */
     @WithSpan
     Pod getPod(String namespace, String name, KubernetesClient kclient);
+
+    /*
+     * 🐱method filterCatalog: List[Step]
+     * 🐱param previousStep: String
+     * 🐱param followingStep: String
+     *
+     *  Filters a list of steps. previousStep and followingStep gives context to the catalog,
+     *  potentially restricting the response.
+     */
+    @WithSpan
+    Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps);
+
 
     enum Status {
         Stopped, Building, Ready, Running, Invalid

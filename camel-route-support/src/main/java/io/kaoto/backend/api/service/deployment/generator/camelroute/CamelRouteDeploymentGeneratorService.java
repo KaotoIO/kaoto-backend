@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -110,5 +111,10 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     public Pod getPod(final String namespace, final String name, final KubernetesClient kubernetesClient) {
         //We are not handling deployments here
         return null;
+    }
+
+    @Override
+    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+        return steps;
     }
 }

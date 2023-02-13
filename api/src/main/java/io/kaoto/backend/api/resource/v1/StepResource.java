@@ -104,7 +104,11 @@ public class StepResource {
             final @Parameter(description = "Maximum number of elements to return.")
             @QueryParam("limit") Long limit,
             final @Parameter(description = "Start returning from the nth element (combine with limit).")
-            @QueryParam("start") Long start) {
+            @QueryParam("start") Long start,
+            final @Parameter(description = "Provides context: previous step, if exists.")
+            @QueryParam("previous-step") String previousStep,
+            final @Parameter(description = "Provides context: following step, if exists.")
+            @QueryParam("following-step") String followingStep) {
         final var allSteps = stepService.allSteps();
         var steps = allSteps.stream().sorted(Comparator.comparing(Metadata::getId));
         Span span = Span.current();
@@ -130,18 +134,22 @@ public class StepResource {
 
         //DSL first because it is usually the parameter we will use
         if (dsl != null && !dsl.isEmpty()) {
+            final var dgsStream = deploymentService.getParsers().stream().parallel()
+                    .filter(s ->
+                            Arrays.stream(dsl.split(",")).anyMatch(it -> it.equalsIgnoreCase(s.identifier())))
+                    .toList();
+
             //First take all the kinds from the parameter list given
             List<String> kinds =
-                    deploymentService.getParsers().stream().parallel()
-                            .filter(s -> Arrays.stream(dsl.split(","))
-                                    .anyMatch(it -> it.equalsIgnoreCase(
-                                            s.identifier())))
-                            .map(DeploymentGeneratorService::getKinds)
-                            .flatMap(Collection::stream)
-                            .toList();
+                    dgsStream.parallelStream()
+                            .map(DeploymentGeneratorService::getKinds).flatMap(Collection::stream).toList();
             //And now we can filter by the kinds
-            steps = steps.filter(step -> kinds.stream()
-                    .anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
+            steps = steps.filter(step -> kinds.stream().anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
+
+            //And give context based on previous and following step, depending on the DSL
+            for (var dgs : dgsStream) {
+                steps = dgs.filterCatalog(previousStep, followingStep, steps);
+            }
         }
 
         //This may remove one third of the options

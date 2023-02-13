@@ -58,38 +58,38 @@ class StepResourceTest {
     @Test
     @Timeout(100)
     void speedKamelet() {
-        stepResource.all("KameletBinding", null, null, null, null);
+        stepResource.all("KameletBinding", null, null, null, null, null, null);
     }
 
     @Test
     @Timeout(100)
     void speedKameletAndBinding() {
-        stepResource.all("KameletBinding,Kamelet", null, null, null, null);
+        stepResource.all("KameletBinding,Kamelet", null, null, null, null, null, null);
     }
     @Test
     @Timeout(100)
     void speedKameletAndBindingEnd() {
-        stepResource.all("KameletBinding,Kamelet", Step.END, null, null, null);
+        stepResource.all("KameletBinding,Kamelet", Step.END, null, null, null, null, null);
     }
     @Test
     @Timeout(100)
     void speedKameletBindingMiddle() {
-        stepResource.all("KameletBinding", Step.MIDDLE, null, null, null);
+        stepResource.all("KameletBinding", Step.MIDDLE, null, null, null, null, null);
     }
 
     @ParameterizedTest
     @ValueSource(longs = {10l, 25l, 42l})
     @Timeout(100)
     void limitAndStart(long limitParameter) {
-        Assertions.assertTrue(stepResource.all(null, null, null, null, null).size() > limitParameter);
-        List<Step> limit = stepResource.all(null, null, null, limitParameter, null).stream().toList();
+        Assertions.assertTrue(stepResource.all(null, null, null, null, null, null, null).size() > limitParameter);
+        List<Step> limit = stepResource.all(null, null, null, limitParameter, null, null, null).stream().toList();
         Assertions.assertEquals(limitParameter, limit.size());
 
         Long[] startParameters = new Long[]{0l, 3l, 5l};
 
         for (Long startParameter : startParameters) {
             List<Step> start =
-                    stepResource.all(null, null, null, limitParameter, startParameter).stream().toList();
+                    stepResource.all(null, null, null, limitParameter, startParameter, null, null).stream().toList();
             Assertions.assertEquals(limitParameter, start.size());
 
             for (int i = 0; i < startParameter; i++) {
@@ -100,7 +100,7 @@ class StepResourceTest {
 
     @Test
     void allSteps() {
-        Collection<Step> steps = stepResource.all(null, null, null, null, null);
+        Collection<Step> steps = stepResource.all(null, null, null, null, null, null, null);
         Assertions.assertNotNull(steps);
         Assertions.assertEquals(
                 catalog.getReadOnlyCatalog().getAll().size(),
@@ -109,26 +109,26 @@ class StepResourceTest {
         var integrationType = "KameletBinding";
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
-                stepResource.all(null, integrationType, null, null, null)
+                stepResource.all(null, integrationType, null, null, null, null, null)
                         .stream().allMatch(s ->
                                 integrationType.equalsIgnoreCase(s.getType())));
 
         var kind = "Kamelet";
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
-                stepResource.all(null, null, kind, null, null)
+                stepResource.all(null, null, kind, null, null, null, null)
                         .stream().allMatch(s ->
                                 kind.equalsIgnoreCase(s.getKind())));
         var type = Step.START;
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
-                stepResource.all(type, null, null, null, null)
+                stepResource.all(type, null, null, null, null, null, null)
                         .stream().allMatch(s ->
                                 type.equalsIgnoreCase(s.getType())));
 
         Assertions.assertNotNull(steps);
         Assertions.assertTrue(
-                stepResource.all(type, integrationType, kind, null, null)
+                stepResource.all(type, integrationType, kind, null, null, null, null)
                         .stream().allMatch(s ->
                                 type.equalsIgnoreCase(s.getType())
                                 && kind.equalsIgnoreCase(s.getKind())));
