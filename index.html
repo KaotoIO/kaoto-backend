@@ -701,6 +701,12 @@ the types of custom resources supported in the cluster.</td>
 		<td><code>Pod</code></td>
 		<td>Return the pod associated to the resource by name. If no pod associated, returns null.</td>
 	</tr>
+	<tr id='deploymentgeneratorservice-filtercatalog'>
+		<td><code><b>filterCatalog</b>(<nobr>&lt;String&gt; <i>previousStep</i></nobr>, <nobr>&lt;String&gt; <i>followingStep</i></nobr>)</nobr></code></td>
+		<td><code><a href='#step'>List[Step]</a></code></td>
+		<td>Filters a list of steps. previousStep and followingStep gives context to the catalog,
+potentially restricting the response.</td>
+	</tr>
 </tbody></table>
 </section>
 
