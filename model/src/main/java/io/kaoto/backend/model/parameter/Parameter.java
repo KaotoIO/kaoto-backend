@@ -27,11 +27,13 @@ import javax.json.bind.annotation.JsonbTypeDeserializer;
         @JsonSubTypes.Type(value = ArrayParameter.class, name = "array")})
 //This is a workaround utility class until Quarkus supports fully polymorphism
 @JsonbTypeDeserializer(ParameterDeserializer.class)
-public abstract class Parameter<T> implements Cloneable {
+public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>> {
 
     // Kaoto
     private String id;
     private boolean path = false;
+
+    private Integer pathOrder = 0;
     private T value;
 
     //JSON schema
@@ -189,6 +191,19 @@ public abstract class Parameter<T> implements Cloneable {
         this.examples = examples;
     }
 
+    /*
+     * 🐱property pathOrder: Integer
+     *
+     * If this parameter is a path parameter, order in which it will appear
+     */
+    public Integer getPathOrder() {
+        return pathOrder;
+    }
+
+    public void setPathOrder(Integer pathOrder) {
+        this.pathOrder = pathOrder;
+    }
+
     @Override
     public Parameter<T> clone() {
         try {
@@ -198,4 +213,10 @@ public abstract class Parameter<T> implements Cloneable {
         }
         return this;
     }
+
+    @Override
+    public int compareTo(Parameter other) {
+        return Integer.compare(other.getPathOrder(), this.getPathOrder());
+    }
+
 }

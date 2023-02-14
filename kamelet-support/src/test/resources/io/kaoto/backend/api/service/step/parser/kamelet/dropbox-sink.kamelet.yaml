@@ -86,6 +86,8 @@ spec:
                       name: CamelDropboxPutFileName
                       simple: "${header[ce-file]}"
         - to:
+            uri: activemq:queue:HELLO.WORLD
+        - to:
             uri: dropbox:put
             parameters:
               accessToken: '{{accessToken}}'

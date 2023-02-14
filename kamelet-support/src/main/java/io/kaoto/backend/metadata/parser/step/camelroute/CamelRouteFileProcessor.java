@@ -166,6 +166,16 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 }
         ).toList();
 
+        //Assign path order to parameters
+        //We will have to assume the component defined them in order in the JSON because
+        //the JSON does not give this information.
+        int i = 0;
+        for (Parameter p : parameters) {
+            if (p.isPath()) {
+                p.setPathOrder(i++);
+            }
+        }
+
         return new ParsedCamelComponentFromJson(
                 id,
                 camelKind,

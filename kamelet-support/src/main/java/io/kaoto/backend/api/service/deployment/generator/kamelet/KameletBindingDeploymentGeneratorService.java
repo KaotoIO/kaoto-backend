@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -126,11 +127,12 @@ public class KameletBindingDeploymentGeneratorService
 
         if (CAMEL_CONNECTOR.equals(kind) && !IGNORE_CAMEL_COMPONENTS) {
             StringBuilder prefix = new StringBuilder(step.getName());
+
+            Collections.sort(step.getParameters());
             for (var property : step.getParameters()) {
                 if (property.isPath()) {
                     prefix.append(":");
                     prefix.append(property.getValue());
-                    break;
                 }
             }
             kameletStep.setUri(prefix.toString());
@@ -138,9 +140,7 @@ public class KameletBindingDeploymentGeneratorService
             if (step.getParameters() != null) {
                 for (var p : step.getParameters()) {
                     if (p.getValue() != null && !p.isPath()) {
-                        kameletStep.getParameters().put(
-                                p.getId(),
-                                p.getValue().toString());
+                        kameletStep.getParameters().put(p.getId(), p.getValue().toString());
                     }
                 }
             }
@@ -153,13 +153,11 @@ public class KameletBindingDeploymentGeneratorService
 
                 if (step.getParameters() != null) {
                     for (var p : new ArrayList<>(step.getParameters())) {
-                        if (p.getTitle().equalsIgnoreCase("name")
-                                && p.getValue() != null) {
+                        if (p.getTitle().equalsIgnoreCase("name") && p.getValue() != null) {
                             ref.setName(p.getValue().toString());
                             step.getParameters().remove(p);
                         }
-                        if (p.getTitle().equalsIgnoreCase("kind")
-                                && p.getValue() != null) {
+                        if (p.getTitle().equalsIgnoreCase("kind") && p.getValue() != null) {
                             ref.setKind(p.getValue().toString());
                             step.getParameters().remove(p);
                         }
@@ -170,9 +168,7 @@ public class KameletBindingDeploymentGeneratorService
             if (step.getParameters() != null) {
                 for (var p : step.getParameters()) {
                     if (p.getValue() != null && !p.isPath()) {
-                        kameletStep.getProperties().put(
-                                p.getId(),
-                                p.getValue().toString());
+                        kameletStep.getProperties().put(p.getId(), p.getValue().toString());
                     }
                 }
             }

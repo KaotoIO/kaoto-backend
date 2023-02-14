@@ -8,6 +8,7 @@ import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteParseCatalog;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
@@ -121,7 +122,7 @@ class KameletStepParserServiceTest {
         assertNotNull(parsed.getSteps());
         assertFalse(parsed.getSteps().isEmpty());
         assertTrue(parsed.getSteps().stream().allMatch(s -> s != null));
-        assertEquals(3, parsed.getSteps().size());
+        assertEquals(4, parsed.getSteps().size());
 
         final var fromStep = parsed.getSteps().get(0);
         assertEquals("kamelet:source", fromStep.getId());
@@ -131,7 +132,16 @@ class KameletStepParserServiceTest {
         assertNotNull(choiceStep.getBranches());
         assertEquals(2, choiceStep.getBranches().size());
 
-        final var dropboxStep = parsed.getSteps().get(2);
+        final var amqStep = parsed.getSteps().get(2);
+        for (Parameter p : amqStep.getParameters()) {
+            if (p.getId().equalsIgnoreCase("destinationType")) {
+                assertEquals("queue", p.getValue());
+            } else if (p.getId().equalsIgnoreCase("destinationName")) {
+                assertEquals("HELLO.WORLD", p.getValue());
+            }
+        }
+
+        final var dropboxStep = parsed.getSteps().get(3);
         assertEquals("dropbox-action", dropboxStep.getId());
 
         KameletDefinition definition =

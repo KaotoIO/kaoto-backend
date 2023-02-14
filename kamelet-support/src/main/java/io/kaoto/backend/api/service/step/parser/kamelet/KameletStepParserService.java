@@ -193,10 +193,15 @@ public class KameletStepParserService
         if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }
-
+        Collections.sort(step.getParameters());
+        String[] pathParts = path.split(":");
+        int i = 0;
         for (Parameter p : step.getParameters()) {
+            if (i >= pathParts.length) {
+                break;
+            }
             if (p.isPath()) {
-                p.setValue(p.convertToType(path));
+                p.setValue(p.convertToType(pathParts[i++]));
             }
         }
 
