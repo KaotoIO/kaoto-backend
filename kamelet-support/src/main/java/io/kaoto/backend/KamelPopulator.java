@@ -271,6 +271,7 @@ public class KamelPopulator {
             final StringBuilder uri) {
         var params = new HashMap<String, String>();
         if (s.getParameters() != null) {
+            Collections.sort(s.getParameters());
             for (Parameter p : s.getParameters()) {
                 if (p.isPath()) {
                     uri.append(":");

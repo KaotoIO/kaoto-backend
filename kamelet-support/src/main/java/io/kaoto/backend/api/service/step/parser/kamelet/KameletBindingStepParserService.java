@@ -192,9 +192,15 @@ public class KameletBindingStepParserService
             path = path.substring(0, path.indexOf("?"));
         }
 
+        String[] pathParts = path.split(":");
+        int i = 0;
+        Collections.sort(step.getParameters());
         for (Parameter p : step.getParameters()) {
+            if (i >= pathParts.length) {
+                break;
+            }
             if (p.isPath()) {
-                p.setValue(path);
+                p.setValue(p.convertToType(pathParts[i++]));
             }
         }
 
