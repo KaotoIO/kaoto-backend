@@ -4640,7 +4640,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-StepResource-v1StepsGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//v1/steps?dsl=&kind=&limit=&start=&type="</code></pre>
+"//v1/steps?dsl=&following-step=&kind=&limit=&previous-step=&start=&type="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4657,12 +4657,14 @@ public class StepResourceApiExample {
         
         StepResourceApi apiInstance = new StepResourceApi();
         String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+        String followingStep = followingStep_example; // String | Provides context: following step, if exists.
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
         Long limit = 789; // Long | Maximum number of elements to return.
+        String previousStep = previousStep_example; // String | Provides context: previous step, if exists.
         Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, followingStep, kind, limit, previousStep, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4680,12 +4682,14 @@ public class StepResourceApiExample {
     public static void main(String[] args) {
         StepResourceApi apiInstance = new StepResourceApi();
         String dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+        String followingStep = followingStep_example; // String | Provides context: following step, if exists.
         String kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
         Long limit = 789; // Long | Maximum number of elements to return.
+        String previousStep = previousStep_example; // String | Provides context: previous step, if exists.
         Long start = 789; // Long | Start returning from the nth element (combine with limit).
         String type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
         try {
-            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+            array[Step_Summary] result = apiInstance.v1StepsGet(dsl, followingStep, kind, limit, previousStep, start, type);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling StepResourceApi#v1StepsGet");
@@ -4700,8 +4704,10 @@ public class StepResourceApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-StepResource-v1StepsGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *dsl = dsl_example; // Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+String *followingStep = followingStep_example; // Provides context: following step, if exists. (optional)
 String *kind = kind_example; // Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
 Long *limit = 789; // Maximum number of elements to return. (optional)
+String *previousStep = previousStep_example; // Provides context: previous step, if exists. (optional)
 Long *start = 789; // Start returning from the nth element (combine with limit). (optional)
 String *type = type_example; // Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
@@ -4709,8 +4715,10 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 
 // Get all steps
 [apiInstance v1StepsGetWith:dsl
+    followingStep:followingStep
     kind:kind
     limit:limit
+    previousStep:previousStep
     start:start
     type:type
               completionHandler: ^(array[Step_Summary] output, NSError* error) {
@@ -4730,8 +4738,10 @@ StepResourceApi *apiInstance = [[StepResourceApi alloc] init];
 var api = new KaotoBackendApi.StepResourceApi()
 var opts = { 
   'dsl': dsl_example, // {{String}} Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+  'followingStep': followingStep_example, // {{String}} Provides context: following step, if exists.
   'kind': kind_example, // {{String}} Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
   'limit': 789, // {{Long}} Maximum number of elements to return.
+  'previousStep': previousStep_example, // {{String}} Provides context: previous step, if exists.
   'start': 789, // {{Long}} Start returning from the nth element (combine with limit).
   'type': type_example // {{String}} Filter by step type. Example: 'START' 'MIDDLE,END
 };
@@ -4765,15 +4775,17 @@ namespace Example
 
             var apiInstance = new StepResourceApi();
             var dsl = dsl_example;  // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional) 
+            var followingStep = followingStep_example;  // String | Provides context: following step, if exists. (optional) 
             var kind = kind_example;  // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional) 
             var limit = 789;  // Long | Maximum number of elements to return. (optional) 
+            var previousStep = previousStep_example;  // String | Provides context: previous step, if exists. (optional) 
             var start = 789;  // Long | Start returning from the nth element (combine with limit). (optional) 
             var type = type_example;  // String | Filter by step type. Example: 'START' 'MIDDLE,END (optional) 
 
             try
             {
                 // Get all steps
-                array[Step_Summary] result = apiInstance.v1StepsGet(dsl, kind, limit, start, type);
+                array[Step_Summary] result = apiInstance.v1StepsGet(dsl, followingStep, kind, limit, previousStep, start, type);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4792,13 +4804,15 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiStepResourceApi();
 $dsl = dsl_example; // String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+$followingStep = followingStep_example; // String | Provides context: following step, if exists.
 $kind = kind_example; // String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
 $limit = 789; // Long | Maximum number of elements to return.
+$previousStep = previousStep_example; // String | Provides context: previous step, if exists.
 $start = 789; // Long | Start returning from the nth element (combine with limit).
 $type = type_example; // String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 try {
-    $result = $api_instance->v1StepsGet($dsl, $kind, $limit, $start, $type);
+    $result = $api_instance->v1StepsGet($dsl, $followingStep, $kind, $limit, $previousStep, $start, $type);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling StepResourceApi->v1StepsGet: ', $e->getMessage(), PHP_EOL;
@@ -4813,13 +4827,15 @@ use WWW::SwaggerClient::StepResourceApi;
 
 my $api_instance = WWW::SwaggerClient::StepResourceApi->new();
 my $dsl = dsl_example; # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet'
+my $followingStep = followingStep_example; # String | Provides context: following step, if exists.
 my $kind = kind_example; # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding'
 my $limit = 789; # Long | Maximum number of elements to return.
+my $previousStep = previousStep_example; # String | Provides context: previous step, if exists.
 my $start = 789; # Long | Start returning from the nth element (combine with limit).
 my $type = type_example; # String | Filter by step type. Example: 'START' 'MIDDLE,END
 
 eval { 
-    my $result = $api_instance->v1StepsGet(dsl => $dsl, kind => $kind, limit => $limit, start => $start, type => $type);
+    my $result = $api_instance->v1StepsGet(dsl => $dsl, followingStep => $followingStep, kind => $kind, limit => $limit, previousStep => $previousStep, start => $start, type => $type);
     print Dumper($result);
 };
 if ($@) {
@@ -4837,14 +4853,16 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.StepResourceApi()
 dsl = dsl_example # String | Filter by Domain Specific Language (DSL). Examples: 'KameletBinding' 'KameletBinding,Kamelet' (optional)
+followingStep = followingStep_example # String | Provides context: following step, if exists. (optional)
 kind = kind_example # String | Filter by kind of step. Examples: 'Kamelet' 'Kamelet,KameletBinding' (optional)
 limit = 789 # Long | Maximum number of elements to return. (optional)
+previousStep = previousStep_example # String | Provides context: previous step, if exists. (optional)
 start = 789 # Long | Start returning from the nth element (combine with limit). (optional)
 type = type_example # String | Filter by step type. Example: 'START' 'MIDDLE,END (optional)
 
 try: 
     # Get all steps
-    api_response = api_instance.v1_steps_get(dsl=dsl, kind=kind, limit=limit, start=start, type=type)
+    api_response = api_instance.v1_steps_get(dsl=dsl, followingStep=followingStep, kind=kind, limit=limit, previousStep=previousStep, start=start, type=type)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling StepResourceApi->v1StepsGet: %s\n" % e)</code></pre>
@@ -4876,6 +4894,25 @@ except ApiException as e:
                                 
                                                     <div class="inner description">
                                                         Filter by Domain Specific Language (DSL). Examples: &#x27;KameletBinding&#x27; &#x27;KameletBinding,Kamelet&#x27;
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">following-step</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_followingStep">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Provides context: following step, if exists.
                                                     </div>
                                             </div>
                                         </div>
@@ -4917,6 +4954,25 @@ except ApiException as e:
                                 
                                                     <div class="inner description">
                                                         Maximum number of elements to return.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr><td style="width:150px;">previous-step</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v1StepsGet_previousStep">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        Provides context: previous step, if exists.
                                                     </div>
                                             </div>
                                         </div>
