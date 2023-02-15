@@ -175,6 +175,22 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 p.setPathOrder(i++);
             }
         }
+        //But this assumption does not always work
+        //Here are the weird cases
+        if ("avro".equalsIgnoreCase(id)) {
+            for (Parameter p : parameters) {
+                if ("messageName".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("/");
+                    p.setPathOrder(0);
+                } else if ("host".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(2);
+                } else if ("port".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(1);
+                } else if ("transport".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(3);
+                }
+            }
+        }
 
         return new ParsedCamelComponentFromJson(
                 id,

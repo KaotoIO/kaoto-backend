@@ -274,7 +274,7 @@ public class KamelPopulator {
             Collections.sort(s.getParameters());
             for (Parameter p : s.getParameters()) {
                 if (p.isPath()) {
-                    uri.append(":");
+                    uri.append(p.getPathSeparator());
                     uri.append(p.getValue() != null ? p.getValue() : p.getDefaultValue());
                 } else if (p.getValue() != null) {
                     params.put(p.getId(), p.getValue().toString());

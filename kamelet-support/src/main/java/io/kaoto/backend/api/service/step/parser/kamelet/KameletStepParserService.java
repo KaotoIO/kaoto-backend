@@ -194,7 +194,10 @@ public class KameletStepParserService
             path = path.substring(0, path.indexOf('?'));
         }
         Collections.sort(step.getParameters());
-        String[] pathParts = path.split(":");
+        var splitSeparators =
+                step.getParameters().stream().filter(Objects::nonNull)
+                        .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
+        String[] pathParts = path.split(splitSeparators);
         int i = 0;
         for (Parameter p : step.getParameters()) {
             if (i >= pathParts.length) {
@@ -217,7 +220,9 @@ public class KameletStepParserService
 
         if (properties != null) {
             for (Map.Entry<String, String> c : properties.entrySet()) {
-                setValueOnStepProperty(step, c.getKey(), c.getValue());
+                if (c.getValue() != null) {
+                    setValueOnStepProperty(step, c.getKey(), c.getValue());
+                }
             }
         }
 
