@@ -6,10 +6,10 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>io.kaoto.backend</groupId>
-        <version>0.6.2-SNAPSHOT</version>
+        <version>0.6.2</version>
     </parent>
     <artifactId>model</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>0.6.2</version>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
