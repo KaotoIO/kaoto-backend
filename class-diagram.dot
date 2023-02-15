@@ -315,7 +315,7 @@ setFileVisitor(&lt;YamlProcessFile&gt; fileVisitor):
 "Parameter" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>Parameter</B></TD></TR>
 	<TR><TD><I>Properties</I><BR/>
-description:String<BR align="left" />title:String<BR align="left" />id:String<BR align="left" />value:Object<BR align="left" />default:Object<BR align="left" />type:String<BR align="left" />path:Boolean<BR align="left" />nullable:Boolean<BR align="left" />enum:Object[]<BR align="left" />examples:Object[]<BR align="left" />pathOrder:Integer<BR align="left" />
+description:String<BR align="left" />title:String<BR align="left" />id:String<BR align="left" />value:Object<BR align="left" />default:Object<BR align="left" />type:String<BR align="left" />path:Boolean<BR align="left" />nullable:Boolean<BR align="left" />enum:Object[]<BR align="left" />examples:Object[]<BR align="left" />pathOrder:Integer<BR align="left" />pathSeparator:String<BR align="left" />
 
 </TD></TR>
 
