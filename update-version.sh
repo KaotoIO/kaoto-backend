@@ -9,6 +9,8 @@ read -r download
 
 if [ "$download" = "y" ];
 then
+  path=$(pwd)
+  git rm $path"/api/src/main/resources/camel-*.zip"
 
   echo "Downloading Kaoto bridged Camel components (EIP)."
   wget https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip
@@ -19,15 +21,12 @@ then
   echo "Enter camel version to use:"
   echo "Example: 3.18.4"
   read -r versionCamel
-  
-  path=$(pwd)
-  git rm $path"/api/src/main/resources/camel-*.zip"
   cd /tmp
   mkdir camel-connectors
   cd camel-connectors
   wget "https://github.com/apache/camel/archive/refs/tags/camel-"$versionCamel".zip"
   unzip *zip
-  cp  "camel-camel-"$versionCamel"dsl/camel-yaml-dsl/camel-yaml-dsl/src/generated/resources/schema/camel-yaml-dsl.json "$path"/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json"
+  cp  "camel-camel-"$versionCamel"/dsl/camel-yaml-dsl/camel-yaml-dsl/src/generated/resources/schema/camel-yaml-dsl.json "$path"/camel-route-support/src/main/resources/io/kaoto/backend/api/service/deployment/generator/camelroute/camel-yaml-dsl.json"
   cd "camel-camel-"$versionCamel"/catalog/camel-catalog/src/generated/resources/org/apache/camel/catalog/components/"
   zip "camel-connectors-"$versionCamel".zip" *.json
   mv "camel-connectors-"$versionCamel".zip" $path"/api/src/main/resources/"
@@ -39,7 +38,7 @@ then
   
   echo "Downloading kamelets."
   echo "Enter kamelets version to use:"
-  echo "Example: 1.0.0"
+  echo "Example: 3.18.4"
   read -r versionKamelets
 
   path=$(pwd)
