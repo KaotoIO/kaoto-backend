@@ -122,7 +122,7 @@ class KameletStepParserServiceTest {
         assertNotNull(parsed.getSteps());
         assertFalse(parsed.getSteps().isEmpty());
         assertTrue(parsed.getSteps().stream().allMatch(s -> s != null));
-        assertEquals(4, parsed.getSteps().size());
+        assertEquals(5, parsed.getSteps().size());
 
         final var fromStep = parsed.getSteps().get(0);
         assertEquals("kamelet:source", fromStep.getId());
@@ -141,7 +141,20 @@ class KameletStepParserServiceTest {
             }
         }
 
-        final var dropboxStep = parsed.getSteps().get(3);
+        final var avroStep = parsed.getSteps().get(3);
+        for (Parameter p : avroStep.getParameters()) {
+            if (p.getId().equalsIgnoreCase("host")) {
+                assertEquals("hostname", p.getValue());
+            } else if (p.getId().equalsIgnoreCase("transport")) {
+                assertEquals("https", p.getValue());
+            } else if (p.getId().equalsIgnoreCase("messageName")) {
+                assertEquals("message", p.getValue());
+            } else if (p.getId().equalsIgnoreCase("port")) {
+                assertEquals(999l, p.getValue());
+            }
+        }
+
+        final var dropboxStep = parsed.getSteps().get(4);
         assertEquals("dropbox-action", dropboxStep.getId());
 
         KameletDefinition definition =

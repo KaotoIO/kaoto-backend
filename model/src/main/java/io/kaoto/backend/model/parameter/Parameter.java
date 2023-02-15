@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -32,8 +33,10 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
     // Kaoto
     private String id;
     private boolean path = false;
-
+    @JsonIgnore
     private Integer pathOrder = 0;
+    @JsonIgnore
+    private String pathSeparator = ":";
     private T value;
 
     //JSON schema
@@ -202,6 +205,18 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
 
     public void setPathOrder(Integer pathOrder) {
         this.pathOrder = pathOrder;
+    }
+    /*
+     * 🐱property pathSeparator: String
+     *
+     * If this parameter is a path parameter, what is the string/character to separate it from the rest
+     */
+    public String getPathSeparator() {
+        return pathSeparator;
+    }
+
+    public void setPathSeparator(String pathSeparator) {
+        this.pathSeparator = pathSeparator;
     }
 
     @Override

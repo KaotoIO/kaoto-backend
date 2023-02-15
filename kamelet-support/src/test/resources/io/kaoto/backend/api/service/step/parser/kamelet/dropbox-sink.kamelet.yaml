@@ -88,6 +88,8 @@ spec:
         - to:
             uri: activemq:queue:HELLO.WORLD
         - to:
+            uri: avro:https:hostname:999/message
+        - to:
             uri: dropbox:put
             parameters:
               accessToken: '{{accessToken}}'

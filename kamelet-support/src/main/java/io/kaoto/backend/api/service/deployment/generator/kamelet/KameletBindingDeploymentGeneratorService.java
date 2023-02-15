@@ -131,7 +131,7 @@ public class KameletBindingDeploymentGeneratorService
             Collections.sort(step.getParameters());
             for (var property : step.getParameters()) {
                 if (property.isPath()) {
-                    prefix.append(":");
+                    prefix.append(property.getPathSeparator());
                     prefix.append(property.getValue());
                 }
             }
