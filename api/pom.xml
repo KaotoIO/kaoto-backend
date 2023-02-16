@@ -127,7 +127,7 @@
                     <plugin>
                         <groupId>io.swagger.codegen.v3</groupId>
                         <artifactId>swagger-codegen-maven-plugin</artifactId>
-                        <version>3.0.40</version>
+                        <version>3.0.41</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
