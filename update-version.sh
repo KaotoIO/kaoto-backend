@@ -17,6 +17,11 @@ then
   mv "main.zip" "api/src/main/resources/camel-component-metadata.zip"
   git add -f "api/src/main/resources/camel-component-metadata.zip"
   
+  echo "Downloading Kaoto view definitions."
+  wget https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/heads/main.zip
+  mv "main.zip" "api/src/main/resources/view-definition.zip"
+  git add -f "api/src/main/resources/view-definition.zip"
+  
   echo "Downloading camel connectors."
   echo "Enter camel version to use:"
   echo "Example: 3.18.4"
