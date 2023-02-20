@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.viewdefinition.parser;
 
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
 import io.kaoto.backend.model.view.ViewDefinitionConstraint;
@@ -53,6 +54,11 @@ public class GenericViewDefinitionParserService
                 v.setStep(step.getUUID());
                 views.add(v);
             }
+            if (step.getBranches() != null) {
+                for (Branch b : step.getBranches()) {
+                    views.addAll(getViewsPerStep(b.getSteps(), view));
+                }
+            }
         }
         return views;
     }
@@ -87,28 +93,22 @@ public class GenericViewDefinitionParserService
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
-                res = steps != null
-                        && steps.size() == Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() == Integer.valueOf(c.getParameter());
                 break;
             case SIZE_GREATER_THAN:
-                res = steps != null
-                        && steps.size() > Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() > Integer.valueOf(c.getParameter());
                 break;
             case SIZE_SMALLER_THAN:
-                res = steps != null
-                        && steps.size() < Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() < Integer.valueOf(c.getParameter());
                 break;
             case CONTAINS_STEP_IDENTIFIER:
-                res = steps != null
-                        &&  containsStepIdentifier(steps, c);
+                res = steps != null && containsStepIdentifier(steps, c);
                 break;
             case CONTAINS_STEP_NAME:
-                res = steps != null
-                        && containsStepName(steps, c);
+                res = steps != null && containsStepName(steps, c);
                 break;
             case CONTAINS_STEP_TYPE:
-                res = steps != null
-                        && containsStepType(steps, c);
+                res = steps != null && containsStepType(steps, c);
                 break;
             default:
                 //Unsupported operation or typo
@@ -126,6 +126,14 @@ public class GenericViewDefinitionParserService
                 res = true;
                 break;
             }
+            if (s.getBranches() != null) {
+                for (Branch b : s.getBranches()) {
+                    res = containsStepIdentifier(b.getSteps(), c);
+                    if (res == true) {
+                        break;
+                    }
+                }
+            }
         }
         return res;
     }
@@ -139,6 +147,14 @@ public class GenericViewDefinitionParserService
                 res = true;
                 break;
             }
+            if (s.getBranches() != null) {
+                for (Branch b : s.getBranches()) {
+                    res = containsStepName(b.getSteps(), c);
+                    if (res == true) {
+                        break;
+                    }
+                }
+            }
         }
         return res;
     }
@@ -151,6 +167,14 @@ public class GenericViewDefinitionParserService
                     || s.getKind().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
+            }
+            if (s.getBranches() != null) {
+                for (Branch b : s.getBranches()) {
+                    res = containsStepType(b.getSteps(), c);
+                    if (res == true) {
+                        break;
+                    }
+                }
             }
         }
         return res;
