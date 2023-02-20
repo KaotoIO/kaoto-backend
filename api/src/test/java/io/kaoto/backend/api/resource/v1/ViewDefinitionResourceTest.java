@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 @QuarkusTest
 @TestHTTPEndpoint(ViewDefinitionResource.class)
 class ViewDefinitionResourceTest {
-    private static String binding = "";
+    private static String route = "";
 
     private StepCatalog stepCatalog;
 
@@ -47,10 +48,7 @@ class ViewDefinitionResourceTest {
 
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
-        binding = Files.readString(Path.of(
-                ViewDefinitionResourceTest.class.getResource(
-                                "../twitter-search-source-binding.yaml")
-                        .toURI()));
+        route = Files.readString(Path.of(ViewDefinitionResourceTest.class.getResource("../route.yaml").toURI()));
     }
 
     @BeforeEach
@@ -87,5 +85,29 @@ class ViewDefinitionResourceTest {
                 .then()
                 .statusCode(Response.Status
                         .UNSUPPORTED_MEDIA_TYPE.getStatusCode());
+    }
+
+
+    @Test
+    void testNestedSteps() throws JsonProcessingException {
+        //Get the JSON steps from the YAML
+        Integration integration  = given()
+                .when()
+                .contentType("text/yaml")
+                .body(route)
+                .post("/../integrations?dsl=Kamelet")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(Integration.class);
+
+        var res = given()
+                .when().body((new ObjectMapper()).writeValueAsString(integration.getSteps()))
+                .contentType(MediaType.APPLICATION_JSON).post()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        res.body("$.size()", is(3));
+        assertEquals(res.extract().path("type"), Arrays.asList(new String[]{
+                "step", "step", "generic"}));
+
     }
 }
