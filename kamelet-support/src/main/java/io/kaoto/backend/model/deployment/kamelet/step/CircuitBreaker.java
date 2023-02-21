@@ -98,8 +98,9 @@ public class CircuitBreaker extends EIPStep {
         properties.put(STEPS_LABEL, this.getSteps());
         Map<String, Object> fallbacksteps = new HashMap<>();
         properties.put(ON_FALLBACK_LABEL, fallbacksteps);
-        fallbacksteps.put(STEPS_LABEL, this.getOnFallback().getSteps());
-
+        if (this.getOnFallback() != null) {
+            fallbacksteps.put(STEPS_LABEL, this.getOnFallback().getSteps());
+        }
         return properties;
     }
 
