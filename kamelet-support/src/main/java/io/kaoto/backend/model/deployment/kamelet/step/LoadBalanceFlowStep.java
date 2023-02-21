@@ -29,7 +29,7 @@ public class LoadBalanceFlowStep implements FlowStep {
         this.setProperties(new HashMap<>());
         if (step.getParameters() != null) {
             for (Parameter p : step.getParameters()) {
-                if ("properties".equalsIgnoreCase(p.getId())) {
+                if ("properties".equalsIgnoreCase(p.getId()) && p.getValue() != null) {
                     this.getProperties().putAll((Map) p.getValue());
                 }
             }
