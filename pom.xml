@@ -214,7 +214,7 @@
                 <dependency>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-parent</artifactId>
-                    <version>1.11.0</version>
+                    <version>1.11.1</version>
                     <type>pom</type>
                 </dependency>
             </dependencies>
