@@ -104,10 +104,11 @@ class ViewDefinitionResourceTest {
                 .when().body((new ObjectMapper()).writeValueAsString(integration.getSteps()))
                 .contentType(MediaType.APPLICATION_JSON).post()
                 .then()
+                .log().body()
                 .statusCode(Response.Status.OK.getStatusCode());
-        res.body("$.size()", is(3));
+        res.body("$.size()", is(4));
         assertEquals(res.extract().path("type"), Arrays.asList(new String[]{
-                "step", "step", "generic"}));
+                "step", "step", "generic", "step"}));
 
     }
 }

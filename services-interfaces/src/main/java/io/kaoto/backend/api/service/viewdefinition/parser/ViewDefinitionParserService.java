@@ -39,9 +39,20 @@ public interface ViewDefinitionParserService<T extends ViewDefinition> {
      * 🐱param steps: List[Step]
      * 🐱param viewDefinition: ViewDefinition
      *
-     * Check if the viewDefinition applies to the steps
+     * Check if the viewDefinition applies to the steps or one of
+     * the given steps by also looking into subsequent branches
      */
     @WithSpan
     boolean appliesTo(List<Step> steps, ViewDefinition viewDefinition);
 
+    /*
+     * 🐱method appliesToStep: boolean
+     * 🐱param steps: Step
+     * 🐱param viewDefinition: ViewDefinition
+     *
+     * Check if the viewDefinition applies to the exact given step
+     * but not a step in subsequent branches
+     */
+    @WithSpan
+    boolean appliesToStep(Step step, ViewDefinition viewDefinition);
 }

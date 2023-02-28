@@ -49,7 +49,7 @@ public class GenericViewDefinitionParserService
                                                 final ViewDefinition view) {
         List<ViewDefinition> views = new ArrayList<>();
         for (Step step : steps) {
-            if (appliesTo(Collections.singletonList(step), view)) {
+            if (appliesToStep(step, view)) {
                 ViewDefinition v = new ViewDefinition(view);
                 v.setStep(step.getUUID());
                 views.add(v);
@@ -64,8 +64,19 @@ public class GenericViewDefinitionParserService
     }
 
     @Override
+    public boolean appliesToStep(final Step step, final ViewDefinition viewDefinition) {
+        return doAppliesTo(Collections.singletonList(step), viewDefinition, false);
+    }
+
+    @Override
     public boolean appliesTo(final List<Step> steps,
                              final ViewDefinition viewDefinition) {
+        return doAppliesTo(steps, viewDefinition, true);
+    }
+
+    private boolean doAppliesTo(final List<Step> steps,
+                                final ViewDefinition viewDefinition,
+                                boolean includeBranch) {
         if (viewDefinition.getConstraints() == null
                 || viewDefinition.getConstraints().isEmpty()) {
             return true;
@@ -76,8 +87,8 @@ public class GenericViewDefinitionParserService
             if (!c.isMandatory()) {
                 hasOptional = true;
                 //lazy checking of conditional, we just need one
-                passOptional = passOptional || passConditional(steps, c);
-            } else if (!passConditional(steps, c)) {
+                passOptional = passOptional || passConditional(steps, c, includeBranch);
+            } else if (!passConditional(steps, c, includeBranch)) {
                 //This is mandatory and didn't pass
                 return false;
             }
@@ -89,7 +100,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean passConditional(final List<Step> steps,
-                                    final ViewDefinitionConstraint c) {
+                                    final ViewDefinitionConstraint c,
+                                    final boolean includeBranch) {
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
@@ -102,13 +114,13 @@ public class GenericViewDefinitionParserService
                 res = steps != null && steps.size() < Integer.valueOf(c.getParameter());
                 break;
             case CONTAINS_STEP_IDENTIFIER:
-                res = steps != null && containsStepIdentifier(steps, c);
+                res = steps != null && containsStepIdentifier(steps, c, includeBranch);
                 break;
             case CONTAINS_STEP_NAME:
-                res = steps != null && containsStepName(steps, c);
+                res = steps != null && containsStepName(steps, c, includeBranch);
                 break;
             case CONTAINS_STEP_TYPE:
-                res = steps != null && containsStepType(steps, c);
+                res = steps != null && containsStepType(steps, c, includeBranch);
                 break;
             default:
                 //Unsupported operation or typo
@@ -119,18 +131,19 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepIdentifier(final List<Step> steps,
-                                           final ViewDefinitionConstraint c) {
+                                           final ViewDefinitionConstraint c,
+                                           final boolean includeBranch) {
         boolean res = false;
         for (Step s : steps) {
             if (s.getId().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
             }
-            if (s.getBranches() != null) {
+            if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
-                    res = containsStepIdentifier(b.getSteps(), c);
+                    res = containsStepIdentifier(b.getSteps(), c, true);
                     if (res == true) {
-                        break;
+                        return true;
                     }
                 }
             }
@@ -139,7 +152,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepName(final List<Step> steps,
-                                     final ViewDefinitionConstraint c) {
+                                     final ViewDefinitionConstraint c,
+                                     final boolean includeBranch) {
         boolean res = false;
         for (Step s : steps) {
             if (s.getName() != null
@@ -147,11 +161,11 @@ public class GenericViewDefinitionParserService
                 res = true;
                 break;
             }
-            if (s.getBranches() != null) {
+            if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
-                    res = containsStepName(b.getSteps(), c);
+                    res = containsStepName(b.getSteps(), c, true);
                     if (res == true) {
-                        break;
+                        return true;
                     }
                 }
             }
@@ -160,7 +174,8 @@ public class GenericViewDefinitionParserService
     }
 
     private boolean containsStepType(final List<Step> steps,
-                                     final ViewDefinitionConstraint c) {
+                                     final ViewDefinitionConstraint c,
+                                     final boolean includeBranch) {
         boolean res = false;
         for (Step s : steps) {
             if (s.getType().equalsIgnoreCase(c.getParameter())
@@ -168,11 +183,11 @@ public class GenericViewDefinitionParserService
                 res = true;
                 break;
             }
-            if (s.getBranches() != null) {
+            if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
-                    res = containsStepType(b.getSteps(), c);
+                    res = containsStepType(b.getSteps(), c, true);
                     if (res == true) {
-                        break;
+                        return true;
                     }
                 }
             }
