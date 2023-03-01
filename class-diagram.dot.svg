@@ -485,20 +485,21 @@
 <!-- ViewDefinitionParserService -->
 <g id="node37" class="node">
 <title>ViewDefinitionParserService</title>
-<polygon fill="none" stroke="black" points="2035,-386.5 2035,-407.5 2633,-407.5 2633,-386.5 2035,-386.5"/>
-<text text-anchor="start" x="2221.5" y="-394.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionParserService</text>
-<polygon fill="none" stroke="black" points="2035,-324.5 2035,-386.5 2633,-386.5 2633,-324.5 2035,-324.5"/>
-<text text-anchor="start" x="2302.5" y="-373.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
-<text text-anchor="start" x="2038" y="-359.3" font-family="Times,serif" font-size="14.00">parse(&lt;List[Step]&gt; steps):List[ViewDefinition]</text>
-<text text-anchor="start" x="2038" y="-345.3" font-family="Times,serif" font-size="14.00">getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[ViewDefinition]</text>
-<text text-anchor="start" x="2038" y="-331.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean</text>
-<polygon fill="none" stroke="black" points="2034,-324 2034,-409 2634,-409 2634,-324 2034,-324"/>
+<polygon fill="none" stroke="black" points="2035,-393.5 2035,-414.5 2633,-414.5 2633,-393.5 2035,-393.5"/>
+<text text-anchor="start" x="2221.5" y="-401.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionParserService</text>
+<polygon fill="none" stroke="black" points="2035,-317.5 2035,-393.5 2633,-393.5 2633,-317.5 2035,-317.5"/>
+<text text-anchor="start" x="2302.5" y="-380.3" font-family="Times,serif" font-style="italic" font-size="14.00">Methods</text>
+<text text-anchor="start" x="2038" y="-366.3" font-family="Times,serif" font-size="14.00">parse(&lt;List[Step]&gt; steps):List[ViewDefinition]</text>
+<text text-anchor="start" x="2038" y="-352.3" font-family="Times,serif" font-size="14.00">getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[ViewDefinition]</text>
+<text text-anchor="start" x="2038" y="-338.3" font-family="Times,serif" font-size="14.00">appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean</text>
+<text text-anchor="start" x="2038" y="-324.3" font-family="Times,serif" font-size="14.00">appliesToStep(&lt;Step&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean</text>
+<polygon fill="none" stroke="black" points="2034,-317 2034,-416 2634,-416 2634,-317 2034,-317"/>
 </g>
 <!-- ViewDefinitionParserService&#45;&gt;ViewDefinition -->
 <g id="edge25" class="edge">
 <title>ViewDefinitionParserService&#45;&gt;ViewDefinition</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M2232.2,-319.99C2173.22,-293.62 2098.45,-260.19 2035.68,-232.13"/>
-<polygon fill="black" stroke="black" points="2026.51,-228.04 2037.48,-228.01 2031.08,-230.08 2035.64,-232.12 2035.64,-232.12 2035.64,-232.12 2031.08,-230.08 2033.81,-236.22 2026.51,-228.04 2026.51,-228.04"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M2216.46,-312.95C2160.37,-287.88 2093.18,-257.84 2035.93,-232.24"/>
+<polygon fill="black" stroke="black" points="2026.46,-228.01 2037.43,-227.99 2031.03,-230.05 2035.59,-232.09 2035.59,-232.09 2035.59,-232.09 2031.03,-230.05 2033.76,-236.2 2026.46,-228.01 2026.46,-228.01"/>
 </g>
 </g>
 </svg>

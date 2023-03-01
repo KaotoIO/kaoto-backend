@@ -1597,7 +1597,14 @@ possible ViewDefinitions associated to steps.</td>
 	<tr id='viewdefinitionparserservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Check if the viewDefinition applies to the steps</td>
+		<td>Check if the viewDefinition applies to the steps or one of
+the given steps by also looking into subsequent branches</td>
+	</tr>
+	<tr id='viewdefinitionparserservice-appliestostep'>
+		<td><code><b>appliesToStep</b>(<nobr>&lt;<a href='#step'>Step</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#viewdefinition'>ViewDefinition</a>&gt; <i>viewDefinition</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if the viewDefinition applies to the exact given step
+but not a step in subsequent branches</td>
 	</tr>
 </tbody></table>
 </section>

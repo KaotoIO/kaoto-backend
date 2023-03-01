@@ -385,6 +385,8 @@ getViewsPerStep(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; view):List[View
 <BR align="left" />
 appliesTo(&lt;List[Step]&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
 <BR align="left" />
+appliesToStep(&lt;Step&gt; steps, &lt;ViewDefinition&gt; viewDefinition):boolean
+<BR align="left" />
 
 </TD></TR>
 
