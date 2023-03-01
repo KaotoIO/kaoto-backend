@@ -1,0 +1,5 @@
+- from:
+    uri: activemq:null:queue
+    steps:
+      - to:
+          uri: activemq:null:queue
