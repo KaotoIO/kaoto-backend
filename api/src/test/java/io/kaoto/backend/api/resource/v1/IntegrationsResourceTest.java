@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
@@ -163,5 +165,29 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
+    }
+
+    @Test
+    void amqAmq() throws Exception {
+        String yaml = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../amq-amq.yaml")
+                        .toURI()));
+
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        JsonNode json = new ObjectMapper().readTree(res.extract().body().asInputStream());
+        JsonNode amq1 = json.get("steps").get(0);
+        JsonNode amq2 = json.get("steps").get(1);
+        assertEquals("START", amq1.get("type").asText());
+        assertEquals("activemq", amq1.get("name").asText());
+        assertEquals("activemq", amq2.get("name").asText());
+        assertNotEquals("START", amq2.get("type").asText());
     }
 }
