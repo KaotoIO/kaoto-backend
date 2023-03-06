@@ -133,7 +133,7 @@ public class Tokenizer extends Expression {
             if (map.containsKey(TRIM_LABEL) && map.get(TRIM_LABEL) != null) {
                 setTrim(Boolean.valueOf(map.get(REGEX_LABEL).toString()));
             }
-            setPropertiesFromMap(map);
+            setPropertiesFromMap(map, this);
         }
     }
 

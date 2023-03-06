@@ -155,7 +155,7 @@ public class ServiceCall extends Expression {
                        final @JsonProperty(
                                LOAD_BALANCER_CONFIGURATION_LABEL2) Map<String, Object> loadBalancerConfiguration2,
                        final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         setName(name);
         setUri(uri);
         setComponent(component);

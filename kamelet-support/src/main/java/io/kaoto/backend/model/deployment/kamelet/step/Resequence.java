@@ -54,7 +54,7 @@ public class Resequence extends Expression {
                       final @JsonProperty(SIMPLE_LABEL) String simple,
                       final @JsonProperty(JQ_LABEL) String jq,
                       final @JsonProperty(CONSTANT_LABEL) String constant) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         if (resequencerConfig != null) {
             setStreamConfig(resequencerConfig);
         } else if (resequencerConfig2 != null) {

@@ -81,6 +81,7 @@ public class KameletRepresenter extends Representer {
 
     public static final String SIMPLE = "simple";
     public static final String JQ = "jq";
+    public static final String JSONPATH = "jsonpath";
     public static final String CONSTANT = "constant";
     public static final String STEPS = "steps";
     public static final String PARAMETERS = "parameters";
@@ -382,6 +383,8 @@ public class KameletRepresenter extends Representer {
             properties.put(SIMPLE, step.getSimple());
         } else if (step.getJq() != null && !step.getJq().isEmpty()) {
             properties.put(JQ, step.getJq());
+        } else if (step.getJsonpath() != null && !step.getJsonpath().isEmpty()) {
+            properties.put(JSONPATH, step.getJsonpath());
         }
         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                 DumperOptions.FlowStyle.AUTO);

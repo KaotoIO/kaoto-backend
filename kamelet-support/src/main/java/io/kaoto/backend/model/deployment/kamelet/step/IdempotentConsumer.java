@@ -75,7 +75,7 @@ public class IdempotentConsumer extends Expression {
                        final @JsonProperty(REMOVE_ON_FAILURE_LABEL2) Boolean removeOnFailure2,
                        final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
 
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         setIdempotentRepository(idempotentRepository != null ? idempotentRepository : idempotentRepository2);
         setEager(eager);
         setCompletionEager(completionEager != null ? completionEager : completionEager2);

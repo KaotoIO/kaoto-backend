@@ -10,4 +10,6 @@ public interface ConditionBlock {
     String getSimple();
 
     String getJq();
+
+    String getJsonpath();
 }

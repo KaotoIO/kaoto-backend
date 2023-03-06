@@ -33,11 +33,11 @@ spec:
               completion-mode: MANUAL
               steps:
               - throttle:
-                  caller-runs-when-rejected: false
                   constant: '5'
                   executor-service: myExecutor
-                  reject-execution: false
                   async-delayed: true
+                  caller-runs-when-rejected: false
+                  reject-execution: false
               - sample:
                   description:
                     text: Message Sampler
@@ -58,8 +58,8 @@ spec:
                 simple: ${body}
               async-delayed: true
           - routing-slip:
-              uri-delimiter: '|'
               simple: ${body}
+              uri-delimiter: '|'
       - choice:
           when:
           - simple: '{{?foo}}'
@@ -67,20 +67,20 @@ spec:
             - dynamic-router:
                 simple: ${body}
             - set-header:
-                name: bar
                 simple: foo
+                name: bar
           - simple: '{{?bar}}'
             steps:
             - set-property:
-                name: property
                 simple: bar
+                name: property
             - threads:
                 pool-size: 8
             - split:
+                tokenize: ','
                 steps:
                 - remove-property:
                     name: property
-                tokenize: ','
             - marshal:
                 json:
                   library: Gson
@@ -92,9 +92,9 @@ spec:
           - simple: '{{?baz}}'
             steps:
             - recipient-list:
-                stop-on-exception: true
                 constant: direct:a,direct:b
                 parallel-processing: true
+                stop-on-exception: true
             - remove-headers:
                 exclude-pattern: toExclude
                 pattern: toRemove
@@ -124,14 +124,14 @@ spec:
                     logging-level: INFO
                     log-name: yaml
                 - service-call:
-                    blacklist-service-filter:
-                      servers:
-                      - service2@host1
                     name: sc
                     static-service-discovery:
                       servers:
                       - service1@host1
                       - service1@host2
+                    blacklist-service-filter:
+                      servers:
+                      - service2@host1
           otherwise:
             steps:
             - remove-header:
@@ -192,8 +192,8 @@ spec:
                     logging-level: INFO
                     log-name: yaml
                 - idempotent-consumer:
-                    idempotent-repository: myRepo
                     simple: ${header.id}
+                    idempotent-repository: myRepo
                     steps:
                     - set-body:
                         simple: ola ke ase

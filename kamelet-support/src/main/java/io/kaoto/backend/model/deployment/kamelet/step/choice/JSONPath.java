@@ -16,20 +16,20 @@ public class JSONPath {
     @JsonProperty("suppress-exceptions")
     private Boolean suppressExceptions;
 
-    public void setExpression(
-            final Expression expression) {
-        this.expression = expression;
+    public Boolean getSuppressExceptions() {
+        return suppressExceptions;
     }
 
     public void setSuppressExceptions(final Boolean suppressExceptions) {
         this.suppressExceptions = suppressExceptions;
     }
 
-    public Boolean getSuppressExceptions() {
-        return suppressExceptions;
-    }
-
     public Expression getExpression() {
         return expression;
+    }
+
+    public void setExpression(
+            final Expression expression) {
+        this.expression = expression;
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.json.bind.annotation.JsonbTypeDeserializer;
+import java.util.Arrays;
 
 /**
  * 🐱class Parameter
@@ -241,5 +242,51 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
                 "id='" + id + '\'' +
                 ", value=" + value +
                 '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parameter<?> parameter)) return false;
+
+        if (isPath() != parameter.isPath()) return false;
+        if (!getId().equals(parameter.getId())) return false;
+        if (getPathOrder() != null ? !getPathOrder().equals(parameter.getPathOrder()) :
+                parameter.getPathOrder() != null)
+            return false;
+        if (getPathSeparator() != null ? !getPathSeparator().equals(
+                parameter.getPathSeparator()) : parameter.getPathSeparator() != null)
+            return false;
+        if (getValue() != null ? !getValue().equals(
+                parameter.getValue()) : parameter.getValue() != null) return false;
+        if (getTitle() != null ? !getTitle().equals(
+                parameter.getTitle()) : parameter.getTitle() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(
+                parameter.getDescription()) : parameter.getDescription() != null)
+            return false;
+        if (getNullable() != null ? !getNullable().equals(parameter.getNullable()) : parameter.getNullable() != null)
+            return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(enumeration, parameter.enumeration)) return false;
+        if (getDefaultValue() != null ? !getDefaultValue().equals(
+                parameter.getDefaultValue()) : parameter.getDefaultValue() != null)
+            return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(getExamples(), parameter.getExamples());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + (isPath() ? 1 : 0);
+        result = 31 * result + (getPathOrder() != null ? getPathOrder().hashCode() : 0);
+        result = 31 * result + (getPathSeparator() != null ? getPathSeparator().hashCode() : 0);
+        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getNullable() != null ? getNullable().hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(enumeration);
+        result = 31 * result + (getDefaultValue() != null ? getDefaultValue().hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(getExamples());
+        return result;
     }
 }
