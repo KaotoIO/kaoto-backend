@@ -18,10 +18,13 @@ public class Filter extends EIPStep implements ConditionBlock {
     public static final String STEPS_LABEL = "steps";
     public static final String SIMPLE_LABEL = "simple";
     public static final String JQ_LABEL = "jq";
+    public static final String JSONPATH_LABEL = "jsonpath";
     @JsonProperty(SIMPLE_LABEL)
     private String simple;
     @JsonProperty(JQ_LABEL)
     private String jq;
+    @JsonProperty(JSONPATH_LABEL)
+    private String jsonpath;
 
     @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
@@ -67,6 +70,9 @@ public class Filter extends EIPStep implements ConditionBlock {
         if (this.getJq() != null) {
             properties.put(JQ_LABEL, this.getJq());
         }
+        if (this.getJsonpath() != null) {
+            properties.put(JSONPATH_LABEL, this.getJsonpath());
+        }
         if (this.getSteps() != null) {
             properties.put(STEPS_LABEL, this.getSteps());
         }
@@ -85,6 +91,9 @@ public class Filter extends EIPStep implements ConditionBlock {
             case JQ_LABEL:
                 parameter.setValue(this.getJq());
                 break;
+            case JSONPATH_LABEL:
+                parameter.setValue(this.getJsonpath());
+                break;
             default:
                 break;
         }
@@ -98,6 +107,9 @@ public class Filter extends EIPStep implements ConditionBlock {
                 break;
             case JQ_LABEL:
                 this.setJq(String.valueOf(parameter.getValue()));
+                break;
+            case JSONPATH_LABEL:
+                this.setJsonpath(String.valueOf(parameter.getValue()));
                 break;
             default:
                 break;
@@ -117,5 +129,14 @@ public class Filter extends EIPStep implements ConditionBlock {
 
     public void setJq(final String jq) {
         this.jq = jq;
+    }
+
+    @Override
+    public String getJsonpath() {
+        return jsonpath;
+    }
+
+    public void setJsonpath(String jsonpath) {
+        this.jsonpath = jsonpath;
     }
 }

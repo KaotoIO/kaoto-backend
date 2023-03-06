@@ -65,20 +65,20 @@ spec:
               exception-type: java.lang.IllegalArgumentException
               message: test
           - routing-slip:
-              uri-delimiter: '|'
               simple: ${body}
+              uri-delimiter: '|'
       - choice:
           when:
           - simple: '{{?foo}}'
             steps:
             - dynamic-router:
+                simple: ${body}
                 description:
                   text: Dynamic Routing
                   lang: eng
-                simple: ${body}
             - set-header:
-                name: bar
                 simple: foo
+                name: bar
             - marshal:
                 json:
                   library: Gson
@@ -131,15 +131,15 @@ spec:
                 json:
                   unmarshal-type-name: MyClass
             - set-property:
-                name: property
                 simple: bar
+                name: property
             - split:
+                tokenize: ','
                 steps:
                 - process:
                     ref: '{{myProcessor}}'
                 - remove-property:
                     name: property
-                tokenize: ','
             - multicast:
                 stop-on-exception: true
                 parallel-processing: true
@@ -160,15 +160,15 @@ spec:
           - simple: '{{?baz}}'
             steps:
             - throttle:
-                caller-runs-when-rejected: false
-                constant: '5'
+                simple: ${body}
                 executor-service: myExecutor
-                reject-execution: false
                 async-delayed: true
+                caller-runs-when-rejected: false
+                reject-execution: false
             - recipient-list:
-                stop-on-exception: true
                 constant: direct:a,direct:b
                 parallel-processing: true
+                stop-on-exception: true
             - remove-headers:
                 exclude-pattern: toExclude
                 pattern: toRemove
@@ -196,14 +196,14 @@ spec:
                     aggregation-strategy: myAggregatorStrategy
                     completion-size: 2
                 - service-call:
-                    blacklist-service-filter:
-                      servers:
-                      - service2@host1
                     name: sc
                     static-service-discovery:
                       servers:
                       - service1@host1
                       - service1@host2
+                    blacklist-service-filter:
+                      servers:
+                      - service2@host1
           otherwise:
             steps:
             - remove-header:
@@ -216,8 +216,8 @@ spec:
           simple: '{{?foo}}'
           steps:
           - idempotent-consumer:
-              idempotent-repository: myRepo
               simple: ${header.id}
+              idempotent-repository: myRepo
               steps:
               - set-body:
                   simple: ola ke ase

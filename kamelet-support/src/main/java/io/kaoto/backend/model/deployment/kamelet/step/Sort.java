@@ -42,7 +42,7 @@ public class Sort extends Expression {
                 final @JsonProperty(COMPARATOR_LABEL2) String comparator2,
                 final @JsonProperty(COMPARATOR_LABEL3) String comparator3,
                 final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         final var alternativeComparator = comparator2 != null ? comparator2 : comparator3;
         setComparator(comparator != null ? comparator : alternativeComparator);
         setDescription(description);

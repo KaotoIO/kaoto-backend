@@ -48,7 +48,7 @@ public class RoutingSlip extends Expression {
                        final @JsonProperty(SIMPLE_LABEL) String simple,
                        final @JsonProperty(JQ_LABEL) String jq,
                        final @JsonProperty(CONSTANT_LABEL) String constant) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         setUriDelimiter(uriDelimiter != null ? uriDelimiter : uriDelimiter2);
         setIgnoreInvalidEndpoints(ignoreInvalidEndpoints != null ? ignoreInvalidEndpoints : ignoreInvalidEndpoints2);
         setCacheSize(cacheSize != null ? cacheSize : cacheSize2);

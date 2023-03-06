@@ -41,6 +41,9 @@ public class SuperChoice extends EIPStep {
                         case JQ:
                             choice.setJq(b.getCondition());
                             break;
+                        case JSONPATH:
+                            choice.setJsonpath(b.getCondition());
+                            break;
                     }
                     getChoice().add(choice);
                 } else {
@@ -85,12 +88,31 @@ public class SuperChoice extends EIPStep {
     }
 
     private String getChoiceCondition(final Choice flow) {
-        return getChoiceConditionSyntax(flow) == Branch.ConditionSyntax.JQ ? flow.getJq() : flow.getSimple();
+        var res = "";
+        switch (getChoiceConditionSyntax(flow)){
+            case JQ:
+                res = flow.getJq();
+                break;
+            case JSONPATH:
+                res = flow.getJsonpath();
+                break;
+            default:
+                res = flow.getSimple();
+                break;
+        }
+        return res;
     }
 
     private Branch.ConditionSyntax getChoiceConditionSyntax(final Choice flow) {
-        return flow.getJq() != null && !flow.getJq().isEmpty()
-                ? Branch.ConditionSyntax.JQ : Branch.ConditionSyntax.SIMPLE;
+        if (flow.getJq() != null) {
+            return Branch.ConditionSyntax.JQ;
+        }
+        if (flow.getJsonpath() != null) {
+            return Branch.ConditionSyntax.JSONPATH;
+        }
+
+        //default to SIMPLE
+        return Branch.ConditionSyntax.SIMPLE;
     }
 
     @Override
@@ -122,8 +144,7 @@ public class SuperChoice extends EIPStep {
         return otherwise;
     }
 
-    public void setOtherwise(
-            final Otherwise otherwise) {
+    public void setOtherwise(final Otherwise otherwise) {
         this.otherwise = otherwise;
     }
 
@@ -131,8 +152,7 @@ public class SuperChoice extends EIPStep {
         return choice;
     }
 
-    public void setChoice(
-            final List<Choice> choice) {
+    public void setChoice(final List<Choice> choice) {
         this.choice = choice;
     }
 

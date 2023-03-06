@@ -32,11 +32,7 @@ public class SetPropertyFlowStep implements FlowStep {
     public SetPropertyFlowStep(final @JsonProperty("set-property") Expression e,
                                final @JsonProperty("setProperty") Expression e2) {
         super();
-        if (e != null) {
-            setSetPropertyPairFlowStep(e);
-        } else if (e2 != null) {
-            setSetPropertyPairFlowStep(e2);
-        }
+        setSetPropertyPairFlowStep(e != null ? e : e2);
     }
 
 
@@ -86,6 +82,8 @@ public class SetPropertyFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.JQ)) {
                     p.setValue(this.getSetPropertyPairFlowStep().getJq());
+                } else {
+                    p.setValue(this.getSetPropertyPairFlowStep().getExpression());
                 }
             }
             return res.get();

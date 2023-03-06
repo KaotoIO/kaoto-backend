@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@JsonPropertyOrder({"simple", "jq", "steps"})
+@JsonPropertyOrder({"simple", "jq", "jsonpath", "steps"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Choice implements Serializable, ConditionBlock {
     @Serial
@@ -21,6 +21,8 @@ public class Choice implements Serializable, ConditionBlock {
     private String simple;
     @JsonProperty("jq")
     private String jq;
+    @JsonProperty("jsonpath")
+    private String jsonpath;
 
     @JsonProperty("steps")
     private List<FlowStep> steps;
@@ -47,5 +49,13 @@ public class Choice implements Serializable, ConditionBlock {
 
     public void setJq(final String jq) {
         this.jq = jq;
+    }
+
+    public String getJsonpath() {
+        return jsonpath;
+    }
+
+    public void setJsonpath(String jsonpath) {
+        this.jsonpath = jsonpath;
     }
 }

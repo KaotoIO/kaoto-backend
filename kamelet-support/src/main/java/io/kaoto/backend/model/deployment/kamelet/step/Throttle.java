@@ -66,7 +66,7 @@ public class Throttle extends Expression {
                     final @JsonProperty(REJECT_EXECUTION_LABEL) Boolean rejectExecution,
                     final @JsonProperty(REJECT_EXECUTION_LABEL2) Boolean rejectExecution2,
                     final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         setCorrelationExpression(correlationExpression != null ? correlationExpression : correlationExpression2);
         setExecutorService(executorService != null ? executorService : executorService2);
         setTimePeriodMillis(timePeriodMillis != null ? timePeriodMillis : timePeriodMillis2);

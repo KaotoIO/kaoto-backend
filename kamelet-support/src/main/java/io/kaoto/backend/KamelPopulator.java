@@ -85,6 +85,7 @@ public class KamelPopulator {
     public static final String JQ = "jq";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
+    public static final String EXPRESSION = "expression";
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
 
@@ -484,19 +485,21 @@ public class KamelPopulator {
 
 
     public static Expression getExpression(final Step step) {
-        Expression expression = new Expression(null, null, null, null, null);
+        Expression expression = new Expression();
         for (Parameter p : step.getParameters()) {
             if (p.getValue() == null) {
                 continue;
             }
             if (NAME.equalsIgnoreCase(p.getId())) {
-                expression.setName(p.getValue().toString());
+                expression.setName(String.valueOf(p.getValue()));
             } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
-                expression.setSimple(p.getValue().toString());
+                expression.setSimple(p.getValue());
             } else if (JQ.equalsIgnoreCase(p.getId())) {
-                expression.setJq(p.getValue().toString());
+                expression.setJq(String.valueOf(p.getValue()));
             } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
-                expression.setConstant(p.getValue().toString());
+                expression.setConstant(String.valueOf(p.getValue()));
+            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
+                expression.setExpression((Expression) p.getValue());
             }
         }
         return expression;

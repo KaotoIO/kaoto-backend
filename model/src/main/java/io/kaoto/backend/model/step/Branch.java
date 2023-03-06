@@ -15,7 +15,8 @@ public class Branch {
 
     public enum ConditionSyntax {
         SIMPLE ("simple"),
-        JQ ("jq");
+        JQ ("jq"),
+        JSONPATH("jsonpath");
 
         private final String value;
 

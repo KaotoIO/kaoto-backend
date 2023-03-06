@@ -23,7 +23,8 @@ import java.util.Optional;
         using = JsonDeserializer.None.class
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SetHeaderFlowStep implements FlowStep {
+public class
+SetHeaderFlowStep implements FlowStep {
     public static final String SET_HEADER_LABEL = "set-header";
     public static final String SET_HEADER_LABEL2 = "setHeader";
 
@@ -31,11 +32,7 @@ public class SetHeaderFlowStep implements FlowStep {
     public SetHeaderFlowStep(final @JsonProperty(SET_HEADER_LABEL) Expression e,
                              final @JsonProperty(SET_HEADER_LABEL2) Expression e2) {
         super();
-        if (e != null) {
-            setSetHeaderPairFlowStep(e);
-        } else if (e2 != null) {
-            setSetHeaderPairFlowStep(e2);
-        }
+        setSetHeaderPairFlowStep(e != null ? e : e2);
     }
 
 
@@ -85,6 +82,8 @@ public class SetHeaderFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.NAME)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getName());
+                } else {
+                    p.setValue(this.getSetHeaderPairFlowStep().getExpression());
                 }
             }
 

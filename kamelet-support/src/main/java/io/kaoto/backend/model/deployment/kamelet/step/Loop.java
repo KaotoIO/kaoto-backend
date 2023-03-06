@@ -67,7 +67,7 @@ public class Loop extends Expression {
                               final @JsonProperty(DISABLED_LABEL) Boolean disabled,
                               final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
                               final @JsonProperty(STEPS_LABEL) List<FlowStep> steps) {
-        super(expression, constant, simple, jq, null);
+        super(expression, constant, simple, jq, null, null, null, null);
         setCopy(copy);
         setDoWhile(doWhile != null ? doWhile : doWhile2);
         setBreakOnShutdown(breakOnShutdown != null ? breakOnShutdown : breakOnShutdown2);

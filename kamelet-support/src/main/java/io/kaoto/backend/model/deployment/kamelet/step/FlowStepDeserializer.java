@@ -112,6 +112,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         steps.put("unmarshal", UnmarshalFlowStep.class);
         steps.put("uri", UriFlowStep.class);
         steps.put("validate", ValidateFlowStep.class);
+        steps.put("when", ChoiceFlowStep.class);
         steps.put("wire-tap", WireTapFlowStep.class);
         steps.put("wireTap", WireTapFlowStep.class);
 

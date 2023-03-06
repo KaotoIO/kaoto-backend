@@ -1,0 +1,9 @@
+- from:
+    uri: direct:set-body
+    steps:
+    - set-body:
+        expression:
+          simple:
+            expression: Hello from yaml route set-body
+    - log:
+        message: Opening connection to Gitter...

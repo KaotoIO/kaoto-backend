@@ -32,9 +32,15 @@ public class ChoiceFlowStep implements FlowStep {
     private SuperChoice choice;
 
     @JsonCreator
-    public ChoiceFlowStep(final @JsonProperty(value = CHOICE_LABEL) SuperChoice choice) {
+    public ChoiceFlowStep(final @JsonProperty(value = CHOICE_LABEL) SuperChoice schoice,
+                          final @JsonProperty(value = "when") Choice choice) {
         super();
-        setChoice(choice);
+        setChoice(schoice);
+        if (choice != null) {
+            SuperChoice superChoice = new SuperChoice();
+            superChoice.setChoice(List.of(choice));
+            setChoice(superChoice);
+        }
     }
 
     public ChoiceFlowStep(final Step step, final KamelPopulator kameletPopulator) {
@@ -64,8 +70,10 @@ public class ChoiceFlowStep implements FlowStep {
         choice.setSteps(kameletPopulator.processSteps(b));
         if (b.getConditionSyntax() == Branch.ConditionSyntax.JQ) {
             choice.setJq(b.getCondition());
-        } else {
+        } else if (b.getConditionSyntax() == Branch.ConditionSyntax.SIMPLE) {
             choice.setSimple(b.getCondition());
+        } else {
+            choice.setJsonpath(b.getCondition());
         }
 
         return choice;

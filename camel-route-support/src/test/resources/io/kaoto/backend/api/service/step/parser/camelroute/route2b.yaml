@@ -1,0 +1,79 @@
+- from:
+    uri: "timer:trigger-gitter-streaming"
+    parameters:
+      repeatCount: 1
+    steps:
+      - log:
+          message: Opening connection to Gitter...
+      - setHeader:
+          name: Authorization
+          expression:
+            simple:
+              expression: "Bearer {{token}}"
+      - set-header:
+          name: test
+          simple:
+            expression: ${body}
+            result-type: long
+      - to:
+          uri: >-
+            https://gitter.ems.host/_matrix/client/v3/sync?filter={"account_data":{"not_types":["*"]},"room":{"account_data":{"not_types":["*"]},"rooms":["{{room}}"],"timeline":{"limit":1,"types":["m.room.message"]},"state":{"not_types":["*"]}
+            } }
+      - log:
+          message: Gitter HTTP Streaming started
+      - loop:
+          doWhile: true
+          expression:
+            simple:
+              expression: true
+          steps:
+            - removeHeaders:
+                pattern: "*"
+            - setProperty:
+                name: next_batch
+                expression:
+                  jsonpath:
+                    expression: $.next_batch
+            - setHeader:
+                name: Authorization
+                expression:
+                  simple:
+                    expression: "Bearer {{token}}"
+            - toD:
+                uri: >-
+                  https://gitter.ems.host/_matrix/client/v3/sync?timeout=30000&filter={"account_data":{"not_types":["*"]},"room":{"account_data":{"not_types":["*"]},"rooms":["{{room}}"],"timeline":{"limit":1,"types":["m.room.message"]},"state":{"not_types":["*"]}
+                  } }&since=${exchangeProperty.next_batch}&disableStreamCache=true
+            - convertBodyTo:
+                type: String
+            - when:
+                expression:
+                  jsonpath:
+                    suppressExceptions: true
+                    expression: "$['rooms']"
+                steps:
+                  - setProperty:
+                      name: backup-response
+                      expression:
+                        simple:
+                          expression: "${body}"
+                  - setHeader:
+                      name: CamelJsltString
+                      expression:
+                        constant:
+                          expression: >-
+                            let event = [for (.rooms.join)
+                            .value.timeline.events[0]] {
+                              "fromUser": {
+                                "username": replace($event[0].sender,"@|-(.*)",""),
+                                "displayName": replace($event[0].sender,"@|-(.*)","")
+                              },
+                              "text": $event[0].content.body,
+                              "sent": format-time(replace($event[0].origin_server_ts, "[\\s\\S]{3}\\z", ""), "yyyy-MM-dd'T'HH:mm:ss.SSSX"),
+                            }
+                  - to: "jslt:dummy?allowTemplateFromHeader=true"
+                  - wire-tap:
+                      uri: "kamelet:sink"
+                  - setBody:
+                      expression:
+                        simple:
+                          expression: "${exchangeProperty.backup-response}"
