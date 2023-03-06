@@ -88,26 +88,22 @@ public class KameletBindingDeploymentGeneratorService
         }
 
         KameletBindingSpec spec = new KameletBindingSpec();
-        int i = 0;
 
-        if (!steps.isEmpty()) {
-            Step step = steps.get(i);
-            if (Step.START.equalsIgnoreCase(step.getType())) {
-                spec.setSource(createKameletBindingStep(steps.get(i++)));
+        for (int i = 0; i < steps.size(); i++) {
+            var step = steps.get(i);
+            if (i == 0 && Step.START.equalsIgnoreCase(step.getType())) {
+                spec.setSource(createKameletBindingStep(step));
+            } else if (i == steps.size() -1 && Step.END.equalsIgnoreCase(step.getType())) {
+                spec.setSink(createKameletBindingStep(step));
+            } else {
+                spec.getSteps().add(createKameletBindingStep(step));
             }
-        }
-
-        for (; i < steps.size() - 1; i++) {
-            spec.getSteps().add(createKameletBindingStep(steps.get(i)));
         }
 
         if (spec.getSteps().isEmpty()) {
             spec.setSteps(null);
         }
 
-        if (steps.size() > 1) {
-            spec.setSink(createKameletBindingStep(steps.get(steps.size() - 1)));
-        }
         KameletBinding binding = new KameletBinding(String.valueOf(metadata.getOrDefault("name", "")), spec);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
