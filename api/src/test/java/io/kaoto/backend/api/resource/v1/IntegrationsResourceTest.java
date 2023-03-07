@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,6 +32,7 @@ import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import org.yaml.snakeyaml.events.Event;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
@@ -189,5 +191,24 @@ class IntegrationsResourceTest {
         assertEquals("activemq", amq1.get("name").asText());
         assertEquals("activemq", amq2.get("name").asText());
         assertNotEquals("START", amq2.get("type").asText());
+    }
+
+    @Test
+    void newBranchStep() throws Exception {
+        String json = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                        "../new-branch-step.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        Yaml yaml = new Yaml(
+                new Constructor(KameletBinding.class),
+                new KameletRepresenter());
+        yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
 }
