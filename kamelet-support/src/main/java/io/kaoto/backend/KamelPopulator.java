@@ -504,6 +504,10 @@ public class KamelPopulator {
         marshal.getDataFormat().setProperties(new HashMap<>());
 
         for (Parameter p : step.getParameters()) {
+            if (null == p.getValue()) {
+                continue;
+            }
+
             if ("dataformat".equalsIgnoreCase(p.getId())) {
                 marshal.getDataFormat().setFormat(p.getValue().toString());
             } else if ("properties".equalsIgnoreCase(p.getId())) {
