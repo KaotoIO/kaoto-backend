@@ -29,8 +29,14 @@ public class UnmarshalFlowStep extends MarshalFlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = catalog.getReadOnlyCatalog().searchByID("unmarshal");
-        assignParameters(res);
+        Step res = catalog.getReadOnlyCatalog()
+                .searchByName("unmarshal").stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP")
+                        || step.getKind().equalsIgnoreCase("EIP-BRANCH"))
+                .findAny().orElse(null);
+        if (res != null) {
+            assignParameters(res);
+        }
         return res;
     }
 }

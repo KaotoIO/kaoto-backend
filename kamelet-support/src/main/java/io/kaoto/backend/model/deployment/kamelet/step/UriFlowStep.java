@@ -103,6 +103,11 @@ public class UriFlowStep implements FlowStep {
                     return 0;
                 }
 
+                //EIPs shouldn't go through this function
+                if (step.getKind().startsWith("EIP")) {
+                    return 10000;
+                }
+
                 if (type == Step.Type.MIDDLE) {
                     return -1;
                 }
@@ -124,8 +129,7 @@ public class UriFlowStep implements FlowStep {
 
         if (res.isPresent() && this.getUri() != null) {
             kameletStepParserService.setValuesOnParameters(res.get(), this.getUri());
-            kameletStepParserService.setValuesOnParameters(res.get(),
-                    this.getParameters());
+            kameletStepParserService.setValuesOnParameters(res.get(), this.getParameters());
         }
 
         return res.orElse(null);

@@ -64,7 +64,7 @@ class KameletParseCatalogTest {
         assertTrue(Arrays.stream(required).allMatch(property -> step.getRequired().contains(property)));
 
         Assertions.assertNotNull(step);
-        assertEquals(name, step.getId());
+        assertEquals(name + "-" + step.getType(), step.getId());
         assertEquals(name, step.getName());
         assertEquals("Kamelet", step.getKind());
         assertEquals(Step.START, step.getType());
@@ -97,7 +97,7 @@ class KameletParseCatalogTest {
         assertTrue(Arrays.stream(required).allMatch(property -> step.getRequired().contains(property)));
 
         Assertions.assertNotNull(step);
-        assertEquals(name, step.getId());
+        assertEquals(name + "-" + step.getType(), step.getId());
         assertEquals(name, step.getName());
         assertEquals("Camel-Connector", step.getKind());
         assertEquals(Step.MIDDLE, step.getType());
@@ -114,7 +114,7 @@ class KameletParseCatalogTest {
         name = "choice";
         Step step2 = catalog.searchByName(name).stream().findAny().get();
         Assertions.assertNotNull(step2);
-        assertEquals(name, step2.getId());
+        assertEquals(name + "-" + step.getType(), step2.getId());
         assertEquals(name, step2.getName());
         assertEquals("EIP-BRANCH", step2.getKind());
         assertEquals(Step.MIDDLE, step2.getType());

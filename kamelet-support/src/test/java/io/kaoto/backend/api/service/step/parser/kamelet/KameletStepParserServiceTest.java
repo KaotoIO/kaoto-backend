@@ -125,10 +125,10 @@ class KameletStepParserServiceTest {
         assertEquals(5, parsed.getSteps().size());
 
         final var fromStep = parsed.getSteps().get(0);
-        assertEquals("kamelet:source", fromStep.getId());
+        assertEquals("kamelet:source", fromStep.getName());
 
         final var choiceStep = parsed.getSteps().get(1);
-        assertEquals("choice", choiceStep.getId());
+        assertEquals("choice", choiceStep.getName());
         assertNotNull(choiceStep.getBranches());
         assertEquals(2, choiceStep.getBranches().size());
 

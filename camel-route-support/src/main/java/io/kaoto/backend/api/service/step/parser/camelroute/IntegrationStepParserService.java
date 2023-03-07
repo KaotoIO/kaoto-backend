@@ -65,7 +65,7 @@ public class IntegrationStepParserService
                 if (flow.getFrom().getSteps() != null) {
                     int i = 0;
                     for (FlowStep step : flow.getFrom().getSteps()) {
-                        steps.add(ksps.processStep(step, i == 0, i++ == flow.getFrom().getSteps().size() - 1));
+                        steps.add(ksps.processStep(step, false, i++ == flow.getFrom().getSteps().size() - 1));
                     }
                 }
             }
