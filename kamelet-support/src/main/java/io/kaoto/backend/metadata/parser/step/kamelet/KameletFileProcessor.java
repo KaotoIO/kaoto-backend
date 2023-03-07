@@ -52,7 +52,6 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
             if (kamelet.getMetadata() != null) {
                 final var metadata = kamelet.getMetadata();
-                step.setId(metadata.getName());
                 step.setName(metadata.getName());
 
                 if (metadata.getLabels() != null) {
@@ -63,6 +62,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                         default -> step.setType(Step.MIDDLE);
                     }
                 }
+                step.setId(step.getName() + "-" + step.getType());
 
                 if (metadata.getAnnotations() != null) {
                     final var annotations = metadata.getAnnotations();

@@ -90,18 +90,18 @@ public class KameletBindingStepParserService
 
     private void processSpec(final List<Step> steps,
                              final KameletBindingSpec spec) {
-        steps.add(processStep(spec.getSource()));
+        steps.add(processStep(spec.getSource(), Step.Type.START));
 
         if (spec.getSteps() != null) {
             for (KameletBindingStep intermediateStep : spec.getSteps()) {
-                steps.add(processStep(intermediateStep));
+                steps.add(processStep(intermediateStep, Step.Type.MIDDLE));
             }
         }
 
-        steps.add(processStep(spec.getSink()));
+        steps.add(processStep(spec.getSink(), Step.Type.END));
     }
 
-    private Step processStep(final KameletBindingStep bindingStep) {
+    private Step processStep(final KameletBindingStep bindingStep, final Step.Type type) {
         Optional<Step> step = Optional.empty();
 
         try {
@@ -131,12 +131,12 @@ public class KameletBindingStepParserService
                     kind = "";
                 }
 
-                var candidates = catalog.getReadOnlyCatalog()
-                        .searchByName(name).stream();
+                var candidates = catalog.getReadOnlyCatalog().searchByName(name).stream();
                 if (!kind.isBlank()) {
                     candidates =
                             candidates.filter(s -> s.getKind().equalsIgnoreCase(bindingStep.getRef().getKind()));
                 }
+                candidates = candidates.filter(s -> s.getType().equals(type.name()));
                 step = candidates
                         .sorted(Comparator.comparing(s -> KINDS.indexOf(s.getKind().toUpperCase(Locale.ROOT))))
                         .findFirst();

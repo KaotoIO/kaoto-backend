@@ -60,15 +60,21 @@ public class LoadBalanceFlowStep implements FlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        Step res = catalog.getReadOnlyCatalog().searchByID(LOAD_BALANCE_LABEL);
-        assignParameters(res);
-        int i = 1;
-        res.setBranches(new LinkedList<>());
-        for (var step : this.getSteps()) {
-            var b = new Branch();
-            b.setIdentifier(String.valueOf(i++));
-            b.setSteps(List.of(kameletStepParserService.processStep(step, false, true)));
-            res.getBranches().add(b);
+        Step res = catalog.getReadOnlyCatalog()
+                .searchByName(LOAD_BALANCE_LABEL).stream()
+                .filter(step -> step.getKind().equalsIgnoreCase("EIP")
+                        || step.getKind().equalsIgnoreCase("EIP-BRANCH"))
+                .findAny().orElse(null);
+        if (res != null) {
+            assignParameters(res);
+            int i = 1;
+            res.setBranches(new LinkedList<>());
+            for (var step : this.getSteps()) {
+                var b = new Branch();
+                b.setIdentifier(String.valueOf(i++));
+                b.setSteps(List.of(kameletStepParserService.processStep(step, false, true)));
+                res.getBranches().add(b);
+            }
         }
         return res;
     }

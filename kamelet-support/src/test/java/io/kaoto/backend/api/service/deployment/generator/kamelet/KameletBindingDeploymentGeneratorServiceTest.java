@@ -62,8 +62,8 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "      kind: Kamelet\n",
                 service.parse(steps, md, Collections.emptyList()));
 
-        Step step = catalog.getReadOnlyCatalog()
-                .searchByName("knative-sink").stream().findAny().get();
+        Step step = catalog.getReadOnlyCatalog().searchByName("knative").stream()
+                .filter(s -> s.getKind().equalsIgnoreCase("Knative")).findAny().get();
         for (Parameter p : step.getParameters()) {
             if (p.getTitle().equalsIgnoreCase("Type")) {
                 p.setValue("example");

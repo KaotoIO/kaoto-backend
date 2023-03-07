@@ -40,9 +40,9 @@ class StepResourceTest {
 
     @Test
     void stepById() {
-        Step s = stepResource.stepById(INFINISPAN_SOURCE);
+        Step s = stepResource.stepById(INFINISPAN_SOURCE + "-START");
         Assertions.assertNotNull(s);
-        Assertions.assertEquals(INFINISPAN_SOURCE, s.getId());
+        Assertions.assertEquals(s.getName() + "-" + s.getType(), s.getId());
     }
 
     @Test
@@ -51,7 +51,7 @@ class StepResourceTest {
         for (Step s : steps) {
             Assertions.assertNotNull(s);
             Assertions.assertEquals(INFINISPAN_SOURCE, s.getName());
-            Assertions.assertEquals(INFINISPAN_SOURCE, s.getId());
+            Assertions.assertEquals(s.getName() + "-" + s.getType(), s.getId());
         }
     }
 
