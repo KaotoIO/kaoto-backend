@@ -149,6 +149,11 @@ public class KamelPopulator {
         setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
         kamelet.getSpec().getTemplate().setBeans((List<Bean>) metadata.getOrDefault("beans", null));
+        final String metadataDescription = metadata.getOrDefault("description","").toString();
+        final String specDesription = kamelet.getSpec().getDefinition().getDescription();
+        if (!metadataDescription.equals("") || specDesription == null) {
+            kamelet.getSpec().getDefinition().setDescription(metadataDescription);
+        }
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
@@ -575,7 +580,7 @@ public class KamelPopulator {
         return flowStep;
     }
 
-    public static FlowStep deserializeToFlowStep(Object to)  {
+    public static FlowStep deserializeToFlowStep(Object to) {
         FlowStep res = null;
 
         if (to instanceof FlowStep flowStep) {
