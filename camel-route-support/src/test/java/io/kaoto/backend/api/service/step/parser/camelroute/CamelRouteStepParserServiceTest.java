@@ -69,7 +69,7 @@ class CamelRouteStepParserServiceTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"route.yaml", "route2.yaml", "route3.yaml"})
+    @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml", "route3-complex-expressions.yaml"})
     void deepParseParametrized(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);
@@ -90,7 +90,7 @@ class CamelRouteStepParserServiceTest {
     @Test
     @Disabled("Until we support full expressions in conditionals")
     void compareCamelAndKebabCases() throws IOException {
-        var route = new String(this.getClass().getResourceAsStream("route2.yaml").readAllBytes(),
+        var route = new String(this.getClass().getResourceAsStream("route2-complex-expressions.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
         var routeb = new String(this.getClass().getResourceAsStream("route2b.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
