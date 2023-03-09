@@ -83,7 +83,19 @@ public class DeploymentService {
         for (DeploymentGeneratorService parser : getParsers()) {
             try {
                 if (parser.identifier().equalsIgnoreCase(dsl) && parser.appliesTo(i.getSteps())) {
-                        return parser.parse(i.getSteps(), i.getMetadata(), i.getParameters());
+                    return parser.parse(i.getSteps(), i.getMetadata(), i.getParameters());
+                }
+            } catch (Exception e) {
+                log.warn("Parser " + parser.getClass() + "threw an unexpected"
+                                + " error. ",
+                        e);
+            }
+        }
+
+        for (DeploymentGeneratorService parser : getParsers()) {
+            try {
+                if (parser.appliesTo(i.getSteps())) {
+                    return parser.parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected"
