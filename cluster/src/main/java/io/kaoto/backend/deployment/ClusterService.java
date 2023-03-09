@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
+import io.fabric8.kubernetes.client.dsl.LogWatch;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
@@ -26,18 +27,18 @@ import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 🐱miniclass ClusterService (DeploymentsResource)
- * 
+ * <p>
  * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
- *
+ * <p>
  * 🐱section Service to interact with the cluster. This is the utility class the resource relies on to perform the
  * operations.
  */
@@ -264,27 +265,48 @@ public class ClusterService {
 
         final var podResource = kubernetesClient.pods().inNamespace(getNamespace(namespace))
                 .withName(pod.getMetadata().getName());
-        try (InputStream in = podResource.tailingLines(lines).watchLog().getOutput();
-                     InputStreamReader isr = new InputStreamReader(in);
-                     BufferedReader reader = new BufferedReader(isr)) {
-
+        LogWatch watch = podResource.tailingLines(lines).watchLog();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(watch.getOutput()));
+        AtomicBoolean closed = new AtomicBoolean(false);
+        try {
             Multi<String> logs = Multi.createFrom().generator(
                     () -> 0, (n, emitter) -> {
                         try {
-                            reader.lines().forEach(line -> emitter.emit(line + "\n"));
+                            String line = reader.readLine();
+                            if (line == null) {
+                                // The stream has reached EOF without reading any characters.
+                                // This can happen when the pod has been deleted.
+                                // A better solution would be to watch the pod resource,
+                                // while streaming the logs, and propagate the error up to
+                                // the client.
+                                emitter.complete();
+                                return n;
+                            }
+                            emitter.emit(line + "\n");
+                            return ++n;
                         } catch (Exception e) {
-                            log.error("Can't get more information from log: " + e.getMessage());
-                        } finally {
-                            emitter.complete();
+                            if (!closed.get()) {
+                                log.error("Error reading log stream", e);
+                                emitter.fail(e);
+                            } else {
+                                emitter.complete();
+                            }
                         }
-                        return ++n;
+                        return n;
                     }
             );
-            logs.runSubscriptionOn(managedExecutor);
-            logs.onOverflow().buffer(3);
-            return logs;
+            return logs.runSubscriptionOn(managedExecutor)
+                    .onTermination().invoke(() -> {
+                        closed.set(true);
+                        watch.close();
+                        try {
+                            reader.close();
+                        } catch (Exception e) {
+                            log.error("Error closing log stream", e);
+                        }
+                    });
         } catch (Exception e) {
-            log.error("Error trying to read the log.", e);
+            log.error("Error watching log stream", e);
         }
         return Multi.createFrom().nothing();
     }
