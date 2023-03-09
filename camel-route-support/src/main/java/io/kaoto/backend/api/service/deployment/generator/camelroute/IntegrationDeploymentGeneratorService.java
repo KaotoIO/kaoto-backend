@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.camelroute.IntegrationStepParserService;
@@ -31,22 +32,20 @@ import java.util.stream.Stream;
 
 @ApplicationScoped
 @RegisterForReflection
-public class IntegrationDeploymentGeneratorService
-        implements DeploymentGeneratorService {
+public class IntegrationDeploymentGeneratorService implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String EIP = "EIP";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
-    private static final List<String> KINDS = Arrays.asList(
-            CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
+    private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
     private Logger log = Logger.getLogger(IntegrationDeploymentGeneratorService.class);
 
-    @Inject
     private IntegrationStepParserService stepParserService;
 
-    @Inject
     private KameletDeploymentGeneratorService kdgs;
+
+    private StepCatalog catalog;
 
     public IntegrationDeploymentGeneratorService() {
     }
@@ -73,14 +72,12 @@ public class IntegrationDeploymentGeneratorService
         } catch (IOException e) {
             log.error("Can't load Integration DSL schema", e);
         }
-        return  "";
+        return "";
     }
 
     @Override
-    public String parse(final List<Step> steps,
-                        final Map<String, Object> metadata,
-                        final List<Parameter> parameters) {
-        return kdgs.getYAML(new Integration(steps, metadata), new IntegrationRepresenter());
+    public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
+        return kdgs.getYAML(new Integration(steps, metadata, catalog), new IntegrationRepresenter());
     }
 
     @Override
@@ -129,6 +126,7 @@ public class IntegrationDeploymentGeneratorService
         }
         return s;
     }
+
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{Integration.class});
@@ -173,7 +171,7 @@ public class IntegrationDeploymentGeneratorService
                     if (pod.getStatus() != null
                             && pod.getStatus().getPhase() != null
                             && (pod.getStatus().getPhase().equalsIgnoreCase("Running")
-                                    || pod.getStatus().getPhase().equalsIgnoreCase("Succeeded"))) {
+                            || pod.getStatus().getPhase().equalsIgnoreCase("Succeeded"))) {
                         return pod;
                     }
                 }
@@ -187,5 +185,13 @@ public class IntegrationDeploymentGeneratorService
     @Override
     public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
         return steps;
+    }
+
+    @Inject
+    public void setStepParserService(final IntegrationStepParserService stepParserService,
+                                     final KameletDeploymentGeneratorService kdgs, final StepCatalog catalog) {
+        this.stepParserService = stepParserService;
+        this.catalog = catalog;
+        this.kdgs = kdgs;
     }
 }

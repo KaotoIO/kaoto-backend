@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
@@ -39,8 +40,9 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
-    @Inject
     private KameletStepParserService stepParserService;
+
+    private StepCatalog catalog;
 
     private Logger log = Logger.getLogger(KameletDeploymentGeneratorService.class);
     public KameletDeploymentGeneratorService() {
@@ -76,7 +78,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        return getYAML(new Kamelet(steps, metadata, parameters),
+        return getYAML(new Kamelet(steps, metadata, parameters, catalog),
                 new KameletRepresenter());
     }
 
@@ -167,5 +169,11 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     @Override
     public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
         return steps;
+    }
+
+    @Inject
+    public void setStepParserService(final KameletStepParserService stepParserService, final StepCatalog catalog) {
+        this.stepParserService = stepParserService;
+        this.catalog = catalog;
     }
 }

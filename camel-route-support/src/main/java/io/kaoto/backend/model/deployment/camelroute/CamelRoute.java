@@ -2,6 +2,7 @@ package io.kaoto.backend.model.deployment.camelroute;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.kaoto.backend.KamelPopulator;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.step.Step;
 
@@ -20,10 +21,10 @@ public class CamelRoute {
         super();
     }
 
-    public CamelRoute(final List<Step> steps) {
+    public CamelRoute(final List<Step> steps, final StepCatalog catalog) {
         setFlows(new LinkedList<>());
         var flow = new Flow();
-        flow.setFrom(new KamelPopulator().getFlow(steps));
+        flow.setFrom(new KamelPopulator(catalog).getFlow(steps));
         getFlows().add(flow);
     }
 
