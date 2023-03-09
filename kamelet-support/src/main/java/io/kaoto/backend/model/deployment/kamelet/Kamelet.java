@@ -7,6 +7,7 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Kind;
 import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -44,9 +45,10 @@ public final class Kamelet
 
     public Kamelet(final List<Step> steps,
                    final Map<String, Object> metadata,
-                   final List<Parameter> parameters) {
+                   final List<Parameter> parameters,
+                   final StepCatalog catalog) {
         this();
-        new KamelPopulator().populateKamelet(this, metadata, steps, parameters);
+        new KamelPopulator(catalog).populateKamelet(this, metadata, steps, parameters);
     }
 
 

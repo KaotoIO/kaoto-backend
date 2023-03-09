@@ -3,9 +3,10 @@ package io.kaoto.backend.api.resource.v1;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -14,10 +15,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
-import com.fasterxml.jackson.databind.JsonNode;
+import io.kaoto.backend.model.step.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
@@ -32,7 +30,6 @@ import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import org.yaml.snakeyaml.events.Event;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
@@ -86,13 +83,13 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-       res = given()
-               .when()
-               .contentType("text/yaml")
-               .body(yaml1)
-               .post("?dsl=KameletBinding")
-               .then()
-               .statusCode(Response.Status.OK.getStatusCode());
+        res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml1)
+                .post("?dsl=KameletBinding")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
 
         String json = res.extract().body().asString();
         Integration integration = mapper.readValue(json, Integration.class);
@@ -172,25 +169,93 @@ class IntegrationsResourceTest {
     @Test
     void amqAmq() throws Exception {
         String yaml = Files.readString(Path.of(
-                DeploymentsResourceTest.class.getResource(
-                                "../amq-amq.yaml")
-                        .toURI()));
+                DeploymentsResourceTest.class.getResource("../amq-amq.yaml").toURI()));
 
         var res = given()
                 .when()
                 .contentType("text/yaml")
                 .body(yaml)
-                .post("")
+                .post("?dsl=Camel Route")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        JsonNode json = new ObjectMapper().readTree(res.extract().body().asInputStream());
-        JsonNode amq1 = json.get("steps").get(0);
-        JsonNode amq2 = json.get("steps").get(1);
-        assertEquals("START", amq1.get("type").asText());
-        assertEquals("activemq", amq1.get("name").asText());
-        assertEquals("activemq", amq2.get("name").asText());
-        assertNotEquals("START", amq2.get("type").asText());
+        var flow = res.extract().body().as(Integration.class);
+        Step amq1 = flow.getSteps().get(0);
+        Step amq2 = flow.getSteps().get(1);
+        assertEquals("START", amq1.getType());
+        assertEquals("activemq", amq1.getName());
+        assertEquals("activemq", amq2.getName());
+        assertEquals("MIDDLE", amq2.getType());
+        assertTrue(amq1.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("queue")));
+        assertTrue(amq1.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue().toString().equalsIgnoreCase("myQueueName")));
+        assertTrue(amq2.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("topic")));
+        assertTrue(amq2.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue().toString().equalsIgnoreCase("anotherOne")));
+
+
+        String json = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
+    }
+
+    @Test
+    void amqAmqFromJson() throws Exception {
+        String json = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource("../amq-amq.json").toURI()));
+
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        String yaml = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flow = res.extract().body().as(Integration.class);
+        Step amq1 = flow.getSteps().get(0);
+        Step amq2 = flow.getSteps().get(1);
+        assertEquals("START", amq1.getType());
+        assertEquals("activemq", amq1.getName());
+        assertEquals("activemq", amq2.getName());
+        assertEquals("MIDDLE", amq2.getType());
+
+        assertTrue(amq1.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("topic")));
+        assertTrue(amq1.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue() == null));
+        assertTrue(amq2.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("queue")));
+        assertTrue(amq2.getParameters().stream()
+                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue().toString().equalsIgnoreCase("sdfg")));
     }
 
     @Test

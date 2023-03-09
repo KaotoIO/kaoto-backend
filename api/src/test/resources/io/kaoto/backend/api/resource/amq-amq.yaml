@@ -1,5 +1,5 @@
 - from:
-    uri: activemq:null:queue
+    uri: activemq:queue:myQueueName
     steps:
-      - to:
-          uri: activemq:null:queue
+    - to:
+        uri: activemq:topic:anotherOne

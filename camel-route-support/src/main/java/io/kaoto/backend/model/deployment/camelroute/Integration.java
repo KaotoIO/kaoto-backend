@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Kind;
 import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStatus;
 import io.kaoto.backend.model.step.Step;
@@ -47,8 +48,7 @@ public final class Integration
 
     }
 
-    public Integration(final List<Step> steps,
-                       final Map<String, Object> metadata) {
+    public Integration(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
 
         this.setMetadata(new ObjectMeta());
         this.getMetadata().setName(
@@ -69,7 +69,7 @@ public final class Integration
         this.setSpec(new IntegrationSpec());
         this.getSpec().setFlows(new ArrayList<>());
         var flow = new Flow();
-        flow.setFrom(new KamelPopulator().getFlow(steps));
+        flow.setFrom(new KamelPopulator(catalog).getFlow(steps));
         this.getSpec().getFlows().add(flow);
     }
 

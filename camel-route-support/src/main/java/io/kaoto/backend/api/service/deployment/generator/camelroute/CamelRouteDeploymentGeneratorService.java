@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.camelroute;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
@@ -16,6 +17,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 
 import java.util.Arrays;
@@ -38,6 +40,8 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
     private Logger log = Logger.getLogger(CamelRouteDeploymentGeneratorService.class);
+
+    private StepCatalog catalog;
 
     public CamelRouteDeploymentGeneratorService() {
         //Empty for injection
@@ -73,7 +77,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class), new CamelRouteRepresenter());
-        return yaml.dumpAs(new CamelRoute(steps), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
+        return yaml.dumpAs(new CamelRoute(steps, catalog), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
     }
 
     @Override
@@ -116,5 +120,10 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     @Override
     public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
         return steps;
+    }
+
+    @Inject
+    public void setCatalog(StepCatalog catalog) {
+        this.catalog = catalog;
     }
 }

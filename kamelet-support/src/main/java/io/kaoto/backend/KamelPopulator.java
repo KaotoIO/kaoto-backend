@@ -1,6 +1,7 @@
 package io.kaoto.backend;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
@@ -86,6 +87,12 @@ public class KamelPopulator {
     public static final String NAME = "name";
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
+
+    private StepCatalog catalog;
+
+    public KamelPopulator(final StepCatalog catalog) {
+        this.catalog = catalog;
+    }
 
     public void populateKamelet(
             final Kamelet kamelet,
@@ -266,18 +273,26 @@ public class KamelPopulator {
         return from;
     }
 
-    public HashMap<String, String> buildUri(
-            final Step s,
-            final StringBuilder uri) {
+    public HashMap<String, String> buildUri(final Step s, final StringBuilder uri) {
         var params = new HashMap<String, String>();
         if (s.getParameters() != null) {
-            Collections.sort(s.getParameters());
-            for (Parameter p : s.getParameters()) {
-                if (p.isPath()) {
-                    uri.append(p.getPathSeparator());
-                    uri.append(p.getValue() != null ? p.getValue() : p.getDefaultValue());
-                } else if (p.getValue() != null) {
-                    params.put(p.getId(), p.getValue().toString());
+            //We need to make sure parameters attributes coming from the frontend are complete and right
+            //The only important thing we need to take from them is the value, the rest should be as default
+            HashMap<String, Object> values = new HashMap<>();
+            s.getParameters().stream().forEach(parameter -> values.put(parameter.getId(), parameter.getValue()));
+
+            //Now we can work with the parameters list
+            Step step = catalog.getReadOnlyCatalog().searchByID(s.getId());
+            if (step != null) {
+                Collections.sort(step.getParameters());
+                for (Parameter p : step.getParameters()) {
+                    var value = values.get(p.getId());
+                    if (p.isPath()) {
+                        uri.append(p.getPathSeparator());
+                        uri.append(value != null ? value : p.getDefaultValue());
+                    } else if (value != null) {
+                        params.put(p.getId(), value.toString());
+                    }
                 }
             }
         }

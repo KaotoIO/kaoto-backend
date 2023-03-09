@@ -9,7 +9,7 @@ import javax.json.bind.annotation.JsonbTypeDeserializer;
 /**
  * 🐱class Parameter
  * 🐱aka List[Parameter]
- *
+ * <p>
  * Represents a parameter of a step in an integration.
  * These parameters could be used on the UI to configure the step.
  */
@@ -49,9 +49,9 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
 
 
     protected Parameter(final String id,
-                     final String title,
-                     final String description,
-                     final T defaultValue) {
+                        final String title,
+                        final String description,
+                        final T defaultValue) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -69,6 +69,10 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
      */
     public String getDescription() {
         return this.description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     /*
@@ -97,10 +101,6 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
         this.id = id;
     }
 
-    public void setValue(final T value) {
-        this.value = value;
-    }
-
     public abstract T convertToType(final Object value);
 
     /*
@@ -112,6 +112,10 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
      */
     public T getValue() {
         return this.value;
+    }
+
+    public void setValue(final T value) {
+        this.value = value;
     }
 
     /*
@@ -148,10 +152,6 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
         if (path != null) {
             this.path = path;
         }
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
     }
 
     /*
@@ -206,6 +206,7 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
     public void setPathOrder(Integer pathOrder) {
         this.pathOrder = pathOrder;
     }
+
     /*
      * 🐱property pathSeparator: String
      *
@@ -234,4 +235,11 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
         return Integer.compare(other.getPathOrder(), this.getPathOrder());
     }
 
+    @Override
+    public String toString() {
+        return "Parameter{" +
+                "id='" + id + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }
