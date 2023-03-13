@@ -38,7 +38,7 @@ jobs:
       - name: 👀 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
       - name: 💅 Codecov Analysis
-        run: bash <(curl -s https://codecov.io/bash)
+        uses: codecov/codecov-action@v3
 
   native-tests:
     name: 👩🏼‍🏭 Native tests for ${{ matrix.os }} 👩🏼‍🏭
