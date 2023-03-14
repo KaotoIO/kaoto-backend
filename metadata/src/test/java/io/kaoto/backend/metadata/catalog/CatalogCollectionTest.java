@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @QuarkusTest
@@ -25,18 +26,18 @@ class CatalogCollectionTest {
         InMemoryCatalog<Step> ic = new InMemoryCatalog<>();
         steps.add(new Step("id-1",
                 "connector-1", "icon",
-                Collections.emptyList()));
+                new LinkedList<>()));
         steps.add(new Step("id-2", CONNECTOR_2,
-                "icon", Collections.emptyList()));
+                "icon", new LinkedList<>()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
 
         ic = new InMemoryCatalog<>();
         steps.clear();
         steps.add(new Step("id-2", CONNECTOR_2,
-                "icon", Collections.emptyList()));
+                "icon", new LinkedList<>()));
         steps.add(new Step("id-3", CONNECTOR_2,
-                "icon", Collections.emptyList()));
+                "icon", new LinkedList<>()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
     }

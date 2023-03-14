@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -193,13 +194,15 @@ public class KameletStepParserService
         if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }
-        Collections.sort(step.getParameters());
-        var splitSeparators =
-                step.getParameters().stream().filter(Objects::nonNull)
-                        .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
+        var pathParameters = new LinkedList<Parameter>();
+        pathParameters.addAll(step.getParameters().stream().parallel()
+                .filter(Objects::nonNull).filter(s -> s.isPath()).toList());
+        Collections.sort(pathParameters);
+        var splitSeparators = pathParameters.stream()
+                .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
         String[] pathParts = path.split(splitSeparators);
         int i = 0;
-        for (Parameter p : step.getParameters()) {
+        for (Parameter p : pathParameters) {
             if (i >= pathParts.length) {
                 break;
             }
