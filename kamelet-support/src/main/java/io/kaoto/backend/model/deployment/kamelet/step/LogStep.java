@@ -36,6 +36,31 @@ public class LogStep extends EIPStep {
         super(step);
     }
 
+    public LogStep(Map<String, Object> map) {
+        if (map.containsKey(MESSAGE)) {
+            this.setMessage(String.valueOf(map.get(MESSAGE)));
+        }
+        if (map.containsKey(MARKER)) {
+            this.setMarker(String.valueOf(map.get(MARKER)));
+        }
+        if (map.containsKey(LOGGER)) {
+            this.setLogger(String.valueOf(map.get(LOGGER)));
+        }
+        if (map.containsKey(DESCRIPTION)) {
+            this.setDescription(String.valueOf(map.get(DESCRIPTION)));
+        }
+        if (map.containsKey(LOGGING_LEVEL)) {
+            this.setLoggingLevel(String.valueOf(map.get(LOGGING_LEVEL)));
+        } else if (map.containsKey(LOGGING_LEVEL1)) {
+            this.setLoggingLevel(String.valueOf(map.get(LOGGING_LEVEL1)));
+        }
+        if (map.containsKey(LOG_NAME)) {
+            this.setLogName(String.valueOf(map.get(LOG_NAME)));
+        } else if (map.containsKey(LOG_NAME1)) {
+            this.setLogName(String.valueOf(map.get(LOG_NAME1)));
+        }
+    }
+
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new LinkedHashMap<>();

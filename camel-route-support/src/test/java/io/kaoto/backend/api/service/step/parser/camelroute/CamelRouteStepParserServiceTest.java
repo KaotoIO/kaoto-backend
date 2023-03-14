@@ -100,4 +100,17 @@ class CamelRouteStepParserServiceTest {
 
         assertEquals(steps, stepsb);
     }
+
+    @Test
+    void compareLogs() throws IOException {
+        var route = new String(this.getClass().getResourceAsStream("route-logs.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
+        var routeb = new String(this.getClass().getResourceAsStream("route2-logs.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
+
+        var steps = camelRouteStepParserService.deepParse(route);
+        var stepsb = camelRouteStepParserService.deepParse(routeb);
+
+        assertEquals(steps, stepsb);
+    }
 }
