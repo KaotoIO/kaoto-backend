@@ -30,9 +30,16 @@ public class LogFlowStep implements FlowStep {
     }
 
     @JsonCreator
-    public LogFlowStep(final @JsonProperty(value = LOG_LABEL, required = true) LogStep log) {
+    public LogFlowStep(final @JsonProperty(value = LOG_LABEL, required = true) Object log) {
         super();
-        this.setLog(log);
+        if (log instanceof LogStep logStep) {
+            this.setLog(logStep);
+        } else if (log instanceof Map map) {
+            this.setLog(new LogStep(map));
+        } else if (log != null) {
+            this.setLog(new LogStep());
+            this.getLog().setMessage(log.toString());
+        }
     }
 
     public LogFlowStep(Step step) {
