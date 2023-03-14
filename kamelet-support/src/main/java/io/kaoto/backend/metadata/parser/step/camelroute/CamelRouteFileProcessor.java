@@ -16,6 +16,7 @@ import javax.json.JsonReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String description,
         String group,
         String type,
-        List<Parameter> parameters,
+        LinkedList<Parameter> parameters,
         List<String> required
     ) { }
 
@@ -141,7 +142,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 .map(Map.Entry::getKey).toList();
 
 
-        List<Parameter> parameters = propertiesParsed.entrySet().stream().map(
+        LinkedList<Parameter> parameters = new LinkedList<>();
+
+        parameters.addAll(propertiesParsed.entrySet().stream().map(
                 parameter -> {
                     Map<String, String> parameterData = parameter.getValue();
 
@@ -164,7 +167,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
                     return parsedParameter;
                 }
-        ).toList();
+        ).toList());
 
         //Assign path order to parameters
         //We will have to assume the component defined them in order in the JSON because

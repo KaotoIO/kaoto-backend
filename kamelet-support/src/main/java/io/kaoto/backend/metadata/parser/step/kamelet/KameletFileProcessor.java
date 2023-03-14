@@ -20,8 +20,8 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -121,7 +121,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
         step.setRequired(required);
 
-        step.setParameters(new ArrayList<>());
+        step.setParameters(new LinkedList<>());
 
         for (var property : properties.entrySet()) {
             Parameter p;

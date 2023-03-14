@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("Camel-Connector");
         step.setName("log");
         step.setId("log-action");
-        step.setParameters(new ArrayList<>());
+        step.setParameters(new LinkedList<>());
         Parameter<String> p = new StringParameter();
         p.setPath(true);
         p.setValue("loggerName");
@@ -101,7 +102,7 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("EIP");
         step.setName("set-body");
-        step.setParameters(new ArrayList<>());
+        step.setParameters(new LinkedList<>());
         p = new StringParameter("constant", "constant", "", "default", null);
         p.setValue("Hello Llama");
         step.getParameters().add(p);
