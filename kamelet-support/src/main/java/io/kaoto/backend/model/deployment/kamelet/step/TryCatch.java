@@ -81,12 +81,14 @@ public class TryCatch extends EIPStep {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put(STEPS_LABEL, this.getSteps());
         List<Map<String, Object>> doC = new LinkedList<>();
-        for (var doCatch : this.getDoCatch()) {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("exception", doCatch.getExceptions());
-            map.put("on-when", doCatch.getOnWhen());
-            map.put(STEPS_LABEL, doCatch.getSteps());
-            doC.add(map);
+        if (this.getDoCatch() != null) {
+            for (var doCatch : this.getDoCatch()) {
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("exception", doCatch.getExceptions());
+                map.put("on-when", doCatch.getOnWhen());
+                map.put(STEPS_LABEL, doCatch.getSteps());
+                doC.add(map);
+            }
         }
         properties.put(DO_CATCH_LABEL, doC);
         Map<String, Object> doF = new LinkedHashMap<>();
