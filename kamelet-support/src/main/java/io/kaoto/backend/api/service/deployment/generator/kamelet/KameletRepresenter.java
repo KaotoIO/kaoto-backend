@@ -10,6 +10,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
+import io.kaoto.backend.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
@@ -83,6 +84,8 @@ public class KameletRepresenter extends Representer {
     public static final String JQ = "jq";
     public static final String JSONPATH = "jsonpath";
     public static final String CONSTANT = "constant";
+    public static final String GROOVY = "groovy";
+    public static final String JAVASCRIPT = "javascript";
     public static final String STEPS = "steps";
     public static final String PARAMETERS = "parameters";
     public static final String URI = "uri";
@@ -334,6 +337,14 @@ public class KameletRepresenter extends Representer {
             public Node representData(final Object data) {
                 return representMapping(getTag(data.getClass(), Tag.MAP),
                         ((Expression) data).getRepresenterProperties(), DumperOptions.FlowStyle.AUTO);
+            }
+        });
+
+        this.multiRepresenters.put(Script.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        ((Script) data).getRepresenterProperties(), DumperOptions.FlowStyle.AUTO);
             }
         });
 
