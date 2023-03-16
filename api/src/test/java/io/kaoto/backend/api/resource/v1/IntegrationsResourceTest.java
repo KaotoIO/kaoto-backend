@@ -276,4 +276,23 @@ class IntegrationsResourceTest {
                 new KameletRepresenter());
         yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
+
+    @Test
+    void scriptStep() throws Exception {
+        String json = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../script.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        Yaml yaml = new Yaml(
+                new Constructor(KameletBinding.class),
+                new KameletRepresenter());
+        yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
+    }
 }
