@@ -276,4 +276,34 @@ class IntegrationsResourceTest {
                 new KameletRepresenter());
         yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
+
+    @Test
+    void scriptStep() throws Exception {
+        String json = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../script.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        String yaml = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flow = res.extract().body().as(Integration.class);
+        Step script = flow.getSteps().get(1);
+        var groovy = script.getParameters().stream().filter(p -> "groovy".equals(p.getId())).findAny();
+        assertTrue(groovy.isPresent());
+        assertEquals("some groovy script", groovy.get().getValue());
+    }
 }

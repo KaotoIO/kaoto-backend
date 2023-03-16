@@ -10,6 +10,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
+import io.kaoto.backend.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
@@ -86,6 +87,10 @@ public class KamelPopulator {
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
     public static final String EXPRESSION = "expression";
+
+    public static final String GROOVY = "groovy";
+    public static final String JAVASCRIPT = "javascript";
+
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
     private final String group = "camel.apache.org";
 
@@ -375,7 +380,7 @@ public class KamelPopulator {
                     flowStep = new SampleFlowStep(step);
                     break;
                 case "script":
-                    flowStep = new ScriptFlowStep(step);
+                    flowStep = new ScriptFlowStep(getScript(step));
                     break;
                 case "service-call":
                     flowStep = new ServiceCallFlowStep(step);
@@ -503,6 +508,23 @@ public class KamelPopulator {
             }
         }
         return expression;
+    }
+
+    public static Script getScript(final Step step) {
+        Script script = new Script();
+        for (Parameter p : step.getParameters()) {
+            if (p.getValue() == null) {
+                continue;
+            }
+            if (NAME.equalsIgnoreCase(p.getId())) {
+                script.setName(String.valueOf(p.getValue()));
+            } else if (GROOVY.equalsIgnoreCase(p.getId())) {
+                script.setGroovy(String.valueOf(p.getValue()));
+            } else if (JAVASCRIPT.equalsIgnoreCase(p.getId())) {
+                script.setJavascript(String.valueOf(p.getValue()));
+            }
+        }
+        return script;
     }
 
     private FlowStep getMarshalStep(final Step step) {

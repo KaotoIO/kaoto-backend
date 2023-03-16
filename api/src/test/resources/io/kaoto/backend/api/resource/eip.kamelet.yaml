@@ -45,8 +45,7 @@ spec:
                   sample-period: '1500'
                   message-frequency: 5
               - script:
-                  expression:
-                    simple: ${body}
+                  groovy: some groovy script
               option:
               - key: o1
                 simple: ${body}
