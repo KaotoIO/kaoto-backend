@@ -46,6 +46,8 @@ public class Step extends Metadata {
     @JsonView(Views.Summary.class)
     @JsonProperty("UUID")
     private String uuid;
+    @JsonView(Views.Complete.class)
+    private String stepId;
 
     public Step() {
         setType(MIDDLE);
@@ -219,6 +221,21 @@ public class Step extends Metadata {
 
     public void setMaxBranches(final Integer maxBranches) {
         this.maxBranches = maxBranches;
+    }
+
+
+    /*
+     * 🐱property id: String
+     *
+     * User defined id for this step.
+     *
+     */
+    public String getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(String stepId) {
+        this.stepId = stepId;
     }
 
     @Override

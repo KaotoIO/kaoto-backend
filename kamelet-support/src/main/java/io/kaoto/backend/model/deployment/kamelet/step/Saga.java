@@ -8,7 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +65,8 @@ public class Saga extends EIPStep {
                 final @JsonProperty(COMPENSATION_LABEL) Object compensation,
                 final @JsonProperty(COMPLETION_LABEL) Object completion,
                 final @JsonProperty(OPTION_LABEL) Object option,
-                final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
+                final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+                final @JsonProperty("id") String id) {
         setSagaService(sagaService != null ? sagaService : sagaService2);
         setPropagation(propagation);
         setCompletionMode(completionMode != null ? completionMode : completionMode2);
@@ -75,6 +75,7 @@ public class Saga extends EIPStep {
         setCompletion(completion);
         setOption(option);
         setDescription(description);
+        setId(id);
     }
 
 
@@ -163,10 +164,7 @@ public class Saga extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
-        if (this.getSteps() != null) {
-            properties.put(STEPS_LABEL, this.getSteps());
-        }
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getSagaService() != null) {
             properties.put(SAGA_SERVICE_LABEL, this.getSagaService());
         }
@@ -190,6 +188,9 @@ public class Saga extends EIPStep {
         }
         if (this.getDescription() != null) {
             properties.put(DESCRIPTION_LABEL, this.getDescription());
+        }
+        if (this.getSteps() != null) {
+            properties.put(STEPS_LABEL, this.getSteps());
         }
 
         return properties;

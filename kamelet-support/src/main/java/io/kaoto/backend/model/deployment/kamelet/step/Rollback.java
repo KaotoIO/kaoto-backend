@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -33,10 +32,12 @@ public class Rollback extends EIPStep {
                     final @JsonProperty(MARK_ROLLBACK_ONLY_LABEL2) Boolean markRollbackOnly2,
                     final @JsonProperty(MARK_ROLLBACK_ONLY_LAST_LABEL) Boolean markRollbackOnlyLast,
                     final @JsonProperty(MARK_ROLLBACK_ONLY_LAST_LABEL2) Boolean markRollbackOnlyLast2,
-                    final @JsonProperty(MESSAGE_LABEL) String message) {
+                    final @JsonProperty(MESSAGE_LABEL) String message,
+                    final @JsonProperty("id") String id) {
         setMarkRollbackOnly(markRollbackOnly != null ? markRollbackOnly : markRollbackOnly2);
         setMarkRollbackOnlyLast(markRollbackOnlyLast != null ? markRollbackOnlyLast : markRollbackOnlyLast2);
         setMessage(message);
+        setId(id);
     }
     public Rollback(Step step) {
         super(step);
@@ -44,7 +45,7 @@ public class Rollback extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new LinkedHashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
 
         if (this.getMarkRollbackOnly() != null) {
             properties.put(MARK_ROLLBACK_ONLY_LABEL2, this.getMarkRollbackOnly());

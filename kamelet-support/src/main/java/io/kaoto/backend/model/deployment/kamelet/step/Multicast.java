@@ -9,7 +9,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +102,8 @@ public class Multicast extends EIPStep {
                      final @JsonProperty(ON_PREPARE_LABEL) Map<String, Object> onPrepare,
                      final @JsonProperty(ON_PREPARE_LABEL2) Map<String, Object> onPrepare2,
                      final @JsonProperty(SHARE_UNIT_OF_WORK_LABEL) Boolean shareUnitOfWork,
-                     final @JsonProperty(SHARE_UNIT_OF_WORK_LABEL2) Boolean shareUnitOfWork2) {
+                     final @JsonProperty(SHARE_UNIT_OF_WORK_LABEL2) Boolean shareUnitOfWork2,
+                     final @JsonProperty("id") String id) {
         super();
         setDescription(description);
         setSteps(steps);
@@ -120,6 +120,7 @@ public class Multicast extends EIPStep {
         setExecutorService(executorService != null ? executorService : executorService2);
         setOnPrepare(onPrepare != null ? onPrepare : onPrepare2);
         setShareUnitOfWork(shareUnitOfWork != null ? shareUnitOfWork : shareUnitOfWork2);
+        setId(id);
     }
 
     public Multicast() {
@@ -191,7 +192,7 @@ public class Multicast extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getAggregationStrategy() != null) {
             properties.put(AGGREGATION_STRATEGY_LABEL, this.getAggregationStrategy());
         }

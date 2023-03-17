@@ -1,10 +1,10 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -20,10 +20,8 @@ public class LogStep extends EIPStep {
 
     private String message;
 
-    @JsonProperty(LOGGING_LEVEL)
     private String loggingLevel;
 
-    @JsonProperty(LOG_NAME)
     private String logName;
     private String marker;
     private String logger;
@@ -32,11 +30,31 @@ public class LogStep extends EIPStep {
     public LogStep() {
     }
 
+    @JsonCreator
+    public LogStep(final @JsonProperty(MESSAGE) String message,
+                final @JsonProperty(MARKER) String marker,
+                final @JsonProperty(LOGGER) String logger,
+                final @JsonProperty(DESCRIPTION) String description,
+                final @JsonProperty(LOGGING_LEVEL) String loggingLevel,
+                final @JsonProperty(LOG_NAME) String logName,
+                final @JsonProperty(LOGGING_LEVEL1) String loggingLevel2,
+                final @JsonProperty(LOG_NAME1) String logName2,
+                final @JsonProperty("id") String id) {
+        setMessage(message);
+        setMarker(marker);
+        setLogger(logger);
+        setDescription(description);
+        setLoggingLevel(loggingLevel != null ? loggingLevel : loggingLevel2);
+        setLogName(logName != null ? logName : logName2);
+        setId(id);
+    }
+
     public LogStep(Step step) {
         super(step);
     }
 
     public LogStep(Map<String, Object> map) {
+        super(map);
         if (map.containsKey(MESSAGE)) {
             this.setMessage(String.valueOf(map.get(MESSAGE)));
         }
@@ -63,7 +81,7 @@ public class LogStep extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new LinkedHashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.message != null) {
             properties.put(MESSAGE, this.getMessage());
         }

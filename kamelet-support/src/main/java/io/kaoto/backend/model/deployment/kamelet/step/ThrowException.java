@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -28,10 +27,12 @@ public class ThrowException extends EIPStep {
 
     public ThrowException(final @JsonProperty(EXCEPTION_TYPE_LABEL) String exceptionType,
                           final @JsonProperty(EXCEPTION_TYPE_LABEL2) String exceptionType2,
-                          final @JsonProperty(MESSAGE_LABEL) String message) {
+                          final @JsonProperty(MESSAGE_LABEL) String message,
+                          final @JsonProperty("id") String id) {
         super();
         setExceptionType(exceptionType != null ? exceptionType : exceptionType2);
         setMessage(message);
+        setId(id);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ThrowException extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        var properties = new HashMap<String, Object>();
+        var properties = super.getDefaultRepresenterProperties();
         if (this.getMessage() != null) {
             properties.put(MESSAGE_LABEL, this.getMessage());
         }

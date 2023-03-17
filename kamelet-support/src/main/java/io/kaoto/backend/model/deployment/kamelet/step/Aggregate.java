@@ -8,7 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -165,7 +164,7 @@ public class Aggregate extends EIPStep {
 
 
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new LinkedHashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.correlationExpression != null) {
             properties.put(CORRELATION_EXPRESSION, this.correlationExpression);
         }

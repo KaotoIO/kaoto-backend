@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -19,12 +19,9 @@ import java.util.Optional;
 
 
 @JsonPropertyOrder({"set-header"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class
-SetHeaderFlowStep implements FlowStep {
+public class SetHeaderFlowStep implements FlowStep {
     public static final String SET_HEADER_LABEL = "set-header";
     public static final String SET_HEADER_LABEL2 = "setHeader";
 
@@ -86,6 +83,8 @@ SetHeaderFlowStep implements FlowStep {
                     p.setValue(this.getSetHeaderPairFlowStep().getExpression());
                 }
             }
+
+            res.get().setStepId(this.getSetHeaderPairFlowStep().getId());
 
             return res.get();
         }

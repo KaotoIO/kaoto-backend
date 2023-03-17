@@ -8,7 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +49,7 @@ public class Pipeline extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getSteps() != null) {
             properties.put(STEPS_LABEL, this.getSteps());
         }

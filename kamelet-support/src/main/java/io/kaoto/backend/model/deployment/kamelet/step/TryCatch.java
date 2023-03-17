@@ -41,11 +41,13 @@ public class TryCatch extends EIPStep {
             final @JsonProperty(DO_CATCH_LABEL) List<DoCatch> doCatch,
             final @JsonProperty(DO_CATCH_LABEL2) List<DoCatch> doCatch2,
             final @JsonProperty(DO_FINALLY_LABEL) GenericFlowWithSteps doFinally,
-            final @JsonProperty(DO_FINALLY_LABEL2) GenericFlowWithSteps doFinally2) {
+            final @JsonProperty(DO_FINALLY_LABEL2) GenericFlowWithSteps doFinally2,
+            final @JsonProperty("id") String id) {
         super();
         setSteps(steps);
         setDoCatch(doCatch != null ? doCatch : doCatch2);
         setDoFinally(doFinally != null ? doFinally : doFinally2);
+        setId(id);
     }
 
     public TryCatch(final Step step, final KamelPopulator kameletPopulator) {

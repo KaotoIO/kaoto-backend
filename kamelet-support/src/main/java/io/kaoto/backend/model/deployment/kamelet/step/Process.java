@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -25,7 +24,7 @@ public class Process extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getRef() != null) {
             properties.put(REF_LABEL, this.getRef());
         }

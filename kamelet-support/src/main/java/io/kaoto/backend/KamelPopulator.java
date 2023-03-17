@@ -271,8 +271,10 @@ public class KamelPopulator {
                 HashMap<String, String> params = buildUri(s, uri);
                 from.setUri(uri.toString());
                 from.setParameters(params);
+                from.setId(s.getStepId());
             } else {
-                from.getSteps().add(processStep(s, true));
+                final var flowStep = processStep(s, true);
+                from.getSteps().add(flowStep);
             }
         }
 
@@ -507,6 +509,7 @@ public class KamelPopulator {
                 expression.setExpression((Expression) p.getValue());
             }
         }
+        expression.setId(step.getStepId());
         return expression;
     }
 
@@ -565,7 +568,7 @@ public class KamelPopulator {
     private FlowStep getCamelConnector(final Step step, final boolean to) {
         var uri = new StringBuilder(step.getName());
         var params = buildUri(step, uri);
-        FlowStep flowStep = new UriFlowStep(uri.toString(), params);
+        FlowStep flowStep = new UriFlowStep(uri.toString(), params, null);
         if (to) {
             flowStep = new ToFlowStep(flowStep);
         }

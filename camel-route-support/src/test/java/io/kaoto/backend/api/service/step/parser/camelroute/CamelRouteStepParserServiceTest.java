@@ -1,25 +1,23 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 @QuarkusTest
 class CamelRouteStepParserServiceTest {
@@ -69,7 +67,8 @@ class CamelRouteStepParserServiceTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml", "route3-complex-expressions.yaml"})
+    @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml",
+            "route3-complex-expressions.yaml", "route-ids.yaml"})
     void deepParseParametrized(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);
@@ -83,7 +82,6 @@ class CamelRouteStepParserServiceTest {
         var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
                 steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
-        assertTrue(camelRouteDeploymentGeneratorService.supportedCustomResources().isEmpty());
     }
 
 

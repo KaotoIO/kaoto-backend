@@ -8,7 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +62,7 @@ public class Filter extends EIPStep implements ConditionBlock {
     }
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getSimple() != null) {
             properties.put(SIMPLE_LABEL, this.getSimple());
         }

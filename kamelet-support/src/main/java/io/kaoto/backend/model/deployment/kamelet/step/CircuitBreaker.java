@@ -54,7 +54,8 @@ public class CircuitBreaker extends EIPStep {
             final @JsonProperty(RESILIENCE_4_J_CONFIGURATION_LABEL) Map<String, String>  resilience4jConfiguration,
             final @JsonProperty(FAULT_TOLERANCE_CONFIGURATION_LABEL) Map<String, String>  faultToleranceConfiguration,
             final @JsonProperty(CONFIGURATION_LABEL) String configuration,
-            final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
+            final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+            final @JsonProperty("id") String id) {
         super();
         setSteps(steps);
         setOnFallback(onFallback);
@@ -62,6 +63,7 @@ public class CircuitBreaker extends EIPStep {
         setFaultToleranceConfiguration(faultToleranceConfiguration);
         setConfiguration(configuration);
         setDescription(description);
+        setId(id);
     }
 
     public CircuitBreaker(final Step step, final KamelPopulator kameletPopulator) {
@@ -80,7 +82,7 @@ public class CircuitBreaker extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
 
         if (this.resilience4jConfiguration != null) {
             properties.put(RESILIENCE_4_J_CONFIGURATION_LABEL2, this.getResilience4jConfiguration());
