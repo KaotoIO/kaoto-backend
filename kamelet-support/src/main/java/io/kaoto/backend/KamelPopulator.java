@@ -298,7 +298,7 @@ public class KamelPopulator {
                     if (p.isPath()) {
                         uri.append(p.getPathSeparator());
                         uri.append(value != null ? value : p.getDefaultValue());
-                    } else if (value != null) {
+                    } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")) {
                         params.put(p.getId(), value.toString());
                     }
                 }

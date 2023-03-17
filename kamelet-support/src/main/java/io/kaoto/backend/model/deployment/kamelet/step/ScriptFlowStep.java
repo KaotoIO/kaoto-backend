@@ -24,8 +24,7 @@ import java.util.Optional;
 public class ScriptFlowStep implements FlowStep {
     public static final String LABEL = "script";
 
-    public ScriptFlowStep(final @JsonProperty(value = "script", required = true)
-                          Script script) {
+    public ScriptFlowStep(final @JsonProperty(value = "script", required = true) Script script) {
         super();
         setScript(script);
     }
@@ -74,5 +73,4 @@ public class ScriptFlowStep implements FlowStep {
 
         return null;
     }
-
 }

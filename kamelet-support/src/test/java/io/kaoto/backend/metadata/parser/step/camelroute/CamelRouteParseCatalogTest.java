@@ -118,7 +118,9 @@ class CamelRouteParseCatalogTest {
                 "bridgeErrorHandler", new BooleanParameter("bridgeErrorHandler", "Bridge Error Handler", "d2", false),
                 "exceptionHandler", new ObjectParameter("exceptionHandler", "Exception Handler", "d3", null),
                 "exchangePattern", new ObjectParameter("exchangePattern", "Exchange Pattern", "d4", null),
-                "lazyStartProducer", new BooleanParameter("lazyStartProducer", "Lazy Start Producer", "d5", false)
+                "lazyStartProducer", new BooleanParameter("lazyStartProducer", "Lazy Start Producer", "d5", false),
+                "step-id-kaoto", new StringParameter("step-id-kaoto", "Step ID", "Identifier of this step inside the " +
+                        "route.", null, null)
         );
 
         expectedParameterValues.get("name").setPath(true);

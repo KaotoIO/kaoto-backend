@@ -78,8 +78,10 @@ public class UriFlowStep implements FlowStep {
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(KameletRepresenter.URI, this.getUri());
-        if (this.getParameters() != null
-                && !this.getParameters().isEmpty()) {
+
+        if (this.getParameters() != null && !this.getParameters().isEmpty()) {
+            //remove step-id-kaoto, it is not a real property
+            this.getParameters().remove("step-kaoto-id");
             properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
         }
         if (this.getId() != null) {

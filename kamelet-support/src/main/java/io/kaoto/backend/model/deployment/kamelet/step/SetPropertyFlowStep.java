@@ -82,7 +82,9 @@ public class SetPropertyFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.JQ)) {
                     p.setValue(this.getSetPropertyPairFlowStep().getJq());
-                } else {
+                } else if (p.getId().equalsIgnoreCase("step-id-kaoto")) {
+                    res.get().setStepId((String) p.getValue());
+                }  else {
                     p.setValue(this.getSetPropertyPairFlowStep().getExpression());
                 }
 

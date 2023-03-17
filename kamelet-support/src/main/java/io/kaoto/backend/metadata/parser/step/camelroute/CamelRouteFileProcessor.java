@@ -96,9 +96,15 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         step.setTitle(parsedCamelJson.title());
         step.setDescription(parsedCamelJson.description());
         step.setGroup(parsedCamelJson.group());
-        step.setParameters(parsedCamelJson.parameters());
         step.setRequired(parsedCamelJson.required());
         step.setType(parsedCamelJson.type());
+        step.setParameters(parsedCamelJson.parameters());
+        //Add extra step-id parameter
+        final var stepId = new StringParameter();
+        step.getParameters().add(stepId);
+        stepId.setTitle("Step ID");
+        stepId.setId("step-id-kaoto");
+        stepId.setDescription("Identifier of this step inside the route.");
 
         return step;
     }

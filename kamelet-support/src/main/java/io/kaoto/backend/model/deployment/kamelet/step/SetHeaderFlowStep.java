@@ -79,6 +79,8 @@ public class SetHeaderFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.NAME)) {
                     p.setValue(this.getSetHeaderPairFlowStep().getName());
+                } else if (p.getId().equalsIgnoreCase("step-id-kaoto")) {
+                    res.get().setStepId((String) p.getValue());
                 } else {
                     p.setValue(this.getSetHeaderPairFlowStep().getExpression());
                 }
