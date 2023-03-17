@@ -1,6 +1,7 @@
 package io.kaoto.backend.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -12,6 +13,7 @@ import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +22,10 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class EIPStep implements Serializable {
     protected static final Logger log = Logger.getLogger(EIPStep.class);
+
+    //All steps have ids
+    @JsonProperty("id")
+    private String id;
 
     protected EIPStep() {
         //Needed for serialization
@@ -36,6 +42,13 @@ public abstract class EIPStep implements Serializable {
                     }
                 }
             }
+        }
+        setId(step.getStepId());
+    }
+
+    public EIPStep(Map<String, Object> map) {
+        if(map.containsKey("id")) {
+            this.setId(String.valueOf(map.get("id")));
         }
     }
 
@@ -58,6 +71,7 @@ public abstract class EIPStep implements Serializable {
                     log.error("Couldn't assign value to parameter " + parameter.getId(), e);
                 }
             }
+            step.setStepId(this.getId());
             processBranches(res.get(), catalog, kameletStepParserService);
         }
 
@@ -87,4 +101,20 @@ public abstract class EIPStep implements Serializable {
     protected abstract void assignProperty(final Parameter parameter);
 
     public abstract Map<String, Object> getRepresenterProperties();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    protected Map<String, Object> getDefaultRepresenterProperties() {
+        Map<String, Object> map = new LinkedHashMap<>();
+        if(this.getId() != null) {
+            map.put("id", this.getId());
+        }
+        return map;
+    }
 }

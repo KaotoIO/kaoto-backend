@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -18,30 +17,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@JsonPropertyOrder({"uri", "parameters"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UriFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 3379417696583645440L;
+    public static final String ID = "id";
+    public static final String PARAMETERS = "parameters";
+    public static final String URI = "uri";
 
     @JsonCreator
     public UriFlowStep(
-            final @JsonProperty(value = "uri") String uri,
-            final @JsonProperty(value = "parameters") Map<String, String> parameters) {
+            final @JsonProperty(value = URI) String uri,
+            final @JsonProperty(value = PARAMETERS) Map<String, String> parameters,
+            final @JsonProperty(value = ID) String id) {
         super();
         setUri(uri);
         setParameters(parameters);
+        setId(id);
     }
 
-    @JsonProperty("uri")
+    @JsonProperty(URI)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String uri;
 
-    @JsonProperty("parameters")
+    @JsonProperty(PARAMETERS)
     private Map<String, String> parameters;
+
+    @JsonProperty(ID)
+    private String id;
 
     public UriFlowStep() {
     }
@@ -62,6 +66,14 @@ public class UriFlowStep implements FlowStep {
         this.uri = uri;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
@@ -69,6 +81,9 @@ public class UriFlowStep implements FlowStep {
         if (this.getParameters() != null
                 && !this.getParameters().isEmpty()) {
             properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
+        }
+        if (this.getId() != null) {
+            properties.put(ID, this.getId());
         }
         return properties;
     }
@@ -130,6 +145,7 @@ public class UriFlowStep implements FlowStep {
         if (res.isPresent() && this.getUri() != null) {
             kameletStepParserService.setValuesOnParameters(res.get(), this.getUri());
             kameletStepParserService.setValuesOnParameters(res.get(), this.getParameters());
+            res.get().setStepId(id);
         }
 
         return res.orElse(null);

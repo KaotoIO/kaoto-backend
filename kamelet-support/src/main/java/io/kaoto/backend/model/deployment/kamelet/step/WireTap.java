@@ -95,7 +95,8 @@ public class WireTap extends EIPStep {
                    final @JsonProperty(AUTO_START_COMPONENTS_LABEL) Boolean autoStartComponents,
                    final @JsonProperty(AUTO_START_COMPONENTS_LABEL2) Boolean autoStartComponents2,
                    final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                   final @JsonProperty(URI_LABEL) String uri) {
+                   final @JsonProperty(URI_LABEL) String uri,
+                   final @JsonProperty("id") String id) {
         super();
         setCopy(copy);
         setDynamicUri(dynamicUri != null ? dynamicUri : dynamicUri2);
@@ -111,6 +112,7 @@ public class WireTap extends EIPStep {
         setUri(new UriFlowStep());
         getUri().setUri(uri);
         getUri().setParameters(parameters);
+        setId(id);
     }
 
     @Override

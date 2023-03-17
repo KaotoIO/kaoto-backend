@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -60,7 +59,8 @@ public class ToDynamic extends EIPStep {
                      final @JsonProperty(AUTO_START_COMPONENTS_LABEL) Boolean autoStartComponents,
                      final @JsonProperty(AUTO_START_COMPONENTS_LABEL2) Boolean autoStartComponents2,
                      final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                     final @JsonProperty(PARAMETERS_LABEL) Map<String, Object> parameters) {
+                     final @JsonProperty(PARAMETERS_LABEL) Map<String, Object> parameters,
+                     final @JsonProperty("id") String id) {
         super();
         setUri(uri);
         setPattern(pattern);
@@ -71,6 +71,7 @@ public class ToDynamic extends EIPStep {
         setAutoStartComponents(autoStartComponents != null ? autoStartComponents : autoStartComponents2);
         setDescription(description);
         setParameters(parameters);
+        setId(id);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class ToDynamic extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        var properties = new LinkedHashMap<String, Object>();
+        var properties = super.getDefaultRepresenterProperties();
         if (this.getUri() != null) {
             properties.put(URI_LABEL, this.getUri());
         }

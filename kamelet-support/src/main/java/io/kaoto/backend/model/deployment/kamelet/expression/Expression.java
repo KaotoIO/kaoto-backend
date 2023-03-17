@@ -8,7 +8,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({"name", "constant", "simple", "jq", "jsonpath"})
@@ -50,7 +49,8 @@ public class Expression extends EIPStep {
             final @JsonProperty(NAME_LABEL) String name,
             final @JsonProperty(RESULT_TYPE) String resultType,
             final @JsonProperty(RESULT_TYPE2) String resultType2,
-            final @JsonProperty(JSON_PATH_LABEL) Object jsonpath) {
+            final @JsonProperty(JSON_PATH_LABEL) Object jsonpath,
+            final @JsonProperty("id") String id) {
         setExpression(expression);
         setConstant(constant);
         setSimple(simple);
@@ -58,6 +58,7 @@ public class Expression extends EIPStep {
         setName(name);
         setResultType(resultType != null ? resultType : resultType2);
         setJsonpath(jsonpath);
+        setId(id);
     }
 
     public Expression(Step step) {
@@ -76,6 +77,7 @@ public class Expression extends EIPStep {
             setName(e.getName());
             setJsonpath(e.getJsonpath());
             setExpression(e.getExpression());
+            setId(e.getId());
         } else if (obj instanceof Map map) {
             setPropertiesFromMap(map, this);
         }
@@ -104,6 +106,9 @@ public class Expression extends EIPStep {
         }
         if (map.containsKey(EXPRESSION_LABEL) && map.get(EXPRESSION_LABEL) != null) {
             expression.setExpression((Expression) map.get(EXPRESSION_LABEL));
+        }
+        if (map.containsKey("id") && map.get("id") != null) {
+            expression.setId(String.valueOf(map.get("id")));
         }
     }
 
@@ -170,7 +175,7 @@ public class Expression extends EIPStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
 
-        Map<String, Object> properties = new LinkedHashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getConstant() != null) {
             if (this.getConstant() instanceof CSimple csimple) {
                 properties.put(CONSTANT_LABEL, csimple.getRepresenterProperties());

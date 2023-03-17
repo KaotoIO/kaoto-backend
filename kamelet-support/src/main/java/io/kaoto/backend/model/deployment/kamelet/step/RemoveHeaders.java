@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -31,10 +30,12 @@ public class RemoveHeaders extends EIPStep {
     public RemoveHeaders(final @JsonProperty(PATTERN_LABEL) String pattern,
                          final @JsonProperty(EXCLUDE_PATTERN_LABEL)  String excludePattern,
                          final @JsonProperty(EXCLUDE_PATTERN_LABEL2) String excludePattern2,
-                         final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
+                         final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+                         final @JsonProperty("id") String id) {
         setPattern(pattern);
         setExcludePattern(excludePattern != null ? excludePattern : excludePattern2);
         setDescription(description);
+        setId(id);
     }
 
     public RemoveHeaders(Step step) {
@@ -43,7 +44,7 @@ public class RemoveHeaders extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getPattern() != null) {
             properties.put(PATTERN_LABEL, this.getPattern());
         }

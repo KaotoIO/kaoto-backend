@@ -8,15 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 @JsonPropertyOrder({"steps"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class From extends UriFlowStep {
     private static final long serialVersionUID = -4601560033032557024L;
@@ -35,11 +32,7 @@ public class From extends UriFlowStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(KameletRepresenter.URI, this.getUri());
-        if (this.getParameters() != null && !this.getParameters().isEmpty()) {
-            properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
-        }
+        Map<String, Object> properties = super.getRepresenterProperties();
         properties.put(KameletRepresenter.STEPS, this.getSteps());
         return properties;
     }

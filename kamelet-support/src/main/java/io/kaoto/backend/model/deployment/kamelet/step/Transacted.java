@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -23,9 +22,11 @@ public class Transacted extends EIPStep {
         super(step);
     }
 
-    public Transacted(final @JsonProperty(REF_LABEL) String ref) {
+    public Transacted(final @JsonProperty(REF_LABEL) String ref,
+                      final @JsonProperty("id") String id) {
         super();
         setRef(ref);
+        setId(id);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class Transacted extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        var properties = new HashMap<String, Object>();
+        var properties = super.getDefaultRepresenterProperties();
         if (this.getRef() != null) {
             properties.put(REF_LABEL, this.getRef());
         }

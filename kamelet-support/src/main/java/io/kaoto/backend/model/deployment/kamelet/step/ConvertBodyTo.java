@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -37,7 +36,7 @@ public class ConvertBodyTo extends EIPStep {
     }
 
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new LinkedHashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.type != null) {
             properties.put(TYPE_LABEL, this.type);
         }

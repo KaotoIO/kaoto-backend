@@ -25,12 +25,18 @@ spec:
           copy: true
           steps:
           - saga:
-              completion:
-                uri: direct:completion
               propagation: MANDATORY
+              completion-mode: MANUAL
               compensation:
                 uri: direct:compensation
-              completion-mode: MANUAL
+              completion:
+                uri: direct:completion
+              option:
+              - key: o1
+                simple: ${body}
+              - key: o2
+                expression:
+                  simple: ${body}
               steps:
               - throttle:
                   constant: '5'
@@ -39,19 +45,13 @@ spec:
                   caller-runs-when-rejected: false
                   reject-execution: false
               - sample:
+                  sample-period: '1500'
+                  message-frequency: 5
                   description:
                     text: Message Sampler
                     lang: eng
-                  sample-period: '1500'
-                  message-frequency: 5
               - script:
                   groovy: some groovy script
-              option:
-              - key: o1
-                simple: ${body}
-              - key: o2
-                expression:
-                  simple: ${body}
           - delay:
               expression:
                 simple: ${body}
@@ -95,8 +95,8 @@ spec:
                 parallel-processing: true
                 stop-on-exception: true
             - remove-headers:
-                exclude-pattern: toExclude
                 pattern: toRemove
+                exclude-pattern: toExclude
             - resequence:
                 simple: ${in.header.seqnum}
                 stream-config:
@@ -106,8 +106,8 @@ spec:
                 - transform:
                     simple: baz
                 - remove-properties:
-                    exclude-pattern: toExclude
                     pattern: toRemove
+                    exclude-pattern: toExclude
             - aggregate:
                 correlation-expression:
                   simple: ${header.StockSymbol}
@@ -143,8 +143,8 @@ spec:
                 mark-rollback-only: true
                 message: test
             - throw-exception:
-                exception-type: java.lang.IllegalArgumentException
                 message: test
+                exception-type: java.lang.IllegalArgumentException
             - stop: {}
       - filter:
           simple: '{{?foo}}'
@@ -168,8 +168,8 @@ spec:
                   parameters:
                     accessToken: '{{accessToken}}'
               - multicast:
-                  stop-on-exception: true
                   parallel-processing: true
+                  stop-on-exception: true
                   steps:
                   - process:
                       ref: '{{myProcessor}}'

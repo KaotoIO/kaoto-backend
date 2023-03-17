@@ -29,40 +29,38 @@ spec:
           copy: true
           steps:
           - saga:
-              completion:
-                uri: direct:completion
               propagation: MANDATORY
-              description:
-                text: SAGA powered step
-                lang: eng
+              completion-mode: MANUAL
+              timeout: '500'
               compensation:
                 uri: direct:compensation
-              completion-mode: MANUAL
-              steps:
-              - to:
-                  uri: direct:something
-              - sample:
-                  description:
-                    text: Message Sampler
-                    lang: eng
-                  sample-period: '1500'
-                  message-frequency: 5
-              - script:
-                  groovy: some groovy script
-              timeout: '500'
               option:
               - key: o1
                 simple: ${body}
               - key: o2
                 expression:
                   simple: ${body}
+              description:
+                text: SAGA powered step
+                lang: eng
+              steps:
+              - to:
+                  uri: direct:something
+              - sample:
+                  sample-period: '1500'
+                  message-frequency: 5
+                  description:
+                    text: Message Sampler
+                    lang: eng
+          - script:
+              groovy: some groovy script
           - delay:
               expression:
                 simple: ${body}
               async-delayed: true
           - throw-exception:
-              exception-type: java.lang.IllegalArgumentException
               message: test
+              exception-type: java.lang.IllegalArgumentException
           - routing-slip:
               simple: ${body}
               uri-delimiter: '|'
@@ -82,14 +80,14 @@ spec:
                 json:
                   library: Gson
             - threads:
-                pool-size: 5
-                max-pool-size: 10
                 description:
                   text: Hilos
                   lang: spa
-                thread-name: threads
-                max-queue-size: 12
+                pool-size: 5
+                max-pool-size: 10
                 keep-alive-time: 5
+                max-queue-size: 12
+                thread-name: threads
             - circuit-breaker:
                 configuration: config
                 description:
@@ -140,8 +138,8 @@ spec:
                 - remove-property:
                     name: property
             - multicast:
-                stop-on-exception: true
                 parallel-processing: true
+                stop-on-exception: true
                 steps:
                 - pipeline:
                     steps:
@@ -169,8 +167,8 @@ spec:
                 parallel-processing: true
                 stop-on-exception: true
             - remove-headers:
-                exclude-pattern: toExclude
                 pattern: toRemove
+                exclude-pattern: toExclude
             - validate:
                 simple: ${body} == 100
             - resequence:
@@ -182,8 +180,8 @@ spec:
                 - transform:
                     simple: baz
                 - remove-properties:
-                    exclude-pattern: toExclude
                     pattern: toRemove
+                    exclude-pattern: toExclude
             - load-balance:
                 weighted:
                   distribution-ratio: 2,1

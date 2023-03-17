@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -85,6 +85,8 @@ public class SetPropertyFlowStep implements FlowStep {
                 } else {
                     p.setValue(this.getSetPropertyPairFlowStep().getExpression());
                 }
+
+                res.get().setStepId(this.getSetPropertyPairFlowStep().getId());
             }
             return res.get();
         }

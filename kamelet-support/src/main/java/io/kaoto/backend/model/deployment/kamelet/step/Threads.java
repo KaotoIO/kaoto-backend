@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -93,7 +92,8 @@ public class Threads extends EIPStep {
                    final @JsonProperty(REJECTED_POLICY_LABEL) String rejectedPolicy,
                    final @JsonProperty(REJECTED_POLICY_LABEL2) String rejectedPolicy2,
                    final @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL) String callerRunsWhenRejected,
-                   final @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL2) String callerRunsWhenRejected2) {
+                   final @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL2) String callerRunsWhenRejected2,
+                   final @JsonProperty("id") String id) {
         setDescription(description);
         setExecutorService(executorService != null ? executorService : executorService2);
         setPoolSize(poolSize != null ? poolSize : poolSize2);
@@ -105,6 +105,7 @@ public class Threads extends EIPStep {
         setThreadName(threadName != null ? threadName : threadName2);
         setRejectedPolicy(rejectedPolicy != null ? rejectedPolicy : rejectedPolicy2);
         setCallerRunsWhenRejected(callerRunsWhenRejected != null ? callerRunsWhenRejected : callerRunsWhenRejected2);
+        setId(id);
     }
 
 
@@ -217,7 +218,7 @@ public class Threads extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getDescription() != null) {
             properties.put(DESCRIPTION_LABEL, this.getDescription());
         }

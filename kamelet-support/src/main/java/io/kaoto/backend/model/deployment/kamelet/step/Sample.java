@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -33,10 +32,12 @@ public class Sample extends EIPStep {
                   final @JsonProperty(SAMPLE_PERIOD_LABEL2) String samplePeriod2,
                   final @JsonProperty(MESSAGE_FREQUENCY_LABEL)  Long messageFrequency,
                   final @JsonProperty(MESSAGE_FREQUENCY_LABEL2) Long messageFrequency2,
-                  final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description) {
+                  final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+                  final @JsonProperty("id") String id) {
         setDescription(description);
         setSamplePeriod(samplePeriod != null ? samplePeriod : samplePeriod2);
         setMessageFrequency(messageFrequency != null ? messageFrequency : messageFrequency2);
+        setId(id);
     }
 
     public Sample(Step step) {
@@ -45,7 +46,7 @@ public class Sample extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getSamplePeriod() != null) {
             properties.put(SAMPLE_PERIOD_LABEL, this.getSamplePeriod());
         }

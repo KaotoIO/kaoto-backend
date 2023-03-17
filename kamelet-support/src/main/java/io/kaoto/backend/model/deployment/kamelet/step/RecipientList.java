@@ -117,8 +117,9 @@ public class RecipientList extends Expression {
                          final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
                          final @JsonProperty(SIMPLE_LABEL) String simple,
                          final @JsonProperty(JQ_LABEL) String jq,
-                         final @JsonProperty(CONSTANT_LABEL) String constant) {
-        super(expression, constant, simple, jq, null, null, null, null);
+                         final @JsonProperty(CONSTANT_LABEL) String constant,
+                         final @JsonProperty("id") String id) {
+        super(expression, constant, simple, jq, null, null, null, null, id);
         setDelimiter(delimiter);
         setParallelProcessing(parallelProcessing != null ? parallelProcessing : parallelProcessing2);
         setStrategyRef(strategyRef != null ? strategyRef : strategyRef2);
