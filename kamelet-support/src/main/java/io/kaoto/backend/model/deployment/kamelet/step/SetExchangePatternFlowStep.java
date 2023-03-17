@@ -54,7 +54,9 @@ public class SetExchangePatternFlowStep implements FlowStep {
 
         if (res.isPresent()) {
             for (Parameter p : res.get().getParameters()) {
-                p.setValue(getExchangePattern());
+                if (!p.getId().equalsIgnoreCase("step-id-kaoto")) {
+                    p.setValue(getExchangePattern());
+                }
             }
         }
 

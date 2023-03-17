@@ -139,6 +139,15 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             step.getParameters().add(p);
 
         }
+
+        if (step.getKind().startsWith("EIP")) {
+            //Add extra step-id parameter to EIP like steps
+            final var stepId = new StringParameter();
+            step.getParameters().add(stepId);
+            stepId.setTitle("Step ID");
+            stepId.setId("step-id-kaoto");
+            stepId.setDescription("Identifier of this step inside the route.");
+        }
     }
 
     private Parameter getParameter(final KameletDefinitionProperty property,

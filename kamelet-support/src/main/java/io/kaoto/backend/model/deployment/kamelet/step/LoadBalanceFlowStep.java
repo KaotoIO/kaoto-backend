@@ -81,7 +81,9 @@ public class LoadBalanceFlowStep implements FlowStep {
 
     protected void assignParameters(final Step res) {
         for (var param : res.getParameters()) {
-            param.setValue(this.getProperties());
+            if (!param.getId().equalsIgnoreCase("step-id-kaoto")) {
+                param.setValue(this.getProperties());
+            }
         }
     }
 

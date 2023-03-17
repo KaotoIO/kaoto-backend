@@ -236,6 +236,8 @@ public class KameletRepresenter extends Representer {
                         properties.put(URI, step.getUri());
                     }
                     if (step.getParameters() != null && !step.getParameters().isEmpty()) {
+                        //remove step-id-kaoto, it is not a real property
+                        step.getParameters().remove("step-kaoto-id");
                         properties.put(PARAMETERS, step.getParameters());
                     }
                     if (step.getProperties() != null && !step.getProperties().isEmpty()) {

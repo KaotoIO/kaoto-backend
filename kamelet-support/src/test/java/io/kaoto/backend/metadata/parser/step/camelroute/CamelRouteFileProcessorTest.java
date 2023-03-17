@@ -88,7 +88,9 @@ class CamelRouteFileProcessorTest {
                         "d4", null),
                 "lazyStartProducer", new BooleanParameter(
                         "lazyStartProducer", "Lazy Start Producer",
-                        "d5", false)
+                        "d5", false),
+                "step-id-kaoto", new StringParameter("step-id-kaoto", "Step ID",
+                        "Identifier of this step inside the route.", null, null)
         );
 
         expectedParameterValues.get("name").setPath(true);

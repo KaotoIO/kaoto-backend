@@ -46,8 +46,6 @@ public class Step extends Metadata {
     @JsonView(Views.Summary.class)
     @JsonProperty("UUID")
     private String uuid;
-    @JsonView(Views.Complete.class)
-    private String stepId;
 
     public Step() {
         setType(MIDDLE);
@@ -231,11 +229,20 @@ public class Step extends Metadata {
      *
      */
     public String getStepId() {
-        return stepId;
+        var p = this.getParameters().stream()
+                .filter(parameter -> parameter.getId().equalsIgnoreCase("step-id-kaoto"))
+                .findAny();
+        if (p.isPresent() && p.get().getValue() != null) {
+            return String.valueOf(p.get().getValue());
+        } else {
+            return null;
+        }
     }
 
-    public void setStepId(String stepId) {
-        this.stepId = stepId;
+    public void setStepId(final String stepId) {
+        this.getParameters().stream()
+                .filter(parameter -> parameter.getId().equalsIgnoreCase("step-id-kaoto"))
+                .findAny().ifPresent(parameter -> parameter.setValue(stepId));
     }
 
     @Override
