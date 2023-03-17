@@ -52,7 +52,8 @@ public class ChoiceFlowStep implements FlowStep {
 
         if (step.getBranches() != null) {
             for (Branch b : step.getBranches()) {
-                if (b.getCondition() != null) {
+                if (b.getCondition() != null || String.valueOf(b.getIdentifier()).startsWith("when-")
+                        || choice.getOtherwise() != null) {
                     choices.add(processChoice(b, kameletPopulator));
                 } else {
                     var otherwise = new Otherwise();
