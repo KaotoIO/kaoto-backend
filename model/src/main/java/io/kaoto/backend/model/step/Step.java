@@ -240,9 +240,11 @@ public class Step extends Metadata {
     }
 
     public void setStepId(final String stepId) {
-        this.getParameters().stream()
-                .filter(parameter -> parameter.getId().equalsIgnoreCase("step-id-kaoto"))
-                .findAny().ifPresent(parameter -> parameter.setValue(stepId));
+        if (this.getParameters() != null) {
+            this.getParameters().stream()
+                    .filter(parameter -> parameter.getId().equalsIgnoreCase("step-id-kaoto"))
+                    .findAny().ifPresent(parameter -> parameter.setValue(stepId));
+        }
     }
 
     @Override
