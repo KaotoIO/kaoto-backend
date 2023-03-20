@@ -51,18 +51,29 @@ public class ChoiceFlowStep implements FlowStep {
         List<Choice> choices = new LinkedList<>();
 
         if (step.getBranches() != null) {
+            Branch tentativeOtherwise = null;
             for (Branch b : step.getBranches()) {
                 if (b.getCondition() != null || String.valueOf(b.getIdentifier()).startsWith("when-")
-                        || choice.getOtherwise() != null) {
+                        || tentativeOtherwise != null) {
+                    if ("otherwise".equalsIgnoreCase(b.getIdentifier())) {
+                        Branch tmp = tentativeOtherwise;
+                        tentativeOtherwise = setOtherwiseBranch(kameletPopulator, choice, b);
+                        b = tmp;
+                    }
                     choices.add(processChoice(b, kameletPopulator));
                 } else {
-                    var otherwise = new Otherwise();
-                    otherwise.setSteps(kameletPopulator.processSteps(b));
-                    choice.setOtherwise(otherwise);
+                    tentativeOtherwise = setOtherwiseBranch(kameletPopulator, choice, b);
                 }
             }
         }
         choice.setChoice(choices);
+    }
+
+    private static Branch setOtherwiseBranch(KamelPopulator kameletPopulator, SuperChoice choice, Branch b) {
+        var otherwise = new Otherwise();
+        otherwise.setSteps(kameletPopulator.processSteps(b));
+        choice.setOtherwise(otherwise);
+        return b;
     }
 
     private Choice processChoice(final Branch b, final KamelPopulator kameletPopulator) {
@@ -83,7 +94,7 @@ public class ChoiceFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(CHOICE_LABEL, this.getChoice());
+        properties.put(CHOICE_LABEL, this.getChoice().getRepresenterProperties());
         return properties;
     }
 
