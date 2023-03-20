@@ -9,7 +9,7 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class SuperChoice extends EIPStep {
 
         if (step.getBranches() != null) {
             for (Branch b : step.getBranches()) {
-                if (b.getCondition() != null) {
+                if (b.getCondition() != null || String.valueOf(b.getIdentifier()).startsWith("when-")) {
                     Choice choice = new Choice();
                     choice.setSteps(kameletPopulator.processSteps(b));
                     switch (b.getConditionSyntax()) {
@@ -66,8 +66,9 @@ public class SuperChoice extends EIPStep {
         step.setBranches(new LinkedList<>());
 
         if (getChoice() != null) {
+            int i = 1;
             for (var flow : getChoice()) {
-                Branch branch = createBranch(getChoiceIdentifier(flow), flow.getSteps(), kameletStepParserService);
+                Branch branch = createBranch(getChoiceIdentifier(flow, i++), flow.getSteps(), kameletStepParserService);
                 branch.setConditionSyntax(getChoiceConditionSyntax(flow));
                 branch.setCondition(getChoiceCondition(flow));
                 kameletStepParserService.setValueOnStepProperty(step,
@@ -83,13 +84,17 @@ public class SuperChoice extends EIPStep {
         }
     }
 
-    private String getChoiceIdentifier(final Choice flow) {
-        return getChoiceCondition(flow);
+    private String getChoiceIdentifier(final Choice flow, Integer i) {
+        String id = getChoiceCondition(flow);
+        if (id == null || id.isBlank()) {
+            id = "when-" + i;
+        }
+        return id;
     }
 
     private String getChoiceCondition(final Choice flow) {
         var res = "";
-        switch (getChoiceConditionSyntax(flow)){
+        switch (getChoiceConditionSyntax(flow)) {
             case JQ:
                 res = flow.getJq();
                 break;
@@ -117,7 +122,7 @@ public class SuperChoice extends EIPStep {
 
     @Override
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = new LinkedHashMap<>();
         if (this.getChoice() != null) {
             properties.put(WHEN_LABEL, this.getChoice());
         }
@@ -127,7 +132,6 @@ public class SuperChoice extends EIPStep {
 
         return properties;
     }
-
 
 
     @Override
