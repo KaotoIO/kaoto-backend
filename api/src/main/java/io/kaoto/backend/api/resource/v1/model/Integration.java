@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.resource.v1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * 🐱miniclass Integration (IntegrationsResource)
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Integration {
 
 
