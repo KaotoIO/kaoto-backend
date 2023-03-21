@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.inject.Inject;
@@ -14,7 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.step.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -305,5 +308,38 @@ class IntegrationsResourceTest {
         var groovy = script.getParameters().stream().filter(p -> "groovy".equals(p.getId())).findAny();
         assertTrue(groovy.isPresent());
         assertEquals("some groovy script", groovy.get().getValue());
+    }
+
+    @Test
+    void expressionObjectJson() throws Exception {
+        String json = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../expression-object.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        String yaml = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flow = res.extract().body().as(Integration.class);
+        Step setBody = flow.getSteps().get(1);
+        var nestedExpression = (Map<String, Object>) setBody.getParameters()
+                .stream()
+                .filter(p -> Expression.EXPRESSION_LABEL.equals(p.getId()))
+                .findAny().get().getValue();
+        var jq = (Map<String, Object>) nestedExpression.get("jq");
+        assertEquals("test", jq.get("expression"));
     }
 }

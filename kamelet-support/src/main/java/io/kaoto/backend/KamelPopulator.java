@@ -506,7 +506,8 @@ public class KamelPopulator {
             } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
                 expression.setConstant(String.valueOf(p.getValue()));
             } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
-                expression.setExpression((Expression) p.getValue());
+                Expression nestedExpression = new Expression(p.getValue());
+                expression.setExpression(nestedExpression);
             }
         }
         expression.setId(step.getStepId());
