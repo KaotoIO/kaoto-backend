@@ -14,7 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.step.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -305,5 +307,79 @@ class IntegrationsResourceTest {
         var groovy = script.getParameters().stream().filter(p -> "groovy".equals(p.getId())).findAny();
         assertTrue(groovy.isPresent());
         assertEquals("some groovy script", groovy.get().getValue());
+    }
+
+    @Test
+    void expressionObject() throws Exception {
+        String yaml = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../expression-object.yaml")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        String json = res.extract().body().asString();
+
+        res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var yaml2 = res.extract().body().asString();
+        System.out.println(yaml2);
+        List<Object> parsed = new Yaml().load(yaml2);
+        List<Object> steps = (List<Object>) ((Map)((Map)parsed.get(0)).get("from")).get("steps");
+        assertEquals(19, steps.size());
+        var choice = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("choice");
+        var when0 = (Map<String, Object>) ((List<Object>)choice.get("when")).get(0);
+        assertExpression("choice", "simple", when0);
+        var delay = (Map<String, Object>) ((Map<String, Object>) steps.get(1)).get("delay");
+        assertExpression("delay", "simple", delay);
+        var drouter = (Map<String, Object>) ((Map<String, Object>) steps.get(2)).get("dynamic-router");
+        assertExpression("dynamic-router", "simple", drouter);
+        var enrich =  (Map<String, Object>) ((Map<String, Object>) steps.get(3)).get("enrich");
+        assertExpression("enrich", "simple", enrich);
+        var filter =  (Map<String, Object>) ((Map<String, Object>) steps.get(4)).get("filter");
+        assertExpression("filter", "simple", filter);
+        var penrich =  (Map<String, Object>) ((Map<String, Object>) steps.get(5)).get("poll-enrich");
+        assertExpression("poll-enrich", "simple", penrich);
+        var rlist =  (Map<String, Object>) ((Map<String, Object>) steps.get(6)).get("recipient-list");
+        assertExpression("recipient-list", "simple", rlist);
+        var resequence =  (Map<String, Object>) ((Map<String, Object>) steps.get(7)).get("resequence");
+        assertExpression("resequence", "simple", resequence);
+        var rslip =  (Map<String, Object>) ((Map<String, Object>) steps.get(8)).get("routing-slip");
+        assertExpression("routing-slip", "simple", rslip);
+        var script =  (Map<String, Object>) ((Map<String, Object>) steps.get(9)).get("script");
+        assertExpression("script", "groovy", script);
+        var scall =  (Map<String, Object>) ((Map<String, Object>) steps.get(10)).get("service-call");
+        assertExpression("service-call", "jsonpath", scall);
+        var sbody =  (Map<String, Object>) ((Map<String, Object>) steps.get(11)).get("set-body");
+        assertExpression("set-body", "constant", sbody);
+        var sheader =  (Map<String, Object>) ((Map<String, Object>) steps.get(12)).get("set-header");
+        assertExpression("set-header", "jq", sheader);
+        var sprop =  (Map<String, Object>) ((Map<String, Object>) steps.get(13)).get("set-property");
+        assertExpression("set-property", "jq", sprop);
+        var sort =  (Map<String, Object>) ((Map<String, Object>) steps.get(14)).get("sort");
+        assertExpression("sort", "simple", sort);
+        var split =  (Map<String, Object>) ((Map<String, Object>) steps.get(15)).get("split");
+        assertExpression("split", "simple", split);
+        var throttle =  (Map<String, Object>) ((Map<String, Object>) steps.get(16)).get("throttle");
+        assertExpression("throttle", "simple", throttle);
+        var transform =  (Map<String, Object>) ((Map<String, Object>) steps.get(17)).get("transform");
+        assertExpression("transform", "jq", transform);
+        var validate =  (Map<String, Object>) ((Map<String, Object>) steps.get(18)).get("validate");
+        assertExpression("validate", "simple", validate);
+    }
+
+    private void assertExpression(String name, String syntax, Map<String, Object> step) {
+        var nested = (Map<String, Object>) ((Map<String, Object>)step.get("expression")).get(syntax);
+        assertEquals(name, nested.get("expression"));
     }
 }

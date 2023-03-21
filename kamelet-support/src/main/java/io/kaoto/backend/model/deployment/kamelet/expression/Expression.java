@@ -10,7 +10,7 @@ import io.kaoto.backend.model.step.Step;
 
 import java.util.Map;
 
-@JsonPropertyOrder({"name", "constant", "simple", "jq", "jsonpath"})
+@JsonPropertyOrder({"name", "constant", "simple", "jq", "jsonpath", "expression"})
 public class Expression extends EIPStep {
     public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
     public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
@@ -30,7 +30,7 @@ public class Expression extends EIPStep {
     private Object simple;
 
     private Object jsonpath;
-    private String jq;
+    private Object jq;
 
     private String name;
 
@@ -45,7 +45,7 @@ public class Expression extends EIPStep {
             final @JsonProperty(EXPRESSION_LABEL) Expression expression,
             final @JsonProperty(CONSTANT_LABEL) Object constant,
             final @JsonProperty(SIMPLE_LABEL) Object simple,
-            final @JsonProperty(JQ_LABEL) String jq,
+            final @JsonProperty(JQ_LABEL) Object jq,
             final @JsonProperty(NAME_LABEL) String name,
             final @JsonProperty(RESULT_TYPE) String resultType,
             final @JsonProperty(RESULT_TYPE2) String resultType2,
@@ -85,16 +85,16 @@ public class Expression extends EIPStep {
 
     protected void setPropertiesFromMap(final Map map, final Expression expression) {
         if (map.containsKey(CONSTANT_LABEL) && map.get(CONSTANT_LABEL) != null) {
-            expression.setConstant(String.valueOf(map.get(CONSTANT_LABEL)));
+            expression.setConstant(parseLang(map.get(CONSTANT_LABEL)));
         }
         if (map.containsKey(SIMPLE_LABEL) && map.get(SIMPLE_LABEL) != null) {
-            expression.setSimple(String.valueOf(map.get(SIMPLE_LABEL)));
+            expression.setSimple(parseLang(map.get(SIMPLE_LABEL)));
         }
         if (map.containsKey(JQ_LABEL) && map.get(JQ_LABEL) != null) {
-            expression.setJq(String.valueOf(map.get(JQ_LABEL)));
+            expression.setJq(parseLang(map.get(JQ_LABEL)));
         }
         if (map.containsKey(JSON_PATH_LABEL) && map.get(JSON_PATH_LABEL) != null) {
-            expression.setJsonpath(map.get(JSON_PATH_LABEL));
+            expression.setJsonpath(parseLang(map.get(JSON_PATH_LABEL)));
         }
         if (map.containsKey(NAME_LABEL) && map.get(NAME_LABEL) != null) {
             expression.setName(String.valueOf(map.get(NAME_LABEL)));
@@ -112,6 +112,13 @@ public class Expression extends EIPStep {
         }
     }
 
+    private Object parseLang(Object lang) {
+        if (lang instanceof Map) {
+            return lang;
+        }
+        return String.valueOf(lang);
+    }
+
     @Override
     protected void assignAttribute(final Parameter parameter) {
         switch (parameter.getId()) {
@@ -122,7 +129,7 @@ public class Expression extends EIPStep {
                 this.setSimple(parameter.getValue());
                 break;
             case JQ_LABEL:
-                this.setJq(String.valueOf(parameter.getValue()));
+                this.setJq(parameter.getValue());
                 break;
             case JSON_PATH_LABEL:
                 this.setJsonpath(parameter.getValue());
@@ -131,7 +138,8 @@ public class Expression extends EIPStep {
                 this.setName(String.valueOf(parameter.getValue()));
                 break;
             case EXPRESSION_LABEL:
-                this.setExpression((Expression) parameter.getValue());
+                Expression nestedExpression = new Expression(parameter.getValue());
+                this.setExpression(nestedExpression);
                 break;
             case RESULT_TYPE:
             case RESULT_TYPE2:
@@ -193,7 +201,11 @@ public class Expression extends EIPStep {
         }
 
         if (this.getJq() != null) {
-            properties.put(JQ_LABEL, this.getJq());
+            if (this.getJq() instanceof Jq jq) {
+                properties.put(JQ_LABEL, jq.getRepresenterProperties());
+            } else {
+                properties.put(JQ_LABEL, this.getJq());
+            }
         }
 
         if (this.getJsonpath() != null) {
@@ -278,11 +290,15 @@ public class Expression extends EIPStep {
         }
     }
 
-    public String getJq() {
+    public Object getJq() {
         return jq;
     }
 
-    public void setJq(final String jq) {
-        this.jq = jq;
+    public void setJq(final Object jq) {
+        if (jq instanceof Map map) {
+            this.jq = new Jq(map);
+        } else {
+            this.jq = jq;
+        }
     }
 }

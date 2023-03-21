@@ -5,6 +5,7 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -18,12 +19,17 @@ public class Filter extends EIPStep implements ConditionBlock {
     public static final String SIMPLE_LABEL = "simple";
     public static final String JQ_LABEL = "jq";
     public static final String JSONPATH_LABEL = "jsonpath";
+    public static final String EXPRESSION_LABEL = "expression";
+
     @JsonProperty(SIMPLE_LABEL)
     private String simple;
     @JsonProperty(JQ_LABEL)
     private String jq;
     @JsonProperty(JSONPATH_LABEL)
     private String jsonpath;
+
+    @JsonProperty(EXPRESSION_LABEL)
+    private Expression expression;
 
     @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
@@ -72,6 +78,9 @@ public class Filter extends EIPStep implements ConditionBlock {
         if (this.getJsonpath() != null) {
             properties.put(JSONPATH_LABEL, this.getJsonpath());
         }
+        if (this.getExpression() != null) {
+            properties.put(EXPRESSION_LABEL, this.getExpression());
+        }
         if (this.getSteps() != null) {
             properties.put(STEPS_LABEL, this.getSteps());
         }
@@ -93,6 +102,8 @@ public class Filter extends EIPStep implements ConditionBlock {
             case JSONPATH_LABEL:
                 parameter.setValue(this.getJsonpath());
                 break;
+            case EXPRESSION_LABEL:
+                parameter.setValue(this.getExpression());
             default:
                 break;
         }
@@ -110,6 +121,9 @@ public class Filter extends EIPStep implements ConditionBlock {
             case JSONPATH_LABEL:
                 this.setJsonpath(String.valueOf(parameter.getValue()));
                 break;
+            case EXPRESSION_LABEL:
+                Expression nested = new Expression(parameter.getValue());
+                this.setExpression(nested);
             default:
                 break;
         }
@@ -138,4 +152,8 @@ public class Filter extends EIPStep implements ConditionBlock {
     public void setJsonpath(String jsonpath) {
         this.jsonpath = jsonpath;
     }
+
+    public Expression getExpression() { return expression; }
+
+    public void setExpression(Expression expression) { this.expression = expression; }
 }

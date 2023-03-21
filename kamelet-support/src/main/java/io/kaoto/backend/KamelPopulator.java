@@ -11,6 +11,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.expression.Script;
+import io.kaoto.backend.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
@@ -507,7 +508,8 @@ public class KamelPopulator {
             } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
                 expression.setConstant(String.valueOf(p.getValue()));
             } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
-                expression.setExpression((Expression) p.getValue());
+                Expression nestedExpression = new Expression(p.getValue());
+                expression.setExpression(nestedExpression);
             }
         }
         expression.setId(step.getStepId());
@@ -526,8 +528,12 @@ public class KamelPopulator {
                 script.setGroovy(String.valueOf(p.getValue()));
             } else if (JAVASCRIPT.equalsIgnoreCase(p.getId())) {
                 script.setJavascript(String.valueOf(p.getValue()));
+            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
+                ScriptExpression nestedExpression = new ScriptExpression(p.getValue());
+                script.setExpression(nestedExpression);
             }
         }
+        script.setId(step.getStepId());
         return script;
     }
 

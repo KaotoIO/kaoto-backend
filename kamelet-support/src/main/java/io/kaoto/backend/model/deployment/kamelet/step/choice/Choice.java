@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.step.ConditionBlock;
 
 import java.io.Serial;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@JsonPropertyOrder({"simple", "jq", "jsonpath", "steps"})
+@JsonPropertyOrder({"simple", "jq", "jsonpath", "expression", "steps"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Choice implements Serializable, ConditionBlock {
     @Serial
@@ -23,6 +24,9 @@ public class Choice implements Serializable, ConditionBlock {
     private String jq;
     @JsonProperty("jsonpath")
     private String jsonpath;
+
+    @JsonProperty("expression")
+    private Expression expression;
 
     @JsonProperty("steps")
     private List<FlowStep> steps;
@@ -58,4 +62,7 @@ public class Choice implements Serializable, ConditionBlock {
     public void setJsonpath(String jsonpath) {
         this.jsonpath = jsonpath;
     }
+    public Expression getExpression() { return expression; }
+
+    public void setExpression(final Expression e) { this.expression = e; }
 }

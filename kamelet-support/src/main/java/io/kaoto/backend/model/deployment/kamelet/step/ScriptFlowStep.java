@@ -66,6 +66,9 @@ public class ScriptFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.JAVASCRIPT)) {
                     p.setValue(this.getScript().getJavascript());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.EXPRESSION)) {
+                    p.setValue(this.getScript().getExpression());
                 }
             }
             return res.get();

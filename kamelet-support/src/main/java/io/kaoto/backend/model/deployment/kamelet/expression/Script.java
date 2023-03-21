@@ -10,19 +10,21 @@ import io.kaoto.backend.model.parameter.Parameter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@JsonPropertyOrder({"name", "groovy", "javascript"})
+@JsonPropertyOrder({"name", "groovy", "javascript", "expression"})
 public class Script extends EIPStep {
     public static final String GROOVY_LABEL = KameletRepresenter.GROOVY;
     public static final String JAVASCRIPT_LABEL = KameletRepresenter.JAVASCRIPT;
+    public static final String EXPRESSION_LABEL = KameletRepresenter.EXPRESSION;
     public static final String NAME_LABEL = KameletRepresenter.NAME;
 
-    public static final String EXPRESSION_LABEL = "script";
 
     private Object groovy;
 
     private Object javascript;
 
     private String name;
+
+    private ScriptExpression expression;
 
     public Script() {
         //Needed for serialization
@@ -32,9 +34,11 @@ public class Script extends EIPStep {
     public Script(
             final @JsonProperty(GROOVY_LABEL) Object groovy,
             final @JsonProperty(JAVASCRIPT_LABEL) Object javascript,
+            final @JsonProperty(EXPRESSION_LABEL) ScriptExpression expression,
             final @JsonProperty(NAME_LABEL) String name) {
         setGroovy(groovy);
         setJavascript(javascript);
+        setExpression(expression);
         setName(name);
     }
 
@@ -50,6 +54,9 @@ public class Script extends EIPStep {
             case NAME_LABEL:
                 this.setName(String.valueOf(parameter.getValue()));
                 break;
+            case EXPRESSION_LABEL:
+                ScriptExpression nested = new ScriptExpression(parameter.getValue());
+                this.setExpression(nested);
             default:
                 break;
         }
@@ -67,6 +74,8 @@ public class Script extends EIPStep {
             case NAME_LABEL:
                 parameter.setValue(this.name);
                 break;
+            case EXPRESSION_LABEL:
+                parameter.setValue(this.expression);
             default:
                 break;
         }
@@ -82,6 +91,10 @@ public class Script extends EIPStep {
 
         if (this.getJavascript() != null) {
             properties.put(JAVASCRIPT_LABEL, this.getJavascript());
+        }
+
+        if (this.getExpression() != null) {
+            properties.put(EXPRESSION_LABEL, this.getExpression());
         }
 
         if (this.getName() != null) {
@@ -114,5 +127,8 @@ public class Script extends EIPStep {
     public void setJavascript(final Object javascript) {
         this.javascript = javascript;
     }
+
+    public ScriptExpression getExpression() {return this.expression; }
+    public void setExpression(ScriptExpression expression) { this.expression = expression; }
 
 }

@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class Branch {
 
+
     public enum ConditionSyntax {
         SIMPLE ("simple"),
         JQ ("jq"),
@@ -34,6 +35,7 @@ public class Branch {
     private String identifier;
     private String condition;
     private ConditionSyntax conditionSyntax = ConditionSyntax.SIMPLE;
+    private Object expression;
 
     public Branch() {
         super();
@@ -91,4 +93,8 @@ public class Branch {
     public ConditionSyntax getConditionSyntax() { return conditionSyntax; }
 
     public void setConditionSyntax(final ConditionSyntax syntax) { this.conditionSyntax = syntax; }
+
+    public Object getExpression() { return expression; }
+
+    public void setExpression(Object expression) { this.expression = expression; }
 }

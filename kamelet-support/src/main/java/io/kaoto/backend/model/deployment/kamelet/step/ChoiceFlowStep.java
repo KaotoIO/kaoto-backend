@@ -10,6 +10,7 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
@@ -85,6 +86,10 @@ public class ChoiceFlowStep implements FlowStep {
             choice.setSimple(b.getCondition());
         } else {
             choice.setJsonpath(b.getCondition());
+        }
+        if (b.getExpression() != null) {
+            Expression nestedExpression = new Expression(b.getExpression());
+            choice.setExpression(nestedExpression);
         }
 
         return choice;
