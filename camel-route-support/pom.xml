@@ -6,10 +6,10 @@
     <parent>
         <groupId>io.kaoto.backend</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7.4-SNAPSHOT</version>
+        <version>0.7.4</version>
     </parent>
     <artifactId>camel-route-support</artifactId>
-    <version>0.7.4-SNAPSHOT</version>
+    <version>0.7.4</version>
     <dependencies>
         <dependency>
             <groupId>io.kaoto.backend</groupId>
