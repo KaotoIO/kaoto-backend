@@ -51,6 +51,7 @@ public class KameletStepParserService
     public static final Pattern PATTERN = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
+    public static final String EXPRESSION = "expression";
     private final Logger log =
             Logger.getLogger(KameletStepParserService.class);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
@@ -34,6 +35,10 @@ public class SuperChoice extends EIPStep {
                 if (b.getCondition() != null || String.valueOf(b.getIdentifier()).startsWith("when-")) {
                     Choice choice = new Choice();
                     choice.setSteps(kameletPopulator.processSteps(b));
+                    if (b.getExpression() != null) {
+                        Expression nestedExpression = new Expression(b.getExpression());
+                        choice.setExpression(nestedExpression);
+                    }
                     switch (b.getConditionSyntax()) {
                         case SIMPLE:
                             choice.setSimple(b.getCondition());
@@ -68,9 +73,13 @@ public class SuperChoice extends EIPStep {
         if (getChoice() != null) {
             int i = 1;
             for (var flow : getChoice()) {
-                Branch branch = createBranch(getChoiceIdentifier(flow, i++), flow.getSteps(), kameletStepParserService);
+                Branch branch = createBranch(
+                        getChoiceIdentifier(flow, i++),
+                        flow.getSteps(),
+                        kameletStepParserService);
                 branch.setConditionSyntax(getChoiceConditionSyntax(flow));
                 branch.setCondition(getChoiceCondition(flow));
+                branch.setExpression(flow.getExpression());
                 kameletStepParserService.setValueOnStepProperty(step,
                         branch.getConditionSyntax().value(),
                         branch.getCondition());

@@ -50,9 +50,9 @@ public class Throttle extends Expression {
 
     @JsonCreator
     public Throttle(final @JsonProperty(EXPRESSION_LABEL) Expression expression,
-                    final @JsonProperty(CONSTANT_LABEL) String constant,
-                    final @JsonProperty(SIMPLE_LABEL) String simple,
-                    final @JsonProperty(JQ_LABEL) String jq,
+                    final @JsonProperty(CONSTANT_LABEL) Object constant,
+                    final @JsonProperty(SIMPLE_LABEL) Object simple,
+                    final @JsonProperty(JQ_LABEL) Object jq,
                     final @JsonProperty(CORRELATION_EXPRESSION_LABEL) Expression correlationExpression,
                     final @JsonProperty(CORRELATION_EXPRESSION_LABEL2) Expression correlationExpression2,
                     final @JsonProperty(EXECUTOR_SERVICE_LABEL) Object executorService,

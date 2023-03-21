@@ -11,6 +11,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.Template;
 import io.kaoto.backend.model.deployment.kamelet.expression.Script;
+import io.kaoto.backend.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.CircuitBreakerFlowStep;
@@ -86,6 +87,7 @@ public class KameletRepresenter extends Representer {
     public static final String CONSTANT = "constant";
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
+    public static final String EXPRESSION = "expression";
     public static final String STEPS = "steps";
     public static final String PARAMETERS = "parameters";
     public static final String URI = "uri";
@@ -350,6 +352,14 @@ public class KameletRepresenter extends Representer {
             }
         });
 
+        this.multiRepresenters.put(ScriptExpression.class, new RepresentMap() {
+            @Override
+            public Node representData(final Object data) {
+                return representMapping(getTag(data.getClass(), Tag.MAP),
+                        ((ScriptExpression) data).getRepresenterProperties(), DumperOptions.FlowStyle.AUTO);
+            }
+        });
+
         choice();
         filter();
     }
@@ -398,6 +408,8 @@ public class KameletRepresenter extends Representer {
             properties.put(JQ, step.getJq());
         } else if (step.getJsonpath() != null && !step.getJsonpath().isEmpty()) {
             properties.put(JSONPATH, step.getJsonpath());
+        } else if (step.getExpression() != null) {
+            properties.put(EXPRESSION, step.getExpression());
         }
         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                 DumperOptions.FlowStyle.AUTO);

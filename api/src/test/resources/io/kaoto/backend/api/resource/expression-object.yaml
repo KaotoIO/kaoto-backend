@@ -1,0 +1,82 @@
+- from:
+    uri: timer:null
+    steps:
+      - choice:
+          when:
+            - expression:
+                simple:
+                  expression: choice
+      - delay:
+          expression:
+            simple:
+              expression: delay
+      - dynamic-router:
+          expression:
+            simple:
+              expression: dynamic-router
+      - enrich:
+          expression:
+            simple:
+              expression: enrich
+      - filter:
+          expression:
+            simple:
+              expression: filter
+      - poll-enrich:
+          expression:
+            simple:
+              expression: poll-enrich
+      - recipient-list:
+          expression:
+            simple:
+              expression: recipient-list
+      - resequence:
+          expression:
+            simple:
+              expression: resequence
+      - routing-slip:
+          expression:
+            simple:
+              expression: routing-slip
+      - script:
+          expression:
+            groovy:
+              expression: script
+      - service-call:
+          expression:
+            jsonpath:
+              expression: service-call
+      - set-body:
+          expression:
+            constant:
+              expression: set-body
+      - set-header:
+          name: header1
+          expression:
+            jq:
+              expression: set-header
+      - set-property:
+          name: prop1
+          expression:
+            jq:
+              expression: set-property
+      - sort:
+          expression:
+            simple:
+              expression: sort
+      - split:
+          expression:
+            simple:
+              expression: split
+      - throttle:
+          expression:
+            simple:
+              expression: throttle
+      - transform:
+          expression:
+            jq:
+              expression: transform
+      - validate:
+          expression:
+            simple:
+              expression: validate

@@ -78,6 +78,9 @@ public class TransformFlowStep implements FlowStep {
                 } else if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.JQ)) {
                     p.setValue(this.getTransform().getJq());
+                } else if (p.getId()
+                        .equalsIgnoreCase(KameletStepParserService.EXPRESSION)) {
+                    p.setValue(this.getTransform().getExpression());
                 }
             }
             return res.get();
