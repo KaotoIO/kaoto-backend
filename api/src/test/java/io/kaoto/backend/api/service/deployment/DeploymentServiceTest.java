@@ -1,11 +1,13 @@
 package io.kaoto.backend.api.service.deployment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
@@ -22,9 +24,11 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
@@ -175,5 +179,20 @@ class DeploymentServiceTest {
             }
         }
         Assertions.assertEquals(bindingRegularCamel.trim(), result);
+    }
+
+    @Test
+    void choiceWithNullIdentifiedBranches() throws IOException {
+
+        var yaml = new String(this.getClass().getResourceAsStream("route-choice-null-condition.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
+        var json = new String(this.getClass().getResourceAsStream("route-choice-null-condition.json").readAllBytes(),
+                StandardCharsets.UTF_8);
+
+        ObjectMapper m = new ObjectMapper();
+        Integration parsed = m.readValue(json, new TypeReference<>() {});
+
+        var yaml2 = deploymentService.crd(parsed, "Camel Route");
+        assertThat(yaml).isEqualToNormalizingNewlines(yaml2);
     }
 }

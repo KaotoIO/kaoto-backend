@@ -44,8 +44,6 @@ public class ChoiceFlowStep implements FlowStep {
     }
 
     public ChoiceFlowStep(final Step step, final KamelPopulator kameletPopulator) {
-        setChoice(new SuperChoice(step, kameletPopulator));
-
         final var choice = new SuperChoice();
 
         List<Choice> choices = new LinkedList<>();
@@ -67,6 +65,7 @@ public class ChoiceFlowStep implements FlowStep {
             }
         }
         choice.setChoice(choices);
+        setChoice(choice);
     }
 
     private static Branch setOtherwiseBranch(KamelPopulator kameletPopulator, SuperChoice choice, Branch b) {
