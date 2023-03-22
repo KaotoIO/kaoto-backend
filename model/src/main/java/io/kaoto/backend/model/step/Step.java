@@ -276,6 +276,10 @@ public class Step extends Metadata {
         if (!Objects.equals(uuid, step.uuid)) {
             return false;
         }
+
+        if (!Objects.equals(this.getParameters(), step.getParameters())) {
+            return false;
+        }
         return getTitle() != null
                 ? getTitle().equals(step.getTitle())
                 : step.getTitle() == null;

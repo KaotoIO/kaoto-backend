@@ -105,10 +105,17 @@ class CamelRouteStepParserServiceTest {
                 StandardCharsets.UTF_8);
         var routeb = new String(this.getClass().getResourceAsStream("route2-logs.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
+        var routec = new String(this.getClass().getResourceAsStream("route3-logs.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
 
         var steps = camelRouteStepParserService.deepParse(route);
         var stepsb = camelRouteStepParserService.deepParse(routeb);
 
         assertEquals(steps, stepsb);
+
+        //Now check default properties are removed
+        var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
+                steps.getParameters());
+        assertThat(yaml).isEqualToNormalizingNewlines(routec);
     }
 }
