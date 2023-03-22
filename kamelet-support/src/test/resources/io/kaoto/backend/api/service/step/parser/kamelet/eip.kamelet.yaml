@@ -121,7 +121,7 @@ spec:
                       copy: true
                       uri: direct:somewhere
                       parameters:
-                        bridgeErrorHandler: 'true'
+                        bridgeErrorHandler: true
           - simple: '{{?bar}}'
             steps:
             - unmarshal:
@@ -161,7 +161,7 @@ spec:
                 executor-service: myExecutor
                 async-delayed: true
                 caller-runs-when-rejected: false
-                reject-execution: false
+                reject-execution: true
             - recipient-list:
                 constant: direct:a,direct:b
                 parallel-processing: true

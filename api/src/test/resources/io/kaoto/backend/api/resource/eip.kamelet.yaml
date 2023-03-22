@@ -43,7 +43,7 @@ spec:
                   executor-service: myExecutor
                   async-delayed: true
                   caller-runs-when-rejected: false
-                  reject-execution: false
+                  reject-execution: true
               - sample:
                   sample-period: '1500'
                   message-frequency: 5
@@ -86,8 +86,8 @@ spec:
             - wire-tap:
                 uri: direct:infiniteandbeyond
                 parameters:
-                  failIfNoConsumers: 'true'
-                  block: 'false'
+                  failIfNoConsumers: false
+                  block: false
           - simple: '{{?baz}}'
             steps:
             - recipient-list:

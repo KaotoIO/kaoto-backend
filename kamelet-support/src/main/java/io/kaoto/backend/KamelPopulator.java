@@ -268,7 +268,7 @@ public class KamelPopulator {
         for (Step s : steps) {
             if (from.getUri() == null) {
                 var uri = new StringBuilder(s.getName());
-                HashMap<String, String> params = buildUri(s, uri);
+                HashMap<String, Object> params = buildUri(s, uri);
                 from.setUri(uri.toString());
                 from.setParameters(params);
                 from.setId(s.getStepId());
@@ -281,8 +281,8 @@ public class KamelPopulator {
         return from;
     }
 
-    public HashMap<String, String> buildUri(final Step s, final StringBuilder uri) {
-        var params = new HashMap<String, String>();
+    public HashMap<String, Object> buildUri(final Step s, final StringBuilder uri) {
+        var params = new HashMap<String, Object>();
         if (s.getParameters() != null) {
             //We need to make sure parameters attributes coming from the frontend are complete and right
             //The only important thing we need to take from them is the value, the rest should be as default
@@ -298,8 +298,9 @@ public class KamelPopulator {
                     if (p.isPath()) {
                         uri.append(p.getPathSeparator());
                         uri.append(value != null ? value : p.getDefaultValue());
-                    } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")) {
-                        params.put(p.getId(), value.toString());
+                    } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")
+                                    && !p.convertToType(value).equals(p.getDefaultValue())) {
+                        params.put(p.getId(), p.convertToType(value));
                     }
                 }
             }

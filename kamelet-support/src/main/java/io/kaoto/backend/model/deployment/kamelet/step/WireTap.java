@@ -80,7 +80,7 @@ public class WireTap extends EIPStep {
     public WireTap(final @JsonProperty(COPY_LABEL) Boolean copy,
                    final @JsonProperty(DYNAMIC_URI_LABEL) Boolean dynamicUri,
                    final @JsonProperty(DYNAMIC_URI_LABEL2) Boolean dynamicUri2,
-                   final @JsonProperty(PARAMETERS_LABEL) Map<String, String> parameters,
+                   final @JsonProperty(PARAMETERS_LABEL) Map<String, Object> parameters,
                    final @JsonProperty(ON_PREPARE_LABEL) Map<String, Object> onPrepare,
                    final @JsonProperty(ON_PREPARE_LABEL2) Map<String, Object> onPrepare2,
                    final @JsonProperty(EXECUTOR_SERVICE_LABEL) Map<String, Object> executorService,
@@ -128,7 +128,7 @@ public class WireTap extends EIPStep {
                 this.setCopy(Boolean.valueOf(String.valueOf(parameter.getValue())));
                 break;
             case PARAMETERS_LABEL:
-                this.getUri().setParameters((Map<String, String>) parameter.getValue());
+                this.getUri().setParameters((Map<String, Object>) parameter.getValue());
                 break;
             case DYNAMIC_URI_LABEL:
             case DYNAMIC_URI_LABEL2:

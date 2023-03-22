@@ -1,7 +1,7 @@
 - from:
     uri: timer:yaml
     parameters:
-      period: '1000'
+      period: '1050'
     steps:
     - set-body:
         constant: Hello Camel K from yaml

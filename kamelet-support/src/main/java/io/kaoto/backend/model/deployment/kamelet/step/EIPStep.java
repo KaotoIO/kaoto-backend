@@ -34,7 +34,7 @@ public abstract class EIPStep implements Serializable {
     protected EIPStep(Step step) {
         if (step.getParameters() != null) {
             for (var parameter : step.getParameters()) {
-                if (parameter.getValue() != null) {
+                if (parameter.getValue() != null && !parameter.getValue().equals(parameter.getDefaultValue())) {
                     try {
                         assignAttribute(parameter);
                     } catch (Exception e) {

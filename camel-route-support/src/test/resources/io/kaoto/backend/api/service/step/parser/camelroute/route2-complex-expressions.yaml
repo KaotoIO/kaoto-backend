@@ -1,7 +1,7 @@
 - from:
     uri: timer:trigger-gitter-streaming
     parameters:
-      repeatCount: '1'
+      repeatCount: 1
     steps:
     - log:
         message: Opening connection to Gitter...
@@ -67,7 +67,7 @@
               - to:
                   uri: jslt:dummy
                   parameters:
-                    allowTemplateFromHeader: 'true'
+                    allowTemplateFromHeader: true
               - wire-tap:
                   uri: kamelet:sink
               - set-body:

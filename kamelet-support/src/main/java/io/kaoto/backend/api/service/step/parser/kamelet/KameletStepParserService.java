@@ -110,7 +110,7 @@ public class KameletStepParserService
             for (var prop : props.entrySet()) {
                 String key = prop.getKey();
                 var def = prop.getValue();
-                Parameter p = new ObjectParameter();
+                Parameter p;
                 switch (def.getType()) {
                     case "string":
                         p = new StringParameter(key, def.getTitle(),
@@ -221,10 +221,10 @@ public class KameletStepParserService
         }
     }
 
-    public void setValuesOnParameters(final Step step, final Map<String, String> properties) {
+    public void setValuesOnParameters(final Step step, final Map<String, Object> properties) {
 
         if (properties != null) {
-            for (Map.Entry<String, String> c : properties.entrySet()) {
+            for (Map.Entry<String, Object> c : properties.entrySet()) {
                 if (c.getValue() != null) {
                     setValueOnStepProperty(step, c.getKey(), c.getValue());
                 }
@@ -235,8 +235,10 @@ public class KameletStepParserService
 
     public void setValueOnStepProperty(final Step step, final String key, final Object value) {
         for (Parameter p : step.getParameters()) {
-            if (p.getId().equalsIgnoreCase(key)) {
-                p.setValue(p.convertToType(value));
+            if (p.getId().equalsIgnoreCase(key) && value != null) {
+                if (!value.equals(p.getDefaultValue())) {
+                    p.setValue(value);
+                }
                 break;
             }
         }
