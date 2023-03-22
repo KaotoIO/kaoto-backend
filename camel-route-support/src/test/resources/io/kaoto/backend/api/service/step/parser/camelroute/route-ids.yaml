@@ -2,7 +2,7 @@
     id: from-74c5
     uri: file:data
     parameters:
-      noop: 'true'
+      noop: true
     steps:
     - log:
         id: log-5f36

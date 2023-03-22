@@ -172,7 +172,10 @@ public class KameletBindingStepParserService
             var valid = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
-                    p.setValue(p.convertToType(c.getValue()));
+                    final var value = p.convertToType(c.getValue());
+                    if (!value.equals(p.getDefaultValue())) {
+                        p.setValue(value);
+                    }
                     valid = true;
                     break;
                 }
