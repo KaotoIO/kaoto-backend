@@ -1,0 +1,7 @@
+- from:
+    uri: timer:yaml
+    steps:
+    - set-body:
+        constant: Hello Camel from yaml
+    - log:
+        message: ${body}
