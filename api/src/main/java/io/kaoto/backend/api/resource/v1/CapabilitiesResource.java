@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import io.kaoto.backend.api.resource.v1.model.Capabilities;
 import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.deployment.ClusterService;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.logging.Logger;
@@ -32,6 +33,9 @@ import javax.ws.rs.core.Response;
 public class CapabilitiesResource {
 
     private ClusterService clusterService;
+
+    @ConfigProperty(name = "quarkus.application.version")
+    private String version;
 
     private Logger log = Logger.getLogger(CapabilitiesResource.class);
 
@@ -65,6 +69,15 @@ public class CapabilitiesResource {
     }
 
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/version")
+    @Operation(summary = "Get Version",
+            description = "Returns the running backend version.")
+    public String showVersion() {
+        return getVersion();
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/namespace")
     @Operation(summary = "Get Namespace",
@@ -95,4 +108,11 @@ public class CapabilitiesResource {
                 .build();
     }
 
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
 }
