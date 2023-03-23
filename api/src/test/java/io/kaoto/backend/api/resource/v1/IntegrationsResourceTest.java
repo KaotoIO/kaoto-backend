@@ -336,7 +336,7 @@ class IntegrationsResourceTest {
         System.out.println(yaml2);
         List<Object> parsed = new Yaml().load(yaml2);
         List<Object> steps = (List<Object>) ((Map)((Map)parsed.get(0)).get("from")).get("steps");
-        assertEquals(19, steps.size());
+        assertEquals(20, steps.size());
         var choice = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("choice");
         var when0 = (Map<String, Object>) ((List<Object>)choice.get("when")).get(0);
         assertExpression("choice", "simple", when0);
@@ -376,6 +376,10 @@ class IntegrationsResourceTest {
         assertExpression("transform", "jq", transform);
         var validate =  (Map<String, Object>) ((Map<String, Object>) steps.get(18)).get("validate");
         assertExpression("validate", "simple", validate);
+        var dotry = (Map<String, Object>) ((Map<String, Object>) steps.get(19)).get("do-try");
+        var docatch0 = (Map<String, Object>) ((List<Object>) dotry.get("do-catch")).get(0);
+        var onwhen = (Map<String, Object>) docatch0.get("on-when");
+        assertExpression("on-when", "simple", onwhen);
     }
 
     private void assertExpression(String name, String syntax, Map<String, Object> step) {

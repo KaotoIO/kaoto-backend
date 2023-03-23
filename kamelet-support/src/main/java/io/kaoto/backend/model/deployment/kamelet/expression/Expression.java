@@ -105,7 +105,10 @@ public class Expression extends EIPStep {
             expression.setResultType(String.valueOf(map.get(RESULT_TYPE2)));
         }
         if (map.containsKey(EXPRESSION_LABEL) && map.get(EXPRESSION_LABEL) != null) {
-            expression.setExpression((Expression) map.get(EXPRESSION_LABEL));
+            Object nested = map.get(EXPRESSION_LABEL);
+            Expression nestedExpression =
+                    nested instanceof Expression ne ? ne : new Expression(nested);
+            expression.setExpression(nestedExpression);
         }
         if (map.containsKey("id") && map.get("id") != null) {
             expression.setId(String.valueOf(map.get("id")));
