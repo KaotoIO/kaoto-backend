@@ -88,7 +88,10 @@ public class ScriptExpression extends EIPStep {
             expression.setResultType(String.valueOf(map.get(RESULT_TYPE2)));
         }
         if (map.containsKey(EXPRESSION_LABEL) && map.get(EXPRESSION_LABEL) != null) {
-            expression.setExpression((ScriptExpression) map.get(EXPRESSION_LABEL));
+            Object nested = map.get(EXPRESSION_LABEL);
+            ScriptExpression nestedExpression =
+                    nested instanceof ScriptExpression ne ? ne : new ScriptExpression(nested);
+            expression.setExpression(nestedExpression);
         }
         if (map.containsKey("id") && map.get("id") != null) {
             expression.setId(String.valueOf(map.get("id")));

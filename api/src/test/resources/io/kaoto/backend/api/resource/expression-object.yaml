@@ -80,3 +80,15 @@
           expression:
             simple:
               expression: validate
+      - do-try:
+          steps: [ ]
+          do-catch:
+            - exception:
+                - java.lang.Exception
+              on-when:
+                expression:
+                  simple:
+                    expression: on-when
+              steps: [ ]
+          do-finally:
+            steps: [ ]
