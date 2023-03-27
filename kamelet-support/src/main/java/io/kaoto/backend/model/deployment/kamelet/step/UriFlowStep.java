@@ -98,7 +98,8 @@ public class UriFlowStep implements FlowStep {
 
         if (this.getUri() != null
                 && this.getUri().contains(":")
-                && !this.getUri().startsWith("kamelet:")) {
+                && !"kamelet:source".equals(this.getUri())
+                && !"kamelet:sink".equals(this.getUri())) {
             connectorName = this.getUri().substring(0, this.getUri().indexOf(':'));
         }
 
