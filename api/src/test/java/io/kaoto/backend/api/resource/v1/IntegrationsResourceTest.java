@@ -3,7 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.inject.Inject;
@@ -385,6 +385,7 @@ class IntegrationsResourceTest {
     private void assertExpression(String name, String syntax, Map<String, Object> step) {
         var nested = (Map<String, Object>) ((Map<String, Object>)step.get("expression")).get(syntax);
         assertEquals(name, nested.get("expression"));
+        assertNull(nested.get("result-type"));
     }
 
     @Test
