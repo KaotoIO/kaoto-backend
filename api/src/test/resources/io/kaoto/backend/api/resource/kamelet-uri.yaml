@@ -1,0 +1,3 @@
+- from:
+    uri: kamelet:telegram-source:test
+    steps: []
