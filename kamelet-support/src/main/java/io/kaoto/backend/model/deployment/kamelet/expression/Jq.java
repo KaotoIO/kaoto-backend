@@ -30,28 +30,28 @@ public class Jq {
 
     @SuppressWarnings("CPD-START")
     public Jq(Map map) {
-        if (map.containsKey(EXPRESSION_LABEL)) {
+        if (map.get(EXPRESSION_LABEL) != null) {
             setExpression(String.valueOf(map.get(EXPRESSION_LABEL)));
         }
-        if (map.containsKey(ID_LABEL)) {
+        if (map.get(ID_LABEL) != null) {
             setId(String.valueOf(map.get(ID_LABEL)));
         }
-        if (map.containsKey(RESULT_TYPE_LABEL)) {
+        if (map.get(RESULT_TYPE_LABEL) != null) {
             setResultType(String.valueOf(map.get(RESULT_TYPE_LABEL)));
-        } else if (map.containsKey(RESULT_TYPE_LABEL2)) {
+        } else if (map.get(RESULT_TYPE_LABEL2) != null) {
             setResultType(String.valueOf(map.get(RESULT_TYPE_LABEL2)));
         }
-        if (map.containsKey(HEADER_NAME_LABEL)) {
+        if (map.get(HEADER_NAME_LABEL) != null) {
             setHeaderName(String.valueOf(map.get(HEADER_NAME_LABEL)));
-        } else if (map.containsKey(HEADER_NAME_LABEL2)) {
+        } else if (map.get(HEADER_NAME_LABEL2) != null) {
             setHeaderName(String.valueOf(map.get(HEADER_NAME_LABEL2)));
         }
-        if (map.containsKey(PROPERTY_NAME_LABEL)) {
+        if (map.get(PROPERTY_NAME_LABEL) != null) {
             setPropertyName(String.valueOf(map.get(PROPERTY_NAME_LABEL)));
-        } else if (map.containsKey(PROPERTY_NAME_LABEL2)) {
+        } else if (map.get(PROPERTY_NAME_LABEL2) != null) {
             setPropertyName(String.valueOf(map.get(PROPERTY_NAME_LABEL2)));
         }
-        if (map.containsKey(TRIM_LABEL)) {
+        if (map.get(TRIM_LABEL) != null) {
             setTrim(Boolean.valueOf(String.valueOf(map.get(TRIM_LABEL))));
         }
     }
