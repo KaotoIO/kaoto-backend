@@ -6,10 +6,10 @@
     <parent>
         <groupId>io.kaoto.backend</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7.5</version>
+        <version>0.7.6-SNAPSHOT</version>
     </parent>
     <artifactId>kamelet-support</artifactId>
-    <version>0.7.5</version>
+    <version>0.7.6-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>io.kaoto.backend</groupId>
