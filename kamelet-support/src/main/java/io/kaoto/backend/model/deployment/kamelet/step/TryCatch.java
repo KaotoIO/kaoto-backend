@@ -94,7 +94,9 @@ public class TryCatch extends EIPStep {
         }
         properties.put(DO_CATCH_LABEL, doC);
         Map<String, Object> doF = new LinkedHashMap<>();
-        doF.put(STEPS_LABEL, doFinally.getSteps());
+        if (doFinally != null) {
+            doF.put(STEPS_LABEL, doFinally.getSteps());
+        }
         properties.put(DO_FINALLY_LABEL, doF);
         return properties;
     }
