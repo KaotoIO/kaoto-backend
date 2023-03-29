@@ -1,0 +1,5 @@
+- from:
+    uri: timer:patatas
+    steps:
+    - to:
+        uri: atlasmap:file:/etc/camel/resources/transform.adm
