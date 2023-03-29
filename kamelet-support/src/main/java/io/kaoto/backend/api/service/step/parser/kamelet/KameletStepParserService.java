@@ -205,12 +205,23 @@ public class KameletStepParserService
                 .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
         String[] pathParts = path.split(splitSeparators);
         int i = 0;
+        Parameter lastPathParam = null;
         for (Parameter p : pathParameters) {
             if (i >= pathParts.length) {
                 break;
             }
             if (p.isPath()) {
                 p.setValue(p.convertToType(pathParts[i++]));
+                lastPathParam = p;
+            }
+        }
+
+        //Aaah, someone used the path separator as part of the parameter value. Sneaky.
+        //This should be a string. Please, let it be a string. What else could it be?
+        if (i < pathParts.length && lastPathParam != null) {
+            for (; i < pathParts.length; i++) {
+                lastPathParam.setValue(lastPathParam.getValue().toString()
+                        + lastPathParam.getPathSeparator() + lastPathParam.convertToType(pathParts[i++]));
             }
         }
 

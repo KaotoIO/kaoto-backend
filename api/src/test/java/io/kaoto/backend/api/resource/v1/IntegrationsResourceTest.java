@@ -183,6 +183,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flow = res.extract().body().as(Integration.class);
+        assertEquals(2, flow.getSteps().size());
         Step amq1 = flow.getSteps().get(0);
         Step amq2 = flow.getSteps().get(1);
         assertEquals("START", amq1.getType());
@@ -240,6 +241,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flow = res.extract().body().as(Integration.class);
+        assertEquals(2, flow.getSteps().size());
         Step amq1 = flow.getSteps().get(0);
         Step amq2 = flow.getSteps().get(1);
         assertEquals("START", amq1.getType());
@@ -304,6 +306,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flow = res.extract().body().as(Integration.class);
+        assertEquals(2, flow.getSteps().size());
         Step script = flow.getSteps().get(1);
         var groovy = script.getParameters().stream().filter(p -> "groovy".equals(p.getId())).findAny();
         assertTrue(groovy.isPresent());
