@@ -255,6 +255,8 @@ public class Step extends Metadata {
                 + ", uuid=" + getUUID() + '\n'
                 + ", title=" + getTitle() + '\n'
                 + ", type=" + getType() + '\n'
+                + ", kind='" + getKind() + '\'' + '\n'
+                + ", group='" + getGroup() + '\'' + '\n'
                 + '}';
     }
 

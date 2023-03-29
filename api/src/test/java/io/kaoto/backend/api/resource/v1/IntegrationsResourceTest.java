@@ -412,9 +412,36 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var yaml2 = res.extract().body().asString();
-        System.out.println(yaml2);
         List<Object> parsed = new Yaml().load(yaml2);
         var uri = (String) ((Map)((Map)parsed.get(0)).get("from")).get("uri");
         assertEquals("kamelet:telegram-source:test", uri);
+    }
+
+    @Test
+    void uriLogStop() throws Exception {
+        String yaml = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../uri-log-stop.yaml")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flow = res.extract().body().as(Integration.class);
+        var filter = flow.getSteps().get(1);
+        var log = filter.getBranches().get(0).getSteps().get(0);
+        assertEquals("MIDDLE", log.getType());
+        var filter2 = flow.getSteps().get(2);
+        var stop = filter2.getBranches().get(0).getSteps().get(0);
+        assertEquals("stop", stop.getName());
+        // @FIXME a workaround for https://github.com/KaotoIO/kaoto-ui/issues/1587
+        // Fix StopFlowStep once above is implemented
+        assertEquals("MIDDLE", stop.getType());
+        var log2 = flow.getSteps().get(3);
+        assertEquals("MIDDLE", log2.getType());
     }
 }

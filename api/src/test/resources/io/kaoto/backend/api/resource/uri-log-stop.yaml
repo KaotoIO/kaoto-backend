@@ -1,0 +1,16 @@
+- from:
+    uri: "direct:start"
+    steps:
+      - filter:
+          expression:
+            simple: "${in.header.continue} == true"
+          steps:
+            - to:
+                uri: "log:filtered"
+      - filter:
+          expression:
+            simple: "${in.header.stop} == true"
+          steps:
+            - stop:
+      - to:
+          uri: "log:original"
