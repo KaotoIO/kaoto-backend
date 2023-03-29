@@ -115,15 +115,18 @@ public class UriFlowStep implements FlowStep {
             });
         } else {
             candidates = candidates.sorted((step, step2) -> {
+                //EIPs shouldn't go through this function
+                if (step.getKind().startsWith("EIP")) {
+                    return 1;
+                }
+                if (step2.getKind().startsWith("EIP")) {
+                    return -1;
+                }
+
                 var type = Step.Type.valueOf(step.getType());
                 var type2 = Step.Type.valueOf(step2.getType());
                 if (type.equals(type2)) {
                     return 0;
-                }
-
-                //EIPs shouldn't go through this function
-                if (step.getKind().startsWith("EIP")) {
-                    return 10000;
                 }
 
                 if (type == Step.Type.MIDDLE) {

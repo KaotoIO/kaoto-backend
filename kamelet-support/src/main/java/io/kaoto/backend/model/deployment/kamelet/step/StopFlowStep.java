@@ -33,9 +33,15 @@ public class StopFlowStep implements FlowStep {
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
                         final Boolean start, final Boolean end) {
-        return catalog.getReadOnlyCatalog()
+        var stopEip= catalog.getReadOnlyCatalog()
                 .searchByName("stop").stream()
                 .filter(step -> step.getKind().equalsIgnoreCase("EIP"))
                 .findAny().orElse(null);
+        if (stopEip != null) {
+            // @FIXME this is a workaround for https://github.com/KaotoIO/kaoto-ui/issues/1587
+            // Once UI implements the END step handling, STOP EIP has to get back to be an END step
+            stopEip.setType("MIDDLE");
+        }
+        return stopEip;
     }
 }
