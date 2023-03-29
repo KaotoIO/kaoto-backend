@@ -298,7 +298,12 @@ public class KamelPopulator {
                     var value = values.get(p.getId());
                     if (p.isPath()) {
                         uri.append(p.getPathSeparator());
-                        uri.append(value != null ? value : p.getDefaultValue());
+                        //Look for the right value
+                        value = value != null ? value : p.getDefaultValue();
+                        //If it is null, don't add it
+                        if (value != null) {
+                            uri.append(value);
+                        }
                     } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")
                                     && !p.convertToType(value).equals(p.getDefaultValue())) {
                         params.put(p.getId(), p.convertToType(value));

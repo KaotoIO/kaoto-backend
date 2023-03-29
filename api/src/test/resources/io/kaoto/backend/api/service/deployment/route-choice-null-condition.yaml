@@ -1,19 +1,19 @@
 - from:
-    uri: timer:null
+    uri: timer:myTimer
     steps:
     - choice:
         when:
         - simple: ${body}
           steps:
           - to:
-              uri: activemq:queue:null
+              uri: activemq:queue:myQueue
         - steps:
           - to:
-              uri: amqp:queue:null
+              uri: 'amqp:queue:'
         - steps:
           - to:
-              uri: asterisk:null
+              uri: 'asterisk:'
         otherwise:
           steps:
           - to:
-              uri: aws2-kinesis:null
+              uri: aws2-kinesis:somethingSomething
