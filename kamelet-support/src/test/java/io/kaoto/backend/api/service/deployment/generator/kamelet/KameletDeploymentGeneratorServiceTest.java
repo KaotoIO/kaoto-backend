@@ -53,6 +53,7 @@ class KameletDeploymentGeneratorServiceTest {
                 service.parse(steps, md, Collections.emptyList()));
 
         Step step = new Step();
+        step.setType("START");
         step.setKind("Camel-Connector");
         step.setName("log");
         step.setId("log-action");

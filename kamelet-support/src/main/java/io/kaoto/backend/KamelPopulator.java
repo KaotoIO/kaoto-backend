@@ -266,8 +266,9 @@ public class KamelPopulator {
         final var from = new From();
         from.setSteps(new ArrayList<>());
 
-        for (Step s : steps) {
-            if (from.getUri() == null) {
+        for (int i = 0; i < steps.size(); i++) {
+            Step s = steps.get(i);
+            if (i==0 && "START".equals(s.getType())) {
                 var uri = new StringBuilder(s.getName());
                 HashMap<String, Object> params = buildUri(s, uri);
                 from.setUri(uri.toString());
