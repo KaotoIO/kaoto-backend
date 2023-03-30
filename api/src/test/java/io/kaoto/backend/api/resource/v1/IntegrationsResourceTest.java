@@ -447,4 +447,28 @@ class IntegrationsResourceTest {
         var log2 = flow.getSteps().get(3);
         assertEquals("MIDDLE", log2.getType());
     }
+
+    @Test
+    void noFrom() throws Exception {
+        String json = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource(
+                                "../no-from.json")
+                        .toURI()));
+        var res = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        var yaml = res.extract().body().asString();
+        List<Object> parsed = new Yaml().load(yaml);
+        var from = (Map) ((Map)parsed.get(0)).get("from");
+        var fromUri = (String) from.get("uri");
+        assertNull(fromUri);
+        var steps = (List<Object>) from.get("steps");
+        assertEquals(1, steps.size());
+        var to = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("to");
+        assertEquals("log:", to.get("uri"));
+    }
 }
