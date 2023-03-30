@@ -233,7 +233,7 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
 
     @Override
     public int compareTo(Parameter other) {
-        return Integer.compare(other.getPathOrder(), this.getPathOrder());
+        return Integer.compare(this.getPathOrder(), other.getPathOrder());
     }
 
     @Override

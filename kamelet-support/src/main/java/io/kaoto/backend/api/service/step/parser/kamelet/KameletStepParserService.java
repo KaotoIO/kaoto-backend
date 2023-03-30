@@ -84,7 +84,7 @@ public class KameletStepParserService
         try {
             ObjectMapper yamlMapper =
                     new ObjectMapper(
-                            new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,  false);
+                            new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             Kamelet kamelet = yamlMapper.readValue(input, Kamelet.class);
 
             processMetadata(res, kamelet.getMetadata());
@@ -115,26 +115,26 @@ public class KameletStepParserService
                 switch (def.getType()) {
                     case "string":
                         p = new StringParameter(key, def.getTitle(),
-                        def.getDescription(), def.getDefault(), def.getFormat());
+                                def.getDescription(), def.getDefault(), def.getFormat());
                         break;
                     case "number":
                         p = new NumberParameter(key, def.getTitle(),
-                        def.getDescription(), Double.valueOf(def.getDefault()));
+                                def.getDescription(), Double.valueOf(def.getDefault()));
                         break;
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null? Integer.valueOf(def.getDefault()) : null);
+                                def.getDefault() != null ? Integer.valueOf(def.getDefault()) : null);
                         break;
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null? Boolean.valueOf(def.getDefault()) : null);
+                                def.getDefault() != null ? Boolean.valueOf(def.getDefault()) : null);
                         break;
                     case "array":
                         p = new ArrayParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null? def.getDefault().split(",") : null);
+                                def.getDefault() != null ? def.getDefault().split(",") : null);
                         break;
                     default:
                         p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getDefault());
@@ -200,36 +200,65 @@ public class KameletStepParserService
         var pathParameters = new LinkedList<Parameter>();
         pathParameters.addAll(step.getParameters().stream().parallel()
                 .filter(Objects::nonNull).filter(s -> s.isPath()).toList());
-        Collections.sort(pathParameters);
-        var splitSeparators = pathParameters.stream()
-                .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
-        String[] pathParts = path.split(splitSeparators);
-        int i = 0;
-        Parameter lastPathParam = null;
-        for (Parameter p : pathParameters) {
-            if (i >= pathParts.length) {
-                break;
-            }
-            if (p.isPath()) {
-                p.setValue(p.convertToType(pathParts[i++]));
-                lastPathParam = p;
-            }
-        }
 
-        //Aaah, someone used the path separator as part of the parameter value. Sneaky.
-        //This should be a string. Please, let it be a string. What else could it be?
-        if (i < pathParts.length && lastPathParam != null) {
-            for (; i < pathParts.length; i++) {
-                lastPathParam.setValue(lastPathParam.getValue().toString()
-                        + lastPathParam.getPathSeparator() + lastPathParam.convertToType(pathParts[i++]));
+        //Let's iterate over the path string to extract the parameters
+        if (!pathParameters.isEmpty()) {
+            //Make sure the order is right
+            Collections.sort(pathParameters);
+
+            Parameter previous = null;
+            List<String> pathParts = new LinkedList<>();
+            for (Parameter p : pathParameters) {
+                //To split, we will have to consider the path separator of the next path param,
+                // not of the current one
+                if (previous != null) {
+                    var endIndex = path.indexOf(p.getPathSeparator());
+                    if (endIndex < 0) {
+                        //If there is no path separator in the string, then everything to the end is this one
+                        endIndex = path.length();
+                    }
+                    pathParts.add(path.substring(0, endIndex));
+                    path = path.substring(endIndex);
+                }
+
+                //We remove the path separator from the beginning of this path parameter
+                //The if is here just in case it is malformed
+                if (path.length() >= p.getPathSeparator().length()) {
+                    path = path.substring(p.getPathSeparator().length());
+                }
+                //prepare for next iteration
+                previous = p;
             }
-        }
 
-        Pattern pattern = Pattern.compile("[?&]([^=]+)=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(uri);
+            //Last path parameter here!
+            if (path.length() > 0) {
+                pathParts.add(path);
+            }
 
-        while (matcher.find()) {
-            setValueOnStepProperty(step, matcher.group(1), matcher.group(2));
+            int i = 0;
+            for (Parameter p : pathParameters) {
+                if (i >= pathParts.size()) {
+                    break;
+                }
+                if (p.isPath()) {
+                    p.setValue(p.convertToType(pathParts.get(i++)));
+                }
+            }
+
+            //Aaah, someone used the path separator as part of the parameter value. Sneaky.
+            //This should be a string. Please, let it be a string. What else could it be?
+            if (i < pathParts.size() && previous != null) {
+                for (; i < pathParts.size(); i++) {
+                    previous.setValue(previous.getValue().toString()
+                            + previous.getPathSeparator() + previous.convertToType(pathParts.get(i++)));
+                }
+                Pattern pattern = Pattern.compile("[?&]([^=]+)=([^&\\n]+)", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(uri);
+
+                while (matcher.find()) {
+                    setValueOnStepProperty(step, matcher.group(1), matcher.group(2));
+                }
+            }
         }
     }
 

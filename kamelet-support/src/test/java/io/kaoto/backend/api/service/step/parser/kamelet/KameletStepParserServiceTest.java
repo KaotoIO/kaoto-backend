@@ -184,9 +184,7 @@ class KameletStepParserServiceTest {
         assertEquals(parsed.getSteps(), parsed2.getSteps());
         assertEquals(parsed.getMetadata().keySet(),
                 parsed2.getMetadata().keySet());
-        for (String key : new String[]{"labels", "annotations",
-                "additionalProperties",
-                "name"}) {
+        for (String key : new String[]{"labels", "annotations", "additionalProperties", "name"}) {
             assertEquals(parsed.getMetadata().get(key),
                     parsed2.getMetadata().get(key));
         }

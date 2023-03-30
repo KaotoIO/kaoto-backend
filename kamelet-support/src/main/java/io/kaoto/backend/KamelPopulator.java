@@ -297,6 +297,9 @@ public class KamelPopulator {
                 for (Parameter p : step.getParameters()) {
                     var value = values.get(p.getId());
                     if (p.isPath()) {
+                        if (p.getPathOrder() == 0) {
+                            uri.append(":");
+                        }
                         uri.append(p.getPathSeparator());
                         //Look for the right value
                         value = value != null ? value : p.getDefaultValue();
