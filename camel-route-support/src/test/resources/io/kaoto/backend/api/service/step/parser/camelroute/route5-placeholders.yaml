@@ -1,0 +1,5 @@
+- from:
+    uri: file:{{customer.file.directory}}
+    steps:
+    - to:
+        uri: sftp://{{sftphost}}:22/files/process

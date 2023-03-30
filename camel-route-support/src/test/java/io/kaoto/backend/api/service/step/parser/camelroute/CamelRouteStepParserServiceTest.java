@@ -68,7 +68,7 @@ class CamelRouteStepParserServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml",
-            "route3-complex-expressions.yaml", "route-ids.yaml", "route4-pathparams.yaml"})
+            "route3-complex-expressions.yaml", "route-ids.yaml", "route4-pathparams.yaml", "route5-placeholders.yaml"})
     void deepParseParametrized(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);

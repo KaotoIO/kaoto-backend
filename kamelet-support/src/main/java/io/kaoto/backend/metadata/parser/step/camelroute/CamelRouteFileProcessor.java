@@ -15,26 +15,24 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
-    private static final String INVALID_TYPE = "invalid";
     public static final String DESCRIPTION = "description";
     public static final String DEFAULT_VALUE = "defaultValue";
     public static final String DISPLAY_NAME = "displayName";
     public static final String COMPONENT = "component";
     public static final String PROPERTIES = "properties";
-    
-    private static String DEFAULT_ICON_STRING;
-
+    private static final String INVALID_TYPE = "invalid";
     private static final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
+    private static String DEFAULT_ICON_STRING;
 
     static {
         try {
@@ -46,19 +44,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         }
 
     }
-
-    record ParsedCamelComponentFromJson(
-        String id,
-        String kind,
-        String icon,
-
-        String title,
-        String description,
-        String group,
-        String type,
-        LinkedList<Parameter> parameters,
-        List<String> required
-    ) { }
 
     @Override
     protected List<Step> parseInputStream(final Reader input) {
@@ -78,7 +63,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return List.of();
     }
-
 
     private Step convertToStep(final JsonObject json) {
         if (!isCamelRouteJson(json)) {
@@ -128,78 +112,53 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String description = component.getString(DESCRIPTION);
         String type = getStepType(component);
 
-        Map<String, Map<String, String>> propertiesParsed = properties
-                .entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        property -> {
-                            var hashMap = new HashMap<String, String>();
-                            var jsonObject = property.getValue().asJsonObject();
-
-                            jsonObject.forEach((key, value) ->
-                                    hashMap.put(key, value.toString().replace("\"", "")));
-
-                            return hashMap;
-                        }
-                ));
-
-        List<String> requiredProperties = propertiesParsed.entrySet().stream()
-                .filter(property -> Boolean.parseBoolean(property.getValue().getOrDefault("required", "false")))
-                .map(Map.Entry::getKey).toList();
-
-
         LinkedList<Parameter> parameters = new LinkedList<>();
+        final AtomicInteger i = new AtomicInteger(0);
+        final var requiredProperties = new LinkedList<String>();
+        properties.entrySet().stream()
+                .forEachOrdered(entrySet -> {
+                            final Map<String, String> parameterData = new LinkedHashMap<>();
+                            final JsonObject jsonObject = entrySet.getValue().asJsonObject();
 
-        parameters.addAll(propertiesParsed.entrySet().stream().map(
-                parameter -> {
-                    Map<String, String> parameterData = parameter.getValue();
+                            // Properties of the parameter
+                            jsonObject.forEach((key, value) ->
+                                    parameterData.put(key, value.toString().replace("\"", "")));
 
-                    Map<String, Function<Map.Entry<
-                            String, Map<String, String>>,
-                            Parameter>> typeToClassConversion = Map.of(
-                            "string", this::getStringParameter,
-                            "object", this::getObjectParameter,
-                            "integer", this::getNumberParameter,
-                            "boolean", this::getBooleanParameter
-                    );
+                            Map<String,
+                                    Function<ParameterEntry, Parameter>>
+                                    typeToClassConversion = Map.of(
+                                    "string", this::getStringParameter,
+                                    "object", this::getObjectParameter,
+                                    "integer", this::getNumberParameter,
+                                    "boolean", this::getBooleanParameter
+                            );
 
-                    Parameter parsedParameter = typeToClassConversion
-                            .getOrDefault(parameterData.get("type"), this::getObjectParameter)
-                            .apply(parameter);
+                            ParameterEntry entry = new ParameterEntry(entrySet.getKey(), parameterData);
 
-                    if ("path".equals(parameterData.get("kind"))) {
-                        parsedParameter.setPath(true);
-                    }
+                            Parameter parsedParameter = typeToClassConversion
+                                    .getOrDefault(parameterData.get("type"), this::getObjectParameter)
+                                    .apply(entry);
 
-                    return parsedParameter;
-                }
-        ).toList());
+                            if ("path".equals(parameterData.get("kind"))) {
+                                parsedParameter.setPath(true);
+                                //Assign path order to parameters
+                                //We will have to assume the component defined them in order in the JSON because
+                                //the JSON does not give this information.
+                                parsedParameter.setPathOrder(i.getAndIncrement());
+                                if (parsedParameter.getPathOrder() == 0) {
+                                    parsedParameter.setPathSeparator("");
+                                }
+                            }
 
-        //Assign path order to parameters
-        //We will have to assume the component defined them in order in the JSON because
-        //the JSON does not give this information.
-        int i = 0;
-        for (Parameter p : parameters) {
-            if (p.isPath()) {
-                p.setPathOrder(i++);
-            }
-        }
-        //But this assumption does not always work
-        //Here are the weird cases
-        if ("avro".equalsIgnoreCase(id)) {
-            for (Parameter p : parameters) {
-                if ("messageName".equalsIgnoreCase(p.getId())) {
-                    p.setPathSeparator("/");
-                    p.setPathOrder(0);
-                } else if ("host".equalsIgnoreCase(p.getId())) {
-                    p.setPathOrder(2);
-                } else if ("port".equalsIgnoreCase(p.getId())) {
-                    p.setPathOrder(1);
-                } else if ("transport".equalsIgnoreCase(p.getId())) {
-                    p.setPathOrder(3);
-                }
-            }
-        }
+                            if(Boolean.valueOf(parameterData.getOrDefault("required", "false"))) {
+                                requiredProperties.add(entrySet.getKey());
+                            }
+
+                            parameters.add(parsedParameter);
+                        }
+                );
+
+        handleWeirdCases(id, parameters);
 
         return new ParsedCamelComponentFromJson(
                 id,
@@ -214,10 +173,39 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private StringParameter getStringParameter(
-            final Map.Entry<String, Map<String, String>> parameter) {
-        String id = parameter.getKey();
-        Map<String, String> parameterData = parameter.getValue();
+    private static void handleWeirdCases(String id, LinkedList<Parameter> parameters) {
+        //Here are the weird cases
+        if ("avro".equalsIgnoreCase(id)) {
+            for (Parameter p : parameters) {
+                if ("messageName".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("/");
+                    p.setPathOrder(3);
+                } else if ("host".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(1);
+                } else if ("port".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(2);
+                } else if ("transport".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(0);
+                }
+            }
+        } else if ("sftp".equalsIgnoreCase(id)) {
+            for (Parameter p : parameters) {
+                if ("host".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("//");
+                    p.setPathOrder(0);
+                } else if ("port".equalsIgnoreCase(p.getId())) {
+                    p.setPathOrder(1);
+                } else if ("directoryName".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("/");
+                    p.setPathOrder(2);
+                }
+            }
+        }
+    }
+
+    private StringParameter getStringParameter(final ParameterEntry parameter) {
+        String id = parameter.key();
+        Map<String, String> parameterData = parameter.value();
 
         return new StringParameter(
                 id,
@@ -228,11 +216,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private NumberParameter getNumberParameter(
-            final Map.Entry<String, Map<String, String>> parameter) {
-        //IntegerParameter doesn't fit some long types there are present
-        String id = parameter.getKey();
-        Map<String, String> parameterData = parameter.getValue();
+    private NumberParameter getNumberParameter(final ParameterEntry parameter) {
+        String id = parameter.key();
+        Map<String, String> parameterData = parameter.value();
         Long value;
 
         if (parameterData.containsKey(DEFAULT_VALUE)) {
@@ -251,10 +237,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private ObjectParameter getObjectParameter(
-            final Map.Entry<String, Map<String, String>> parameter) {
-        String id = parameter.getKey();
-        Map<String, String> parameterData = parameter.getValue();
+    private ObjectParameter getObjectParameter(final ParameterEntry parameter) {
+        String id = parameter.key();
+        Map<String, String> parameterData = parameter.value();
 
         return new ObjectParameter(
                 id,
@@ -264,10 +249,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private BooleanParameter getBooleanParameter(
-            final Map.Entry<String, Map<String, String>> parameter) {
-        String id = parameter.getKey();
-        Map<String, String> parameterData = parameter.getValue();
+    private BooleanParameter getBooleanParameter(final ParameterEntry parameter) {
+        String id = parameter.key();
+        Map<String, String> parameterData = parameter.value();
 
         return new BooleanParameter(
                 id,
@@ -340,4 +324,24 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
         return duplicatedStep;
     }
+
+    record ParsedCamelComponentFromJson(
+            String id,
+            String kind,
+            String icon,
+
+            String title,
+            String description,
+            String group,
+            String type,
+            LinkedList<Parameter> parameters,
+            List<String> required
+    ) {
+    }
+
+    record ParameterEntry(
+            String key,
+            Map<String, String> value
+    )
+    {}
 }
