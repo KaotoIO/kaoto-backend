@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.UnmarshalFlowStep;
@@ -15,6 +17,38 @@ import java.util.Map;
 
 public class MarshalDeserializer extends JsonDeserializer {
     private final Logger log = Logger.getLogger(MarshalDeserializer.class);
+
+    private static void extractProperties(final Map<String, Object> properties,
+                                          final Map.Entry<String, JsonNode> field) {
+        if (field.getValue() instanceof ValueNode v) {
+            extractScalarValue(properties, field, v);
+        } else {
+            field.getValue().fields().forEachRemaining(e -> {
+                if (e.getValue() instanceof ValueNode v) {
+                    extractScalarValue(properties, e, v);
+                } else {
+                    Map<String, Object> innerProperties = new LinkedHashMap<>();
+                    JsonNode node = e.getValue();
+                    node.fields().forEachRemaining(
+                            stringJsonNodeEntry -> extractProperties(innerProperties, stringJsonNodeEntry));
+                    properties.put(e.getKey(), innerProperties);
+                }
+            });
+        }
+    }
+
+    private static void extractScalarValue(final Map<String, Object> properties,
+                                           final Map.Entry<String, JsonNode> field,
+                                           final ValueNode v) {
+        if (v instanceof NumericNode numericNode) {
+            properties.put(field.getKey(), numericNode.numberValue());
+        } else if (v instanceof BooleanNode booleanNode) {
+            properties.put(field.getKey(), booleanNode.booleanValue());
+        } else {
+            properties.put(field.getKey(), v.asText());
+        }
+    }
+
     @Override
     public Object deserialize(final JsonParser jsonParser,
                               final DeserializationContext ctxt) {
@@ -48,24 +82,5 @@ public class MarshalDeserializer extends JsonDeserializer {
         }
 
         return step;
-    }
-
-    private static void extractProperties(final Map<String, Object> properties,
-                                          final Map.Entry<String, JsonNode> field) {
-        if (field.getValue() instanceof ValueNode v) {
-            properties.put(field.getKey(), v.asText());
-        } else {
-            field.getValue().fields().forEachRemaining(e -> {
-                if (e.getValue() instanceof ValueNode v) {
-                    properties.put(e.getKey(), v.asText());
-                } else {
-                    Map<String, Object> innerProperties = new LinkedHashMap<>();
-                    JsonNode node = e.getValue();
-                    node.fields().forEachRemaining(
-                            stringJsonNodeEntry -> extractProperties(innerProperties, stringJsonNodeEntry));
-                    properties.put(e.getKey(), innerProperties);
-                }
-            });
-        }
     }
 }

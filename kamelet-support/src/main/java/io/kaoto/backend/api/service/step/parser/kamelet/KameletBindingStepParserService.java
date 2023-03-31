@@ -166,9 +166,9 @@ public class KameletBindingStepParserService
         return step.orElse(null);
     }
 
-    private void setValuesOnParameters(final Step step, final Map<String, String> properties) {
+    private void setValuesOnParameters(final Step step, final Map<String, Object> properties) {
 
-        for (Map.Entry<String, String> c : properties.entrySet()) {
+        for (Map.Entry<String, Object> c : properties.entrySet()) {
             var valid = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
