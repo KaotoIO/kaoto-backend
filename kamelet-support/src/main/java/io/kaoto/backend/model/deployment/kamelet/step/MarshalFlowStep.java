@@ -30,7 +30,9 @@ public class MarshalFlowStep implements FlowStep {
         Map<String, Object> step = new HashMap<>();
         Map<String, Object> properties = new HashMap<>();
         step.put("marshal", properties);
-        properties.put(dataFormat.getFormat(), dataFormat.getProperties());
+        if (dataFormat != null) {
+            properties.put(dataFormat.getFormat(), dataFormat.getProperties());
+        }
         return step;
     }
 
@@ -48,15 +50,7 @@ public class MarshalFlowStep implements FlowStep {
     protected void assignParameters(final Step res) {
         for (var param : res.getParameters()) {
             if ("dataformat".equalsIgnoreCase(param.getId())) {
-                param.setValue(this.getDataFormat().getFormat());
-            } else if ("properties".equalsIgnoreCase(param.getId())
-                            && this.getDataFormat().getProperties() != null) {
-                Object[] array = new Object[this.getDataFormat().getProperties().size()];
-                int i = 0;
-                for (var entry : this.getDataFormat().getProperties().entrySet()) {
-                    array[i++] = new Object[]{entry.getKey(), entry.getValue()};
-                }
-                param.setValue(array);
+                param.setValue(this.getDataFormat());
             }
         }
     }
@@ -66,8 +60,7 @@ public class MarshalFlowStep implements FlowStep {
         return dataFormat;
     }
 
-    public void setDataFormat(
-            final DataFormat dataFormat) {
+    public void setDataFormat(final DataFormat dataFormat) {
         this.dataFormat = dataFormat;
     }
 }

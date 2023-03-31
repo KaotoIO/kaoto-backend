@@ -33,7 +33,7 @@ public class MarshalSerializer extends JsonSerializer {
         if (df.getProperties() != null) {
             gen.writeStartObject();
             for (var property : df.getProperties().entrySet()) {
-                gen.writeStringField(property.getKey(), property.getValue());
+                gen.writeStringField(property.getKey(), property.getValue().toString());
             }
             gen.writeEndObject();
         }
