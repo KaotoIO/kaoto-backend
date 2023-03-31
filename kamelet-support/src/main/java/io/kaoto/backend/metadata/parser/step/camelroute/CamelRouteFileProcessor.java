@@ -200,6 +200,21 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                     p.setPathOrder(2);
                 }
             }
+        } else if ("kamelet".equalsIgnoreCase(id)) {
+            for (Parameter p : parameters) {
+                if ("routeId".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("/");
+                    break;
+                }
+            }
+            //Convert to array when it is supported by the frontend
+            ObjectParameter parameter = new ObjectParameter();
+            parameter.setId("kaoto-parameters");
+            parameter.setTitle("Parameters");
+            parameter.setPath(false);
+            parameter.setDescription("Parameters of the kamelet.");
+            parameter.setNullable(true);
+            parameters.add(parameter);
         }
     }
 
