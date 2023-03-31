@@ -10,9 +10,7 @@ import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonDeserialize(
-        using = MarshalDeserializer.class
-)
+@JsonDeserialize(using = MarshalDeserializer.class)
 public class UnmarshalFlowStep extends MarshalFlowStep {
     @Serial
     private static final long serialVersionUID = 5841231681362382129L;
@@ -22,7 +20,9 @@ public class UnmarshalFlowStep extends MarshalFlowStep {
         Map<String, Object> step = new HashMap<>();
         Map<String, Object> properties = new HashMap<>();
         step.put("unmarshal", properties);
-        properties.put(getDataFormat().getFormat(), getDataFormat().getProperties());
+        if (getDataFormat() != null) {
+            properties.put(getDataFormat().getFormat(), getDataFormat().getProperties());
+        }
         return step;
     }
 
