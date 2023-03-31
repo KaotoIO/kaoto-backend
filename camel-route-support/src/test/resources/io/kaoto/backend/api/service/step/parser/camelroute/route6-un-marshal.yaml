@@ -13,3 +13,8 @@
     - unmarshal:
         xml:
           class: classInJava.class
+    - marshal:
+        avro:
+          allow-jms-type: true
+          number: 234
+          string: string whatever

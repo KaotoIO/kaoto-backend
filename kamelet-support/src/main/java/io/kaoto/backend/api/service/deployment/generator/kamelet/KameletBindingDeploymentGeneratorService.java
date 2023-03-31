@@ -136,7 +136,7 @@ public class KameletBindingDeploymentGeneratorService
             if (step.getParameters() != null) {
                 for (var p : step.getParameters()) {
                     if (p.getValue() != null && !p.isPath()) {
-                        kameletStep.getParameters().put(p.getId(), p.getValue().toString());
+                        kameletStep.getParameters().put(p.getId(), p.getValue());
                     }
                 }
             }

@@ -283,8 +283,8 @@ public class KameletStepParserService
             boolean found = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(key)) {
-                    if (!value.equals(p.getDefaultValue())) {
-                        p.setValue(value);
+                    if (!p.convertToType(value).equals(p.getDefaultValue())) {
+                        p.setValue(p.convertToType(value));
                         found = true;
                     }
                     break;
@@ -292,7 +292,6 @@ public class KameletStepParserService
             }
 
             if (extraPropertiesIn != null && !found) {
-                System.out.println(key + "=>" + value);
                 for (Parameter p : step.getParameters()) {
                     if (p.getId().equalsIgnoreCase(extraPropertiesIn)) {
                         if (p.getValue() == null) {
