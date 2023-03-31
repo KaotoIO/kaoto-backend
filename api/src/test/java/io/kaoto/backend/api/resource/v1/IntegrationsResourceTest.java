@@ -417,7 +417,7 @@ class IntegrationsResourceTest {
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
         var uri = (String) ((Map)((Map)parsed.get(0)).get("from")).get("uri");
-        assertEquals("kamelet:telegram-source:test", uri);
+        assertEquals("kamelet:telegram-source:test/", uri);
     }
 
     @Test

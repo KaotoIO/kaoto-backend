@@ -1,0 +1,7 @@
+- from:
+    id: from-d428
+    uri: kamelet:timer-source/routeId
+    parameters:
+      period: 2
+      message: hello
+    steps: []

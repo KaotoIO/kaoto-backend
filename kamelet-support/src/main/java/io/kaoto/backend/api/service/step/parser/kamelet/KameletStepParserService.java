@@ -263,28 +263,52 @@ public class KameletStepParserService
     }
 
     public void setValuesOnParameters(final Step step, final Map<String, Object> properties) {
-
         if (properties != null) {
             for (Map.Entry<String, Object> c : properties.entrySet()) {
                 if (c.getValue() != null) {
-                    setValueOnStepProperty(step, c.getKey(), c.getValue());
+                    if (step.getName().equalsIgnoreCase("kamelet")) {
+                        setValueOnStepProperty(step, c.getKey(), c.getValue(), "kaoto-parameters");
+                    } else {
+                        setValueOnStepProperty(step, c.getKey(), c.getValue());
+                    }
                 }
             }
         }
 
+    }
+
+    public void setValueOnStepProperty(final Step step, final String key, final Object value,
+                                       final String extraPropertiesIn) {
+        if (value != null) {
+            boolean found = false;
+            for (Parameter p : step.getParameters()) {
+                if (p.getId().equalsIgnoreCase(key)) {
+                    if (!value.equals(p.getDefaultValue())) {
+                        p.setValue(value);
+                        found = true;
+                    }
+                    break;
+                }
+            }
+
+            if (extraPropertiesIn != null && !found) {
+                System.out.println(key + "=>" + value);
+                for (Parameter p : step.getParameters()) {
+                    if (p.getId().equalsIgnoreCase(extraPropertiesIn)) {
+                        if (p.getValue() == null) {
+                            p.setValue(new LinkedHashMap<String, Object>());
+                        }
+                        ((Map<String, Object>) p.getValue()).put(key, value);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void setValueOnStepProperty(final Step step, final String key, final Object value) {
-        for (Parameter p : step.getParameters()) {
-            if (p.getId().equalsIgnoreCase(key) && value != null) {
-                if (!value.equals(p.getDefaultValue())) {
-                    p.setValue(value);
-                }
-                break;
-            }
-        }
+       setValueOnStepProperty(step, key, value, null);
     }
-
     public void processMetadata(final ParseResult<Step> result, final ObjectMeta metadata) {
         result.setMetadata(new LinkedHashMap<>());
 

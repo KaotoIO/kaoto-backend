@@ -82,6 +82,16 @@ public class UriFlowStep implements FlowStep {
         if (this.getParameters() != null && !this.getParameters().isEmpty()) {
             //remove step-id-kaoto, it is not a real property
             this.getParameters().remove("step-kaoto-id");
+
+            //add special dynamic parameters for kamelet component
+            for (var p : this.getParameters().entrySet()) {
+                if (p.getKey().equalsIgnoreCase("kaoto-parameters")) {
+                    Map<String, Object> map = (Map<String, Object>) p.getValue();
+                    this.getParameters().putAll(map);
+                    break;
+                }
+            }
+            this.getParameters().remove("kaoto-parameters");
             properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
         }
         if (this.getId() != null) {
