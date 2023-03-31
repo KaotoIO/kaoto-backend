@@ -140,6 +140,17 @@ class CamelRouteParseCatalogTest {
         );
     }
 
+    @Test
+    void checkDuration() {
+        String camelZip = "resource://camel-3.19.0.zip";
+        InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        assertTrue(catalog.store(camelParser.parse().join()));
+        Step consumer = catalog.searchByID("timer-consumer");
+        consumer.getParameters().stream().parallel()
+                .anyMatch(p -> p.getId().equalsIgnoreCase("delay") && p  instanceof StringParameter);
+    }
+
 
     @Test
 //    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)

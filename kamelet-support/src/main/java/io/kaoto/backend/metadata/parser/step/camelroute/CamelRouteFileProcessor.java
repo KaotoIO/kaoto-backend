@@ -128,8 +128,11 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                                     Function<ParameterEntry, Parameter>>
                                     typeToClassConversion = Map.of(
                                     "string", this::getStringParameter,
+                                    "duration", this::getStringParameter,
                                     "object", this::getObjectParameter,
                                     "integer", this::getNumberParameter,
+                                    "long", this::getNumberParameter,
+                                    "numeric", this::getNumberParameter,
                                     "boolean", this::getBooleanParameter
                             );
 
