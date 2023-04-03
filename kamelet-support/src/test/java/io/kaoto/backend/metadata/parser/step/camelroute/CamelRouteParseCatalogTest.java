@@ -3,6 +3,7 @@ package io.kaoto.backend.metadata.parser.step.camelroute;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.model.parameter.BooleanParameter;
+import io.kaoto.backend.model.parameter.NumberParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
@@ -29,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @QuarkusTest
 class CamelRouteParseCatalogTest {
 
+    public static final String CAMEL_ZIP = "resource://camel-3.19.0.zip";
+
     @Inject
     public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
         this.parseCatalog = parseCatalog;
@@ -38,11 +41,9 @@ class CamelRouteParseCatalogTest {
 
     @Test
     void shouldLoadFromJar() {
-        String camelGit = "https://github.com/apache/camel/archive/refs/tags/camel-3.18.2.zip";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
-        ParseCatalog<Step> camelParser =
-                parseCatalog.getParser(camelGit);
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(CAMEL_ZIP);
         List<Step> steps = camelParser.parse().join();
 
         assertTrue(catalog.store(steps));
@@ -81,10 +82,9 @@ class CamelRouteParseCatalogTest {
 
     @Test
     void loadFromLocalZip() {
-        String camelZip = "resource://camel-3.19.0.zip";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
-        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(CAMEL_ZIP);
         List<Step> steps = camelParser.parse().join();
 
         assertTrue(catalog.store(steps));
@@ -141,23 +141,24 @@ class CamelRouteParseCatalogTest {
     }
 
     @Test
-    void checkDuration() {
-        String camelZip = "resource://camel-3.19.0.zip";
+    void checkTypesOfAttributesInCamelComponents() {
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
-        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(CAMEL_ZIP);
         assertTrue(catalog.store(camelParser.parse().join()));
         Step consumer = catalog.searchByID("timer-consumer");
-        consumer.getParameters().stream().parallel()
-                .anyMatch(p -> p.getId().equalsIgnoreCase("delay") && p instanceof StringParameter);
+        assertTrue(consumer.getParameters().stream().parallel()
+                .anyMatch(p -> p.getId().equalsIgnoreCase("delay") && p instanceof StringParameter));
+        Step activemq = catalog.searchByID("activemq-action");
+        assertTrue(activemq.getParameters().stream().parallel()
+                .anyMatch(p -> p.getId().equalsIgnoreCase("deliveryDelay") && p instanceof NumberParameter));
     }
 
 
     @Test
 //    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
-        String camelZip = "resource://camel-3.19.0.zip";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
-        ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
+        ParseCatalog<Step> camelParser = parseCatalog.getParser(CAMEL_ZIP);
         List<Step> steps = camelParser.parse().join();
         assertTrue(catalog.store(steps));
     }
