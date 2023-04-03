@@ -63,7 +63,6 @@ import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
-import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
@@ -559,24 +558,9 @@ public class KamelPopulator {
     }
 
     private void assignParameters(final Step step, final MarshalFlowStep marshal) {
-        marshal.setDataFormat(new DataFormat());
-        marshal.getDataFormat().setProperties(new HashMap<>());
-
         for (Parameter p : step.getParameters()) {
-            if (null == p.getValue()) {
-                continue;
-            }
-
-            if ("dataformat".equalsIgnoreCase(p.getId())) {
-                marshal.getDataFormat().setFormat(p.getValue().toString());
-            } else if ("properties".equalsIgnoreCase(p.getId())) {
-                for (var param : ((ArrayParameter) p).getValue()) {
-                    if (param instanceof Object[] array) {
-                        marshal.getDataFormat().getProperties().put(array[0].toString(), array[1].toString());
-                    } else if (param instanceof List list) {
-                        marshal.getDataFormat().getProperties().put(list.get(0).toString(), list.get(1).toString());
-                    }
-                }
+            if (null != p.getValue() && "dataformat".equalsIgnoreCase(p.getId())) {
+                marshal.setDataFormat(new DataFormat(p.getValue()));
             }
         }
     }
