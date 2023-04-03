@@ -148,7 +148,7 @@ class CamelRouteParseCatalogTest {
         assertTrue(catalog.store(camelParser.parse().join()));
         Step consumer = catalog.searchByID("timer-consumer");
         consumer.getParameters().stream().parallel()
-                .anyMatch(p -> p.getId().equalsIgnoreCase("delay") && p  instanceof StringParameter);
+                .anyMatch(p -> p.getId().equalsIgnoreCase("delay") && p instanceof StringParameter);
     }
 
 
