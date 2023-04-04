@@ -2,10 +2,10 @@
   "resources": {
     "includes": [
       {
-        "pattern": "camel-connectors-3.20.2.zip$"
+        "pattern": "camel-connectors-3.20.3.zip$"
       },
       {
-        "pattern": "camel-kamelets-3.20.1.1.jar$"
+        "pattern": "camel-kamelets-3.20.2.jar$"
       },
       {
         "pattern": "view-definition.zip$"
