@@ -18,3 +18,10 @@
           allow-jms-type: true
           number: 234
           string: string whatever
+    - unmarshal:
+        xstream:
+          aliases:
+          - key: aKey
+            value: aValue
+          - key: anotherKey
+            value: anotherValue
