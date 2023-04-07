@@ -3,10 +3,13 @@ package io.kaoto.backend.model.deployment.kamelet.expression;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({Groovy.EXPRESSION_LABEL, Groovy.ID_LABEL, Groovy.RESULT_TYPE_LABEL, Groovy.TRIM_LABEL})
+@RegisterForReflection
 public class Groovy {
     public static final String EXPRESSION_LABEL = "expression";
     public static final String ID_LABEL = "id";

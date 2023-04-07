@@ -3,10 +3,13 @@ package io.kaoto.backend.model.deployment.kamelet.expression;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({JsonPath.EXPRESSION_LABEL, JsonPath.ID_LABEL, JsonPath.RESULT_TYPE_LABEL, JsonPath.TRIM_LABEL})
+@RegisterForReflection
 public class JsonPath {
     public static final String EXPRESSION_LABEL = "expression";
     public static final String ALLOW_EASY_PREDICATE_LABEL = "allow-easy-predicate";
