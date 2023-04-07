@@ -3,6 +3,8 @@ package io.kaoto.backend.model.deployment.kamelet.expression;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import java.util.Map;
         Javascript.ID_LABEL,
         Javascript.RESULT_TYPE_LABEL,
         Javascript.TRIM_LABEL})
+@RegisterForReflection
 public class Javascript {
     public static final String EXPRESSION_LABEL = "expression";
     public static final String ID_LABEL = "id";

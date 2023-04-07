@@ -7,10 +7,12 @@ import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresen
 import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.Map;
 
 @JsonPropertyOrder({"name", "constant", "simple", "jq", "jsonpath", "expression"})
+@RegisterForReflection
 public class Expression extends EIPStep {
     public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
     public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;

@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.model.parameter.Parameter;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonPropertyOrder({"name", "groovy", "javascript", "expression"})
+@RegisterForReflection
 public class Script extends EIPStep {
     public static final String GROOVY_LABEL = KameletRepresenter.GROOVY;
     public static final String JAVASCRIPT_LABEL = KameletRepresenter.JAVASCRIPT;

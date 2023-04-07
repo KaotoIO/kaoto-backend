@@ -3,10 +3,12 @@ package io.kaoto.backend.model.deployment.kamelet.expression;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@RegisterForReflection
 public class Tokenizer extends Expression {
     public static final String TOKEN_LABEL = "token";
     public static final String END_TOKEN_LABEL = "end-token-label";

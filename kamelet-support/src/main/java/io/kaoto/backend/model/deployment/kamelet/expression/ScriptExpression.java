@@ -7,10 +7,12 @@ import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresen
 import io.kaoto.backend.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.Map;
 
 @JsonPropertyOrder({"name", "groovy", "javascript", "expression"})
+@RegisterForReflection
 public class ScriptExpression extends EIPStep {
     public static final String GROOVY_LABEL = KameletRepresenter.GROOVY;
     public static final String JAVASCRIPT_LABEL = KameletRepresenter.JAVASCRIPT;
