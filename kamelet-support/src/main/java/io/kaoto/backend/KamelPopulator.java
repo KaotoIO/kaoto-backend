@@ -150,8 +150,8 @@ public class KamelPopulator {
         setSpecDefinition(kamelet, parameters);
         kamelet.getSpec().getTemplate().setBeans((List<Bean>) metadata.getOrDefault("beans", null));
         final String metadataDescription = metadata.getOrDefault("description","").toString();
-        final String specDesription = kamelet.getSpec().getDefinition().getDescription();
-        if (!metadataDescription.equals("") || specDesription == null) {
+        final String specDescription = kamelet.getSpec().getDefinition().getDescription();
+        if (!metadataDescription.equals("") || specDescription == null) {
             kamelet.getSpec().getDefinition().setDescription(metadataDescription);
         }
     }
