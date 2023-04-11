@@ -7,3 +7,5 @@
         constant: Hello Camel K from yaml
     - to:
         uri: log:info
+    - to:
+        uri: https://mycustom.url:42/with/things

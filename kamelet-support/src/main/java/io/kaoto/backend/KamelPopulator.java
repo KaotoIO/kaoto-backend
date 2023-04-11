@@ -70,6 +70,7 @@ import io.kaoto.backend.model.step.Step;
 import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -294,6 +295,20 @@ public class KamelPopulator {
             //The only important thing we need to take from them is the value, the rest should be as default
             HashMap<String, Object> values = new HashMap<>();
             s.getParameters().stream().forEach(parameter -> values.put(parameter.getId(), parameter.getValue()));
+
+            //these connectors ignore the camel component name when building the uri
+            //or duplicate it, depending on where you are looking from
+            var exceptions = Arrays.asList("http", "https");
+            if (exceptions.contains(s.getName())) {
+                s.getParameters().stream().forEach(parameter -> {
+                    if (parameter.isPath()
+                            && parameter.getPathOrder() == 0
+                            && String.valueOf(parameter.getValue()).startsWith(s.getName())) {
+                        values.put(parameter.getId(),
+                                String.valueOf(parameter.getValue()).substring(s.getName().length() + 1));
+                    }
+                });
+            }
 
             //Now we can work with the parameters list
             Step step = catalog.getReadOnlyCatalog().searchByID(s.getId());

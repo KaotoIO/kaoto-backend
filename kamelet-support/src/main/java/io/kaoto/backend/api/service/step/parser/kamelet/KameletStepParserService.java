@@ -194,6 +194,10 @@ public class KameletStepParserService
     public void setValuesOnParameters(final Step step, final String uri) {
 
         String path = uri.substring(uri.indexOf(':') + 1);
+        if (step.getName().equalsIgnoreCase("http")
+                || step.getName().equalsIgnoreCase("https")) {
+            path = step.getName() + ":" + path;
+        }
         if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }

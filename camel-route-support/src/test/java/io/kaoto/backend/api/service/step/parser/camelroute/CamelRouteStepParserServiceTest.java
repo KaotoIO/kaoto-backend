@@ -59,6 +59,11 @@ class CamelRouteStepParserServiceTest {
         assertTrue(steps.getMetadata() == null || steps.getMetadata().isEmpty());
         assertFalse(steps.getSteps().isEmpty());
 
+        var https = steps.getSteps().get(3);
+        assertTrue(https.getParameters().stream().anyMatch(
+                p -> "httpUri".equalsIgnoreCase(p.getId())
+                        && "https://mycustom.url:42/with/things".equals(p.getValue())));
+
         var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
                 steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
