@@ -197,8 +197,7 @@ public class KameletStepParserService
         if (step.getName().equalsIgnoreCase("http")
                 || step.getName().equalsIgnoreCase("https")) {
             path = step.getName() + ":" + path;
-        }
-        if (path.contains("?")) {
+        } else if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }
         var pathParameters = new LinkedList<Parameter>();
