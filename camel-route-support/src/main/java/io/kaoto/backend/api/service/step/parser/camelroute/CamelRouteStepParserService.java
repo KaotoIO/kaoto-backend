@@ -40,19 +40,29 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
 
     @Override
     public ParseResult<Step> deepParse(final String input) {
+        // Right now we discard any flow that is not the first
+        return getParsedFlows(input).get(0);
+    }
+
+    @Override
+    public List<ParseResult<Step>> getParsedFlows(final String input) {
         if (!appliesTo(input)) {
             throw new IllegalArgumentException(
                     "Wrong format provided. This is not parseable by us.");
         }
 
-        ParseResult<Step> res = new ParseResult<>();
+        List<ParseResult<Step>> resultList = new ArrayList<>();
 
-        List<Step> steps = new ArrayList<>();
         try {
             CamelRoute route = getCamelRoute(input);
             var flows = route.getFlows();
+
             for (var flow : flows) {
                 var from = flow.getFrom();
+
+                ParseResult<Step> res = new ParseResult<>();
+                List<Step> steps = new ArrayList<>();
+
                 steps.add(ksps.processStep(from, true, false));
                 if (from.getSteps() != null) {
                     int i = 0;
@@ -61,20 +71,16 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
                     }
                 }
 
-                //Right now we discard any flow that is not the first
-                if (!steps.isEmpty()) {
-                    break;
-                }
+                res.setSteps(steps.stream().filter(Objects::nonNull).toList());
+                resultList.add(res);
             }
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Error trying to parse.", e);
         }
 
-        res.setSteps(steps.stream().filter(Objects::nonNull).toList());
-        return res;
+        return resultList;
     }
-
 
     @Override
     public boolean appliesTo(final String input) {
