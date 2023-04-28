@@ -41,6 +41,16 @@ public interface StepParserService<T extends Step> {
     ParseResult<T> deepParse(String yaml);
 
     /*
+     * 🐱method getParsedFlows: List<ParseResult>
+     * 🐱param yaml: String
+     *
+     * Based on the YAML provided, offer a list of flows defined on it and
+     * the metadata associated to the orchestration.
+     */
+    @WithSpan
+    List<ParseResult<T>> getParsedFlows(String yaml);
+
+    /*
      * 🐱method appliesTo: boolean
      * 🐱param yaml: String
      *

@@ -46,7 +46,6 @@ public class IntegrationStepParserService
         }
 
         ParseResult<Step> res = new ParseResult<>();
-
         List<Step> steps = new ArrayList<>();
         try {
             ObjectMapper yamlMapper =
@@ -70,7 +69,6 @@ public class IntegrationStepParserService
                 }
             }
 
-
         } catch (Exception e) {
             throw new IllegalArgumentException("Error trying to parse.", e);
         }
@@ -79,6 +77,11 @@ public class IntegrationStepParserService
                 .filter(Objects::nonNull)
                 .toList());
         return res;
+    }
+
+    @Override
+    public List<ParseResult<Step>> getParsedFlows(String yaml) {
+        return null;
     }
 
 
