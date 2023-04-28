@@ -17,6 +17,9 @@ bin/
 *.iml
 *.iws
 
+# VSCode
+.vscode
+
 # Compiled class file
 *.class
 

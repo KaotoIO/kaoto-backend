@@ -100,6 +100,11 @@ public class KameletStepParserService
         return res;
     }
 
+    @Override
+    public List<ParseResult<Step>> getParsedFlows(String yaml) {
+        return null;
+    }
+
     private void processParameters(final ParseResult<Step> res,
                                    final KameletSpec spec) {
         res.setParameters(new ArrayList<>());

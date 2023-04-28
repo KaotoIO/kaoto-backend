@@ -88,6 +88,11 @@ public class KameletBindingStepParserService
         return res;
     }
 
+    @Override
+    public List<ParseResult<Step>> getParsedFlows(String yaml) {
+        return null;
+    }
+
     private void processSpec(final List<Step> steps,
                              final KameletBindingSpec spec) {
         steps.add(processStep(spec.getSource(), Step.Type.START));
