@@ -38,8 +38,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-public class KameletBindingDeploymentGeneratorService
-        implements DeploymentGeneratorService {
+public class KameletBindingDeploymentGeneratorService implements DeploymentGeneratorService {
 
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
@@ -229,6 +228,12 @@ public class KameletBindingDeploymentGeneratorService
         return Arrays.asList(new Class[]{KameletBinding.class});
     }
 
+
+    @Override
+    public boolean isDeployable() {
+        return !supportedCustomResources().isEmpty();
+    }
+
     @Override
     public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
         return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
@@ -300,7 +305,7 @@ public class KameletBindingDeploymentGeneratorService
     }
 
     @Override
-    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+    public Stream<Step> filterCatalog(Step previousStep, Step followingStep, Stream<Step> steps) {
         return steps;
     }
 }

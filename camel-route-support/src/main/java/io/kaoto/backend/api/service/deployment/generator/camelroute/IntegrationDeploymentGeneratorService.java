@@ -153,6 +153,11 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     }
 
     @Override
+    public boolean isDeployable() {
+        return !supportedCustomResources().isEmpty();
+    }
+
+    @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
         List<Deployment> res = new LinkedList<>();
         try {
@@ -203,7 +208,7 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     }
 
     @Override
-    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+    public Stream<Step> filterCatalog(Step previousStep, Step followingStep, Stream<Step> steps) {
         return steps;
     }
 

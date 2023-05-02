@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import io.kaoto.backend.model.deployment.rest.Rest;
 
 import java.io.Serializable;
 
@@ -23,10 +24,8 @@ import java.io.Serializable;
  *         - to: kamelet:sink
  * ```
  */
-@JsonPropertyOrder({"from"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonPropertyOrder({"from", "rest"})
+@JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Flow implements Serializable {
     private static final long serialVersionUID = -4601560033032557024L;
@@ -34,11 +33,22 @@ public class Flow implements Serializable {
     @JsonProperty("from")
     private From from;
 
+    @JsonProperty("rest")
+    private Rest rest;
+
     public From getFrom() {
         return from;
     }
 
     public void setFrom(final From from) {
         this.from = from;
+    }
+
+    public Rest getRest() {
+        return rest;
+    }
+
+    public void setRest(Rest rest) {
+        this.rest = rest;
     }
 }

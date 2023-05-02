@@ -62,6 +62,18 @@ public class Step extends Metadata {
         setParameters(parameters);
     }
 
+    public Step(final String identifier, final String connector, final String icon,
+                final LinkedList<Parameter> parameters,
+                final String kind, final Step.Type type) {
+        this();
+        setId(identifier);
+        setName(connector);
+        setIcon(icon);
+        setParameters(parameters);
+        setKind(kind);
+        setType(type.name());
+    }
+
     /*
      * 🐱property description: String
      *

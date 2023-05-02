@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.metadata.parser.step.camelroute.CamelRestDSLParseCatalog;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -37,8 +38,11 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String EIP = "EIP";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
+    public static final String CAMEL_REST_DSL = CamelRestDSLParseCatalog.CAMEL_REST_DSL;
+    public static final String CAMEL_REST_VERB =  CamelRestDSLParseCatalog.CAMEL_REST_VERB;
+    public static final String CAMEL_REST_ENDPOINT =  CamelRestDSLParseCatalog.CAMEL_REST_ENDPOINT;
     private static final List<String> KINDS = Arrays.asList(
-            CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
+            CAMEL_CONNECTOR, EIP, EIP_BRANCHES, CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT);
 
     private Logger log = Logger.getLogger(CamelRouteDeploymentGeneratorService.class);
 
@@ -121,6 +125,11 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     }
 
     @Override
+    public boolean isDeployable() {
+        return false;
+    }
+
+    @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
         //We are not handling deployments here
         return Collections.emptyList();
@@ -132,8 +141,28 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
         return null;
     }
 
+
     @Override
-    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+    public Stream<Step> filterCatalog(Step previousStep, Step followingStep, Stream<Step> steps) {
+
+        if (previousStep != null) {
+            switch (previousStep.getKind().toUpperCase()) {
+                case CAMEL_REST_DSL:
+                    //After the "rest" element, comes a http verb
+                    steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_VERB));
+                    break;
+                case CAMEL_REST_VERB:
+                    //After a verb comes the configuration that consumes
+                    steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT));
+                    break;
+                default:
+                    //We are at the end of the integration or not on REST, looking for a  normal camel flow
+                    steps = steps.filter(s -> !s.getKind().equalsIgnoreCase(CAMEL_REST_VERB)
+                            && !s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT)
+                            && !s.getKind().equalsIgnoreCase(CAMEL_REST_DSL));
+                    break;
+            }
+        }
         return steps;
     }
 

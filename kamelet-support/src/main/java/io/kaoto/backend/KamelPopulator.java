@@ -63,6 +63,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.UriFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.ValidateFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
+import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
@@ -268,23 +269,28 @@ public class KamelPopulator {
     }
 
     public From getFlow(final List<Step> steps) {
-        final var from = new From();
-        from.setSteps(new ArrayList<>());
+        var from = new From();
 
-        for (int i = 0; i < steps.size(); i++) {
-            Step s = steps.get(i);
-            if (i==0 && "START".equals(s.getType())) {
-                var uri = new StringBuilder(s.getName());
-                HashMap<String, Object> params = buildUri(s, uri);
-                from.setUri(uri.toString());
-                from.setParameters(params);
-                from.setId(s.getStepId());
-            } else {
-                final var flowStep = processStep(s, true);
-                from.getSteps().add(flowStep);
+        if (!steps.isEmpty()
+                && "CAMEL-REST-DSL".equalsIgnoreCase(steps.get(0).getKind())) {
+            from = new Rest(steps.get(0), catalog);
+        } else {
+            from.setSteps(new ArrayList<>());
+
+            for (int i = 0; i < steps.size(); i++) {
+                Step s = steps.get(i);
+                if (i == 0 && "START".equals(s.getType())) {
+                    var uri = new StringBuilder(s.getName());
+                    HashMap<String, Object> params = buildUri(s, uri);
+                    from.setUri(uri.toString());
+                    from.setParameters(params);
+                    from.setId(s.getStepId());
+                } else {
+                    final var flowStep = processStep(s, true);
+                    from.getSteps().add(flowStep);
+                }
             }
         }
-
         return from;
     }
 
@@ -585,7 +591,7 @@ public class KamelPopulator {
         }
     }
 
-    private FlowStep getCamelConnector(final Step step, final boolean to) {
+    public FlowStep getCamelConnector(final Step step, final boolean to) {
         var uri = new StringBuilder(step.getName());
         var params = buildUri(step, uri);
         FlowStep flowStep = new UriFlowStep(uri.toString(), params, null);

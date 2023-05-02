@@ -10,6 +10,7 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
@@ -59,15 +60,22 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
 
             for (var flow : flows) {
                 var from = flow.getFrom();
+                if (from == null) {
+                    from = flow.getRest();
+                }
 
                 ParseResult<Step> res = new ParseResult<>();
                 List<Step> steps = new ArrayList<>();
 
-                steps.add(ksps.processStep(from, true, false));
-                if (from.getSteps() != null) {
-                    int i = 0;
-                    for (FlowStep step : from.getSteps()) {
-                        steps.add(ksps.processStep(step, false, i++ == from.getSteps().size() - 1));
+                if (from instanceof Rest rest) {
+                    steps.add(rest.getStep(ksps, false, true));
+                } else if (from.getSteps() != null)  {
+                    steps.add(ksps.processStep(from, true, false));
+                    if (from.getSteps() != null) {
+                        int i = 0;
+                        for (FlowStep step : from.getSteps()) {
+                            steps.add(ksps.processStep(step, false, i++ == from.getSteps().size() - 1));
+                        }
                     }
                 }
 

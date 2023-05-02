@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.camelroute;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.camelroute.IntegrationSpec;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
+import io.kaoto.backend.model.deployment.rest.Rest;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -37,7 +38,11 @@ public class IntegrationRepresenter extends KameletRepresenter {
                     public Node representData(final Object data) {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         Flow flow = (Flow) data;
-                        properties.put("from", flow.getFrom());
+                        if (flow.getFrom() instanceof Rest) {
+                            properties.put("rest", flow.getFrom());
+                        } else {
+                            properties.put("from", flow.getFrom());
+                        }
                         return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);
