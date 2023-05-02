@@ -50,22 +50,14 @@ public class LanguageService {
                     .equals("")?"":String.format("/v1/capabilities/%s/schema",parser.identifier());
 
             addNewLanguage(res, parser.identifier(), parser.description());
-            res.get(parser.identifier())
-                    .put("step-kinds", parser.getKinds().toString());
-            res.get(parser.identifier())
-                    .put("output", "true");
-            res.get(parser.identifier())
-                    .put("deployable",
-                            Boolean.toString(
-                                    !parser.supportedCustomResources()
-                                            .isEmpty()));
-            res.get(parser.identifier())
-                    .put("validationSchema",validationSchemaURI);
+            res.get(parser.identifier()).put("step-kinds", parser.getKinds().toString());
+            res.get(parser.identifier()).put("output", "true");
+            res.get(parser.identifier()).put("deployable", Boolean.toString(parser.isDeployable()));
+            res.get(parser.identifier()).put("validationSchema",validationSchemaURI);
         }
 
         for (StepParserService parser : getStepParserServices()) {
-            addNewLanguage(res, parser.identifier(),
-                    parser.description());
+            addNewLanguage(res, parser.identifier(), parser.description());
             res.get(parser.identifier()).put("input", "true");
         }
 

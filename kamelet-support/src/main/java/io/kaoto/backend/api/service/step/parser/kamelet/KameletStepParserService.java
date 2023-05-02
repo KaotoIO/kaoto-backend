@@ -40,8 +40,7 @@ import java.util.regex.Pattern;
  * 🐱miniclass KameletStepParserService (StepParserService)
  */
 @ApplicationScoped
-public class KameletStepParserService
-        implements StepParserService<Step> {
+public class KameletStepParserService implements StepParserService<Step> {
 
     public static final String SIMPLE = "simple";
     public static final String JQ = "jq";
@@ -49,11 +48,11 @@ public class KameletStepParserService
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
     public static final Pattern PATTERN = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
+
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
     public static final String EXPRESSION = "expression";
-    private final Logger log =
-            Logger.getLogger(KameletStepParserService.class);
+    private final Logger log = Logger.getLogger(KameletStepParserService.class);
 
     private StepCatalog catalog;
 
@@ -69,6 +68,10 @@ public class KameletStepParserService
     @Inject
     public void setCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
+    }
+
+    public StepCatalog getCatalog() {
+        return catalog;
     }
 
     @Override

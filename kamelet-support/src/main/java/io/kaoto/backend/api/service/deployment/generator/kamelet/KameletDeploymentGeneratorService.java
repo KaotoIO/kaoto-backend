@@ -97,9 +97,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
     public String getYAML(final CustomResource kamelet,
                           final Representer representer) {
-        Yaml yaml = new Yaml(
-                new Constructor(Kamelet.class),
-                representer);
+        Yaml yaml = new Yaml(new Constructor(Kamelet.class), representer);
         return yaml.dumpAsMap(kamelet);
     }
 
@@ -108,9 +106,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
         return steps.stream().filter(Objects::nonNull)
                 .allMatch(
                         s -> getKinds().stream()
-                        .anyMatch(
-                                Predicate.isEqual(
-                                        s.getKind().toUpperCase())));
+                        .anyMatch(Predicate.isEqual(s.getKind().toUpperCase())));
     }
 
     @Override
@@ -141,14 +137,17 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
 
     @Override
+    public boolean isDeployable() {
+        return true;
+    }
+
+    @Override
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
                 ObjectMapper yamlMapper =
                         new ObjectMapper(new YAMLFactory())
-                                .configure(
-                                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                        false);
+                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
                 return yamlMapper.readValue(input, Kamelet.class);
             } catch (Exception e) {
@@ -168,8 +167,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 res.add(new Deployment(customResource, getStatus(customResource)));
 
                 if (Span.current() != null) {
-                    Span.current().setAttribute("Kamelet[" + res.size() + "]",
-                            res.get(res.size() - 1).toString());
+                    Span.current().setAttribute("Kamelet[" + res.size() + "]", res.get(res.size() - 1).toString());
                 }
             }
         } catch (Exception e) {
@@ -186,7 +184,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
 
     @Override
-    public Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps) {
+    public Stream<Step> filterCatalog(Step previousStep, Step followingStep, Stream<Step> steps) {
         return steps;
     }
 

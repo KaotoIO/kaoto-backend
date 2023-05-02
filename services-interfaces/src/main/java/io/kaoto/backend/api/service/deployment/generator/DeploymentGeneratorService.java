@@ -116,6 +116,14 @@ public interface DeploymentGeneratorService {
      */
     List<Class<? extends CustomResource>> supportedCustomResources();
 
+    /*
+     * 🐱method isDeployable: boolean
+     *
+     * Based on the environment, the capabilities, or any other important feature.
+     * But, is this DSL deployable using the `Deploy` button in Kaoto?
+     *
+     */
+    boolean isDeployable();
 
     /*
      * 🐱method getKinds: String[]
@@ -154,7 +162,7 @@ public interface DeploymentGeneratorService {
      *  potentially restricting the response.
      */
     @WithSpan
-    Stream<Step> filterCatalog(String previousStep, String followingStep, Stream<Step> steps);
+    Stream<Step> filterCatalog(Step previousStep, Step followingStep, Stream<Step> steps);
 
 
     enum Status {

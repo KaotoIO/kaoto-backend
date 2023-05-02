@@ -336,7 +336,7 @@ class IntegrationsResourceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
-            "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml"})
+            "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml", "Camel Route#rest-dsl-multi.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");

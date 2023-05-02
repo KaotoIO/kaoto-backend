@@ -148,7 +148,8 @@ public class StepResource {
 
             //And give context based on previous and following step, depending on the DSL
             for (var dgs : dgsStream) {
-                steps = dgs.filterCatalog(previousStep, followingStep, steps);
+                steps = dgs.filterCatalog(stepService.stepById(previousStep),
+                        stepService.stepById(followingStep), steps);
             }
         }
 
