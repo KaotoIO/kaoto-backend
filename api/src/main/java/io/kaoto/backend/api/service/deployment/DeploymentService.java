@@ -117,7 +117,7 @@ public class DeploymentService {
      * Based on the provided steps, return a valid yaml string to deploy
      */
     @WithSpan
-    public String crds(final List<Integration> i, final String dsl) {
+    public String crds(final List<Integration> i, final Map<String, Object> metadata, final String dsl) {
         List<StepParserService.ParseResult<Step>> integrations = new LinkedList<>();
 
         for (Integration integration : i) {
@@ -125,6 +125,12 @@ public class DeploymentService {
             parseResult.setMetadata(integration.getMetadata());
             parseResult.setSteps(integration.getSteps());
             parseResult.setParameters(integration.getParameters());
+            integrations.add(parseResult);
+        }
+
+        if (metadata != null && !metadata.isEmpty()) {
+            var parseResult = new StepParserService.ParseResult<Step>();
+            parseResult.setMetadata(metadata);
             integrations.add(parseResult);
         }
 

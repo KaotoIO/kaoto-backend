@@ -82,7 +82,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class), new CamelRouteRepresenter());
-        return yaml.dumpAs(new CamelRoute(steps, catalog), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
+        return yaml.dumpAs(new CamelRoute(steps, metadata, catalog), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
     }
 
     @Override

@@ -142,4 +142,13 @@ class CamelRouteStepParserServiceTest {
                 steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(routec);
     }
+
+    @Test
+    void beans() throws Exception {
+        var route = new String(this.getClass().getResourceAsStream("route-with-beans.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
+        var steps = camelRouteStepParserService.getParsedFlows(route);
+        var yaml = camelRouteDeploymentGeneratorService.parse(steps);
+        assertThat(yaml).isEqualToNormalizingNewlines(route);
+    }
 }
