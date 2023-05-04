@@ -1,8 +1,12 @@
 package io.kaoto.backend.model.deployment.camelroute;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.camelroute.CamelRouteDeserializer;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.rest.HttpVerb;
 import io.kaoto.backend.model.deployment.rest.Rest;
@@ -11,22 +15,35 @@ import org.jboss.logging.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 🐱class CamelRoute
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(using = CamelRouteDeserializer.class)
 public class CamelRoute {
 
     protected static final Logger log = Logger.getLogger(CamelRoute.class);
     private List<Flow> flows;
 
+    @JsonProperty("beans")
+    private List<Bean> beans;
+
     public CamelRoute() {
         super();
     }
 
-    public CamelRoute(final List<Step> steps, final StepCatalog catalog) {
+    public CamelRoute(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
+        processFlows(steps, catalog);
+        processBeans(metadata);
+    }
+
+    private void processFlows(final List<Step> steps, final StepCatalog catalog) {
+        if (steps == null) {
+            return;
+        }
         final var flow = new KamelPopulator(catalog).getFlow(steps);
         setFlows(new LinkedList<>());
         if (flow instanceof Rest) {
@@ -63,6 +80,12 @@ public class CamelRoute {
         }
     }
 
+    private void processBeans(final Map<String, Object> metadata) {
+        if (metadata != null && metadata.containsKey("beans") && metadata.get("beans") instanceof List) {
+            setBeans((List<Bean>) metadata.get("beans"));
+        }
+    }
+
     public List<Flow> getFlows() {
         return flows;
     }
@@ -71,5 +94,8 @@ public class CamelRoute {
         this.flows = flows;
     }
 
+    public List<Bean> getBeans() { return beans; }
+
+    public void setBeans(List<Bean> beans) { this.beans = beans; }
 
 }

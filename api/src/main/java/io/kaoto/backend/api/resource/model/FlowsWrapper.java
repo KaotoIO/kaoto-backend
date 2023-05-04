@@ -10,14 +10,15 @@ import java.util.Map;
  * Used by the API to pass flows back and forth.
  *
  */
-public record FlowsWrapper(List<Integration> flows, Map<String, Object> properties) {
+public record FlowsWrapper(List<Integration> flows, Map<String, Object> metadata, Map<String, Object> properties) {
 
     public FlowsWrapper(List<Integration> flows) {
-        this(flows, null);
+        this(flows, null, null);
     }
 
-    public FlowsWrapper(List<Integration> flows, Map<String, Object> properties) {
+    public FlowsWrapper(List<Integration> flows, Map<String, Object> metadata, Map<String, Object> properties) {
         this.flows = flows;
+        this.metadata = metadata;
         this.properties = properties;
     }
 }

@@ -19,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class IntegrationsResource {
             final @RequestBody FlowsWrapper request,
             final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
-        return deploymentService.crds(request.flows(), dsl);
+        return deploymentService.crds(request.flows(), request.metadata(), dsl);
     }
 
     /*
@@ -91,6 +92,8 @@ public class IntegrationsResource {
             final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
         List<Integration> integrations = new ArrayList<>();
+        Map<String, Object> metadata = new LinkedHashMap<>();
+        FlowsWrapper answer = new FlowsWrapper(integrations, metadata, Map.of());
 
         boolean found = false;
         if (dsl != null) {
@@ -98,7 +101,7 @@ public class IntegrationsResource {
                 try {
                     if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
                         var parsed = stepParserService.getParsedFlows(crd);
-                        decorateIntegration(dsl, integrations, parsed);
+                        decorateIntegration(dsl, answer, parsed);
                         found = true;
                         break;
                     }
@@ -113,7 +116,7 @@ public class IntegrationsResource {
                 try {
                     if (stepParserService.appliesTo(crd)) {
                         var parsed = stepParserService.getParsedFlows(crd);
-                        decorateIntegration(stepParserService.identifier(), integrations, parsed);
+                        decorateIntegration(stepParserService.identifier(), answer, parsed);
                         LOG.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
                                 + " not a " + dsl);
                         break;
@@ -124,19 +127,25 @@ public class IntegrationsResource {
             }
         }
 
-        return new FlowsWrapper(integrations, Map.of());
+        return answer;
     }
 
-    private void decorateIntegration(String dsl, List<Integration> integrations,
+    private void decorateIntegration(String dsl, FlowsWrapper flowsWrapper,
                                      List<StepParserService.ParseResult<Step>> parsed) {
         for (var result : parsed) {
+            if (result.getSteps() == null) {
+                if (result.getMetadata() != null) {
+                    flowsWrapper.metadata().putAll(result.getMetadata());
+                }
+                continue;
+            }
             Integration integration = new Integration();
             integration.setSteps(result.getSteps());
             integration.setMetadata(result.getMetadata());
             integration.setParameters(result.getParameters());
             integration.setDsl(dsl);
 
-            integrations.add(integration);
+            flowsWrapper.flows().add(integration);
         }
     }
 

@@ -1,0 +1,26 @@
+- from:
+    uri: 'netty-http:http://0.0.0.0:8080:'
+    steps:
+    - to:
+        uri: sql:select * from actor
+        parameters:
+          dataSource:
+            ref: dataSource
+    - marshal:
+        json:
+          library: Jackson
+- beans:
+  - name: dataSource
+    type: org.postgresql.ds.PGSimpleDataSource
+    properties:
+      serverName: 127.0.0.1
+      portNumber: '5432'
+      databaseName: dvdrental
+      user: user
+      password: password
+  - name: someBean
+    type: io.kaoto.test.backend.api.service.step.parser.camelroute.SomeBean
+    properties:
+      someProperty: someValue
+      someObjectProperty:
+        someObjectPropertyProperty: someObjectPropertyValue
