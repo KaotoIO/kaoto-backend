@@ -2,6 +2,7 @@ package io.kaoto.backend.api.service.deployment;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.extension.annotations.WithSpan;
 import org.jboss.logging.Logger;
@@ -101,6 +102,52 @@ public class DeploymentService {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected"
                                 + " error. ",
                         e);
+            }
+        }
+
+        return null;
+    }
+
+
+    /*
+     * 🐱method crds: String
+     * 🐱param i: List<Integration>
+     * 🐱param dsl: String
+     *
+     * Based on the provided steps, return a valid yaml string to deploy
+     */
+    @WithSpan
+    public String crds(final List<Integration> i, final String dsl) {
+        List<StepParserService.ParseResult<Step>> integrations = new LinkedList<>();
+
+        for (Integration integration : i) {
+            var parseResult = new StepParserService.ParseResult<Step>();
+            parseResult.setMetadata(integration.getMetadata());
+            parseResult.setSteps(integration.getSteps());
+            parseResult.setParameters(integration.getParameters());
+            integrations.add(parseResult);
+        }
+
+        if (dsl != null) {
+            for (DeploymentGeneratorService parser : getParsers()) {
+                try {
+                    if (parser.identifier().equalsIgnoreCase(dsl)) {
+                        return parser.parse(integrations);
+                    }
+                } catch (Exception e) {
+                    log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                    break;
+                }
+            }
+        }
+
+        for (DeploymentGeneratorService parser : getParsers()) {
+            try {
+                if (parser.appliesToFlows(integrations)) {
+                    return parser.parse(integrations);
+                }
+            } catch (Exception e) {
+                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 

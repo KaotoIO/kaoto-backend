@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -55,8 +56,20 @@ public interface DeploymentGeneratorService {
      * If applies, the name will be the name used on the integration deployed.
      */
     @WithSpan
-    String parse(List<Step> steps, Map<String, Object> metadata,
-                 List<Parameter> parameters);
+    @Deprecated
+    String parse(List<Step> steps, Map<String, Object> metadata, List<Parameter> parameters);
+
+
+    /*
+     * 🐱method parse: String
+     * 🐱param flows: ParseResult
+     *
+     * Based on the list of flows, returns the source code.
+     * If applies, the name will be the name used on the integration deployed.
+     *
+     */
+    @WithSpan
+    String parse(List<StepParserService.ParseResult<Step>> flows);
 
     /*
      * 🐱method parse: CustomResource
@@ -74,7 +87,17 @@ public interface DeploymentGeneratorService {
      * Check if the parser applies to the steps
      */
     @WithSpan
+    @Deprecated
     boolean appliesTo(List<Step> steps);
+
+    /*
+     * 🐱method appliesTo: boolean
+     * 🐱param flows: ParseResult
+     *
+     * Check if the parser applies to the flows
+     */
+    @WithSpan
+    boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows);
 
     /*
      * 🐱method getStatus: CustomResource

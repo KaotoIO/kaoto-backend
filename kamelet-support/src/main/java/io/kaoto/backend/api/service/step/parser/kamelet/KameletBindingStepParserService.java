@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -89,8 +90,13 @@ public class KameletBindingStepParserService
     }
 
     @Override
-    public List<ParseResult<Step>> getParsedFlows(String yaml) {
-        return null;
+    public List<ParseResult<Step>> getParsedFlows(String input) {
+        var res = new LinkedList<ParseResult<Step>>();
+        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
+        for (var crd : splitCRDs) {
+            res.add(deepParse(crd));
+        }
+        return res;
     }
 
     private void processSpec(final List<Step> steps,

@@ -1,0 +1,48 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: twitter-search-source-binding
+spec:
+  source:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: twitter-search-source
+      kind: Kamelet
+    properties:
+      keywords: Apache Camel
+      apiKey: your own
+      apiKeySecret: your own
+      accessToken: your own
+      accessTokenSecret: your own
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      name: sink-broker
+      kind: Broker
+    properties:
+      type: sometype
+
+---
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: twitter-search-source-binding
+spec:
+  source:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: twitter-search-source
+      kind: Kamelet
+    properties:
+      keywords: Apache Camel
+      apiKey: your own
+      apiKeySecret: your own
+      accessToken: your own
+      accessTokenSecret: your own
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      name: sink-broker
+      kind: Broker
+    properties:
+      type: sometype

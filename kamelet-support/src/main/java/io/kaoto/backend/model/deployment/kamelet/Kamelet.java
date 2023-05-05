@@ -48,7 +48,9 @@ public final class Kamelet
                    final List<Parameter> parameters,
                    final StepCatalog catalog) {
         this();
-        new KamelPopulator(catalog).populateKamelet(this, metadata, steps, parameters);
+        new KamelPopulator(catalog).populateKamelet(this, metadata != null ? metadata : Map.of(),
+                steps != null ? steps : List.of(),
+                parameters != null ? parameters : List.of());
     }
 
 

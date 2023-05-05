@@ -2,10 +2,9 @@ package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.language.LanguageService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.cache.CacheResult;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -59,23 +58,14 @@ public class IntegrationsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/yaml")
     @Path("/")
+    @CacheResult(cacheName = "api")
     @Operation(summary = "Get CRDs",
             description = "Returns the associated custom resource definitions. This is an idempotent operation.")
     public String crds(
             final @RequestBody List<Integration> request,
             final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
-
-        /* TODO: Have a better handling of multiple routes */
-
-        StringBuilder response = new StringBuilder();
-
-        for (Integration integration : request) {
-            response.append(deploymentService.crd(integration, dsl));
-            response.append(System.lineSeparator());
-        }
-
-        return response.toString();
+        return deploymentService.crds(request, dsl);
     }
 
     /*
@@ -90,6 +80,7 @@ public class IntegrationsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes("text/yaml")
     @Path("/")
+    @CacheResult(cacheName = "api")
     @Operation(summary = "Get Integration Object",
             description = "Given the associated custom resource definition, returns the JSON object."
                     + " This is an idempotent operation.")
@@ -101,18 +92,18 @@ public class IntegrationsResource {
         List<Integration> integrations = new ArrayList<>();
 
         boolean found = false;
-        for (StepParserService<Step> stepParserService : stepParserServices) {
-            try {
-                if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
-                    var parsed = stepParserService.getParsedFlows(crd);
-
-                    decorateIntegration(dsl, integrations, parsed);
-
-                    found = true;
-                    break;
+        if (dsl != null) {
+            for (StepParserService<Step> stepParserService : stepParserServices) {
+                try {
+                    if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
+                        var parsed = stepParserService.getParsedFlows(crd);
+                        decorateIntegration(dsl, integrations, parsed);
+                        found = true;
+                        break;
+                    }
+                } catch (Exception e) {
+                    LOG.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
                 }
-            } catch (Exception e) {
-                LOG.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
             }
         }
 
@@ -121,16 +112,13 @@ public class IntegrationsResource {
                 try {
                     if (stepParserService.appliesTo(crd)) {
                         var parsed = stepParserService.getParsedFlows(crd);
-
                         decorateIntegration(stepParserService.identifier(), integrations, parsed);
-
                         LOG.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
                                 + " not a " + dsl);
                         break;
                     }
                 } catch (Exception e) {
-                    LOG.warn("Parser " + stepParserService.getClass()
-                            + "threw an unexpected error.", e);
+                    LOG.trace("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
                 }
             }
         }
@@ -138,11 +126,8 @@ public class IntegrationsResource {
         return integrations;
     }
 
-    private static void decorateIntegration(
-            String dsl,
-            List<Integration> integrations,
-            List<StepParserService.ParseResult<Step>> parsed
-    ) {
+    private void decorateIntegration(String dsl, List<Integration> integrations,
+                                     List<StepParserService.ParseResult<Step>> parsed) {
         for (var result : parsed) {
             Integration integration = new Integration();
             integration.setSteps(result.getSteps());

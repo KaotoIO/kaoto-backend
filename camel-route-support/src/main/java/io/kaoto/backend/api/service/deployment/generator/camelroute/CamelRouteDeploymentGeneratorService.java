@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -81,6 +82,14 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     }
 
     @Override
+    public String parse(List<StepParserService.ParseResult<Step>> flows) {
+        StringBuilder sb = new StringBuilder();
+        flows.stream().forEachOrdered(stepParseResult -> sb.append(parse(stepParseResult.getSteps(),
+                stepParseResult.getMetadata(), stepParseResult.getParameters())));
+        return sb.toString();
+    }
+
+    @Override
     public CustomResource parse(final String input) {
         //We are not handling deployments here
         return null;
@@ -103,6 +112,12 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         //We are not handling deployments here
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
+        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
+                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
     }
 
     @Override

@@ -118,7 +118,7 @@ public class KamelPopulator {
                 def.setTitle(String.valueOf(map.getOrDefault("title", "")));
                 def.setDescription(String.valueOf(map.getOrDefault("description", "")));
                 def.setRequired((List<String>) map.getOrDefault("required", null));
-                def.setProperties((Map<String, KameletDefinitionProperty>) map.getOrDefault("required", null));
+                def.setProperties((Map<String, KameletDefinitionProperty>) map.getOrDefault("properties", null));
                 kamelet.getSpec().setDefinition(def);
             }
         }

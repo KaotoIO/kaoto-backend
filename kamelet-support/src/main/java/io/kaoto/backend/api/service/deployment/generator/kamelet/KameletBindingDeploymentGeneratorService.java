@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
@@ -104,7 +105,12 @@ public class KameletBindingDeploymentGeneratorService
             spec.setSteps(null);
         }
 
-        KameletBinding binding = new KameletBinding(String.valueOf(metadata.getOrDefault("name", "")), spec);
+        var name = "";
+        if (metadata != null) {
+            name = String.valueOf(metadata.getOrDefault("name", ""));
+        }
+
+        KameletBinding binding = new KameletBinding(name, spec);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
         return yaml.dumpAsMap(binding);
@@ -204,8 +210,29 @@ public class KameletBindingDeploymentGeneratorService
     }
 
     @Override
+    public String parse(List<StepParserService.ParseResult<Step>> flows) {
+        StringBuilder sb = new StringBuilder();
+        flows.stream().forEachOrdered(stepParseResult -> {
+            if (!sb.isEmpty()) {
+                sb.append(System.lineSeparator());
+                sb.append("---");
+                sb.append(System.lineSeparator());
+            }
+            sb.append(parse(stepParseResult.getSteps(), stepParseResult.getMetadata(),
+                    stepParseResult.getParameters()));
+        });
+        return sb.toString();
+    }
+
+    @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{KameletBinding.class});
+    }
+
+    @Override
+    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
+        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
+                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
     }
 
     @Override
