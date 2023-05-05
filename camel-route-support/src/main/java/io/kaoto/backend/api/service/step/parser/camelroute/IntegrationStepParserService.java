@@ -15,6 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -80,8 +81,13 @@ public class IntegrationStepParserService
     }
 
     @Override
-    public List<ParseResult<Step>> getParsedFlows(String yaml) {
-        return null;
+    public List<ParseResult<Step>> getParsedFlows(String input) {
+        var res = new LinkedList<ParseResult<Step>>();
+        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
+        for (var crd : splitCRDs) {
+            res.add(deepParse(crd));
+        }
+        return res;
     }
 
 

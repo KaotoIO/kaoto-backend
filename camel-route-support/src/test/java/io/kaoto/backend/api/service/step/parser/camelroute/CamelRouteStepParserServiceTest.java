@@ -89,7 +89,25 @@ class CamelRouteStepParserServiceTest {
                 steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
     }
+    @ParameterizedTest
+    @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml", "route-multi.yaml",
+            "route3-complex-expressions.yaml", "route-ids.yaml", "route4-pathparams.yaml", "route5-placeholders.yaml",
+            "route6-un-marshal.yaml", "route6-kamelet-extraparameters.yaml"})
+    void parsedFlows(String file) throws IOException {
+        var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
+                StandardCharsets.UTF_8);
+        assertTrue(camelRouteStepParserService.appliesTo(route));
+        var flows = camelRouteStepParserService.getParsedFlows(route);
 
+        for (var flow : flows) {
+            assertTrue(camelRouteDeploymentGeneratorService.appliesTo(flow.getSteps()));
+            assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
+            assertTrue(flow.getMetadata() == null || flow.getMetadata().isEmpty());
+            assertFalse(flow.getSteps().isEmpty());
+        }
+
+        assertThat(route).isEqualToNormalizingNewlines(camelRouteDeploymentGeneratorService.parse(flows));
+    }
 
     @Test
     @Disabled("Until we support full expressions in conditionals")

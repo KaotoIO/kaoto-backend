@@ -2,6 +2,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
@@ -211,6 +212,36 @@ public class KameletRepresenter extends Representer {
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });
+
+        this.multiRepresenters.put(KameletDefinitionProperty.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object object) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        KameletDefinitionProperty data = (KameletDefinitionProperty) object;
+                        if (data.getTitle() != null) {
+                            properties.put("title", data.getTitle());
+                        }
+                        if (data.getDescription() != null) {
+                            properties.put("description", data.getDescription());
+                        }
+                        if (data.getType() != null) {
+                            properties.put("type", data.getType());
+                        }
+                        if (data.getDefault() != null) {
+                            properties.put("default", data.getDefault());
+                        }
+                        if (data.getExample() != null) {
+                            properties.put("example", data.getExample());
+                        }
+                        if (data.getFormat() != null) {
+                            properties.put("format", data.getFormat());
+                        }
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
+
         this.multiRepresenters.put(Template.class,
                 new RepresentMap() {
                     @Override

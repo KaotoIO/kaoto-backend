@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
@@ -78,10 +79,22 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        return getYAML(new Kamelet(steps, metadata, parameters, catalog),
-                new KameletRepresenter());
+        return getYAML(new Kamelet(steps, metadata, parameters, catalog), new KameletRepresenter());
     }
 
+    @Override
+    public String parse(List<StepParserService.ParseResult<Step>> flows) {
+        StringBuilder res = new StringBuilder("");
+        flows.stream().forEachOrdered(parseResult -> {
+            if (!res.isEmpty()) {
+                res.append(System.lineSeparator());
+                res.append("---");
+                res.append(System.lineSeparator());
+            }
+            res.append(parse(parseResult.getSteps(), parseResult.getMetadata(), parseResult.getParameters()));
+        });
+        return res.toString();
+    }
     public String getYAML(final CustomResource kamelet,
                           final Representer representer) {
         Yaml yaml = new Yaml(
@@ -98,6 +111,12 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                         .anyMatch(
                                 Predicate.isEqual(
                                         s.getKind().toUpperCase())));
+    }
+
+    @Override
+    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
+        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
+                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
     }
 
     @Override

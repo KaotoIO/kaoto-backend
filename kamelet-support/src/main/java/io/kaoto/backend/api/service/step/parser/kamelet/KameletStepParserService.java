@@ -101,8 +101,13 @@ public class KameletStepParserService
     }
 
     @Override
-    public List<ParseResult<Step>> getParsedFlows(String yaml) {
-        return null;
+    public List<ParseResult<Step>> getParsedFlows(String input) {
+        var res = new LinkedList<ParseResult<Step>>();
+        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
+        for (var crd : splitCRDs) {
+            res.add(deepParse(crd));
+        }
+        return res;
     }
 
     private void processParameters(final ParseResult<Step> res,
