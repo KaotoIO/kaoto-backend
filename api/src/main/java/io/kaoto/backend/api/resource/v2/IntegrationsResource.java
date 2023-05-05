@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.resource.v2;
 
+import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 🐱class IntegrationsResource
@@ -62,10 +64,10 @@ public class IntegrationsResource {
     @Operation(summary = "Get CRDs",
             description = "Returns the associated custom resource definitions. This is an idempotent operation.")
     public String crds(
-            final @RequestBody List<Integration> request,
+            final @RequestBody FlowsWrapper request,
             final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
-        return deploymentService.crds(request, dsl);
+        return deploymentService.crds(request.flows(), dsl);
     }
 
     /*
@@ -84,10 +86,9 @@ public class IntegrationsResource {
     @Operation(summary = "Get Integration Object",
             description = "Given the associated custom resource definition, returns the JSON object."
                     + " This is an idempotent operation.")
-    public List<Integration> integration(
+    public FlowsWrapper integration(
             final @RequestBody String crd,
-            final @Parameter(description = "DSL to use. For example: "
-                    + "'Kamelet Binding'.")
+            final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
             @QueryParam("dsl") String dsl) {
         List<Integration> integrations = new ArrayList<>();
 
@@ -123,7 +124,7 @@ public class IntegrationsResource {
             }
         }
 
-        return integrations;
+        return new FlowsWrapper(integrations, Map.of());
     }
 
     private void decorateIntegration(String dsl, List<Integration> integrations,

@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.resource.v2;
 
+import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
@@ -45,7 +46,7 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        var flows = Arrays.asList(res.extract().body().as(Integration[].class));
+        var flows = res.extract().body().as(FlowsWrapper.class).flows();
         assertTrue(!flows.isEmpty());
         var flow = flows.get(0);
         assertEquals(2, flow.getSteps().size());
@@ -105,7 +106,7 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        var flows = Arrays.asList(res.extract().body().as(Integration[].class));
+        var flows = res.extract().body().as(FlowsWrapper.class).flows();
         assertTrue(!flows.isEmpty());
         var flow = flows.get(0);
         assertEquals(2, flow.getSteps().size());
@@ -168,7 +169,7 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        var flows = Arrays.asList(res.extract().body().as(Integration[].class));
+        var flows = res.extract().body().as(FlowsWrapper.class).flows();
         assertTrue(!flows.isEmpty());
         var flow = flows.get(0);
         assertEquals(2, flow.getSteps().size());
@@ -295,7 +296,7 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        var flows = Arrays.asList(res.extract().body().as(Integration[].class));
+        var flows = res.extract().body().as(FlowsWrapper.class).flows();
         assertTrue(!flows.isEmpty());
         var flow = flows.get(0);
         var filter = flow.getSteps().get(1);
@@ -363,7 +364,7 @@ class IntegrationsResourceTest {
 
         assertEquals(res0.extract().body().asString(), res1.extract().body().asString());
 
-        var flows = Arrays.asList(res1.extract().body().as(Integration[].class));
+        var flows = res1.extract().body().as(FlowsWrapper.class);
 
         //Now let's try to recreate the source code
         var res2 = given()
