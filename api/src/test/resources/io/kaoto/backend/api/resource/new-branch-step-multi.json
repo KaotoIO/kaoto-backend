@@ -1,4 +1,4 @@
-[
+{ "flows": [
   {
     "dsl": "Camel Route",
     "metadata": {
@@ -144,4 +144,4 @@
     ],
     "params": []
   }
-]
+]}
