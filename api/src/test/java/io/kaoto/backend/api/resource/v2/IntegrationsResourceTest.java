@@ -1,25 +1,21 @@
 package io.kaoto.backend.api.resource.v2;
 
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,13 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
 class IntegrationsResourceTest {
-    @Inject
-    StepCatalog catalog;
-    @BeforeEach
-    void ensureCatalog() {
-        catalog.waitForWarmUp().join();
-    }
-
     @Test
     void amqAmq() throws Exception {
         String yaml = Files.readString(Path.of(
