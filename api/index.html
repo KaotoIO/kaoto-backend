@@ -832,6 +832,23 @@
     }
   }
 };
+            defs["FlowsWrapper"] = {
+  "type" : "object",
+  "properties" : {
+    "flows" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Integration"
+      }
+    },
+    "properties" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "object"
+      }
+    }
+  }
+};
             defs["Integration"] = {
   "type" : "object",
   "properties" : {
@@ -1294,6 +1311,9 @@
                     </li>
                     <li data-group="IntegrationsResource" data-name="v1IntegrationsPost" class="">
                       <a href="#api-IntegrationsResource-v1IntegrationsPost">v1IntegrationsPost</a>
+                    </li>
+                    <li data-group="IntegrationsResource" data-name="v2IntegrationsPost" class="">
+                      <a href="#api-IntegrationsResource-v2IntegrationsPost">v2IntegrationsPost</a>
                     </li>
                   <li class="nav-header" data-group="StepResource"><a href="#api-StepResource">API Methods - StepResource</a></li>
                     <li data-group="StepResource" data-name="v1StepsGet" class="">
@@ -4877,6 +4897,362 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-v1IntegrationsPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-IntegrationsResource-v2IntegrationsPost">
+                      <article id="api-IntegrationsResource-v2IntegrationsPost-0" data-group="User" data-name="v2IntegrationsPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>v2IntegrationsPost</h1>
+                          <p>Get CRDs</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Returns the associated custom resource definitions. This is an idempotent operation.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/v2/integrations</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-IntegrationsResource-v2IntegrationsPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-IntegrationsResource-v2IntegrationsPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json,text/yaml"\
+-H "Content-Type: text/yaml,application/json"\
+"//v2/integrations?dsl="</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.IntegrationsResourceApi;
+
+import java.io.File;
+import java.util.*;
+
+public class IntegrationsResourceApiExample {
+
+    public static void main(String[] args) {
+        
+        IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
+        String body = ; // String | 
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        try {
+            FlowsWrapper result = apiInstance.v2IntegrationsPost(body, dsl);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationsResourceApi#v2IntegrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.IntegrationsResourceApi;
+
+public class IntegrationsResourceApiExample {
+
+    public static void main(String[] args) {
+        IntegrationsResourceApi apiInstance = new IntegrationsResourceApi();
+        String body = ; // String | 
+        String dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+        try {
+            FlowsWrapper result = apiInstance.v2IntegrationsPost(body, dsl);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling IntegrationsResourceApi#v2IntegrationsPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *body = ; //  (optional)
+String *dsl = dsl_example; // DSL to use. For example: 'Kamelet Binding'. (optional)
+
+IntegrationsResourceApi *apiInstance = [[IntegrationsResourceApi alloc] init];
+
+// Get CRDs
+[apiInstance v2IntegrationsPostWith:body
+    dsl:dsl
+              completionHandler: ^(FlowsWrapper output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var KaotoBackendApi = require('kaoto_backend_api');
+
+var api = new KaotoBackendApi.IntegrationsResourceApi()
+var opts = { 
+  'body':  // {{String}} 
+  'dsl': dsl_example // {{String}} DSL to use. For example: 'Kamelet Binding'.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.v2IntegrationsPost(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class v2IntegrationsPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new IntegrationsResourceApi();
+            var body = new String(); // String |  (optional) 
+            var dsl = dsl_example;  // String | DSL to use. For example: 'Kamelet Binding'. (optional) 
+
+            try
+            {
+                // Get CRDs
+                FlowsWrapper result = apiInstance.v2IntegrationsPost(body, dsl);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling IntegrationsResourceApi.v2IntegrationsPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiIntegrationsResourceApi();
+$body = ; // String | 
+$dsl = dsl_example; // String | DSL to use. For example: 'Kamelet Binding'.
+
+try {
+    $result = $api_instance->v2IntegrationsPost($body, $dsl);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling IntegrationsResourceApi->v2IntegrationsPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::IntegrationsResourceApi;
+
+my $api_instance = WWW::SwaggerClient::IntegrationsResourceApi->new();
+my $body = WWW::SwaggerClient::Object::String->new(); # String | 
+my $dsl = dsl_example; # String | DSL to use. For example: 'Kamelet Binding'.
+
+eval { 
+    my $result = $api_instance->v2IntegrationsPost(body => $body, dsl => $dsl);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling IntegrationsResourceApi->v2IntegrationsPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-IntegrationsResource-v2IntegrationsPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.IntegrationsResourceApi()
+body =  # String |  (optional)
+dsl = dsl_example # String | DSL to use. For example: 'Kamelet Binding'. (optional)
+
+try: 
+    # Get CRDs
+    api_response = api_instance.v2_integrations_post(body=body, dsl=dsl)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling IntegrationsResourceApi->v2IntegrationsPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string"
+      }
+    },
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/FlowsWrapper"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["text/yaml"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_v2IntegrationsPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_v2IntegrationsPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">dsl</td>
+                                <td>
+                                
+                                
+                                    <div id="d2e199_v2IntegrationsPost_dsl">
+                                        <div class="json-schema-view">
+                                            <div class="primitive">
+                                                <span class="type">
+                                                    String
+                                                </span>
+                                
+                                                    <div class="inner description">
+                                                        DSL to use. For example: &#x27;Kamelet Binding&#x27;.
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-v2IntegrationsPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-v2IntegrationsPost-200-schema">
+                                  <div id='responses-v2IntegrationsPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/FlowsWrapper"
+      }
+    },
+    "text/yaml" : {
+      "schema" : {
+        "type" : "string"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-v2IntegrationsPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-v2IntegrationsPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-v2IntegrationsPost-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
