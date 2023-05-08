@@ -2,6 +2,12 @@ digraph ClassDiagram {
 	node [shape=plaintext]
 	edge [arrowhead=empty];
 
+"FlowsWrapper" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>FlowsWrapper</B></TD></TR>
+	
+</TABLE>>]
+
+
 "CapabilitiesResource" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>CapabilitiesResource</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
@@ -48,6 +54,8 @@ integration(&lt;String&gt; dsl, &lt;String&gt; crd):Map
 <BR align="left" />
 compatibleDSL(&lt;List[Step]&gt; steps):Map
 <BR align="left" />
+CRDs(&lt;String&gt; dsl, &lt;List&lt;Integration&gt;&gt; integration):Map
+<BR align="left" />
 
 </TD></TR>
 
@@ -55,6 +63,11 @@ compatibleDSL(&lt;List[Step]&gt; steps):Map
 </TABLE>>]
 
 
+		"DeploymentService" -> "IntegrationsResource" [dir=both; arrowhead=diamond; arrowtail=none
+		
+		, taillabel="0..1"
+		
+		]
 		"DeploymentService" -> "IntegrationsResource" [dir=both; arrowhead=diamond; arrowtail=none
 		
 		, taillabel="0..1"
@@ -360,6 +373,8 @@ identifier():String
 description():String
 <BR align="left" />
 parse(&lt;String&gt; yaml):ParseResult
+<BR align="left" />
+getParsedFlows(&lt;String&gt; yaml):List&lt;ParseResult&gt;
 <BR align="left" />
 appliesTo(&lt;String&gt; yaml):boolean
 <BR align="left" />

@@ -448,6 +448,9 @@ operations.
 <p>This endpoint will return the yaml needed to deploy
 the related integration and the
 endpoints to interact with deployments.</p>
+<p>This endpoint will return the yaml needed to deploy
+the related integration and the
+endpoints to interact with deployments.</p>
 
 <h3 id='integrationsresource-method'><a href='#integrationsresource-method'>🔗</a>Methods</h3>
 
@@ -470,13 +473,19 @@ endpoints to interact with deployments.</p>
 	<tr id='integrationsresource-integration'>
 		<td><code><b>integration</b>(<nobr>&lt;String&gt; <i>dsl</i></nobr>, <nobr>&lt;String&gt; <i>crd</i></nobr>)</nobr></code></td>
 		<td><code>Map</code></td>
-		<td>Idempotent operation that given a CRD, returns the JSON status.</td>
+		<td>Idempotent operation that given a CRD, returns the JSON status.
+<p>Idempotent operation that given a CRD, returns the JSON representation.</p></td>
 	</tr>
 	<tr id='integrationsresource-compatibledsl'>
 		<td><code><b>compatibleDSL</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
 		<td><code>Map</code></td>
 		<td>Idempotent operation that given list of steps, returns the list of
 compatible languages.</td>
+	</tr>
+	<tr id='integrationsresource-crds'>
+		<td><code><b>CRDs</b>(<nobr>&lt;String&gt; <i>dsl</i></nobr>, <nobr>&lt;List<Integration>&gt; <i>integration</i></nobr>)</nobr></code></td>
+		<td><code>Map</code></td>
+		<td>Idempotent operation that given an array of integrations, returns the corresponding CRDs.</td>
 	</tr>
 </tbody></table>
 </section>
@@ -552,6 +561,11 @@ resource relies on to perform the operations.
 	</tr>
 	<tr id='deploymentservice-crd'>
 		<td><code><b>crd</b>(<nobr>&lt;<a href='#integration'>Integration</a>&gt; <i>i</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Based on the provided steps, return a valid yaml string to deploy</td>
+	</tr>
+	<tr id='deploymentservice-crds'>
+		<td><code><b>crds</b>(<nobr>&lt;List<Integration>&gt; <i>i</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the provided steps, return a valid yaml string to deploy</td>
 	</tr>
@@ -665,16 +679,19 @@ Generic interface to generate deployments
 		<td>Returns the description of the supported language.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
-		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parameter'>List[Parameter]</a>&gt; <i>parameters</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>)</nobr></code></td>
+		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parameter'>List[Parameter]</a>&gt; <i>parameters</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>, <nobr>&lt;<a href='#parseresult'>ParseResult</a>&gt; <i>flows</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the list of steps, returns the yaml to deploy it.
 If applies, the name will be the name used on the integration deployed.
+<p>Based on the list of flows, returns the source code.
+If applies, the name will be the name used on the integration deployed.</p>
 <p>Based on the source code, returns the resource to deploy.</p></td>
 	</tr>
 	<tr id='deploymentgeneratorservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>)</nobr></code></td>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parseresult'>ParseResult</a>&gt; <i>flows</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Check if the parser applies to the steps</td>
+		<td>Check if the parser applies to the steps
+<p>Check if the parser applies to the flows</p></td>
 	</tr>
 	<tr id='deploymentgeneratorservice-getstatus'>
 		<td><code><b>getStatus</b>()</nobr></code></td>
@@ -2163,6 +2180,12 @@ refreshing.</td>
 		<td>Based on the YAML provided, offer a list of steps defined on it and
 the metadata associated to the orchestration.</td>
 	</tr>
+	<tr id='stepparserservice-getparsedflows'>
+		<td><code><b>getParsedFlows</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code>List<ParseResult></code></td>
+		<td>Based on the YAML provided, offer a list of flows defined on it and
+the metadata associated to the orchestration.</td>
+	</tr>
 	<tr id='stepparserservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
@@ -2197,6 +2220,12 @@ the metadata associated to the orchestration.</td>
 
 
 </section>
+
+</section>
+<section class='namespace' id='flowswrapper'>
+<h2><a href='#flowswrapper'>🔗</a>FlowsWrapper</h2>
+<p>Used by the API to pass flows back and forth.</p>
+
 
 </section>
 <section class='namespace' id='simplifiedkamelet'>
