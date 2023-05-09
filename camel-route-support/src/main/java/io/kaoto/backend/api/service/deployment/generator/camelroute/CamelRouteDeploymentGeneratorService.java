@@ -12,6 +12,7 @@ import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -39,7 +40,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        Yaml yaml = new Yaml(new Constructor(CamelRoute.class), new CamelRouteRepresenter());
+        Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
         return yaml.dumpAs(new CamelRoute(
                         steps != null ? new LinkedList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),

@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
 import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -70,7 +71,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                         try {
                             metadataList.addAll(this.yamlProcessFile.parseInputStream(
                                     // Yaml is not thread-safe, so it needs to be initialized here
-                                    new StringReader(new Yaml(new Constructor(cr)).dumpAsMap(resource))));
+                                    new StringReader(new Yaml(new Constructor(cr, new LoaderOptions())).dumpAsMap(resource))));
                         } catch (Throwable t) {
                             log.trace("Couldn't parse the resource.", t);
                         }

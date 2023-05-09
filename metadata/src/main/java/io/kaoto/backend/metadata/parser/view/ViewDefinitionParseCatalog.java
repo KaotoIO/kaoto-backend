@@ -8,6 +8,7 @@ import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.view.ViewDefinition;
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -70,7 +71,7 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
             if (!appliesTo(content)) {
                 return List.of();
             }
-            Yaml yaml = new Yaml(new Constructor(ViewDefinition.class));
+            Yaml yaml = new Yaml(new Constructor(ViewDefinition.class, new LoaderOptions()));
             ViewDefinition viewDefinition = yaml.load(content);
             return List.of(viewDefinition);
         } catch (YAMLException | IOException e) {
