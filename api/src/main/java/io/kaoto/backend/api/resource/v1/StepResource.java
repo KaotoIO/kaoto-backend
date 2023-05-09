@@ -106,9 +106,9 @@ public class StepResource {
             final @Parameter(description = "Start returning from the nth element (combine with limit).")
             @QueryParam("start") Long start,
             final @Parameter(description = "Provides context: previous step, if exists.")
-            @QueryParam("previous-step") String previousStep,
+            @QueryParam("previousStep") String previousStep,
             final @Parameter(description = "Provides context: following step, if exists.")
-            @QueryParam("following-step") String followingStep) {
+            @QueryParam("followingStep") String followingStep) {
         final var allSteps = stepService.allSteps();
         var steps = allSteps.stream().sorted(Comparator.comparing(Metadata::getId));
         Span span = Span.current();
