@@ -13,6 +13,7 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -77,7 +78,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        Yaml yaml = new Yaml(new Constructor(CamelRoute.class), new CamelRouteRepresenter());
+        Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
         return yaml.dumpAs(new CamelRoute(steps, catalog), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
     }
 

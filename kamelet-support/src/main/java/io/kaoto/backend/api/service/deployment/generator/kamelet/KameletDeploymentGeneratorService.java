@@ -17,6 +17,7 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
 import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -98,7 +99,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String getYAML(final CustomResource kamelet,
                           final Representer representer) {
         Yaml yaml = new Yaml(
-                new Constructor(Kamelet.class),
+                new Constructor(Kamelet.class, new LoaderOptions()),
                 representer);
         return yaml.dumpAsMap(kamelet);
     }

@@ -9,6 +9,7 @@ import io.kaoto.backend.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -24,7 +25,7 @@ class SerializationTest {
     @Test
     void yaml() throws JsonProcessingException {
         Yaml yaml = new Yaml(
-                new Constructor(),
+                new Constructor(new LoaderOptions()),
                 new KameletRepresenter());
         ObjectMapper yamlMapper =
                 new ObjectMapper(new YAMLFactory())

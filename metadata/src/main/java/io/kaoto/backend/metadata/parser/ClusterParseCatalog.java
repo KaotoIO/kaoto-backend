@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.Metadata;
 import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -51,7 +52,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
         final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         try {
-            Constructor constructor = new Constructor(cr);
+            Constructor constructor = new Constructor(cr, new LoaderOptions());
             Yaml yaml = new Yaml(constructor);
             final List<? extends CustomResource> resources;
 

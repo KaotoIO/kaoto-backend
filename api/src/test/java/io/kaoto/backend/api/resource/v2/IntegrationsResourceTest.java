@@ -10,6 +10,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -144,7 +145,7 @@ class IntegrationsResourceTest {
                 .post("?dsl=Camel Route")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
+        Yaml yaml = new Yaml(new Constructor(KameletBinding.class, new LoaderOptions()), new KameletRepresenter());
         yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
 
