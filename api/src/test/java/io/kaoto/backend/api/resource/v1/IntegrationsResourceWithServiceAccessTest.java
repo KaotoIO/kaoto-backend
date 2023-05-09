@@ -16,6 +16,7 @@ import jakarta.ws.rs.core.Response;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -125,7 +126,7 @@ class IntegrationsResourceWithServiceAccessTest {
         String yaml2 = res.extract().body().asString();
 
         Yaml yaml = new Yaml(
-                new Constructor(KameletBinding.class),
+                new Constructor(KameletBinding.class, new LoaderOptions()),
                 new KameletRepresenter());
         KameletBinding res1 = yaml.load(yaml1);
         KameletBinding res2 = yaml.load(yaml2);

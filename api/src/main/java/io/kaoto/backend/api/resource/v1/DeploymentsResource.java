@@ -16,6 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.NoCache;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -167,7 +168,8 @@ public class DeploymentsResource {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
                 try {
-                    Yaml yaml = new Yaml(new Constructor(c), new KameletRepresenter());
+                    Yaml yaml = new Yaml(new Constructor(c, new LoaderOptions()),
+                            new KameletRepresenter());
                     return yaml.dumpAsMap(cr);
                 } catch (Exception e) {
                     log.trace("We tried to parse with " + c.getName() + " and"
