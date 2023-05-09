@@ -18,6 +18,7 @@ import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -175,7 +176,7 @@ public class ClusterService {
                         .withVersion(binding.getVersion())
                         .build();
 
-        var constructor = new Constructor(binding.getClass());
+        var constructor = new Constructor(binding.getClass(), new LoaderOptions());
         Yaml yaml = new Yaml(constructor, new IntegrationRepresenter());
         kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
