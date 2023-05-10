@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.step.parser.kamelet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.metadata.ParseCatalog;
@@ -37,7 +38,7 @@ class KameletStepParserServiceTest {
     private static String incomplete;
     private static String kameletEIP;
     private static String kameletJq;
-
+    private static String multiKamelet;
 
     private CamelRouteParseCatalog parseCatalog;
     @Inject
@@ -75,6 +76,10 @@ class KameletStepParserServiceTest {
         kameletJq = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource(
                                 "jq.kamelet.yaml")
+                        .toURI()));
+        multiKamelet = Files.readString(Path.of(
+                KameletBindingStepParserServiceTest.class.getResource(
+                                "multi-kamelets.yaml")
                         .toURI()));
     }
 
@@ -173,6 +178,15 @@ class KameletStepParserServiceTest {
         assertEquals("The access Token to use to access Dropbox",
                 accessToken.getDescription());
         assertEquals("string", accessToken.getType());
+    }
+
+    @Test
+    void parseMultipleFlows() throws JsonProcessingException {
+        var parsed = service.getParsedFlows(multiKamelet);
+        assertEquals(2, parsed.size());
+        var yaml = deploymentService.parse(parsed);
+
+        assertThat(yaml).isEqualToNormalizingWhitespace(multiKamelet);
     }
 
     @Test

@@ -211,14 +211,15 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
         StringBuilder sb = new StringBuilder();
+
+        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).get();
         flows.stream().forEachOrdered(stepParseResult -> {
-            if (!sb.isEmpty()) {
-                sb.append(System.lineSeparator());
+            sb.append(parse(stepParseResult.getSteps(), stepParseResult.getMetadata(),
+                    stepParseResult.getParameters()));
+            if (stepParseResult != last) {
                 sb.append("---");
                 sb.append(System.lineSeparator());
             }
-            sb.append(parse(stepParseResult.getSteps(), stepParseResult.getMetadata(),
-                    stepParseResult.getParameters()));
         });
         return sb.toString();
     }

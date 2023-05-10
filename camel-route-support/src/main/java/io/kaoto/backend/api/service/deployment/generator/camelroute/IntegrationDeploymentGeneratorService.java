@@ -88,9 +88,15 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
         StringBuilder sb = new StringBuilder();
-        flows.stream().forEachOrdered(stepParseResult -> sb.append(parse(stepParseResult.getSteps(),
-                stepParseResult.getMetadata(), stepParseResult.getParameters())
-                + System.lineSeparator() + "---" + System.lineSeparator()));
+
+        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).get();
+        flows.stream().forEachOrdered(stepParseResult -> {
+            sb.append(
+                    parse(stepParseResult.getSteps(), stepParseResult.getMetadata(), stepParseResult.getParameters()));
+            if (stepParseResult != last) {
+                sb.append("---" + System.lineSeparator());
+            }
+        });
         return sb.toString();
     }
 

@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 class DeploymentGeneratorServiceTest {
@@ -26,26 +29,65 @@ class DeploymentGeneratorServiceTest {
 
     @Test
     void parse() {
-        String yaml = "apiVersion: camel.apache.org/v1\n"
-                + "kind: Integration\n"
-                + "metadata:\n"
-                + "  name: hello.yaml\n"
-                + "spec:\n"
-                + "  flows:\n"
-                + "  - from:\n"
-                + "      uri: timer:tick\n"
-                + "      parameters:\n"
-                + "        period: '5000'\n"
-                + "      steps:\n"
-                + "      - to:\n"
-                + "          uri: log:tick\n";
+        String yaml = String.join(System.lineSeparator(), Arrays.asList(
+                "apiVersion: camel.apache.org/v1",
+                "kind: Integration",
+                "metadata:",
+                "  name: hello.yaml",
+                "spec:",
+                "  flows:",
+                "  - from:",
+                "      uri: timer:tick",
+                "      parameters:",
+                "        period: '5000'",
+                "      steps:",
+                "      - to:",
+                "          uri: log:tick")) + System.lineSeparator();
 
         var parsed = stepParserService.deepParse(yaml);
 
         var yaml2 = deploymentGeneratorService.parse(parsed.getSteps(),
                 parsed.getMetadata(), parsed.getParameters());
 
-        assertEquals(yaml, yaml2);
+        assertThat(yaml).isEqualToNormalizingNewlines(yaml2);
+    }
+
+    @Test
+    void parseFlows() {
+        String yaml = String.join(System.lineSeparator(), Arrays.asList(
+                "apiVersion: camel.apache.org/v1",
+                "kind: Integration",
+                "metadata:",
+                "  name: hello.yaml",
+                "spec:",
+                "  flows:",
+                "  - from:",
+                "      uri: timer:tick",
+                "      parameters:",
+                "        period: '5000'",
+                "      steps:",
+                "      - to:",
+                "          uri: log:tick",
+                "---",
+                "apiVersion: camel.apache.org/v1",
+                "kind: Integration",
+                "metadata:",
+                "  name: bye.yaml",
+                "spec:",
+                "  flows:",
+                "  - from:",
+                "      uri: timer:tock",
+                "      parameters:",
+                "        period: '3000'",
+                "      steps:",
+                "      - to:",
+                "          uri: log:tock")) + System.lineSeparator();
+
+        var parsed = stepParserService.getParsedFlows(yaml);
+
+        var yaml2 = deploymentGeneratorService.parse(parsed);
+
+        assertThat(yaml).isEqualToNormalizingNewlines(yaml2);
     }
 
     @Inject
