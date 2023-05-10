@@ -705,6 +705,12 @@ the supported types in #supportedCustomResources() .</td>
 		<td>Returns the Java model classes that extend CustomResource and that are
 the types of custom resources supported in the cluster.</td>
 	</tr>
+	<tr id='deploymentgeneratorservice-isdeployable'>
+		<td><code><b>isDeployable</b>()</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Based on the environment, the capabilities, or any other important feature.
+But, is this DSL deployable using the <code>Deploy</code> button in Kaoto?</td>
+	</tr>
 	<tr id='deploymentgeneratorservice-getkinds'>
 		<td><code><b>getKinds</b>()</nobr></code></td>
 		<td><code>String[]</code></td>
@@ -2225,6 +2231,56 @@ the metadata associated to the orchestration.</td>
 <section class='namespace' id='flowswrapper'>
 <h2><a href='#flowswrapper'>🔗</a>FlowsWrapper</h2>
 <p>Used by the API to pass flows back and forth.</p>
+
+
+</section>
+<section class='namespace' id='camelrestdslparsecatalog'>
+<h2><a href='#camelrestdslparsecatalog'>🔗</a>CamelRestDSLParseCatalog</h2>
+<p>&lt;p&gt;
+&lt;p&gt;
+Adds the REST DSL steps to the catalog.</p>
+
+<h3 id=''><a href='#'>🔗</a>Methods</h3>
+
+
+
+<details>
+	<summary>Methods inherited from <a href='#stepcatalogparser'>StepCatalogParser</a></summary>
+	<div class='accordion-content'><section>
+
+
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='camelrestdslparsecatalog-getparser'>
+		<td><code><b>getParser</b>(<nobr>&lt;String&gt; <i>url</i></nobr>, <nobr>&lt;String&gt; <i>tag</i></nobr>)</nobr></code></td>
+		<td><code><a href='#parsecatalog'>ParseCatalog</a></code></td>
+		<td>Loads all the elements on the given url.
+<p>Loads all the elements on the git repository.</p></td>
+	</tr>
+	<tr id='camelrestdslparsecatalog-getparserfromcluster'>
+		<td><code><b>getParserFromCluster</b>()</nobr></code></td>
+		<td><code><a href='#parsecatalog'>ParseCatalog</a></code></td>
+		<td>Loads all the elements on the connected cluster.</td>
+	</tr>
+	<tr id='camelrestdslparsecatalog-getlocalfolder'>
+		<td><code><b>getLocalFolder</b>(<nobr>&lt;Path&gt; <i>path</i></nobr>)</nobr></code></td>
+		<td><code><a href='#parsecatalog'>ParseCatalog</a></code></td>
+		<td>Loads all the elements on the given path.</td>
+	</tr>
+	<tr id='camelrestdslparsecatalog-generateskind'>
+		<td><code><b>generatesKind</b>(<nobr>&lt;String&gt; <i>kind</i></nobr>)</nobr></code></td>
+		<td><code>Boolean</code></td>
+		<td>Does this parser generate steps of this kind?</td>
+	</tr>
+</tbody></table>
+</section>
+</div>
+</details>
 
 
 </section>

@@ -112,6 +112,19 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		, taillabel="0..1"
 		
 		]
+"CamelRestDSLParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>CamelRestDSLParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"CamelRestDSLParseCatalog" -> "StepCatalogParser"
+
+		"CamelRestDSLParseCatalog" -> "ParseCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
 "CamelRoute" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>CamelRoute</B></TD></TR>
 	
