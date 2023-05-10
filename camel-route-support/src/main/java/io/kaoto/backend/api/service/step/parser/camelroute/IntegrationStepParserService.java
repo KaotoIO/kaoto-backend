@@ -96,7 +96,7 @@ public class IntegrationStepParserService
         String[] kinds = new String[]{"Integration"};
 
         Pattern pattern = Pattern.compile(
-                "(\nkind:)(.+)\n", Pattern.CASE_INSENSITIVE);
+                System.lineSeparator()+ "(kind:)(.+)" + System.lineSeparator(), Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
         if (matcher.find()) {
             return Arrays.stream(kinds).anyMatch(

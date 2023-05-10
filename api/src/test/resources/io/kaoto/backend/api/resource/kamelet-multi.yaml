@@ -75,7 +75,6 @@ spec:
             clientIdentifier: '{{clientIdentifier}}'
             uploadMode: '{{uploadMode}}'
             accessToken: '{{accessToken}}'
-
 ---
 apiVersion: camel.apache.org/v1alpha1
 kind: Kamelet
