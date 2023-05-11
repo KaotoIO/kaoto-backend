@@ -125,12 +125,13 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
         for (var property : properties.entrySet()) {
             Parameter p;
-            final var title = property.getKey();
+            final String id = property.getKey();
+            final var title = property.getValue().getTitle();
 
             final var prop = property.getValue();
             var description = prop.getDescription();
             String value = prop.getDefault();
-            p = getParameter(prop, title, description, value);
+            p = getParameter(prop, id, title, description, value);
             p.setPath(prop.getPath());
 
             p.setNullable(required == null || required.stream()
@@ -151,23 +152,23 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     }
 
     private Parameter getParameter(final KameletDefinitionProperty property,
-                                   final String title, final String description,
-                                   final String value) {
+                                   final String id, final String title,
+                                   final String description, final String value) {
         final var type = property.getType().toLowerCase();
 
         return switch (type) {
             //number, integer, string, boolean, array, object, or null
-            case "number" -> new NumberParameter(title, title, description,
+            case "number" -> new NumberParameter(id, title, description,
                     value != null ? Double.valueOf(value) : null);
-            case "integer" -> new IntegerParameter(title, title, description,
+            case "integer" -> new IntegerParameter(id, title, description,
                     value != null ? Integer.valueOf(value) : null);
-            case "string" -> new StringParameter(title, title, description,
+            case "string" -> new StringParameter(id, title, description,
                     value, property.getFormat());
-            case "boolean" -> new BooleanParameter(title, title, description,
+            case "boolean" -> new BooleanParameter(id, title, description,
                     value != null ? Boolean.valueOf(value) : null);
-            case "array" -> new ArrayParameter(title, title, description,
+            case "array" -> new ArrayParameter(id, title, description,
                     value != null ? value.split(",") : null);
-            default -> new ObjectParameter(title, title, description,
+            default -> new ObjectParameter(id, title, description,
                     value);
         };
     }
