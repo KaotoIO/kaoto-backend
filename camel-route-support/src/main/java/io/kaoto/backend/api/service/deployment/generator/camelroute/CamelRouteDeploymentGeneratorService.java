@@ -149,14 +149,33 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
             switch (previousStep.getKind().toUpperCase()) {
                 case CAMEL_REST_DSL:
                     //After the "rest" element, comes a http verb
-                    steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_VERB));
+                    if (followingStep != null) {
+                        steps = Stream.empty();
+                    } else {
+                        steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_VERB));
+                    }
                     break;
                 case CAMEL_REST_VERB:
                     //After a verb comes the configuration that consumes
-                    steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT));
+                    if (followingStep != null) {
+                        steps = Stream.empty();
+                    } else {
+                        steps = steps.filter(s -> s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT));
+                    }
+                    break;
+                case CAMEL_REST_ENDPOINT:
+                    //We expect only one step, so if followingStep is not null, return empty
+                    if (followingStep != null) {
+                        steps = Stream.empty();
+                    } else {
+                        steps = steps.filter(s -> !s.getKind().equalsIgnoreCase(CAMEL_REST_VERB)
+                                && !s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT)
+                                && !s.getKind().equalsIgnoreCase(CAMEL_REST_DSL));
+                        steps = steps.filter(s -> s.getType().equalsIgnoreCase("END"));
+                    }
                     break;
                 default:
-                    //We are at the end of the integration or not on REST, looking for a  normal camel flow
+                    //We are at the end of the integration, looking for a  normal camel flow
                     steps = steps.filter(s -> !s.getKind().equalsIgnoreCase(CAMEL_REST_VERB)
                             && !s.getKind().equalsIgnoreCase(CAMEL_REST_ENDPOINT)
                             && !s.getKind().equalsIgnoreCase(CAMEL_REST_DSL));
