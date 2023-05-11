@@ -127,10 +127,10 @@ public class UriFlowStep implements FlowStep {
             candidates = candidates.sorted((step, step2) -> {
                 //EIPs shouldn't go through this function
                 if (step.getKind().startsWith("EIP")) {
-                    return 1;
+                    return 3;
                 }
                 if (step2.getKind().startsWith("EIP")) {
-                    return -1;
+                    return -3;
                 }
 
                 var type = Step.Type.valueOf(step.getType());
@@ -139,18 +139,27 @@ public class UriFlowStep implements FlowStep {
                     return 0;
                 }
 
-                if (type == Step.Type.MIDDLE) {
-                    return -1;
-                }
-                if (type2 == Step.Type.MIDDLE) {
-                    return 1;
+                if (!end) {
+                    if (type == Step.Type.MIDDLE) {
+                        return -1;
+                    }
+                    if (type2 == Step.Type.MIDDLE) {
+                        return 1;
+                    }
+                } else {
+                    if (type == Step.Type.END) {
+                        return -2;
+                    }
+                    if (type2 == Step.Type.END) {
+                        return 2;
+                    }
                 }
 
                 if (type == Step.Type.START) {
-                    return -1;
+                    return -2;
                 }
                 if (type2 == Step.Type.START) {
-                    return 1;
+                    return 2;
                 }
                 return 0;
             });

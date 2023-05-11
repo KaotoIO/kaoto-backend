@@ -165,9 +165,9 @@ public class KameletStepParserService implements StepParserService<Step> {
 
             final var fromSteps = spec.getTemplate().getFrom().getSteps();
             if (fromSteps != null) {
-                int i = 0;
                 for (FlowStep flowStep : fromSteps) {
-                    steps.add(processStep(flowStep, false, i++ == fromSteps.size() - 1));
+                    //end is always false in this case because we can always edit one step after it
+                    steps.add(processStep(flowStep, false, false));
                 }
             }
         }

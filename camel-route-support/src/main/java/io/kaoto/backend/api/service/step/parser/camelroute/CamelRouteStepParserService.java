@@ -85,9 +85,9 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
             } else if (from.getSteps() != null) {
                 steps.add(ksps.processStep(from, true, false));
                 if (from.getSteps() != null) {
-                    int i = 0;
                     for (FlowStep step : from.getSteps()) {
-                        steps.add(ksps.processStep(step, false, i++ == from.getSteps().size() - 1));
+                        //end is always false in this case because we can always edit one step after it
+                        steps.add(ksps.processStep(step, false, false));
                     }
                 }
             }
