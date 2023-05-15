@@ -159,12 +159,12 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v0.4.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.20.2");
         List<Step> stepsGit = kameletParserGit.parse().join();
 
 
         String jarUrl = "https://repo1.maven.org/maven2/org/apache/camel/"
-                + "kamelets/camel-kamelets/0.4.0/camel-kamelets-0.4.0.jar";
+                + "kamelets/camel-kamelets/3.20.2/camel-kamelets-3.20.2.jar";
 
 
         ParseCatalog<Step> kameletParserJar =
@@ -182,7 +182,7 @@ class KameletParseCatalogTest {
 
     @Test
     void loadFromLocalZip() {
-        String camelZip = "resource://camel-kamelets-0.9.0.jar";
+        String camelZip = "resource://camel-kamelets-3.20.2.jar";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
@@ -203,7 +203,7 @@ class KameletParseCatalogTest {
     @Test
 //    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
-        String camelZip = "resource://camel-kamelets-0.9.0.jar";
+        String camelZip = "resource://camel-kamelets-3.20.2.jar";
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
         List<Step> steps = camelParser.parse().join();
