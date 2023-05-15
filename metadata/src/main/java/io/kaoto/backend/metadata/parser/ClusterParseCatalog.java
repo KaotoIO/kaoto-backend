@@ -7,6 +7,7 @@ import io.kaoto.backend.model.Metadata;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.StringReader;
 import java.util.Collections;
@@ -24,6 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> {
 
     private final Class<? extends CustomResource> cr;
+
+    private final Representer representer;
+
     private Logger log = Logger.getLogger(ClusterParseCatalog.class);
 
     private String namespace;
@@ -40,8 +44,9 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
 
     private ProcessFile<T> yamlProcessFile;
 
-    public ClusterParseCatalog(final Class<? extends CustomResource> cr) {
+    public ClusterParseCatalog(final Class<? extends CustomResource> cr, final Representer representer) {
         this.cr = cr;
+        this.representer = representer;
     }
 
     private List<T> getCRAndParse(final Class<? extends CustomResource> cr) {
@@ -52,7 +57,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
 
         try {
             Constructor constructor = new Constructor(cr);
-            Yaml yaml = new Yaml(constructor);
+            final Yaml yaml = new Yaml(constructor, representer);
             final List<? extends CustomResource> resources;
 
             var time = System.currentTimeMillis();
@@ -70,8 +75,8 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                     futureMd.add(CompletableFuture.runAsync(() ->
                     {
                         try {
-                            metadataList.addAll(this.yamlProcessFile.parseInputStream(
-                                    new StringReader(yaml.dumpAsMap(resource))));
+                            final var textYaml = yaml.dumpAsMap(resource);
+                            metadataList.addAll(this.yamlProcessFile.parseInputStream(new StringReader(textYaml)));
                         } catch (Throwable t) {
                             log.trace("Couldn't parse the resource.", t);
                         }

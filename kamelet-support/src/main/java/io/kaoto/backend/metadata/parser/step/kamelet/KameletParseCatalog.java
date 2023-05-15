@@ -2,6 +2,7 @@ package io.kaoto.backend.metadata.parser.step.kamelet;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
+import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.ClusterParseCatalog;
 import io.kaoto.backend.metadata.parser.GitParseCatalog;
@@ -58,7 +59,7 @@ public final class KameletParseCatalog implements StepCatalogParser {
     @Override
     public ParseCatalog<Step> getParserFromCluster() {
         ClusterParseCatalog<Step> parseCatalog =
-                new ClusterParseCatalog<>(Kamelet.class);
+                new ClusterParseCatalog<>(Kamelet.class, new KameletRepresenter());
         parseCatalog.setFileVisitor(new KameletFileProcessor());
         parseCatalog.setKubernetesClient(kubernetesClient);
         parseCatalog.setNamespace(namespace);
