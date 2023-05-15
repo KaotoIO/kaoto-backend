@@ -8,19 +8,23 @@ import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,6 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WithKubernetesTestServer
 class KameletParseCatalogTest {
 
+    private static final String FILE_NAME = "camel-kamelets-3.20.2.jar";
+
+    private Logger log = Logger.getLogger(KameletParseCatalogTest.class);
+
     public KameletParseCatalog getParseCatalog() {
         return parseCatalog;
     }
@@ -38,12 +46,14 @@ class KameletParseCatalogTest {
     public void setParseCatalog(final KameletParseCatalog parseCatalog) {
         this.parseCatalog = parseCatalog;
     }
+
     private KameletParseCatalog parseCatalog;
 
     @Inject
     public void setKubernetesClient(final KubernetesClient kubernetesClient) {
         this.kubernetesClient = kubernetesClient;
     }
+
     private KubernetesClient kubernetesClient;
 
     @Test
@@ -82,7 +92,7 @@ class KameletParseCatalogTest {
     @Test
     void getCamelConnector() {
         ParseCatalog<Step> kameletParser =
-            parseCatalog.getParser("https://github.com/KaotoIO/camel-component-metadata.git", "test");
+                parseCatalog.getParser("https://github.com/KaotoIO/camel-component-metadata.git", "test");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -121,6 +131,7 @@ class KameletParseCatalogTest {
         assertEquals(1, step2.getMinBranches());
         assertEquals(-1, step2.getMaxBranches());
     }
+
     @Test
     void wrongUrlSilentlyFails() {
         ParseCatalog<Step> kameletParser = parseCatalog.getParser("https://nothing/wrong/url.git", "");
@@ -155,6 +166,16 @@ class KameletParseCatalogTest {
         assertEquals(1, steps.size());
     }
 
+    //reproducer for issue #656
+    @Test
+    void testClusterWithWholeKamelets() {
+        int numberOfKamelets = loadAllKameletsFromResourcesIntoCluster();
+
+        ParseCatalog<Step> kameletParser = parseCatalog.getParserFromCluster();
+        List<Step> steps = kameletParser.parse().join();
+        assertEquals(numberOfKamelets, steps.size());
+    }
+
     @Test
     void compareJarAndGit() {
 
@@ -162,10 +183,8 @@ class KameletParseCatalogTest {
                 parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.20.2");
         List<Step> stepsGit = kameletParserGit.parse().join();
 
-
         String jarUrl = "https://repo1.maven.org/maven2/org/apache/camel/"
-                + "kamelets/camel-kamelets/3.20.2/camel-kamelets-3.20.2.jar";
-
+                + "kamelets/camel-kamelets/3.20.2/" + FILE_NAME;
 
         ParseCatalog<Step> kameletParserJar =
                 parseCatalog.getParser(
@@ -182,7 +201,7 @@ class KameletParseCatalogTest {
 
     @Test
     void loadFromLocalZip() {
-        String camelZip = "resource://camel-kamelets-3.20.2.jar";
+        String camelZip = "resource://" + FILE_NAME;
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
@@ -199,14 +218,34 @@ class KameletParseCatalogTest {
         assertTrue(!salesforces.isEmpty());
     }
 
-
     @Test
 //    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
-        String camelZip = "resource://camel-kamelets-3.20.2.jar";
+        String camelZip = "resource://" + FILE_NAME;
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
         List<Step> steps = camelParser.parse().join();
         assertTrue(catalog.store(steps));
+    }
+
+    public int loadAllKameletsFromResourcesIntoCluster() {
+        int loadedResources = 0;
+        try (ZipInputStream zis = new ZipInputStream(
+                Objects.requireNonNull(this.getClass().getResourceAsStream("/" + FILE_NAME)))) {
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                if (zipEntry.getName().contains("kamelets/") && zipEntry.getName().contains(".yaml")) {
+                    log.info(String.format("Loading Kamelet %s into cluster",
+                            zipEntry.getName().replaceFirst("kamelets/", "")));
+                    final String content = IOUtils.toString(new InputStreamReader(zis));
+                    kubernetesClient.resource(content).inNamespace("default").createOrReplace();
+                    loadedResources++;
+                }
+                zipEntry = zis.getNextEntry();
+            }
+        } catch (IOException e) {
+            log.error("Problem with processing zip file.", e);
+        }
+        return loadedResources;
     }
 }
