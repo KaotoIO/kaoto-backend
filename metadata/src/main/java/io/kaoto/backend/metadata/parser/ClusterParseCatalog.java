@@ -51,8 +51,6 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
         final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         try {
-            Constructor constructor = new Constructor(cr);
-            Yaml yaml = new Yaml(constructor);
             final List<? extends CustomResource> resources;
 
             var time = System.currentTimeMillis();
@@ -71,7 +69,8 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                     {
                         try {
                             metadataList.addAll(this.yamlProcessFile.parseInputStream(
-                                    new StringReader(yaml.dumpAsMap(resource))));
+                                    // Yaml is not thread-safe, so it needs to be initialized here
+                                    new StringReader(new Yaml(new Constructor(cr)).dumpAsMap(resource))));
                         } catch (Throwable t) {
                             log.trace("Couldn't parse the resource.", t);
                         }

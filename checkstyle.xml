@@ -8,4 +8,9 @@
         <property name="max" value="120"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
+    <module name="TreeWalker">
+        <!-- Checks that there are no import statements that use the * notation -->
+        <!-- See http://checkstyle.sourceforge.net/config_imports.html#AvoidStarImport -->
+        <module name="AvoidStarImport"/>
+    </module>
 </module>
