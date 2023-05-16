@@ -136,6 +136,25 @@ class ClusterServiceTest {
     }
 
     @Test
+    void testStartIntegration() {
+        String ns = "default";
+        assertTrue(clusterService.getResources(ns).isEmpty());
+        clusterService.start(integration, ns);
+        assertFalse(clusterService.getResources(ns).isEmpty());
+        final var integrations = clusterService.getResources(ns);
+        assertEquals(1, integrations.size());
+        final var integration = integrations.get(0);
+
+        assertNotNull(integration.getName());
+        assertNotNull(integration.getDate());
+        assertNotNull(integration.getErrors());
+        assertNotNull(integration.getNamespace());
+
+        clusterService.stop(integration.getName(), ns, integration.getType());
+        assertTrue(clusterService.getResources(ns).isEmpty());
+    }
+
+    @Test
     void testDuplicatedName() {
         String ns = "default";
         clusterService.start(kameletBinding, ns);
