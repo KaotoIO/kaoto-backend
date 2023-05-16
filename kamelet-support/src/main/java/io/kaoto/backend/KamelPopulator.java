@@ -162,6 +162,7 @@ public class KamelPopulator {
                                    final List<Parameter> parameters) {
         if (kamelet.getSpec().getDefinition() == null) {
             kamelet.getSpec().setDefinition(new KameletDefinition());
+            kamelet.getSpec().getDefinition().setTitle("");
         }
         var def = kamelet.getSpec().getDefinition();
         if (def.getProperties() == null) {
