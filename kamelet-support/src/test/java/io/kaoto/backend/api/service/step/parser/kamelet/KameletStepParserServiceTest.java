@@ -12,20 +12,24 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -180,6 +184,17 @@ class KameletStepParserServiceTest {
         assertEquals("string", accessToken.getType());
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"twitter-search-source-binding.yaml", "invalid/route.yaml",
+            "invalid/integration.yaml"})
+    void deepParseInvalid(String resourcePath) throws IOException {
+        String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        assertThatThrownBy(() -> service.deepParse(input))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Wrong format provided. This is not parseable by us.");
+    }
+
     @Test
     void parseMultipleFlows() throws JsonProcessingException {
         var parsed = service.getParsedFlows(multiKamelet);
@@ -222,6 +237,15 @@ class KameletStepParserServiceTest {
                         service.deepParse(incomplete).getSteps()));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"twitter-search-source-binding.yaml", "invalid/route.yaml",
+            "invalid/integration.yaml"})
+    void appliesToInvalid(String resourcePath) throws IOException {
+        String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        assertThat(service.appliesTo(input)).isFalse();
+    }
+
     @Test
     void checkEIP() {
         assertTrue(service.appliesTo(kameletEIP));
@@ -240,14 +264,5 @@ class KameletStepParserServiceTest {
         assertTrue(deploymentService.appliesTo(parsed.getSteps()));
         String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
         assertThat(parsedString).isEqualToNormalizingNewlines(kameletJq);
-    }
-
-    @Test
-    void fail() {
-        //include here potential security issues
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            service.deepParse("Kind: Kamelet\n But not really");
-        });
-        assertFalse(service.appliesTo("Malformed YAML"));
     }
 }

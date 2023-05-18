@@ -1,0 +1,15 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: Easy integration example
+spec:
+  flows:
+  - from:
+      uri: timer:tick
+      parameters:
+        period: '5000'
+      steps:
+      - to:
+          uri: activemq:queue:myQueue
+      - to:
+          uri: log:save

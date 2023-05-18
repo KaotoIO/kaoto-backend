@@ -12,11 +12,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -32,15 +33,13 @@ class CamelRouteStepParserServiceTest {
     @Test
     void identifier() {
         final var identifier = camelRouteStepParserService.identifier();
-        assertNotNull(identifier);
-        assertTrue(!identifier.isEmpty());
+        assertThat(identifier).isNotNull().isNotEmpty();
     }
 
     @Test
     void description() {
         final var description = camelRouteStepParserService.description();
-        assertNotNull(description);
-        assertTrue(!description.isEmpty());
+        assertThat(description).isNotNull().isNotEmpty();
     }
 
     @BeforeEach
@@ -89,6 +88,19 @@ class CamelRouteStepParserServiceTest {
                 steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"invalid/dropbox-sink.kamelet.yaml", "invalid/twitter-search-source-binding.yaml",
+            "integration.yaml"})
+    void deepParseInvalid(String resourcePath) throws IOException {
+        String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
+                .readAllBytes(), StandardCharsets.UTF_8);
+
+        assertThatThrownBy(() -> camelRouteStepParserService.deepParse(input))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Wrong format provided. This is not parseable by us.");
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml", "route-multi.yaml",
             "route3-complex-expressions.yaml", "route-ids.yaml", "route4-pathparams.yaml", "route5-placeholders.yaml",
@@ -150,5 +162,14 @@ class CamelRouteStepParserServiceTest {
         var steps = camelRouteStepParserService.getParsedFlows(route);
         var yaml = camelRouteDeploymentGeneratorService.parse(steps);
         assertThat(yaml).isEqualToNormalizingNewlines(route);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"invalid/dropbox-sink.kamelet.yaml", "invalid/twitter-search-source-binding.yaml",
+            "integration.yaml"})
+    void appliesToInvalid(String resourcePath) throws IOException {
+        String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        assertThat(camelRouteStepParserService.appliesTo(input)).isFalse();
     }
 }

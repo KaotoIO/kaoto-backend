@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -29,8 +30,12 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
     @Override
     public CamelRoute deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         CamelRoute answer = new CamelRoute();
-        ArrayNode root = (ArrayNode) p.getCodec().readTree(p);
-        Iterator<JsonNode> fields = root.elements();
+        TreeNode root = p.getCodec().readTree(p);
+        if (!(root instanceof ArrayNode)) {
+            throw new IOException(
+                    "Camel Route is expected to have a topmost array, but detected " + root.getClass().getName());
+        }
+        Iterator<JsonNode> fields = ((ArrayNode) root).elements();
         while (fields.hasNext()) {
             var field = fields.next();
             if (field.has("from") || field.has("rest")) {
