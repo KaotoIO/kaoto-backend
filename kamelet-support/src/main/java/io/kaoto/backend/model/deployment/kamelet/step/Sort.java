@@ -16,6 +16,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sort extends Expression {
 
+    public static final String TOKENIZE_LABEL = "tokenize";
 
     public static final String COMPARATOR_LABEL = "comparator";
 
@@ -28,6 +29,8 @@ public class Sort extends Expression {
     private String comparator;
 
     private Map<String, String> description;
+
+    private String tokenize;
 
     public Sort() {
         //Empty for serialization purposes
@@ -42,10 +45,12 @@ public class Sort extends Expression {
                 final @JsonProperty(COMPARATOR_LABEL2) String comparator2,
                 final @JsonProperty(COMPARATOR_LABEL3) String comparator3,
                 final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
+                final @JsonProperty(TOKENIZE_LABEL) String tokenize,
                 final @JsonProperty("id") String id) {
         super(expression, constant, simple, jq, null, null, null, null, id);
         final var alternativeComparator = comparator2 != null ? comparator2 : comparator3;
         setComparator(comparator != null ? comparator : alternativeComparator);
+        setTokenize(tokenize);
         setDescription(description);
     }
 
@@ -64,6 +69,9 @@ public class Sort extends Expression {
         if (this.getDescription() != null) {
             properties.put(DESCRIPTION_LABEL, this.getDescription());
         }
+        if (this.getTokenize() != null) {
+            properties.put(TOKENIZE_LABEL, this.getTokenize());
+        }
 
         return properties;
     }
@@ -79,6 +87,9 @@ public class Sort extends Expression {
                 break;
             case DESCRIPTION_LABEL:
                 this.setDescription((Map<String, String>) parameter.getValue());
+                break;
+            case TOKENIZE_LABEL:
+                this.setTokenize(String.valueOf(parameter.getValue()));
                 break;
             default:
                 break;
@@ -96,6 +107,9 @@ public class Sort extends Expression {
                 break;
             case DESCRIPTION_LABEL:
                 parameter.setValue(this.getDescription());
+                break;
+            case TOKENIZE_LABEL:
+                parameter.setValue(this.getTokenize());
                 break;
             default:
                 break;
@@ -116,5 +130,13 @@ public class Sort extends Expression {
 
     public void setDescription(final Map<String, String> description) {
         this.description = description;
+    }
+
+    public String getTokenize() {
+        return tokenize;
+    }
+
+    public void setTokenize(final String tokenize) {
+        this.tokenize = tokenize;
     }
 }
