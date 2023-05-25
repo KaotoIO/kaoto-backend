@@ -218,6 +218,14 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             parameter.setDescription("Parameters of the kamelet.");
             parameter.setNullable(true);
             parameters.add(parameter);
+        } else if ("netty-http".equalsIgnoreCase(id)) {
+            for (Parameter p : parameters) {
+                if ("host".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("://");
+                } else if ("path".equalsIgnoreCase(p.getId())) {
+                    p.setPathSeparator("/");
+                }
+            }
         }
     }
 
