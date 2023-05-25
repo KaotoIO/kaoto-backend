@@ -1,5 +1,5 @@
 - from:
-    uri: 'netty-http:http://0.0.0.0:8080:'
+    uri: netty-http:https://apiserver:8901/mypath/api/
     steps:
     - to:
         uri: sql:select * from actor
