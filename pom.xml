@@ -32,7 +32,7 @@
         <!-- Shared dependencies -->
         <compiler-plugin.version>3.11.0</compiler-plugin.version>
         <surefire-plugin.version>3.1.0</surefire-plugin.version>
-        <pitest.version>1.14.0</pitest.version>
+        <pitest.version>1.14.1</pitest.version>
     </properties>
     <build>
         <plugins>
