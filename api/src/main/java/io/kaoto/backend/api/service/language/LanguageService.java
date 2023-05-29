@@ -41,7 +41,7 @@ public class LanguageService {
         for (DSLSpecification dsl : getDSLs()) {
             var specs = addNewLanguage(res, dsl.identifier(), dsl.description());
 
-            specs.put("step-kinds", dsl.getKinds().toString());
+            specs.put("stepKinds", dsl.getKinds().toString());
             specs.put("output", Boolean.toString(dsl.getDeploymentGeneratorService() != null));
             specs.put("input", Boolean.toString(dsl.getStepParserService() != null));
             specs.put("deployable", Boolean.toString(dsl.isDeployable()));
