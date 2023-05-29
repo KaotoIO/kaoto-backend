@@ -48,5 +48,14 @@ class CapabilitiesResourceTest {
         assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
                 dsl.get("name").equalsIgnoreCase("KameletBinding")
                         &&  dsl.get("supportsMultipleFlows").equalsIgnoreCase("false")));
+
+        for(var dsl : capabilities.getDsls()) {
+            assertTrue(dsl.containsKey("stepKinds") && !dsl.get("stepKinds").isBlank());
+            assertTrue(dsl.containsKey("output") && !dsl.get("output").isBlank());
+            assertTrue(dsl.containsKey("input") && !dsl.get("input").isBlank());
+            assertTrue(dsl.containsKey("deployable") && !dsl.get("deployable").isBlank());
+            assertTrue(dsl.containsKey("validationSchema") && !dsl.get("validationSchema").isBlank());
+            assertTrue(dsl.containsKey("description") && !dsl.get("description").isBlank());
+        }
     }
 }
