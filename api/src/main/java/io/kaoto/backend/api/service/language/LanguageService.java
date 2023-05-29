@@ -34,9 +34,9 @@ public class LanguageService {
      * Returns the supported languages.
      */
     @WithSpan
-    public Collection<Map<String, String>> getAll() {
+    public Collection<Map<String, Object>> getAll() {
 
-        Map<String, Map<String, String>> res = new HashMap<>();
+        Map<String, Map<String, Object>> res = new HashMap<>();
 
         for (DSLSpecification dsl : getDSLs()) {
             var specs = addNewLanguage(res, dsl.identifier(), dsl.description());
@@ -49,6 +49,8 @@ public class LanguageService {
                     dsl.validationSchema().equals("")?"":String.format("/v1/capabilities/%s/schema",dsl.identifier());
             specs.put("validationSchema",validationSchemaURI);
             specs.put("supportsMultipleFlows", Boolean.toString(dsl.doesSupportMultipleFlows()));
+            //Eventually, i18n
+            specs.put("vocabulary", dsl.getVocabulary());
         }
 
         if (null != crdDefault && !crdDefault.isEmpty() && res.containsKey(crdDefault)) {
@@ -70,11 +72,11 @@ public class LanguageService {
         return  schema;
     }
 
-    private Map<String, String> addNewLanguage(final Map<String, Map<String, String>> res,
+    private Map<String, Object> addNewLanguage(final Map<String, Map<String, Object>> res,
                                                final String key,
                                                final String description) {
         res.computeIfAbsent(key, k -> {
-            final var language = new HashMap<String, String>();
+            final var language = new HashMap<String, Object>();
             language.put("description", description);
             language.put("name", k);
             return language;

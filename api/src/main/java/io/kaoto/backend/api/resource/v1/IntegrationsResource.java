@@ -169,7 +169,7 @@ public class IntegrationsResource {
 
         if (dsls.isEmpty()) {
             for (var l : languageService.getAll()) {
-                dsls.add(l.get("name"));
+                dsls.add(String.valueOf(l.get("name")));
             }
         }
 

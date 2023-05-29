@@ -10,19 +10,18 @@ import java.util.Map;
  *
  */
 public class Capabilities {
-    private List<Map<String, String>> dsls = new ArrayList<>();
+    private List<Map<String, Object>> dsls = new ArrayList<>();
 
     /*
      * 🐱property dsls: Map
      *
      * Returns the list of available languages and the capabilities they have.
      */
-    public List<Map<String, String>> getDsls() {
+    public List<Map<String, Object>> getDsls() {
         return dsls;
     }
 
-    public void setDsls(
-            final Collection<Map<String, String>> dsls) {
+    public void setDsls(final Collection<Map<String, Object>> dsls) {
         this.dsls.clear();
         this.dsls.addAll(dsls);
     }
