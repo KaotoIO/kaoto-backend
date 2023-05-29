@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.dsl.kamelet.KameletDSLSpecification;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @QuarkusTest
 class KameletDeploymentGeneratorServiceTest {
 
-    private KameletDeploymentGeneratorService service;
+    private KameletDSLSpecification service;
 
     private StepCatalog catalog;
 
@@ -50,7 +51,7 @@ class KameletDeploymentGeneratorServiceTest {
                         + "    from:\n"
                         + "      uri: null\n"
                         + "      steps: []\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         Step step = new Step();
         step.setType("START");
@@ -98,7 +99,7 @@ class KameletDeploymentGeneratorServiceTest {
                         + "      steps:\n"
                         + "      - to:\n"
                         + "          uri: kamelet:sink\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         step = new Step();
         step.setKind("EIP");
@@ -136,7 +137,7 @@ class KameletDeploymentGeneratorServiceTest {
                         + "          constant: Hello Llama\n"
                         + "      - to:\n"
                         + "          uri: kamelet:sink\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
     }
 
     @Test
@@ -183,7 +184,7 @@ class KameletDeploymentGeneratorServiceTest {
     }
 
     @Inject
-    public void setService(final KameletDeploymentGeneratorService service) {
+    public void setService(final KameletDSLSpecification service) {
         this.service = service;
     }
 

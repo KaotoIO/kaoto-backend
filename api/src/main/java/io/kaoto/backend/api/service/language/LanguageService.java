@@ -1,8 +1,6 @@
 package io.kaoto.backend.api.service.language;
 
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.model.step.Step;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.opentelemetry.extension.annotations.WithSpan;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -16,8 +14,7 @@ import java.util.Optional;
 
 /**
  * 🐱miniclass LanguageService (CapabilitiesResource)
- * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
- * 🐱relationship compositionOf StepParserService, 0..1
+ * 🐱relationship compositionOf DSLSpecification, 0..1
  *
  * 🐱section
  * Service to extract languages from all supported DSL. This is the utility
@@ -29,11 +26,7 @@ public class LanguageService {
     @ConfigProperty(name = "crd.default")
     private String crdDefault;
 
-    @Inject
-    private Instance<DeploymentGeneratorService> generatorServices;
-
-    @Inject
-    private Instance<StepParserService<Step>> stepParserServices;
+    private Instance<DSLSpecification> dslSpecifications;
 
     /*
      * 🐱method getAll: Map
@@ -45,24 +38,19 @@ public class LanguageService {
 
         Map<String, Map<String, String>> res = new HashMap<>();
 
-        for (DeploymentGeneratorService parser : getGeneratorServices()) {
-            String validationSchemaURI = parser.validationSchema()
-                    .equals("")?"":String.format("/v1/capabilities/%s/schema",parser.identifier());
+        for (DSLSpecification dsl : getDSLs()) {
+            var specs = addNewLanguage(res, dsl.identifier(), dsl.description());
 
-            addNewLanguage(res, parser.identifier(), parser.description());
-            res.get(parser.identifier()).put("step-kinds", parser.getKinds().toString());
-            res.get(parser.identifier()).put("output", "true");
-            res.get(parser.identifier()).put("deployable", Boolean.toString(parser.isDeployable()));
-            res.get(parser.identifier()).put("validationSchema",validationSchemaURI);
+            specs.put("step-kinds", dsl.getKinds().toString());
+            specs.put("output", Boolean.toString(dsl.getDeploymentGeneratorService() != null));
+            specs.put("input", Boolean.toString(dsl.getStepParserService() != null));
+            specs.put("deployable", Boolean.toString(dsl.isDeployable()));
+            String validationSchemaURI =
+                    dsl.validationSchema().equals("")?"":String.format("/v1/capabilities/%s/schema",dsl.identifier());
+            specs.put("validationSchema",validationSchemaURI);
         }
 
-        for (StepParserService parser : getStepParserServices()) {
-            addNewLanguage(res, parser.identifier(), parser.description());
-            res.get(parser.identifier()).put("input", "true");
-        }
-
-        if (null != crdDefault && !crdDefault.isEmpty()
-                && res.containsKey(crdDefault)) {
+        if (null != crdDefault && !crdDefault.isEmpty() && res.containsKey(crdDefault)) {
             res.get(crdDefault).put("default", "true");
         }
 
@@ -72,7 +60,7 @@ public class LanguageService {
     public String getValidationSchema(String dsl) {
         String schema = "";
 
-        Optional<DeploymentGeneratorService> found = getGeneratorServices().stream()
+        Optional<DSLSpecification> found = getDSLs().stream()
                 .filter( p -> p.identifier().equalsIgnoreCase(dsl))
                 .findFirst();
         if (found.isPresent()) {
@@ -81,33 +69,25 @@ public class LanguageService {
         return  schema;
     }
 
-    private String addNewLanguage(final Map<String, Map<String, String>> res,
-                                  final String key,
-                                  final String description) {
+    private Map<String, String> addNewLanguage(final Map<String, Map<String, String>> res,
+                                               final String key,
+                                               final String description) {
         res.computeIfAbsent(key, k -> {
             final var language = new HashMap<String, String>();
             language.put("description", description);
             language.put("name", k);
             return language;
         });
-        return key;
+        return res.get(key);
     }
 
-    public Instance<DeploymentGeneratorService> getGeneratorServices() {
-        return generatorServices;
+    public Instance<DSLSpecification> getDSLs() {
+        return dslSpecifications;
     }
 
-    public void setGeneratorServices(
-            final Instance<DeploymentGeneratorService> parsers) {
-        this.generatorServices = parsers;
+    @Inject
+    public void setDSLs(final Instance<DSLSpecification> dslSpecifications) {
+        this.dslSpecifications = dslSpecifications;
     }
 
-    public Instance<StepParserService<Step>> getStepParserServices() {
-        return stepParserServices;
-    }
-
-    public void setStepParserServices(
-            final Instance<StepParserService<Step>> stepParserServices) {
-        this.stepParserServices = stepParserServices;
-    }
 }

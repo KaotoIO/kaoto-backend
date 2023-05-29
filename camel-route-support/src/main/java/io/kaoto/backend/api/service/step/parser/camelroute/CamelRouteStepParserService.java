@@ -10,7 +10,6 @@ import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -25,19 +24,10 @@ import java.util.Objects;
  * 🐱miniclass CamelRouteStepParserService (StepParserService)
  */
 @ApplicationScoped
-@RegisterForReflection
 public class CamelRouteStepParserService implements StepParserService<Step> {
     private Logger log = Logger.getLogger(CamelRouteStepParserService.class);
 
     private KameletStepParserService ksps;
-
-    public String identifier() {
-        return "Camel Route";
-    }
-
-    public String description() {
-        return "A camel route is a non deployable in cluster workflow of actions and steps.";
-    }
 
     @Override
     public ParseResult<Step> deepParse(final String input) {

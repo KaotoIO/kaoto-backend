@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v2;
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.cache.CacheResult;
@@ -15,7 +16,6 @@ import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * 🐱class IntegrationsResource
  * 🐱relationship compositionOf DeploymentService, 0..1
- *
+ * <p>
  * This endpoint will return the yaml needed to deploy
  * the related integration and the
  * endpoints to interact with deployments.
@@ -41,19 +41,19 @@ import java.util.Map;
 public class IntegrationsResource {
 
     private final Logger LOG = Logger.getLogger(IntegrationsResource.class);
+    private DeploymentService deploymentService;
+    private Instance<DSLSpecification> dslSpecifications;
 
     @Inject
     public void setDeploymentService(
             final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
     }
-    private DeploymentService deploymentService;
 
     @Inject
-    public void setStepParserServices(final Instance<StepParserService<Step>> stepParserServices) {
-        this.stepParserServices = stepParserServices;
+    public void setDslSpecifications(final Instance<DSLSpecification> dslSpecifications) {
+        this.dslSpecifications = dslSpecifications;
     }
-    private Instance<StepParserService<Step>> stepParserServices;
 
     /*
      * 🐱method CRDs: Map
@@ -102,32 +102,32 @@ public class IntegrationsResource {
 
         boolean found = false;
         if (dsl != null) {
-            for (StepParserService<Step> stepParserService : stepParserServices) {
+            for (DSLSpecification dslSpecification : dslSpecifications) {
                 try {
-                    if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
-                        var parsed = stepParserService.getParsedFlows(crd);
+                    if (dslSpecification.identifier().equalsIgnoreCase(dsl) && dslSpecification.appliesTo(crd)) {
+                        var parsed = dslSpecification.getStepParserService().getParsedFlows(crd);
                         decorateIntegration(dsl, answer, parsed);
                         found = true;
                         break;
                     }
                 } catch (Exception e) {
-                    LOG.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
+                    LOG.warn("Parser " + dslSpecification.getClass() + "threw an unexpected error.", e);
                 }
             }
         }
 
         if (!found) {
-            for (var stepParserService : stepParserServices) {
+            for (var dslSpecification : dslSpecifications) {
                 try {
-                    if (stepParserService.appliesTo(crd)) {
-                        var parsed = stepParserService.getParsedFlows(crd);
-                        decorateIntegration(stepParserService.identifier(), answer, parsed);
-                        LOG.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
+                    if (dslSpecification.appliesTo(crd)) {
+                        var parsed = dslSpecification.getStepParserService().getParsedFlows(crd);
+                        decorateIntegration(dslSpecification.identifier(), answer, parsed);
+                        LOG.warn("Gurl, the DSL you gave me is so wrong. This is a " + dslSpecification.identifier()
                                 + " not a " + dsl);
                         break;
                     }
                 } catch (Exception e) {
-                    LOG.trace("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
+                    LOG.trace("Parser " + dslSpecification.getClass() + "threw an unexpected error.", e);
                 }
             }
         }

@@ -17,34 +17,11 @@ import java.util.stream.Stream;
 /**
  * 🐱miniclass DeploymentGeneratorService (StepResource)
  * 🐱relationship dependsOn Step
- *
+ * <p>
  * 🐱section
  * Generic interface to generate deployments
- *
  */
 public interface DeploymentGeneratorService {
-
-    /*
-     * 🐱method identifier: String
-     *
-     * Returns the identifier of the supported language.
-     */
-    String identifier();
-
-    /*
-     * 🐱method description: String
-     *
-     * Returns the description of the supported language.
-     */
-    String description();
-
-    /*
-     * 🐱 method description: String
-     *
-     * Returns validationSchema/validationSchema URL if exists.
-
-     */
-    String validationSchema();
 
     /*
      * 🐱method parse: String
@@ -55,7 +32,6 @@ public interface DeploymentGeneratorService {
      * Based on the list of steps, returns the yaml to deploy it.
      * If applies, the name will be the name used on the integration deployed.
      */
-    @WithSpan
     @Deprecated
     String parse(List<Step> steps, Map<String, Object> metadata, List<Parameter> parameters);
 
@@ -81,25 +57,6 @@ public interface DeploymentGeneratorService {
     CustomResource parse(String input);
 
     /*
-     * 🐱method appliesTo: boolean
-     * 🐱param steps: List[Step]
-     *
-     * Check if the parser applies to the steps
-     */
-    @WithSpan
-    @Deprecated
-    boolean appliesTo(List<Step> steps);
-
-    /*
-     * 🐱method appliesTo: boolean
-     * 🐱param flows: ParseResult
-     *
-     * Check if the parser applies to the flows
-     */
-    @WithSpan
-    boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows);
-
-    /*
      * 🐱method getStatus: CustomResource
      *
      * Returns the status of the custom resource provided. It must be one of
@@ -115,22 +72,6 @@ public interface DeploymentGeneratorService {
      *  the types of custom resources supported in the cluster.
      */
     List<Class<? extends CustomResource>> supportedCustomResources();
-
-    /*
-     * 🐱method isDeployable: boolean
-     *
-     * Based on the environment, the capabilities, or any other important feature.
-     * But, is this DSL deployable using the `Deploy` button in Kaoto?
-     *
-     */
-    boolean isDeployable();
-
-    /*
-     * 🐱method getKinds: String[]
-     *
-     * Return the step kinds compatible with this service.
-     */
-    List<String> getKinds();
 
     /*
      * 🐱method getResources: Deployment[]

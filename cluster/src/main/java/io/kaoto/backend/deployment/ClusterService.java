@@ -8,8 +8,8 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.camelroute.IntegrationRepresenter;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.extension.annotations.WithSpan;
@@ -47,7 +47,7 @@ public class ClusterService {
 
     private Logger log = Logger.getLogger(ClusterService.class);
     private KubernetesClient kubernetesClient;
-    private Instance<DeploymentGeneratorService> parsers;
+    private Instance<DSLSpecification> parsers;
     private ManagedExecutor managedExecutor;
 
     @ConfigProperty(name = "kaoto.openshift.namespace",
@@ -60,7 +60,7 @@ public class ClusterService {
     }
 
     @Inject
-    public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
+    public void setParsers(final Instance<DSLSpecification> parsers) {
         this.parsers = parsers;
     }
 
@@ -82,7 +82,7 @@ public class ClusterService {
         List<Deployment> res = new ArrayList<>();
 
         for (var parser : parsers) {
-            res.addAll(parser.getResources(getNamespace(namespace), kubernetesClient));
+            res.addAll(parser.getDeploymentGeneratorService().getResources(getNamespace(namespace), kubernetesClient));
         }
 
         return res;
@@ -99,10 +99,7 @@ public class ClusterService {
     @WithSpan
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
-            log.trace("Trying parser for " + parser.identifier());
-            log.trace(input);
-
-            CustomResource binding = parser.parse(input);
+            CustomResource binding = parser.getDeploymentGeneratorService().parse(input);
             if (binding != null) {
                 log.trace("This is a " + binding.getKind());
                 setName(binding, namespace);
@@ -252,7 +249,7 @@ public class ClusterService {
         //When we find a pod, that's the one.
         for (var parser : parsers) {
             if (Strings.isNullOrEmpty(dsl) || dsl.equalsIgnoreCase(parser.identifier())) {
-                pod = parser.getPod(namespace, name, kubernetesClient);
+                pod = parser.getDeploymentGeneratorService().getPod(namespace, name, kubernetesClient);
                 if (pod != null) {
                     break;
                 }

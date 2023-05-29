@@ -21,14 +21,11 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -51,30 +48,6 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     public IntegrationDeploymentGeneratorService() {
     }
 
-    @Override
-    public List<String> getKinds() {
-        return KINDS;
-    }
-
-    public String identifier() {
-        return "Integration";
-    }
-
-    public String description() {
-        return "An Integration defines a workflow of actions and steps.";
-    }
-
-    @Override
-    public String validationSchema() {
-        try {
-            String schema = new String(CamelRouteDeploymentGeneratorService.class
-                    .getResourceAsStream("integration.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            log.error("Can't load Integration DSL schema", e);
-        }
-        return "";
-    }
 
     @Override
     public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
@@ -120,20 +93,6 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     }
 
     @Override
-    public boolean appliesTo(final List<Step> steps) {
-        return steps.stream()
-                .filter(Objects::nonNull)
-                .allMatch(s -> getKinds().stream()
-                        .anyMatch(Predicate.isEqual(s.getKind().toUpperCase())));
-    }
-
-    @Override
-    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
-        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
-                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
-    }
-
-    @Override
     public Status getStatus(final CustomResource cr) {
         Status s = Status.Invalid;
         if (cr instanceof Integration integration && integration.getStatus() != null) {
@@ -156,11 +115,6 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
         return Arrays.asList(new Class[]{Integration.class});
-    }
-
-    @Override
-    public boolean isDeployable() {
-        return !supportedCustomResources().isEmpty();
     }
 
     @Override

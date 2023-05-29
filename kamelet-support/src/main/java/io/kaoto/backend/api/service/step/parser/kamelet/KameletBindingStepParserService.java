@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
@@ -17,7 +18,6 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -34,28 +34,11 @@ import java.util.regex.Pattern;
  * 🐱miniclass KameletBindingStepParserService (StepParserService)
  */
 @ApplicationScoped
-public class KameletBindingStepParserService
-        implements StepParserService<Step> {
+public class KameletBindingStepParserService implements StepParserService<Step> {
 
-    private Logger log =
-            Logger.getLogger(KameletBindingStepParserService.class);
-
-    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    private static final String KAMELET = "KAMELET";
-    private static final String KNATIVE = "KNATIVE";
-    private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE, CAMEL_CONNECTOR);
+    private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
 
     private StepCatalog catalog;
-
-    public String identifier() {
-        return "KameletBinding";
-    }
-
-    public String description() {
-        return "Kamelet Bindings are used to create simple integrations that "
-                + "link a start step to an end step with optional "
-                + "intermediate action steps.";
-    }
 
     @Inject
     public void setCatalog(final StepCatalog catalog) {
@@ -87,6 +70,10 @@ public class KameletBindingStepParserService
         res.setMetadata(md);
         res.setParameters(Collections.emptyList());
         return res;
+    }
+
+    public boolean appliesTo(final String yaml) {
+        return yaml.contains("kind: KameletBinding");
     }
 
     @Override
@@ -123,9 +110,12 @@ public class KameletBindingStepParserService
                 step = catalog.getReadOnlyCatalog()
                         .searchByName(uri.substring(0, uri.indexOf(":")))
                         .stream()
-                        .filter(s -> KINDS.stream().anyMatch(k -> s.getKind().equalsIgnoreCase(k)))
+                        .filter(s ->
+                                KameletBindingDSLSpecification.KINDS.stream()
+                                        .anyMatch(k -> s.getKind().equalsIgnoreCase(k)))
                         .sorted(Comparator.comparing(
-                                s -> KINDS.indexOf(((Step) s).getKind().toUpperCase(Locale.ROOT))).reversed())
+                                s -> KameletBindingDSLSpecification.KINDS
+                                        .indexOf(((Step) s).getKind().toUpperCase(Locale.ROOT))).reversed())
                         .findFirst();
 
                 if (step.isPresent()) {
@@ -149,12 +139,13 @@ public class KameletBindingStepParserService
                 }
                 candidates = candidates.filter(s -> s.getType().equals(type.name()));
                 step = candidates
-                        .sorted(Comparator.comparing(s -> KINDS.indexOf(s.getKind().toUpperCase(Locale.ROOT))))
+                        .sorted(Comparator.comparing(s ->
+                                KameletBindingDSLSpecification.KINDS.indexOf(s.getKind().toUpperCase(Locale.ROOT))))
                         .findFirst();
 
                 //knative
                 if (step.isPresent()
-                        && step.get().getKind().equalsIgnoreCase(KNATIVE)) {
+                        && step.get().getKind().equalsIgnoreCase(KameletBindingDSLSpecification.KNATIVE)) {
                     for (Parameter p : new ArrayList<>(step.get().getParameters())) {
                         if (p.getId().equalsIgnoreCase("kind")) {
                             p.setValue(bindingStep.getRef().getKind());
@@ -244,11 +235,6 @@ public class KameletBindingStepParserService
         res.put("finalizers", metadata.getFinalizers());
         res.put("managedFields", metadata.getManagedFields());
         res.put("annotations", metadata.getAnnotations());
-    }
-
-    @Override
-    public boolean appliesTo(final String yaml) {
-        return yaml.contains("kind: KameletBinding");
     }
 
 }

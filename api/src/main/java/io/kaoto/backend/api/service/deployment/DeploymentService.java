@@ -1,7 +1,7 @@
 package io.kaoto.backend.api.service.deployment;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.extension.annotations.WithSpan;
@@ -19,13 +19,12 @@ import java.util.Map;
 
 /**
  * 🐱miniclass DeploymentService (IntegrationsResource)
- * 🐱relationship compositionOf DeploymentGeneratorService, 0..1
- *
- *
+ * 🐱relationship compositionOf DSLSpecification, 0..N
+ * <p>
+ * <p>
  * 🐱section
  * Service to interact with the cluster. This is the utility class the
  * resource relies on to perform the operations.
- *
  */
 @ApplicationScoped
 public class DeploymentService {
@@ -33,7 +32,7 @@ public class DeploymentService {
     private Logger log = Logger.getLogger(DeploymentService.class);
 
     @Inject
-    private Instance<DeploymentGeneratorService> parsers;
+    private Instance<DSLSpecification> parsers;
 
     /*
      * 🐱method integration: Map
@@ -53,24 +52,23 @@ public class DeploymentService {
             metadata.put("name", name);
         }
 
-        for (DeploymentGeneratorService parser : getParsers()) {
+        for (DSLSpecification parser : getParsers()) {
             try {
-                if (parser.appliesTo(steps)) {
+                if (parser.appliesTo(steps) && parser.getDeploymentGeneratorService() != null) {
                     Map<String, String> strings = new HashMap<>();
                     strings.put("dsl", parser.identifier());
-                    strings.put("crd", parser.parse(steps,
-                            metadata, Collections.emptyList()));
+                    strings.put("crd", parser.getDeploymentGeneratorService().parse(steps, metadata,
+                            Collections.emptyList()));
                     res.add(strings);
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass()
-                                + "threw an unexpected error. ",
-                        e);
+                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 
         return res;
     }
+
     /*
      * 🐱method crd: String
      * 🐱param i: Integration
@@ -81,10 +79,13 @@ public class DeploymentService {
     @WithSpan
     public String crd(final Integration i, final String dsl) {
 
-        for (DeploymentGeneratorService parser : getParsers()) {
+        for (DSLSpecification parser : getParsers()) {
             try {
-                if (parser.identifier().equalsIgnoreCase(dsl) && parser.appliesTo(i.getSteps())) {
-                    return parser.parse(i.getSteps(), i.getMetadata(), i.getParameters());
+                if (parser.getDeploymentGeneratorService() != null
+                        && parser.identifier().equalsIgnoreCase(dsl)
+                        && parser.appliesTo(i.getSteps())) {
+                    return parser.getDeploymentGeneratorService()
+                            .parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected"
@@ -93,15 +94,15 @@ public class DeploymentService {
             }
         }
 
-        for (DeploymentGeneratorService parser : getParsers()) {
+        for (DSLSpecification parser : getParsers()) {
             try {
-                if (parser.appliesTo(i.getSteps())) {
-                    return parser.parse(i.getSteps(), i.getMetadata(), i.getParameters());
+                if (parser.appliesTo(i.getSteps())
+                        && parser.getDeploymentGeneratorService() != null) {
+                    return parser.getDeploymentGeneratorService()
+                            .parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected"
-                                + " error. ",
-                        e);
+                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 
@@ -135,10 +136,11 @@ public class DeploymentService {
         }
 
         if (dsl != null) {
-            for (DeploymentGeneratorService parser : getParsers()) {
+            for (DSLSpecification parser : getParsers()) {
                 try {
-                    if (parser.identifier().equalsIgnoreCase(dsl)) {
-                        return parser.parse(integrations);
+                    if (parser.identifier().equalsIgnoreCase(dsl)
+                            && parser.getDeploymentGeneratorService() != null) {
+                        return parser.getDeploymentGeneratorService().parse(integrations);
                     }
                 } catch (Exception e) {
                     log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
@@ -147,10 +149,11 @@ public class DeploymentService {
             }
         }
 
-        for (DeploymentGeneratorService parser : getParsers()) {
+        for (DSLSpecification parser : getParsers()) {
             try {
-                if (parser.appliesToFlows(integrations)) {
-                    return parser.parse(integrations);
+                if (parser.appliesToFlows(integrations)
+                        && parser.getDeploymentGeneratorService() != null) {
+                    return parser.getDeploymentGeneratorService().parse(integrations);
                 }
             } catch (Exception e) {
                 log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
@@ -160,11 +163,11 @@ public class DeploymentService {
         return null;
     }
 
-    public Instance<DeploymentGeneratorService> getParsers() {
+    public Instance<DSLSpecification> getParsers() {
         return parsers;
     }
 
-    public void setParsers(final Instance<DeploymentGeneratorService> parsers) {
+    public void setParsers(final Instance<DSLSpecification> parsers) {
         this.parsers = parsers;
     }
 }

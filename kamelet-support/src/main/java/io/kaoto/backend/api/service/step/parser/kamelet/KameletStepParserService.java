@@ -42,13 +42,13 @@ import java.util.regex.Pattern;
 @ApplicationScoped
 public class KameletStepParserService implements StepParserService<Step> {
 
+    public static final Pattern PATTERN = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
+
     public static final String SIMPLE = "simple";
     public static final String JQ = "jq";
     public static final String OTHERWISE = "otherwise";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
-    public static final Pattern PATTERN = Pattern.compile("[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
-
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
     public static final String EXPRESSION = "expression";
@@ -56,22 +56,13 @@ public class KameletStepParserService implements StepParserService<Step> {
 
     private StepCatalog catalog;
 
-    public String identifier() {
-        return "Kamelet";
-    }
-
-    public String description() {
-        return "A Kamelet is a snippet of a route. It defines meta building "
-                + "blocks or steps that can be reused on integrations.";
+    public StepCatalog getCatalog() {
+        return catalog;
     }
 
     @Inject
     public void setCatalog(final StepCatalog catalog) {
         this.catalog = catalog;
-    }
-
-    public StepCatalog getCatalog() {
-        return catalog;
     }
 
     @Override
@@ -322,8 +313,9 @@ public class KameletStepParserService implements StepParserService<Step> {
     }
 
     public void setValueOnStepProperty(final Step step, final String key, final Object value) {
-       setValueOnStepProperty(step, key, value, null);
+        setValueOnStepProperty(step, key, value, null);
     }
+
     public void processMetadata(final ParseResult<Step> result, final ObjectMeta metadata) {
         result.setMetadata(new LinkedHashMap<>());
 
