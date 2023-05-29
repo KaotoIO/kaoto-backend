@@ -64,6 +64,11 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
     }
 
     @Override
+    public Boolean doesSupportMultipleFlows() {
+        return true;
+    }
+
+    @Override
     public DeploymentGeneratorService getDeploymentGeneratorService() {
         return deploymentGeneratorService;
     }

@@ -113,4 +113,6 @@ public abstract class DSLSpecification {
      * Returns the Step Parser Service associated to this DSL, if exists.
      */
     public abstract StepParserService getStepParserService();
+
+    public abstract Boolean doesSupportMultipleFlows();
 }
