@@ -2,9 +2,8 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.language.LanguageService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * 🐱class IntegrationsResource
  * 🐱relationship compositionOf DeploymentService, 0..1
- *
+ * <p>
  * This endpoint will return the yaml needed to deploy
  * the related integration and the
  * endpoints to interact with deployments.
@@ -38,32 +37,26 @@ import java.util.List;
 public class IntegrationsResource {
 
     private Logger log = Logger.getLogger(IntegrationsResource.class);
+    private DeploymentService deploymentService;
+    private Instance<DSLSpecification> dslSpecifications;
+    private LanguageService languageService;
 
     @Inject
     public void setDeploymentService(
             final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
     }
-    private DeploymentService deploymentService;
 
     @Inject
-    public void setStepParserServices(final Instance<StepParserService<Step>> stepParserServices) {
-        this.stepParserServices = stepParserServices;
+    public void setParsers(final Instance<DSLSpecification> services) {
+        this.dslSpecifications = services;
     }
-    private Instance<StepParserService<Step>> stepParserServices;
-
-    @Inject
-    public void setParsers(final Instance<DeploymentGeneratorService> services) {
-        this.deploymentGeneratorServices = services;
-    }
-    private Instance<DeploymentGeneratorService> deploymentGeneratorServices;
-
-    private LanguageService languageService;
 
     @Inject
     public void setLanguageService(final LanguageService languageService) {
         this.languageService = languageService;
     }
+
     /*
      * 🐱method crd: Map
      * 🐱param dsl: String
@@ -84,7 +77,6 @@ public class IntegrationsResource {
             @QueryParam("dsl") String dsl) {
         return deploymentService.crd(request, dsl);
     }
-
 
 
     /*
@@ -110,10 +102,10 @@ public class IntegrationsResource {
         Integration integration = new Integration();
 
         boolean found = false;
-        for (StepParserService<Step> stepParserService : stepParserServices) {
+        for (DSLSpecification stepParserService : dslSpecifications) {
             try {
                 if (stepParserService.identifier().equalsIgnoreCase(dsl) && stepParserService.appliesTo(crd)) {
-                    var parsed = stepParserService.deepParse(crd);
+                    var parsed = stepParserService.getStepParserService().deepParse(crd);
                     integration.setSteps(parsed.getSteps());
                     integration.setMetadata(parsed.getMetadata());
                     integration.setParameters(parsed.getParameters());
@@ -127,10 +119,10 @@ public class IntegrationsResource {
         }
 
         if (!found) {
-            for (var stepParserService : stepParserServices) {
+            for (var stepParserService : dslSpecifications) {
                 try {
                     if (stepParserService.appliesTo(crd)) {
-                        var parsed = stepParserService.deepParse(crd);
+                        var parsed = stepParserService.getStepParserService().deepParse(crd);
                         integration.setSteps(parsed.getSteps());
                         integration.setMetadata(parsed.getMetadata());
                         integration.setParameters(parsed.getParameters());
@@ -148,7 +140,6 @@ public class IntegrationsResource {
 
         return integration;
     }
-
 
 
     /*
@@ -170,10 +161,10 @@ public class IntegrationsResource {
     public List<String> compatibleDSL(final @RequestBody List<Step> steps) {
         List<String> dsls = new ArrayList<>();
 
-        for (DeploymentGeneratorService parser : deploymentGeneratorServices) {
-           if (parser.appliesTo(steps)) {
-               dsls.add(parser.identifier());
-           }
+        for (DSLSpecification parser : dslSpecifications) {
+            if (parser.appliesTo(steps)) {
+                dsls.add(parser.identifier());
+            }
         }
 
         if (dsls.isEmpty()) {

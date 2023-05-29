@@ -10,7 +10,6 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
-import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
@@ -25,7 +24,6 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,8 +31,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -51,41 +47,10 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
 
     private Logger log = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
-    public String identifier() {
-        return "KameletBinding";
-    }
-
-    public String description() {
-        return "Kamelet Bindings are used to create simple integrations that "
-                + "link a start step to an end step with optional "
-                + "intermediate action steps.";
-    }
-
-    @Override
-    public String validationSchema() {
-        try {
-            String schema = new String(CamelRouteFileProcessor.class
-                    .getResourceAsStream("kameletbinding.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            log.error("Can't load Kamelet Binding DSL schema", e);
-        }
-        return "";
-    }
-
-    @Override
-    public List<String> getKinds() {
-        return KINDS;
-    }
-
     @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-
-        if (!appliesTo(steps)) {
-            return "";
-        }
 
         KameletBindingSpec spec = new KameletBindingSpec();
 
@@ -93,7 +58,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
             var step = steps.get(i);
             if (i == 0 && Step.START.equalsIgnoreCase(step.getType())) {
                 spec.setSource(createKameletBindingStep(step));
-            } else if (i == steps.size() -1 && Step.END.equalsIgnoreCase(step.getType())) {
+            } else if (i == steps.size() - 1 && Step.END.equalsIgnoreCase(step.getType())) {
                 spec.setSink(createKameletBindingStep(step));
             } else {
                 spec.getSteps().add(createKameletBindingStep(step));
@@ -179,13 +144,6 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
         return kameletStep;
     }
 
-
-    @Override
-    public boolean appliesTo(final List<Step> steps) {
-        return steps.stream().filter(Objects::nonNull)
-                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase())));
-    }
-
     @Override
     public Status getStatus(final CustomResource cr) {
         Status s = Status.Invalid;
@@ -229,32 +187,18 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
         return Arrays.asList(new Class[]{KameletBinding.class});
     }
 
-
-    @Override
-    public boolean isDeployable() {
-        return !supportedCustomResources().isEmpty();
-    }
-
-    @Override
-    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
-        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
-                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
-    }
-
     @Override
     public CustomResource parse(final String input) {
-        if (stepParserService.appliesTo(input)) {
-            try {
-                ObjectMapper yamlMapper =
-                        new ObjectMapper(new YAMLFactory())
-                                .configure(
-                                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                        false);
+        try {
+            ObjectMapper yamlMapper =
+                    new ObjectMapper(new YAMLFactory())
+                            .configure(
+                                    DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                                    false);
 
-                return yamlMapper.readValue(input, KameletBinding.class);
-            } catch (Exception e) {
-                log.trace("Tried creating a kamelet binding and it didn't work.");
-            }
+            return yamlMapper.readValue(input, KameletBinding.class);
+        } catch (Exception e) {
+            log.trace("Tried creating a kamelet binding and it didn't work.");
         }
 
         return null;

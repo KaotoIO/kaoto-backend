@@ -17,20 +17,6 @@ import java.util.Map;
 public interface StepParserService<T extends Step> {
 
     /*
-     * 🐱method identifier: String
-     *
-     * Returns the identifier of the supported language.
-     */
-    String identifier();
-
-    /*
-     * 🐱method description: String
-     *
-     * Returns the description of the supported language.
-     */
-    String description();
-
-    /*
      * 🐱method parse: ParseResult
      * 🐱param yaml: String
      *
@@ -54,10 +40,9 @@ public interface StepParserService<T extends Step> {
      * 🐱method appliesTo: boolean
      * 🐱param yaml: String
      *
-     * Check if this parser knows how to parse the provided string
+     * Check if this parser knows how to parse the provided source code
      */
-    @WithSpan
-    boolean appliesTo(String yaml);
+    boolean appliesTo(String sourceCode);
 
     /**
      * 🐱miniclass ParseResult (StepParserService)

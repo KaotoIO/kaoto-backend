@@ -10,7 +10,6 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -23,57 +22,25 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ApplicationScoped
 public class KameletDeploymentGeneratorService implements DeploymentGeneratorService {
-
-    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
-    private static final String EIP = "EIP";
-    private static final String EIP_BRANCHES = "EIP-BRANCH";
-    private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
     private KameletStepParserService stepParserService;
 
     private StepCatalog catalog;
 
     private Logger log = Logger.getLogger(KameletDeploymentGeneratorService.class);
+
     public KameletDeploymentGeneratorService() {
     }
 
-    @Override
-    public List<String> getKinds() {
-        return KINDS;
-    }
-
-    public String identifier() {
-        return "Kamelet";
-    }
-
-    public String description() {
-        return "A Kamelet is a snippet of a route. It defines meta building "
-                + "blocks or steps that can be reused on integrations.";
-    }
-
-    @Override
-    public String validationSchema() {
-        try {
-            String schema = new String(CamelRouteFileProcessor.class
-                    .getResourceAsStream("kamelet.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            log.error("Can't load Kamelet DSL schema", e);
-        }
-        return "";
-    }
 
     @Override
     public String parse(final List<Step> steps,
@@ -96,24 +63,11 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
         });
         return res.toString();
     }
+
     public String getYAML(final CustomResource kamelet,
                           final Representer representer) {
         Yaml yaml = new Yaml(new Constructor(Kamelet.class), representer);
         return yaml.dumpAsMap(kamelet);
-    }
-
-    @Override
-    public boolean appliesTo(final List<Step> steps) {
-        return steps.stream().filter(Objects::nonNull)
-                .allMatch(
-                        s -> getKinds().stream()
-                        .anyMatch(Predicate.isEqual(s.getKind().toUpperCase())));
-    }
-
-    @Override
-    public boolean appliesToFlows(List<StepParserService.ParseResult<Step>> flows) {
-        return flows.stream().anyMatch(flow -> flow.getSteps().stream().filter(Objects::nonNull)
-                .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase()))));
     }
 
     @Override
@@ -138,24 +92,16 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
 
     @Override
-    public boolean isDeployable() {
-        return true;
-    }
-
-    @Override
     public CustomResource parse(final String input) {
-        if (stepParserService.appliesTo(input)) {
-            try {
-                ObjectMapper yamlMapper =
-                        new ObjectMapper(new YAMLFactory())
-                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            ObjectMapper yamlMapper =
+                    new ObjectMapper(new YAMLFactory())
+                            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-                return yamlMapper.readValue(input, Kamelet.class);
-            } catch (Exception e) {
-                log.trace("Tried creating a kamelet and it didn't work.");
-            }
+            return yamlMapper.readValue(input, Kamelet.class);
+        } catch (Exception e) {
+            log.trace("Tried creating a kamelet and it didn't work.");
         }
-
         return null;
     }
 

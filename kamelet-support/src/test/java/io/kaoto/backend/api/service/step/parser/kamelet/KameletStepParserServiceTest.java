@@ -3,6 +3,8 @@ package io.kaoto.backend.api.service.step.parser.kamelet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.kamelet.KameletDSLSpecification;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.CatalogCollection;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
@@ -46,10 +48,7 @@ class KameletStepParserServiceTest {
 
     private CamelRouteParseCatalog parseCatalog;
     @Inject
-    private KameletStepParserService service;
-
-    @Inject
-    private KameletDeploymentGeneratorService deploymentService;
+    private KameletDSLSpecification dslSpecification;
 
     private StepCatalog catalog;
 
@@ -106,26 +105,17 @@ class KameletStepParserServiceTest {
 
     @Test
     void deepParse() {
-        var parsed = service.deepParse(kamelet);
+        StepParserService.ParseResult<Step> parsed = dslSpecification.getStepParserService().deepParse(kamelet);
         assertNotNull(parsed);
 
         assertNotNull(parsed.getMetadata());
         assertFalse(parsed.getMetadata().isEmpty());
-        Map<String, String> labels =
-                (Map<String, String>) parsed.getMetadata().get("labels");
-        Map<String, String> annotations =
-                (Map<String, String>) parsed.getMetadata().get("annotations");
-        assertEquals("Apache Software Foundation",
-                annotations.get("camel.apache.org/provider"));
-        assertEquals("Preview",
-                annotations.get(
-                        "camel.apache.org/kamelet.support.level"));
-        assertEquals("sink",
-                labels.get(
-                        "camel.apache.org/kamelet.type"));
-        assertEquals("Dropbox",
-                annotations.get(
-                        "camel.apache.org/kamelet.group"));
+        Map<String, String> labels = (Map<String, String>) parsed.getMetadata().get("labels");
+        Map<String, String> annotations = (Map<String, String>) parsed.getMetadata().get("annotations");
+        assertEquals("Apache Software Foundation", annotations.get("camel.apache.org/provider"));
+        assertEquals("Preview", annotations.get("camel.apache.org/kamelet.support.level"));
+        assertEquals("sink", labels.get("camel.apache.org/kamelet.type"));
+        assertEquals("Dropbox", annotations.get("camel.apache.org/kamelet.group"));
         assertEquals("dropbox-sink", parsed.getMetadata().get("name"));
 
         assertNotNull(parsed.getSteps());
@@ -190,51 +180,47 @@ class KameletStepParserServiceTest {
     void deepParseInvalid(String resourcePath) throws IOException {
         String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
                 .readAllBytes(), StandardCharsets.UTF_8);
-        assertThatThrownBy(() -> service.deepParse(input))
+        assertThatThrownBy(() -> dslSpecification.getStepParserService().deepParse(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Wrong format provided. This is not parseable by us.");
     }
 
     @Test
     void parseMultipleFlows() throws JsonProcessingException {
-        var parsed = service.getParsedFlows(multiKamelet);
+        List<StepParserService.ParseResult<Step>> parsed =
+                dslSpecification.getStepParserService().getParsedFlows(multiKamelet);
         assertEquals(2, parsed.size());
-        var yaml = deploymentService.parse(parsed);
+        var yaml = dslSpecification.getDeploymentGeneratorService().parse(parsed);
 
         assertThat(yaml).isEqualToNormalizingWhitespace(multiKamelet);
     }
 
     @Test
     void goAndBackAgain() {
-        var parsed = service.deepParse(kamelet);
-        String output = deploymentService.parse(parsed.getSteps(),
+        var parsed = dslSpecification.getStepParserService().deepParse(kamelet);
+        String output = dslSpecification.getDeploymentGeneratorService().parse(parsed.getSteps(),
                 parsed.getMetadata(), parsed.getParameters());
-        var parsed2 = service.deepParse(output);
+        var parsed2 = dslSpecification.getStepParserService().deepParse(output);
         assertEquals(parsed.getSteps(), parsed2.getSteps());
-        assertEquals(parsed.getMetadata().keySet(),
-                parsed2.getMetadata().keySet());
+        assertEquals(parsed.getMetadata().keySet(), parsed2.getMetadata().keySet());
         for (String key : new String[]{"labels", "annotations", "additionalProperties", "name"}) {
-            assertEquals(parsed.getMetadata().get(key),
-                    parsed2.getMetadata().get(key));
+            assertEquals(parsed.getMetadata().get(key), parsed2.getMetadata().get(key));
         }
 
-        var parsedInc = service.deepParse(incomplete);
-        String outputInc = deploymentService.parse(parsedInc.getSteps(),
+        var parsedInc = dslSpecification.getStepParserService().deepParse(incomplete);
+        String outputInc = dslSpecification.getDeploymentGeneratorService().parse(parsedInc.getSteps(),
                 parsedInc.getMetadata(), parsed.getParameters());
-        var parsed2Inc = service.deepParse(outputInc);
+        var parsed2Inc = dslSpecification.getStepParserService().deepParse(outputInc);
         assertEquals(parsedInc.getSteps(), parsed2Inc.getSteps());
     }
 
     @Test
     void appliesTo() {
-        assertTrue(service.appliesTo(kamelet));
-        assertTrue(service.appliesTo(incomplete));
+        assertTrue(dslSpecification.appliesTo(kamelet));
+        assertTrue(dslSpecification.appliesTo(incomplete));
+        assertTrue(dslSpecification.appliesTo(dslSpecification.getStepParserService().deepParse(kamelet).getSteps()));
         assertTrue(
-                deploymentService.appliesTo(
-                        service.deepParse(kamelet).getSteps()));
-        assertTrue(
-                deploymentService.appliesTo(
-                        service.deepParse(incomplete).getSteps()));
+                dslSpecification.appliesTo(dslSpecification.getStepParserService().deepParse(incomplete).getSteps()));
     }
 
     @ParameterizedTest
@@ -243,26 +229,30 @@ class KameletStepParserServiceTest {
     void appliesToInvalid(String resourcePath) throws IOException {
         String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
                 .readAllBytes(), StandardCharsets.UTF_8);
-        assertThat(service.appliesTo(input)).isFalse();
+        assertThat(dslSpecification.appliesTo(input)).isFalse();
     }
 
     @Test
     void checkEIP() {
-        assertTrue(service.appliesTo(kameletEIP));
-        final var parsed = service.deepParse(kameletEIP);
+        assertTrue(dslSpecification.appliesTo(kameletEIP));
+        final var parsed = dslSpecification.getStepParserService().deepParse(kameletEIP);
         assertNotNull(parsed);
-        assertTrue(deploymentService.appliesTo(parsed.getSteps()));
-        String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
+        assertTrue(dslSpecification.appliesTo(parsed.getSteps()));
+        String parsedString = dslSpecification.getDeploymentGeneratorService()
+                .parse(parsed.getSteps(), parsed.getMetadata(),
+                parsed.getParameters());
         assertThat(parsedString).isEqualToNormalizingNewlines(kameletEIP);
     }
 
     @Test
     void checkJq() {
-        assertTrue(service.appliesTo(kameletJq));
-        final var parsed = service.deepParse(kameletJq);
+        assertTrue(dslSpecification.appliesTo(kameletJq));
+        final var parsed = dslSpecification.getStepParserService().deepParse(kameletJq);
         assertNotNull(parsed);
-        assertTrue(deploymentService.appliesTo(parsed.getSteps()));
-        String parsedString = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
+        assertTrue(dslSpecification.appliesTo(parsed.getSteps()));
+        String parsedString = dslSpecification.getDeploymentGeneratorService()
+                .parse(parsed.getSteps(), parsed.getMetadata(),
+                parsed.getParameters());
         assertThat(parsedString).isEqualToNormalizingNewlines(kameletJq);
     }
 }

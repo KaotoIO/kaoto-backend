@@ -1,11 +1,11 @@
 package io.kaoto.backend.api.resource.v1;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.StepService;
 import io.kaoto.backend.model.Metadata;
+import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.model.step.Step;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.opentelemetry.api.trace.Span;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * 🐱class StepResource
  * 🐱relationship dependsOn StepCatalog
- *
+ * <p>
  * This endpoint will return steps based on the parameters.
  */
 @Path("/v1/steps")
@@ -57,24 +57,25 @@ import java.util.List;
 )
 public class StepResource {
 
+    private StepService stepService;
+    private DeploymentService deploymentService;
+    private MeterRegistry registry;
+
     @Inject
     public void setStepService(final StepService stepService) {
         this.stepService = stepService;
     }
-    private StepService stepService;
 
     @Inject
     public void setDeploymentService(
             final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
     }
-    private DeploymentService deploymentService;
 
     @Inject
     public void setRegistry(final MeterRegistry registry) {
         this.registry = registry;
     }
-    private MeterRegistry registry;
 
     /*
      * 🐱method allSteps : List[Step]
@@ -141,15 +142,16 @@ public class StepResource {
 
             //First take all the kinds from the parameter list given
             List<String> kinds =
-                    dgsStream.parallelStream()
-                            .map(DeploymentGeneratorService::getKinds).flatMap(Collection::stream).toList();
+                    dgsStream.parallelStream().map(DSLSpecification::getKinds).flatMap(Collection::stream).toList();
             //And now we can filter by the kinds
             steps = steps.filter(step -> kinds.stream().anyMatch(s -> s.equalsIgnoreCase(step.getKind())));
 
             //And give context based on previous and following step, depending on the DSL
             for (var dgs : dgsStream) {
-                steps = dgs.filterCatalog(stepService.stepById(previousStep),
-                        stepService.stepById(followingStep), steps);
+                if (dgs.getDeploymentGeneratorService() != null) {
+                    steps = dgs.getDeploymentGeneratorService().filterCatalog(stepService.stepById(previousStep),
+                            stepService.stepById(followingStep), steps);
+                }
             }
         }
 

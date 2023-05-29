@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class KameletBindingDeploymentGeneratorServiceTest {
 
     @Inject
-    private KameletBindingDeploymentGeneratorService service;
+    private KameletBindingDSLSpecification service;
 
     @Inject
     private StepCatalog catalog;
@@ -43,7 +44,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "metadata:\n"
                 + "  name: " + name + "\n"
                 + "spec: {}\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         steps.addAll(catalog.getReadOnlyCatalog()
                 .searchByName("aws-s3-source"));
@@ -60,7 +61,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
                 + "      name: aws-s3-source\n"
                 + "      kind: Kamelet\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         Step step = catalog.getReadOnlyCatalog().searchByName("knative").stream()
                 .filter(s -> s.getKind().equalsIgnoreCase("Knative")).findAny().get();
@@ -92,7 +93,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "      kind: Broker\n"
                 + "    properties:\n"
                 + "      type: example\n",
-                service.parse(steps, md, Collections.emptyList()));
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
     }
 
     @Test
@@ -144,12 +145,11 @@ class KameletBindingDeploymentGeneratorServiceTest {
         assertTrue(service.appliesTo(steps));
     }
 
-    public KameletBindingDeploymentGeneratorService getService() {
+    public KameletBindingDSLSpecification getService() {
         return service;
     }
 
-    public void setService(
-            final KameletBindingDeploymentGeneratorService service) {
+    public void setService(final KameletBindingDSLSpecification service) {
         this.service = service;
     }
 

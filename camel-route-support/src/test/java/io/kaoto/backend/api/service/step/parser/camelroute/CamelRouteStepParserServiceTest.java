@@ -1,7 +1,9 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.camelroute.CamelRouteDSLSpecification;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,21 +27,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CamelRouteStepParserServiceTest {
 
     @Inject
-    CamelRouteStepParserService camelRouteStepParserService;
-    @Inject
-    CamelRouteDeploymentGeneratorService camelRouteDeploymentGeneratorService;
+    CamelRouteDSLSpecification camelRouteDSLSpecification;
     @Inject
     StepCatalog catalog;
 
     @Test
     void identifier() {
-        final var identifier = camelRouteStepParserService.identifier();
+        final var identifier = camelRouteDSLSpecification.identifier();
         assertThat(identifier).isNotNull().isNotEmpty();
     }
 
     @Test
     void description() {
-        final var description = camelRouteStepParserService.description();
+        final var description = camelRouteDSLSpecification.description();
         assertThat(description).isNotNull().isNotEmpty();
     }
 
@@ -51,22 +52,23 @@ class CamelRouteStepParserServiceTest {
     void deepParse() throws IOException {
         var route = new String(this.getClass().getResourceAsStream("route.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
-        assertTrue(camelRouteStepParserService.appliesTo(route));
-        var steps = camelRouteStepParserService.deepParse(route);
-        assertTrue(camelRouteDeploymentGeneratorService.appliesTo(steps.getSteps()));
+        assertTrue(camelRouteDSLSpecification.getStepParserService().appliesTo(route));
+        var steps = camelRouteDSLSpecification.getStepParserService().deepParse(route);
+        assertTrue(camelRouteDSLSpecification.appliesTo(steps.getSteps()));
         assertTrue(steps.getParameters() == null || steps.getParameters().isEmpty());
         assertTrue(steps.getMetadata() == null || steps.getMetadata().isEmpty());
         assertFalse(steps.getSteps().isEmpty());
 
-        var https = steps.getSteps().get(3);
+        Step https = (Step) steps.getSteps().get(3);
         assertTrue(https.getParameters().stream().anyMatch(
                 p -> "httpUri".equalsIgnoreCase(p.getId())
                         && "https://mycustom.url:42/with/things".equals(p.getValue())));
 
-        var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
-                steps.getParameters());
+        var yaml = camelRouteDSLSpecification.getDeploymentGeneratorService()
+                .parse(steps.getSteps(), steps.getMetadata(),
+                        steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
-        assertTrue(camelRouteDeploymentGeneratorService.supportedCustomResources().isEmpty());
+        assertTrue(camelRouteDSLSpecification.getDeploymentGeneratorService().supportedCustomResources().isEmpty());
     }
 
 
@@ -77,15 +79,15 @@ class CamelRouteStepParserServiceTest {
     void deepParseParametrized(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);
-        assertTrue(camelRouteStepParserService.appliesTo(route));
-        var steps = camelRouteStepParserService.deepParse(route);
-        assertTrue(camelRouteDeploymentGeneratorService.appliesTo(steps.getSteps()));
+        assertTrue(camelRouteDSLSpecification.getStepParserService().appliesTo(route));
+        var steps = camelRouteDSLSpecification.getStepParserService().deepParse(route);
+        assertTrue(camelRouteDSLSpecification.appliesTo(steps.getSteps()));
         assertTrue(steps.getParameters() == null || steps.getParameters().isEmpty());
         assertTrue(steps.getMetadata() == null || steps.getMetadata().isEmpty());
         assertFalse(steps.getSteps().isEmpty());
 
-        var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
-                steps.getParameters());
+        var yaml = camelRouteDSLSpecification.getDeploymentGeneratorService()
+                .parse(steps.getSteps(), steps.getMetadata(), steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(route);
     }
 
@@ -96,7 +98,7 @@ class CamelRouteStepParserServiceTest {
         String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
                 .readAllBytes(), StandardCharsets.UTF_8);
 
-        assertThatThrownBy(() -> camelRouteStepParserService.deepParse(input))
+        assertThatThrownBy(() -> camelRouteDSLSpecification.getStepParserService().deepParse(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Wrong format provided. This is not parseable by us.");
     }
@@ -108,17 +110,19 @@ class CamelRouteStepParserServiceTest {
     void parsedFlows(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);
-        assertTrue(camelRouteStepParserService.appliesTo(route));
-        var flows = camelRouteStepParserService.getParsedFlows(route);
+        assertTrue(camelRouteDSLSpecification.getStepParserService().appliesTo(route));
+        List<StepParserService.ParseResult<Step>> flows =
+                camelRouteDSLSpecification.getStepParserService().getParsedFlows(route);
 
         for (var flow : flows) {
-            assertTrue(camelRouteDeploymentGeneratorService.appliesTo(flow.getSteps()));
+            assertTrue(camelRouteDSLSpecification.appliesTo(flow.getSteps()));
             assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
             assertTrue(flow.getMetadata() == null || flow.getMetadata().isEmpty());
             assertFalse(flow.getSteps().isEmpty());
         }
 
-        assertThat(route).isEqualToNormalizingNewlines(camelRouteDeploymentGeneratorService.parse(flows));
+        assertThat(route)
+                .isEqualToNormalizingNewlines(camelRouteDSLSpecification.getDeploymentGeneratorService().parse(flows));
     }
 
     @Test
@@ -129,8 +133,8 @@ class CamelRouteStepParserServiceTest {
         var routeb = new String(this.getClass().getResourceAsStream("route2b.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
 
-        var steps = camelRouteStepParserService.deepParse(route);
-        var stepsb = camelRouteStepParserService.deepParse(routeb);
+        var steps = camelRouteDSLSpecification.getStepParserService().deepParse(route);
+        var stepsb = camelRouteDSLSpecification.getStepParserService().deepParse(routeb);
 
         assertEquals(steps, stepsb);
     }
@@ -144,14 +148,14 @@ class CamelRouteStepParserServiceTest {
         var routec = new String(this.getClass().getResourceAsStream("route3-logs.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
 
-        var steps = camelRouteStepParserService.deepParse(route);
-        var stepsb = camelRouteStepParserService.deepParse(routeb);
+        var steps = camelRouteDSLSpecification.getStepParserService().deepParse(route);
+        var stepsb = camelRouteDSLSpecification.getStepParserService().deepParse(routeb);
 
         assertEquals(steps, stepsb);
 
         //Now check default properties are removed
-        var yaml = camelRouteDeploymentGeneratorService.parse(steps.getSteps(), steps.getMetadata(),
-                steps.getParameters());
+        var yaml = camelRouteDSLSpecification.getDeploymentGeneratorService()
+                .parse(steps.getSteps(), steps.getMetadata(), steps.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(routec);
     }
 
@@ -159,8 +163,8 @@ class CamelRouteStepParserServiceTest {
     void beans() throws Exception {
         var route = new String(this.getClass().getResourceAsStream("route-with-beans.yaml").readAllBytes(),
                 StandardCharsets.UTF_8);
-        var steps = camelRouteStepParserService.getParsedFlows(route);
-        var yaml = camelRouteDeploymentGeneratorService.parse(steps);
+        var steps = camelRouteDSLSpecification.getStepParserService().getParsedFlows(route);
+        var yaml = camelRouteDSLSpecification.getDeploymentGeneratorService().parse(steps);
         assertThat(yaml).isEqualToNormalizingNewlines(route);
     }
 
@@ -170,6 +174,6 @@ class CamelRouteStepParserServiceTest {
     void appliesToInvalid(String resourcePath) throws IOException {
         String input = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath))
                 .readAllBytes(), StandardCharsets.UTF_8);
-        assertThat(camelRouteStepParserService.appliesTo(input)).isFalse();
+        assertThat(camelRouteDSLSpecification.getStepParserService().appliesTo(input)).isFalse();
     }
 }

@@ -26,18 +26,9 @@ import java.util.regex.Pattern;
  */
 @ApplicationScoped
 @RegisterForReflection
-public class IntegrationStepParserService
-        implements StepParserService<Step> {
+public class IntegrationStepParserService implements StepParserService<Step> {
 
     private KameletStepParserService ksps;
-
-    public String identifier() {
-        return "Integration";
-    }
-
-    public String description() {
-        return "An Integration defines a workflow of actions and steps.";
-    }
 
     @Override
     public ParseResult<Step> deepParse(final String input) {
@@ -90,7 +81,6 @@ public class IntegrationStepParserService
         return res;
     }
 
-
     @Override
     public boolean appliesTo(final String yaml) {
         String[] kinds = new String[]{"Integration"};
@@ -107,8 +97,7 @@ public class IntegrationStepParserService
     }
 
     @Inject
-    public void setKsps(
-            final KameletStepParserService ksps) {
+    public void setKsps(final KameletStepParserService ksps) {
         this.ksps = ksps;
     }
 }
