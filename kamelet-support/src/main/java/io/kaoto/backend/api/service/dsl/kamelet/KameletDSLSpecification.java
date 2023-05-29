@@ -62,6 +62,11 @@ public class KameletDSLSpecification extends DSLSpecification {
     }
 
     @Override
+    public Boolean doesSupportMultipleFlows() {
+        return false;
+    }
+
+    @Override
     public DeploymentGeneratorService getDeploymentGeneratorService() {
         return deploymentGeneratorService;
     }

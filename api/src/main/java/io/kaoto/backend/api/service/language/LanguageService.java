@@ -48,6 +48,7 @@ public class LanguageService {
             String validationSchemaURI =
                     dsl.validationSchema().equals("")?"":String.format("/v1/capabilities/%s/schema",dsl.identifier());
             specs.put("validationSchema",validationSchemaURI);
+            specs.put("supportsMultipleFlows", Boolean.toString(dsl.doesSupportMultipleFlows()));
         }
 
         if (null != crdDefault && !crdDefault.isEmpty() && res.containsKey(crdDefault)) {
