@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,28 +36,31 @@ class CapabilitiesResourceTest {
         assertEquals(4, capabilities.getDsls().size(), "There should be four DSLs.");
 
         assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                dsl.get("name").equalsIgnoreCase("Camel Route")
-                        &&  dsl.get("supportsMultipleFlows").equalsIgnoreCase("true")));
+                String.valueOf(dsl.get("name")).equalsIgnoreCase("Camel Route")
+                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("true")));
 
         assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                dsl.get("name").equalsIgnoreCase("Integration")
-                        &&  dsl.get("supportsMultipleFlows").equalsIgnoreCase("true")));
+                String.valueOf(dsl.get("name")).equalsIgnoreCase("Integration")
+                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("true")));
 
         assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                dsl.get("name").equalsIgnoreCase("Kamelet")
-                        &&  dsl.get("supportsMultipleFlows").equalsIgnoreCase("false")));
+                String.valueOf(dsl.get("name")).equalsIgnoreCase("Kamelet")
+                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("false")));
 
         assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                dsl.get("name").equalsIgnoreCase("KameletBinding")
-                        &&  dsl.get("supportsMultipleFlows").equalsIgnoreCase("false")));
+                String.valueOf(dsl.get("name")).equalsIgnoreCase("KameletBinding")
+                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("false")));
 
         for(var dsl : capabilities.getDsls()) {
-            assertTrue(dsl.containsKey("stepKinds") && !dsl.get("stepKinds").isBlank());
-            assertTrue(dsl.containsKey("output") && !dsl.get("output").isBlank());
-            assertTrue(dsl.containsKey("input") && !dsl.get("input").isBlank());
-            assertTrue(dsl.containsKey("deployable") && !dsl.get("deployable").isBlank());
-            assertTrue(dsl.containsKey("validationSchema") && !dsl.get("validationSchema").isBlank());
-            assertTrue(dsl.containsKey("description") && !dsl.get("description").isBlank());
+            assertTrue(dsl.containsKey("stepKinds") && dsl.get("stepKinds") != null);
+            assertTrue(dsl.containsKey("output") && dsl.get("output") != null);
+            assertTrue(dsl.containsKey("input") && dsl.get("input") != null);
+            assertTrue(dsl.containsKey("deployable") && dsl.get("deployable") != null);
+            assertTrue(dsl.containsKey("validationSchema") && dsl.get("validationSchema") != null);
+            assertTrue(dsl.containsKey("description") && dsl.get("description") != null);
+            assertTrue(dsl.containsKey("vocabulary") && dsl.get("vocabulary") != null);
+            assertTrue(dsl.get("vocabulary") instanceof Map map && map.size() == 1
+                    && String.valueOf(map.get("stepsName")).equals("Steps"));
         }
     }
 }

@@ -7,6 +7,7 @@ import io.opentelemetry.extension.annotations.WithSpan;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -115,4 +116,6 @@ public abstract class DSLSpecification {
     public abstract StepParserService getStepParserService();
 
     public abstract Boolean doesSupportMultipleFlows();
+
+    public abstract Map<String, String> getVocabulary();
 }

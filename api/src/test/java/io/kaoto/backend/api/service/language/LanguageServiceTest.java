@@ -24,17 +24,17 @@ class LanguageServiceTest {
         Assertions.assertEquals(4, map.size());
 
         for (var language : map) {
-            if (language.get("name").equalsIgnoreCase("KameletBinding")) {
+            if (String.valueOf(language.get("name")).equalsIgnoreCase("KameletBinding")) {
                 Assertions.assertEquals("true", language.get("default"));
                 Assertions.assertEquals("true", language.get("input"));
                 Assertions.assertEquals("true", language.get("output"));
                 Assertions.assertEquals("true", language.get("deployable"));
-            } else if (language.get("name").equalsIgnoreCase("Kamelet")) {
+            } else if (String.valueOf(language.get("name")).equalsIgnoreCase("Kamelet")) {
                 Assertions.assertFalse(language.containsKey("default"));
                 Assertions.assertEquals("true", language.get("input"));
                 Assertions.assertEquals("true", language.get("output"));
                 Assertions.assertEquals("true", language.get("deployable"));
-            } else if (language.get("name").equalsIgnoreCase("Camel Route")) {
+            } else if (String.valueOf(language.get("name")).equalsIgnoreCase("Camel Route")) {
                 Assertions.assertFalse(language.containsKey("default"));
                 Assertions.assertEquals("true", language.get("input"));
                 Assertions.assertEquals("true", language.get("output"));

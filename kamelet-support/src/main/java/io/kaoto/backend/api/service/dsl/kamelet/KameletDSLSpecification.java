@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -64,6 +65,11 @@ public class KameletDSLSpecification extends DSLSpecification {
     @Override
     public Boolean doesSupportMultipleFlows() {
         return false;
+    }
+
+    @Override
+    public Map<String, String> getVocabulary() {
+        return Map.of("stepsName", "Steps");
     }
 
     @Override
