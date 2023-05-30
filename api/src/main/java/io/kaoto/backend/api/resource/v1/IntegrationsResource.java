@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * 🐱class IntegrationsResource
  * 🐱relationship compositionOf DeploymentService, 0..1
- * <p>
+ *
  * This endpoint will return the yaml needed to deploy
  * the related integration and the
  * endpoints to interact with deployments.
