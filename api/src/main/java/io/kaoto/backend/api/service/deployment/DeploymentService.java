@@ -20,8 +20,7 @@ import java.util.Map;
 /**
  * 🐱miniclass DeploymentService (IntegrationsResource)
  * 🐱relationship compositionOf DSLSpecification, 0..N
- * <p>
- * <p>
+ * 
  * 🐱section
  * Service to interact with the cluster. This is the utility class the
  * resource relies on to perform the operations.
