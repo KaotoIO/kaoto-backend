@@ -96,10 +96,8 @@ public class DeploymentsResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody String crd,
-            final @Parameter(description = "Name of the resource to start.")
-            @PathParam("name") String name,
-            final @Parameter(description = "Namespace of the cluster where "
-                    + "we want to deploy it.")
+            final @Parameter(description = "Name of the resource to start.") @PathParam("name") String name,
+            final @Parameter(description = "Namespace of the cluster where we want to deploy it.")
             @QueryParam("namespace") String namespace) {
 
         String securedcrd = securityCheck(crd);
@@ -166,8 +164,7 @@ public class DeploymentsResource {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
                 try {
-                    Yaml yaml = new Yaml(new Constructor(c),
-                            new KameletRepresenter());
+                    Yaml yaml = new Yaml(new Constructor(c), new KameletRepresenter());
                     return yaml.dumpAsMap(cr);
                 } catch (Exception e) {
                     log.trace("We tried to parse with " + c.getName() + " and"

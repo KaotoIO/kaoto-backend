@@ -347,7 +347,7 @@ public class KameletStepParserService implements StepParserService<Step> {
         String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
 
         Matcher matcher = PATTERN.matcher(yaml);
-        if (matcher.find()) {
+        if (!yaml.contains("kind: KameletBinding") && matcher.find()) {
             return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(1).trim()));
         }
 

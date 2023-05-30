@@ -93,14 +93,16 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     @Override
     public CustomResource parse(final String input) {
-        try {
-            ObjectMapper yamlMapper =
-                    new ObjectMapper(new YAMLFactory())
-                            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        if (stepParserService.appliesTo(input)) {
+            try {
+                ObjectMapper yamlMapper =
+                        new ObjectMapper(new YAMLFactory())
+                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            return yamlMapper.readValue(input, Kamelet.class);
-        } catch (Exception e) {
-            log.trace("Tried creating a kamelet and it didn't work.");
+                return yamlMapper.readValue(input, Kamelet.class);
+            } catch (Exception e) {
+                log.trace("Tried creating a kamelet and it didn't work.");
+            }
         }
         return null;
     }
