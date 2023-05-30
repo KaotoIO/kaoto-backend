@@ -6,6 +6,9 @@
       },
       {
         "pattern": "io/kaoto/backend/api/service/deployment/generator/camelroute/integration.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/metadata/parser/step/camelroute/base64icon.txt$"
       }
     ]
   }

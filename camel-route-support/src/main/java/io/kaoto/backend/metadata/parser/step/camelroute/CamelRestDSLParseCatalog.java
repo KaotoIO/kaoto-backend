@@ -10,8 +10,10 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.smallrye.common.constraint.NotNull;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,13 +35,15 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     public static final String CAMEL_REST_DSL = Rest.CAMEL_REST_DSL;
     public static final String CAMEL_REST_VERB = "CAMEL-REST-VERB";
     public static final String CAMEL_REST_ENDPOINT = "CAMEL-REST-ENDPOINT";
-    protected static final String[] KINDS = {CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT};
     public static final String REST_DSL = "REST DSL";
+    protected static final String[] KINDS = {CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT};
+    private static String ICON = null;
+    private Logger log = Logger.getLogger(CamelRestDSLParseCatalog.class);
 
     @NotNull
     private static Step getRestParentStep() {
         var step = new Step(Rest.CAMEL_REST_DSL, "rest",
-                null, new LinkedList<>(), CAMEL_REST_DSL, Step.Type.START);
+                ICON, new LinkedList<>(), CAMEL_REST_DSL, Step.Type.START);
         step.setMinBranches(1);
         step.setMaxBranches(9);
         step.setDescription("This step represents a REST API.");
@@ -61,7 +65,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     @NotNull
     private static Step getVerbStep(String verb) {
         var step = new Step("camel-rest-verb-" + verb, verb,
-                null, new LinkedList<>(), CAMEL_REST_VERB, Step.Type.MIDDLE);
+                ICON, new LinkedList<>(), CAMEL_REST_VERB, Step.Type.MIDDLE);
         step.setMinBranches(1);
         step.setMaxBranches(-1);
         step.setDescription("This step represents a " + verb.toUpperCase() + " HTTP endpoint in the REST API.");
@@ -70,63 +74,10 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         return step;
     }
 
-    @Override
-    public ParseCatalog<Step> getParser(String url) {
-        return new CamelRestDSLParser();
-    }
-
-    @Override
-    public ParseCatalog<Step> getParser(String url, String tag) {
-        //We are not expecting to get anything from here
-        return new EmptyParseCatalog<>();
-    }
-
-    @Override
-    public ParseCatalog<Step> getParserFromCluster() {
-        //We are not expecting to get anything from here
-        return new EmptyParseCatalog<>();
-    }
-
-    @Override
-    public ParseCatalog<Step> getLocalFolder(Path path) {
-        //We are not expecting to get anything from here
-        return new EmptyParseCatalog<>();
-    }
-
-    @Override
-    public boolean generatesKind(String kind) {
-        return kind.isBlank() || Arrays.stream(KINDS).anyMatch(k -> k.equalsIgnoreCase(kind));
-    }
-
-    class CamelRestDSLParser implements ParseCatalog<Step> {
-        @Override
-        public CompletableFuture<List<Step>> parse() {
-            List<Step> steps = new ArrayList<>();
-            steps.add(getRestParentStep());
-
-            String[] verbs = new String[]{"get", "head", "post", "put", "delete", "connect", "options", "trace",
-                    "patch"};
-            for (String verb : verbs) {
-                steps.add(getVerbStep(verb));
-            }
-            steps.add(getConsumesStep());
-
-            CompletableFuture<List<Step>> metadata = new CompletableFuture<>();
-            metadata.complete(steps);
-            return metadata;
-        }
-
-        @Override
-        public void setFileVisitor(ProcessFile<Step> fileVisitor) {
-            //We are not going to visit anything, we don't need a fileVisitor
-        }
-
-    }
-
     @NotNull
     private static Step getConsumesStep() {
         var step = new Step(Rest.CAMEL_REST_CONSUMES, Rest.CONSUMES_LABEL,
-                null, new LinkedList<>(), CAMEL_REST_ENDPOINT, Step.Type.MIDDLE);
+                ICON, new LinkedList<>(), CAMEL_REST_ENDPOINT, Step.Type.MIDDLE);
 
         var parameters = new LinkedList<Parameter>();
 
@@ -170,5 +121,66 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         step.setParameters(parameters);
 
         return step;
+    }
+
+    @Override
+    public ParseCatalog<Step> getParser(String url) {
+        return new CamelRestDSLParser();
+    }
+
+    @Override
+    public ParseCatalog<Step> getParser(String url, String tag) {
+        //We are not expecting to get anything from here
+        return new EmptyParseCatalog<>();
+    }
+
+    @Override
+    public ParseCatalog<Step> getParserFromCluster() {
+        //We are not expecting to get anything from here
+        return new EmptyParseCatalog<>();
+    }
+
+    @Override
+    public ParseCatalog<Step> getLocalFolder(Path path) {
+        //We are not expecting to get anything from here
+        return new EmptyParseCatalog<>();
+    }
+
+    @Override
+    public boolean generatesKind(String kind) {
+        return kind.isBlank() || Arrays.stream(KINDS).anyMatch(k -> k.equalsIgnoreCase(kind));
+    }
+
+    class CamelRestDSLParser implements ParseCatalog<Step> {
+        @Override
+        public CompletableFuture<List<Step>> parse() {
+            if (ICON == null) {
+                try {
+                    ICON = new String(this.getClass().getResourceAsStream("base64icon.txt").readAllBytes());
+                } catch (IOException e) {
+                    log.error("Couldn't load the icon file for REST DSL steps.");
+                }
+            }
+
+            List<Step> steps = new ArrayList<>();
+            steps.add(getRestParentStep());
+
+            String[] verbs = new String[]{"get", "head", "post", "put", "delete", "connect", "options", "trace",
+                    "patch"};
+            for (String verb : verbs) {
+                steps.add(getVerbStep(verb));
+            }
+            steps.add(getConsumesStep());
+
+            CompletableFuture<List<Step>> metadata = new CompletableFuture<>();
+            metadata.complete(steps);
+            return metadata;
+        }
+
+        @Override
+        public void setFileVisitor(ProcessFile<Step> fileVisitor) {
+            //We are not going to visit anything, we don't need a fileVisitor
+        }
+
     }
 }
