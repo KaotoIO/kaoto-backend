@@ -1,66 +1,89 @@
 package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Capabilities;
+import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-import java.util.Map;
-
+import static io.kaoto.backend.api.service.language.LanguagesSpecificationChecker.checkAllLanguagesSpecifications;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
+
 
 @QuarkusTest
 @TestHTTPEndpoint(CapabilitiesResource.class)
 class CapabilitiesResourceTest {
 
-
     @Test
     void get() {
-
-        var res = given()
+        var capabilities = given()
                 .when()
                 .get()
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(Capabilities.class);
 
-        Capabilities capabilities = res.extract().body().as(Capabilities.class);
+        assertThat(capabilities).isNotNull();
+        checkAllLanguagesSpecifications(capabilities.getDsls());
+    }
 
-        assertNotNull(capabilities);
-        assertNotNull(capabilities.getDsls());
+    @Test
+    void getVersion() {
+        String response = given()
+                .when()
+                .get("/version")
+                .then()
+                .contentType(MediaType.TEXT_PLAIN)
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+        assertThat(response).matches("^\\d*\\.\\d*\\.\\d*(-.*)?$");
+    }
 
-        assertEquals(4, capabilities.getDsls().size(), "There should be four DSLs.");
+    @Test
+    void getNamespace() {
+        given()
+                .when()
+                .get("/namespace")
+                .then()
+                .contentType(MediaType.APPLICATION_JSON)
+                .statusCode(Response.Status.OK.getStatusCode())
+                .body("namespace", is("default"));
+    }
 
-        assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                String.valueOf(dsl.get("name")).equalsIgnoreCase("Camel Route")
-                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("true")));
+    @ParameterizedTest
+    @MethodSource("provideDslSchemaForTest")
+    void getValidationSchema(String dsl, Class reourceClass, String file) throws IOException {
+        String schemaToValidate =
+                new String(Objects.requireNonNull(reourceClass.getResourceAsStream(file)).readAllBytes());
 
-        assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                String.valueOf(dsl.get("name")).equalsIgnoreCase("Integration")
-                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("true")));
+        String response = given()
+                .when()
+                .get(String.format("/%s/schema/", dsl))
+                .then()
+                .contentType(MediaType.APPLICATION_JSON)
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+        assertThat(response).isEqualToNormalizingNewlines(schemaToValidate);
+    }
 
-        assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                String.valueOf(dsl.get("name")).equalsIgnoreCase("Kamelet")
-                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("false")));
-
-        assertTrue(capabilities.getDsls().stream().anyMatch(dsl ->
-                String.valueOf(dsl.get("name")).equalsIgnoreCase("KameletBinding")
-                        &&  String.valueOf(dsl.get("supportsMultipleFlows")).equalsIgnoreCase("false")));
-
-        for(var dsl : capabilities.getDsls()) {
-            assertTrue(dsl.containsKey("stepKinds") && dsl.get("stepKinds") != null);
-            assertTrue(dsl.containsKey("output") && dsl.get("output") != null);
-            assertTrue(dsl.containsKey("input") && dsl.get("input") != null);
-            assertTrue(dsl.containsKey("deployable") && dsl.get("deployable") != null);
-            assertTrue(dsl.containsKey("validationSchema") && dsl.get("validationSchema") != null);
-            assertTrue(dsl.containsKey("description") && dsl.get("description") != null);
-            assertTrue(dsl.containsKey("vocabulary") && dsl.get("vocabulary") != null);
-            assertTrue(dsl.get("vocabulary") instanceof Map map && map.size() == 1
-                    && String.valueOf(map.get("stepsName")).equals("Steps"));
-        }
+    private static Stream<Arguments> provideDslSchemaForTest() {
+        return Stream.of(
+                Arguments.of("Integration", CamelRouteDeploymentGeneratorService.class, "integration.json"),
+                Arguments.of("Camel Route", CamelRouteDeploymentGeneratorService.class, "camel-yaml-dsl.json"),
+                Arguments.of("Kamelet", CamelRouteFileProcessor.class, "kamelet.json"),
+                Arguments.of("KameletBinding", CamelRouteFileProcessor.class, "kameletbinding.json")
+        );
     }
 }
