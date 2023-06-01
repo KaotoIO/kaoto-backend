@@ -107,7 +107,7 @@ class KameletBindingStepParserServiceTest {
     }
 
     @Test
-    void parseKnative() throws URISyntaxException, IOException {
+    void parseKnative() {
         StepParserService.ParseResult<Step> parsed = dslSpecification.getStepParserService().deepParse(knativeBinding);
         assertEquals(2, parsed.getSteps().size());
         var yaml = dslSpecification.getDeploymentGeneratorService()

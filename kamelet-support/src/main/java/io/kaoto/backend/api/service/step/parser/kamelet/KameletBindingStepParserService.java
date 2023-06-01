@@ -143,6 +143,8 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
                 }
 
                 var candidates = catalog.getReadOnlyCatalog().searchByName(name).stream();
+                candidates = candidates.filter(s ->
+                        KameletBindingDSLSpecification.KINDS.stream().anyMatch(k -> s.getKind().equalsIgnoreCase(k)));
                 if (!kind.isBlank()) {
                     candidates =
                             candidates.filter(s -> s.getKind().equalsIgnoreCase(bindingStep.getRef().getKind()));

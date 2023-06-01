@@ -20,10 +20,9 @@ import java.util.Map;
 @RegisterForReflection
 public class KameletBindingDSLSpecification extends DSLSpecification {
 
-    private static final String CAMEL_CONNECTOR = "CAMEL-CONNECTOR";
     private static final String KAMELET = "KAMELET";
     public static final String KNATIVE = "KNATIVE";
-    public static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE, CAMEL_CONNECTOR);
+    public static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
     private Logger log = Logger.getLogger(KameletBindingDSLSpecification.class);
 
     private DeploymentGeneratorService deploymentGeneratorService;

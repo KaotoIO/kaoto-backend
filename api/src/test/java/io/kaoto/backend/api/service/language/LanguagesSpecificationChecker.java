@@ -35,7 +35,7 @@ public class LanguagesSpecificationChecker {
                             .checkMultipleFlows("false")
                             .checkDescription("Kamelet Bindings are used to create simple integrations" +
                                     " that link a start step to an end step with optional intermediate action steps.")
-                            .checkStepKinds("[KAMELET, KNATIVE, CAMEL-CONNECTOR]")
+                            .checkStepKinds("[KAMELET, KNATIVE]")
                             .checkVocabulary(Map.of("stepsName", "Steps"));
                 }
                 case "Kamelet" -> {
