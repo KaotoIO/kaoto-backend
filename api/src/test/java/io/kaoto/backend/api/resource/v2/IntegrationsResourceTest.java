@@ -74,9 +74,9 @@ class IntegrationsResourceTest {
 
         res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
@@ -90,9 +90,9 @@ class IntegrationsResourceTest {
 
         var res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
@@ -139,9 +139,9 @@ class IntegrationsResourceTest {
                                 .toURI()));
         var res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
@@ -154,9 +154,9 @@ class IntegrationsResourceTest {
                 IntegrationsResourceTest.class.getResource("../../resource/script-multi.json").toURI()));
         var res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         String yaml = res.extract().body().asString();
@@ -196,9 +196,9 @@ class IntegrationsResourceTest {
 
         res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
@@ -272,9 +272,9 @@ class IntegrationsResourceTest {
 
         res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
@@ -318,9 +318,9 @@ class IntegrationsResourceTest {
                 IntegrationsResourceTest.class.getResource("../../resource/no-from-multi.json").toURI()));
         var res = given()
                 .when()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(json)
-                .post("?dsl=Camel Route")
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         var yaml = res.extract().body().asString();
@@ -372,7 +372,7 @@ class IntegrationsResourceTest {
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(flows)
-                .post("?dsl=" + parameters[0])
+                .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         var sourceCode = res2.extract().body().asString();
