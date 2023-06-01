@@ -69,11 +69,8 @@ public class IntegrationsResource {
     @CacheResult(cacheName = "api")
     @Operation(summary = "Get CRDs",
             description = "Returns the associated custom resource definitions. This is an idempotent operation.")
-    public String crds(
-            final @RequestBody FlowsWrapper request,
-            final @Parameter(description = "DSL to use. For example: 'Kamelet Binding'.")
-            @QueryParam("dsl") String dsl) {
-        return deploymentService.crds(request.flows(), request.metadata(), dsl);
+    public String crds(final @RequestBody FlowsWrapper request) {
+        return deploymentService.crds(request.flows(), request.metadata());
     }
 
     /*

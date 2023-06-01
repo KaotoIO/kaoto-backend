@@ -111,21 +111,28 @@ public class DeploymentService {
 
     /*
      * 🐱method crds: String
-     * 🐱param i: List<Integration>
+     * 🐱param integrationList: List<Integration>
      * 🐱param dsl: String
      *
      * Based on the provided steps, return a valid yaml string to deploy
      */
     @WithSpan
-    public String crds(final List<Integration> i, final Map<String, Object> metadata, final String dsl) {
+    public String crds(final List<Integration> integrationList, final Map<String, Object> metadata) {
         List<StepParserService.ParseResult<Step>> integrations = new LinkedList<>();
+        String dsl = null;
 
-        for (Integration integration : i) {
+        for (Integration integration : integrationList) {
             var parseResult = new StepParserService.ParseResult<Step>();
             parseResult.setMetadata(integration.getMetadata());
             parseResult.setSteps(integration.getSteps());
             parseResult.setParameters(integration.getParameters());
             integrations.add(parseResult);
+            if (integration.getDsl() != null) {
+                if (dsl != null && !integration.getDsl().equalsIgnoreCase(dsl)) {
+                    log.error("We were sent a mix of DSL in the same list of flows!");
+                }
+                dsl = integration.getDsl();
+            }
         }
 
         if (metadata != null && !metadata.isEmpty()) {
