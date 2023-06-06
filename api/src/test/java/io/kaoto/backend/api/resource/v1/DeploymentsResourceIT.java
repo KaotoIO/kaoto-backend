@@ -4,8 +4,10 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.resource.support.NativeHelper;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
+
 @QuarkusIntegrationTest
-class IntegrationsResourceIT extends IntegrationsResourceTestAbstract {
+public class DeploymentsResourceIT extends DeploymentsResourceTestAbstract {
+
     @Override
     protected void waitForWarmUpCatalog() {
         NativeHelper.waitForWarmUpCatalog(StepCatalog.class.getCanonicalName());

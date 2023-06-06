@@ -22,6 +22,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -150,8 +151,10 @@ public class DeploymentsResource {
     @Operation(summary = "Get CRD",
             description = "Returns the custom resource identified by name.")
     public String resource(
-            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
-            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name")
+            String name,
+            final @Parameter(description = "Type of the resource to get", required = true) @NotNull @QueryParam("type")
+            String type,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
         CustomResource cr = clusterService.get(namespace, name, type);
@@ -192,8 +195,10 @@ public class DeploymentsResource {
     @Operation(summary = "Stop/Remove",
             description = "Remove the resource identified by name.")
     public boolean stop(
-            final @Parameter(description = "Name of the resource to get.") @PathParam("name") String name,
-            final @Parameter(description = "Type of the resource to get") @QueryParam("type") String type,
+            final @Parameter(description = "Name of the resource to get.") @PathParam("name")
+            String name,
+            final @Parameter(description = "Type of the resource to get", required = true) @NotNull @QueryParam("type")
+            String type,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
         return clusterService.stop(name, namespace, type);
