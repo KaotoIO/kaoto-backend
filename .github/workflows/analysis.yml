@@ -74,7 +74,7 @@ jobs:
           disk-root: "C:"
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run native tests
-        run: mvn install -Pnative
+        run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Pnative -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
       - name: Archive Quarkus log for native tests
         uses: actions/upload-artifact@v3
         if: failure()
@@ -114,5 +114,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run tests
-        run: mvn install
+        run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
