@@ -170,7 +170,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
         StringBuilder sb = new StringBuilder();
 
-        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).get();
+        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).orElseThrow();
         flows.stream().forEachOrdered(stepParseResult -> {
             sb.append(parse(stepParseResult.getSteps(), stepParseResult.getMetadata(),
                     stepParseResult.getParameters()));

@@ -181,7 +181,7 @@ public class IdempotentConsumer extends Expression {
         var filter_ids = this.getRepresenterProperties();
         var id = STEPS_LABEL;
         if (filter_ids.size() > 0) {
-            id = String.valueOf(filter_ids.entrySet().stream().findFirst().get().getValue());
+            id = String.valueOf(filter_ids.entrySet().stream().findFirst().orElseThrow().getValue());
         }
         step.setBranches(List.of(createBranch(id, this.getSteps(), kameletStepParserService)));
     }

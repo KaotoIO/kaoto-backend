@@ -54,7 +54,7 @@ public class ChoiceFlowStep implements FlowStep {
             for (Branch b : step.getBranches()) {
                 if (b.getCondition() != null || String.valueOf(b.getIdentifier()).startsWith("when-")
                         || tentativeOtherwise != null) {
-                    if ("otherwise".equalsIgnoreCase(b.getIdentifier())) {
+                    if ("otherwise".equalsIgnoreCase(b.getIdentifier()) && tentativeOtherwise != null) {
                         Branch tmp = tentativeOtherwise;
                         tentativeOtherwise = setOtherwiseBranch(kameletPopulator, choice, b);
                         b = tmp;
