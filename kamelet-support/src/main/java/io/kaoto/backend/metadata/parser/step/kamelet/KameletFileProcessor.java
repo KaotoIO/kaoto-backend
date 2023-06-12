@@ -130,7 +130,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
             final var prop = property.getValue();
             var description = prop.getDescription();
-            String value = prop.getDefault();
+            Object value = prop.getDefault();
             p = getParameter(prop, id, title, description, value);
             p.setPath(prop.getPath());
 
@@ -153,21 +153,21 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
     private Parameter getParameter(final KameletDefinitionProperty property,
                                    final String id, final String title,
-                                   final String description, final String value) {
+                                   final String description, final Object value) {
         final var type = property.getType().toLowerCase();
 
         return switch (type) {
             //number, integer, string, boolean, array, object, or null
             case "number" -> new NumberParameter(id, title, description,
-                    value != null ? Double.valueOf(value) : null);
+                    value != null ? Double.valueOf(String.valueOf(value)) : null);
             case "integer" -> new IntegerParameter(id, title, description,
-                    value != null ? Integer.valueOf(value) : null);
+                    value != null ? Integer.valueOf(String.valueOf(value)) : null);
             case "string" -> new StringParameter(id, title, description,
-                    value, property.getFormat());
+                    value != null ? String.valueOf(value) : null, property.getFormat());
             case "boolean" -> new BooleanParameter(id, title, description,
-                    value != null ? Boolean.valueOf(value) : null);
+                    value != null ? Boolean.valueOf(String.valueOf(value)) : null);
             case "array" -> new ArrayParameter(id, title, description,
-                    value != null ? value.split(",") : null);
+                    value != null ? String.valueOf(value).split(",") : null);
             default -> new ObjectParameter(id, title, description,
                     value);
         };

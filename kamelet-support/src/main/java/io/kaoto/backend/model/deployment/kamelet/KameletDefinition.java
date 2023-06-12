@@ -78,8 +78,7 @@ public class KameletDefinition implements Serializable {
         return properties;
     }
 
-    public void setProperties(
-            final Map<String, KameletDefinitionProperty> properties) {
+    public void setProperties(final Map<String, KameletDefinitionProperty> properties) {
         this.properties = properties;
     }
 

@@ -9,10 +9,11 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
-import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import org.apache.camel.v1alpha1.KameletBindingSpec;
+import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -86,24 +87,22 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         return res;
     }
 
-    private void processSpec(final List<Step> steps,
-                             final KameletBindingSpec spec) {
-        steps.add(processStep(spec.getSource(), Step.Type.START));
+    private void processSpec(final List<Step> steps, final KameletBindingSpec spec) {
+        steps.add(processStep(new KameletBindingStep(spec.getSource()), Step.Type.START));
 
         if (spec.getSteps() != null) {
-            for (KameletBindingStep intermediateStep : spec.getSteps()) {
-                steps.add(processStep(intermediateStep, Step.Type.MIDDLE));
+            for (Steps intermediateStep : spec.getSteps()) {
+                steps.add(processStep(new KameletBindingStep(intermediateStep), Step.Type.MIDDLE));
             }
         }
 
-        steps.add(processStep(spec.getSink(), Step.Type.END));
+        steps.add(processStep(new KameletBindingStep(spec.getSink()), Step.Type.END));
     }
 
     private Step processStep(final KameletBindingStep bindingStep, final Step.Type type) {
         Optional<Step> step = Optional.empty();
 
         try {
-
             if (bindingStep.getUri() != null) {
                 log.trace("Found uri component. Probably a Camel Conector.");
                 String uri = bindingStep.getUri();

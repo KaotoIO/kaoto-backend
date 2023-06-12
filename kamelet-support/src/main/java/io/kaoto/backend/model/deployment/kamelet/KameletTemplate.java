@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
+import org.apache.camel.v1alpha1.kameletspec.Template;
 
-import java.io.Serializable;
 import java.util.List;
 
 
@@ -29,13 +29,17 @@ import java.util.List;
         using = JsonDeserializer.None.class
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Template implements Serializable {
+public class KameletTemplate extends Template {
     private static final long serialVersionUID = -4601560033032557024L;
 
     @JsonProperty("beans")
     private List<Bean> beans;
     @JsonProperty("from")
     private From from;
+
+    public KameletTemplate() {
+
+    }
 
     public From getFrom() {
         return from;

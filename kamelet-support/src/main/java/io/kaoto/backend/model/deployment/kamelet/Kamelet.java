@@ -1,18 +1,18 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.model.annotation.Group;
-import io.fabric8.kubernetes.model.annotation.Kind;
+import io.fabric8.kubernetes.model.annotation.Plural;
+import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import org.apache.camel.v1alpha1.KameletStatus;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -27,15 +27,15 @@ import java.util.Map;
  *
  */
 
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Version(
+        value = "v1alpha1",
+        storage = true,
+        served = true
+)
 @Group("camel.apache.org")
-@Version("v1alpha1")
-@Kind("Kamelet")
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class Kamelet
-        extends CustomResource<KameletSpec, KameletBindingStatus>
-        implements io.fabric8.kubernetes.api.model.Namespaced, Serializable {
+@Singular("kamelet")
+@Plural("kamelets")
+public final class Kamelet extends CustomResource<KameletSpec, KameletStatus> implements Namespaced {
 
     @Serial
     private static final long serialVersionUID = -6210736155226440906L;

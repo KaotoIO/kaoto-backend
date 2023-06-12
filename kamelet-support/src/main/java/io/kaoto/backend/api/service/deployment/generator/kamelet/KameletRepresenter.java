@@ -5,12 +5,8 @@ import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
-import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
-import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
-import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
-import io.kaoto.backend.model.deployment.kamelet.Template;
+import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
 import io.kaoto.backend.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.model.deployment.kamelet.step.AggregateFlowStep;
@@ -68,6 +64,8 @@ import io.kaoto.backend.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.SuperChoice;
+import org.apache.camel.v1alpha1.KameletBindingSpec;
+import org.apache.camel.v1alpha1.KameletSpec;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.Property;
@@ -159,6 +157,7 @@ public class KameletRepresenter extends Representer {
                 });
     }
 
+    @SuppressWarnings("CPD-START")
     private void spec() {
         //spec does not have the right order
         this.multiRepresenters.put(KameletBindingSpec.class,
@@ -189,6 +188,29 @@ public class KameletRepresenter extends Representer {
                         properties.put("definition", spec.getDefinition());
                         properties.put("dependencies", spec.getDependencies());
                         properties.put("template", spec.getTemplate());
+                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
+                                DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
+
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletspec.Definition.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var def = (org.apache.camel.v1alpha1.kameletspec.Definition) data;
+                        properties.put("title", def.getTitle());
+                        properties.put("description", def.getDescription());
+                        if (def.getRequired() != null) {
+                            properties.put("required", def.getRequired());
+                        }
+                        if (def.getProperties() != null) {
+                            var propsMap = new LinkedHashMap<String, KameletDefinitionProperty>();
+                            for (var property : def.getProperties().entrySet()) {
+                                propsMap.put(property.getKey(), new KameletDefinitionProperty(property.getValue()));
+                            }
+                            properties.put("properties", propsMap);
+                        }
                         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
@@ -242,12 +264,12 @@ public class KameletRepresenter extends Representer {
                     }
                 });
 
-        this.multiRepresenters.put(Template.class,
+        this.multiRepresenters.put(KameletTemplate.class,
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
                         Map<String, Object> properties = new LinkedHashMap<>();
-                        Template template = (Template) data;
+                        KameletTemplate template = (KameletTemplate) data;
                         if (template.getBeans() != null) {
                             properties.put("beans", template.getBeans());
                         }
@@ -256,49 +278,130 @@ public class KameletRepresenter extends Representer {
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });
-        this.multiRepresenters.put(KameletBindingStep.class,
-            new RepresentMap() {
-                @Override
-                public Node representData(final Object data) {
-                    Map<String, Object> properties = new LinkedHashMap<>();
-                    KameletBindingStep step = (KameletBindingStep) data;
-                    if (step.getRef() != null) {
-                        properties.put("ref", step.getRef());
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.Source.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var step = (org.apache.camel.v1alpha1.kameletbindingspec.Source) data;
+                        if (step.getRef() != null) {
+                            properties.put("ref", step.getRef());
+                        }
+                        if (step.getUri() != null) {
+                            properties.put(URI, step.getUri());
+                        }
+                        if (step.getProperties() != null
+                                && step.getProperties().getAdditionalProperties() != null
+                                && !step.getProperties().getAdditionalProperties().isEmpty()) {
+                            properties.put("properties", step.getProperties().getAdditionalProperties());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
-                    if (step.getUri() != null) {
-                        properties.put(URI, step.getUri());
+                });
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.Sink.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var step = (org.apache.camel.v1alpha1.kameletbindingspec.Sink) data;
+                        if (step.getRef() != null) {
+                            properties.put("ref", step.getRef());
+                        }
+                        if (step.getUri() != null) {
+                            properties.put(URI, step.getUri());
+                        }
+                        if (step.getProperties() != null
+                                && step.getProperties().getAdditionalProperties() != null
+                                && !step.getProperties().getAdditionalProperties().isEmpty()) {
+                            properties.put("properties", step.getProperties().getAdditionalProperties());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
-                    if (step.getParameters() != null && !step.getParameters().isEmpty()) {
-                        //remove step-id-kaoto, it is not a real property
-                        step.getParameters().remove("step-kaoto-id");
-                        properties.put(PARAMETERS, step.getParameters());
-                    }
-                    if (step.getProperties() != null && !step.getProperties().isEmpty()) {
-                        properties.put("properties", step.getProperties());
-                    }
-                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
-                }
-            });
+                });
 
-        this.multiRepresenters.put(KameletBindingStepRef.class,
-            new RepresentMap() {
-                @Override
-                public Node representData(final Object data) {
-                    Map<String, Object> properties = new LinkedHashMap<>();
-                    KameletBindingStepRef ref = (KameletBindingStepRef) data;
-                    if (ref.getApiVersion() != null) {
-                        properties.put(API_VERSION, ref.getApiVersion());
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.Steps.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var step = (org.apache.camel.v1alpha1.kameletbindingspec.Steps) data;
+                        if (step.getRef() != null) {
+                            properties.put("ref", step.getRef());
+                        }
+                        if (step.getUri() != null) {
+                            properties.put(URI, step.getUri());
+                        }
+                        if (step.getProperties() != null
+                                && step.getProperties().getAdditionalProperties() != null
+                                && !step.getProperties().getAdditionalProperties().isEmpty()) {
+                            properties.put("properties", step.getProperties().getAdditionalProperties());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
-                    if (ref.getName() != null) {
-                        properties.put(NAME, ref.getName());
+                });
+
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.source.Ref.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var ref = (org.apache.camel.v1alpha1.kameletbindingspec.source.Ref) data;
+                        if (ref.getApiVersion() != null) {
+                            properties.put(API_VERSION, ref.getApiVersion());
+                        }
+                        if (ref.getName() != null) {
+                            properties.put(NAME, ref.getName());
+                        }
+                        if (ref.getKind() != null) {
+                            properties.put(KIND, ref.getKind());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
-                    if (ref.getKind() != null) {
-                        properties.put(KIND, ref.getKind());
+                });
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.steps.Ref.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var ref = (org.apache.camel.v1alpha1.kameletbindingspec.steps.Ref) data;
+                        if (ref.getApiVersion() != null) {
+                            properties.put(API_VERSION, ref.getApiVersion());
+                        }
+                        if (ref.getName() != null) {
+                            properties.put(NAME, ref.getName());
+                        }
+                        if (ref.getKind() != null) {
+                            properties.put(KIND, ref.getKind());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
-                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
-                }
-            });
+                });
+        this.multiRepresenters.put(org.apache.camel.v1alpha1.kameletbindingspec.sink.Ref.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        var ref = (org.apache.camel.v1alpha1.kameletbindingspec.sink.Ref) data;
+                        if (ref.getApiVersion() != null) {
+                            properties.put(API_VERSION, ref.getApiVersion());
+                        }
+                        if (ref.getName() != null) {
+                            properties.put(NAME, ref.getName());
+                        }
+                        if (ref.getKind() != null) {
+                            properties.put(KIND, ref.getKind());
+                        }
+                        return representMapping(
+                                getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
+                    }
+                });
     }
+    @SuppressWarnings("CPD-END")
 
     private void addEIP() {
         //Can we dynamically add this without Quarkus removing the classes

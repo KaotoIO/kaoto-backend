@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.camelroute.Integration;
-import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -51,7 +50,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             ksps.processMetadata(res, integration.getMetadata());
             res.setParameters(new ArrayList<>());
 
-            for (Flow flow : integration.getSpec().getFlows()) {
+            for (var flow : integration.getSpec().get_flows()) {
                 steps.add(ksps.processStep(flow.getFrom(), true, false));
                 if (flow.getFrom().getSteps() != null) {
                     for (FlowStep step : flow.getFrom().getSteps()) {

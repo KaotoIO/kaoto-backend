@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -150,16 +151,26 @@ class DeploymentServiceTest {
             }
         }
 
-        ObjectMapper yamlMapper =
-                new ObjectMapper(new YAMLFactory())
-                        .configure(
-                                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                false);
+        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 
         KameletBinding res1 = yamlMapper.readValue(expectedStr, KameletBinding.class);
         KameletBinding res2 = yamlMapper.readValue(result, KameletBinding.class);
 
-        assertEquals(res1, res2);
+        //spec does not have a good equals function, so we have to check manually
+        assertEquals(res1.getMetadata(), res2.getMetadata());
+        assertEquals(res1.getKind(), res2.getKind());
+
+        //the step objects also don't have good equals functions
+        assertEquals(res1.getSpec().getSink().getUri(), res2.getSpec().getSink().getUri());
+        assertEquals(res1.getSpec().getSink().getRef().getFieldPath(),
+                res2.getSpec().getSink().getRef().getFieldPath());
+        assertEquals(res1.getSpec().getSink().getTypes(), res2.getSpec().getSink().getTypes());
+        assertEquals(res1.getSpec().getSource().getUri(), res2.getSpec().getSource().getUri());
+        assertEquals(res1.getSpec().getSource().getRef().getFieldPath(),
+                res2.getSpec().getSource().getRef().getFieldPath());
+        assertEquals(res1.getSpec().getSource().getTypes(), res2.getSpec().getSource().getTypes());
+        assertEquals(res1.getSpec().getSteps().size(), res2.getSpec().getSteps().size());
+
     }
 
 

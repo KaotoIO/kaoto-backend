@@ -1,54 +1,31 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.fabric8.kubernetes.api.model.KubernetesResource;
+import javax.annotation.processing.Generated;
 
-import java.io.Serializable;
-import java.util.List;
-
-@JsonPropertyOrder({"definition", "dependencies", "template"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class KameletSpec
-        implements KubernetesResource, Serializable {
-    private static final long serialVersionUID = 7040723764223374489L;
-
-    @JsonProperty("definition")
-    private KameletDefinition definition;
-
-    @JsonProperty("dependencies")
-    private List<String> dependencies;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"definition", "dependencies", "sources", "template", "types"})
+@JsonDeserialize(using = JsonDeserializer.None.class)
+@Generated("io.fabric8.java.generator.CRGeneratorRunner")
+public class KameletSpec extends org.apache.camel.v1alpha1.KameletSpec {
 
     @JsonProperty("template")
-    private Template template;
+    @JsonPropertyDescription("the main source in YAML DSL")
+    @JsonSetter(nulls = com.fasterxml.jackson.annotation.Nulls.SKIP)
+    private KameletTemplate template;
 
-    public KameletDefinition getDefinition() {
-        return definition;
-    }
-
-    public void setDefinition(final KameletDefinition definition) {
-        this.definition = definition;
-    }
-
-    public Template getTemplate() {
+    @Override
+    public KameletTemplate getTemplate() {
         return template;
     }
 
-    public void setTemplate(final Template template) {
+    public void setTemplate(KameletTemplate template) {
         this.template = template;
-    }
-
-    public List<String> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies(final List<String> dependencies) {
-        this.dependencies = dependencies;
     }
 }

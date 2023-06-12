@@ -19,6 +19,28 @@ public final class KameletBindingStepRef implements Serializable {
     private String apiVersion = "camel.apache.org/v1alpha1";
     private String name = "";
 
+    public KameletBindingStepRef() {
+    }
+
+    public KameletBindingStepRef(final String apiVersion, final String kind, final String name) {
+        this.setApiVersion(apiVersion);
+        this.setKind(kind);
+        this.setName(name);
+    }
+
+    public KameletBindingStepRef(final org.apache.camel.v1alpha1.kameletbindingspec.source.Ref ref) {
+        this(ref.getApiVersion(), ref.getKind(), ref.getName());
+    }
+
+    public KameletBindingStepRef(final org.apache.camel.v1alpha1.kameletbindingspec.sink.Ref ref) {
+        this(ref.getApiVersion(), ref.getKind(), ref.getName());
+    }
+
+    public KameletBindingStepRef(final org.apache.camel.v1alpha1.kameletbindingspec.steps.Ref ref) {
+        this(ref.getApiVersion(), ref.getKind(), ref.getName());
+    }
+
+
     public String getName() {
         return name;
     }
@@ -78,5 +100,29 @@ public final class KameletBindingStepRef implements Serializable {
                 ", apiVersion='" + apiVersion + '\'' +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public org.apache.camel.v1alpha1.kameletbindingspec.source.Ref getSourceRef() {
+        var ref = new org.apache.camel.v1alpha1.kameletbindingspec.source.Ref();
+        ref.setApiVersion(this.getApiVersion());
+        ref.setKind(this.getKind());
+        ref.setName(this.getName());
+        return ref;
+    }
+
+    public org.apache.camel.v1alpha1.kameletbindingspec.sink.Ref getSinkRef() {
+        var ref = new org.apache.camel.v1alpha1.kameletbindingspec.sink.Ref();
+        ref.setApiVersion(this.getApiVersion());
+        ref.setKind(this.getKind());
+        ref.setName(this.getName());
+        return ref;
+    }
+
+    public org.apache.camel.v1alpha1.kameletbindingspec.steps.Ref getStepsRef() {
+        var ref = new org.apache.camel.v1alpha1.kameletbindingspec.steps.Ref();
+        ref.setApiVersion(this.getApiVersion());
+        ref.setKind(this.getKind());
+        ref.setName(this.getName());
+        return ref;
     }
 }
