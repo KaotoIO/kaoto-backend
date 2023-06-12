@@ -1,7 +1,6 @@
 package io.kaoto.backend.api.service.step.parser.kamelet;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -76,9 +75,7 @@ public class KameletStepParserService implements StepParserService<Step> {
 
         List<Step> steps = new ArrayList<>();
         try {
-            ObjectMapper yamlMapper =
-                    new ObjectMapper(
-                            new YAMLFactory()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
             Kamelet kamelet = yamlMapper.readValue(input, Kamelet.class);
 
             processMetadata(res, kamelet.getMetadata());

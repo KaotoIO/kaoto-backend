@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -95,10 +94,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper =
-                        new ObjectMapper(new YAMLFactory())
-                                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Kamelet.class);
             } catch (Exception e) {
                 log.trace("Tried creating a kamelet and it didn't work.");
