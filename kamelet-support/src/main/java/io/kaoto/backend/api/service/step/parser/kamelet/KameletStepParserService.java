@@ -9,7 +9,6 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
@@ -21,6 +20,7 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
+import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -109,8 +109,7 @@ public class KameletStepParserService implements StepParserService<Step> {
         res.setParameters(new ArrayList<>());
         if (spec.getDefinition() != null
                 && spec.getDefinition().getProperties() != null) {
-            Map<String, KameletDefinitionProperty> props =
-                    spec.getDefinition().getProperties();
+            Map<String, Properties> props = spec.getDefinition().getProperties();
 
             for (var prop : props.entrySet()) {
                 String key = prop.getKey();
@@ -119,29 +118,39 @@ public class KameletStepParserService implements StepParserService<Step> {
                 switch (def.getType()) {
                     case "string":
                         p = new StringParameter(key, def.getTitle(),
-                                def.getDescription(), def.getDefault(), def.getFormat());
+                                def.getDescription(),
+                                def.get_default() != null ?
+                                        String.valueOf(def.get_default().getValue()) : null,
+                                def.getFormat());
                         break;
                     case "number":
                         p = new NumberParameter(key, def.getTitle(),
-                                def.getDescription(), Double.valueOf(def.getDefault()));
+                                def.getDescription(),
+                                def.get_default() != null ?
+                                        Double.valueOf(String.valueOf(def.get_default().getValue()))
+                                        : null);
                         break;
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null ? Integer.valueOf(def.getDefault()) : null);
+                                def.get_default() != null ?
+                                        Integer.valueOf(String.valueOf(def.get_default().getValue())) : null);
                         break;
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null ? Boolean.valueOf(def.getDefault()) : null);
+                                def.get_default() != null ?
+                                        Boolean.valueOf(String.valueOf(def.get_default().getValue())) : null);
                         break;
                     case "array":
                         p = new ArrayParameter(key, def.getTitle(),
                                 def.getDescription(),
-                                def.getDefault() != null ? def.getDefault().split(",") : null);
+                                def.get_default() != null ?
+                                        String.valueOf(def.get_default().getValue()).split(",") :
+                                        null);
                         break;
                     default:
-                        p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getDefault());
+                        p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.get_default());
                 }
                 res.getParameters().add(p);
             }
@@ -151,14 +160,17 @@ public class KameletStepParserService implements StepParserService<Step> {
     private void processSpec(final List<Step> steps,
                              final ParseResult<Step> res,
                              final KameletSpec spec) {
-        if (spec.getTemplate() != null && spec.getTemplate().getFrom() != null) {
-            steps.add(processStep(spec.getTemplate().getFrom(), true, false));
+        if (spec.getTemplate() != null) {
+            final var template = spec.getTemplate();
+            if (template.getFrom() != null) {
+                steps.add(processStep(template.getFrom(), true, false));
 
-            final var fromSteps = spec.getTemplate().getFrom().getSteps();
-            if (fromSteps != null) {
-                for (FlowStep flowStep : fromSteps) {
-                    //end is always false in this case because we can always edit one step after it
-                    steps.add(processStep(flowStep, false, false));
+                final var fromSteps = template.getFrom().getSteps();
+                if (fromSteps != null) {
+                    for (FlowStep flowStep : fromSteps) {
+                        //end is always false in this case because we can always edit one step after it
+                        steps.add(processStep(flowStep, false, false));
+                    }
                 }
             }
         }

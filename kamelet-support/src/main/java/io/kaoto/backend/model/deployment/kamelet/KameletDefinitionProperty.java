@@ -36,16 +36,44 @@ public class KameletDefinitionProperty  implements Serializable {
     private String type;
 
     @JsonProperty("default")
-    private String defaultValue;
+    private Object defaultValue;
 
     @JsonProperty("example")
-    private String example;
+    private Object example;
 
     @JsonProperty("path")
     private Boolean path;
 
     @JsonProperty("format")
     private String format;
+
+    public KameletDefinitionProperty() {
+
+    }
+
+    public KameletDefinitionProperty(final String defaultValue, final String example, final String description,
+                                     final String format,
+                                     final String title, final String type) {
+        this.setDefault(defaultValue);
+        this.setExample(example);
+        this.setDescription(description);
+        this.setFormat(format);
+        this.setPath(false);
+        this.setTitle(title);
+        this.setType(type);
+    }
+
+    public KameletDefinitionProperty(final org.apache.camel.v1alpha1.kameletspec.definition.Properties value) {
+        this(value.get_default() != null && value.get_default().getValue() != null ?
+                        String.valueOf(value.get_default().getValue()) :
+                        null,
+                value.getExample() != null ? String.valueOf(value.getExample()) : null,
+                value.getDescription(),
+                value.getFormat(),
+                value.getTitle(),
+                value.getType());
+    }
+
 
     public String getTitle() {
         return title;
@@ -71,19 +99,19 @@ public class KameletDefinitionProperty  implements Serializable {
         this.type = type;
     }
 
-    public String getDefault() {
+    public Object getDefault() {
         return defaultValue;
     }
 
-    public void setDefault(final String defaultValue) {
+    public void setDefault(final Object defaultValue) {
         this.defaultValue = defaultValue;
     }
 
-    public String getExample() {
+    public Object getExample() {
         return example;
     }
 
-    public void setExample(final String example) {
+    public void setExample(final Object example) {
         this.example = example;
     }
 

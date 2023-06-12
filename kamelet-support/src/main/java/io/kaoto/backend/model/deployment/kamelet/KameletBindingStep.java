@@ -1,24 +1,15 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.camel.v1alpha1.kameletbindingspec.Sink;
+import org.apache.camel.v1alpha1.kameletbindingspec.Source;
+import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-@JsonPropertyOrder({"ref", "uri", "properties"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class KameletBindingStep implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 2963462792033661194L;
+public final class KameletBindingStep {
 
     @JsonProperty("ref")
     private KameletBindingStepRef ref;
@@ -35,11 +26,29 @@ public final class KameletBindingStep implements Serializable {
     public KameletBindingStep() {
     }
 
-    public KameletBindingStep(final String uri) {
-        this.uri = uri;
+
+    public KameletBindingStep(final Map<String, Object> additionalProperties,
+                              final KameletBindingStepRef kameletBindingStepRef,
+                              final String uri) {
+        this.setProperties(additionalProperties);
+        this.setRef(kameletBindingStepRef);
+        this.setUri(uri);
     }
-    public KameletBindingStep(final KameletBindingStepRef ref) {
-        this.ref = ref;
+
+    public KameletBindingStep(final Source camelKStep) {
+        this(camelKStep.getProperties() != null ? camelKStep.getProperties().getAdditionalProperties() : null,
+                new KameletBindingStepRef(camelKStep.getRef()),
+                camelKStep.getUri());
+    }
+    public KameletBindingStep(final Sink camelKStep) {
+        this(camelKStep.getProperties() != null ? camelKStep.getProperties().getAdditionalProperties() : null,
+                new KameletBindingStepRef(camelKStep.getRef()),
+                camelKStep.getUri());
+    }
+    public KameletBindingStep(final Steps camelKStep) {
+        this(camelKStep.getProperties() != null ? camelKStep.getProperties().getAdditionalProperties() : null,
+                new KameletBindingStepRef(camelKStep.getRef()),
+                camelKStep.getUri());
     }
 
     public KameletBindingStepRef getRef() {
@@ -114,5 +123,41 @@ public final class KameletBindingStep implements Serializable {
         result = 31 * result + (getProperties() != null ? getProperties().hashCode() : 0);
         result = 31 * result + (getParameters() != null ? getParameters().hashCode() : 0);
         return result;
+    }
+
+    public Source getSource() {
+        Source source = new Source();
+        var properties = new org.apache.camel.v1alpha1.kameletbindingspec.source.Properties();
+        properties.setAdditionalProperties(this.getProperties());
+        source.setProperties(properties);
+        source.setUri(this.getUri());
+        source.setRef(this.getRef().getSourceRef());
+        var types = new LinkedHashMap<String, org.apache.camel.v1alpha1.kameletbindingspec.source.Types>();
+        source.setTypes(types);
+        return source;
+    }
+
+    public Sink getSink() {
+        Sink sink = new Sink();
+        var properties = new org.apache.camel.v1alpha1.kameletbindingspec.sink.Properties();
+        properties.setAdditionalProperties(this.getProperties());
+        sink.setProperties(properties);
+        sink.setUri(this.getUri());
+        sink.setRef(this.getRef().getSinkRef());
+        var types = new LinkedHashMap<String, org.apache.camel.v1alpha1.kameletbindingspec.sink.Types>();
+        sink.setTypes(types);
+        return sink;
+    }
+
+    public Steps getSteps() {
+        Steps steps = new Steps();
+        var properties = new org.apache.camel.v1alpha1.kameletbindingspec.steps.Properties();
+        properties.setAdditionalProperties(this.getProperties());
+        steps.setProperties(properties);
+        steps.setUri(this.getUri());
+        steps.setRef(this.getRef().getStepsRef());
+        var types = new LinkedHashMap<String, org.apache.camel.v1alpha1.kameletbindingspec.steps.Types>();
+        steps.setTypes(types);
+        return steps;
     }
 }

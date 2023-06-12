@@ -12,12 +12,12 @@ import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
-import io.kaoto.backend.model.deployment.kamelet.KameletBindingSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletBindingStepRef;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
+import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -52,20 +52,24 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
 
-        KameletBindingSpec spec = new KameletBindingSpec();
+        var spec = new KameletBindingSpec();
+        spec.setSteps(new LinkedList<>());
 
         for (int i = 0; i < steps.size(); i++) {
             var step = steps.get(i);
             if (i == 0 && Step.START.equalsIgnoreCase(step.getType())) {
-                spec.setSource(createKameletBindingStep(step));
+                spec.setSource(createKameletBindingStep(step).getSource());
             } else if (i == steps.size() - 1 && Step.END.equalsIgnoreCase(step.getType())) {
-                spec.setSink(createKameletBindingStep(step));
+                spec.setSink(createKameletBindingStep(step).getSink());
             } else {
-                spec.getSteps().add(createKameletBindingStep(step));
+                final var intermediateStep = createKameletBindingStep(step).getSteps();
+                if (intermediateStep != null) {
+                    spec.getSteps().add(intermediateStep);
+                }
             }
         }
 
-        if (spec.getSteps().isEmpty()) {
+        if (spec.getSteps() != null && spec.getSteps().isEmpty()) {
             spec.setSteps(null);
         }
 
@@ -81,6 +85,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
     }
 
     private KameletBindingStep createKameletBindingStep(final Step step) {
+
         KameletBindingStep kameletStep = new KameletBindingStep();
 
         String kind = step.getKind();
@@ -111,7 +116,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
                 }
             }
         } else {
-            KameletBindingStepRef ref = new KameletBindingStepRef();
+            var ref = new KameletBindingStepRef();
             ref.setName(step.getName());
             if (step.getKind().equalsIgnoreCase("Knative")) {
                 ref.setKind("Broker");

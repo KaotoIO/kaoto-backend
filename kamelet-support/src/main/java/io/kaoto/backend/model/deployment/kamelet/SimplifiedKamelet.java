@@ -1,10 +1,13 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.Namespaced;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.model.annotation.Group;
+import io.fabric8.kubernetes.model.annotation.Plural;
+import io.fabric8.kubernetes.model.annotation.Singular;
+import io.fabric8.kubernetes.model.annotation.Version;
+import org.apache.camel.v1alpha1.KameletStatus;
 
 
 /**
@@ -14,19 +17,19 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
  *
  */
 
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonDeserialize(using = JsonDeserializer.None.class)
-public final class SimplifiedKamelet {
+@Version(
+        value = "v1alpha1",
+        storage = true,
+        served = true
+)
+@Group("camel.apache.org")
+@Singular("kamelet")
+@Plural("kamelets")
+public final class SimplifiedKamelet
+        extends CustomResource<SimplifiedKameletSpec, KameletStatus> implements Namespaced {
 
     @JsonProperty("spec")
     protected SimplifiedKameletSpec spec;
-
-    @JsonProperty("kind")
-    private String kind;
-
-    @JsonProperty("metadata")
-    private ObjectMeta metadata = new ObjectMeta();
 
     public SimplifiedKamelet() {
         //Needed for serialization
@@ -40,19 +43,4 @@ public final class SimplifiedKamelet {
         this.spec = spec;
     }
 
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(final String kind) {
-        this.kind = kind;
-    }
-
-    public ObjectMeta getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(final ObjectMeta metadata) {
-        this.metadata = metadata;
-    }
 }

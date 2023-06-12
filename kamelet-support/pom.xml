@@ -27,6 +27,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.camel.k</groupId>
+            <artifactId>camel-k-crds</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
@@ -36,7 +41,6 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-config-yaml</artifactId>
@@ -53,4 +57,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!-- For camel k CRDs -->
+    <repositories>
+        <repository>
+            <id>apache-repo</id>
+            <name>Apache Repository</name>
+            <url>https://repository.apache.org/content/groups/releases/</url>
+        </repository>
+    </repositories>
 </project>

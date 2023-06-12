@@ -1,14 +1,11 @@
 package io.kaoto.backend;
 
+import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
-import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
-import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
-import io.kaoto.backend.model.deployment.kamelet.Template;
+import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.model.deployment.kamelet.expression.ScriptExpression;
@@ -68,6 +65,10 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
+import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
+import org.apache.camel.v1alpha1.kameletspec.Definition;
+import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
 
 import java.util.ArrayList;
@@ -109,17 +110,18 @@ public class KamelPopulator {
             final List<Parameter> parameters) {
 
         kamelet.setSpec(new KameletSpec());
-        kamelet.getSpec().setTemplate(new Template());
-        kamelet.getSpec().getTemplate().setFrom(getFlow(steps));
+        final var template = new KameletTemplate();
+        kamelet.getSpec().setTemplate(template);
+        template.setFrom(getFlow(steps));
         if (metadata.containsKey("definition")) {
-            if (metadata.get("definition") instanceof KameletDefinition def) {
+            if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
             } else if (metadata.get("definition") instanceof Map map) {
-                KameletDefinition def = new KameletDefinition();
+                Definition def = new Definition();
                 def.setTitle(String.valueOf(map.getOrDefault("title", "")));
                 def.setDescription(String.valueOf(map.getOrDefault("description", "")));
                 def.setRequired((List<String>) map.getOrDefault("required", null));
-                def.setProperties((Map<String, KameletDefinitionProperty>) map.getOrDefault("properties", null));
+                def.setProperties((Map<String, Properties>) map.getOrDefault("properties", null));
                 kamelet.getSpec().setDefinition(def);
             }
         }
@@ -150,7 +152,7 @@ public class KamelPopulator {
 
         setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
-        kamelet.getSpec().getTemplate().setBeans((List<Bean>) metadata.getOrDefault("beans", null));
+        template.setBeans((List<Bean>) metadata.getOrDefault("beans", null));
         final String metadataDescription = metadata.getOrDefault("description","").toString();
         final String specDescription = kamelet.getSpec().getDefinition().getDescription();
         if (! "".equals(metadataDescription) || specDescription == null) {
@@ -161,7 +163,7 @@ public class KamelPopulator {
     private void setSpecDefinition(final Kamelet kamelet,
                                    final List<Parameter> parameters) {
         if (kamelet.getSpec().getDefinition() == null) {
-            kamelet.getSpec().setDefinition(new KameletDefinition());
+            kamelet.getSpec().setDefinition(new Definition());
             kamelet.getSpec().getDefinition().setTitle("");
         }
         var def = kamelet.getSpec().getDefinition();
@@ -201,21 +203,21 @@ public class KamelPopulator {
         }
     }
 
-    private void setParameters(final List<Parameter> parameters,
-                               final KameletDefinition def) {
+    private void setParameters(final List<Parameter> parameters, final Definition def) {
         for (Parameter p : parameters) {
             //this will override anything that comes from the metadata set
             //which means there are edited changes
-            KameletDefinitionProperty property =
-                    new KameletDefinitionProperty();
+            Properties property = new Properties();
             if (p.getDefaultValue() != null) {
-                property.setDefault(p.getDefaultValue().toString());
+                AnyType defaultValue = new AnyType();
+                defaultValue.setValue(p.getDefaultValue());
+                property.set_default(defaultValue);
             }
             property.setDescription(p.getDescription());
             if ("string".equalsIgnoreCase(p.getType())) {
                 property.setFormat(((StringParameter) p).getFormat());
             }
-            property.setPath(false);
+            // property.setPath(false);
             property.setTitle(p.getTitle());
             property.setType(p.getType());
             def.getProperties().put(p.getId(), property);

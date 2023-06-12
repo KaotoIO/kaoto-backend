@@ -14,6 +14,7 @@ import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
+import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,25 +66,16 @@ class KameletStepParserServiceTest {
     @BeforeAll
     static void setup() throws URISyntaxException, IOException {
         kamelet = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "dropbox-sink.kamelet.yaml")
-                        .toURI()));
+                KameletBindingStepParserServiceTest.class.getResource("dropbox-sink.kamelet.yaml").toURI()));
         incomplete = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "dropbox-sink.kamelet-incomplete.yaml")
+                KameletBindingStepParserServiceTest.class.getResource("dropbox-sink.kamelet-incomplete.yaml")
                         .toURI()));
         kameletEIP = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "eip.kamelet.yaml")
-                        .toURI()));
+                KameletBindingStepParserServiceTest.class.getResource("eip.kamelet.yaml").toURI()));
         kameletJq = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "jq.kamelet.yaml")
-                        .toURI()));
+                KameletBindingStepParserServiceTest.class.getResource("jq.kamelet.yaml").toURI()));
         multiKamelet = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource(
-                                "multi-kamelets.yaml")
-                        .toURI()));
+                KameletBindingStepParserServiceTest.class.getResource("multi-kamelets.yaml").toURI()));
     }
 
     @BeforeEach
@@ -156,8 +148,7 @@ class KameletStepParserServiceTest {
         final var dropboxStep = parsed.getSteps().get(4);
         assertEquals("dropbox-action", dropboxStep.getId());
 
-        KameletDefinition definition =
-                (KameletDefinition) parsed.getMetadata().get("definition");
+        Definition definition = (Definition) parsed.getMetadata().get("definition");
 
         assertNotNull(definition);
 
@@ -166,8 +157,7 @@ class KameletStepParserServiceTest {
         assertFalse(definition.getProperties().isEmpty());
         assertEquals(4, definition.getProperties().size());
         assertTrue(definition.getProperties().containsKey("accessToken"));
-        KameletDefinitionProperty accessToken =
-                definition.getProperties().get("accessToken");
+        var accessToken = definition.getProperties().get("accessToken");
         assertEquals("Dropbox Access Token", accessToken.getTitle());
         assertEquals("The access Token to use to access Dropbox",
                 accessToken.getDescription());
@@ -198,11 +188,17 @@ class KameletStepParserServiceTest {
     @Test
     void goAndBackAgain() {
         var parsed = dslSpecification.getStepParserService().deepParse(kamelet);
+        assertTrue(!parsed.getSteps().isEmpty(), "Something got broken: we didn't get any steps from the kamelet.");
+        assertEquals(5, parsed.getSteps().size());
         String output = dslSpecification.getDeploymentGeneratorService().parse(parsed.getSteps(),
                 parsed.getMetadata(), parsed.getParameters());
         var parsed2 = dslSpecification.getStepParserService().deepParse(output);
         assertEquals(parsed.getSteps(), parsed2.getSteps());
         assertEquals(parsed.getMetadata().keySet(), parsed2.getMetadata().keySet());
+        assertTrue(parsed.getMetadata().containsKey("labels"));
+        assertTrue(parsed.getMetadata().containsKey("annotations"));
+        assertTrue(parsed.getMetadata().containsKey("additionalProperties"));
+        assertTrue(parsed.getMetadata().containsKey("name"));
         for (String key : new String[]{"labels", "annotations", "additionalProperties", "name"}) {
             assertEquals(parsed.getMetadata().get(key), parsed2.getMetadata().get(key));
         }

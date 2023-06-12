@@ -1,14 +1,9 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.rest.Rest;
-
-import java.io.Serializable;
+import org.apache.camel.v1.integrationspec.Flows;
 
 
 /**
@@ -24,10 +19,8 @@ import java.io.Serializable;
  *         - to: kamelet:sink
  * ```
  */
-@JsonPropertyOrder({"from", "rest"})
-@JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Flow implements Serializable {
+
+public class Flow extends Flows {
     private static final long serialVersionUID = -4601560033032557024L;
 
     @JsonProperty("from")

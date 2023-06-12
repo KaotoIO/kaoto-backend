@@ -1,15 +1,11 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.model.annotation.Group;
-import io.fabric8.kubernetes.model.annotation.Kind;
 import io.fabric8.kubernetes.model.annotation.Plural;
-import io.fabric8.kubernetes.model.annotation.ShortNames;
+import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
-
-import java.io.Serializable;
+import org.apache.camel.v1alpha1.KameletBindingSpec;
 
 
 /**
@@ -59,15 +55,15 @@ import java.io.Serializable;
  */
 
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Version(
+        value = "v1alpha1",
+        storage = true,
+        served = true
+)
 @Group("camel.apache.org")
-@Version("v1alpha1")
-@Kind("KameletBinding")
+@Singular("kameletbinding")
 @Plural("kameletbindings")
-@ShortNames("klb")
-public final class KameletBinding
-        extends CustomResource<KameletBindingSpec, KameletBindingStatus>
-        implements  io.fabric8.kubernetes.api.model.Namespaced, Serializable {
+public final class KameletBinding extends org.apache.camel.v1alpha1.KameletBinding {
     private static final long serialVersionUID = -1089453226037028488L;
 
     public KameletBinding() {
