@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
@@ -39,13 +38,8 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         ParseResult<Step> res = new ParseResult<>();
         List<Step> steps = new ArrayList<>();
         try {
-            ObjectMapper yamlMapper =
-                new ObjectMapper(new YAMLFactory())
-                        .configure(
-                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                            false);
-            Integration integration = yamlMapper.readValue(input,
-                    Integration.class);
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+            Integration integration = yamlMapper.readValue(input, Integration.class);
 
             ksps.processMetadata(res, integration.getMetadata());
             res.setParameters(new ArrayList<>());

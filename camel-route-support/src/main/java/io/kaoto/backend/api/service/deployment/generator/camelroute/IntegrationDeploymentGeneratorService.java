@@ -1,6 +1,5 @@
 package io.kaoto.backend.api.service.deployment.generator.camelroute;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -77,12 +76,7 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper =
-                        new ObjectMapper(new YAMLFactory())
-                                .configure(
-                                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                                        false);
-
+                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Integration.class);
             } catch (Exception e) {
                 log.trace("Tried creating an integration and it didn't work.");

@@ -139,7 +139,7 @@ class ClusterServiceTest {
     void testStartIntegration() {
         String ns = "default";
         assertTrue(clusterService.getResources(ns).isEmpty());
-        clusterService.start(integration, ns);
+        clusterService.start(integration2, ns);
         assertFalse(clusterService.getResources(ns).isEmpty());
         final var integrations = clusterService.getResources(ns);
         assertEquals(1, integrations.size());
