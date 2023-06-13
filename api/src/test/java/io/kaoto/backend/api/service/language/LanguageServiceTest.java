@@ -3,7 +3,7 @@ package io.kaoto.backend.api.service.language;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static io.kaoto.backend.api.service.language.LanguagesSpecificationChecker.checkAllLanguagesSpecifications;
 

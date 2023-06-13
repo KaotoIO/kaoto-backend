@@ -6,9 +6,9 @@ import io.kaoto.backend.model.view.ViewDefinition;
 import io.opentelemetry.extension.annotations.WithSpan;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

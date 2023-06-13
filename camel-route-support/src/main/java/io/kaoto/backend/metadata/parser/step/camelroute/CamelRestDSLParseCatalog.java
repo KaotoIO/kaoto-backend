@@ -12,7 +12,7 @@ import io.kaoto.backend.model.step.Step;
 import io.smallrye.common.constraint.NotNull;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;

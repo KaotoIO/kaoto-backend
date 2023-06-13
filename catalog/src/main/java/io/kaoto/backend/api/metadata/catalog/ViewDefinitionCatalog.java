@@ -7,8 +7,8 @@ import io.kaoto.backend.metadata.parser.view.ViewDefinitionParseCatalog;
 import io.kaoto.backend.model.configuration.Repository;
 import io.kaoto.backend.model.view.ViewDefinition;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;

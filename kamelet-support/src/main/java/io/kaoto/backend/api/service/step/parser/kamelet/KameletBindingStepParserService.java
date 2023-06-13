@@ -15,8 +15,8 @@ import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

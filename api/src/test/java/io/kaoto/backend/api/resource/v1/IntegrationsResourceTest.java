@@ -3,7 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.quarkus.test.junit.QuarkusTest;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @QuarkusTest
 public class IntegrationsResourceTest extends IntegrationsResourceTestAbstract {
