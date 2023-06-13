@@ -177,11 +177,10 @@ public class ClusterService {
 
         var constructor = new Constructor(binding.getClass());
         Yaml yaml = new Yaml(constructor, new IntegrationRepresenter());
-        var what = kubernetesClient.genericKubernetesResources(context)
+        kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
                 .load(new ByteArrayInputStream(yaml.dumpAsMap(binding).getBytes(StandardCharsets.UTF_8)))
                 .create();
-        System.out.println(what);
     }
 
     /*
