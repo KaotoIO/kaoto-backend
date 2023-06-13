@@ -61,6 +61,15 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             processMetadata(md, binding.getMetadata());
             processSpec(steps, binding.getSpec());
 
+            //Let's store the spec to make sure we don't lose anything else
+
+            binding.getSpec().setSteps(null);
+            binding.getSpec().setSource(null);
+            binding.getSpec().setSink(null);
+            binding.getSpec().setErrorHandler(null);
+            binding.getSpec().setIntegration(null);
+            md.put("spec", binding.getSpec());
+
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Wrong format provided. This is not parseable by us.");
         }

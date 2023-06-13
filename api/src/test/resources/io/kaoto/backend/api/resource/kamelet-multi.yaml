@@ -12,36 +12,36 @@ metadata:
   name: dropbox-sink
 spec:
   definition:
-    title: Dropbox Sink
     description: |-
       Upload Files to Dropbox.
       The Kamelet expects the following headers to be set:
       - `file` / `ce-file`: as the file name to upload
       If the header won't be set the exchange ID will be used as file name.
+    properties:
+      accessToken:
+        description: The access Token to use to access Dropbox
+        format: password
+        title: Dropbox Access Token
+        type: string
+      clientIdentifier:
+        description: Dropbox App client Identifier
+        title: Client Identifier
+        type: string
+      remotePath:
+        description: Original file or folder to work with
+        title: Remote Path
+        type: string
+      uploadMode:
+        default: add
+        description: Which mode to upload.
+        title: Upload Mode
+        type: string
     required:
     - accessToken
     - clientIdentifier
     - remotePath
     - uploadMode
-    properties:
-      accessToken:
-        title: Dropbox Access Token
-        description: The access Token to use to access Dropbox
-        type: string
-        format: password
-      clientIdentifier:
-        title: Client Identifier
-        description: Dropbox App client Identifier
-        type: string
-      remotePath:
-        title: Remote Path
-        description: Original file or folder to work with
-        type: string
-      uploadMode:
-        title: Upload Mode
-        description: Which mode to upload.
-        type: string
-        default: add
+    title: Dropbox Sink
   dependencies:
   - camel:core
   - camel:dropbox
@@ -75,6 +75,9 @@ spec:
             clientIdentifier: '{{clientIdentifier}}'
             uploadMode: '{{uploadMode}}'
             accessToken: '{{accessToken}}'
+  types:
+    in:
+      mediaType: text/plain
 ---
 apiVersion: camel.apache.org/v1alpha1
 kind: Kamelet
@@ -90,36 +93,36 @@ metadata:
   name: dropbox-sink
 spec:
   definition:
-    title: Dropbox Sink
     description: |-
       Upload Files to Dropbox.
       The Kamelet expects the following headers to be set:
       - `file` / `ce-file`: as the file name to upload
       If the header won't be set the exchange ID will be used as file name.
+    properties:
+      accessToken:
+        description: The access Token to use to access Dropbox
+        format: password
+        title: Dropbox Access Token
+        type: string
+      clientIdentifier:
+        description: Dropbox App client Identifier
+        title: Client Identifier
+        type: string
+      remotePath:
+        description: Original file or folder to work with
+        title: Remote Path
+        type: string
+      uploadMode:
+        default: add
+        description: Which mode to upload.
+        title: Upload Mode
+        type: string
     required:
     - accessToken
     - clientIdentifier
     - remotePath
     - uploadMode
-    properties:
-      accessToken:
-        title: Dropbox Access Token
-        description: The access Token to use to access Dropbox
-        type: string
-        format: password
-      clientIdentifier:
-        title: Client Identifier
-        description: Dropbox App client Identifier
-        type: string
-      remotePath:
-        title: Remote Path
-        description: Original file or folder to work with
-        type: string
-      uploadMode:
-        title: Upload Mode
-        description: Which mode to upload.
-        type: string
-        default: add
+    title: Dropbox Sink
   dependencies:
   - camel:core
   - camel:dropbox

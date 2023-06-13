@@ -1,5 +1,6 @@
 package io.kaoto.backend;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -109,7 +110,31 @@ public class KamelPopulator {
             final List<Step> steps,
             final List<Parameter> parameters) {
 
-        kamelet.setSpec(new KameletSpec());
+
+        KameletSpec spec;
+        var metaObject = new ObjectMeta();
+        if (metadata != null && !metadata.isEmpty()) {
+            metaObject.setAnnotations(
+                    (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
+            metaObject.setAdditionalProperties(
+                    (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
+            var original_spec = metadata.remove("spec");
+            metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
+            metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
+            if (original_spec != null && original_spec instanceof KameletSpec ospec) {
+                spec = ospec;
+            } else if (original_spec != null && original_spec instanceof Map ospec) {
+                ObjectMapper mapper = new ObjectMapper();
+                spec = mapper.convertValue(ospec, KameletSpec.class);
+            } else {
+                spec = new KameletSpec();
+            }
+        } else {
+            spec = new KameletSpec();
+        }
+
+
+        kamelet.setSpec(spec);
         final var template = new KameletTemplate();
         kamelet.getSpec().setTemplate(template);
         template.setFrom(getFlow(steps));

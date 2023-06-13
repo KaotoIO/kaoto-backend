@@ -19,8 +19,10 @@ class KameletBindingDeploymentGeneratorServiceTest {
             "apiVersion: camel.apache.org/v1alpha1\n"
                     + "kind: KameletBinding\n"
                     + "metadata:\n"
-                    + "  name: ''\n"
-                    + "spec: {}\n";
+                    + "  name: null\n"
+                    + "spec:\n" +
+                    "  source: null\n" +
+                    "  sink: null\n";
     private KameletBindingDeploymentGeneratorService parser;
 
     @Inject
@@ -32,18 +34,15 @@ class KameletBindingDeploymentGeneratorServiceTest {
     @Test
     void parse() {
         List<Step> steps = new ArrayList();
-        Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse(
-                steps, Collections.emptyMap(), Collections.emptyList()));
+        Assertions.assertEquals(EMPTY_INTEGRATION, parser.parse(steps, Collections.emptyMap(),
+                Collections.emptyList()));
         steps.add(new Step());
         steps.add(new Step());
         for (Step step : steps) {
             step.setKind("Kamelet");
         }
-        Assertions.assertNotEquals("",
-                parser.parse(steps, Collections.emptyMap(),
-                        Collections.emptyList()));
-        Assertions.assertNotEquals(EMPTY_INTEGRATION,
-                parser.parse(steps, Collections.emptyMap(),
+        Assertions.assertNotEquals("", parser.parse(steps, Collections.emptyMap(), Collections.emptyList()));
+        Assertions.assertNotEquals(EMPTY_INTEGRATION, parser.parse(steps, Collections.emptyMap(),
                         Collections.emptyList()));
     }
 }

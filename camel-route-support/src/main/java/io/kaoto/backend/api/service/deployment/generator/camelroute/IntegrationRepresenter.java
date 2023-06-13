@@ -1,5 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.camelroute;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.camelroute.IntegrationSpec;
@@ -24,9 +26,11 @@ public class IntegrationRepresenter extends KameletRepresenter {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        Map<String, Object> properties = new LinkedHashMap<>();
-                        IntegrationSpec spec = (IntegrationSpec) data;
-                        properties.put("flows", spec.get_flows());
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> properties = mapper.convertValue(data,
+                                new TypeReference<Map<String, Object>>() {});
+                        properties.put("flows", ((IntegrationSpec) data).get_flows());
+                        properties.remove("_flows");
                         return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);

@@ -20,6 +20,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -38,7 +40,12 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class), new CamelRouteRepresenter());
-        return yaml.dumpAs(new CamelRoute(steps, metadata, catalog), Tag.SEQ, DumperOptions.FlowStyle.BLOCK);
+        return yaml.dumpAs(new CamelRoute(
+                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                        catalog),
+                Tag.SEQ,
+                DumperOptions.FlowStyle.BLOCK);
     }
 
     @Override

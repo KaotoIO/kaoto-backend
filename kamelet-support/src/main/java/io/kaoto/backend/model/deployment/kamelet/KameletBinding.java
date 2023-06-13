@@ -69,13 +69,10 @@ public final class KameletBinding extends org.apache.camel.v1alpha1.KameletBindi
     public KameletBinding() {
     }
 
-    public KameletBinding(final String name, final KameletBindingSpec spec) {
+    public KameletBinding(final KameletBindingSpec spec, final ObjectMeta metadata) {
         this();
         setSpec(spec);
-        if (getMetadata() == null) {
-           setMetadata(new ObjectMeta());
-        }
-        getMetadata().setName(name);
+        setMetadata(metadata);
     }
 
 

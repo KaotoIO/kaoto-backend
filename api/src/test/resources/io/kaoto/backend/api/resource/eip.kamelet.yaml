@@ -8,9 +8,9 @@ metadata:
   name: eip-action
 spec:
   definition:
-    title: EIP Kamelet
     description: Used to test all EIP we implement
     properties: {}
+    title: EIP Kamelet
   dependencies:
   - camel:core
   - camel:kamelet

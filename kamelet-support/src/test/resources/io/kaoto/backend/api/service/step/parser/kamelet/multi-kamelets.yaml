@@ -11,29 +11,29 @@ metadata:
   name: timer-source
 spec:
   definition:
-    title: Timer Source
     description: Produces periodic events with a custom payload.
-    required:
-      - message
     properties:
       period:
-        title: Period
+        default: 1000
         description: The interval between two events in milliseconds
+        title: Period
         type: integer
-        default: '1000'
       message:
-        title: Message
         description: The message to generate
+        title: Message
         type: string
       contentType:
-        title: Content Type
-        description: The content type of the message being generated
-        type: string
         default: text/plain
+        description: The content type of the message being generated
+        title: Content Type
+        type: string
       repeatCount:
-        title: Repeat Count
         description: Specifies a maximum limit of number of fires
+        title: Repeat Count
         type: integer
+    required:
+      - message
+    title: Timer Source
   dependencies:
     - camel:core
     - camel:timer
@@ -63,21 +63,21 @@ metadata:
   name: log-sink
 spec:
   definition:
-    title: Log Sink
     description: A sink that logs all data that it receives, useful for debugging
       purposes.
     properties:
       showHeaders:
-        title: Show Headers
+        default: false
         description: Show the headers received
+        title: Show Headers
         type: boolean
-        default: 'false'
       showStreams:
-        title: Show Streams
+        default: true
         description: Show the stream bodies (they may not be available in following
           steps)
+        title: Show Streams
         type: boolean
-        default: 'true'
+    title: Log Sink
   dependencies:
     - camel:kamelet
     - camel:log

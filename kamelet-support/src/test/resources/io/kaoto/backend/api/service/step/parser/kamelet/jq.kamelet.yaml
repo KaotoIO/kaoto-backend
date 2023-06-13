@@ -12,9 +12,9 @@ metadata:
   name: jq-action
 spec:
   definition:
-    title: Jq Kamelet
     description: Used to test jq usage
     properties: {}
+    title: Jq Kamelet
   dependencies:
   - camel:core
   - camel:kamelet

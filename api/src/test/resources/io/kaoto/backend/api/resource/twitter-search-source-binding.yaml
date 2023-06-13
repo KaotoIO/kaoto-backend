@@ -4,32 +4,38 @@ metadata:
   name: integration-4
 spec:
   source:
-    ref:
-      apiVersion: camel.apache.org/v1alpha1
-      name: twitter-search-source
-      kind: Kamelet
     properties:
       accessToken: your own
       accessTokenSecret: your own
       apiKey: your own
       apiKeySecret: your own
       keywords: Apache Camel
-  steps:
-  - ref:
-      apiVersion: camel.apache.org/v1alpha1
-      name: aws-translate-action
-      kind: Kamelet
-  - ref:
-      apiVersion: camel.apache.org/v1alpha1
-      name: avro-deserialize-action
-      kind: Kamelet
-  sink:
     ref:
       apiVersion: camel.apache.org/v1alpha1
-      name: kafka-sink
       kind: Kamelet
+      name: twitter-search-source
+    types: {}
+  steps:
+  - properties: {}
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
+      name: aws-translate-action
+    types: {}
+  - properties: {}
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
+      name: avro-deserialize-action
+    types: {}
+  sink:
     properties:
       bootstrapServers: The Brokers
       password: The Password
       topic: The Topic Names
       user: The Username
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
+      name: kafka-sink
+    types: {}

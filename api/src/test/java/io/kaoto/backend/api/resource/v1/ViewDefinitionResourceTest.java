@@ -88,6 +88,7 @@ class ViewDefinitionResourceTest {
 
     @Test
     void testNestedSteps() throws JsonProcessingException {
+
         //Get the JSON steps from the YAML
         Integration integration  = given()
                 .when()

@@ -3,6 +3,8 @@ kind: Integration
 metadata:
   name: integration
 spec:
+  dependencies:
+  - mvn:something.something
   flows:
   - from:
       uri: timer:tick
@@ -13,3 +15,16 @@ spec:
           uri: activemq:queue:myQueue
       - to:
           uri: log:save
+  integrationKit:
+    apiVersion: patatas
+    fieldPath: fieldPathy
+    kind: integrationKit
+    name: myOwnIntegrationKit
+    uid: hahaha
+  profile: myProfile
+  repositories:
+  - http://my.private.cloud/repo
+  serviceAccountName: service-account-name
+  traits:
+    camel:
+      enabled: true

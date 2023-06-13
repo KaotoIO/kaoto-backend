@@ -1,5 +1,6 @@
 package io.kaoto.backend.model.deployment.camelroute;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -47,24 +48,22 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
     }
 
     public Integration(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
-
         this.setMetadata(new ObjectMeta());
-        this.getMetadata().setName(
-                metadata.getOrDefault("name", "").toString());
-
+        this.getMetadata().setName(metadata.getOrDefault("name", "").toString());
         this.getMetadata().setAdditionalProperties(
-                (Map<String, Object>) metadata.getOrDefault(
-                        "additionalProperties", Collections.emptyMap()));
-
-        this.getMetadata().setAdditionalProperties(
-                (Map<String, Object>) metadata.getOrDefault(
-                        "annotations", Collections.emptyMap()));
-
-        this.getMetadata().setLabels(
-                (Map<String, String>) metadata.getOrDefault(
-                        "labels", Collections.emptyMap()));
-
-        this.setSpec(new IntegrationSpec());
+                (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
+        var original_spec = getMetadata().getAdditionalProperties().remove("spec");
+        this.getMetadata().setAnnotations(
+                (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
+        this.getMetadata().setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
+        if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {
+            this.setSpec(ospec);
+        } else if (original_spec != null && original_spec instanceof Map ospec) {
+            ObjectMapper mapper = new ObjectMapper();
+            this.setSpec(mapper.convertValue(original_spec, IntegrationSpec.class));
+        } else {
+            this.setSpec(new IntegrationSpec());
+        }
         this.getSpec().set_flows(new ArrayList<>());
         var flow = new Flow();
         flow.setFrom(new KamelPopulator(catalog).getFlow(steps));
