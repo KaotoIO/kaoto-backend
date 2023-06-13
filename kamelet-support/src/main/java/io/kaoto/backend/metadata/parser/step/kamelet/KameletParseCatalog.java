@@ -11,8 +11,8 @@ import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.step.Step;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.nio.file.Path;
 import java.util.Arrays;
 
