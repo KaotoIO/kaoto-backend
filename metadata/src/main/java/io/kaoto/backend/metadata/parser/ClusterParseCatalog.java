@@ -71,7 +71,8 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                         try {
                             metadataList.addAll(this.yamlProcessFile.parseInputStream(
                                     // Yaml is not thread-safe, so it needs to be initialized here
-                                    new StringReader(new Yaml(new Constructor(cr, new LoaderOptions())).dumpAsMap(resource))));
+                                    new StringReader(new Yaml(new Constructor(cr,
+                                            new LoaderOptions())).dumpAsMap(resource))));
                         } catch (Throwable t) {
                             log.trace("Couldn't parse the resource.", t);
                         }

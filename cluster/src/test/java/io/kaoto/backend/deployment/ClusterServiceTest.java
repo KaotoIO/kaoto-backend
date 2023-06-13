@@ -1,7 +1,11 @@
 package io.kaoto.backend.deployment;
 
+import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
+import io.kaoto.backend.model.deployment.camelroute.Integration;
+import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +15,7 @@ import org.junit.jupiter.api.Timeout;
 import jakarta.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -176,65 +181,35 @@ class ClusterServiceTest {
 
         assertTrue(clusterService.getResources(ns).isEmpty());
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("Kamelet")
-                        .withPlural("Kamelets")
-                        .withVersion("v1alpha1")
-                        .build())
+        kubernetesClient.resources(Kamelet.class)
                 .inNamespace(ns)
                 .load(new ByteArrayInputStream(kamelet.getBytes(StandardCharsets.UTF_8)))
                 .create();
 
         assertEquals(1, clusterService.getResources(ns).size());
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("Integration")
-                        .withPlural("Integrations")
-                        .withVersion("v1")
-                        .build())
+        kubernetesClient.resources(Integration.class)
                 .inNamespace(ns)
                 .load(new ByteArrayInputStream(integration.getBytes(StandardCharsets.UTF_8)))
                 .create();
 
         assertEquals(1, clusterService.getResources(ns).size());
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("Integration")
-                        .withPlural("Integrations")
-                        .withVersion("v1")
-                        .build())
+        kubernetesClient.resources(Integration.class)
                 .inNamespace(ns)
                 .load(new ByteArrayInputStream(integration2.getBytes(StandardCharsets.UTF_8)))
                 .create();
 
         assertEquals(2, clusterService.getResources(ns).size());
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("KameletBinding")
-                        .withPlural("KameletBindings")
-                        .withVersion("v1alpha1")
-                        .build())
+        kubernetesClient.resources(KameletBinding.class)
                 .inNamespace(ns)
                 .load(new ByteArrayInputStream(kameletBinding.getBytes(StandardCharsets.UTF_8)))
                 .create();
 
         assertEquals(3, clusterService.getResources(ns).size());
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("KameletBinding")
-                        .withPlural("KameletBindings")
-                        .withVersion("v1alpha1")
-                        .build())
+        kubernetesClient.resources(KameletBinding.class)
                 .inNamespace(ns)
                 .load(new ByteArrayInputStream(kameletBinding2.getBytes(StandardCharsets.UTF_8)))
                 .create();
@@ -245,36 +220,18 @@ class ClusterServiceTest {
     @Test
     @Timeout(value=60)
     void logs() {
-        var pod = "apiVersion: v1\n"
-                + "kind: Pod\n"
-                + "metadata:\n"
-                + "  generateName: abinding-759497b44d-\n"
-                + "  labels:\n"
-                + "    camel.apache.org/integration: abinding\n"
-                + "spec:\n"
-                + "  containers:\n"
-                + "status:\n"
-                + "  phase: Running";
+        kubernetesClient.resource(new PodBuilder()
+                    .editOrNewMetadata()
+                    .withGenerateName("abinding-759497b44d-")
+                    .withLabels(Map.of("camel.apache.org/integration", "abinding"))
+                    .endMetadata()
+                    .editOrNewStatus()
+                    .withPhase("Running")
+                    .endStatus()
+                    .build())
+                .inNamespace("default").create();
 
-
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withKind("Pod")
-                        .withPlural("Pods")
-                        .withVersion("v1")
-                        .build())
-                .inNamespace("default")
-                .load(new ByteArrayInputStream(pod.getBytes(StandardCharsets.UTF_8)))
-                .create();
-
-
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("KameletBinding")
-                        .withPlural("KameletBindings")
-                        .withVersion("v1alpha1")
-                        .build())
+        kubernetesClient.resources(KameletBinding.class)
                 .inNamespace("default")
                 .load(new ByteArrayInputStream(kameletBinding.getBytes(StandardCharsets.UTF_8)))
                 .create();
@@ -302,13 +259,7 @@ class ClusterServiceTest {
                 + "      - to:\n"
                 + "          uri: log:tick\n";
 
-        kubernetesClient.genericKubernetesResources(new ResourceDefinitionContext.Builder()
-                        .withNamespaced(true)
-                        .withGroup("camel.apache.org")
-                        .withKind("Integration")
-                        .withPlural("Integrations")
-                        .withVersion("v1")
-                        .build())
+        kubernetesClient.resources(Integration.class)
                 .inNamespace("default")
                 .load(new ByteArrayInputStream(intyaml.getBytes(StandardCharsets.UTF_8)))
                 .create();

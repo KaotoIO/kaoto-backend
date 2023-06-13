@@ -5,18 +5,23 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -55,6 +60,12 @@ class KameletParseCatalogTest {
     }
 
     private KubernetesClient kubernetesClient;
+
+    @AfterEach
+    void cleanUp() {
+        kubernetesClient.resources(Kamelet.class).inAnyNamespace().list().getItems()
+                .forEach(kamelet -> kubernetesClient.resource(kamelet).delete());
+    }
 
     @Test
     void getSteps() {
@@ -238,7 +249,10 @@ class KameletParseCatalogTest {
                     log.info(String.format("Loading Kamelet %s into cluster",
                             zipEntry.getName().replaceFirst("kamelets/", "")));
                     final String content = IOUtils.toString(new InputStreamReader(zis));
-                    kubernetesClient.resource(content).inNamespace("default").createOrReplace();
+                    kubernetesClient.resources(Kamelet.class)
+                            .inNamespace("default")
+                            .load(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)))
+                            .create();
                     loadedResources++;
                 }
                 zipEntry = zis.getNextEntry();
