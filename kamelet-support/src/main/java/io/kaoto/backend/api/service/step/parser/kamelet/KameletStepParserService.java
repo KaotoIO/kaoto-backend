@@ -82,6 +82,13 @@ public class KameletStepParserService implements StepParserService<Step> {
             processSpec(steps, res, kamelet.getSpec());
             processParameters(res, kamelet.getSpec());
 
+            //Let's store the spec to make sure we don't lose anything else
+            if (kamelet.getSpec().getTemplate() != null) {
+                kamelet.getSpec().getTemplate().setFrom(null);
+                kamelet.getSpec().getTemplate().setBeans(null);
+            }
+            res.getMetadata().put("spec", kamelet.getSpec());
+
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Error trying to parse.", e);
         }
@@ -338,7 +345,9 @@ public class KameletStepParserService implements StepParserService<Step> {
         result.getMetadata().put("annotations", annotations);
         if (metadata.getAnnotations() != null) {
             annotations.putAll(metadata.getAnnotations());
-            annotations.put("icon", annotations.get("camel.apache.org/kamelet.icon"));
+            if (annotations.containsKey("camel.apache.org/kamelet.icon")) {
+                annotations.put("icon", annotations.get("camel.apache.org/kamelet.icon"));
+            }
         }
 
         var additionalProperties = new LinkedHashMap<String, Object>();

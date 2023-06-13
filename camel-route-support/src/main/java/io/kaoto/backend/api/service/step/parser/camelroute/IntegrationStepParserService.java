@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +54,12 @@ public class IntegrationStepParserService implements StepParserService<Step> {
                     }
                 }
             }
+
+            //Let's store the spec to make sure we don't lose anything else
+            if (integration.getSpec().get_flows() != null) {
+                integration.getSpec().get_flows().clear();
+            }
+            ((Map<String, Object>)res.getMetadata().get("additionalProperties")).put("spec", integration.getSpec());
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Error trying to parse.", e);

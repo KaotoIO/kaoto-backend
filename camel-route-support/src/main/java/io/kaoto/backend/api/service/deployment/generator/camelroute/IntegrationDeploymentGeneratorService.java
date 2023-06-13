@@ -22,6 +22,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +52,8 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
     @Override
     public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
         return kdgs.getYAML(new Integration(
-                        steps != null ? steps : List.of(),
-                        metadata != null ? metadata : Map.of(),
+                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
                         catalog),
                 new IntegrationRepresenter());
     }

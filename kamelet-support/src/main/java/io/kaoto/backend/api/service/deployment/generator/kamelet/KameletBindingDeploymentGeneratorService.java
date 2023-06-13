@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +49,35 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
     private Logger log = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Override
-    public String parse(final List<Step> steps,
-                        final Map<String, Object> metadata,
-                        final List<Parameter> parameters) {
+    public String parse(final List<Step> stepList,
+                        final Map<String, Object> md,
+                        final List<Parameter> parameterList) {
 
-        var spec = new KameletBindingSpec();
+        Map<String, Object> metadata = md != null ? new LinkedHashMap<>(md) : Map.of();
+        List<Step> steps = stepList != null ? new LinkedList<>(stepList) : List.of();
+
+        KameletBindingSpec spec;
+        var metaObject = new ObjectMeta();
+        if (metadata != null && !metadata.isEmpty()) {
+            metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
+            metaObject.setAdditionalProperties(
+                    (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
+            var original_spec = metadata.remove("spec");
+            metaObject.setAnnotations(
+                    (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
+            metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
+            if (original_spec != null && original_spec instanceof KameletBindingSpec ospec) {
+                spec = ospec;
+            } else if (original_spec != null && original_spec instanceof Map ospec) {
+                ObjectMapper mapper = new ObjectMapper();
+                spec = mapper.convertValue(ospec, KameletBindingSpec.class);
+            } else {
+                spec = new KameletBindingSpec();
+            }
+        } else {
+            spec = new KameletBindingSpec();
+        }
+
         spec.setSteps(new LinkedList<>());
 
         for (int i = 0; i < steps.size(); i++) {
@@ -72,12 +98,7 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
             spec.setSteps(null);
         }
 
-        var name = "";
-        if (metadata != null) {
-            name = String.valueOf(metadata.getOrDefault("name", ""));
-        }
-
-        KameletBinding binding = new KameletBinding(name, spec);
+        KameletBinding binding = new KameletBinding(spec, metaObject);
 
         Yaml yaml = new Yaml(new Constructor(KameletBinding.class), new KameletRepresenter());
         return yaml.dumpAsMap(binding);

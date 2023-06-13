@@ -41,7 +41,7 @@ public class CamelRoute {
     }
 
     private void processFlows(final List<Step> steps, final StepCatalog catalog) {
-        if (steps == null) {
+        if (steps == null || steps.isEmpty()) {
             return;
         }
         final var flow = new KamelPopulator(catalog).getFlow(steps);

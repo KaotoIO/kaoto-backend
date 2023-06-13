@@ -5,9 +5,9 @@ metadata:
 spec:
   source:
     uri: timer:earthquake
-    parameters:
+    properties:
       period: '500'
   sink:
     uri: log:info
-    parameters:
+    properties:
       showBody: 'false'

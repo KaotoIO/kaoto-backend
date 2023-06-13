@@ -43,7 +43,9 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "kind: KameletBinding\n"
                 + "metadata:\n"
                 + "  name: " + name + "\n"
-                + "spec: {}\n",
+                + "spec:\n"
+                + "  source: null\n"
+                + "  sink: null\n",
                 service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         steps.addAll(catalog.getReadOnlyCatalog()
@@ -57,10 +59,13 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "  name: " + name + "\n"
                 + "spec:\n"
                 + "  source:\n"
+                + "    properties: {}\n"
                 + "    ref:\n"
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
+                + "      kind: Kamelet\n"
                 + "      name: aws-s3-source\n"
-                + "      kind: Kamelet\n",
+                + "    types: {}\n"
+                + "  sink: null\n",
                 service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
 
         Step step = catalog.getReadOnlyCatalog().searchByName("knative").stream()
@@ -82,17 +87,20 @@ class KameletBindingDeploymentGeneratorServiceTest {
                 + "  name: " + name + "\n"
                 + "spec:\n"
                 + "  source:\n"
+                + "    properties: {}\n"
                 + "    ref:\n"
                 + "      apiVersion: camel.apache.org/v1alpha1\n"
-                + "      name: aws-s3-source\n"
                 + "      kind: Kamelet\n"
+                + "      name: aws-s3-source\n"
+                + "    types: {}\n"
                 + "  sink:\n"
+                + "    properties:\n"
+                + "      type: example\n"
                 + "    ref:\n"
                 + "      apiVersion: eventing.knative.dev/v1\n"
-                + "      name: broker-name\n"
                 + "      kind: Broker\n"
-                + "    properties:\n"
-                + "      type: example\n",
+                + "      name: broker-name\n"
+                + "    types: {}\n",
                 service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
     }
 

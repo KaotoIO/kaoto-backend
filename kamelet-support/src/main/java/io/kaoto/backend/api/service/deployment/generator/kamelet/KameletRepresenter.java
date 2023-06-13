@@ -1,5 +1,7 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
@@ -166,15 +168,13 @@ public class KameletRepresenter extends Representer {
                 public Node representData(final Object data) {
                     Map<String, Object> properties = new LinkedHashMap<>();
                     KameletBindingSpec spec = (KameletBindingSpec) data;
-                    if (spec.getSource() != null) {
-                        properties.put("source", spec.getSource());
-                    }
+                    properties.put("source", spec.getSource());
                     if (spec.getSteps() != null) {
                         properties.put(STEPS, spec.getSteps());
                     }
-                    if (spec.getSink() != null) {
-                        properties.put("sink", spec.getSink());
-                    }
+                    properties.put("sink", spec.getSink());
+                    properties.putAll(
+                            new ObjectMapper().convertValue(data, new TypeReference<Map<String, Object>>() {}));
                     return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
@@ -183,13 +183,12 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        Map<String, Object> properties = new LinkedHashMap<>();
-                        KameletSpec spec = (KameletSpec) data;
-                        properties.put("definition", spec.getDefinition());
-                        properties.put("dependencies", spec.getDependencies());
-                        properties.put("template", spec.getTemplate());
-                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
-                                DumperOptions.FlowStyle.BLOCK);
+                    Map<String, Object> properties = new LinkedHashMap<>();
+                    KameletSpec spec = (KameletSpec) data;
+                    properties.putAll(
+                            new ObjectMapper().convertValue(data, new TypeReference<Map<String, Object>>() {}));
+                    properties.put("template", spec.getTemplate());
+                    return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                     }
                 });
 
@@ -197,21 +196,8 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        Map<String, Object> properties = new LinkedHashMap<>();
-                        var def = (org.apache.camel.v1alpha1.kameletspec.Definition) data;
-                        properties.put("title", def.getTitle());
-                        properties.put("description", def.getDescription());
-                        if (def.getRequired() != null) {
-                            properties.put("required", def.getRequired());
-                        }
-                        if (def.getProperties() != null) {
-                            var propsMap = new LinkedHashMap<String, KameletDefinitionProperty>();
-                            for (var property : def.getProperties().entrySet()) {
-                                propsMap.put(property.getKey(), new KameletDefinitionProperty(property.getValue()));
-                            }
-                            properties.put("properties", propsMap);
-                        }
-                        return representMapping(getTag(data.getClass(), Tag.MAP), properties,
+                        var properties = new ObjectMapper().convertValue(data, new TypeReference<>() {});
+                        return representMapping(getTag(data.getClass(), Tag.MAP), (Map<?, ?>) properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
                 });

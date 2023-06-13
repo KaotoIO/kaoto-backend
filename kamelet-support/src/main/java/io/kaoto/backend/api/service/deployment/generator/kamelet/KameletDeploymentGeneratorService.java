@@ -23,6 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,12 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        return getYAML(new Kamelet(steps, metadata, parameters, catalog), new KameletRepresenter());
+        return getYAML(new Kamelet(
+                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                        parameters != null ? new LinkedList<>(parameters) : List.of(),
+                        catalog),
+                new KameletRepresenter());
     }
 
     @Override
