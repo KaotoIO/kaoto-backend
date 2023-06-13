@@ -41,7 +41,7 @@ jobs:
       - name: configure Pagefile
         uses: al-cheb/configure-pagefile-action@v1.3
         with:
-          minimum-size: 16GB
+          minimum-size: 32GB
           disk-root: "C:"
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Build Native Quarkus
