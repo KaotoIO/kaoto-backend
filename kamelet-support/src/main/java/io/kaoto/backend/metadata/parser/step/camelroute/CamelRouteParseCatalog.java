@@ -8,7 +8,7 @@ import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
 import io.kaoto.backend.model.step.Step;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.nio.file.Path;
 
 @ApplicationScoped
