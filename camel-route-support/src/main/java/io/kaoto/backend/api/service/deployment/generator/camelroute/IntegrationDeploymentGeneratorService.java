@@ -80,7 +80,7 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Integration.class);
             } catch (Exception e) {
-                log.trace("Tried creating an integration and it didn't work.");
+                log.error("Tried creating an integration and it didn't work.", e);
             }
         }
 

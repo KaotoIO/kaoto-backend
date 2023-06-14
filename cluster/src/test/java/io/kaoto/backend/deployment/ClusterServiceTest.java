@@ -80,19 +80,19 @@ class ClusterServiceTest {
             + "      steps:\n"
             + "      - to:\n"
             + "          uri: log:tick\n";
-    private String integration2 = "apiVersion: camel.apache.org/v1\n"
-            + "kind: Integration\n"
-            + "metadata:\n"
-            + "  name: asdf.yaml\n"
-            + "spec:\n"
-            + "  flows:\n"
-            + "  - from:\n"
-            + "      uri: timer:tick\n"
-            + "      parameters:\n"
-            + "        period: '5000'\n"
-            + "      steps:\n"
-            + "      - to:\n"
-            + "          uri: log:tick\n";
+    private String integration2 = "apiVersion: camel.apache.org/v1" + System.lineSeparator()
+            + "kind: Integration" + System.lineSeparator()
+            + "metadata:" + System.lineSeparator()
+            + "  name: asdf.yaml" + System.lineSeparator()
+            + "spec:" + System.lineSeparator()
+            + "  flows:" + System.lineSeparator()
+            + "  - from:" + System.lineSeparator()
+            + "      uri: timer:tick" + System.lineSeparator()
+            + "      parameters:" + System.lineSeparator()
+            + "        period: '5000'" + System.lineSeparator()
+            + "      steps:" + System.lineSeparator()
+            + "      - to:" + System.lineSeparator()
+            + "          uri: log:tick" + System.lineSeparator();
 
     @Inject
     private ClusterService clusterService;

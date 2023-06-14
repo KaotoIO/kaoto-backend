@@ -8,6 +8,7 @@ import io.kaoto.backend.model.deployment.camelroute.Integration;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -81,6 +82,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         return res;
     }
 
+    private Logger log = Logger.getLogger(IntegrationStepParserService.class);
     @Override
     public boolean appliesTo(final String yaml) {
         String[] kinds = new String[]{"Integration"};
@@ -92,6 +94,10 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             return Arrays.stream(kinds).anyMatch(
                     k -> k.equalsIgnoreCase(matcher.group(2).trim()));
         }
+
+        log.error("This is not an integration");
+        log.error("Because it didn't match " + System.lineSeparator()+ "(kind:)(.+)" + System.lineSeparator());
+        log.error(yaml);
 
         return false;
     }
