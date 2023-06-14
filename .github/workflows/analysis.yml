@@ -75,6 +75,9 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run native tests
         run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Pnative -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
+      - name: check if file exist
+        run: type C:\Users\runneradmin\.testcontainers.properties
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: Archive Quarkus log for native tests
         uses: actions/upload-artifact@v3
         if: failure()
