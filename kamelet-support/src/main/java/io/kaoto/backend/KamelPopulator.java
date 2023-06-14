@@ -242,7 +242,6 @@ public class KamelPopulator {
             if ("string".equalsIgnoreCase(p.getType())) {
                 property.setFormat(((StringParameter) p).getFormat());
             }
-            // property.setPath(false);
             property.setTitle(p.getTitle());
             property.setType(p.getType());
             def.getProperties().put(p.getId(), property);
