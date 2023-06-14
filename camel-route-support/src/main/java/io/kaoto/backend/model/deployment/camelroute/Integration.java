@@ -12,9 +12,9 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1.IntegrationStatus;
 
-import javax.annotation.processing.Generated;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +37,7 @@ import java.util.Map;
 @Group("camel.apache.org")
 @Singular("integration")
 @Plural("integrations")
-@Generated("io.fabric8.java.generator.CRGeneratorRunner")
+@RegisterForReflection
 public final class Integration extends CustomResource<IntegrationSpec, IntegrationStatus> implements Namespaced {
 
     @Serial

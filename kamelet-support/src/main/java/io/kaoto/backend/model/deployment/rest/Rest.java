@@ -11,6 +11,7 @@ import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import java.util.Map;
  */
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@RegisterForReflection
 public class Rest extends From {
     protected static final Logger log = Logger.getLogger(Rest.class);
     private static final long serialVersionUID = 8685166491995899231L;

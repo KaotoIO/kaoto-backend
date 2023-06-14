@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Plural;
 import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 
 
@@ -63,6 +64,7 @@ import org.apache.camel.v1alpha1.KameletBindingSpec;
 @Group("camel.apache.org")
 @Singular("kameletbinding")
 @Plural("kameletbindings")
+@RegisterForReflection
 public final class KameletBinding extends org.apache.camel.v1alpha1.KameletBinding {
     private static final long serialVersionUID = -1089453226037028488L;
 

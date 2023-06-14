@@ -11,6 +11,7 @@ import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.rest.HttpVerb;
 import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
 import java.util.LinkedList;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = CamelRouteDeserializer.class)
+@RegisterForReflection
 public class CamelRoute {
 
     protected static final Logger log = Logger.getLogger(CamelRoute.class);

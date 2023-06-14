@@ -28,6 +28,10 @@ crd:
   default: "KameletBinding"
 
 quarkus:
+  index-dependency:
+    camelkcrd:
+      group-id: org.apache.camel.k
+      artifact-id: camel-k-crds
   native:
     additional-build-args: -H:ResourceConfigurationFiles=resources-config.json
   application:

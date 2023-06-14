@@ -10,6 +10,7 @@ import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1alpha1.KameletStatus;
 
 import java.io.Serial;
@@ -35,6 +36,7 @@ import java.util.Map;
 @Group("camel.apache.org")
 @Singular("kamelet")
 @Plural("kamelets")
+@RegisterForReflection
 public final class Kamelet extends CustomResource<KameletSpec, KameletStatus> implements Namespaced {
 
     @Serial
