@@ -34,6 +34,7 @@ jobs:
       - name: 🦾 Build and Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          TESTCONTAINERS_CLIENT_PING_TIMEOUT: 60
         run: mvn -T1C -B verify -Panalysis
       - name: 👀 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
@@ -75,6 +76,8 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run native tests
         run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Pnative -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
+        env:
+          TESTCONTAINERS_CLIENT_PING_TIMEOUT: 60
       - name: Archive Quarkus log for native tests
         uses: actions/upload-artifact@v3
         if: failure()
