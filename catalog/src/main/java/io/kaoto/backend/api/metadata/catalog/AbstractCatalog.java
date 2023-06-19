@@ -5,7 +5,7 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.metadata.catalog.ReadOnlyCatalog;
 import io.kaoto.backend.model.Metadata;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.annotation.PostConstruct;
 import org.jboss.logging.Logger;
 

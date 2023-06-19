@@ -1,7 +1,7 @@
 package io.kaoto.backend.api.service.language;
 
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import jakarta.enterprise.context.ApplicationScoped;

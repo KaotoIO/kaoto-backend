@@ -2,7 +2,7 @@ package io.kaoto.backend.api.metadata.catalog;
 
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.model.step.Step;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 import java.nio.file.Path;
 

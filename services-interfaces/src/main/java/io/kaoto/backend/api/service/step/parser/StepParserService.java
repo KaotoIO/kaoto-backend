@@ -2,7 +2,7 @@ package io.kaoto.backend.api.service.step.parser;
 
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 import java.util.List;
 import java.util.Map;

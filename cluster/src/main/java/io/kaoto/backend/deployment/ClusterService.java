@@ -12,7 +12,7 @@ import io.kaoto.backend.api.service.deployment.generator.camelroute.IntegrationR
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
