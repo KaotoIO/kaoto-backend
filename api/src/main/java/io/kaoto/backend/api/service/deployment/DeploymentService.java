@@ -4,7 +4,7 @@ import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.jboss.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
