@@ -1,9 +1,9 @@
 # First stage - install the dependencies in an intermediate container
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5 as BUILD
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.6 as BUILD
 RUN microdnf install curl
 
 # Second stage - copy the dependencies
-FROM quay.io/quarkus/quarkus-micro-image:1.0
+FROM quay.io/quarkus/quarkus-micro-image:2.0
 ENV NAMESPACE='default'
 ENV CATALOG_NAMESPACE=''
 

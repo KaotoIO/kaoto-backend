@@ -1,4 +1,9 @@
 "%dev":
+  quarkus:
+    http:
+      cors:
+        # allows all origins during dev mode
+        origins: /.*/
   repository:
     step:
       jar:
@@ -53,3 +58,7 @@ quarkus:
         class: org.quartz.plugins.history.LoggingJobHistoryPlugin
         properties:
           jobSuccessMessage: "Job [{1}.{0}] execution complete and reports: {8}"
+  # disable OpenTelemetry SDK Autoconfigure by default
+  otel:
+    sdk:
+      disabled: true
