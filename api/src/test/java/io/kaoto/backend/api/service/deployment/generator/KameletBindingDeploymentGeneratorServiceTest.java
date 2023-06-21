@@ -18,8 +18,7 @@ class KameletBindingDeploymentGeneratorServiceTest {
     public static final String EMPTY_INTEGRATION =
             "apiVersion: camel.apache.org/v1alpha1\n"
                     + "kind: KameletBinding\n"
-                    + "metadata:\n"
-                    + "  name: null\n"
+                    + "metadata: {}\n"
                     + "spec:\n" +
                     "  source: null\n" +
                     "  sink: null\n";

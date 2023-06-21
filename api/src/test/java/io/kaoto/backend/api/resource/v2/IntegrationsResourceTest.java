@@ -1,12 +1,13 @@
 package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
-import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,20 +15,19 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -205,46 +205,46 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        List<Object> steps = (List<Object>) ((Map)((Map)parsed.get(0)).get("from")).get("steps");
+        List<Object> steps = (List<Object>) ((Map) ((Map) parsed.get(0)).get("from")).get("steps");
         assertEquals(20, steps.size());
         var choice = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("choice");
-        var when0 = (Map<String, Object>) ((List<Object>)choice.get("when")).get(0);
+        var when0 = (Map<String, Object>) ((List<Object>) choice.get("when")).get(0);
         assertExpression("choice", "simple", when0);
         var delay = (Map<String, Object>) ((Map<String, Object>) steps.get(1)).get("delay");
         assertExpression("delay", "simple", delay);
         var drouter = (Map<String, Object>) ((Map<String, Object>) steps.get(2)).get("dynamic-router");
         assertExpression("dynamic-router", "simple", drouter);
-        var enrich =  (Map<String, Object>) ((Map<String, Object>) steps.get(3)).get("enrich");
+        var enrich = (Map<String, Object>) ((Map<String, Object>) steps.get(3)).get("enrich");
         assertExpression("enrich", "simple", enrich);
-        var filter =  (Map<String, Object>) ((Map<String, Object>) steps.get(4)).get("filter");
+        var filter = (Map<String, Object>) ((Map<String, Object>) steps.get(4)).get("filter");
         assertExpression("filter", "simple", filter);
-        var penrich =  (Map<String, Object>) ((Map<String, Object>) steps.get(5)).get("poll-enrich");
+        var penrich = (Map<String, Object>) ((Map<String, Object>) steps.get(5)).get("poll-enrich");
         assertExpression("poll-enrich", "simple", penrich);
-        var rlist =  (Map<String, Object>) ((Map<String, Object>) steps.get(6)).get("recipient-list");
+        var rlist = (Map<String, Object>) ((Map<String, Object>) steps.get(6)).get("recipient-list");
         assertExpression("recipient-list", "simple", rlist);
-        var resequence =  (Map<String, Object>) ((Map<String, Object>) steps.get(7)).get("resequence");
+        var resequence = (Map<String, Object>) ((Map<String, Object>) steps.get(7)).get("resequence");
         assertExpression("resequence", "simple", resequence);
-        var rslip =  (Map<String, Object>) ((Map<String, Object>) steps.get(8)).get("routing-slip");
+        var rslip = (Map<String, Object>) ((Map<String, Object>) steps.get(8)).get("routing-slip");
         assertExpression("routing-slip", "simple", rslip);
-        var script =  (Map<String, Object>) ((Map<String, Object>) steps.get(9)).get("script");
+        var script = (Map<String, Object>) ((Map<String, Object>) steps.get(9)).get("script");
         assertExpression("script", "groovy", script);
-        var scall =  (Map<String, Object>) ((Map<String, Object>) steps.get(10)).get("service-call");
+        var scall = (Map<String, Object>) ((Map<String, Object>) steps.get(10)).get("service-call");
         assertExpression("service-call", "jsonpath", scall);
-        var sbody =  (Map<String, Object>) ((Map<String, Object>) steps.get(11)).get("set-body");
+        var sbody = (Map<String, Object>) ((Map<String, Object>) steps.get(11)).get("set-body");
         assertExpression("set-body", "constant", sbody);
-        var sheader =  (Map<String, Object>) ((Map<String, Object>) steps.get(12)).get("set-header");
+        var sheader = (Map<String, Object>) ((Map<String, Object>) steps.get(12)).get("set-header");
         assertExpression("set-header", "jq", sheader);
-        var sprop =  (Map<String, Object>) ((Map<String, Object>) steps.get(13)).get("set-property");
+        var sprop = (Map<String, Object>) ((Map<String, Object>) steps.get(13)).get("set-property");
         assertExpression("set-property", "jq", sprop);
-        var sort =  (Map<String, Object>) ((Map<String, Object>) steps.get(14)).get("sort");
+        var sort = (Map<String, Object>) ((Map<String, Object>) steps.get(14)).get("sort");
         assertExpression("sort", "simple", sort);
-        var split =  (Map<String, Object>) ((Map<String, Object>) steps.get(15)).get("split");
+        var split = (Map<String, Object>) ((Map<String, Object>) steps.get(15)).get("split");
         assertExpression("split", "simple", split);
-        var throttle =  (Map<String, Object>) ((Map<String, Object>) steps.get(16)).get("throttle");
+        var throttle = (Map<String, Object>) ((Map<String, Object>) steps.get(16)).get("throttle");
         assertExpression("throttle", "simple", throttle);
-        var transform =  (Map<String, Object>) ((Map<String, Object>) steps.get(17)).get("transform");
+        var transform = (Map<String, Object>) ((Map<String, Object>) steps.get(17)).get("transform");
         assertExpression("transform", "jq", transform);
-        var validate =  (Map<String, Object>) ((Map<String, Object>) steps.get(18)).get("validate");
+        var validate = (Map<String, Object>) ((Map<String, Object>) steps.get(18)).get("validate");
         assertExpression("validate", "simple", validate);
         var dotry = (Map<String, Object>) ((Map<String, Object>) steps.get(19)).get("do-try");
         var docatch0 = (Map<String, Object>) ((List<Object>) dotry.get("do-catch")).get(0);
@@ -253,7 +253,7 @@ class IntegrationsResourceTest {
     }
 
     private void assertExpression(String name, String syntax, Map<String, Object> step) {
-        var nested = (Map<String, Object>) ((Map<String, Object>)step.get("expression")).get(syntax);
+        var nested = (Map<String, Object>) ((Map<String, Object>) step.get("expression")).get(syntax);
         assertEquals(name, nested.get("expression"));
         assertNull(nested.get("result-type"));
     }
@@ -281,7 +281,7 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        var uri = (String) ((Map)((Map)parsed.get(0)).get("from")).get("uri");
+        var uri = (String) ((Map) ((Map) parsed.get(0)).get("from")).get("uri");
         assertEquals("kamelet:telegram-source:test/", uri);
     }
 
@@ -326,7 +326,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
         var yaml = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml);
-        var from = (Map) ((Map)parsed.get(0)).get("from");
+        var from = (Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from");
         var fromUri = (String) from.get("uri");
         assertNull(fromUri);
         var steps = (List<Object>) from.get("steps");
@@ -368,6 +368,10 @@ class IntegrationsResourceTest {
 
         var flows = res1.extract().body().as(FlowsWrapper.class);
 
+        for (var flow : flows.flows()) {
+            assertEquals(parameters[0], flow.getDsl());
+        }
+
         //Now let's try to recreate the source code
         var res2 = given()
                 .when()
@@ -380,6 +384,82 @@ class IntegrationsResourceTest {
 
         //This should be the same as the original source code
         assertThat(route).isEqualToNormalizingNewlines(sourceCode);
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Kamelet#eip.kamelet.yaml", "Integration#integration.yaml",
+            "Camel Route#route-with-beans.yaml", "Camel Route#rest-dsl-multi.yaml",
+            "KameletBinding#kamelet-binding.yaml"})
+    void changeNameAndDescription(String file) throws IOException {
+
+        String[] parameters = file.split("#");
+
+        var route = new String(this.getClass().getResourceAsStream("../../resource/" + parameters[1]).readAllBytes(),
+                StandardCharsets.UTF_8);
+
+        //First, get the JSON object of the flow
+        var res1 = given()
+                .when()
+                .contentType("text/yaml")
+                .body(route)
+                .post("?dsl=" + parameters[0])
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flows = res1.extract().body().as(FlowsWrapper.class);
+        assertTrue(!flows.flows().isEmpty());
+        var flow = flows.flows().get(0);
+        var randomGeneratedName = "flow-" + System.currentTimeMillis();
+        if (flow.getMetadata() != null) {
+            randomGeneratedName += flow.getMetadata().get("name");
+        }
+        var randomGeneratedDesc = "Description " + System.currentTimeMillis();
+        if (flow.getMetadata() == null) {
+            flow.setMetadata(new LinkedHashMap<>());
+        }
+        flow.getMetadata().put("name", randomGeneratedName);
+        flow.getMetadata().put("description", randomGeneratedDesc);
+
+        //Now let's try to recreate the source code
+        var res2 = given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(flows)
+                .post()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        var sourceCode = res2.extract().body().asString();
+
+        //Make sure it gets properly filled in the metadata from the source code
+        var res3 = given()
+                .when()
+                .contentType("text/yaml")
+                .body(sourceCode)
+                .post("?dsl=" + parameters[0])
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        flows = res3.extract().body().as(FlowsWrapper.class);
+        assertTrue(!flows.flows().isEmpty());
+        flow = flows.flows().get(0);
+        assertNotNull(flow.getMetadata());
+        assertEquals(randomGeneratedName, flow.getMetadata().get("name"));
+        assertEquals(randomGeneratedDesc, flow.getMetadata().get("description"));
+        assertTrue(sourceCode.contains("    description: " + randomGeneratedDesc));
+
+        switch (parameters[0]) {
+            case "Kamelet":
+            case "Kamelet Binding":
+            case "Integration":
+                assertTrue(sourceCode.contains("  name: " + randomGeneratedName));
+                break;
+            case "Camel Route":
+                assertTrue(sourceCode.contains("    id: " + randomGeneratedName));
+                break;
+            default:
+                break;
+        }
     }
 
 }

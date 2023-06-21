@@ -60,6 +60,10 @@ public class IntegrationStepParserService implements StepParserService<Step> {
                 integration.getSpec().get_flows().clear();
             }
             ((Map<String, Object>)res.getMetadata().get("additionalProperties")).put("spec", integration.getSpec());
+            if (integration.getMetadata().getAnnotations().containsKey("description")) {
+                res.getMetadata().put("description",
+                        integration.getMetadata().getAnnotations().get("description"));
+            }
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Error trying to parse.", e);
@@ -85,8 +89,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
     public boolean appliesTo(final String yaml) {
         String[] kinds = new String[]{"Integration"};
 
-        Pattern pattern = Pattern.compile(
-                System.lineSeparator()+ "(kind:)(.+)" + System.lineSeparator(), Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(kind:)(.+)(\r\n|\r|\n)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
         if (matcher.find()) {
             return Arrays.stream(kinds).anyMatch(

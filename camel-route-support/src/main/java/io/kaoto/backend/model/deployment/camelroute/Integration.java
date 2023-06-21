@@ -52,10 +52,13 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         this.getMetadata().setName(metadata.getOrDefault("name", "").toString());
         this.getMetadata().setAdditionalProperties(
                 (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
-        var original_spec = getMetadata().getAdditionalProperties().remove("spec");
         this.getMetadata().setAnnotations(
                 (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
         this.getMetadata().setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
+        if (metadata.containsKey("description")) {
+            this.getMetadata().getAnnotations().put("description", String.valueOf(metadata.get("description")));
+        }
+        var original_spec = getMetadata().getAdditionalProperties().remove("spec");
         if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {
             this.setSpec(ospec);
         } else if (original_spec != null && original_spec instanceof Map ospec) {

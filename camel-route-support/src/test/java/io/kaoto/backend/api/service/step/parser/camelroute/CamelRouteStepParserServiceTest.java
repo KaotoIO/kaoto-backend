@@ -75,7 +75,7 @@ class CamelRouteStepParserServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"route.yaml", "route2-complex-expressions.yaml",
             "route3-complex-expressions.yaml", "route-ids.yaml", "route4-pathparams.yaml", "route5-placeholders.yaml",
-            "route6-un-marshal.yaml", "route6-kamelet-extraparameters.yaml"})
+            "route6-un-marshal.yaml", "route6-kamelet-extraparameters.yaml" })
     void deepParseParametrized(String file) throws IOException {
         var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
                 StandardCharsets.UTF_8);
@@ -118,6 +118,25 @@ class CamelRouteStepParserServiceTest {
             assertTrue(camelRouteDSLSpecification.appliesTo(flow.getSteps()));
             assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
             assertTrue(flow.getMetadata() == null || flow.getMetadata().isEmpty());
+            assertFalse(flow.getSteps().isEmpty());
+        }
+
+        assertThat(route)
+                .isEqualToNormalizingNewlines(camelRouteDSLSpecification.getDeploymentGeneratorService().parse(flows));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"route-with-id.yaml"})
+    void parsedFlowsWithMetadata(String file) throws IOException {
+        var route = new String(this.getClass().getResourceAsStream(file).readAllBytes(),
+                StandardCharsets.UTF_8);
+        assertTrue(camelRouteDSLSpecification.getStepParserService().appliesTo(route));
+        List<StepParserService.ParseResult<Step>> flows =
+                camelRouteDSLSpecification.getStepParserService().getParsedFlows(route);
+
+        for (var flow : flows) {
+            assertTrue(camelRouteDSLSpecification.appliesTo(flow.getSteps()));
+            assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
             assertFalse(flow.getSteps().isEmpty());
         }
 
