@@ -23,7 +23,7 @@ spec:
     uid: hahaha
   profile: myProfile
   repositories:
-  - http://my.private.cloud/repo
+  - https://my.private.cloud/repo
   serviceAccountName: service-account-name
   traits:
     camel:
