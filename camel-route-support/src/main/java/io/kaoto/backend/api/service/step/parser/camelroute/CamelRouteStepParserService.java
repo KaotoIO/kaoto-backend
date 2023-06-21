@@ -10,6 +10,7 @@ import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.util.StringUtil;
 import org.jboss.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -82,6 +83,24 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
                 }
             }
             res.setSteps(steps.stream().filter(Objects::nonNull).toList());
+            if (!StringUtil.isNullOrEmpty(flow.getId())) {
+                if (res.getMetadata() == null) {
+                    res.setMetadata(new LinkedHashMap<>());
+                }
+                res.getMetadata().put("name", flow.getId());
+            }
+            if (!StringUtil.isNullOrEmpty(flow.getRouteConfigurationId())) {
+                if (res.getMetadata() == null) {
+                    res.setMetadata(new LinkedHashMap<>());
+                }
+                res.getMetadata().put("route-configuration-id", flow.getRouteConfigurationId());
+            }
+            if (!StringUtil.isNullOrEmpty(flow.getDescription())) {
+                if (res.getMetadata() == null) {
+                    res.setMetadata(new LinkedHashMap<>());
+                }
+                res.getMetadata().put("description", flow.getDescription());
+            }
             resultList.add(res);
         }
     }

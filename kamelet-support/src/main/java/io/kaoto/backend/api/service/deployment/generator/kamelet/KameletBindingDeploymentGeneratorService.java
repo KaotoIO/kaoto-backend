@@ -63,10 +63,13 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
             metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
             metaObject.setAdditionalProperties(
                     (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
-            var original_spec = metadata.remove("spec");
             metaObject.setAnnotations(
                     (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
             metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
+            if (metadata.containsKey("description")) {
+                metaObject.getAnnotations().put("description", String.valueOf(metadata.remove("description")));
+            }
+            var original_spec = metadata.remove("spec");
             if (original_spec != null && original_spec instanceof KameletBindingSpec ospec) {
                 spec = ospec;
             } else if (original_spec != null && original_spec instanceof Map ospec) {

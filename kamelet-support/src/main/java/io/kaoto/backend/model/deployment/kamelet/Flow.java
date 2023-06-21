@@ -23,6 +23,15 @@ import org.apache.camel.v1.integrationspec.Flows;
 public class Flow extends Flows {
     private static final long serialVersionUID = -4601560033032557024L;
 
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("route-configuration-id")
+    private String routeConfigurationId;
+
+    @JsonProperty("description")
+    private String description;
+
     @JsonProperty("from")
     private From from;
 
@@ -43,5 +52,29 @@ public class Flow extends Flows {
 
     public void setRest(Rest rest) {
         this.rest = rest;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRouteConfigurationId() {
+        return routeConfigurationId;
+    }
+
+    public void setRouteConfigurationId(String routeConfigurationId) {
+        this.routeConfigurationId = routeConfigurationId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -38,19 +38,19 @@ public class CamelRoute {
     }
 
     public CamelRoute(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
-        processFlows(steps, catalog);
+        processFlows(steps, catalog, metadata);
         processBeans(metadata);
     }
 
-    private void processFlows(final List<Step> steps, final StepCatalog catalog) {
+    private void processFlows(final List<Step> steps, final StepCatalog catalog, final Map<String, Object> md) {
         if (steps == null || steps.isEmpty()) {
             return;
         }
         final var flow = new KamelPopulator(catalog).getFlow(steps);
         setFlows(new LinkedList<>());
+        Flow f = null;
         if (flow instanceof Rest) {
             //These are contextual variables in case the user is not using branches
-            Flow f = null;
             List<HttpVerb> httpVerbs = null;
             HttpVerb httpVerb = null;
             for (Step step : steps) {
@@ -76,9 +76,19 @@ public class CamelRoute {
                 }
             }
         } else {
-            var f = new Flow();
+            f = new Flow();
             f.setFrom(flow);
             getFlows().add(f);
+        }
+
+        if (f != null && md.containsKey("name")) {
+            f.setId(String.valueOf(md.get("name")));
+        }
+        if (f != null && md.containsKey("route-configuration-id")) {
+            f.setRouteConfigurationId(String.valueOf(md.get("route-configuration-id")));
+        }
+        if (f != null && md.containsKey("description")) {
+            f.setDescription(String.valueOf(md.get("description")));
         }
     }
 

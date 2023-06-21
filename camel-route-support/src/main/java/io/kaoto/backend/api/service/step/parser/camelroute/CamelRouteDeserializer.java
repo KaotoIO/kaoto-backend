@@ -38,6 +38,10 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
         Iterator<JsonNode> fields = ((ArrayNode) root).elements();
         while (fields.hasNext()) {
             var field = fields.next();
+            if (field.has("route")) {
+                field = field.get("route");
+            }
+
             if (field.has("from") || field.has("rest")) {
                 Flow flow = ctxt.readTreeAsValue(field, Flow.class);
                 if (answer.getFlows() == null) {

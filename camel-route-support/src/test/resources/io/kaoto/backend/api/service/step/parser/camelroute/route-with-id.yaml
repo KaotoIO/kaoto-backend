@@ -1,0 +1,34 @@
+- route:
+    route-configuration-id: yamlError
+    from:
+      uri: timer:yaml
+      steps:
+      - set-body:
+          simple: Timer fired ${header.CamelTimerCounter} times
+      - log:
+          message: ${body}
+- route:
+    id: route-identifier
+    from:
+      uri: timer:yaml
+      steps:
+      - set-body:
+          simple: Timer fired ${header.CamelTimerCounter} times
+      - log:
+          message: ${body}
+- from:
+    id: from-74c5
+    uri: file:data
+    parameters:
+      noop: true
+    steps:
+    - log:
+        id: log-5f36
+        message: ${body}
+    - dynamic-router:
+        id: dynamic-router-32
+        simple: ${body}
+    - set-header:
+        id: set-header-23245
+        simple: foo
+        name: bar

@@ -360,7 +360,7 @@ abstract class IntegrationsResourceTestAbstract {
                 .statusCode(Response.Status.OK.getStatusCode());
         var yaml = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml);
-        var from = (Map) ((Map) parsed.get(0)).get("from");
+        var from = (Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from");
         var fromUri = (String) from.get("uri");
         assertNull(fromUri);
         var steps = (List<Object>) from.get("steps");

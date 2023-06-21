@@ -1,19 +1,22 @@
-- from:
-    uri: timer:myTimer
-    steps:
-    - choice:
-        when:
-        - simple: ${body}
-          steps:
-          - to:
-              uri: activemq:queue:myQueue
-        - steps:
-          - to:
-              uri: 'amqp:queue:'
-        - steps:
-          - to:
-              uri: 'asterisk:'
-        otherwise:
-          steps:
-          - to:
-              uri: aws2-kinesis:somethingSomething
+- route:
+    id: integration
+    description: ''
+    from:
+      uri: timer:myTimer
+      steps:
+      - choice:
+          when:
+          - simple: ${body}
+            steps:
+            - to:
+                uri: activemq:queue:myQueue
+          - steps:
+            - to:
+                uri: 'amqp:queue:'
+          - steps:
+            - to:
+                uri: 'asterisk:'
+          otherwise:
+            steps:
+            - to:
+                uri: aws2-kinesis:somethingSomething

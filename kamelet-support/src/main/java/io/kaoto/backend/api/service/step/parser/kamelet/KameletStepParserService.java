@@ -19,6 +19,7 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.util.StringUtil;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
 
@@ -182,6 +183,9 @@ public class KameletStepParserService implements StepParserService<Step> {
         res.getMetadata().put("definition", spec.getDefinition());
         res.getMetadata().put("beans", spec.getTemplate().getBeans());
         res.getMetadata().put("dependencies", spec.getDependencies());
+        if (!StringUtil.isNullOrEmpty(spec.getDefinition().getDescription())) {
+            res.getMetadata().put("description", spec.getDefinition().getDescription());
+        }
     }
 
     public Step processStep(final FlowStep step, final Boolean start, final Boolean end) {

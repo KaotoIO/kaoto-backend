@@ -6,6 +6,8 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.expression.Script;
@@ -66,8 +68,6 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
 import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
@@ -84,24 +84,87 @@ import java.util.Objects;
 
 public class KamelPopulator {
 
-    protected static final Logger log = Logger.getLogger(KamelPopulator.class);
-
     public static final String SIMPLE = "simple";
     public static final String JQ = "jq";
     public static final String CONSTANT = "constant";
     public static final String NAME = "name";
     public static final String EXPRESSION = "expression";
-
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
-
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
+    protected static final Logger log = Logger.getLogger(KamelPopulator.class);
     private final String group = "camel.apache.org";
 
     private StepCatalog catalog;
 
     public KamelPopulator(final StepCatalog catalog) {
         this.catalog = catalog;
+    }
+
+    public static Expression getExpression(final Step step) {
+        Expression expression = new Expression();
+        for (Parameter p : step.getParameters()) {
+            if (p.getValue() == null) {
+                continue;
+            }
+            if (NAME.equalsIgnoreCase(p.getId())) {
+                expression.setName(String.valueOf(p.getValue()));
+            } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
+                expression.setSimple(p.getValue());
+            } else if (JQ.equalsIgnoreCase(p.getId())) {
+                expression.setJq(String.valueOf(p.getValue()));
+            } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
+                expression.setConstant(String.valueOf(p.getValue()));
+            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
+                Expression nestedExpression = new Expression(p.getValue());
+                expression.setExpression(nestedExpression);
+            }
+        }
+        expression.setId(step.getStepId());
+        return expression;
+    }
+
+    public static Script getScript(final Step step) {
+        Script script = new Script();
+        for (Parameter p : step.getParameters()) {
+            if (p.getValue() == null) {
+                continue;
+            }
+            if (NAME.equalsIgnoreCase(p.getId())) {
+                script.setName(String.valueOf(p.getValue()));
+            } else if (GROOVY.equalsIgnoreCase(p.getId())) {
+                script.setGroovy(String.valueOf(p.getValue()));
+            } else if (JAVASCRIPT.equalsIgnoreCase(p.getId())) {
+                script.setJavascript(String.valueOf(p.getValue()));
+            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
+                ScriptExpression nestedExpression = new ScriptExpression(p.getValue());
+                script.setExpression(nestedExpression);
+            }
+        }
+        script.setId(step.getStepId());
+        return script;
+    }
+
+    public static FlowStep deserializeToFlowStep(Object to) {
+        FlowStep res = null;
+
+        if (to instanceof FlowStep flowStep) {
+            res = flowStep;
+        } else if (to instanceof String sto) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(sto);
+            res = uri;
+        } else if (to instanceof Map map) {
+            UriFlowStep uri = new UriFlowStep();
+            uri.setUri(map.getOrDefault("uri", "").toString());
+            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
+            if (parameters != null && !parameters.isEmpty()) {
+                uri.setParameters(new LinkedHashMap<>(parameters));
+            }
+            res = uri;
+        }
+
+        return res;
     }
 
     public void populateKamelet(
@@ -142,11 +205,8 @@ public class KamelPopulator {
             if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
             } else if (metadata.get("definition") instanceof Map map) {
-                Definition def = new Definition();
-                def.setTitle(String.valueOf(map.getOrDefault("title", "")));
-                def.setDescription(String.valueOf(map.getOrDefault("description", "")));
-                def.setRequired((List<String>) map.getOrDefault("required", null));
-                def.setProperties((Map<String, Properties>) map.getOrDefault("properties", null));
+                ObjectMapper objectMapper = new ObjectMapper();
+                Definition def = objectMapper.convertValue(map, Definition.class);
                 kamelet.getSpec().setDefinition(def);
             }
         }
@@ -170,19 +230,19 @@ public class KamelPopulator {
         kamelet.getMetadata().setName(name);
 
         //do we have an icon?
-        if (kamelet.getMetadata().getAnnotations().getOrDefault(CAMEL_APACHE_ORG_KAMELET_ICON, "").isBlank()) {
+        if (metadata.containsKey("icon")) {
             kamelet.getMetadata().getAnnotations().put(CAMEL_APACHE_ORG_KAMELET_ICON,
-                    metadata.getOrDefault("icon", "").toString());
+                    metadata.remove("icon").toString());
+        }
+
+        //do we have a description?
+        if (metadata.containsKey("description") && metadata.get("description") != null) {
+            kamelet.getSpec().getDefinition().setDescription(metadata.remove("description").toString());
         }
 
         setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
         template.setBeans((List<Bean>) metadata.getOrDefault("beans", null));
-        final String metadataDescription = metadata.getOrDefault("description","").toString();
-        final String specDescription = kamelet.getSpec().getDefinition().getDescription();
-        if (! "".equals(metadataDescription) || specDescription == null) {
-            kamelet.getSpec().getDefinition().setDescription(metadataDescription);
-        }
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
@@ -361,7 +421,7 @@ public class KamelPopulator {
                             uri.append(value);
                         }
                     } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")
-                                    && !p.convertToType(value).equals(p.getDefaultValue())) {
+                            && !p.convertToType(value).equals(p.getDefaultValue())) {
                         params.put(p.getId(), p.convertToType(value));
                     }
                 }
@@ -553,51 +613,6 @@ public class KamelPopulator {
         return list;
     }
 
-
-    public static Expression getExpression(final Step step) {
-        Expression expression = new Expression();
-        for (Parameter p : step.getParameters()) {
-            if (p.getValue() == null) {
-                continue;
-            }
-            if (NAME.equalsIgnoreCase(p.getId())) {
-                expression.setName(String.valueOf(p.getValue()));
-            } else if (SIMPLE.equalsIgnoreCase(p.getId())) {
-                expression.setSimple(p.getValue());
-            } else if (JQ.equalsIgnoreCase(p.getId())) {
-                expression.setJq(String.valueOf(p.getValue()));
-            } else if (CONSTANT.equalsIgnoreCase(p.getId())) {
-                expression.setConstant(String.valueOf(p.getValue()));
-            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
-                Expression nestedExpression = new Expression(p.getValue());
-                expression.setExpression(nestedExpression);
-            }
-        }
-        expression.setId(step.getStepId());
-        return expression;
-    }
-
-    public static Script getScript(final Step step) {
-        Script script = new Script();
-        for (Parameter p : step.getParameters()) {
-            if (p.getValue() == null) {
-                continue;
-            }
-            if (NAME.equalsIgnoreCase(p.getId())) {
-                script.setName(String.valueOf(p.getValue()));
-            } else if (GROOVY.equalsIgnoreCase(p.getId())) {
-                script.setGroovy(String.valueOf(p.getValue()));
-            } else if (JAVASCRIPT.equalsIgnoreCase(p.getId())) {
-                script.setJavascript(String.valueOf(p.getValue()));
-            } else if (EXPRESSION.equalsIgnoreCase(p.getId())) {
-                ScriptExpression nestedExpression = new ScriptExpression(p.getValue());
-                script.setExpression(nestedExpression);
-            }
-        }
-        script.setId(step.getStepId());
-        return script;
-    }
-
     private FlowStep getMarshalStep(final Step step) {
         var marshal = new MarshalFlowStep();
         assignParameters(step, marshal);
@@ -626,28 +641,6 @@ public class KamelPopulator {
             flowStep = new ToFlowStep(flowStep);
         }
         return flowStep;
-    }
-
-    public static FlowStep deserializeToFlowStep(Object to) {
-        FlowStep res = null;
-
-        if (to instanceof FlowStep flowStep) {
-            res = flowStep;
-        } else if (to instanceof String sto) {
-            UriFlowStep uri = new UriFlowStep();
-            uri.setUri(sto);
-            res = uri;
-        } else if (to instanceof Map map) {
-            UriFlowStep uri = new UriFlowStep();
-            uri.setUri(map.getOrDefault("uri", "").toString());
-            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
-            if (parameters != null && !parameters.isEmpty()) {
-                uri.setParameters(new LinkedHashMap<>(parameters));
-            }
-            res = uri;
-        }
-
-        return res;
     }
 
     enum Type {source, sink, action}
