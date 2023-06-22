@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <rest path="/v1">
+        <get id="listPets" path="/pets" produces="application/json">
+            <param dataType="integer" description="How many items to return at one time (max 100)" name="limit" required="false" type="query"/>
+            <to uri="direct:listPets"/>
+        </get>
+        <post id="createPets" path="/pets" produces="application/json">
+            <to uri="direct:createPets"/>
+        </post>
+        <get id="showPetById" path="/pets/{petId}" produces="application/json">
+            <param dataType="string" description="The id of the pet to retrieve" name="petId" required="true" type="path"/>
+            <to uri="direct:showPetById"/>
+        </get>
+    </rest>
+</rests>

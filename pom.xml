@@ -170,6 +170,7 @@
         <module>kamelet-support</module>
         <module>camel-route-support</module>
         <module>cluster</module>
+        <module>api-rest</module>
         <module>api</module>
     </modules>
     <dependencies>
