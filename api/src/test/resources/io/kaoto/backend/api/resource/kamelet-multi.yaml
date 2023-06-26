@@ -90,7 +90,7 @@ metadata:
     camel.apache.org/kamelet.group: Dropbox
   labels:
     camel.apache.org/kamelet.type: sink
-  name: dropbox-sink
+  name: another-sink
 spec:
   definition:
     description: |-

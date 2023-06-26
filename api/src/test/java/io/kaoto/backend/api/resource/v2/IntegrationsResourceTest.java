@@ -20,12 +20,18 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -205,7 +211,7 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        List<Object> steps = (List<Object>) ((Map) ((Map) parsed.get(0)).get("from")).get("steps");
+        List<Object> steps = (List<Object>) ((Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from")).get("steps");
         assertEquals(20, steps.size());
         var choice = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("choice");
         var when0 = (Map<String, Object>) ((List<Object>) choice.get("when")).get(0);
@@ -281,7 +287,7 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        var uri = (String) ((Map) ((Map) parsed.get(0)).get("from")).get("uri");
+        var uri = (String) ((Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from")).get("uri");
         assertEquals("kamelet:telegram-source:test/", uri);
     }
 
@@ -386,6 +392,49 @@ class IntegrationsResourceTest {
         assertThat(route).isEqualToNormalizingNewlines(sourceCode);
     }
 
+    @Test
+    void uniqueName() throws IOException {
+        var route = new String(this.getClass()
+                        .getResourceAsStream("../../resource/route-repeated-names.yaml").readAllBytes(),
+                        StandardCharsets.UTF_8);
+
+        //Should be the same as with DSL parameter
+        var res1 = given()
+                .when()
+                .contentType("text/yaml")
+                .body(route)
+                .post("?dsl=Camel Route")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        var flows = res1.extract().body().as(FlowsWrapper.class);
+        var ids = flows.flows().stream().collect(
+                Collectors.groupingBy(i -> i.getMetadata().get("name"), Collectors.counting()))
+                .entrySet();
+        assertEquals(flows.flows().size(), ids.size());
+        assertTrue(ids.stream().allMatch(id -> id.getValue() == 1l));
+
+        //Let's assign the same name to all flows
+        var sameIdentifier = "sameIdentifier";
+        flows.flows().forEach(i -> i.getMetadata().put("name", sameIdentifier));
+
+        //Now let's try to recreate the source code
+        var res2 = given()
+                .when()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(flows)
+                .post()
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        var yaml = res2.extract().body().asString();
+
+        Pattern pattern = Pattern.compile("  id: (.+)(?: \n\r|\n|\r)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(yaml);
+        assertTrue(matcher.find());
+        assertEquals("id: sameIdentifier", matcher.group(0).trim());
+        assertTrue(matcher.find());
+        assertNotEquals("id: sameIdentifier", matcher.group(0).trim());
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"Kamelet#eip.kamelet.yaml", "Integration#integration.yaml",

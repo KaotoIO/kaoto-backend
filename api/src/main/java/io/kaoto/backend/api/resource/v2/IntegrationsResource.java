@@ -25,6 +25,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,7 @@ public class IntegrationsResource {
     @Operation(summary = "Get CRDs",
             description = "Returns the associated custom resource definitions. This is an idempotent operation.")
     public String crds(final @RequestBody FlowsWrapper request) {
+        ensureUniqueNames(request);
         return deploymentService.crds(request.flows(), request.metadata());
     }
 
@@ -129,7 +131,29 @@ public class IntegrationsResource {
             }
         }
 
+        ensureUniqueNames(answer);
+
         return answer;
+    }
+
+    private static void ensureUniqueNames(FlowsWrapper answer) {
+        List<String> usedIds = new LinkedList<>();
+        var name = "name";
+        for (var flow : answer.flows()) {
+            //Make sure we have a metadata set
+            if (flow.getMetadata() == null) {
+                flow.setMetadata(new LinkedHashMap<>());
+            }
+            //Make sure there is an id/name assigned to all flows
+            if (!flow.getMetadata().containsKey(name)) {
+                flow.getMetadata().put(name, flow.getDsl() + System.currentTimeMillis());
+            }
+            //Make sure it is unique
+            if (usedIds.contains(flow.getMetadata().get(name))) {
+                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + System.currentTimeMillis());
+            }
+            usedIds.add(String.valueOf(flow.getMetadata().get(name)));
+        }
     }
 
     private void decorateIntegration(String dsl, FlowsWrapper flowsWrapper,
