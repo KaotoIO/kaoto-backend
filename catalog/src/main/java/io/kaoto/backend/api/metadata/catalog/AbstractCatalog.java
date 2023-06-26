@@ -22,9 +22,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractCatalog<T extends Metadata> {
 
+    private static Logger log = Logger.getLogger(AbstractCatalog.class);
     private InMemoryCatalog<T> c = new InMemoryCatalog<>();
     private final MetadataCatalog<T> readOnlyCatalog = new ReadOnlyCatalog<>(c);
-    private static Logger log = Logger.getLogger(AbstractCatalog.class);
     private CompletableFuture<Void> waitingForWarmUp;
     private CompletableFuture<Void> initializing = new CompletableFuture<>();
 
@@ -33,11 +33,8 @@ public abstract class AbstractCatalog<T extends Metadata> {
     }
 
     public MetadataCatalog<T> getReadOnlyCatalog() {
-        if (waitingForWarmUp.isDone()) {
-            return readOnlyCatalog;
-        } else {
-            throw new CatalogWarmingUpException("Catalog still warming up.");
-        }
+        waitingForWarmUp.join();
+        return readOnlyCatalog;
     }
 
     /*
@@ -108,7 +105,7 @@ public abstract class AbstractCatalog<T extends Metadata> {
         var waitingForWarmUp = CompletableFuture.allOf(
                 futureSteps.toArray(new CompletableFuture[0]));
         waitingForWarmUp.thenAccept(complete ->
-                ((ReadOnlyCatalog) getReadOnlyCatalog()).addCatalog(c))
+                        ((ReadOnlyCatalog) getReadOnlyCatalog()).addCatalog(c))
                 .thenRun(() -> log.info("Catalog refreshed."));
     }
 }
