@@ -1,14 +1,16 @@
-- from:
-    uri: netty-http:https://apiserver:8901/mypath/api/
-    steps:
-    - to:
-        uri: sql:select * from actor
-        parameters:
-          dataSource:
-            ref: dataSource
-    - marshal:
-        json:
-          library: Jackson
+- route:
+    id: a-route
+    from:
+      uri: netty-http:https://apiserver:8901/mypath/api/
+      steps:
+      - to:
+          uri: sql:select * from actor
+          parameters:
+            dataSource:
+              ref: dataSource
+      - marshal:
+          json:
+            library: Jackson
 - beans:
   - name: dataSource
     type: org.postgresql.ds.PGSimpleDataSource

@@ -1,5 +1,7 @@
-- from:
-    uri: activemq:queue:myQueueName
-    steps:
-    - to:
-        uri: activemq:topic:anotherOne
+- route:
+    id: AMQ-route
+    from:
+      uri: activemq:queue:myQueueName
+      steps:
+      - to:
+          uri: activemq:topic:anotherOne

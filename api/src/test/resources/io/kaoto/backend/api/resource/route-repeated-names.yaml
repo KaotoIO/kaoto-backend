@@ -1,0 +1,20 @@
+- route:
+    id: "identifier"
+    from:
+        uri: timer:yaml
+        parameters:
+          period: '1050'
+        steps:
+        - set-body:
+            constant: Hello Camel K from yaml
+        - to:
+            uri: log:info
+        - to:
+            uri: https://mycustom.url:42/with/things
+- route:
+      id: "identifier"
+      from:
+        uri: file:{{customer.file.directory}}
+        steps:
+        - to:
+            uri: sftp://{{sftphost}}:22/files/process
