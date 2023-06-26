@@ -17,8 +17,6 @@ import jakarta.ws.rs.core.Response;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,25 +45,6 @@ class OpenApiToRestDslResourceTest {
     }
 
     @Test
-    void jsonToXml() throws Exception {
-        String json = Files.readString(Path.of(
-                OpenApiToRestDslResourceTest.class.getResource(
-                                "openapi-petstore.json")
-                        .toURI()));
-
-        var res = given()
-                .when()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(json)
-                .post("/?output=xml")
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-
-        String answer = res.extract().body().asString();
-        verifyXml(answer);
-    }
-
-    @Test
     void yamlToYaml() throws Exception {
         String json = Files.readString(Path.of(
                 OpenApiToRestDslResourceTest.class.getResource(
@@ -84,25 +63,6 @@ class OpenApiToRestDslResourceTest {
         verifyYaml(answer);
     }
 
-    @Test
-    void yamlToXml() throws Exception {
-        String json = Files.readString(Path.of(
-                OpenApiToRestDslResourceTest.class.getResource(
-                                "openapi-petstore.yaml")
-                        .toURI()));
-
-        var res = given()
-                .when()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(json)
-                .post("/?output=xml")
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-
-        String answer = res.extract().body().asString();
-        verifyXml(answer);
-    }
-
     private void verifyYaml(String answer) throws Exception {
         final ObjectMapper mapper = new ObjectMapper();
         var loader = new Yaml(new SafeConstructor(new LoaderOptions()));
@@ -113,16 +73,6 @@ class OpenApiToRestDslResourceTest {
                                 "restdsl-petstore.yaml")
                         .toURI())));
         var expected = (ArrayNode) mapper.convertValue(list, JsonNode.class);
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    private void verifyXml(String answer) throws Exception {
-        var mapper = new XmlMapper();
-        var actual = (ObjectNode) mapper.readTree(answer);
-        var expected = (ObjectNode) mapper.readTree(Files.readString(Path.of(
-                OpenApiToRestDslResourceTest.class.getResource(
-                                "restdsl-petstore.xml")
-                        .toURI())));
         assertThat(actual).isEqualTo(expected);
     }
 

@@ -9,7 +9,6 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -21,13 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.apicurio.datamodels.Library;
 import io.apicurio.datamodels.openapi.models.OasDocument;
-import io.quarkus.arc.Arc;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/v1/rest/openApiToRest")
@@ -49,25 +47,21 @@ public class OpenApiToRestDslResource {
 
     private Logger log = Logger.getLogger(OpenApiToRestDslResource.class);
 
+    @Inject
+    private CamelRuntime camelRuntime;
+
     @POST
     @Path("/")
-    @Produces({"text/yaml", MediaType.APPLICATION_XML})
+    @Produces("text/yaml")
     @Consumes({MediaType.APPLICATION_JSON, "text/yaml"})
     @Operation(summary = "Generate REST DSL from Open API specification",
             description = "Consume Open API specification and generate Camel REST DSL in YAML format.")
     public String generate(
-            final @RequestBody String spec,
-            final @Parameter(description = "Camel Rest DSL format, either YAML or XML. "
-                    + "It assumes YAML if not specified.", example = "xml")
-            @QueryParam("output") String output
-            ) throws Exception {
-        var runtime = Arc.container().instance(CamelRuntime.class).get();
-        var camelContext = runtime.getCamelContext();
+            final @RequestBody String spec) throws Exception {
+        var camelContext = camelRuntime.getCamelContext();
         var jacksonNode = readOpenApiSpec(spec);
         OasDocument specDoc = (OasDocument) Library.readDocument(jacksonNode);
-        return "xml".equalsIgnoreCase(output)
-                ? RestDslGenerator.toXml(specDoc).generate(camelContext)
-                : RestDslGenerator.toYaml(specDoc).generate(camelContext);
+        return RestDslGenerator.toYaml(specDoc).generate(camelContext);
     }
 
     private JsonNode readOpenApiSpec(final String input) {
