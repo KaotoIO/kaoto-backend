@@ -146,7 +146,8 @@ public class IntegrationsResource {
             }
             //Make sure there is an id/name assigned to all flows
             if (!flow.getMetadata().containsKey(name)) {
-                flow.getMetadata().put(name, flow.getDsl() + System.currentTimeMillis());
+                flow.getMetadata().put(name,
+                        flow.getDsl().toLowerCase().replaceAll(" ", "") + System.currentTimeMillis());
             }
             //Make sure it is unique
             if (usedIds.contains(flow.getMetadata().get(name))) {
