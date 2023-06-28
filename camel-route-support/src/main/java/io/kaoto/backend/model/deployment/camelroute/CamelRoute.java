@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.camelroute.CamelRouteDeserializer;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.rest.HttpVerb;
 import io.kaoto.backend.model.deployment.rest.Rest;

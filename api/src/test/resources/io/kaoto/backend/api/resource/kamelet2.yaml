@@ -1,0 +1,56 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  name: jms-amqp-10-source
+  annotations:
+    camel.apache.org/kamelet.support.level: "Stable"
+    camel.apache.org/provider: "Apache Software Foundation"
+    camel.apache.org/catalog.version: "4.0.0-SNAPSHOT"
+    camel.apache.org/kamelet.group: "JMS"
+    camel.apache.org/kamelet.namespace: "Messaging"
+  labels:
+    camel.apache.org/kamelet.type: "source"
+    camel.apache.org/requires.runtime: camel-k
+spec:
+  definition:
+    title: "JMS - AMQP 1.0 Source"
+    description: "Consume data from any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client."
+    required:
+      - destinationName
+      - remoteURI
+    type: object
+    properties:
+      destinationType:
+        title: "Destination Type"
+        description: "The JMS destination type (queue or topic)."
+        type: string
+        default: queue
+      destinationName:
+        title: "Destination Name"
+        description: "The JMS destination name."
+        type: string
+      remoteURI:
+        title: "Broker URL"
+        description: "The JMS URL."
+        type: string
+        example: "amqp://my-host:31616"
+  dependencies:
+    - "camel:jms"
+    - "camel:amqp"
+    - "camel:kamelet"
+  template:
+    beans:
+      - name: connectionFactoryBean
+        type: "#class:org.apache.qpid.jms.JmsConnectionFactory"
+        property:
+          - key: remoteURI
+            value: '{{remoteURI}}'
+          - key: secondProperty
+            value: 'another'
+    from:
+      uri: "jms:{{destinationType}}:{{destinationName}}"
+      parameters:
+        connectionFactory: "#bean:{{connectionFactoryBean}}"
+      steps:
+        - to:
+            uri: "kamelet:sink"

@@ -5,8 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.kaoto.backend.model.deployment.camelroute.Bean;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.rest.HttpVerb;
 import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.deployment.rest.RestParameter;
@@ -45,8 +47,11 @@ public class CamelRouteRepresenter extends IntegrationRepresenter {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> properties = mapper.convertValue(data,
+                                new TypeReference<Map<String, Object>>() {});
                         return representMapping(getTag(data.getClass(), Tag.MAP),
-                                ((Bean) data).getRepresenterProperties(),
+                                properties,
                                 DumperOptions.FlowStyle.AUTO);
                     }
                 });
