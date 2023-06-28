@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * 🐱miniclass DSLSpecification
+ * 🐱class DSLSpecification
  * <p>
  * <p>
  * 🐱section
