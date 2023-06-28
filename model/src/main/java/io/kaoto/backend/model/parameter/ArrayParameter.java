@@ -14,9 +14,14 @@ public class ArrayParameter extends Parameter<Object[]> {
     private Integer minItems;
     private Boolean uniqueItems;
 
-    public ArrayParameter(final String id, final String title,
-                          final String description, final Object[] v) {
-        super(id, title, description, v);
+    public ArrayParameter(final String id,
+                          final String title,
+                          final String description,
+                          final Boolean nullable,
+                          final Object[][] enumeration,
+                          final Object[][] examples,
+                          final Object[] defaultValue) {
+        super(id, title, description, nullable, enumeration, examples, defaultValue);
     }
 
     public ArrayParameter() {

@@ -372,7 +372,7 @@ class IntegrationsResourceTest {
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
             "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml", "Camel Route#rest-dsl-multi.yaml",
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
-            "Integration#integration-multiroute.yaml"})
+            "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");
@@ -469,7 +469,7 @@ class IntegrationsResourceTest {
     @ValueSource(strings = {"Kamelet#eip.kamelet.yaml", "Integration#integration.yaml",
             "Camel Route#route-with-beans.yaml", "Camel Route#rest-dsl-multi.yaml",
             "KameletBinding#kamelet-binding.yaml", "Kamelet#kamelet2.yaml",
-            "Integration#integration-multiroute.yaml"})
+            "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml"})
     void changeNameAndDescription(String file) throws IOException {
 
         String[] parameters = file.split("#");

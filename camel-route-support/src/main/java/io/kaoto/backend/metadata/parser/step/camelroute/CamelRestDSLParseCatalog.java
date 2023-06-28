@@ -52,11 +52,11 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         var parameters = new LinkedList<Parameter>();
         final var path =
                 new StringParameter(Rest.PATH_LABEL, "Path of the endpoint",
-                        "Path where this endpoint is listening.", null, null);
+                        "Path where this endpoint is listening.", null, null, null,null, null);
         parameters.add(path);
         final var description =
                 new StringParameter(Rest.DESCRIPTION_LABEL, "Description of the endpoint",
-                        "Human readable description of this endpoint.", null, null);
+                        "Human readable description of this endpoint.", null, null, null,null, null);
         parameters.add(description);
         step.setParameters(parameters);
         return step;

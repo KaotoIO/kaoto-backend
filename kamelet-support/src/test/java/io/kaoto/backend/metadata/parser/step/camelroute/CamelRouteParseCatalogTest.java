@@ -114,13 +114,19 @@ class CamelRouteParseCatalogTest {
         assertIterableEquals(List.of("name"), parsedStep.getRequired());
 
         Map<String, Parameter> expectedParameterValues = Map.of(
-                "name", new StringParameter("name", "Name", "d1", null, null),
-                "bridgeErrorHandler", new BooleanParameter("bridgeErrorHandler", "Bridge Error Handler", "d2", false),
-                "exceptionHandler", new ObjectParameter("exceptionHandler", "Exception Handler", "d3", null),
-                "exchangePattern", new ObjectParameter("exchangePattern", "Exchange Pattern", "d4", null),
-                "lazyStartProducer", new BooleanParameter("lazyStartProducer", "Lazy Start Producer", "d5", false),
+                "name", new StringParameter("name", "Name", "d1",
+                        null, null, null, null, null),
+                "bridgeErrorHandler", new BooleanParameter("bridgeErrorHandler", "Bridge Error Handler", "d2",
+                        null, null, null,false),
+                "exceptionHandler", new ObjectParameter("exceptionHandler", "Exception Handler", "d3",
+                        null, null, null,null),
+                "exchangePattern", new ObjectParameter("exchangePattern", "Exchange Pattern", "d4",
+                        null, null, null,null),
+                "lazyStartProducer", new BooleanParameter("lazyStartProducer", "Lazy Start Producer", "d5",
+                        null, null, null,false),
                 "step-id-kaoto", new StringParameter("step-id-kaoto", "Step ID", "Identifier of this step inside the " +
-                        "route.", null, null)
+                        "route.",
+                        null, null, null,null, null)
         );
 
         expectedParameterValues.get("name").setPath(true);

@@ -52,10 +52,16 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
     protected Parameter(final String id,
                         final String title,
                         final String description,
+                        final Boolean nullable,
+                        final T[] enumeration,
+                        final T[] examples,
                         final T defaultValue) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.nullable = nullable;
+        this.enumeration = enumeration;
+        this.examples = examples;
         this.defaultValue = defaultValue;
     }
 

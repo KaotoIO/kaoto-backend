@@ -91,8 +91,6 @@ public class KameletRepresenter extends Representer {
     public static final String PARAMETERS = "parameters";
     public static final String URI = "uri";
     public static final String NAME = "name";
-    public static final String KIND = "kind";
-    public static final String API_VERSION = "apiVersion";
 
     public KameletRepresenter() {
         super(new DumperOptions());

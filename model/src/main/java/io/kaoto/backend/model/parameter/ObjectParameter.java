@@ -14,9 +14,14 @@ public class ObjectParameter extends Parameter<Object> {
     private Integer minProperties;
     private String[] required;
 
-    public ObjectParameter(final String id, final String title,
-                           final String description, final Object v) {
-        super(id, title, description, v);
+    public ObjectParameter(final String id,
+                           final String title,
+                           final String description,
+                           final Boolean nullable,
+                           final Object[] enumeration,
+                           final Object[] examples,
+                           final Object defaultValue) {
+        super(id, title, description, nullable, enumeration, examples, defaultValue);
     }
 
     public ObjectParameter() {

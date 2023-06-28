@@ -1,0 +1,50 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    camel.apache.org/kamelet.icon: data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIi
+    camel.apache.org/kamelet.support.level: Stable
+    camel.apache.org/provider: Apache Software Foundation
+    camel.apache.org/catalog.version: 4.0.0-SNAPSHOT
+    camel.apache.org/kamelet.group: JMS
+    camel.apache.org/kamelet.namespace: Messaging
+  labels:
+    camel.apache.org/requires.runtime: camel-k
+    camel.apache.org/kamelet.type: source
+  name: jms-amqp-10-source
+spec:
+  definition:
+    description: Consume data from any AMQP 1.0 compliant message broker
+    properties:
+      destinationType:
+        default: queue
+        description: The JMS destination type (queue or topic).
+        title: Destination Type
+        type: string
+      destinationName:
+        description: The JMS destination name.
+        title: Destination Name
+        type: string
+      remoteURI:
+        description: The JMS URL.
+        example: amqp://my-host:31616
+        title: Broker URL
+        type: string
+    required:
+    - destinationName
+    - remoteURI
+    title: JMS - AMQP 1.0 Source
+    type: object
+  dependencies:
+  - camel:jms
+  - camel:amqp
+  - camel:kamelet
+  - camel:core
+  template:
+    from:
+      uri: jms:{{destinationType}}:{{destinationName}}
+      parameters:
+        connectionFactory: '#bean:{{connectionFactoryBean}}'
+      steps:
+      - to:
+          uri: kamelet:sink

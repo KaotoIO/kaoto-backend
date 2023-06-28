@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.step.parser.kamelet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
@@ -122,40 +123,67 @@ public class KameletStepParserService implements StepParserService<Step> {
                 Parameter p;
                 switch (def.getType()) {
                     case "string":
-                        p = new StringParameter(key, def.getTitle(),
+                        p = new StringParameter(key,
+                                def.getTitle(),
                                 def.getDescription(),
+                                def.getNullable(),
+                                def.get_enum() != null ? def.get_enum().toArray(new String[]{}) : null,
+                                def.getExample() != null ?
+                                        new String[]{String.valueOf(def.getExample().getValue())} :
+                                        null,
                                 def.get_default() != null ?
                                         String.valueOf(def.get_default().getValue()) : null,
                                 def.getFormat());
                         break;
                     case "number":
                         p = new NumberParameter(key, def.getTitle(),
-                                def.getDescription(),
+                                def.getDescription(), def.getNullable(),
+                                def.get_enum() != null ? def.get_enum().toArray(new Double[]{}) : null,
+                                def.getExample() != null ?
+                                        new Number[]{Double.valueOf(String.valueOf(def.getExample().getValue()))} :
+                                        null,
                                 def.get_default() != null ?
                                         Double.valueOf(String.valueOf(def.get_default().getValue()))
                                         : null);
                         break;
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
-                                def.getDescription(),
+                                def.getDescription(), def.getNullable(),
+                                def.get_enum() != null ? def.get_enum().toArray(new Integer[]{}) : null,
+                                def.getExample() != null ?
+                                        new Integer[]{Integer.valueOf(String.valueOf(def.getExample().getValue()))} :
+                                        null,
                                 def.get_default() != null ?
                                         Integer.valueOf(String.valueOf(def.get_default().getValue())) : null);
                         break;
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
-                                def.getDescription(),
+                                def.getDescription(), def.getNullable(),
+                                def.get_enum() != null ? def.get_enum().toArray(new Boolean[]{}) : null,
+                                def.getExample() != null ?
+                                        new Boolean[]{Boolean.valueOf(String.valueOf(def.getExample().getValue()))} :
+                                        null,
                                 def.get_default() != null ?
                                         Boolean.valueOf(String.valueOf(def.get_default().getValue())) : null);
                         break;
                     case "array":
                         p = new ArrayParameter(key, def.getTitle(),
-                                def.getDescription(),
+                                def.getDescription(), def.getNullable(),
+                                def.get_enum() != null ? def.get_enum().toArray(new Object[][]{}) : null,
+                                def.getExample() != null ?
+                                        new Object[][]{ (Object[]) def.getExample().getValue()} :
+                                        null,
                                 def.get_default() != null ?
                                         String.valueOf(def.get_default().getValue()).split(",") :
                                         null);
                         break;
                     default:
-                        p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.get_default());
+                        p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getNullable(),
+                                def.get_enum().toArray(new AnyType[0]),
+                                def.getExample() != null ?
+                                        new Object[]{ def.getExample().getValue()} :
+                                        null,
+                                def.get_default());
                 }
                 res.getParameters().add(p);
             }

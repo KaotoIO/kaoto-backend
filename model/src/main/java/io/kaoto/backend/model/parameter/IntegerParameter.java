@@ -14,9 +14,14 @@ public class IntegerParameter extends Parameter<Integer> {
     private Integer maximum;
     private Integer minimum;
 
-    public IntegerParameter(final String id, final String title,
-                            final String description, final Integer v) {
-        super(id, title, description, v);
+    public IntegerParameter(final String id,
+                            final String title,
+                            final String description,
+                            final Boolean nullable,
+                            final Integer[] enumeration,
+                            final Integer[] examples,
+                            final Integer defaultValue) {
+        super(id, title, description, nullable, enumeration, examples, defaultValue);
     }
 
     public IntegerParameter() {

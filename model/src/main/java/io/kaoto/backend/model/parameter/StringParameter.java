@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * 🐱miniclass StringParameter (Parameter)
- *
  */
 @JsonTypeName("string")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,10 +16,15 @@ public class StringParameter extends Parameter<String> {
     private String pattern;
     private String format;
 
-    public StringParameter(final String id, final String title,
-                           final String description, final String v,
-                           final String format) {
-        super(id, title, description, v);
+    public StringParameter(final String id,
+                              final String title,
+                              final String description,
+                              final Boolean nullable,
+                              final String[] enumeration,
+                              final String[] examples,
+                              final String defaultValue,
+                              final String format) {
+        super(id, title, description, nullable, enumeration, examples, defaultValue);
         this.setFormat(format);
     }
 

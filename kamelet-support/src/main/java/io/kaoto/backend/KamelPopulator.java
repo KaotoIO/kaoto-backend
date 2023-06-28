@@ -304,6 +304,21 @@ public class KamelPopulator {
             }
             property.setTitle(p.getTitle());
             property.setType(p.getType());
+            property.setNullable(p.getNullable());
+            if (p.getEnum() != null) {
+                var enumerable = new LinkedList<AnyType>();
+                for (var enumy : p.getEnum()) {
+                    var anyType = new AnyType();
+                    anyType.setValue(enumy);
+                    enumerable.add(anyType);
+                }
+                property.set_enum(enumerable);
+            }
+            if (p.getExamples() != null && p.getExamples().length > 0) {
+                var example = new AnyType();
+                example.setValue(p.getExamples()[0]);
+                property.setExample(example);
+            }
             def.getProperties().put(p.getId(), property);
         }
     }
