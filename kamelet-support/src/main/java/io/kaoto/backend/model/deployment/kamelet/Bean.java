@@ -29,7 +29,7 @@ import java.util.Map;
  value: 'org.postgresql.Driver'
  * ```
  */
-@JsonPropertyOrder({"name", "type", "property"  })
+@JsonPropertyOrder({"name", "type", "properties", "property"  })
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )

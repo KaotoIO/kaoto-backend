@@ -1,0 +1,42 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: integration.with.beans
+spec:
+  flows:
+  - route:
+      id: http-sql
+      from:
+        uri: netty-http:https://demo.api.lalala.com:8080/mypath/api/
+        steps:
+        - to:
+            uri: sql:select * from actor
+            parameters:
+              dataSource:
+                ref: dataSource
+  - route:
+      id: timer-amq-log
+      from:
+        uri: timer:tick
+        parameters:
+          period: '5000'
+        steps:
+        - to:
+            uri: activemq:queue:myQueue
+        - to:
+            uri: log:save
+  - beans:
+    - name: dataSource
+      type: org.postgresql.ds.PGSimpleDataSource
+      properties:
+        serverName: 127.0.0.1
+        portNumber: '5432'
+        databaseName: dvdrental
+        user: user
+        password: password
+    - name: someBean
+      type: io.kaoto.test.backend.api.service.step.parser.camelroute.SomeBean
+      properties:
+        someProperty: someValue
+        someObjectProperty:
+          someObjectPropertyProperty: someObjectPropertyValue

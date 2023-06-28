@@ -2,6 +2,7 @@ package io.kaoto.backend.api.service.step.parser.camelroute;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.camelroute.IntegrationDeploymentGeneratorService;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +17,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +65,7 @@ class IntegrationStepParserServiceTest {
     @Test
     void parseMultipleRoutes() throws Exception {
         String input = new String(Objects.requireNonNull(
-                this.getClass().getResourceAsStream("integration-multiroute.yaml"))
+                        this.getClass().getResourceAsStream("integration-multiroute.yaml"))
                 .readAllBytes(), StandardCharsets.UTF_8);
         var parsed = service.getParsedFlows(input);
         assertThat(parsed).hasSize(3);
@@ -80,6 +83,43 @@ class IntegrationStepParserServiceTest {
         assertThat(flow2.getSteps()).extracting(Step::getName).containsExactly("timer", "activemq", "log");
         var yaml = deploymentService.parse(parsed);
         assertThat(yaml).isEqualToNormalizingNewlines(input);
+    }
+    @Test
+    void parseWithBeans() throws Exception {
+        var yaml = Files.readString(Path.of(this.getClass().getResource("integration-with-beans.yaml").toURI()));
+        var parsed = service.getParsedFlows(yaml);
+        assertThat(parsed).hasSize(3);
+        var route1 = parsed.get(1);
+        assertThat(route1.getSteps())
+                .hasSize(2)
+                .extracting(Step::getName)
+                .containsExactly("netty-http", "sql");
+        var route2 = parsed.get(2);
+        assertThat(route2.getSteps())
+                .hasSize(3)
+                .extracting(Step::getName)
+                .containsExactly("timer", "activemq", "log");
+        var metadata = parsed.get(0);
+        assertThat(metadata.getMetadata().get("name")).isEqualTo("integration.with.beans");
+        List<Bean> beans = (List) metadata.getMetadata().get("beans");
+        assertThat(beans)
+                .hasSize(2)
+                .extracting(Bean::getName)
+                .containsExactly("dataSource", "someBean");
+        Bean dataSource = beans.get(0);
+        assertThat(dataSource.getType()).isEqualTo("org.postgresql.ds.PGSimpleDataSource");
+        assertThat(dataSource.getProperties()).hasSize(5);
+        assertThat(dataSource.getProperties().get("password")).isEqualTo("password");
+        Bean someBean = beans.get(1);
+        assertThat(someBean.getType())
+                .isEqualTo("io.kaoto.test.backend.api.service.step.parser.camelroute.SomeBean");
+        assertThat(someBean.getProperties()).hasSize(2);
+        assertThat(someBean.getProperties().get("someObjectProperty"))
+                .isInstanceOf(Map.class)
+                .extracting(m -> ((Map)m).get("someObjectPropertyProperty"))
+                .isEqualTo("someObjectPropertyValue");
+        var yaml2 = deploymentService.parse(parsed);
+        assertThat(yaml2).isEqualToNormalizingNewlines(yaml);
     }
 
     @ParameterizedTest
