@@ -56,8 +56,9 @@ jobs:
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          version: '22.3.0'
           java-version: '17'
+          distribution: 'mandrel'
+          version: 'mandrel-latest'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'maven'
