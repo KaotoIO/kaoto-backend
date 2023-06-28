@@ -56,8 +56,8 @@ jobs:
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          version: '22.3.0'
-          java-version: '17'
+          java-version: '17.0.7'
+          distribution: 'graalvm-community'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'maven'
@@ -74,7 +74,7 @@ jobs:
           disk-root: "C:"
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Run native tests
-        run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Pnative -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
+        run: mvn ${{ matrix.os == 'windows-latest' && '--%' || '' }} install -Pnative -Dquarkus.native.native-image-xmx=5g -Dquarkus.log.category.\"io.kaoto.backend.model.deployment.kamelet.step.FlowStepDeserializer\".level=OFF
       - name: Archive Quarkus log for native tests
         uses: actions/upload-artifact@v3
         if: failure()
