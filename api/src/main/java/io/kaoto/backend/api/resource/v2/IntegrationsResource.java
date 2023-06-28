@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 🐱class IntegrationsResource
@@ -146,12 +147,14 @@ public class IntegrationsResource {
             }
             //Make sure there is an id/name assigned to all flows
             if (!flow.getMetadata().containsKey(name)) {
+                Random random = new Random();
                 flow.getMetadata().put(name,
-                        flow.getDsl().toLowerCase().replaceAll(" ", "") + System.currentTimeMillis());
+                        flow.getDsl().toLowerCase().replaceAll(" ", "") + random.nextInt(99));
             }
             //Make sure it is unique
             if (usedIds.contains(flow.getMetadata().get(name))) {
-                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + System.currentTimeMillis());
+                Random random = new Random();
+                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + random.nextInt(99));
             }
             usedIds.add(String.valueOf(flow.getMetadata().get(name)));
         }
