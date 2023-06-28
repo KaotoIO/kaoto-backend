@@ -340,6 +340,33 @@ class IntegrationsResourceTest {
         var to = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("to");
         assertEquals("log:", to.get("uri"));
     }
+    @Test
+    void beans() throws Exception {
+        String yaml = Files.readString(Path.of(
+                IntegrationsResourceTest.class.getResource("../../resource/kamelet2.yaml").toURI()));
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Kamelet")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        var flows = res.extract().body().as(FlowsWrapper.class);
+        assertNotNull(flows);
+        var flow = flows.flows().get(0);
+        assertNotNull(flow);
+        var beans = (List<Map<String, Object>>) flow.getMetadata().get("beans");
+        assertEquals(1, beans.size());
+        var bean = beans.get(0);
+        assertEquals(3, bean.size());
+        assertTrue(bean.containsKey("name"));
+        assertTrue(bean.containsKey("type"));
+        assertTrue(bean.containsKey("properties"));
+        var properties = (Map<String, String>) bean.get("properties");
+        assertEquals(2, properties.size());
+        assertTrue(properties.containsKey("remoteURI"));
+        assertTrue(properties.containsKey("secondProperty"));
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
@@ -439,7 +466,7 @@ class IntegrationsResourceTest {
     @ParameterizedTest
     @ValueSource(strings = {"Kamelet#eip.kamelet.yaml", "Integration#integration.yaml",
             "Camel Route#route-with-beans.yaml", "Camel Route#rest-dsl-multi.yaml",
-            "KameletBinding#kamelet-binding.yaml"})
+            "KameletBinding#kamelet-binding.yaml", "Kamelet#kamelet2.yaml"})
     void changeNameAndDescription(String file) throws IOException {
 
         String[] parameters = file.split("#");

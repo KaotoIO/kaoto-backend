@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -43,8 +45,8 @@ public class Bean implements Serializable {
     private String name;
     @JsonProperty("type")
     private String type;
-    @JsonProperty("property")
-    private List<Property> property;
+    @JsonProperty("properties")
+    private Map<String, Object> properties;
 
     public String getName() {
         return name;
@@ -62,12 +64,21 @@ public class Bean implements Serializable {
         this.type = type;
     }
 
-    public List<Property> getProperty() {
-        return property;
+    @JsonProperty("property")
+    public void setProperty(final List<Property> property) {
+        if (this.properties == null) {
+            this.properties = new LinkedHashMap<>();
+        }
+        for (Property prop : property) {
+            this.properties.put(prop.getKey(), prop.getValue());
+        }
     }
 
-    public void setProperty(
-            final List<Property> property) {
-        this.property = property;
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
     }
 }

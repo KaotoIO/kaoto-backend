@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
-import io.kaoto.backend.model.deployment.camelroute.Bean;
 import io.kaoto.backend.model.deployment.camelroute.CamelRoute;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 
 public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
