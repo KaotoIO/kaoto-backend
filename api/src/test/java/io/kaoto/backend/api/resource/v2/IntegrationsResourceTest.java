@@ -413,7 +413,7 @@ class IntegrationsResourceTest {
                 .entrySet();
         assertEquals(flows.flows().size(), ids.size());
         assertTrue(ids.stream().allMatch(id -> id.getValue() == 1l));
-            assertTrue(ids.stream().allMatch(id ->Pattern.matches( "([A-Za-z0-9])+", id.getKey().toString())));
+        assertTrue(ids.stream().allMatch(id ->Pattern.matches( "([A-Za-z0-9])+", id.getKey().toString())));
 
         //Let's assign the same name to all flows
         var sameIdentifier = "sameIdentifier";
