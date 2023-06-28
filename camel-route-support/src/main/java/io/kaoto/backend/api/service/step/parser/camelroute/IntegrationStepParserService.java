@@ -6,8 +6,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.camelroute.Integration;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -98,7 +100,13 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             ksps.processMetadata(metadata, integration.getMetadata());
 
             if (integration.getSpec().get_flows() != null) {
-                integration.getSpec().get_flows().forEach(f -> processFlows(answer, f));
+                integration.getSpec().get_flows().forEach(flow -> {
+                    if (flow.getBeans() != null) {
+                        processBeans(metadata, flow.getBeans());
+                    } else {
+                        processFlows(answer, flow);
+                    }
+                });
                 integration.getSpec().get_flows().clear();
             }
 
@@ -124,16 +132,19 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         res.setParameters(new ArrayList<>());
         List<Step> steps = new ArrayList<>();
         res.setSteps(steps);
-        var fromStep = ksps.processStep(flow.getFrom(), true, false);
-        if (fromStep != null) {
-            steps.add(fromStep);
+
+        var from = flow.getFrom();
+        if (from == null) {
+            from = flow.getRest();
         }
-        if (flow.getFrom().getSteps() != null) {
-            for (FlowStep step : flow.getFrom().getSteps()) {
-                //end is always false in this case because we can always edit one step after it
-                var processed = ksps.processStep(step, false, false);
-                if (processed != null) {
-                    steps.add(processed);
+        if (from instanceof Rest rest) {
+            steps.add(rest.getStep(ksps, false, true));
+        } else if (from != null) {
+            steps.add(ksps.processStep(from, true, false));
+            if (from.getSteps() != null) {
+                for (FlowStep step : from.getSteps()) {
+                    //end is always false in this case because we can always edit one step after it
+                    steps.add(ksps.processStep(step, false, false));
                 }
             }
         }
@@ -150,6 +161,13 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             res.getMetadata().put("description", flow.getDescription());
         }
         answer.add(res);
+    }
+
+    private void processBeans(ParseResult<Step> parsedMetadata, List<Bean> beans) {
+        if (parsedMetadata.getMetadata() == null) {
+            parsedMetadata.setMetadata(new LinkedHashMap<>());
+        }
+        parsedMetadata.getMetadata().put("beans", beans);
     }
 
     @Override

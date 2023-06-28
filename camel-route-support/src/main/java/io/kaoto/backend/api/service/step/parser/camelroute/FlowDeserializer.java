@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -8,7 +9,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.CollectionType;
 
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.rest.Rest;
@@ -49,6 +52,11 @@ public class FlowDeserializer extends StdDeserializer<Flow> {
         if (((ObjectNode)root).has("rest")) {
             var rest = ctxt.readTreeAsValue((JsonNode)root.get("rest"), Rest.class);
             flow.setRest(rest);
+        }
+        if (((ObjectNode)root).has("beans")) {
+            CollectionType beansType = ctxt.getTypeFactory().constructCollectionType(List.class, Bean.class);
+            List<Bean> beans = ctxt.readTreeAsValue((JsonNode)root.get("beans"), beansType);
+            flow.setBeans(beans);
         }
         return flow;
     }

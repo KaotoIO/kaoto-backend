@@ -1,5 +1,7 @@
 package io.kaoto.backend.model.deployment.kamelet;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.rest.Rest;
@@ -38,6 +40,9 @@ public class Flow extends Flows {
     @JsonProperty("rest")
     private Rest rest;
 
+    @JsonProperty("beans")
+    private List<Bean> beans;
+
     public From getFrom() {
         return from;
     }
@@ -52,6 +57,14 @@ public class Flow extends Flows {
 
     public void setRest(Rest rest) {
         this.rest = rest;
+    }
+
+    public List<Bean> getBeans() {
+        return beans;
+    }
+
+    public void setBeans(List<Bean> beans) {
+        this.beans = beans;
     }
 
     public String getId() {
