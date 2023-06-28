@@ -237,6 +237,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 id,
                 parameterData.get(DISPLAY_NAME),
                 parameterData.get(DESCRIPTION),
+                null, null, null,
                 parameterData.getOrDefault(DEFAULT_VALUE, null),
                 null
         );
@@ -259,6 +260,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 id,
                 parameterData.get(DISPLAY_NAME),
                 parameterData.get(DESCRIPTION),
+                null, null, null,
                 value
         );
     }
@@ -271,6 +273,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 id,
                 parameterData.get(DISPLAY_NAME),
                 parameterData.get(DESCRIPTION),
+                null, null, null,
                 parameterData.getOrDefault(DEFAULT_VALUE, null)
         );
     }
@@ -283,6 +286,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 id,
                 parameterData.get(DISPLAY_NAME),
                 parameterData.get(DESCRIPTION),
+                null, null, null,
                 Boolean.parseBoolean(parameterData
                         .getOrDefault(DEFAULT_VALUE, "false"))
         );

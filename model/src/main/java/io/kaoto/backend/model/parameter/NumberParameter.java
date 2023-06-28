@@ -14,9 +14,14 @@ public class NumberParameter extends Parameter<Number> {
     private Number maximum;
     private Number minimum;
 
-    public NumberParameter(final String id, final String title,
-                           final String description, final Number v) {
-        super(id, title, description, v);
+    public NumberParameter(final String id,
+                           final String title,
+                           final String description,
+                           final Boolean nullable,
+                           final Number[] enumeration,
+                           final Number[] examples,
+                           final Number defaultValue)  {
+            super(id, title, description, nullable, enumeration, examples, defaultValue);
     }
 
     public NumberParameter() {
