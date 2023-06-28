@@ -1,6 +1,7 @@
 package io.kaoto.backend.model.deployment.camelroute;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -10,6 +11,7 @@ import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1.IntegrationStatus;
@@ -17,6 +19,7 @@ import org.apache.camel.v1.IntegrationStatus;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,8 +70,12 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         } else {
             this.setSpec(new IntegrationSpec());
         }
+
         this.getSpec().set_flows(new ArrayList<>());
         flowList.forEach(iflow -> processFlow(iflow, this.getSpec().get_flows(), catalog));
+        if (metadata.containsKey("beans")) {
+            processBeans(this.getSpec().get_flows(), (List<Bean>) metadata.get("beans"));
+        }
     }
 
     private void processFlow(IntegrationFlow iflow, List<Flow> flowList, StepCatalog catalog) {
@@ -86,5 +93,12 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
             }
         }
         flowList.add(flow);
+    }
+
+    private void processBeans(List<Flow> flowList, List<Bean> beans) {
+        Flow beansFlow  = new Flow();
+        beansFlow.setBeans(new LinkedList<>());
+        beansFlow.getBeans().addAll(beans);
+        flowList.add(beansFlow);
     }
 }

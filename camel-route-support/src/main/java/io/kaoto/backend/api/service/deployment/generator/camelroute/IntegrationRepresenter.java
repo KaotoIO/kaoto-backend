@@ -3,6 +3,7 @@ package io.kaoto.backend.api.service.deployment.generator.camelroute;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.camelroute.IntegrationSpec;
 import io.kaoto.backend.model.deployment.rest.Rest;
@@ -46,6 +47,8 @@ public class IntegrationRepresenter extends KameletRepresenter {
 
                         if (flow.getFrom() instanceof Rest) {
                             properties.put("rest", flow.getFrom());
+                        } else if (flow.getBeans() != null) {
+                            properties.put("beans", flow.getBeans());
                         } else {
                             properties.put("from", flow.getFrom());
                         }
@@ -68,6 +71,18 @@ public class IntegrationRepresenter extends KameletRepresenter {
                             routeProperties.put("route", properties2);
                             properties = routeProperties;
                         }
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.AUTO);
+                    }
+                });
+        this.multiRepresenters.put(Bean.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> properties = mapper.convertValue(data,
+                                new TypeReference<Map<String, Object>>() {});
                         return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);

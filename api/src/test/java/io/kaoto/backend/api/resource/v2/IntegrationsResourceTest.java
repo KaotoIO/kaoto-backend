@@ -20,11 +20,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -373,7 +371,7 @@ class IntegrationsResourceTest {
             "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml", "Camel Route#rest-dsl-multi.yaml",
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
-            "Integration#integration-no-step.yaml"})
+            "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");
