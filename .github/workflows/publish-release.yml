@@ -27,8 +27,8 @@ jobs:
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '17'
-          version: '22.3.0'
+          java-version: '17.0.7'
+          distribution: 'graalvm-community'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'maven'
@@ -45,7 +45,7 @@ jobs:
           disk-root: "C:"
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Build Native Quarkus
-        run: mvn install -Pnative -DskipTests
+        run: mvn install -Pnative -Dquarkus.native.native-image-xmx=5g -DskipTests
       - name: 🛂 Find the version - non-Windows
         run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
         if: ${{ matrix.os != 'windows-latest' }}
