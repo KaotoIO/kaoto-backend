@@ -447,8 +447,9 @@ operations.
 <h2><a href='#integrationsresource'>🔗</a>IntegrationsResource</h2>
 <p>This endpoint will return the yaml needed to deploy
 the related integration and the
-endpoints to interact with deployments.</p>
-<p>This endpoint will return the yaml needed to deploy
+endpoints to interact with deployments.
+&lt;p&gt;
+This endpoint will return the yaml needed to deploy
 the related integration and the
 endpoints to interact with deployments.</p>
 
@@ -565,7 +566,7 @@ resource relies on to perform the operations.
 		<td>Based on the provided steps, return a valid yaml string to deploy</td>
 	</tr>
 	<tr id='deploymentservice-crds'>
-		<td><code><b>crds</b>(<nobr>&lt;List<Integration>&gt; <i>i</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
+		<td><code><b>crds</b>(<nobr>&lt;List<Integration>&gt; <i>integrationList</i></nobr>, <nobr>&lt;String&gt; <i>dsl</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
 		<td>Based on the provided steps, return a valid yaml string to deploy</td>
 	</tr>
@@ -579,7 +580,8 @@ resource relies on to perform the operations.
 </section>
 <section class='namespace' id='stepresource'>
 <h2><a href='#stepresource'>🔗</a>StepResource</h2>
-<p>This endpoint will return steps based on the parameters.</p>
+<p>&lt;p&gt;
+This endpoint will return steps based on the parameters.</p>
 
 <h3 id='stepresource-method'><a href='#stepresource-method'>🔗</a>Methods</h3>
 
@@ -654,6 +656,7 @@ resource relies on to perform the operations.
 </section>
 <section class='namespace' id='deploymentgeneratorservice'>
 <h2><a href='#deploymentgeneratorservice'>🔗</a></h2>
+<p>&lt;p&gt;</p>
 
 <h3 id='deploymentgeneratorservice-method'><a href='#deploymentgeneratorservice-method'>🔗</a>DeploymentGeneratorService</h3>
 
@@ -668,16 +671,6 @@ Generic interface to generate deployments
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='deploymentgeneratorservice-identifier'>
-		<td><code><b>identifier</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the identifier of the supported language.</td>
-	</tr>
-	<tr id='deploymentgeneratorservice-description'>
-		<td><code><b>description</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the description of the supported language.</td>
-	</tr>
 	<tr id='deploymentgeneratorservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parameter'>List[Parameter]</a>&gt; <i>parameters</i></nobr>, <nobr>&lt;Map&gt; <i>metadata</i></nobr>, <nobr>&lt;<a href='#parseresult'>ParseResult</a>&gt; <i>flows</i></nobr>, <nobr>&lt;String&gt; <i>input</i></nobr>)</nobr></code></td>
 		<td><code>String</code></td>
@@ -686,12 +679,6 @@ If applies, the name will be the name used on the integration deployed.
 <p>Based on the list of flows, returns the source code.
 If applies, the name will be the name used on the integration deployed.</p>
 <p>Based on the source code, returns the resource to deploy.</p></td>
-	</tr>
-	<tr id='deploymentgeneratorservice-appliesto'>
-		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parseresult'>ParseResult</a>&gt; <i>flows</i></nobr>)</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Check if the parser applies to the steps
-<p>Check if the parser applies to the flows</p></td>
 	</tr>
 	<tr id='deploymentgeneratorservice-getstatus'>
 		<td><code><b>getStatus</b>()</nobr></code></td>
@@ -704,17 +691,6 @@ the supported types in #supportedCustomResources() .</td>
 		<td><code>List<Class></code></td>
 		<td>Returns the Java model classes that extend CustomResource and that are
 the types of custom resources supported in the cluster.</td>
-	</tr>
-	<tr id='deploymentgeneratorservice-isdeployable'>
-		<td><code><b>isDeployable</b>()</nobr></code></td>
-		<td><code>boolean</code></td>
-		<td>Based on the environment, the capabilities, or any other important feature.
-But, is this DSL deployable using the <code>Deploy</code> button in Kaoto?</td>
-	</tr>
-	<tr id='deploymentgeneratorservice-getkinds'>
-		<td><code><b>getKinds</b>()</nobr></code></td>
-		<td><code>String[]</code></td>
-		<td>Return the step kinds compatible with this service.</td>
 	</tr>
 	<tr id='deploymentgeneratorservice-getresources'>
 		<td><code><b>getResources</b>(<nobr>&lt;String&gt; <i>namespace</i></nobr>, <nobr>&lt;KubernetesClient&gt; <i>kclient</i></nobr>)</nobr></code></td>
@@ -2170,16 +2146,6 @@ refreshing.</td>
 		<th>Description</th>
 	</tr>
 	</thead><tbody>
-	<tr id='stepparserservice-identifier'>
-		<td><code><b>identifier</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the identifier of the supported language.</td>
-	</tr>
-	<tr id='stepparserservice-description'>
-		<td><code><b>description</b>()</nobr></code></td>
-		<td><code>String</code></td>
-		<td>Returns the description of the supported language.</td>
-	</tr>
 	<tr id='stepparserservice-parse'>
 		<td><code><b>parse</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code><a href='#parseresult'>ParseResult</a></code></td>
@@ -2195,7 +2161,7 @@ the metadata associated to the orchestration.</td>
 	<tr id='stepparserservice-appliesto'>
 		<td><code><b>appliesTo</b>(<nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
 		<td><code>boolean</code></td>
-		<td>Check if this parser knows how to parse the provided string</td>
+		<td>Check if this parser knows how to parse the provided source code</td>
 	</tr>
 </tbody></table>
 </section>
@@ -2331,6 +2297,74 @@ return a completable list of elements to add to a catalog.</td>
 <section class='namespace' id='processfile'>
 <h2><a href='#processfile'>🔗</a>ProcessFile</h2>
 <p>Helper class to walk around files to parse Metadata objects.</p>
+
+
+</section>
+<section class='namespace' id='dslspecification'>
+<h2><a href='#dslspecification'>🔗</a>DSLSpecification</h2>
+<p>&lt;p&gt;
+&lt;p&gt;</p>
+
+<h3 id='dslspecification-method'><a href='#dslspecification-method'>🔗</a>Methods</h3>
+
+
+<section>
+
+&lt;p&gt;
+&lt;p&gt;
+Generic interface to define DSL specific elements like the vocabulary or capabilities.
+<table><thead>
+	<tr>
+		<th>Method</th>
+		<th>Returns</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='dslspecification-identifier'>
+		<td><code><b>identifier</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the identifier of the supported language.
+<p>This must be unique on the whole Kaoto instance and relates the deployments and parsers services with the DSL
+specification.</p></td>
+	</tr>
+	<tr id='dslspecification-description'>
+		<td><code><b>description</b>()</nobr></code></td>
+		<td><code>String</code></td>
+		<td>Returns the identifier of the supported language.
+<p>This must be unique on the whole Kaoto instance and relates the deployments and parsers services with the DSL
+specification.</p></td>
+	</tr>
+	<tr id='dslspecification-isdeployable'>
+		<td><code><b>isDeployable</b>()</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Based on the environment, the capabilities, or any other important feature.
+But, is this DSL deployable using the <code>Deploy</code> button in Kaoto?</td>
+	</tr>
+	<tr id='dslspecification-getkinds'>
+		<td><code><b>getKinds</b>()</nobr></code></td>
+		<td><code>String[]</code></td>
+		<td>Return the kinds of steps compatible with this DSL.</td>
+	</tr>
+	<tr id='dslspecification-appliesto'>
+		<td><code><b>appliesTo</b>(<nobr>&lt;<a href='#step'>List[Step]</a>&gt; <i>steps</i></nobr>, <nobr>&lt;<a href='#parseresult'>ParseResult</a>&gt; <i>flows</i></nobr>, <nobr>&lt;String&gt; <i>yaml</i></nobr>)</nobr></code></td>
+		<td><code>boolean</code></td>
+		<td>Check if this DSL can be applied to the list of steps.
+<p>Check if at least one of the flows belongs to this DSL.</p>
+<p>Check if the source code is from this DSL.</p></td>
+	</tr>
+	<tr id='dslspecification-getdeploymentgeneratorservice'>
+		<td><code><b>getDeploymentGeneratorService</b>()</nobr></code></td>
+		<td><code><a href='#deploymentgeneratorservice'>DeploymentGeneratorService</a></code></td>
+		<td>Returns the Deployment Generator Service associated to this DSL, if exists.</td>
+	</tr>
+	<tr id='dslspecification-getstepparserservice'>
+		<td><code><b>getStepParserService</b>()</nobr></code></td>
+		<td><code><a href='#stepparserservice'>StepParserService</a></code></td>
+		<td>Returns the Step Parser Service associated to this DSL, if exists.</td>
+	</tr>
+</tbody></table>
+</section>
+
 
 
 </section>

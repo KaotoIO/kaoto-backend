@@ -378,13 +378,33 @@ properties:Map[String, String]<BR align="left" />step:Step<BR align="left" />url
 		, taillabel="0..n"
 		
 		]
-"StepParserService" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>StepParserService</B></TD></TR>
+"DSLSpecification" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>DSLSpecification</B></TD></TR>
 	<TR><TD><I>Methods</I><BR/>
 identifier():String
 <BR align="left" />
 description():String
 <BR align="left" />
+isDeployable():boolean
+<BR align="left" />
+getKinds():String[]
+<BR align="left" />
+appliesTo(&lt;List[Step]&gt; steps, &lt;ParseResult&gt; flows, &lt;String&gt; yaml):boolean
+<BR align="left" />
+getDeploymentGeneratorService():DeploymentGeneratorService
+<BR align="left" />
+getStepParserService():StepParserService
+<BR align="left" />
+
+</TD></TR>
+
+
+</TABLE>>]
+
+
+"StepParserService" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>StepParserService</B></TD></TR>
+	<TR><TD><I>Methods</I><BR/>
 parse(&lt;String&gt; yaml):ParseResult
 <BR align="left" />
 getParsedFlows(&lt;String&gt; yaml):List&lt;ParseResult&gt;
