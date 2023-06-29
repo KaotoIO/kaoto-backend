@@ -371,7 +371,8 @@ class IntegrationsResourceTest {
     @ParameterizedTest
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
             "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml", "Camel Route#rest-dsl-multi.yaml",
-            "Camel Route#route-with-beans.yaml", "Integration#integration.yaml"})
+            "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
+            "Integration#integration-multiroute.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");
@@ -467,7 +468,8 @@ class IntegrationsResourceTest {
     @ParameterizedTest
     @ValueSource(strings = {"Kamelet#eip.kamelet.yaml", "Integration#integration.yaml",
             "Camel Route#route-with-beans.yaml", "Camel Route#rest-dsl-multi.yaml",
-            "KameletBinding#kamelet-binding.yaml", "Kamelet#kamelet2.yaml"})
+            "KameletBinding#kamelet-binding.yaml", "Kamelet#kamelet2.yaml",
+            "Integration#integration-multiroute.yaml"})
     void changeNameAndDescription(String file) throws IOException {
 
         String[] parameters = file.split("#");
@@ -528,9 +530,9 @@ class IntegrationsResourceTest {
         switch (parameters[0]) {
             case "Kamelet":
             case "Kamelet Binding":
-            case "Integration":
                 assertTrue(sourceCode.contains("  name: " + randomGeneratedName));
                 break;
+            case "Integration":
             case "Camel Route":
                 assertTrue(sourceCode.contains("    id: " + randomGeneratedName));
                 break;

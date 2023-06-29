@@ -1,0 +1,28 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: multiroute-integration-example
+spec:
+  flows:
+  - route:
+      id: timer-amq-log
+      from:
+        uri: timer:tick
+        parameters:
+          period: '5000'
+        steps:
+        - to:
+            uri: activemq:queue:myQueue
+        - to:
+            uri: log:save
+  - route:
+      id: timer-amq-log2
+      from:
+        uri: timer:tick2
+        parameters:
+          period: '5000'
+        steps:
+        - to:
+            uri: activemq:queue:myQueue2
+        - to:
+            uri: log:save2

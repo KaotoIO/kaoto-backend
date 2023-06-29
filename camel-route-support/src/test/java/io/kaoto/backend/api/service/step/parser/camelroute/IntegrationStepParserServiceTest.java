@@ -59,6 +59,29 @@ class IntegrationStepParserServiceTest {
         assertThat(yaml).isEqualToNormalizingNewlines(integration);
     }
 
+    @Test
+    void parseMultipleRoutes() throws Exception {
+        String input = new String(Objects.requireNonNull(
+                this.getClass().getResourceAsStream("integration-multiroute.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        var parsed = service.getParsedFlows(input);
+        assertThat(parsed).hasSize(3);
+        var metadata = parsed.get(0);
+        assertThat(metadata.getSteps()).isNull();
+        assertThat(metadata.getParameters()).isEmpty();
+        assertThat(metadata.getMetadata().get("name")).isEqualTo("multiroute-integration-example");
+        var flow1 = parsed.get(1);
+        assertThat(flow1.getMetadata().get("name")).isEqualTo("timer-amq-log");
+        assertThat(flow1.getParameters()).isEmpty();
+        assertThat(flow1.getSteps()).extracting(Step::getName).containsExactly("timer", "activemq", "log");
+        var flow2 = parsed.get(2);
+        assertThat(flow2.getMetadata().get("name")).isEqualTo("timer-amq-log2");
+        assertThat(flow2.getParameters()).isEmpty();
+        assertThat(flow2.getSteps()).extracting(Step::getName).containsExactly("timer", "activemq", "log");
+        var yaml = deploymentService.parse(parsed);
+        assertThat(yaml).isEqualToNormalizingNewlines(input);
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"invalid/dropbox-sink.kamelet.yaml", "invalid/twitter-search-source-binding.yaml",
             "route.yaml"})

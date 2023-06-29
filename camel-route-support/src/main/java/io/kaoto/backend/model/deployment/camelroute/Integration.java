@@ -11,7 +11,6 @@ import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
-import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1.IntegrationStatus;
 
@@ -47,7 +46,8 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
 
     }
 
-    public Integration(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
+    public Integration(
+            final List<IntegrationFlow> flowList, final Map<String, Object> metadata, final StepCatalog catalog) {
         this.setMetadata(new ObjectMeta());
         this.getMetadata().setName(metadata.getOrDefault("name", "").toString());
         this.getMetadata().setAdditionalProperties(
@@ -68,10 +68,23 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
             this.setSpec(new IntegrationSpec());
         }
         this.getSpec().set_flows(new ArrayList<>());
-        var flow = new Flow();
-        flow.setFrom(new KamelPopulator(catalog).getFlow(steps));
-        this.getSpec().get_flows().add(flow);
+        flowList.forEach(iflow -> processFlow(iflow, this.getSpec().get_flows(), catalog));
     }
 
-
+    private void processFlow(IntegrationFlow iflow, List<Flow> flowList, StepCatalog catalog) {
+        var flow = new Flow();
+        flow.setFrom(new KamelPopulator(catalog).getFlow(iflow.getSteps()));
+        if (iflow.getMetadata() != null) {
+            if (iflow.getMetadata().get("name") != null) {
+                flow.setId(iflow.getMetadata().get("name").toString());
+            }
+            if (iflow.getMetadata().get("route-configuration-id") != null) {
+                flow.setRouteConfigurationId(iflow.getMetadata().get("route-configuration-id").toString());
+            }
+            if (iflow.getMetadata().get("description") != null) {
+                flow.setDescription(iflow.getMetadata().get("description").toString());
+            }
+        }
+        flowList.add(flow);
+    }
 }
