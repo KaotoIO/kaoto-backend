@@ -68,20 +68,14 @@ class DeploymentGeneratorServiceTest {
                 "      steps:",
                 "      - to:",
                 "          uri: log:tick",
-                "---",
-                "apiVersion: camel.apache.org/v1",
-                "kind: Integration",
-                "metadata:",
-                "  name: bye.yaml",
-                "spec:",
-                "  flows:",
                 "  - from:",
                 "      uri: timer:tock",
                 "      parameters:",
                 "        period: '3000'",
                 "      steps:",
                 "      - to:",
-                "          uri: log:tock")) + System.lineSeparator();
+                "          uri: log:tock"
+)) + System.lineSeparator();
 
         var parsed = stepParserService.getParsedFlows(yaml);
 

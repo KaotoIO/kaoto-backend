@@ -1,10 +1,12 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.camelroute.Integration;
+import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -13,7 +15,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -77,12 +79,71 @@ public class IntegrationStepParserService implements StepParserService<Step> {
 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
-        var res = new LinkedList<ParseResult<Step>>();
-        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
-        for (var crd : splitCRDs) {
-            res.add(deepParse(crd));
+        if (!appliesTo(input)) {
+            throw new IllegalArgumentException(
+                    "Wrong format provided. This is not parseable by us.");
         }
-        return res;
+
+        List<ParseResult<Step>> answer = new ArrayList<>();
+        ParseResult<Step> metadata = new ParseResult<>();
+        metadata.setParameters(new ArrayList<>());
+        answer.add(metadata);
+        try {
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+            var module = new SimpleModule();
+            module.addDeserializer(Flow.class, new FlowDeserializer());
+            yamlMapper.registerModule(module);
+            Integration integration = yamlMapper.readValue(input, Integration.class);
+
+            ksps.processMetadata(metadata, integration.getMetadata());
+
+            if (integration.getSpec().get_flows() != null) {
+                integration.getSpec().get_flows().forEach(f -> processFlows(answer, f));
+                integration.getSpec().get_flows().clear();
+            }
+
+            //Let's store the spec to make sure we don't lose anything else
+            ((Map<String, Object>)metadata
+                    .getMetadata()
+                    .get("additionalProperties"))
+                    .put("spec", integration.getSpec());
+            if (integration.getMetadata().getAnnotations().containsKey("description")) {
+                metadata.getMetadata().put("description",
+                        integration.getMetadata().getAnnotations().get("description"));
+            }
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error trying to parse.", e);
+        }
+
+        return answer;
+    }
+
+    private void processFlows(List<ParseResult<Step>> answer, Flow flow) {
+        ParseResult<Step> res = new ParseResult<>();
+        res.setParameters(new ArrayList<>());
+        List<Step> steps = new ArrayList<>();
+        res.setSteps(steps);
+        steps.add(ksps.processStep(flow.getFrom(), true, false));
+        if (flow.getFrom().getSteps() != null) {
+            for (FlowStep step : flow.getFrom().getSteps()) {
+                //end is always false in this case because we can always edit one step after it
+                steps.add(ksps.processStep(step, false, false));
+            }
+        }
+        if (res.getMetadata() == null) {
+            res.setMetadata(new LinkedHashMap<>());
+        }
+        if (flow.getId() != null) {
+            res.getMetadata().put("name", flow.getId());
+        }
+        if (flow.getRouteConfigurationId() != null) {
+            res.getMetadata().put("route-configuration-id", flow.getRouteConfigurationId());
+        }
+        if (flow.getDescription() != null) {
+            res.getMetadata().put("description", flow.getDescription());
+        }
+        answer.add(res);
     }
 
     @Override

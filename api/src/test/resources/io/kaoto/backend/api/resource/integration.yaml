@@ -6,15 +6,17 @@ spec:
   dependencies:
   - mvn:something.something
   flows:
-  - from:
-      uri: timer:tick
-      parameters:
-        period: '5000'
-      steps:
-      - to:
-          uri: activemq:queue:myQueue
-      - to:
-          uri: log:save
+  - route:
+      id: timer-amq-log
+      from:
+        uri: timer:tick
+        parameters:
+          period: '5000'
+        steps:
+        - to:
+            uri: activemq:queue:myQueue
+        - to:
+            uri: log:save
   integrationKit:
     apiVersion: patatas
     fieldPath: fieldPathy

@@ -12,6 +12,7 @@ import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.api.service.step.parser.camelroute.IntegrationStepParserService;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.deployment.camelroute.Integration;
+import io.kaoto.backend.model.deployment.camelroute.IntegrationFlow;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
@@ -51,8 +52,14 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
 
     @Override
     public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
+        List<IntegrationFlow> parsedList = new LinkedList<>();
+        if (steps != null) {
+            var parsed = new IntegrationFlow();
+            parsed.setSteps(steps);
+            parsedList.add(parsed);
+        }
         return kdgs.getYAML(new Integration(
-                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        parsedList,
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
                         catalog),
                 new IntegrationRepresenter());
@@ -60,17 +67,24 @@ public class IntegrationDeploymentGeneratorService implements DeploymentGenerato
 
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
-        StringBuilder sb = new StringBuilder();
-
-        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).orElseThrow();
-        flows.stream().forEachOrdered(stepParseResult -> {
-            sb.append(
-                    parse(stepParseResult.getSteps(), stepParseResult.getMetadata(), stepParseResult.getParameters()));
-            if (stepParseResult != last) {
-                sb.append("---" + System.lineSeparator());
+        List<IntegrationFlow> parsedList = new LinkedList<>();
+        Map<String, Object> metadata = null;
+        for (var f : flows) {
+            if (f.getSteps() != null) {
+                var iflow = new IntegrationFlow();
+                iflow.setSteps(f.getSteps());
+                iflow.setMetadata(f.getMetadata());
+                iflow.setParameters(f.getParameters());
+                parsedList.add(iflow);
+            } else if (f.getMetadata() != null) {
+                metadata = f.getMetadata();
             }
-        });
-        return sb.toString();
+        }
+        return kdgs.getYAML(new Integration(
+                        parsedList,
+                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                        catalog),
+                new IntegrationRepresenter());
     }
 
     @Override
