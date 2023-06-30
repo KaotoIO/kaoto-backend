@@ -1,0 +1,29 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  labels:
+    camel.apache.org/kamelet.type: source
+  name: route-2450-action-source
+spec:
+  definition:
+    properties: {}
+    title: ''
+  dependencies:
+  - camel:jms
+  - camel:amqp
+  - camel:kamelet
+  - camel:core
+  template:
+    beans:
+    - name: connectionFactoryBean
+      type: '#class:org.apache.qpid.jms.JmsConnectionFactory'
+      properties:
+        remoteURI: '{{remoteURI}}'
+        secondProperty: another
+    from:
+      uri: jms:{{destinationType}}:{{destinationName}}
+      parameters:
+        connectionFactory: '#bean:{{connectionFactoryBean}}'
+      steps:
+      - to:
+          uri: kamelet:sink

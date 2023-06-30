@@ -9,6 +9,7 @@ import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.CatalogCollection;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
 import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteParseCatalog;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinition;
 import io.kaoto.backend.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -17,6 +18,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -43,7 +45,7 @@ class KameletStepParserServiceTest {
 
     private static String kamelet;
     private static String incomplete;
-    private static String multiKamelet;
+    private static String beansKamelet;
 
     private CamelRouteParseCatalog parseCatalog;
     @Inject
@@ -68,8 +70,8 @@ class KameletStepParserServiceTest {
         incomplete = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource("dropbox-sink.kamelet-incomplete.yaml")
                         .toURI()));
-        multiKamelet = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource("multi-kamelets.yaml").toURI()));
+        beansKamelet = Files.readString(Path.of(
+                KameletBindingStepParserServiceTest.class.getResource("beans.kamelet.yaml").toURI()));
     }
 
     @BeforeEach
@@ -170,13 +172,29 @@ class KameletStepParserServiceTest {
     }
 
     @Test
-    void parseMultipleFlows() throws JsonProcessingException {
+    void parseWithBeans() {
         List<StepParserService.ParseResult<Step>> parsed =
-                dslSpecification.getStepParserService().getParsedFlows(multiKamelet);
+                dslSpecification.getStepParserService().getParsedFlows(beansKamelet);
         assertEquals(2, parsed.size());
+        var meta = parsed.get(1);
+        assertThat(meta.getSteps()).isNull();
+        List<Bean> beans = (List<Bean>) meta.getMetadata().get("beans");
+        assertThat(beans).hasSize(1);
+        assertThat(beans.get(0).getName()).isEqualTo("connectionFactoryBean");
+        assertThat(beans.get(0).getType()).isEqualTo("#class:org.apache.qpid.jms.JmsConnectionFactory");
+        var beanProps = (Map<String, Object>) beans.get(0).getProperties();
+        assertThat(beanProps)
+                .hasSize(2)
+                .containsEntry("remoteURI", "{{remoteURI}}")
+                .containsEntry("secondProperty", "another");
+        var route = parsed.get(0);
+        assertThat(route.getSteps())
+                .hasSize(2)
+                .extracting(Step::getName)
+                .containsExactly("jms", "kamelet:sink");
+        assertThat(route.getMetadata()).doesNotContainKey("beans");
         var yaml = dslSpecification.getDeploymentGeneratorService().parse(parsed);
-
-        assertThat(yaml).isEqualToNormalizingWhitespace(multiKamelet);
+        assertThat(yaml).isEqualToNormalizingWhitespace(beansKamelet);
     }
 
     @Test

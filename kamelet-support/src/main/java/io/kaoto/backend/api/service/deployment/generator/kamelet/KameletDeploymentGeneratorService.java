@@ -57,17 +57,23 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
-        StringBuilder res = new StringBuilder("");
-
-        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).orElseThrow();
-        flows.stream().forEachOrdered(parseResult -> {
-            res.append(parse(parseResult.getSteps(), parseResult.getMetadata(), parseResult.getParameters()));
-            if (parseResult != last) {
-                res.append("---");
-                res.append(System.lineSeparator());
+        // migrate upper layer metadata into kamelet local
+        StepParserService.ParseResult<Step> metadata = null;
+        StepParserService.ParseResult<Step> route = null;
+        for (StepParserService.ParseResult<Step> parseResult : flows) {
+            if (parseResult.getSteps() != null) {
+                route = parseResult;
+            } else {
+                metadata = parseResult;
             }
-        });
-        return res.toString();
+        }
+        if (metadata != null && metadata.getMetadata() != null) {
+            if (route.getMetadata() == null) {
+                route.setMetadata(new LinkedHashMap<>());
+            }
+            route.getMetadata().putAll(metadata.getMetadata());
+        }
+        return parse(route.getSteps(), route.getMetadata(), route.getParameters());
     }
 
     public String getYAML(final CustomResource kamelet,

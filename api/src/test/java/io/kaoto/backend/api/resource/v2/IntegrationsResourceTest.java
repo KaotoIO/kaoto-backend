@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -353,7 +353,7 @@ class IntegrationsResourceTest {
         assertNotNull(flows);
         var flow = flows.flows().get(0);
         assertNotNull(flow);
-        var beans = (List<Map<String, Object>>) flow.getMetadata().get("beans");
+        var beans = (List<Map<String, Object>>) flows.metadata().get("beans");
         assertEquals(1, beans.size());
         var bean = beans.get(0);
         assertEquals(3, bean.size());
@@ -368,10 +368,11 @@ class IntegrationsResourceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
-            "Kamelet#eip.kamelet.yaml", "Kamelet#kamelet-multi.yaml", "Camel Route#rest-dsl-multi.yaml",
+            "Kamelet#eip.kamelet.yaml", "Camel Route#rest-dsl-multi.yaml",
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
-            "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml"})
+            "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml",
+            "Kamelet#beans.kamelet.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");
@@ -440,7 +441,7 @@ class IntegrationsResourceTest {
                 .entrySet();
         assertEquals(flows.flows().size(), ids.size());
         assertTrue(ids.stream().allMatch(id -> id.getValue() == 1l));
-        assertTrue(ids.stream().allMatch(id ->Pattern.matches( "([A-Za-z0-9])+", id.getKey().toString())));
+        assertTrue(ids.stream().allMatch(id -> Pattern.matches( "([A-Za-z0-9])+", id.getKey().toString())));
 
         //Let's assign the same name to all flows
         var sameIdentifier = "sameIdentifier";
