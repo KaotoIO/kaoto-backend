@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
@@ -209,6 +210,18 @@ public class KameletRepresenter extends Representer {
                         properties.put("from", template.getFrom());
                         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
+                    }
+                });
+        this.multiRepresenters.put(Bean.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> properties = mapper.convertValue(data,
+                                new TypeReference<Map<String, Object>>() {});
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.AUTO);
                     }
                 });
     }

@@ -103,9 +103,15 @@ public class KameletStepParserService implements StepParserService<Step> {
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
         var res = new LinkedList<ParseResult<Step>>();
-        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
-        for (var crd : splitCRDs) {
-            res.add(deepParse(crd));
+        var kamelet = deepParse(input);
+        res.add(kamelet);
+        // move beans to the upper level to align with other DSLs
+        if (kamelet.getMetadata().get("beans") != null) {
+            var meta = new ParseResult<Step>();
+            meta.setMetadata(new LinkedHashMap<>());
+            meta.getMetadata().put("beans", kamelet.getMetadata().get("beans"));
+            res.add(meta);
+            kamelet.getMetadata().remove("beans");
         }
         return res;
     }
