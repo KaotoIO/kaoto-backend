@@ -42,16 +42,18 @@ If you want to use it with Kaoto-ui, don't forget to set CORS origins via QUARKU
 
 Kaoto-backend provides OpenTelemetry tracing. By default, OpenTelemetry SDK Autoconfigure is disabled.
 It can be enabled by `quarkus.otel.sdk.disabled=false` 
-Note that after that, the OTLP Exporter (e.g. Jaeger) is expected on `http://localhost:4317/` but the endpoint can be overridden via `quarkus.otel.exporter.otlp.traces.endpoint` configuration property.
-For more information and all configuration properties, see [Quarkus OpenTelemetry guide](https://quarkus.io/guides/opentelemetry)
+> **_NOTE:_**  When OpenTelemetry is enabled, by default, the OTLP Exporter (e.g. Jaeger) is expected on `http://localhost:4317/` 
+> endpoint. That endpoint can be overridden via `quarkus.otel.exporter.otlp.traces.endpoint`configuration property. 
+
+For more information and all configuration properties, see [Quarkus OpenTelemetry guide](https://quarkus.io/guides/opentelemetry).
 
 ### CORS
 
 [CORS filter](https://quarkus.io/guides/http-reference#cors-filter) is enabled by default.
 For proper functionality with the Kaoto-ui, it is necessary to set `quarkus.http.cors.origins` configuration property with Kaoto-ui URL(s).
 For more information and all configuration properties, see [Quarkus HTTP Reference](https://quarkus.io/guides/http-reference#quarkus-vertx-http-config-group-cors-cors-config_configuration)
-
-Note: When you run Kaoto-backend in the dev mode, all origins are accepted.
+> **_NOTE:_** When you run Kaoto-backend in the dev mode, all origins are accepted. (`origins: /.*/`)
+ 
 
 ## Developing Kaoto
 
@@ -87,6 +89,10 @@ API on `http://localhost:8081/q/swagger-ui/`.
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev 
 > mode only at http://localhost:8081/q/dev/.
+
+> **_NOTE2:_**  During dev mode, the Dev Services for Kubernetes are enabled
+> and **require** running Docker on your environment. If you don't have Docker,
+> you can disable this functionality by `-Dquarkus.kubernetes-client.devservices.enabled=false`
 
 ### Packaging and Running
 
