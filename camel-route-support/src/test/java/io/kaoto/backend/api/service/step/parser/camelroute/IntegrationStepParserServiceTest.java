@@ -82,6 +82,20 @@ class IntegrationStepParserServiceTest {
         assertThat(yaml).isEqualToNormalizingNewlines(input);
     }
 
+    @Test
+    void parseNoStep() throws Exception {
+        String input = new String(Objects.requireNonNull(
+                this.getClass().getResourceAsStream("integration-no-step.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        var parsed = service.getParsedFlows(input);
+        assertThat(parsed).hasSize(2);
+        var metadata = parsed.get(0);
+        assertThat(metadata.getSteps()).isNull();
+        assertThat(metadata.getParameters()).isEmpty();
+        assertThat(metadata.getMetadata().get("name")).isEqualTo("integration-no-step");
+        var yaml = deploymentService.parse(parsed);
+        assertThat(yaml).isEqualToNormalizingNewlines(input);
+    }
     @ParameterizedTest
     @ValueSource(strings = {"invalid/dropbox-sink.kamelet.yaml", "invalid/twitter-search-source-binding.yaml",
             "route.yaml"})

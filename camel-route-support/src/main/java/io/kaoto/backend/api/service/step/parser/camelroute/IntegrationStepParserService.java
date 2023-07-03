@@ -124,11 +124,17 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         res.setParameters(new ArrayList<>());
         List<Step> steps = new ArrayList<>();
         res.setSteps(steps);
-        steps.add(ksps.processStep(flow.getFrom(), true, false));
+        var fromStep = ksps.processStep(flow.getFrom(), true, false);
+        if (fromStep != null) {
+            steps.add(fromStep);
+        }
         if (flow.getFrom().getSteps() != null) {
             for (FlowStep step : flow.getFrom().getSteps()) {
                 //end is always false in this case because we can always edit one step after it
-                steps.add(ksps.processStep(step, false, false));
+                var processed = ksps.processStep(step, false, false);
+                if (processed != null) {
+                    steps.add(processed);
+                }
             }
         }
         if (res.getMetadata() == null) {
