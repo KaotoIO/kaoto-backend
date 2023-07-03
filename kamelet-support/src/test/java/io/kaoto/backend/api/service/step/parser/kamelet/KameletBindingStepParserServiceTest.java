@@ -128,4 +128,58 @@ class KameletBindingStepParserServiceTest {
                 .readAllBytes(), StandardCharsets.UTF_8);
         assertThat(dslSpecification.appliesTo(input)).isFalse();
     }
+
+    @Test
+    void parseNullSource() throws IOException {
+        String input = new String(
+                Objects.requireNonNull(
+                        this.getClass().getResourceAsStream("null-source.binding.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        StepParserService.ParseResult<Step> parsed = dslSpecification.getStepParserService().deepParse(input);
+        assertThat(parsed.getSteps()).hasSize(1);
+        assertThat(parsed.getSteps().get(0))
+                .extracting(Step::getName)
+                .isEqualTo("log-sink");
+        assertThat(parsed.getSteps().get(0))
+                .extracting(Step::getType)
+                .isEqualTo("END");
+        String parsedYaml = dslSpecification.getDeploymentGeneratorService()
+                .parse(parsed.getSteps(), parsed.getMetadata(),
+                        parsed.getParameters());
+        assertThat(parsedYaml).isEqualToNormalizingNewlines(input);
+    }
+
+    @Test
+    void parseNullSink() throws IOException {
+        String input = new String(
+                Objects.requireNonNull(
+                        this.getClass().getResourceAsStream("null-sink.binding.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        StepParserService.ParseResult<Step> parsed = dslSpecification.getStepParserService().deepParse(input);
+        assertThat(parsed.getSteps()).hasSize(1);
+        assertThat(parsed.getSteps().get(0))
+                .extracting(Step::getName)
+                .isEqualTo("timer-source");
+        assertThat(parsed.getSteps().get(0))
+                .extracting(Step::getType)
+                .isEqualTo("START");
+        String parsedYaml = dslSpecification.getDeploymentGeneratorService()
+                .parse(parsed.getSteps(), parsed.getMetadata(),
+                        parsed.getParameters());
+        assertThat(parsedYaml).isEqualToNormalizingNewlines(input);
+    }
+
+    @Test
+    void parseNullSourceNullSink() throws IOException {
+        String input = new String(
+                Objects.requireNonNull(
+                        this.getClass().getResourceAsStream("null-source-null-sink.binding.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        StepParserService.ParseResult<Step> parsed = dslSpecification.getStepParserService().deepParse(input);
+        assertThat(parsed.getSteps()).isEmpty();
+        String parsedYaml = dslSpecification.getDeploymentGeneratorService()
+                .parse(parsed.getSteps(), parsed.getMetadata(),
+                        parsed.getParameters());
+        assertThat(parsedYaml).isEqualToNormalizingNewlines(input);
+    }
 }

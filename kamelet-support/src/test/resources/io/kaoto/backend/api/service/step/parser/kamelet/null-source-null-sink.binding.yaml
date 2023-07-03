@@ -1,0 +1,7 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: route-3810
+spec:
+  source: null
+  sink: null
