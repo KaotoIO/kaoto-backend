@@ -99,15 +99,24 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     }
 
     private void processSpec(final List<Step> steps, final KameletBindingSpec spec) {
-        steps.add(processStep(new KameletBindingStep(spec.getSource()), Step.Type.START));
+        var kbsSource = spec.getSource() != null
+                ? new KameletBindingStep(spec.getSource())
+                : new KameletBindingStep();
+        steps.add(processStep(kbsSource, Step.Type.START));
 
         if (spec.getSteps() != null) {
             for (Steps intermediateStep : spec.getSteps()) {
-                steps.add(processStep(new KameletBindingStep(intermediateStep), Step.Type.MIDDLE));
+                var kbsStep = intermediateStep != null
+                        ? new KameletBindingStep(intermediateStep)
+                        : new KameletBindingStep();
+                steps.add(processStep(kbsStep, Step.Type.MIDDLE));
             }
         }
 
-        steps.add(processStep(new KameletBindingStep(spec.getSink()), Step.Type.END));
+        var kbsSink = spec.getSink() != null
+                ? new KameletBindingStep(spec.getSink())
+                : new KameletBindingStep();
+        steps.add(processStep(kbsSink, Step.Type.END));
     }
 
     private Step processStep(final KameletBindingStep bindingStep, final Step.Type type) {

@@ -1,0 +1,13 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: route-1828
+spec:
+  source: null
+  sink:
+    properties: {}
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
+      name: log-sink
+    types: {}
