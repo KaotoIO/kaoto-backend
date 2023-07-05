@@ -222,11 +222,7 @@ public class KamelPopulator {
         Type type = defineType(steps);
         kamelet.getMetadata().getLabels().put(group + "/kamelet.type", type.name());
 
-        //consistent naming for kamelets
-        String name = metadata.getOrDefault(NAME, "").toString();
-        if (!name.endsWith(type.name())) {
-            name = name + "-" + type.name();
-        }
+        String name = metadata.getOrDefault(NAME, "example-" + type.name()).toString();
         kamelet.getMetadata().setName(name);
 
         //do we have an icon?
