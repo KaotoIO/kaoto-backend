@@ -1,0 +1,16 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  labels:
+    camel.apache.org/kamelet.type: action
+  name: test-kamelet
+spec:
+  definition:
+    properties: {}
+    title: ''
+  dependencies:
+  - camel:core
+  template:
+    from:
+      uri: null
+      steps: []

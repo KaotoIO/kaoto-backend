@@ -31,13 +31,13 @@ class KameletDeploymentGeneratorServiceTest {
     void parse() {
         List<Step> steps = new ArrayList<Step>();
         Map<String, Object> md = new HashMap<>();
-        md.put("name", "kamelet-test");
+        md.put("name", "kamelet-test-source");
         assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
                         + "kind: Kamelet\n"
                         + "metadata:\n"
                         + "  labels:\n"
                         + "    camel.apache.org/kamelet.type: action\n"
-                        + "  name: kamelet-test-action\n"
+                        + "  name: kamelet-test-source\n"
                         + "spec:\n"
                         + "  definition:\n"
                         + "    properties: {}\n"
@@ -167,6 +167,29 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("Kamelet");
         steps.add(step);
         assertTrue(!service.appliesTo(steps));
+    }
+
+    @Test
+    void testDefaultName() {
+        List<Step> steps = new ArrayList<Step>();
+        Map<String, Object> md = new HashMap<>();
+        assertEquals("apiVersion: camel.apache.org/v1alpha1\n"
+                        + "kind: Kamelet\n"
+                        + "metadata:\n"
+                        + "  labels:\n"
+                        + "    camel.apache.org/kamelet.type: action\n"
+                        + "  name: example-action\n"
+                        + "spec:\n"
+                        + "  definition:\n"
+                        + "    properties: {}\n"
+                        + "    title: ''\n"
+                        + "  dependencies:\n"
+                        + "  - camel:core\n"
+                        + "  template:\n"
+                        + "    from:\n"
+                        + "      uri: null\n"
+                        + "      steps: []\n",
+                service.getDeploymentGeneratorService().parse(steps, md, Collections.emptyList()));
     }
 
     @BeforeEach

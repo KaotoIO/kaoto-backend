@@ -43,8 +43,6 @@ class KameletStepParserServiceTest {
 
     private static String kamelet;
     private static String incomplete;
-    private static String kameletEIP;
-    private static String kameletJq;
     private static String multiKamelet;
 
     private CamelRouteParseCatalog parseCatalog;
@@ -70,10 +68,6 @@ class KameletStepParserServiceTest {
         incomplete = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource("dropbox-sink.kamelet-incomplete.yaml")
                         .toURI()));
-        kameletEIP = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource("eip.kamelet.yaml").toURI()));
-        kameletJq = Files.readString(Path.of(
-                KameletBindingStepParserServiceTest.class.getResource("jq.kamelet.yaml").toURI()));
         multiKamelet = Files.readString(Path.of(
                 KameletBindingStepParserServiceTest.class.getResource("multi-kamelets.yaml").toURI()));
     }
@@ -228,27 +222,18 @@ class KameletStepParserServiceTest {
         assertThat(dslSpecification.appliesTo(input)).isFalse();
     }
 
-    @Test
-    void checkEIP() {
-        assertTrue(dslSpecification.appliesTo(kameletEIP));
-        final var parsed = dslSpecification.getStepParserService().deepParse(kameletEIP);
+    @ParameterizedTest
+    @ValueSource(strings = {"eip.kamelet.yaml", "jq.kamelet.yaml", "name.kamelet.yaml"})
+    void checkRoundTrip(String resource) throws Exception {
+        String kamelet = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resource))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        assertTrue(dslSpecification.appliesTo(kamelet));
+        final var parsed = dslSpecification.getStepParserService().deepParse(kamelet);
         assertNotNull(parsed);
         assertTrue(dslSpecification.appliesTo(parsed.getSteps()));
         String parsedString = dslSpecification.getDeploymentGeneratorService()
                 .parse(parsed.getSteps(), parsed.getMetadata(),
                 parsed.getParameters());
-        assertThat(parsedString).isEqualToNormalizingNewlines(kameletEIP);
-    }
-
-    @Test
-    void checkJq() {
-        assertTrue(dslSpecification.appliesTo(kameletJq));
-        final var parsed = dslSpecification.getStepParserService().deepParse(kameletJq);
-        assertNotNull(parsed);
-        assertTrue(dslSpecification.appliesTo(parsed.getSteps()));
-        String parsedString = dslSpecification.getDeploymentGeneratorService()
-                .parse(parsed.getSteps(), parsed.getMetadata(),
-                parsed.getParameters());
-        assertThat(parsedString).isEqualToNormalizingNewlines(kameletJq);
+        assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
     }
 }
