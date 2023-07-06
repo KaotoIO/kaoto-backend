@@ -42,7 +42,7 @@
         <maven-pmd-plugin.version>3.21.0</maven-pmd-plugin.version>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
         <jandex-maven-plugin.version>1.2.3</jandex-maven-plugin.version>
-        <maven-jxr-plugin.version>2.2.0</maven-jxr-plugin.version>
+        <maven-jxr-plugin.version>3.3.0</maven-jxr-plugin.version>
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
         <swagger-codegen-maven-plugin.version>3.0.46</swagger-codegen-maven-plugin.version>
         <smallrye-open-api-maven-plugin.version>3.4.0</smallrye-open-api-maven-plugin.version>
