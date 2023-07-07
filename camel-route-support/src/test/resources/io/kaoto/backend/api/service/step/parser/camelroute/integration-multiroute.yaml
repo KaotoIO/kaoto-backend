@@ -1,11 +1,14 @@
 apiVersion: camel.apache.org/v1
 kind: Integration
 metadata:
+  annotations:
+    kaoto.io/description: The multiple route integration CRD example
   name: multiroute-integration-example
 spec:
   flows:
   - route:
       id: timer-amq-log
+      description: The 1st Timer to ActiveMQ to Log Route
       from:
         uri: timer:tick
         parameters:
@@ -17,6 +20,7 @@ spec:
             uri: log:save
   - route:
       id: timer-amq-log2
+      description: The 2nd Timer to ActiveMQ to Log Route
       from:
         uri: timer:tick2
         parameters:

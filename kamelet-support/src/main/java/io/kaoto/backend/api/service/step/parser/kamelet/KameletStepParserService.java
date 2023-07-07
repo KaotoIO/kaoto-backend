@@ -10,7 +10,9 @@ import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
+import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
 import io.kaoto.backend.model.deployment.kamelet.step.Filter;
+import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.BooleanParameter;
@@ -53,6 +55,14 @@ public class KameletStepParserService implements StepParserService<Step> {
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
     public static final String EXPRESSION = "expression";
+    public static final String DESCRIPTION = "description";
+    public static final String DESCRIPTION_ANNO = "kaoto.io/description";
+    public static final String TEMPLATE_ID = "template-id";
+    public static final String TEMPLATE_DESCRIPTION = "template-description";
+    public static final String ROUTE_ID = "route-id";
+    public static final String ROUTE_DESCRIPTION = "route-description";
+    private static final String[] ROOT_METADATA_NAMES
+            = new String[] { DESCRIPTION, "beans", "definition"};
     private final Logger log = Logger.getLogger(KameletStepParserService.class);
 
     private StepCatalog catalog;
@@ -86,6 +96,7 @@ public class KameletStepParserService implements StepParserService<Step> {
 
             //Let's store the spec to make sure we don't lose anything else
             if (kamelet.getSpec().getTemplate() != null) {
+                kamelet.getSpec().getTemplate().setRoute(null);
                 kamelet.getSpec().getTemplate().setFrom(null);
                 kamelet.getSpec().getTemplate().setBeans(null);
             }
@@ -103,15 +114,19 @@ public class KameletStepParserService implements StepParserService<Step> {
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
         var res = new LinkedList<ParseResult<Step>>();
+        ParseResult<Step> parsedMeta = new ParseResult<>();
+        parsedMeta.setParameters(new ArrayList<>());
+        parsedMeta.setMetadata(new LinkedHashMap<>());
+        res.add(parsedMeta);
+
         var kamelet = deepParse(input);
         res.add(kamelet);
-        // move beans to the upper level to align with other DSLs
-        if (kamelet.getMetadata().get("beans") != null) {
-            var meta = new ParseResult<Step>();
-            meta.setMetadata(new LinkedHashMap<>());
-            meta.getMetadata().put("beans", kamelet.getMetadata().get("beans"));
-            res.add(meta);
-            kamelet.getMetadata().remove("beans");
+        // move root metadata to a dedicated ParseResult to align with other DSLs
+        parsedMeta.getMetadata().put("name", kamelet.getMetadata().get("name"));
+        for (String metadataName : ROOT_METADATA_NAMES) {
+            if (kamelet.getMetadata().containsKey(metadataName)) {
+                parsedMeta.getMetadata().put(metadataName, kamelet.getMetadata().remove(metadataName));
+            }
         }
         return res;
     }
@@ -214,24 +229,44 @@ public class KameletStepParserService implements StepParserService<Step> {
                              final KameletSpec spec) {
         if (spec.getTemplate() != null) {
             final var template = spec.getTemplate();
-            if (template.getFrom() != null) {
-                steps.add(processStep(template.getFrom(), true, false));
-
-                final var fromSteps = template.getFrom().getSteps();
-                if (fromSteps != null) {
-                    for (FlowStep flowStep : fromSteps) {
-                        //end is always false in this case because we can always edit one step after it
-                        steps.add(processStep(flowStep, false, false));
-                    }
-                }
+            if (!StringUtil.isNullOrEmpty(template.getId())) {
+                res.getMetadata().put(TEMPLATE_ID, template.getId());
             }
+            if (!StringUtil.isNullOrEmpty(template.getDescription())) {
+                res.getMetadata().put(TEMPLATE_DESCRIPTION, template.getDescription());
+            }
+            processFlow(steps, res, template);
         }
 
         res.getMetadata().put("definition", spec.getDefinition());
         res.getMetadata().put("beans", spec.getTemplate().getBeans());
         res.getMetadata().put("dependencies", spec.getDependencies());
-        if (!StringUtil.isNullOrEmpty(spec.getDefinition().getDescription())) {
-            res.getMetadata().put("description", spec.getDefinition().getDescription());
+    }
+
+    private void processFlow(
+            final List<Step> steps,
+            final ParseResult<Step> res,
+            final KameletTemplate template) {
+        From from = template.getFrom();
+        if (template.getRoute() != null) {
+            from = template.getRoute().getFrom();
+            if (!StringUtil.isNullOrEmpty(template.getRoute().getId())) {
+                res.getMetadata().put(ROUTE_ID, template.getRoute().getId());
+            }
+            if (!StringUtil.isNullOrEmpty(template.getRoute().getDescription())) {
+                res.getMetadata().put(ROUTE_DESCRIPTION, template.getRoute().getDescription());
+            }
+        }
+        if (from != null) {
+            steps.add(processStep(from, true, false));
+
+            final var fromSteps = from.getSteps();
+            if (fromSteps != null) {
+                for (FlowStep flowStep : fromSteps) {
+                    //end is always false in this case because we can always edit one step after it
+                    steps.add(processStep(flowStep, false, false));
+                }
+            }
         }
     }
 
@@ -402,6 +437,9 @@ public class KameletStepParserService implements StepParserService<Step> {
             annotations.putAll(metadata.getAnnotations());
             if (annotations.containsKey("camel.apache.org/kamelet.icon")) {
                 annotations.put("icon", annotations.get("camel.apache.org/kamelet.icon"));
+            }
+            if (annotations.containsKey(DESCRIPTION_ANNO)) {
+                result.getMetadata().put(DESCRIPTION, annotations.get(DESCRIPTION_ANNO));
             }
         }
 

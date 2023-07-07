@@ -8,6 +8,7 @@ metadata:
     camel.apache.org/catalog.version: 4.0.0-SNAPSHOT
     camel.apache.org/kamelet.group: JMS
     camel.apache.org/kamelet.namespace: Messaging
+    kaoto.io/description: Consume data from any AMQP 1.0 compliant message broker
   labels:
     camel.apache.org/requires.runtime: camel-k
     camel.apache.org/kamelet.type: source

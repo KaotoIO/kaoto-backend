@@ -1,5 +1,7 @@
 package io.kaoto.backend.api.service.step.parser.kamelet;
 
+import static io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -36,6 +38,7 @@ import java.util.regex.Pattern;
 @ApplicationScoped
 public class KameletBindingStepParserService implements StepParserService<Step> {
 
+    private static final String[] ROOT_METADATA_NAMES = new String[] { "description" };
     private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
 
     private StepCatalog catalog;
@@ -69,8 +72,8 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             binding.getSpec().setErrorHandler(null);
             binding.getSpec().setIntegration(null);
             md.put("spec", binding.getSpec());
-            if (binding.getMetadata().getAnnotations().containsKey("description")) {
-                md.put("description", binding.getMetadata().getAnnotations().get("description"));
+            if (binding.getMetadata().getAnnotations().containsKey(DESCRIPTION_ANNO)) {
+                md.put("description", binding.getMetadata().getAnnotations().get(DESCRIPTION_ANNO));
             }
 
 
@@ -91,9 +94,19 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
         var res = new LinkedList<ParseResult<Step>>();
-        String[] splitCRDs = input.split(System.lineSeparator() + "---" + System.lineSeparator());
-        for (var crd : splitCRDs) {
-            res.add(deepParse(crd));
+        ParseResult<Step> parsedMeta = new ParseResult();
+        parsedMeta.setParameters(new ArrayList<>());
+        parsedMeta.setMetadata(new LinkedHashMap<>());
+        res.add(parsedMeta);
+
+        var binding = deepParse(input);
+        res.add(binding);
+        // move root metadata to a dedicated ParseResult to align with other DSLs
+        parsedMeta.getMetadata().put("name", binding.getMetadata().get("name"));
+        for (String metadataName : ROOT_METADATA_NAMES) {
+            if (binding.getMetadata().containsKey(metadataName)) {
+                parsedMeta.getMetadata().put(metadataName, binding.getMetadata().remove(metadataName));
+            }
         }
         return res;
     }

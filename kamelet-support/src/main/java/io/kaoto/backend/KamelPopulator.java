@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
+import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.deployment.kamelet.KameletSpec;
@@ -68,6 +70,8 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
+import io.netty.util.internal.StringUtil;
+
 import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
@@ -199,8 +203,14 @@ public class KamelPopulator {
 
         kamelet.setSpec(spec);
         final var template = new KameletTemplate();
+        if (metadata.containsKey(KameletStepParserService.TEMPLATE_ID)) {
+            template.setId(metadata.get(KameletStepParserService.TEMPLATE_ID).toString());
+        }
+        if (metadata.containsKey(KameletStepParserService.TEMPLATE_DESCRIPTION)) {
+            template.setDescription(metadata.get(KameletStepParserService.TEMPLATE_DESCRIPTION).toString());
+        }
         kamelet.getSpec().setTemplate(template);
-        template.setFrom(getFlow(steps));
+        processFlow(template, steps, metadata);
         if (metadata.containsKey("definition")) {
             if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
@@ -233,12 +243,31 @@ public class KamelPopulator {
 
         //do we have a description?
         if (metadata.containsKey("description") && metadata.get("description") != null) {
-            kamelet.getSpec().getDefinition().setDescription(metadata.remove("description").toString());
+            kamelet.getMetadata().getAnnotations().put(
+                    KameletStepParserService.DESCRIPTION_ANNO, metadata.remove("description").toString());
         }
 
         setSpecDependencies(kamelet.getSpec(), steps, metadata);
         setSpecDefinition(kamelet, parameters);
         template.setBeans((List<Bean>) metadata.getOrDefault("beans", null));
+    }
+
+    private void processFlow(KameletTemplate template, List<Step> steps, Map<String, Object> metadata) {
+        From from = getFlow(steps);
+        if (!metadata.containsKey(KameletStepParserService.ROUTE_ID)
+                && !metadata.containsKey(KameletStepParserService.ROUTE_DESCRIPTION)) {
+            template.setFrom(from);
+            return;
+        }
+        Flow flow = new Flow();
+        if (metadata.get(KameletStepParserService.ROUTE_ID) != null) {
+            flow.setId(metadata.get(KameletStepParserService.ROUTE_ID).toString());
+        }
+        if (metadata.get(KameletStepParserService.ROUTE_DESCRIPTION) != null) {
+            flow.setDescription(metadata.get(KameletStepParserService.ROUTE_DESCRIPTION).toString());
+        }
+        flow.setFrom(from);
+        template.setRoute(flow);
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
@@ -252,6 +281,35 @@ public class KamelPopulator {
             def.setProperties(new LinkedHashMap<>());
         }
         setParameters(parameters, def);
+        copyDefinitionTitleAndDescription(kamelet);
+    }
+
+    /**
+     * Copy <code>metadata.name</code> to <code>spec.definition.title</code>, and
+     * <code>metadata.annotations.kaoto.io/description</code> to <code>spec.definition.description</code>
+     * or the other way around if the values are missing.
+     * @param kamelet
+     */
+    private void copyDefinitionTitleAndDescription(Kamelet kamelet) {
+        Definition definition = kamelet.getSpec().getDefinition();
+        if (definition == null) {
+            return;
+        }
+        if (StringUtil.isNullOrEmpty(definition.getTitle())) {
+            definition.setTitle(kamelet.getMetadata().getName());
+        } else if (StringUtil.isNullOrEmpty(kamelet.getMetadata().getName())) {
+            kamelet.getMetadata().setName(definition.getTitle());
+        }
+        if (StringUtil.isNullOrEmpty(definition.getDescription())) {
+            String desc = kamelet.getMetadata().getAnnotations().get(KameletStepParserService.DESCRIPTION_ANNO);
+            if (desc != null) {
+                definition.setDescription(desc);
+            }
+        } else if (StringUtil.isNullOrEmpty(kamelet.getMetadata().getAnnotations()
+                .get(KameletStepParserService.DESCRIPTION_ANNO))) {
+            kamelet.getMetadata().getAnnotations().put(
+                    KameletStepParserService.DESCRIPTION_ANNO, definition.getDescription());
+        }
     }
 
     private void setSpecDependencies(final KameletSpec spec,

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
+import io.kaoto.backend.model.deployment.kamelet.Flow;
 import io.kaoto.backend.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.model.deployment.kamelet.KameletTemplate;
@@ -204,10 +205,20 @@ public class KameletRepresenter extends Representer {
                     public Node representData(final Object data) {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         KameletTemplate template = (KameletTemplate) data;
+                        if (template.getId() != null) {
+                            properties.put("id", template.getId());
+                        }
+                        if (template.getDescription() != null) {
+                            properties.put("description", template.getDescription());
+                        }
                         if (template.getBeans() != null) {
                             properties.put("beans", template.getBeans());
                         }
-                        properties.put("from", template.getFrom());
+                        if (template.getRoute() != null) {
+                            properties.put("route", template.getRoute());
+                        } else {
+                            properties.put("from", template.getFrom());
+                        }
                         return representMapping(getTag(data.getClass(), Tag.MAP), properties,
                                 DumperOptions.FlowStyle.BLOCK);
                     }
@@ -219,6 +230,26 @@ public class KameletRepresenter extends Representer {
                         ObjectMapper mapper = new ObjectMapper();
                         Map<String, Object> properties = mapper.convertValue(data,
                                 new TypeReference<Map<String, Object>>() {});
+                        return representMapping(getTag(data.getClass(), Tag.MAP),
+                                properties,
+                                DumperOptions.FlowStyle.AUTO);
+                    }
+                });
+        this.multiRepresenters.put(Flow.class,
+                new RepresentMap() {
+                    @Override
+                    public Node representData(final Object data) {
+                        Map<String, Object> properties = new LinkedHashMap<>();
+                        Flow flow = (Flow) data;
+                        if (flow.getId() != null) {
+                            properties.put("id", flow.getId());
+                        }
+                        if (flow.getDescription() != null) {
+                            properties.put("description", flow.getDescription());
+                        }
+                        if (flow.getFrom() != null) {
+                            properties.put("from", flow.getFrom());
+                        }
                         return representMapping(getTag(data.getClass(), Tag.MAP),
                                 properties,
                                 DumperOptions.FlowStyle.AUTO);

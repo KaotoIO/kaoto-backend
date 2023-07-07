@@ -3,6 +3,7 @@ kind: Kamelet
 metadata:
   annotations:
     camel.apache.org/kamelet.icon: whatever
+    kaoto.io/description: Used to test all EIP we implement
   labels:
     camel.apache.org/kamelet.type: action
   name: eip-action

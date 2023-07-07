@@ -1,5 +1,7 @@
 package io.kaoto.backend.model.deployment.camelroute;
 
+import static io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.fabric8.kubernetes.api.model.Namespaced;
@@ -19,6 +21,7 @@ import org.apache.camel.v1.IntegrationStatus;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,10 +59,10 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         this.getMetadata().setAdditionalProperties(
                 (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
         this.getMetadata().setAnnotations(
-                (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
+                (Map<String, String>) metadata.getOrDefault("annotations", new LinkedHashMap<>()));
         this.getMetadata().setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
         if (metadata.containsKey("description")) {
-            this.getMetadata().getAnnotations().put("description", String.valueOf(metadata.get("description")));
+            this.getMetadata().getAnnotations().put(DESCRIPTION_ANNO, String.valueOf(metadata.get("description")));
         }
         var original_spec = getMetadata().getAdditionalProperties().remove("spec");
         if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {

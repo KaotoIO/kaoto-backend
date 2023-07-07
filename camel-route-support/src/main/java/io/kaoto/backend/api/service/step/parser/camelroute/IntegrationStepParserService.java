@@ -1,5 +1,8 @@
 package io.kaoto.backend.api.service.step.parser.camelroute;
 
+import static io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
+import static io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -64,9 +67,9 @@ public class IntegrationStepParserService implements StepParserService<Step> {
                 integration.getSpec().get_flows().clear();
             }
             ((Map<String, Object>)res.getMetadata().get("additionalProperties")).put("spec", integration.getSpec());
-            if (integration.getMetadata().getAnnotations().containsKey("description")) {
-                res.getMetadata().put("description",
-                        integration.getMetadata().getAnnotations().get("description"));
+            if (integration.getMetadata().getAnnotations().containsKey(DESCRIPTION_ANNO)) {
+                res.getMetadata().put(DESCRIPTION,
+                        integration.getMetadata().getAnnotations().get(DESCRIPTION_ANNO));
             }
 
         } catch (Exception e) {
@@ -115,9 +118,9 @@ public class IntegrationStepParserService implements StepParserService<Step> {
                     .getMetadata()
                     .get("additionalProperties"))
                     .put("spec", integration.getSpec());
-            if (integration.getMetadata().getAnnotations().containsKey("description")) {
-                metadata.getMetadata().put("description",
-                        integration.getMetadata().getAnnotations().get("description"));
+            if (integration.getMetadata().getAnnotations().containsKey(DESCRIPTION_ANNO)) {
+                metadata.getMetadata().put(DESCRIPTION,
+                        integration.getMetadata().getAnnotations().get(DESCRIPTION_ANNO));
             }
 
         } catch (Exception e) {
@@ -167,7 +170,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             res.getMetadata().put("route-configuration-id", flow.getRouteConfigurationId());
         }
         if (flow.getDescription() != null) {
-            res.getMetadata().put("description", flow.getDescription());
+            res.getMetadata().put(DESCRIPTION, flow.getDescription());
         }
         answer.add(res);
     }

@@ -1,0 +1,28 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    kaoto.io/description: copy title desc Kamelet description
+  labels:
+    camel.apache.org/kamelet.type: source
+  name: copy-title-desc
+spec:
+  definition:
+    description: copy title desc Kamelet description
+    properties: {}
+    title: copy-title-desc
+  dependencies:
+  - camel:core
+  - camel:timer
+  - camel:log
+  template:
+    id: test-kamelet-template-id
+    description: test-kamelet template description
+    route:
+      id: test-kamelet-template-route-id
+      description: test-kamelet template route description
+      from:
+        uri: timer:tick
+        steps:
+        - to:
+            uri: log:info
