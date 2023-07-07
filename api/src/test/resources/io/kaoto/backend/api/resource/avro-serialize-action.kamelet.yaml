@@ -8,6 +8,7 @@ metadata:
     camel.apache.org/provider: Apache Software Foundation
     camel.apache.org/kamelet.group: Actions
     camel.apache.org/kamelet.namespace: Transformation
+    kaoto.io/description: Serialize payload to Avro
   labels:
     camel.apache.org/kamelet.type: action
   name: avro-serialize-action

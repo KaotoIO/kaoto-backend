@@ -1,6 +1,8 @@
 package io.kaoto.backend.api.service.deployment.generator.kamelet;
 
 
+import static io.kaoto.backend.api.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -64,10 +66,10 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
             metaObject.setAdditionalProperties(
                     (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
             metaObject.setAnnotations(
-                    (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
+                    (Map<String, String>) metadata.getOrDefault("annotations", new LinkedHashMap<>()));
             metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
             if (metadata.containsKey("description")) {
-                metaObject.getAnnotations().put("description", String.valueOf(metadata.remove("description")));
+                metaObject.getAnnotations().put(DESCRIPTION_ANNO, String.valueOf(metadata.remove("description")));
             }
             var original_spec = metadata.remove("spec");
             if (original_spec != null && original_spec instanceof KameletBindingSpec ospec) {
@@ -197,18 +199,23 @@ public class KameletBindingDeploymentGeneratorService implements DeploymentGener
 
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
-        StringBuilder sb = new StringBuilder();
-
-        StepParserService.ParseResult<Step> last = flows.stream().reduce((a, b) -> b).orElseThrow();
-        flows.stream().forEachOrdered(stepParseResult -> {
-            sb.append(parse(stepParseResult.getSteps(), stepParseResult.getMetadata(),
-                    stepParseResult.getParameters()));
-            if (stepParseResult != last) {
-                sb.append("---");
-                sb.append(System.lineSeparator());
+        // migrate upper layer metadata into KameletBinding
+        StepParserService.ParseResult<Step> metadata = null;
+        StepParserService.ParseResult<Step> binding = null;
+        for (StepParserService.ParseResult<Step> parseResult : flows) {
+            if (parseResult.getSteps() != null) {
+                binding = parseResult;
+            } else {
+                metadata = parseResult;
             }
-        });
-        return sb.toString();
+        }
+        if (metadata != null && metadata.getMetadata() != null) {
+            if (binding.getMetadata() == null) {
+                binding.setMetadata(new LinkedHashMap<>());
+            }
+            binding.getMetadata().putAll(metadata.getMetadata());
+        }
+        return parse(binding.getSteps(), binding.getMetadata(), binding.getParameters());
     }
 
     @Override

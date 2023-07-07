@@ -367,7 +367,7 @@ class IntegrationsResourceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
+    @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding.yaml",
             "Kamelet#eip.kamelet.yaml", "Camel Route#rest-dsl-multi.yaml", "Camel Route#empty-route.yaml",
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
@@ -491,16 +491,21 @@ class IntegrationsResourceTest {
         assertTrue(!flows.flows().isEmpty());
         var flow = flows.flows().get(0);
         var randomGeneratedName = "flow-" + System.currentTimeMillis();
-        if (flow.getMetadata() != null) {
-            randomGeneratedName += flow.getMetadata().get("name");
-        }
         var randomGeneratedDesc = "Description " + System.currentTimeMillis();
-        if (flow.getMetadata() == null) {
-            flow.setMetadata(new LinkedHashMap<>());
+        if ("Kamelet".equals(parameters[0]) || "KameletBinding".equals(parameters[0])) {
+            randomGeneratedName += flows.metadata().get("name");
+            flows.metadata().put("name", randomGeneratedName);
+            flows.metadata().put("description", randomGeneratedDesc);
+        } else {
+            if (flow.getMetadata() != null) {
+                randomGeneratedName += flow.getMetadata().get("name");
+            }
+            if (flow.getMetadata() == null) {
+                flow.setMetadata(new LinkedHashMap<>());
+            }
+            flow.getMetadata().put("name", randomGeneratedName);
+            flow.getMetadata().put("description", randomGeneratedDesc);
         }
-        flow.getMetadata().put("name", randomGeneratedName);
-        flow.getMetadata().put("description", randomGeneratedDesc);
-
         //Now let's try to recreate the source code
         var res2 = given()
                 .when()
@@ -524,17 +529,19 @@ class IntegrationsResourceTest {
         assertTrue(!flows.flows().isEmpty());
         flow = flows.flows().get(0);
         assertNotNull(flow.getMetadata());
-        assertEquals(randomGeneratedName, flow.getMetadata().get("name"));
-        assertEquals(randomGeneratedDesc, flow.getMetadata().get("description"));
-        assertTrue(sourceCode.contains("    description: " + randomGeneratedDesc));
+        assertTrue(sourceCode.contains("description: " + randomGeneratedDesc));
 
         switch (parameters[0]) {
             case "Kamelet":
             case "Kamelet Binding":
+                assertEquals(randomGeneratedName, flows.metadata().get("name"));
+                assertEquals(randomGeneratedDesc, flows.metadata().get("description"));
                 assertTrue(sourceCode.contains("  name: " + randomGeneratedName));
                 break;
             case "Integration":
             case "Camel Route":
+                assertEquals(randomGeneratedName, flow.getMetadata().get("name"));
+                assertEquals(randomGeneratedDesc, flow.getMetadata().get("description"));
                 assertTrue(sourceCode.contains("    id: " + randomGeneratedName));
                 break;
             default:

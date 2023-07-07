@@ -38,6 +38,13 @@ public class KameletTemplate extends Template {
     private List<Bean> beans;
     @JsonProperty("from")
     private From from;
+    @JsonProperty("route")
+    private Flow route;
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("description")
+    private String description;
 
     public KameletTemplate() {
 
@@ -59,4 +66,16 @@ public class KameletTemplate extends Template {
             final List<Bean> beans) {
         this.beans = beans;
     }
+
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
+
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public Flow getRoute() { return route; }
+
+    public void setRoute(Flow route) { this.route = route; }
 }

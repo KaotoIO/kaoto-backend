@@ -1,13 +1,16 @@
 apiVersion: camel.apache.org/v1alpha1
 kind: Kamelet
 metadata:
+  annotations:
+    kaoto.io/description: The 2450 Kamelet Description
   labels:
     camel.apache.org/kamelet.type: source
   name: route-2450-action-source
 spec:
   definition:
+    description: The 2450 Kamelet Description
     properties: {}
-    title: ''
+    title: The 2450 Kamelet
   dependencies:
   - camel:jms
   - camel:amqp

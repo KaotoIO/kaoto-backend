@@ -1,13 +1,16 @@
 apiVersion: camel.apache.org/v1alpha1
 kind: Kamelet
 metadata:
+  annotations:
+    kaoto.io/description: Used to test name
   labels:
     camel.apache.org/kamelet.type: action
   name: test-kamelet
 spec:
   definition:
+    description: Used to test name
     properties: {}
-    title: ''
+    title: test name
   dependencies:
   - camel:core
   template:

@@ -176,7 +176,7 @@ class KameletStepParserServiceTest {
         List<StepParserService.ParseResult<Step>> parsed =
                 dslSpecification.getStepParserService().getParsedFlows(beansKamelet);
         assertEquals(2, parsed.size());
-        var meta = parsed.get(1);
+        var meta = parsed.get(0);
         assertThat(meta.getSteps()).isNull();
         List<Bean> beans = (List<Bean>) meta.getMetadata().get("beans");
         assertThat(beans).hasSize(1);
@@ -187,7 +187,7 @@ class KameletStepParserServiceTest {
                 .hasSize(2)
                 .containsEntry("remoteURI", "{{remoteURI}}")
                 .containsEntry("secondProperty", "another");
-        var route = parsed.get(0);
+        var route = parsed.get(1);
         assertThat(route.getSteps())
                 .hasSize(2)
                 .extracting(Step::getName)
@@ -252,6 +252,59 @@ class KameletStepParserServiceTest {
         String parsedString = dslSpecification.getDeploymentGeneratorService()
                 .parse(parsed.getSteps(), parsed.getMetadata(),
                 parsed.getParameters());
+        assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
+    }
+
+    @Test
+    void checkIdNameTitleDescription() throws Exception {
+        String kamelet = new String(Objects.requireNonNull(
+                this.getClass().getResourceAsStream("id-name-desc.kamelet.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        final List<StepParserService.ParseResult<Step>> parsedList
+                = dslSpecification.getStepParserService().getParsedFlows(kamelet);
+        assertThat(parsedList).hasSize(2);
+        var parsedMeta = parsedList.get(0);
+        assertThat(parsedMeta.getSteps()).isNull();
+        var metadata = parsedMeta.getMetadata();
+        assertThat(metadata).containsEntry("name", "test-kamelet")
+                .containsEntry("description", "metadata annotations kaoto.io/description");
+        Definition definition = (Definition) metadata.get("definition");
+        assertThat(definition.getTitle()).isEqualTo("test-kamelet definition title");
+        assertThat(definition.getDescription()).isEqualTo("test-kamelet definition description");
+        var parsedFlow = parsedList.get(1);
+        assertNotNull(parsedFlow);
+        assertTrue(dslSpecification.appliesTo(parsedFlow.getSteps()));
+        var flowMeta = parsedFlow.getMetadata();
+        assertThat(flowMeta).containsEntry("name", "test-kamelet")
+                .doesNotContainKey("description")
+                .containsEntry("template-id", "test-kamelet-template-id")
+                .containsEntry("template-description", "test-kamelet template description")
+                .containsEntry("route-id", "test-kamelet-template-route-id")
+                .containsEntry("route-description", "test-kamelet template route description");
+        String parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
+        assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
+    }
+
+    @Test
+    void checkCopyTitleAndDescription() throws Exception {
+        String kamelet = new String(Objects.requireNonNull(
+                        this.getClass().getResourceAsStream("copy-title-desc.kamelet.yaml"))
+                .readAllBytes(), StandardCharsets.UTF_8);
+        List<StepParserService.ParseResult<Step>> parsedList
+                = dslSpecification.getStepParserService().getParsedFlows(kamelet);
+        String parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
+        assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
+
+        parsedList.get(0).getMetadata().remove("name");
+        parsedList.get(0).getMetadata().remove("description");
+        parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
+        assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
+
+        parsedList = dslSpecification.getStepParserService().getParsedFlows(kamelet);
+        Definition definition = (Definition) parsedList.get(0).getMetadata().get("definition");
+        definition.setTitle(null);
+        definition.setDescription(null);;
+        parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
         assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
     }
 }
