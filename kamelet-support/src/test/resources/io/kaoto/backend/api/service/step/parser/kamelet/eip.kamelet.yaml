@@ -250,5 +250,3 @@ spec:
                 ignore-invalid-endpoint: true
                 allow-optimised-components: true
                 auto-start-components: true
-      - to:
-          uri: kamelet:sink
