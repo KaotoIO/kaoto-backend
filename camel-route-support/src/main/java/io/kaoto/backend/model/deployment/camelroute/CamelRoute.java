@@ -9,6 +9,7 @@ import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.camelroute.CamelRouteDeserializer;
 import io.kaoto.backend.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.deployment.kamelet.Flow;
+import io.kaoto.backend.model.deployment.kamelet.step.From;
 import io.kaoto.backend.model.deployment.rest.HttpVerb;
 import io.kaoto.backend.model.deployment.rest.Rest;
 import io.kaoto.backend.model.step.Step;
@@ -39,13 +40,32 @@ public class CamelRoute {
     }
 
     public CamelRoute(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
-        processFlows(steps, catalog, metadata);
+        Flow f = processFlows(steps, catalog);
         processBeans(metadata);
+
+        //We have an empty flow, but don't show it empty
+        if ((getBeans() == null || getBeans().isEmpty()) && f == null) {
+            setFlows(new LinkedList<>());
+            f = new Flow();
+            f.setFrom(new From());
+            f.getFrom().setSteps(new LinkedList<>());
+            getFlows().add(f);
+        }
+
+        if (f != null && metadata.containsKey("name")) {
+            f.setId(String.valueOf(metadata.get("name")));
+        }
+        if (f != null && metadata.containsKey("route-configuration-id")) {
+            f.setRouteConfigurationId(String.valueOf(metadata.get("route-configuration-id")));
+        }
+        if (f != null && metadata.containsKey("description")) {
+            f.setDescription(String.valueOf(metadata.get("description")));
+        }
     }
 
-    private void processFlows(final List<Step> steps, final StepCatalog catalog, final Map<String, Object> md) {
+    private Flow processFlows(final List<Step> steps, final StepCatalog catalog) {
         if (steps == null || steps.isEmpty()) {
-            return;
+            return null;
         }
         final var flow = new KamelPopulator(catalog).getFlow(steps);
         setFlows(new LinkedList<>());
@@ -82,15 +102,7 @@ public class CamelRoute {
             getFlows().add(f);
         }
 
-        if (f != null && md.containsKey("name")) {
-            f.setId(String.valueOf(md.get("name")));
-        }
-        if (f != null && md.containsKey("route-configuration-id")) {
-            f.setRouteConfigurationId(String.valueOf(md.get("route-configuration-id")));
-        }
-        if (f != null && md.containsKey("description")) {
-            f.setDescription(String.valueOf(md.get("description")));
-        }
+        return f;
     }
 
     private void processBeans(final Map<String, Object> metadata) {
