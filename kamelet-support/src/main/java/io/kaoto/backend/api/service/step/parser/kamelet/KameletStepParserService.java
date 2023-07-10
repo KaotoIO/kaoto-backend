@@ -133,7 +133,11 @@ public class KameletStepParserService implements StepParserService<Step> {
                                 def.getTitle(),
                                 def.getDescription(),
                                 def.getNullable(),
-                                def.get_enum() != null ? def.get_enum().toArray(new String[]{}) : null,
+                                def.get_enum() != null ?
+                                        def.get_enum().stream()
+                                                .map(anyType -> String.valueOf(anyType.getValue()))
+                                                .toArray(String[]::new):
+                                        null,
                                 def.getExample() != null ?
                                         new String[]{String.valueOf(def.getExample().getValue())} :
                                         null,
@@ -144,7 +148,10 @@ public class KameletStepParserService implements StepParserService<Step> {
                     case "number":
                         p = new NumberParameter(key, def.getTitle(),
                                 def.getDescription(), def.getNullable(),
-                                def.get_enum() != null ? def.get_enum().toArray(new Double[]{}) : null,
+                                def.get_enum() != null ?
+                                        def.get_enum().stream()
+                                                .map(anyType -> String.valueOf(anyType.getValue()))
+                                                .toArray(Double[]::new) : null,
                                 def.getExample() != null ?
                                         new Number[]{Double.valueOf(String.valueOf(def.getExample().getValue()))} :
                                         null,
@@ -155,7 +162,10 @@ public class KameletStepParserService implements StepParserService<Step> {
                     case "integer":
                         p = new IntegerParameter(key, def.getTitle(),
                                 def.getDescription(), def.getNullable(),
-                                def.get_enum() != null ? def.get_enum().toArray(new Integer[]{}) : null,
+                                def.get_enum() != null ?
+                                        def.get_enum().stream()
+                                                .map(anyType -> String.valueOf(anyType.getValue()))
+                                                .toArray(Integer[]::new) : null,
                                 def.getExample() != null ?
                                         new Integer[]{Integer.valueOf(String.valueOf(def.getExample().getValue()))} :
                                         null,
@@ -165,7 +175,10 @@ public class KameletStepParserService implements StepParserService<Step> {
                     case "boolean":
                         p = new BooleanParameter(key, def.getTitle(),
                                 def.getDescription(), def.getNullable(),
-                                def.get_enum() != null ? def.get_enum().toArray(new Boolean[]{}) : null,
+                                def.get_enum() != null ?
+                                        def.get_enum().stream()
+                                                .map(anyType -> String.valueOf(anyType.getValue()))
+                                                .toArray(Boolean[]::new) : null,
                                 def.getExample() != null ?
                                         new Boolean[]{Boolean.valueOf(String.valueOf(def.getExample().getValue()))} :
                                         null,
