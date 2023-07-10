@@ -1,0 +1,31 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    camel.apache.org/kamelet.icon: whatever
+  labels:
+    camel.apache.org/kamelet.type: source
+  name: eip-source
+spec:
+  definition:
+    properties: {}
+    title: AWS-Cloudtrail
+  dependencies:
+  - camel:core
+  - camel:kamelet
+  - camel:aws-cloudtrail
+  template:
+    from:
+      uri: aws-cloudtrail:cloudtrail
+      parameters:
+        secretKey: '{{?secretKey}}'
+        accessKey: '{{?accessKey}}'
+        maxResults: '{{maxResults}}'
+        overrideEndpoint: '{{overrideEndpoint}}'
+        eventSource: '{{?eventSource}}'
+        uriEndpointOverride: '{{?uriEndpointOverride}}'
+        useDefaultCredentialsProvider: '{{useDefaultCredentialsProvider}}'
+        region: '{{region}}'
+      steps:
+      - to:
+          uri: kamelet:sink

@@ -38,7 +38,7 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
     private Integer pathOrder = 0;
     @JsonIgnore
     private String pathSeparator = ":";
-    private T value;
+    private Object value;
 
     //JSON schema
     private String title;
@@ -117,11 +117,11 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
      * Used when describing a configured element.
      *
      */
-    public T getValue() {
+    public Object getValue() {
         return this.value;
     }
 
-    public void setValue(final T value) {
+    public void setValue(final Object value) {
         this.value = value;
     }
 
