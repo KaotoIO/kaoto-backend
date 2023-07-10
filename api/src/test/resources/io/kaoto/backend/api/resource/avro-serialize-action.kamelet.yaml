@@ -9,7 +9,7 @@ metadata:
     camel.apache.org/kamelet.group: Actions
     camel.apache.org/kamelet.namespace: Transformation
   labels:
-    camel.apache.org/kamelet.type: sink
+    camel.apache.org/kamelet.type: action
   name: avro-serialize-action
 spec:
   definition:

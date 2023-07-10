@@ -63,5 +63,3 @@ spec:
             - set-header:
                 constant: TOPIC.APAC
                 name: kafka.OVERRIDE_TOPIC
-      - to:
-          uri: kamelet:sink

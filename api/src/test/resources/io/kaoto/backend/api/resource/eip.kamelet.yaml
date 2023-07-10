@@ -223,5 +223,3 @@ spec:
                 uri: direct
                 parameters:
                   name: start
-      - to:
-          uri: kamelet:sink

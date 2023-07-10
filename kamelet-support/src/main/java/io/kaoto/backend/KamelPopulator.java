@@ -348,18 +348,18 @@ public class KamelPopulator {
     }
 
     private Type defineType(final List<Step> steps) {
-        // The code of a "source" Kamelet must send data to the kamelet:sink
-        // special endpoint. The code of a "sink" Kamelet must consume data
-        // from the special endpoint kamelet:source.
-        // If it has both, it is an action.
+        //    source ends with a to that is a kamelet:sink or starts with an uri in the from
+        //    sink ends with a to that is NOT a kamelet:sink (a camel connector)
+        //    action anything else
         Type type = Type.action;
         if (steps.size() > 1) {
-            boolean source = steps.get(0).getName().equalsIgnoreCase("kamelet:source");
-            boolean sink = steps.get(steps.size() - 1).getName().equalsIgnoreCase("kamelet:sink");
-
-            if (source && !sink) {
+            if (steps.size() > 2
+                    && steps.get(steps.size() - 1).getKind().equalsIgnoreCase("Camel-Connector")
+                    && !steps.get(steps.size() - 1).getName().equalsIgnoreCase("kamelet:sink")) {
                 type = Type.sink;
-            } else if (!source && sink) {
+            } else if (steps.get(steps.size() - 1).getName().equalsIgnoreCase("kamelet:sink")
+                || steps.get(0).getKind().equalsIgnoreCase("Camel-Connector")
+                      && !steps.get(0).getName().equalsIgnoreCase("kamelet:source")) {
                 type = Type.source;
             }
         }
