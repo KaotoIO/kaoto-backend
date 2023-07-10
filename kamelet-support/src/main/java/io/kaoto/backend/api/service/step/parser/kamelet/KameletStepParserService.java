@@ -344,10 +344,14 @@ public class KameletStepParserService implements StepParserService<Step> {
             boolean found = false;
             for (Parameter p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(key)) {
-                    if (!p.convertToType(value).equals(p.getDefaultValue())) {
-                        p.setValue(p.convertToType(value));
-                        found = true;
+                    final var typedValue = p.convertToType(value);
+                    if (typedValue != null && !typedValue.equals(p.getDefaultValue())) {
+                        p.setValue(typedValue);
+                    } else if (typedValue == null && value != null) {
+                        //It may be a string with a variable, for example
+                        p.setValue(value);
                     }
+                    found = true;
                     break;
                 }
             }

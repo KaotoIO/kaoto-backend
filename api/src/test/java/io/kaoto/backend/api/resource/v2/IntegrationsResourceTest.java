@@ -372,7 +372,7 @@ class IntegrationsResourceTest {
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
             "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml",
-            "Kamelet#beans.kamelet.yaml"})
+            "Kamelet#beans.kamelet.yaml", "Kamelet#aws-cloudtrail.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");

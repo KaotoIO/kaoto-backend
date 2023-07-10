@@ -23,11 +23,14 @@ public class BooleanParameter extends Parameter<Boolean> {
 
     @Override
     public Boolean convertToType(final Object value) {
-        try {
-            return Boolean.valueOf(String.valueOf(value));
-        } catch (Exception e) {
+        if ("true".equalsIgnoreCase(String.valueOf(value))) {
+            return true;
+        }
+        if ("false".equalsIgnoreCase(String.valueOf(value))) {
             return false;
         }
+        return null;
+
     }
 
     @Override

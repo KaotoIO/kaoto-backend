@@ -87,9 +87,7 @@ public class DeploymentService {
                             .parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected"
-                                + " error. ",
-                        e);
+                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 

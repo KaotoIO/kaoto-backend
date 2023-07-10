@@ -431,9 +431,15 @@ public class KamelPopulator {
                         if (value != null) {
                             uri.append(value);
                         }
-                    } else if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")
-                            && !p.convertToType(value).equals(p.getDefaultValue())) {
-                        params.put(p.getId(), p.convertToType(value));
+                    } else {
+                        final var typedValue = p.convertToType(value);
+                        if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")) {
+                            if (typedValue != null && !typedValue.equals(p.getDefaultValue())) {
+                                params.put(p.getId(), typedValue);
+                            } else if (typedValue == null && value != null) {
+                                params.put(p.getId(), value);
+                            }
+                        }
                     }
                 }
             }
