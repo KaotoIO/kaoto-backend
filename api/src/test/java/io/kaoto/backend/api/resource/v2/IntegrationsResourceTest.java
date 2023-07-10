@@ -368,7 +368,7 @@ class IntegrationsResourceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Camel Route#route-multi.yaml", "KameletBinding#kamelet-binding-multi.yaml",
-            "Kamelet#eip.kamelet.yaml", "Camel Route#rest-dsl-multi.yaml",
+            "Kamelet#eip.kamelet.yaml", "Camel Route#rest-dsl-multi.yaml", "Camel Route#empty-route.yaml",
             "Camel Route#route-with-beans.yaml", "Integration#integration.yaml",
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
             "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml",

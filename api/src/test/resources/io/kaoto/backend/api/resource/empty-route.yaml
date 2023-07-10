@@ -1,0 +1,5 @@
+- route:
+    id: empty-route
+    from:
+      uri: null
+      steps: []
