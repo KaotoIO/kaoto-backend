@@ -75,6 +75,9 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
     }
 
     @Override
+    public Boolean doesSupportResourceDescription() { return false; }
+
+    @Override
     public DeploymentGeneratorService getDeploymentGeneratorService() {
         return deploymentGeneratorService;
     }
