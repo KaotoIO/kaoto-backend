@@ -10,6 +10,11 @@
     </parent>
     <artifactId>api</artifactId>
     <version>1.1.0-SNAPSHOT</version>
+
+    <properties>
+        <kaoto.runtime.type>jvm</kaoto.runtime.type>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -90,6 +95,16 @@
             <artifactId>quarkus-hibernate-validator</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+            </extension>
+        </extensions>
+    </build>
+
     <profiles>
         <profile>
             <id>native</id>
@@ -100,6 +115,7 @@
             </activation>
             <properties>
                 <quarkus.package.type>native</quarkus.package.type>
+                <kaoto.runtime.type>native</kaoto.runtime.type>
             </properties>
             <build>
                 <plugins>
@@ -168,5 +184,41 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>container-image</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>container-image</name>
+                </property>
+            </activation>
+
+            <properties>
+                <!--
+                    This allows to build a native executable without having to install
+                    GraalVM which also allow to use the right version that quarkus is
+                    tested against.
+
+                    https://quarkus.io/guides/building-native-image#container-runtime
+                -->
+                <quarkus.native.container-build>true</quarkus.native.container-build>
+
+                <quarkus.container-image.build>true</quarkus.container-image.build>
+                <quarkus.container-image.group>kaotoio</quarkus.container-image.group>
+                <quarkus.container-image.name>backend</quarkus.container-image.name>
+
+                <quarkus.container-image.tag>latest-${kaoto.runtime.type}-${os.detected.arch}</quarkus.container-image.tag>
+                <quarkus.container-image.additional-tags>${git.branch}-${git.commit.id.abbrev}-${kaoto.runtime.type}-${os.detected.arch}</quarkus.container-image.additional-tags>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-container-image-docker</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
     </profiles>
 </project>

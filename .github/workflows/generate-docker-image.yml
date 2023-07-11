@@ -70,15 +70,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
       - name: 🏃‍♀️ Run built image
         if: ${{ github.event_name == 'pull_request' }}
-        run: docker run -d --rm --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
-      - name: 👩‍⚕️ Check health
-        uses: stringbean/docker-healthcheck-action@v2
-        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker images
+          docker run -d --rm -p 8081:8081 --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v3
         with:
-          container: kaoto-backend
-          wait-time: 50
-          require-status: running
-          require-healthy: true
+          url: 'http://localhost:8081/q/health'
+          max-attempts: 5
+          retry-delay: 1s
       - name: 🍱 Build and push
         uses: docker/build-push-action@v4
         if: ${{ github.event_name != 'pull_request' }}
