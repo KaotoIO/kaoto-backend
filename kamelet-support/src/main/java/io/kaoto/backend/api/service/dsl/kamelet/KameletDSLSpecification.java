@@ -68,6 +68,9 @@ public class KameletDSLSpecification extends DSLSpecification {
     }
 
     @Override
+    public Boolean doesSupportResourceDescription() { return true; }
+
+    @Override
     public Map<String, String> getVocabulary() {
         return Map.of("stepsName", "Steps");
     }

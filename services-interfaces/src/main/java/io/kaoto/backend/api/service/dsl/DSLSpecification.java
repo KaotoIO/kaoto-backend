@@ -118,4 +118,6 @@ public abstract class DSLSpecification {
     public abstract Boolean doesSupportMultipleFlows();
 
     public abstract Map<String, String> getVocabulary();
+
+     public abstract Boolean doesSupportResourceDescription();
 }

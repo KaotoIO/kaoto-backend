@@ -33,6 +33,7 @@ public class LanguagesSpecificationChecker {
                             .checkValidationSchema("/v1/capabilities/KameletBinding/schema")
                             .checkDeployable("true")
                             .checkMultipleFlows("false")
+                            .checkResourceDescription("true")
                             .checkDescription("Kamelet Bindings are used to create simple integrations" +
                                     " that link a start step to an end step with optional intermediate action steps.")
                             .checkStepKinds("[KAMELET, KNATIVE]")
@@ -46,6 +47,7 @@ public class LanguagesSpecificationChecker {
                             .checkValidationSchema("/v1/capabilities/Kamelet/schema")
                             .checkDeployable("true")
                             .checkMultipleFlows("false")
+                            .checkResourceDescription("true")
                             .checkDescription("A Kamelet is a snippet of a route. It defines meta" +
                                     " building blocks or steps that can be reused on integrations.")
                             .checkStepKinds("[CAMEL-CONNECTOR, EIP, EIP-BRANCH]")
@@ -59,6 +61,7 @@ public class LanguagesSpecificationChecker {
                             .checkValidationSchema("/v1/capabilities/Camel Route/schema")
                             .checkDeployable("false")
                             .checkMultipleFlows("true")
+                            .checkResourceDescription("false")
                             .checkDescription("A camel route is a non deployable in cluster workflow" +
                                     " of actions and steps.")
                             .checkStepKinds("[CAMEL-CONNECTOR, EIP, EIP-BRANCH, CAMEL-REST-DSL," +
@@ -73,6 +76,7 @@ public class LanguagesSpecificationChecker {
                             .checkValidationSchema("/v1/capabilities/Integration/schema")
                             .checkDeployable("true")
                             .checkMultipleFlows("true")
+                            .checkResourceDescription("true")
                             .checkDescription("An Integration defines a workflow of actions and steps.")
                             .checkStepKinds("[CAMEL-CONNECTOR, EIP, EIP-BRANCH]")
                             .checkVocabulary(Map.of("stepsName", "Steps"));
@@ -193,6 +197,18 @@ public class LanguagesSpecificationChecker {
                 assertion.isNotNull()
                         .isInstanceOf(Map.class)
                         .isEqualTo(desiredVocabulary);
+            }
+            return this;
+        }
+
+        public LanguageSpecificationChecker checkResourceDescription(String desiredSupportsResourceDescription) {
+            ObjectAssert<Object> assertion = assertThat(language.get("supportsResourceDescription"))
+                    .as(String.format("Check supportsResourceDescription value in %s language specification",
+                            languageName));
+            if (desiredSupportsResourceDescription == null) {
+                assertion.isNull();
+            } else {
+                assertion.isNotNull().isEqualTo(desiredSupportsResourceDescription);
             }
             return this;
         }

@@ -49,6 +49,7 @@ public class LanguageService {
                     dsl.validationSchema().equals("")?"":String.format("/v1/capabilities/%s/schema",dsl.identifier());
             specs.put("validationSchema",validationSchemaURI);
             specs.put("supportsMultipleFlows", Boolean.toString(dsl.doesSupportMultipleFlows()));
+            specs.put("supportsResourceDescription", Boolean.toString(dsl.doesSupportResourceDescription()));
             //Eventually, i18n
             specs.put("vocabulary", dsl.getVocabulary());
         }
