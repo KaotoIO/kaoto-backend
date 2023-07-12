@@ -2,3 +2,5 @@ codecov:
   bot: Delawen
   branch: main
   require_ci_to_pass: yes
+ignore:
+    - "api/src/main/java/io/kaoto/backend/api/Main.java"
