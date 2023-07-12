@@ -75,6 +75,7 @@ jobs:
           docker run -d --rm -p 8081:8081 --name kaoto-backend kaotoio/backend:pr-${{ github.event.pull_request.number }}
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           url: 'http://localhost:8081/q/health'
           max-attempts: 5
