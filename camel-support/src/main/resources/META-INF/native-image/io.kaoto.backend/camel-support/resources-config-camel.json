@@ -1,0 +1,27 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "io/kaoto/backend/camel/metadata/parser/step/camelroute/base64icon.txt$"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/metadata/parser/step/camelroute/default-icon.txt$"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/service/deployment/generator/camelroute/camel-yaml-dsl.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/service/deployment/generator/camelroute/integration.json$"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/service/dsl/kamelet/kamelet.json$,"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/service/dsl/kamelet/kameletbinding.json$,"
+      },
+      {
+        "pattern": "io/kaoto/backend/camel/service/dsl/kamelet/kamelet-dsl.json$,"
+      }
+    ]
+  }
+}

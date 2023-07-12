@@ -1,6 +1,6 @@
 package io.kaoto.backend.api.service.deployment.generator;
 
-import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.kaoto.backend.model.step.Step;
 import org.junit.jupiter.api.Assertions;
