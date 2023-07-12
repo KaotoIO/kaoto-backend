@@ -1,8 +1,10 @@
 package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Capabilities;
-import io.kaoto.backend.api.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
-import io.kaoto.backend.metadata.parser.step.camelroute.CamelRouteFileProcessor;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.kaoto.backend.camel.metadata.parser.step.camelroute.CamelRouteFileProcessor;
+import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
+import io.kaoto.backend.camel.service.dsl.kamelet.KameletDSLSpecification;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -64,7 +66,7 @@ class CapabilitiesResourceTest {
 
     @ParameterizedTest
     @MethodSource("provideDslSchemaForTest")
-    void getValidationSchema(String dsl, Class reourceClass, String file) throws IOException {
+    void getValidationSchema(String dsl, Class<?> reourceClass, String file) throws IOException {
         String schemaToValidate =
                 new String(Objects.requireNonNull(reourceClass.getResourceAsStream(file)).readAllBytes());
 
@@ -82,8 +84,8 @@ class CapabilitiesResourceTest {
         return Stream.of(
                 Arguments.of("Integration", CamelRouteDeploymentGeneratorService.class, "integration.json"),
                 Arguments.of("Camel Route", CamelRouteDeploymentGeneratorService.class, "camel-yaml-dsl.json"),
-                Arguments.of("Kamelet", CamelRouteFileProcessor.class, "kamelet.json"),
-                Arguments.of("KameletBinding", CamelRouteFileProcessor.class, "kameletbinding.json")
+                Arguments.of("Kamelet", KameletDSLSpecification.class, "kamelet.json"),
+                Arguments.of("KameletBinding", KameletBindingDSLSpecification.class, "kameletbinding.json")
         );
     }
 }

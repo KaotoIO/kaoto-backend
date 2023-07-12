@@ -2,8 +2,8 @@ package io.kaoto.backend.api.resource.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import jakarta.ws.rs.core.Response;

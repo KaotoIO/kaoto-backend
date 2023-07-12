@@ -8,9 +8,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.api.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
 

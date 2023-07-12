@@ -41,20 +41,7 @@
             <dependencies>
                 <dependency>
                     <groupId>io.kaoto.backend</groupId>
-                    <artifactId>kamelet-support</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>camel-route-support</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>io.kaoto.backend</groupId>
-                    <artifactId>camel-route-support</artifactId>
+                    <artifactId>camel-support</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>

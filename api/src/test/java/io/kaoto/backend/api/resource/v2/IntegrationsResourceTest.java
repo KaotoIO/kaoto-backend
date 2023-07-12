@@ -1,8 +1,8 @@
 package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
-import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
