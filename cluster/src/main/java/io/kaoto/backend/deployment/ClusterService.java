@@ -8,7 +8,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
-import io.kaoto.backend.api.service.deployment.generator.camelroute.IntegrationRepresenter;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationRepresenter;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;

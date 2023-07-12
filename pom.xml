@@ -55,6 +55,9 @@
         <!-- ui -->
         <node.version>16.16.0</node.version>
         <yarn.version>1.22.19</yarn.version>
+
+        <quarkus.index-dependency.camel-k.group-id>org.apache.camel.k</quarkus.index-dependency.camel-k.group-id>
+        <quarkus.index-dependency.camel-k.artifact-id>camel-k-crds</quarkus.index-dependency.camel-k.artifact-id>
     </properties>
 
     <dependencyManagement>
@@ -305,8 +308,7 @@
         <module>metadata</module>
         <module>catalog</module>
         <module>services-interfaces</module>
-        <module>kamelet-support</module>
-        <module>camel-route-support</module>
+        <module>camel-support</module>
         <module>cluster</module>
         <module>api-rest</module>
         <module>api</module>

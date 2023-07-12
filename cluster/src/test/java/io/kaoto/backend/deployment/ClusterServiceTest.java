@@ -2,10 +2,9 @@ package io.kaoto.backend.deployment;
 
 import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
-import io.kaoto.backend.model.deployment.camelroute.Integration;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
+import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
 import org.junit.jupiter.api.BeforeEach;

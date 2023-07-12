@@ -2,9 +2,9 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
-import io.kaoto.backend.model.deployment.camelroute.Integration;
-import io.kaoto.backend.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
+import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.kubernetes.client.KubernetesTestServer;
 import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
