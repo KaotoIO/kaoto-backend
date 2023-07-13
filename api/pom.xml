@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.kaoto.backend</groupId>
@@ -25,8 +26,8 @@
             <artifactId>quarkus-arc</artifactId>
         </dependency>
         <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-config-yaml</artifactId>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-config-yaml</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -131,7 +132,8 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                                        <native.image.path>
+                                            ${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                         <maven.home>${maven.home}</maven.home>
                                     </systemPropertyVariables>
@@ -174,7 +176,8 @@
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>${project.basedir}/src/main/resources/api.yaml/openapi.json</inputSpec>
+                                    <inputSpec>
+                                        ${project.basedir}/src/main/resources/api.yaml/openapi.json</inputSpec>
                                     <language>html2</language>
                                     <output>/tmp/api/</output>
                                 </configuration>
@@ -209,7 +212,8 @@
                 <quarkus.container-image.name>backend</quarkus.container-image.name>
 
                 <quarkus.container-image.tag>latest-${kaoto.runtime.type}-${os.detected.arch}</quarkus.container-image.tag>
-                <quarkus.container-image.additional-tags>${git.branch}-${git.commit.id.abbrev}-${kaoto.runtime.type}-${os.detected.arch}</quarkus.container-image.additional-tags>
+                <quarkus.container-image.additional-tags>
+                    ${git.branch}-${git.commit.id.abbrev}-${kaoto.runtime.type}-${os.detected.arch}</quarkus.container-image.additional-tags>
             </properties>
 
             <dependencies>
@@ -218,6 +222,75 @@
                     <artifactId>quarkus-container-image-docker</artifactId>
                 </dependency>
             </dependencies>
+        </profile>
+
+        <profile>
+            <id>standalone</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>standalone</name>
+                </property>
+            </activation>
+
+
+            <properties>
+                <kaoto.ui.branch>main</kaoto.ui.branch>
+                <quarkus.container-image.name>standalone</quarkus.container-image.name>
+
+                <quarkus.quinoa>true</quarkus.quinoa>
+
+                <quarkus.quinoa.package-manager-install>true</quarkus.quinoa.package-manager-install>
+                <quarkus.quinoa.package-manager-install.node-version>${node.version}</quarkus.quinoa.package-manager-install.node-version>
+                <quarkus.quinoa.package-manager-install.yarn-version>${yarn.version</quarkus.quinoa.package-manager-install.yarn-version>
+
+                <quarkus.quinoa.package-manager-command.prepend-binary>true</quarkus.quinoa.package-manager-command.prepend-binary>
+                <quarkus.quinoa.package-manager>yarn</quarkus.quinoa.package-manager>
+                <quarkus.quinoa.package-manager-command.install>install --mode=skip-build</quarkus.quinoa.package-manager-command.install>
+                <quarkus.quinoa.package-manager-command.build>run build</quarkus.quinoa.package-manager-command.build>
+                <quarkus.quinoa.package-manager-command.build-env.KAOTO_API>.</quarkus.quinoa.package-manager-command.build-env.KAOTO_API>
+
+                <quarkus.quinoa.ui-dir>${project.build.directory}/ui</quarkus.quinoa.ui-dir>
+                <quarkus.quinoa.build-dir>${quarkus.quinoa.ui-dir}/dist</quarkus.quinoa.build-dir>
+
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkiverse.quinoa</groupId>
+                    <artifactId>quarkus-quinoa</artifactId>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>checkout</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>git</executable>
+                                    <workingDirectory>${project.basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>clone</argument>
+                                        <argument>--depth=1</argument>
+                                        <argument>--branch=${kaoto.ui.branch}</argument>
+                                        <argument>https://github.com/KaotoIO/kaoto-ui.git</argument>
+                                        <argument>--single-branch</argument>
+                                        <argument>${quarkus.quinoa.ui-dir}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
     </profiles>

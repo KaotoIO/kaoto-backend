@@ -46,3 +46,5 @@ package-lock.json
 # with java -jar plantuml.jar sequenceDiagram.txt
 # https://plantuml.com/es/starting
 /diagrams/*.png
+api/src/main/webui
+.quinoa/
