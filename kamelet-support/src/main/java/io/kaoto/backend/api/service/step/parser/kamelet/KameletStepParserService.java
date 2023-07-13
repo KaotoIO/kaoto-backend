@@ -213,7 +213,7 @@ public class KameletStepParserService implements StepParserService<Step> {
                         break;
                     default:
                         p = new ObjectParameter(key, def.getTitle(), def.getDescription(), def.getNullable(),
-                                def.get_enum().toArray(new AnyType[0]),
+                                def.get_enum() != null ? def.get_enum().toArray(new AnyType[0]) : null,
                                 def.getExample() != null ?
                                         new Object[]{ def.getExample().getValue()} :
                                         null,
