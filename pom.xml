@@ -46,7 +46,7 @@
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
         <swagger-codegen-maven-plugin.version>3.0.46</swagger-codegen-maven-plugin.version>
         <smallrye-open-api-maven-plugin.version>3.4.0</smallrye-open-api-maven-plugin.version>
-        <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
+        <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
     </properties>
 
