@@ -1,11 +1,11 @@
 package io.kaoto.backend.api.resource.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 abstract class IntegrationsResourceTestAbstract {
 
     protected abstract void waitForWarmUpCatalog();
+
+    protected abstract List<String> getAllLanguages();
 
     @BeforeEach
     void setupTest() {
@@ -367,5 +370,126 @@ abstract class IntegrationsResourceTestAbstract {
         assertEquals(1, steps.size());
         var to = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("to");
         assertEquals("log:", to.get("uri"));
+    }
+
+    @Test
+    void dslsTest() throws IOException, URISyntaxException {
+        ObjectMapper mapper = new ObjectMapper();
+        String yaml1 = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../twitter-search-source-binding.yaml")
+                        .toURI()));
+
+        var dslsRes = given()
+                .when()
+                .contentType("application/json")
+                .body(Collections.emptyList())
+                .post("/dsls")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        List<String> dsllist = mapper.readValue(dslsRes.extract().body().asString(),
+                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        assertThat(dsllist).hasSize(getAllLanguages().size());
+        assertThat(dsllist).hasSameElementsAs(getAllLanguages());
+
+        var integrationRes = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml1)
+                .post("?dsl=KameletBinding")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        Integration integration = mapper.readValue(integrationRes.extract().body().asString(), Integration.class);
+
+        dslsRes = given()
+                .when()
+                .contentType("application/json")
+                .body(Collections.emptyList())
+                .post("/dsls")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        dsllist = mapper.readValue(dslsRes.extract().body().asString(),
+                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        assertThat(dsllist).hasSize(getAllLanguages().size());
+        assertThat(dsllist).hasSameElementsAs(getAllLanguages());
+
+        dslsRes = given()
+                .when()
+                .contentType("application/json")
+                .body(integration.getSteps())
+                .post("/dsls")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        dsllist = mapper.readValue(dslsRes.extract().body().asString(),
+                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        assertThat(dsllist).hasSize(1);
+        assertThat(dsllist).containsExactlyInAnyOrder("KameletBinding");
+    }
+
+    @Test
+    void testWithInvalidDslParam() throws URISyntaxException, IOException {
+        String yaml1 = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../twitter-search-source-binding.yaml")
+                        .toURI()));
+
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml1)
+                .post("?dsl=SomethingWrong")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+
+        var res2 = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml1)
+                .post("?dsl=KameletBinding")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+
+        assertThat(res).isEqualTo(res2);
+    }
+
+
+    @Test
+    void thereAndBackAgain() throws URISyntaxException, IOException {
+        String yamlOriginal = Files.readString(Path.of(
+                DeploymentsResourceTest.class.getResource(
+                                "../twitter-search-source-binding.yaml")
+                        .toURI()));
+
+        // post yaml, get integration json
+        String json = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yamlOriginal)
+                .post("?dsl=KameletBinding")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+
+        // post integration json, get (original) yaml
+        String yamlAfter = given()
+                .when()
+                .contentType("application/json")
+                .body(json)
+                .post("?dsl=KameletBinding")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+
+
+        Yaml yaml = new Yaml(
+                new Constructor(KameletBinding.class, new LoaderOptions()),
+                new KameletRepresenter());
+        KameletBinding original = yaml.load(yamlOriginal);
+        KameletBinding after = yaml.load(yamlAfter);
+
+        assertThat(after).as("Check that returned KameletBinding yaml will be same as original")
+                .isEqualTo(original);
     }
 }
