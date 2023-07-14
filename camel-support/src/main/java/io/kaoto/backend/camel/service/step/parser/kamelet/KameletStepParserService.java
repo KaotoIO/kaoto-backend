@@ -1,12 +1,11 @@
 package io.kaoto.backend.camel.service.step.parser.kamelet;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletSpec;
@@ -23,11 +22,11 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.util.StringUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -86,8 +85,7 @@ public class KameletStepParserService implements StepParserService<Step> {
 
         List<Step> steps = new ArrayList<>();
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            Kamelet kamelet = yamlMapper.readValue(input, Kamelet.class);
+            Kamelet kamelet = KamelHelper.YAML_MAPPER.readValue(input, Kamelet.class);
 
             processMetadata(res, kamelet.getMetadata());
             processSpec(steps, res, kamelet.getSpec());

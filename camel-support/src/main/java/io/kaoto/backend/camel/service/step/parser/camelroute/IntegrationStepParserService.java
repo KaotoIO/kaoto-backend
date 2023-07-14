@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
@@ -31,6 +32,11 @@ import java.util.regex.Pattern;
 @RegisterForReflection
 public class IntegrationStepParserService implements StepParserService<Step> {
 
+    // TODO: ideally the deserializer should be set on the target class, but for some
+    //       reason it seems to cause failures
+    private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory())
+            .registerModules(new SimpleModule().addDeserializer(Flow.class, new FlowDeserializer()));
+
     private KameletStepParserService ksps;
 
     @Override
@@ -43,8 +49,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         ParseResult<Step> res = new ParseResult<>();
         List<Step> steps = new ArrayList<>();
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            Integration integration = yamlMapper.readValue(input, Integration.class);
+            Integration integration = KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
 
             ksps.processMetadata(res, integration.getMetadata());
             res.setParameters(new ArrayList<>());
@@ -91,11 +96,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         metadata.setParameters(new ArrayList<>());
         answer.add(metadata);
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            var module = new SimpleModule();
-            module.addDeserializer(Flow.class, new FlowDeserializer());
-            yamlMapper.registerModule(module);
-            Integration integration = yamlMapper.readValue(input, Integration.class);
+            Integration integration = MAPPER.readValue(input, Integration.class);
 
             ksps.processMetadata(metadata, integration.getMetadata());
 

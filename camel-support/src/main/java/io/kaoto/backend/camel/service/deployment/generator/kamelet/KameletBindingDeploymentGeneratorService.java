@@ -1,19 +1,18 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStepRef;
+import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
@@ -44,7 +43,6 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     private static final String KNATIVE = "KNATIVE";
     private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
     private static final boolean IGNORE_CAMEL_COMPONENTS = true;
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Logger LOG = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Inject
@@ -74,7 +72,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
             if (originalSpec instanceof KameletBindingSpec ospec) {
                 spec = ospec;
             } else if (originalSpec instanceof Map ospec) {
-                spec = MAPPER.convertValue(ospec, KameletBindingSpec.class);
+                spec = KamelHelper.JSON_MAPPER.convertValue(ospec, KameletBindingSpec.class);
             } else {
                 spec = new KameletBindingSpec();
             }
@@ -225,8 +223,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-                return yamlMapper.readValue(input, KameletBinding.class);
+                return KamelHelper.JSON_MAPPER.readValue(input, KameletBinding.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating a kamelet binding and it didn't work.");
             }
@@ -240,7 +237,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
         List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(KameletBinding.class).inNamespace(namespace).list();
-            for (CustomResource customResource : resources.getItems()) {
+            for (CustomResource<?, ?> customResource : resources.getItems()) {
                 res.add(new Deployment(customResource, getStatus(customResource)));
 
                 if (Span.current() != null) {

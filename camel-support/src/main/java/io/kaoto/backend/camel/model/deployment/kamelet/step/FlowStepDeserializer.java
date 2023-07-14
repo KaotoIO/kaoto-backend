@@ -5,15 +5,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import org.jboss.logging.Logger;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FlowStepDeserializer extends JsonDeserializer<FlowStep> {
-    private final Logger log = Logger.getLogger(FlowStepDeserializer.class);
+    private static final Logger LOG = Logger.getLogger(FlowStepDeserializer.class);
+    private static final Map<String, Class<?>> STEPS = getFlowSteps();
 
     @Override
     public FlowStep deserialize(
@@ -21,26 +22,26 @@ public class FlowStepDeserializer extends JsonDeserializer<FlowStep> {
             final DeserializationContext deserializationContext) {
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
-            return deserializeFlowStep(n);
+            return deserializeFlowStep(jsonParser, n);
         } catch (Exception e) {
-            log.error("Error trying to deserialize step: " + e.getMessage());
+            LOG.error("Error trying to deserialize step: " + e.getMessage());
         }
 
         return new UriFlowStep();
     }
 
-    public FlowStep deserializeFlowStep(final JsonNode n) throws JsonProcessingException {
-        for (var step : getFlowSteps().entrySet()) {
+    public FlowStep deserializeFlowStep(final JsonParser p, final JsonNode n) throws JsonProcessingException {
+        for (var step : STEPS.entrySet()) {
             if (n.get(step.getKey()) != null) {
-                return (FlowStep) new ObjectMapper().readValue(n.toPrettyString(), step.getValue());
+                return (FlowStep) p.getCodec().treeToValue(n, step.getValue());
             }
         }
 
         return new UriFlowStep();
     }
 
-    private Map<String, Class> getFlowSteps() {
-        Map<String, Class> steps = new HashMap<>();
+    private static Map<String, Class<?>> getFlowSteps() {
+        Map<String, Class<?>> steps = new HashMap<>();
 
         steps.put("aggregate", AggregateFlowStep.class);
         steps.put("claim-check", ClaimCheckFlowStep.class);
@@ -116,6 +117,6 @@ public class FlowStepDeserializer extends JsonDeserializer<FlowStep> {
         steps.put("wire-tap", WireTapFlowStep.class);
         steps.put("wireTap", WireTapFlowStep.class);
 
-        return steps;
+        return Collections.unmodifiableMap(steps);
     }
 }

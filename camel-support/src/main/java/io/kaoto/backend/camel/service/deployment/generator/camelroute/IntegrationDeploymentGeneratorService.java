@@ -1,18 +1,17 @@
 package io.kaoto.backend.camel.service.deployment.generator.camelroute;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
 import io.kaoto.backend.camel.model.deployment.camelroute.IntegrationFlow;
+import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
@@ -87,8 +86,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-                return yamlMapper.readValue(input, Integration.class);
+                return KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating an integration and it didn't work.");
             }
@@ -128,7 +126,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
         try {
             String createdLabel = "camel.apache.org/created.by.kind";
             final var resources = kclient.resources(Integration.class).inNamespace(namespace).list();
-            for (CustomResource customResource : resources.getItems()) {
+            for (CustomResource<?, ?> customResource : resources.getItems()) {
                 if (customResource.getMetadata() == null
                         || customResource.getMetadata().getLabels() == null
                         || !customResource.getMetadata().getLabels().containsKey(createdLabel)) {

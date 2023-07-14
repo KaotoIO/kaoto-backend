@@ -1,6 +1,5 @@
 package io.kaoto.backend.camel;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -190,11 +189,10 @@ public class KamelPopulator {
             metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
             metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
 
-            if (originalSpec != null && originalSpec instanceof KameletSpec ospec) {
+            if (originalSpec instanceof KameletSpec ospec) {
                 spec = ospec;
-            } else if (originalSpec != null && originalSpec instanceof Map ospec) {
-                ObjectMapper mapper = new ObjectMapper();
-                spec = mapper.convertValue(ospec, KameletSpec.class);
+            } else if (originalSpec instanceof Map ospec) {
+                spec = KamelHelper.JSON_MAPPER.convertValue(ospec, KameletSpec.class);
             } else {
                 spec = new KameletSpec();
             }
@@ -213,12 +211,12 @@ public class KamelPopulator {
         }
         kamelet.getSpec().setTemplate(template);
         processFlow(template, steps, metadata);
+
         if (metadata.containsKey("definition")) {
             if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
             } else if (metadata.get("definition") instanceof Map map) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                Definition def = objectMapper.convertValue(map, Definition.class);
+                Definition def = KamelHelper.JSON_MAPPER.convertValue(map, Definition.class);
                 kamelet.getSpec().setDefinition(def);
             }
         }

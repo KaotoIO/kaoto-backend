@@ -1,27 +1,25 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
+import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.deployment.Deployment;
-import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,8 +108,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-                return yamlMapper.readValue(input, Kamelet.class);
+                return KamelHelper.YAML_MAPPER.readValue(input, Kamelet.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating a kamelet and it didn't work.");
             }
@@ -124,7 +121,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
         List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(Kamelet.class).inNamespace(namespace).list();
-            for (CustomResource customResource : resources.getItems()) {
+            for (CustomResource<?, ?> customResource : resources.getItems()) {
                 res.add(new Deployment(customResource, getStatus(customResource)));
 
                 if (Span.current() != null) {

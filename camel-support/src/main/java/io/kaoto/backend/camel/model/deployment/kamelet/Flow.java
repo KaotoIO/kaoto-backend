@@ -1,11 +1,11 @@
 package io.kaoto.backend.camel.model.deployment.kamelet;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
+import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import org.apache.camel.v1.integrationspec.Flows;
+
+import java.util.List;
 
 
 /**

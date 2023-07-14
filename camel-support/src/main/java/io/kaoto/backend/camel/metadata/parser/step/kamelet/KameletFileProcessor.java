@@ -1,8 +1,6 @@
 package io.kaoto.backend.camel.metadata.parser.step.kamelet;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.camel.model.deployment.kamelet.SimplifiedKamelet;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
@@ -30,9 +28,6 @@ import java.util.regex.Pattern;
 public class KameletFileProcessor extends YamlProcessFile<Step> {
     private static final Logger LOG = Logger.getLogger(KameletFileProcessor.class);
 
-    private static final ObjectMapper MAPPER =  new ObjectMapper(new YAMLFactory())
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
     public KameletFileProcessor() {
         //Nothing needed here
     }
@@ -47,7 +42,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 return List.of();
             }
 
-            SimplifiedKamelet kamelet = MAPPER.readValue(yaml, SimplifiedKamelet.class);
+            SimplifiedKamelet kamelet = KamelHelper.YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
             Step step = new Step();
             step.setKind(kind);
 

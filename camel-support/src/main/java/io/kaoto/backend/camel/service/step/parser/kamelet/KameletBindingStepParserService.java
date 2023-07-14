@@ -1,11 +1,10 @@
 package io.kaoto.backend.camel.service.step.parser.kamelet;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
@@ -56,8 +55,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         List<Step> steps = new ArrayList<>();
         Map<String, Object> md = new LinkedHashMap<>();
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            KameletBinding binding = yamlMapper.readValue(input, KameletBinding.class);
+            KameletBinding binding = KamelHelper.YAML_MAPPER.readValue(input, KameletBinding.class);
             processMetadata(md, binding.getMetadata());
             processSpec(steps, binding.getSpec());
 
@@ -93,7 +91,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
         var res = new ArrayList<ParseResult<Step>>();
-        ParseResult<Step> parsedMeta = new ParseResult();
+        ParseResult<Step> parsedMeta = new ParseResult<>();
         parsedMeta.setParameters(new ArrayList<>());
         parsedMeta.setMetadata(new LinkedHashMap<>());
         res.add(parsedMeta);
@@ -205,7 +203,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
         for (Map.Entry<String, Object> c : properties.entrySet()) {
             var valid = false;
-            for (Parameter p : step.getParameters()) {
+            for (Parameter<?> p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(c.getKey())) {
                     final var value = p.convertToType(c.getValue());
                     if (!value.equals(p.getDefaultValue())) {

@@ -1,15 +1,13 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.CustomResource;
-import io.kaoto.backend.camel.service.deployment.generator.Representer;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
-import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletTemplate;
+import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.AggregateFlowStep;
@@ -67,6 +65,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.SuperChoice;
+import io.kaoto.backend.camel.service.deployment.generator.Representer;
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.apache.camel.v1alpha1.KameletSpec;
 import org.yaml.snakeyaml.DumperOptions;
@@ -114,20 +113,22 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                        Map<String, Object> properties = objectMapper.convertValue(data,
+
+                        Map<String, Object> properties = KamelHelper.JSON_MAPPER_LAZY.convertValue(data,
                                 new TypeReference<Map<String, Object>>() {});
-                        CustomResource cr = (CustomResource) data;
+
+                        CustomResource<?, ?> cr = (CustomResource<?, ?>) data;
 
                         final var objectMeta = cr.getMetadata();
                         final var metadata = (Map<String, Object>) properties.get("metadata");
 
                         if (objectMeta.getAdditionalProperties() != null
                                 && !objectMeta.getAdditionalProperties().isEmpty()) {
-                            metadata.put("additionalProperties", new LinkedHashMap<String, Object>());
-                            ((Map<String, Object>) metadata.get("additionalProperties"))
-                                    .putAll(objectMeta.getAdditionalProperties());
+
+                            metadata.put(
+                                    "additionalProperties",
+                                    new LinkedHashMap<>(objectMeta.getAdditionalProperties()));
+
                             for (var key : objectMeta.getAdditionalProperties().keySet()) {
                                 metadata.remove(key);
                             }
@@ -136,8 +137,10 @@ public class KameletRepresenter extends Representer {
                         }
 
                         if (objectMeta.getAnnotations() != null && !objectMeta.getAnnotations().isEmpty()) {
-                            metadata.put("annotations", new LinkedHashMap<String, Object>());
-                            ((Map<String, Object>) metadata.get("annotations")).putAll(objectMeta.getAnnotations());
+                            metadata.put(
+                                    "annotations",
+                                    new LinkedHashMap<>(objectMeta.getAnnotations()));
+
                             for (var key : objectMeta.getAnnotations().keySet()) {
                                 metadata.remove(key);
                             }
@@ -146,8 +149,10 @@ public class KameletRepresenter extends Representer {
                         }
 
                         if (objectMeta.getLabels() != null && !objectMeta.getLabels().isEmpty()) {
-                            metadata.put("labels", new LinkedHashMap<String, String>());
-                            ((Map<String, String>) metadata.get("labels")).putAll(objectMeta.getLabels());
+                            metadata.put(
+                                    "labels",
+                                    new LinkedHashMap<>(objectMeta.getLabels()));
+
                             for (var key : objectMeta.getLabels().keySet()) {
                                 metadata.remove(key);
                             }
@@ -165,8 +170,7 @@ public class KameletRepresenter extends Representer {
 
     private void spec() {
         //spec does not have the right order
-        final var objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
         this.multiRepresenters.put(KameletBindingSpec.class,
             new RepresentMap() {
                 @Override
@@ -179,8 +183,8 @@ public class KameletRepresenter extends Representer {
                         properties.put(STEPS, null);
                     }
                     properties.put("sink", null);
-                    properties.putAll(
-                            objectMapper.convertValue(data, new TypeReference<Map<String, Object>>() {}));
+                    properties.putAll(KamelHelper.asMap(data));
+
                     return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
@@ -189,10 +193,11 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        Map<String, Object> properties = new LinkedHashMap<>();
+                        Map<String, Object> properties = new LinkedHashMap<>(
+                                KamelHelper.asMap(data)
+                        );
+
                         KameletSpec spec = (KameletSpec) data;
-                        properties.putAll(
-                                new ObjectMapper().convertValue(data, new TypeReference<Map<String, Object>>() {}));
                         properties.put("template", spec.getTemplate());
                         return representMapping(
                                 getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
