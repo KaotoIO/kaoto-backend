@@ -38,17 +38,13 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
-    private Logger log = Logger.getLogger(IntegrationDeploymentGeneratorService.class);
+    private static final Logger LOG = Logger.getLogger(IntegrationDeploymentGeneratorService.class);
 
     private IntegrationStepParserService stepParserService;
 
     private KameletDeploymentGeneratorService kdgs;
 
     private StepCatalog catalog;
-
-    public IntegrationDeploymentGeneratorService() {
-    }
-
 
     @Override
     public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
@@ -94,7 +90,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Integration.class);
             } catch (Exception e) {
-                log.trace("Tried creating an integration and it didn't work.");
+                LOG.trace("Tried creating an integration and it didn't work.");
             }
         }
 
@@ -114,7 +110,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
                     s = DeploymentGeneratorService.Status.Building;
                     break;
                 default:
-                    log.warn("Unrecognized status: " + integration.getStatus().getPhase());
+                    LOG.warn("Unrecognized status: " + integration.getStatus().getPhase());
                     s = DeploymentGeneratorService.Status.Stopped;
             }
         }
@@ -145,7 +141,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
                 }
             }
         } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
+            LOG.warn("Error extracting the list of integrations.", e);
         }
 
         return res;

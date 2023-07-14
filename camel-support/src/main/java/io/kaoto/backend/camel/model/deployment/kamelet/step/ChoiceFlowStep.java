@@ -104,7 +104,7 @@ public class ChoiceFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         return this.getChoice().getStep(catalog, CHOICE_LABEL, kameletStepParserService);
     }
 

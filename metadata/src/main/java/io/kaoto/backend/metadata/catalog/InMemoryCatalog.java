@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  */
 public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
-    private Map<String, T> metadataCatalog = new HashMap<>();
-    private Logger log = Logger.getLogger(InMemoryCatalog.class);
+    private static final Logger LOG = Logger.getLogger(InMemoryCatalog.class);
+    private final Map<String, T> metadataCatalog = new HashMap<>();
 
     @Override
     public boolean store(final List<T> steps) {
@@ -36,7 +36,7 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
                         .parallel()
                         .filter(Objects::nonNull)
                         .collect(stepMapCollector)));
-        log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
+        LOG.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
         return true;
     }

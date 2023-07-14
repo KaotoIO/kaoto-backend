@@ -12,10 +12,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class LoadBalanceDeserializer extends JsonDeserializer {
-    private final Logger log = Logger.getLogger(LoadBalanceDeserializer.class);
+public class LoadBalanceDeserializer extends JsonDeserializer<LoadBalanceFlowStep> {
+    private static final Logger LOG = Logger.getLogger(LoadBalanceDeserializer.class);
+
     @Override
-    public Object deserialize(final JsonParser jsonParser,
+    public LoadBalanceFlowStep deserialize(final JsonParser jsonParser,
                               final DeserializationContext ctxt) {
         var step = new LoadBalanceFlowStep();
         step.setProperties(new HashMap<>());
@@ -35,7 +36,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
                                 try {
                                     step.getSteps().add(flowStepDeserializer.deserializeFlowStep(s));
                                 } catch (JsonProcessingException e) {
-                                    log.error("Couldn't deserialize step", e);
+                                    LOG.error("Couldn't deserialize step", e);
                                 }
                             });
                 }
@@ -45,7 +46,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
                 }
             }
         } catch (Exception e) {
-            log.error("Error trying to deserialize step: " + e.getMessage());
+            LOG.error("Error trying to deserialize step: " + e.getMessage());
         }
 
         return step;

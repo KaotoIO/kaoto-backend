@@ -95,11 +95,13 @@ public class KamelPopulator {
     public static final String EXPRESSION = "expression";
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
-    public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
-    protected static final Logger log = Logger.getLogger(KamelPopulator.class);
-    private final String group = "camel.apache.org";
+    public static final String CAMEL_GROUP = "camel.apache.org";
+    public static final String CAMEL_APACHE_ORG_KAMELET_ICON = CAMEL_GROUP + "/kamelet.icon";
+    public static final String CAMEL_APACHE_ORG_KAMELET_TYPE = CAMEL_GROUP + "/kamelet.type";
 
-    private StepCatalog catalog;
+    private static final Logger LOG = Logger.getLogger(KamelPopulator.class);
+
+    private final StepCatalog catalog;
 
     public KamelPopulator(final StepCatalog catalog) {
         this.catalog = catalog;
@@ -130,7 +132,7 @@ public class KamelPopulator {
 
     public static Script getScript(final Step step) {
         Script script = new Script();
-        for (Parameter p : step.getParameters()) {
+        for (Parameter<?> p : step.getParameters()) {
             if (p.getValue() == null) {
                 continue;
             }
@@ -180,17 +182,19 @@ public class KamelPopulator {
 
         KameletSpec spec;
         var metaObject = new ObjectMeta();
-        if (metadata != null && !metadata.isEmpty()) {
+        if (!metadata.isEmpty()) {
             metaObject.setAnnotations(
                     (Map<String, String>) metadata.getOrDefault("annotations", Collections.emptyMap()));
             metaObject.setAdditionalProperties(
                     (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
-            var original_spec = metadata.remove("spec");
+
+            var originalSpec = metadata.remove("spec");
             metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
             metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
-            if (original_spec != null && original_spec instanceof KameletSpec ospec) {
+
+            if (originalSpec != null && originalSpec instanceof KameletSpec ospec) {
                 spec = ospec;
-            } else if (original_spec != null && original_spec instanceof Map ospec) {
+            } else if (originalSpec != null && originalSpec instanceof Map ospec) {
                 ObjectMapper mapper = new ObjectMapper();
                 spec = mapper.convertValue(ospec, KameletSpec.class);
             } else {
@@ -230,7 +234,7 @@ public class KamelPopulator {
 
         //override in case this is outdated from the graphic side
         Type type = defineType(steps);
-        kamelet.getMetadata().getLabels().put(group + "/kamelet.type", type.name());
+        kamelet.getMetadata().getLabels().put(CAMEL_APACHE_ORG_KAMELET_TYPE, type.name());
 
         String name = metadata.getOrDefault(NAME, "example-" + type.name()).toString();
         kamelet.getMetadata().setName(name);
@@ -406,8 +410,8 @@ public class KamelPopulator {
     }
 
     private Type defineType(final List<Step> steps) {
-        //    source ends with a to that is a kamelet:sink or starts with an uri in the from
-        //    sink ends with a to that is NOT a kamelet:sink (a camel connector)
+        //    source ends with a "to" that is a kamelet:sink or starts with an uri in the from
+        //    sink ends with a "to" that is NOT a kamelet:sink (a camel connector)
         //    action anything else
         Type type = Type.action;
         if (steps.size() > 1) {
@@ -456,13 +460,13 @@ public class KamelPopulator {
             //We need to make sure parameters attributes coming from the frontend are complete and right
             //The only important thing we need to take from them is the value, the rest should be as default
             HashMap<String, Object> values = new HashMap<>();
-            s.getParameters().stream().forEach(parameter -> values.put(parameter.getId(), parameter.getValue()));
+            s.getParameters().forEach(parameter -> values.put(parameter.getId(), parameter.getValue()));
 
             //these connectors ignore the camel component name when building the uri
             //or duplicate it, depending on where you are looking from
             var exceptions = Arrays.asList("http", "https");
             if (exceptions.contains(s.getName())) {
-                s.getParameters().stream().forEach(parameter -> {
+                s.getParameters().forEach(parameter -> {
                     if (parameter.isPath()
                             && parameter.getPathOrder() == 0
                             && String.valueOf(parameter.getValue()).startsWith(s.getName())) {
@@ -668,7 +672,7 @@ public class KamelPopulator {
                     break;
             }
         } else {
-            log.error("We don't recognize this kind of step: " + step.getKind());
+            LOG.error("We don't recognize this kind of step: " + step.getKind());
         }
 
         return flowStep;

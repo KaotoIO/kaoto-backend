@@ -1,10 +1,10 @@
 package io.kaoto.backend.camel.model.deployment.camelroute;
 
-import java.util.List;
-import java.util.Map;
-
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+
+import java.util.List;
+import java.util.Map;
 
 public class IntegrationFlow {
     private List<Step> steps;

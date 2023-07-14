@@ -29,14 +29,14 @@ import java.util.Map;
 @RegisterForReflection
 public class CamelRoute {
 
-    protected static final Logger log = Logger.getLogger(CamelRoute.class);
+    protected static final Logger LOG = Logger.getLogger(CamelRoute.class);
     private List<Flow> flows;
 
     @JsonProperty("beans")
     private List<Bean> beans;
 
     public CamelRoute() {
-        super();
+        // required for serialization
     }
 
     public CamelRoute(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
@@ -93,7 +93,7 @@ public class CamelRoute {
                     ((Rest) f.getFrom()).setToHttpVerb(step, httpVerb);
                 } else {
                     //uh-uh, this is bad
-                    log.error("Malformed REST, don't know what to do.");
+                    LOG.error("Malformed REST, don't know what to do.");
                 }
             }
         } else {

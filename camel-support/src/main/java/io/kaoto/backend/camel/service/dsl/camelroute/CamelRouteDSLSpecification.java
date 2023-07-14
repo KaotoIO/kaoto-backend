@@ -1,16 +1,15 @@
 package io.kaoto.backend.camel.service.dsl.camelroute;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.camel.service.step.parser.camelroute.CamelRouteStepParserService;
 import io.kaoto.backend.camel.metadata.parser.step.camelroute.CamelRestDSLParseCatalog;
+import io.kaoto.backend.camel.service.deployment.generator.GeneratorHelper;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.camelroute.CamelRouteStepParserService;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.jboss.logging.Logger;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +27,11 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES, CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT);
 
-    private Logger log = Logger.getLogger(CamelRouteDSLSpecification.class);
+    private static final String VALIDATION_SCHEME = GeneratorHelper.loadResourceAsString(
+            CamelRouteDeploymentGeneratorService.class,
+            "camel-yaml-dsl.json").orElse("");
 
     private DeploymentGeneratorService deploymentGeneratorService;
-
     private CamelRouteStepParserService stepParserService;
 
     public String identifier() {
@@ -49,14 +49,7 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
 
     @Override
     public String validationSchema() {
-        try {
-            String schema = new String(CamelRouteDeploymentGeneratorService.class
-                    .getResourceAsStream("camel-yaml-dsl.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            log.error("Can't load Camel YAML DSL schema", e);
-        }
-        return "";
+        return VALIDATION_SCHEME;
     }
 
     @Override

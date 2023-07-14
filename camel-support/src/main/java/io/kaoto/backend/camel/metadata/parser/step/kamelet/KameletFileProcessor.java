@@ -28,7 +28,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
-    private final Logger log = Logger.getLogger(KameletFileProcessor.class);
+    private static final Logger LOG = Logger.getLogger(KameletFileProcessor.class);
+
+    private static final ObjectMapper MAPPER =  new ObjectMapper(new YAMLFactory())
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public KameletFileProcessor() {
         //Nothing needed here
@@ -44,9 +47,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 return List.of();
             }
 
-            var YAML_MAPPER = new ObjectMapper(new YAMLFactory())
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            SimplifiedKamelet kamelet = YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
+            SimplifiedKamelet kamelet = MAPPER.readValue(yaml, SimplifiedKamelet.class);
             Step step = new Step();
             step.setKind(kind);
 
@@ -97,7 +98,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             }
             return List.of(step);
         } catch (IOException | YAMLException e) {
-            log.trace("Error parsing Kamelet.", e);
+            LOG.trace("Error parsing Kamelet.", e);
         }
 
         return List.of();

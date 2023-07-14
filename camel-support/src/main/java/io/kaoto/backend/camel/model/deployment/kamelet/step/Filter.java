@@ -104,6 +104,7 @@ public class Filter extends EIPStep implements ConditionBlock {
                 break;
             case EXPRESSION_LABEL:
                 parameter.setValue(this.getExpression());
+                break;
             default:
                 break;
         }
@@ -124,6 +125,7 @@ public class Filter extends EIPStep implements ConditionBlock {
             case EXPRESSION_LABEL:
                 Expression nested = new Expression(parameter.getValue());
                 this.setExpression(nested);
+                break;
             default:
                 break;
         }

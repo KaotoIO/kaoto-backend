@@ -42,7 +42,7 @@ public class DynamicRouterFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         return getDynamicRouter().getStep(catalog, LABEL, kameletStepParserService);
     }
 

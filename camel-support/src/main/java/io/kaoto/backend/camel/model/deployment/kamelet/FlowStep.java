@@ -17,5 +17,5 @@ public interface FlowStep extends Serializable {
     Map<String, Object> getRepresenterProperties();
 
     Step getStep(StepCatalog catalog, KameletStepParserService kameletStepParserService,
-                 Boolean start, Boolean end);
+                 boolean start, boolean end);
 }

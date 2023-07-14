@@ -44,7 +44,7 @@ public class RollbackFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         return getRollback().getStep(catalog, LABEL, kameletStepParserService);
     }
 

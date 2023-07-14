@@ -46,7 +46,7 @@ public abstract class EIPStep implements Serializable {
         setId(step.getStepId());
     }
 
-    public EIPStep(Map<String, Object> map) {
+    protected EIPStep(Map<String, Object> map) {
         if(map.containsKey("id")) {
             this.setId(String.valueOf(map.get("id")));
         }

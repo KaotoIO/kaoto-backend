@@ -46,7 +46,7 @@ public class ValidateFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         return getValidate().getStep(catalog, LABEL, kameletStepParserService);
     }
 

@@ -44,7 +44,7 @@ public class LoopFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         return this.getLoop().getStep(catalog, LOOP_LABEL, kameletStepParserService);
     }
 

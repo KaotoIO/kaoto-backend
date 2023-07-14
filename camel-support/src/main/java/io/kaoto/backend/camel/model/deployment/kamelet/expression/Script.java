@@ -59,6 +59,7 @@ public class Script extends EIPStep {
             case EXPRESSION_LABEL:
                 ScriptExpression nested = new ScriptExpression(parameter.getValue());
                 this.setExpression(nested);
+                break;
             default:
                 break;
         }
@@ -78,6 +79,7 @@ public class Script extends EIPStep {
                 break;
             case EXPRESSION_LABEL:
                 parameter.setValue(this.expression);
+                break;
             default:
                 break;
         }

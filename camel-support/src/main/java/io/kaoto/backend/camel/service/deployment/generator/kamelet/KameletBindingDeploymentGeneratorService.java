@@ -45,11 +45,11 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     private static final String KNATIVE = "KNATIVE";
     private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
     private static final boolean IGNORE_CAMEL_COMPONENTS = true;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final Logger LOG = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Inject
     private KameletBindingStepParserService stepParserService;
-
-    private Logger log = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Override
     public String parse(final List<Step> stepList,
@@ -71,12 +71,11 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
             if (metadata.containsKey("description")) {
                 metaObject.getAnnotations().put(DESCRIPTION_ANNO, String.valueOf(metadata.remove("description")));
             }
-            var original_spec = metadata.remove("spec");
-            if (original_spec != null && original_spec instanceof KameletBindingSpec ospec) {
+            var originalSpec = metadata.remove("spec");
+            if (originalSpec instanceof KameletBindingSpec ospec) {
                 spec = ospec;
-            } else if (original_spec != null && original_spec instanceof Map ospec) {
-                ObjectMapper mapper = new ObjectMapper();
-                spec = mapper.convertValue(ospec, KameletBindingSpec.class);
+            } else if (originalSpec instanceof Map ospec) {
+                spec = MAPPER.convertValue(ospec, KameletBindingSpec.class);
             } else {
                 spec = new KameletBindingSpec();
             }
@@ -190,7 +189,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                     s = DeploymentGeneratorService.Status.Building;
                     break;
                 default:
-                    log.warn("Detected unrecognized status " + binding.getStatus().getPhase());
+                    LOG.warn("Detected unrecognized status " + binding.getStatus().getPhase());
                     s = DeploymentGeneratorService.Status.Stopped;
             }
         }
@@ -230,7 +229,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, KameletBinding.class);
             } catch (Exception e) {
-                log.trace("Tried creating a kamelet binding and it didn't work.");
+                LOG.trace("Tried creating a kamelet binding and it didn't work.");
             }
         }
 
@@ -251,7 +250,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                 }
             }
         } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
+            LOG.warn("Error extracting the list of integrations.", e);
         }
 
         return res;

@@ -1,9 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.camelroute;
 
-import static io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -11,8 +8,8 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Plural;
 import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
-import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -25,6 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
 
 
 /**
@@ -44,12 +43,13 @@ import java.util.Map;
 @Plural("integrations")
 @RegisterForReflection
 public final class Integration extends CustomResource<IntegrationSpec, IntegrationStatus> implements Namespaced {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Serial
     private static final long serialVersionUID = -6210923845780906L;
 
     public Integration() {
-
+        // required for serialization
     }
 
     public Integration(
@@ -64,12 +64,11 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         if (metadata.containsKey("description")) {
             this.getMetadata().getAnnotations().put(DESCRIPTION_ANNO, String.valueOf(metadata.get("description")));
         }
-        var original_spec = getMetadata().getAdditionalProperties().remove("spec");
-        if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {
+        var originalSpec = getMetadata().getAdditionalProperties().remove("spec");
+        if (originalSpec instanceof IntegrationSpec ospec) {
             this.setSpec(ospec);
-        } else if (original_spec != null && original_spec instanceof Map ospec) {
-            ObjectMapper mapper = new ObjectMapper();
-            this.setSpec(mapper.convertValue(original_spec, IntegrationSpec.class));
+        } else if (originalSpec instanceof Map) {
+            this.setSpec(MAPPER.convertValue(originalSpec, IntegrationSpec.class));
         } else {
             this.setSpec(new IntegrationSpec());
         }

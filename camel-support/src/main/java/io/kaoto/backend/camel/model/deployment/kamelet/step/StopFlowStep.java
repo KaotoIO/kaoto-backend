@@ -32,7 +32,7 @@ public class StopFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         var stopEip= catalog.getReadOnlyCatalog()
                 .searchByName("stop").stream()
                 .filter(step -> step.getKind().equalsIgnoreCase("EIP"))

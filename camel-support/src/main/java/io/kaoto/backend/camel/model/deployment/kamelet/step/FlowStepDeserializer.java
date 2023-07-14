@@ -12,11 +12,11 @@ import org.jboss.logging.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlowStepDeserializer extends JsonDeserializer {
+public class FlowStepDeserializer extends JsonDeserializer<FlowStep> {
     private final Logger log = Logger.getLogger(FlowStepDeserializer.class);
 
     @Override
-    public Object deserialize(
+    public FlowStep deserialize(
             final JsonParser jsonParser,
             final DeserializationContext deserializationContext) {
         try {

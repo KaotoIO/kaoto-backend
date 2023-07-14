@@ -9,6 +9,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1alpha1.kameletspec.Template;
 
+import java.io.Serial;
 import java.util.List;
 
 
@@ -32,6 +33,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @RegisterForReflection
 public class KameletTemplate extends Template {
+    @Serial
     private static final long serialVersionUID = -4601560033032557024L;
 
     @JsonProperty("beans")
@@ -47,7 +49,7 @@ public class KameletTemplate extends Template {
     private String description;
 
     public KameletTemplate() {
-
+        //Needed for serialization
     }
 
     public From getFrom() {

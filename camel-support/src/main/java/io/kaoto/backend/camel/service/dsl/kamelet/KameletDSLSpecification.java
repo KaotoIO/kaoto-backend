@@ -1,16 +1,15 @@
 package io.kaoto.backend.camel.service.dsl.kamelet;
 
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.service.deployment.generator.GeneratorHelper;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.jboss.logging.Logger;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +22,16 @@ public class KameletDSLSpecification extends DSLSpecification {
     private static final String EIP = "EIP";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
-    private Logger log = Logger.getLogger(KameletDSLSpecification.class);
+
+    private static final String VALIDATION_SCHEME = GeneratorHelper.loadResourceAsString(
+            KameletDSLSpecification.class,
+            "kamelet.json").orElse("");
 
     private DeploymentGeneratorService deploymentGeneratorService;
 
     private StepParserService stepParserService;
+
+
 
     public String identifier() {
         return "Kamelet";
@@ -46,14 +50,7 @@ public class KameletDSLSpecification extends DSLSpecification {
 
     @Override
     public String validationSchema() {
-        try {
-            String schema = new String(KameletDSLSpecification.class
-                    .getResourceAsStream("kamelet.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            log.error("Can't load Kamelet DSL schema", e);
-        }
-        return "";
+        return VALIDATION_SCHEME;
     }
 
     @Override

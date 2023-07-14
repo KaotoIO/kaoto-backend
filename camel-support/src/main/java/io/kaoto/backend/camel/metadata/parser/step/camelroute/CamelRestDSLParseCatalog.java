@@ -14,6 +14,8 @@ import org.jboss.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,8 +39,26 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     public static final String CAMEL_REST_ENDPOINT = "CAMEL-REST-ENDPOINT";
     public static final String REST_DSL = "REST DSL";
     protected static final String[] KINDS = {CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT};
-    private static String ICON = null;
-    private Logger log = Logger.getLogger(CamelRestDSLParseCatalog.class);
+
+    private static final Logger LOG = Logger.getLogger(CamelRestDSLParseCatalog.class);
+
+    private static final String ICON;
+
+    static {
+        String icon = null;
+
+        try (InputStream is = CamelRestDSLParseCatalog.class.getResourceAsStream("base64icon.txt")) {
+            if (is == null) {
+                LOG.error("Couldn't load the icon file for REST DSL steps.");
+            } else {
+                icon = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        } catch (IOException e) {
+            LOG.error("Couldn't load the icon file for REST DSL steps.");
+        }
+
+        ICON = icon;
+    }
 
     @NotNull
     private static Step getRestParentStep() {
@@ -151,17 +171,9 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         return kind.isBlank() || Arrays.stream(KINDS).anyMatch(k -> k.equalsIgnoreCase(kind));
     }
 
-    class CamelRestDSLParser implements ParseCatalog<Step> {
+    static class CamelRestDSLParser implements ParseCatalog<Step> {
         @Override
         public CompletableFuture<List<Step>> parse() {
-            if (ICON == null) {
-                try {
-                    ICON = new String(this.getClass().getResourceAsStream("base64icon.txt").readAllBytes());
-                } catch (IOException e) {
-                    log.error("Couldn't load the icon file for REST DSL steps.");
-                }
-            }
-
             List<Step> steps = new ArrayList<>();
             steps.add(getRestParentStep());
 

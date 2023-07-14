@@ -38,7 +38,7 @@ public class MarshalFlowStep implements FlowStep {
 
     @Override
     public Step getStep(final StepCatalog catalog, final KameletStepParserService kameletStepParserService,
-                        final Boolean start, final Boolean end) {
+                        final boolean start, final boolean end) {
         Step res = catalog.getReadOnlyCatalog().searchByName("marshal")
                 .stream().filter(s -> s.getKind().equalsIgnoreCase("EIP")).findAny().orElse(null);
         if (res != null) {
