@@ -19,10 +19,11 @@ import org.yaml.snakeyaml.nodes.Tag;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -42,7 +43,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
                         final List<Parameter> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
         return yaml.dumpAs(new CamelRoute(
-                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        steps != null ? new ArrayList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
                         catalog),
                 Tag.SEQ,

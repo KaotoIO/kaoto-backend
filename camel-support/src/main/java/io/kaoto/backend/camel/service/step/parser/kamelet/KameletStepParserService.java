@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -113,7 +112,7 @@ public class KameletStepParserService implements StepParserService<Step> {
 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
-        var res = new LinkedList<ParseResult<Step>>();
+        var res = new ArrayList<ParseResult<Step>>();
         ParseResult<Step> parsedMeta = new ParseResult<>();
         parsedMeta.setParameters(new ArrayList<>());
         parsedMeta.setMetadata(new LinkedHashMap<>());
@@ -306,9 +305,9 @@ public class KameletStepParserService implements StepParserService<Step> {
         } else if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }
-        var pathParameters = new LinkedList<Parameter>();
+        var pathParameters = new ArrayList<Parameter>();
         pathParameters.addAll(step.getParameters().stream().parallel()
-                .filter(Objects::nonNull).filter(s -> s.isPath()).toList());
+                .filter(Objects::nonNull).filter(Parameter::isPath).toList());
 
         //Let's iterate over the path string to extract the parameters
         if (!pathParameters.isEmpty()) {
@@ -316,7 +315,7 @@ public class KameletStepParserService implements StepParserService<Step> {
             Collections.sort(pathParameters);
 
             Parameter previous = null;
-            List<String> pathParts = new LinkedList<>();
+            List<String> pathParts = new ArrayList<>();
             for (Parameter p : pathParameters) {
                 //To split, we will have to consider the path separator of the next path param,
                 // not of the current one

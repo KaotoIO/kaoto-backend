@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -63,13 +62,13 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     @NotNull
     private static Step getRestParentStep() {
         var step = new Step(Rest.CAMEL_REST_DSL, "rest",
-                ICON, new LinkedList<>(), CAMEL_REST_DSL, Step.Type.START);
+                ICON, new ArrayList<>(), CAMEL_REST_DSL, Step.Type.START);
         step.setMinBranches(1);
         step.setMaxBranches(9);
         step.setDescription("This step represents a REST API.");
         step.setTitle(REST_DSL);
         step.setGroup(REST_DSL);
-        var parameters = new LinkedList<Parameter>();
+        var parameters = new ArrayList<Parameter>();
         final var path =
                 new StringParameter(Rest.PATH_LABEL, "Path of the endpoint",
                         "Path where this endpoint is listening.", null, null, null,null, null);
@@ -85,7 +84,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     @NotNull
     private static Step getVerbStep(String verb) {
         var step = new Step("camel-rest-verb-" + verb, verb,
-                ICON, new LinkedList<>(), CAMEL_REST_VERB, Step.Type.MIDDLE);
+                ICON, new ArrayList<>(), CAMEL_REST_VERB, Step.Type.MIDDLE);
         step.setMinBranches(1);
         step.setMaxBranches(-1);
         step.setDescription("This step represents a " + verb.toUpperCase() + " HTTP endpoint in the REST API.");
@@ -97,9 +96,9 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     @NotNull
     private static Step getConsumesStep() {
         var step = new Step(Rest.CAMEL_REST_CONSUMES, Rest.CONSUMES_LABEL,
-                ICON, new LinkedList<>(), CAMEL_REST_ENDPOINT, Step.Type.MIDDLE);
+                ICON, new ArrayList<>(), CAMEL_REST_ENDPOINT, Step.Type.MIDDLE);
 
-        var parameters = new LinkedList<Parameter>();
+        var parameters = new ArrayList<Parameter>();
 
         var parameter = new StringParameter();
         parameter.setId(Rest.CONSUMES_LABEL);

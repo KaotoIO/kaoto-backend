@@ -15,8 +15,8 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,9 +112,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String description = component.getString(DESCRIPTION);
         String type = getStepType(component);
 
-        LinkedList<Parameter> parameters = new LinkedList<>();
+        List<Parameter> parameters = new ArrayList<>();
         final AtomicInteger i = new AtomicInteger(0);
-        final var requiredProperties = new LinkedList<String>();
+        final var requiredProperties = new ArrayList<String>();
         properties.entrySet().stream()
                 .forEachOrdered(entrySet -> {
                             final Map<String, String> parameterData = new LinkedHashMap<>();
@@ -176,7 +176,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private static void handleWeirdCases(String id, LinkedList<Parameter> parameters) {
+    private static void handleWeirdCases(String id, List<Parameter> parameters) {
         //Here are the weird cases
         if ("avro".equalsIgnoreCase(id)) {
             for (Parameter p : parameters) {
@@ -364,7 +364,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             String description,
             String group,
             String type,
-            LinkedList<Parameter> parameters,
+            List<Parameter> parameters,
             List<String> required
     ) {
     }

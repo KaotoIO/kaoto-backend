@@ -1,10 +1,5 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -12,10 +7,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
-
 import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
 
@@ -45,14 +44,14 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
             if (field.has("from") || field.has("rest")) {
                 Flow flow = ctxt.readTreeAsValue(field, Flow.class);
                 if (answer.getFlows() == null) {
-                    answer.setFlows(new LinkedList<>());
+                    answer.setFlows(new ArrayList<>());
                 }
                 answer.getFlows().add(flow);
             } else if (field.has("beans")) {
                 CollectionType beansType = ctxt.getTypeFactory().constructCollectionType(List.class, Bean.class);
                 List<Bean> beans = ctxt.readTreeAsValue(field.get("beans"), beansType);
                 if (answer.getBeans() == null) {
-                    answer.setBeans(new LinkedList<>());
+                    answer.setBeans(new ArrayList<>());
                 }
                 answer.getBeans().addAll(beans);
             } else {

@@ -25,7 +25,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -41,8 +40,8 @@ import java.util.Random;
 @Path("/v2/integrations")
 @ApplicationScoped
 public class IntegrationsResource {
+    private static final Logger LOG = Logger.getLogger(IntegrationsResource.class);
 
-    private final Logger LOG = Logger.getLogger(IntegrationsResource.class);
     private DeploymentService deploymentService;
     private Instance<DSLSpecification> dslSpecifications;
 
@@ -138,7 +137,7 @@ public class IntegrationsResource {
     }
 
     private static void ensureUniqueNames(FlowsWrapper answer) {
-        List<String> usedIds = new LinkedList<>();
+        List<String> usedIds = new ArrayList<>();
         var name = "name";
         for (var flow : answer.flows()) {
             //Make sure we have a metadata set

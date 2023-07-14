@@ -9,8 +9,8 @@ import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserServi
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +109,7 @@ public class CircuitBreaker extends EIPStep {
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
+        step.setBranches(new ArrayList<>());
         var identifier = STEPS_LABEL;
         if (this.getDescription() != null) {
             identifier = this.getDescription().toString();

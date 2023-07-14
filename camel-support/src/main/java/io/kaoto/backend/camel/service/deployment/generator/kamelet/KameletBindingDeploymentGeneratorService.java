@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -57,7 +56,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                         final List<Parameter> parameterList) {
 
         Map<String, Object> metadata = md != null ? new LinkedHashMap<>(md) : Map.of();
-        List<Step> steps = stepList != null ? new LinkedList<>(stepList) : List.of();
+        List<Step> steps = stepList != null ? new ArrayList<>(stepList) : List.of();
 
         KameletBindingSpec spec;
         var metaObject = new ObjectMeta();
@@ -83,7 +82,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
             spec = new KameletBindingSpec();
         }
 
-        spec.setSteps(new LinkedList<>());
+        spec.setSteps(new ArrayList<>());
 
         for (int i = 0; i < steps.size(); i++) {
             var step = steps.get(i);
@@ -238,7 +237,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
 
     @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
-        List<Deployment> res = new LinkedList<>();
+        List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(KameletBinding.class).inNamespace(namespace).list();
             for (CustomResource customResource : resources.getItems()) {

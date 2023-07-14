@@ -13,8 +13,8 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.dataformat.DataFormat;
 import org.jboss.logging.Logger;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class MarshalDeserializer extends JsonDeserializer {
                 if (node instanceof ValueNode v) {
                     extractScalarValue(properties, e.getKey(), v);
                 } else if (node instanceof ArrayNode arrayNode) {
-                    List<Map<String, Object>> list = new LinkedList<>();
+                    List<Map<String, Object>> list = new ArrayList<>();
                     arrayNode.forEach(n -> {
                         Map<String, Object> map = new LinkedHashMap<>();
                         n.fields().forEachRemaining(f -> extractProperties(map, f));

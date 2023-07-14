@@ -22,22 +22,23 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 @ApplicationScoped
 public class KameletDeploymentGeneratorService implements DeploymentGeneratorService {
+    private static final Logger LOG = Logger.getLogger(KameletDeploymentGeneratorService.class);
 
     private KameletStepParserService stepParserService;
 
     private StepCatalog catalog;
 
-    private Logger log = Logger.getLogger(KameletDeploymentGeneratorService.class);
 
     public KameletDeploymentGeneratorService() {
     }
@@ -48,9 +49,9 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
         return getYAML(new Kamelet(
-                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        steps != null ? new ArrayList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        parameters != null ? new LinkedList<>(parameters) : List.of(),
+                        parameters != null ? new ArrayList<>(parameters) : List.of(),
                         catalog),
                 new KameletRepresenter());
     }
@@ -94,7 +95,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                     s = Status.Ready;
                     break;
                 default:
-                    log.warn("Detected unrecognized status " + kamelet.getStatus().getPhase());
+                    LOG.warn("Detected unrecognized status " + kamelet.getStatus().getPhase());
             }
         }
         return s;
@@ -112,7 +113,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Kamelet.class);
             } catch (Exception e) {
-                log.trace("Tried creating a kamelet and it didn't work.");
+                LOG.trace("Tried creating a kamelet and it didn't work.");
             }
         }
         return null;
@@ -120,7 +121,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
-        List<Deployment> res = new LinkedList<>();
+        List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(Kamelet.class).inNamespace(namespace).list();
             for (CustomResource customResource : resources.getItems()) {
@@ -131,7 +132,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 }
             }
         } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
+            LOG.warn("Error extracting the list of integrations.", e);
         }
 
         return res;

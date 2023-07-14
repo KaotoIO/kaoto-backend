@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
@@ -66,12 +65,12 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.ValidateFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.dataformat.DataFormat;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import io.netty.util.internal.StringUtil;
-
 import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
@@ -81,7 +80,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -320,10 +318,10 @@ public class KamelPopulator {
                                      final List<Step> steps,
                                      final Map<String, Object> metadata) {
 
-        spec.setDependencies((List<String>) metadata.getOrDefault("dependencies", new LinkedList<>()));
+        spec.setDependencies((List<String>) metadata.getOrDefault("dependencies", new ArrayList<>()));
 
         if (spec.getDependencies() == null) {
-            spec.setDependencies(new LinkedList<>());
+            spec.setDependencies(new ArrayList<>());
         }
 
         var deps = spec.getDependencies();
@@ -364,7 +362,7 @@ public class KamelPopulator {
             property.setType(p.getType());
             property.setNullable(p.getNullable());
             if (p.getEnum() != null) {
-                var enumerable = new LinkedList<AnyType>();
+                var enumerable = new ArrayList<AnyType>();
                 for (var enumy : p.getEnum()) {
                     var anyType = new AnyType();
                     anyType.setValue(enumy);
@@ -679,15 +677,15 @@ public class KamelPopulator {
     }
 
     public List<FlowStep> processSteps(final Branch b) {
-        final var list = new LinkedList<FlowStep>();
+        final var list = new ArrayList<FlowStep>();
         if (b.getSteps() != null) {
             b.getSteps().stream()
                     //make sure we don't try to process null steps from the branch
-                    .filter(s -> !Objects.isNull(s))
+                    .filter(Objects::nonNull)
                     .map(s -> processStep(s, true))
                     //make sure we don't add null steps, the unrecognized ones
                     .filter(s -> !Objects.isNull(s))
-                    .forEachOrdered(step -> list.add(step));
+                    .forEachOrdered(list::add);
         }
         return list;
     }

@@ -10,17 +10,18 @@ import org.jboss.logging.Logger;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 🐱miniclass DeploymentService (IntegrationsResource)
  * 🐱relationship compositionOf DSLSpecification, 0..N
- * 
+ *
  * 🐱section
  * Service to interact with the cluster. This is the utility class the
  * resource relies on to perform the operations.
@@ -28,7 +29,7 @@ import java.util.Map;
 @ApplicationScoped
 public class DeploymentService {
 
-    private Logger log = Logger.getLogger(DeploymentService.class);
+    private static final Logger LOG = Logger.getLogger(DeploymentService.class);
 
     @Inject
     private Instance<DSLSpecification> parsers;
@@ -45,7 +46,7 @@ public class DeploymentService {
                                          final Step[] stepArray) {
 
         List<Step> steps = Arrays.asList(stepArray);
-        List<Map<String, String>> res = new LinkedList<>();
+        List<Map<String, String>> res = new ArrayList<>();
         Map<String, Object> metadata = new HashMap<>();
         if (name != null && !name.isBlank()) {
             metadata.put("name", name);
@@ -61,7 +62,7 @@ public class DeploymentService {
                     res.add(strings);
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                LOG.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 
@@ -87,7 +88,7 @@ public class DeploymentService {
                             .parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                LOG.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 
@@ -99,7 +100,7 @@ public class DeploymentService {
                             .parse(i.getSteps(), i.getMetadata(), i.getParameters());
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                LOG.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 
@@ -116,7 +117,7 @@ public class DeploymentService {
      */
     @WithSpan
     public String crds(final List<Integration> integrationList, final Map<String, Object> metadata) {
-        List<StepParserService.ParseResult<Step>> integrations = new LinkedList<>();
+        List<StepParserService.ParseResult<Step>> integrations = new ArrayList<>();
         String dsl = null;
 
         for (Integration integration : integrationList) {
@@ -127,7 +128,7 @@ public class DeploymentService {
             integrations.add(parseResult);
             if (integration.getDsl() != null) {
                 if (dsl != null && !integration.getDsl().equalsIgnoreCase(dsl)) {
-                    log.error("We were sent a mix of DSL in the same list of flows!");
+                    LOG.error("We were sent a mix of DSL in the same list of flows!");
                 }
                 dsl = integration.getDsl();
             }
@@ -147,7 +148,7 @@ public class DeploymentService {
                         return parser.getDeploymentGeneratorService().parse(integrations);
                     }
                 } catch (Exception e) {
-                    log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                    LOG.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
                     break;
                 }
             }
@@ -160,7 +161,7 @@ public class DeploymentService {
                     return parser.getDeploymentGeneratorService().parse(integrations);
                 }
             } catch (Exception e) {
-                log.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
+                LOG.warn("Parser " + parser.getClass() + "threw an unexpected error. ", e);
             }
         }
 

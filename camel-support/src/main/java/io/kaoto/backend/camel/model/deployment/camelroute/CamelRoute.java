@@ -16,7 +16,7 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,10 +45,10 @@ public class CamelRoute {
 
         //We have an empty flow, but don't show it empty
         if ((getBeans() == null || getBeans().isEmpty()) && f == null) {
-            setFlows(new LinkedList<>());
+            setFlows(new ArrayList<>());
             f = new Flow();
             f.setFrom(new From());
-            f.getFrom().setSteps(new LinkedList<>());
+            f.getFrom().setSteps(new ArrayList<>());
             getFlows().add(f);
         }
 
@@ -68,7 +68,7 @@ public class CamelRoute {
             return null;
         }
         final var flow = new KamelPopulator(catalog).getFlow(steps);
-        setFlows(new LinkedList<>());
+        setFlows(new ArrayList<>());
         Flow f = null;
         if (flow instanceof Rest) {
             //These are contextual variables in case the user is not using branches

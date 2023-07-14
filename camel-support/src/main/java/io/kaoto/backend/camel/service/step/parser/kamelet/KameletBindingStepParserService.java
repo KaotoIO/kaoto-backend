@@ -5,23 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
+import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
 import org.jboss.logging.Logger;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -93,7 +92,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
-        var res = new LinkedList<ParseResult<Step>>();
+        var res = new ArrayList<ParseResult<Step>>();
         ParseResult<Step> parsedMeta = new ParseResult();
         parsedMeta.setParameters(new ArrayList<>());
         parsedMeta.setMetadata(new LinkedHashMap<>());

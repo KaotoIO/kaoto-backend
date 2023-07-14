@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -59,7 +59,7 @@ class ViewDefinitionResourceTest {
 
     @Test
     void testViews() throws JsonProcessingException {
-        List<Step> steps = new LinkedList<Step>();
+        List<Step> steps = new ArrayList<>();
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("kamelet:source-START"));
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("log-producer"));
 

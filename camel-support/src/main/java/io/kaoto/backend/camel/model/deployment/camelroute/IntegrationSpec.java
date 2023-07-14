@@ -9,12 +9,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1.integrationspec.Flows;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
@@ -29,7 +28,7 @@ public class IntegrationSpec extends org.apache.camel.v1.IntegrationSpec {
     @JsonProperty("flows")
     @JsonPropertyDescription("a source in YAML DSL language which contain the routes, rest and beans")
     @JsonSetter(nulls = Nulls.SKIP)
-    private List<Flow> flows = new LinkedList<>();
+    private List<Flow> flows = new ArrayList<>();
 
     public List<Flow> get_flows() {
         return flows;

@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class LoadBalanceDeserializer extends JsonDeserializer<LoadBalanceFlowStep> {
@@ -20,7 +20,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer<LoadBalanceFlowSte
                               final DeserializationContext ctxt) {
         var step = new LoadBalanceFlowStep();
         step.setProperties(new HashMap<>());
-        step.setSteps(new LinkedList<>());
+        step.setSteps(new ArrayList<>());
 
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);

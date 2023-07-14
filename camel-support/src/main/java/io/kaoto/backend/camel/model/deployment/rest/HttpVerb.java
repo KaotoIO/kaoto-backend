@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +134,7 @@ public class HttpVerb implements Serializable {
             props.put("description", this.getDescription());
         }
         if (getParameterList() != null && !getParameterList().isEmpty()) {
-            var parameters = new LinkedList<Map<String, Object>>();
+            var parameters = new ArrayList<>(getParameterList().size());
             for (RestParameter p : this.getParameterList()) {
                 parameters.add(p.getRepresenterProperties());
             }

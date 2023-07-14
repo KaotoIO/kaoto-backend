@@ -17,8 +17,8 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.SuperChoice;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +47,7 @@ public class ChoiceFlowStep implements FlowStep {
     public ChoiceFlowStep(final Step step, final KamelPopulator kameletPopulator) {
         final var choice = new SuperChoice();
 
-        List<Choice> choices = new LinkedList<>();
+        List<Choice> choices = new ArrayList<>();
 
         if (step.getBranches() != null) {
             Branch tentativeOtherwise = null;

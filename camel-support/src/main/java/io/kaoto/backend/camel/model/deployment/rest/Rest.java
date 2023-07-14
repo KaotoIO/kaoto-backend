@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -142,55 +142,55 @@ public class Rest extends From {
         switch (step.getId().toLowerCase()) {
             case "camel-rest-verb-get":
                 if (getGet() == null) {
-                    setGet(new LinkedList<>());
+                    setGet(new ArrayList<>());
                 }
                 list = populateVerb(step, getGet());
                 break;
             case "camel-rest-verb-head":
                 if (getHead() == null) {
-                    setHead(new LinkedList<>());
+                    setHead(new ArrayList<>());
                 }
                 list = populateVerb(step, getHead());
                 break;
             case "camel-rest-verb-post":
                 if (getPost() == null) {
-                    setPost(new LinkedList<>());
+                    setPost(new ArrayList<>());
                 }
                 list = populateVerb(step, getPost());
                 break;
             case "camel-rest-verb-put":
                 if (getPut() == null) {
-                    setPut(new LinkedList<>());
+                    setPut(new ArrayList<>());
                 }
                 list = populateVerb(step, getPut());
                 break;
             case "camel-rest-verb-delete":
                 if (getDelete() == null) {
-                    setDelete(new LinkedList<>());
+                    setDelete(new ArrayList<>());
                 }
                 list = populateVerb(step, getDelete());
                 break;
             case "camel-rest-verb-connect":
                 if (getConnect() == null) {
-                    setConnect(new LinkedList<>());
+                    setConnect(new ArrayList<>());
                 }
                 list = populateVerb(step, getConnect());
                 break;
             case "camel-rest-verb-options":
                 if (getOptions() == null) {
-                    setOptions(new LinkedList<>());
+                    setOptions(new ArrayList<>());
                 }
                 list = populateVerb(step, getOptions());
                 break;
             case "camel-rest-verb-trace":
                 if (getTrace() == null) {
-                    setTrace(new LinkedList<>());
+                    setTrace(new ArrayList<>());
                 }
                 list = populateVerb(step, getTrace());
                 break;
             case "camel-rest-verb-patch":
                 if (getPatch() == null) {
-                    setPatch(new LinkedList<>());
+                    setPatch(new ArrayList<>());
                 }
                 list = populateVerb(step, getPatch());
                 break;
@@ -198,7 +198,7 @@ public class Rest extends From {
                 log.error("Malformed branch, we don't know which http verb it has");
                 log.error("We are just going to assign this to GET because we have to put it somewhere.");
                 if (getGet() == null) {
-                    setGet(new LinkedList<>());
+                    setGet(new ArrayList<>());
                 }
                 list = populateVerb(step, getGet());
                 break;
@@ -324,7 +324,7 @@ public class Rest extends From {
                 } else if (p.getId().equalsIgnoreCase(DESCRIPTION_LABEL)) {
                     httpVerb.setDescription(String.valueOf(p.getValue()));
                 } else if (PARAM_LABEL.equalsIgnoreCase(p.getId())) {
-                    httpVerb.setParameterList(new LinkedList<>());
+                    httpVerb.setParameterList(new ArrayList<>());
                     for (var value : (List)p.getValue()) {
                         if (value instanceof RestParameter restParameter) {
                             httpVerb.getParameterList().add(restParameter);
@@ -394,7 +394,7 @@ public class Rest extends From {
             log.error("No rest component in the catalog!");
             return null;
         }
-        rest.setBranches(new LinkedList<>());
+        rest.setBranches(new ArrayList<>());
         if (this.getGet() != null) {
             rest.getBranches().add(createBranchHttpVerb(catalog, ksps, this.getGet(), GET_LABEL));
         }
@@ -439,7 +439,7 @@ public class Rest extends From {
         Branch b = new Branch();
         b.setIdentifier(httpVerb);
         var step = catalog.getReadOnlyCatalog().searchByID("camel-rest-verb-" + httpVerb);
-        step.setBranches(new LinkedList<>());
+        step.setBranches(new ArrayList<>());
         for (HttpVerb endpoint : httpVerbList) {
             step.getBranches().add(createBranchConsumes(catalog, ksps, endpoint));
         }

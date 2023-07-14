@@ -19,7 +19,6 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,7 +98,7 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
 
     private void processBeans(List<Flow> flowList, List<Bean> beans) {
         Flow beansFlow  = new Flow();
-        beansFlow.setBeans(new LinkedList<>());
+        beansFlow.setBeans(new ArrayList<>());
         beansFlow.getBeans().addAll(beans);
         flowList.add(beansFlow);
     }

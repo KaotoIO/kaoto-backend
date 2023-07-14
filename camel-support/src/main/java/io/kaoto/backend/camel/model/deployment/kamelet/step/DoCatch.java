@@ -9,9 +9,9 @@ import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.step.Branch;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,7 +26,7 @@ public class DoCatch implements Serializable {
         setSteps(kameletPopulator.processSteps(branch));
         var exception = branch.getParameters().stream().filter(p -> p.getId().equalsIgnoreCase("exceptions")).findAny();
         if (exception.isPresent()) {
-            setExceptions(new LinkedList<>());
+            setExceptions(new ArrayList<>());
             var list = Collections.emptyList();
             if (exception.get().getValue() instanceof List<?>) {
                 list = (List<Object>) exception.get().getValue();
