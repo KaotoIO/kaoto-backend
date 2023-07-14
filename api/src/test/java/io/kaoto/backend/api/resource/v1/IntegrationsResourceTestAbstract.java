@@ -6,13 +6,16 @@ import io.kaoto.backend.api.service.deployment.generator.kamelet.KameletRepresen
 import io.kaoto.backend.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -21,6 +24,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -177,7 +181,7 @@ abstract class IntegrationsResourceTestAbstract {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         Yaml yaml = new Yaml(
-                new Constructor(KameletBinding.class,new LoaderOptions()),
+                new Constructor(KameletBinding.class, new LoaderOptions()),
                 new KameletRepresenter());
         yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
@@ -372,13 +376,25 @@ abstract class IntegrationsResourceTestAbstract {
         assertEquals("log:", to.get("uri"));
     }
 
-    @Test
-    void dslsTest() throws IOException, URISyntaxException {
+    private static Stream<Arguments> provideTestResourcesForDslsTest() {
+        return Stream.of(
+                Arguments.of("../twitter-search-source-binding.yaml", List.of("KameletBinding")),
+                Arguments.of("../avro-serialize-action.kamelet.yaml",
+                        List.of("Kamelet", "Camel Route", "Integration")),
+                Arguments.of("../rest-dsl-multi.yaml", List.of("Camel Route")),
+                Arguments.of("../uri-log-stop.yaml", List.of("Kamelet", "Camel Route", "Integration")),
+                Arguments.of("../route-multi.yaml", List.of("Kamelet", "Camel Route", "Integration")),
+                Arguments.of("../integration-without-route.yaml",
+                        List.of("Kamelet", "Camel Route", "Integration"))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTestResourcesForDslsTest")
+    void dslsTest(String fileInResource, List<String> compatibleDsls) throws IOException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper();
         String yaml1 = Files.readString(Path.of(
-                DeploymentsResourceTest.class.getResource(
-                                "../twitter-search-source-binding.yaml")
-                        .toURI()));
+                DeploymentsResourceTest.class.getResource(fileInResource).toURI()));
 
         var dslsRes = given()
                 .when()
@@ -392,14 +408,16 @@ abstract class IntegrationsResourceTestAbstract {
         assertThat(dsllist).hasSize(getAllLanguages().size());
         assertThat(dsllist).hasSameElementsAs(getAllLanguages());
 
-        var integrationRes = given()
+        String integrationRes = given()
                 .when()
                 .contentType("text/yaml")
                 .body(yaml1)
-                .post("?dsl=KameletBinding")
+                .post()
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-        Integration integration = mapper.readValue(integrationRes.extract().body().asString(), Integration.class);
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().asString();
+
+        Integration integration = mapper.readValue(integrationRes, Integration.class);
 
         dslsRes = given()
                 .when()
@@ -422,8 +440,8 @@ abstract class IntegrationsResourceTestAbstract {
                 .statusCode(Response.Status.OK.getStatusCode());
         dsllist = mapper.readValue(dslsRes.extract().body().asString(),
                 mapper.getTypeFactory().constructCollectionType(List.class, String.class));
-        assertThat(dsllist).hasSize(1);
-        assertThat(dsllist).containsExactlyInAnyOrder("KameletBinding");
+        assertThat(dsllist).hasSize(compatibleDsls.size());
+        assertThat(dsllist).containsExactlyInAnyOrderElementsOf(compatibleDsls);
     }
 
     @Test
