@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  build-native:
     name: 👩🏼‍🏭 Build Native Quarkus for ${{ matrix.os }} 👩🏼‍🏭
     runs-on: ${{ matrix.os }}
     strategy:
@@ -88,5 +88,91 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: api/target/api-${{ env.version }}.jar
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+
+  build-native-standalone:
+    name: 👩🏼‍🏭 Build Native Quarkus for ${{ matrix.os }} 👩🏼‍🏭
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: kaoto-linux-amd64
+            file: -runner
+          - os: windows-latest
+            asset_name: kaoto-windows-amd64
+            file: -runner.exe
+          - os: macos-latest
+            asset_name: kaoto-macos-amd64
+            file: -runner
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17.0.7'
+          distribution: 'graalvm-community'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: configure Pagefile
+        uses: al-cheb/configure-pagefile-action@v1.3
+        with:
+          minimum-size: 16GB
+          disk-root: "C:"
+        if: ${{ matrix.os == 'windows-latest' }}
+      - name: 🤳 Build Native Quarkus
+        run:  mvn -B install -Pstandalone -Pnative -DskipTests -Dquarkus.native.native-image-xmx=5g
+      - name: 🛂 Find the version - non-Windows
+        run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+        if: ${{ matrix.os != 'windows-latest' }}
+      - name: 🛂 Find the version - Windows
+        run: |
+          $version = & mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout
+          echo "version=$version" >> $env:GITHUB_ENV
+        if: ${{ matrix.os == 'windows-latest' }}
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/standalone-${{ env.version }}${{ matrix.file }}
+          asset_name: ${{ matrix.asset_name }}
+
+  build-jar-standalone:
+    name: 👩🏼‍🏭 Build JAR 👩🏼‍🏭
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🗄️ Checkout Source Code
+        uses: actions/checkout@v3
+      - name: 🥸 Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          check-latest: true
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Build Jar
+        run:  mvn clean package -Pstandalone -DskipTests
+      - name: 🛂 Find the version
+        run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/standalone-${{ env.version }}.jar
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
