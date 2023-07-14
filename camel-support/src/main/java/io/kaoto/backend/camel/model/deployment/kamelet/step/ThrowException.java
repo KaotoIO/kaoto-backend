@@ -36,7 +36,7 @@ public class ThrowException extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXCEPTION_TYPE_LABEL:
             case EXCEPTION_TYPE_LABEL2:
@@ -63,7 +63,7 @@ public class ThrowException extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXCEPTION_TYPE_LABEL:
             case EXCEPTION_TYPE_LABEL2:

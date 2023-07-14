@@ -30,7 +30,7 @@ public class Transacted extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         this.setRef(String.valueOf(parameter.getValue()));
     }
 
@@ -44,7 +44,7 @@ public class Transacted extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         parameter.setValue(this.getRef());
     }
 

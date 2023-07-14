@@ -224,16 +224,18 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
                                        final String uri) {
 
         String path = uri.substring(uri.indexOf(":") + 1);
-        if (path.indexOf("?") > -1) {
+        if (path.contains("?")) {
             path = path.substring(0, path.indexOf("?"));
         }
 
         var splitSeparators =
                 step.getParameters().stream().filter(Objects::nonNull)
-                        .map(p -> p.getPathSeparator()).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
+                        .map(Parameter::getPathSeparator).distinct().reduce((s, s2) -> s + "|" + s2).orElse(":");
         String[] pathParts = path.split(splitSeparators);
         int i = 0;
-        Collections.sort(step.getParameters());
+
+        step.getParameters().sort(Comparator.comparing(Parameter::getPathOrder));
+
         for (Parameter p : step.getParameters()) {
             if (i >= pathParts.length) {
                 break;
@@ -251,7 +253,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             String key = matcher.group(1);
             String value = matcher.group(2);
 
-            for (Parameter p : step.getParameters()) {
+            for (Parameter<?> p : step.getParameters()) {
                 if (p.getId().equalsIgnoreCase(key)) {
                     p.setValue(p.convertToType(value));
                     break;

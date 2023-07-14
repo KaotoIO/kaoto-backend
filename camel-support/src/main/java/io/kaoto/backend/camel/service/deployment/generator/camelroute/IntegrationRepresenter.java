@@ -20,10 +20,10 @@ public class IntegrationRepresenter extends KameletRepresenter {
 
     public IntegrationRepresenter() {
         super();
-        spec();
+        integrationSpec();
     }
 
-    private void spec() {
+    private void integrationSpec() {
         this.multiRepresenters.put(IntegrationSpec.class,
                 new RepresentMap() {
                     @Override

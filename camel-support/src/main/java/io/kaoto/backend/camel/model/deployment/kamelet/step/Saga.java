@@ -89,7 +89,7 @@ public class Saga extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SAGA_SERVICE_LABEL:
             case SAGA_SERVICE_LABEL2:
@@ -129,7 +129,7 @@ public class Saga extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SAGA_SERVICE_LABEL:
             case SAGA_SERVICE_LABEL2:

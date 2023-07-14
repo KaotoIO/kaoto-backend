@@ -31,7 +31,7 @@ public class Branch {
     }
 
     private List<Step> steps = new LinkedList<>();
-    private List<Parameter> parameters = new LinkedList<>();
+    private List<Parameter<?>> parameters = new LinkedList<>();
     private String identifier;
     private String condition;
     private ConditionSyntax conditionSyntax = ConditionSyntax.SIMPLE;
@@ -62,7 +62,7 @@ public class Branch {
      * List of parameters of the branch.
      *
      */
-    public List<Parameter> getParameters() {
+    public List<Parameter<?>> getParameters() {
         return this.parameters;
     }
 
@@ -70,7 +70,7 @@ public class Branch {
         this.steps = steps;
     }
 
-    public void setParameters(final List<Parameter> parameters) {
+    public void setParameters(final List<Parameter<?>> parameters) {
         this.parameters = parameters;
     }
 

@@ -14,6 +14,7 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.logging.Logger;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,9 @@ import java.util.Map;
 @RegisterForReflection
 public class Rest extends From {
     protected static final Logger log = Logger.getLogger(Rest.class);
+    @Serial
     private static final long serialVersionUID = 8685166491995899231L;
+
     public static final String CONSUMES_LABEL = "consumes";
     public static final String PRODUCES_LABEL = "produces";
     public static final String URI_LABEL = "uri";
@@ -325,10 +328,10 @@ public class Rest extends From {
                     httpVerb.setDescription(String.valueOf(p.getValue()));
                 } else if (PARAM_LABEL.equalsIgnoreCase(p.getId())) {
                     httpVerb.setParameterList(new ArrayList<>());
-                    for (var value : (List)p.getValue()) {
+                    for (var value : (List<?>)p.getValue()) {
                         if (value instanceof RestParameter restParameter) {
                             httpVerb.getParameterList().add(restParameter);
-                        } else if (value instanceof Map map) {
+                        } else if (value instanceof Map<?, ?> map) {
                             httpVerb.getParameterList().add(new RestParameter(map));
                         }
                     }

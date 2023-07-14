@@ -227,6 +227,7 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
         this.pathSeparator = pathSeparator;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Parameter<T> clone() {
         try {
@@ -238,7 +239,7 @@ public abstract class Parameter<T> implements Cloneable, Comparable<Parameter<T>
     }
 
     @Override
-    public int compareTo(Parameter other) {
+    public int compareTo(Parameter<T> other) {
         return Integer.compare(this.getPathOrder(), other.getPathOrder());
     }
 

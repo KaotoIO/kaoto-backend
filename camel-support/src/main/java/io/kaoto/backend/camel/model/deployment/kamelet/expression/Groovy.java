@@ -26,7 +26,7 @@ public class Groovy {
     }
 
     @SuppressWarnings("CPD-START")
-    public Groovy(Map map) {
+    public Groovy(Map<?,?> map) {
         if (map.get(EXPRESSION_LABEL) != null) {
             setExpression(String.valueOf(map.get(EXPRESSION_LABEL)));
         }

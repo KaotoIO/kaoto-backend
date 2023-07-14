@@ -30,7 +30,7 @@ public class Javascript {
     }
 
     @SuppressWarnings("CPD-START")
-    public Javascript(Map map) {
+    public Javascript(Map<?, ?> map) {
         if (map.get(EXPRESSION_LABEL) != null) {
             setExpression(String.valueOf(map.get(EXPRESSION_LABEL)));
         }

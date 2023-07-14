@@ -144,12 +144,12 @@ public class SuperChoice extends EIPStep {
 
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         //We don't have properties
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         //We don't have properties
     }
 

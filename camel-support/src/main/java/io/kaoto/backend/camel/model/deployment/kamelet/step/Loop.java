@@ -78,7 +78,7 @@ public class Loop extends Expression {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
             case COPY_LABEL:
@@ -129,7 +129,7 @@ public class Loop extends Expression {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
             case COPY_LABEL:

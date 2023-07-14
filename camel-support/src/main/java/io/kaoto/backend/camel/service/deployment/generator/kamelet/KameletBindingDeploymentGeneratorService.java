@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,8 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     private static final String KAMELET = "KAMELET";
     private static final String KNATIVE = "KNATIVE";
     private static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
+    private static final List<Class<? extends CustomResource<?,?>>> CUSTOM_RESOURCES = List.of(KameletBinding.class);
+
     private static final boolean IGNORE_CAMEL_COMPONENTS = true;
     private static final Logger LOG = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
@@ -51,14 +54,14 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     @Override
     public String parse(final List<Step> stepList,
                         final Map<String, Object> md,
-                        final List<Parameter> parameterList) {
+                        final List<Parameter<?>> parameterList) {
 
         Map<String, Object> metadata = md != null ? new LinkedHashMap<>(md) : Map.of();
         List<Step> steps = stepList != null ? new ArrayList<>(stepList) : List.of();
 
         KameletBindingSpec spec;
         var metaObject = new ObjectMeta();
-        if (metadata != null && !metadata.isEmpty()) {
+        if (!metadata.isEmpty()) {
             metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
             metaObject.setAdditionalProperties(
                     (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
@@ -121,7 +124,8 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
         if (CAMEL_CONNECTOR.equals(kind) && !IGNORE_CAMEL_COMPONENTS) {
             StringBuilder prefix = new StringBuilder(step.getName());
 
-            Collections.sort(step.getParameters());
+            step.getParameters().sort(Comparator.comparing(Parameter::getPathOrder));
+
             for (var property : step.getParameters()) {
                 if (property.isPath()) {
                     prefix.append(property.getPathSeparator());
@@ -172,7 +176,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     }
 
     @Override
-    public DeploymentGeneratorService.Status getStatus(final CustomResource cr) {
+    public DeploymentGeneratorService.Status getStatus(final CustomResource<?, ?> cr) {
         DeploymentGeneratorService.Status s = DeploymentGeneratorService.Status.Invalid;
         if (cr instanceof KameletBinding binding
                 && binding.getStatus() != null) {
@@ -205,25 +209,31 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                 metadata = parseResult;
             }
         }
+
+        if (binding == null) {
+            throw new IllegalStateException("binding cannot be null");
+        }
+
         if (metadata != null && metadata.getMetadata() != null) {
             if (binding.getMetadata() == null) {
                 binding.setMetadata(new LinkedHashMap<>());
             }
             binding.getMetadata().putAll(metadata.getMetadata());
         }
+
         return parse(binding.getSteps(), binding.getMetadata(), binding.getParameters());
     }
 
     @Override
-    public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{KameletBinding.class});
+    public List<Class<? extends CustomResource<?, ?>>> supportedCustomResources() {
+        return CUSTOM_RESOURCES;
     }
 
     @Override
-    public CustomResource parse(final String input) {
+    public CustomResource<?, ?> parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                return KamelHelper.JSON_MAPPER.readValue(input, KameletBinding.class);
+                return KamelHelper.YAML_MAPPER.readValue(input, KameletBinding.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating a kamelet binding and it didn't work.");
             }

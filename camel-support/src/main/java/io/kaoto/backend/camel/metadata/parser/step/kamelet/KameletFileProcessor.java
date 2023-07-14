@@ -120,21 +120,18 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         step.setParameters(new ArrayList<>());
 
         for (var property : properties.entrySet()) {
-            Parameter p;
             final String id = property.getKey();
             final var title = property.getValue().getTitle();
 
             final var prop = property.getValue();
             var description = prop.getDescription();
             Object value = prop.getDefault();
-            p = getParameter(prop, id, title, description, value);
-            p.setPath(prop.getPath());
 
-            p.setNullable(required == null || required.stream()
-                    .noneMatch(r -> r.equalsIgnoreCase(title)));
+            Parameter<?> p = getParameter(prop, id, title, description, value);
+            p.setPath(prop.getPath());
+            p.setNullable(required == null || required.stream().noneMatch(r -> r.equalsIgnoreCase(title)));
 
             step.getParameters().add(p);
-
         }
 
         if (step.getKind().startsWith("EIP")) {
@@ -147,7 +144,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
         }
     }
 
-    private Parameter getParameter(final KameletDefinitionProperty property,
+    private Parameter<?> getParameter(final KameletDefinitionProperty property,
                                    final String id, final String title,
                                    final String description, final Object value) {
         final var type = property.getType().toLowerCase();

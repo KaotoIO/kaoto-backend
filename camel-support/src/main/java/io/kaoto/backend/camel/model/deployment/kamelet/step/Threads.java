@@ -115,7 +115,7 @@ public class Threads extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXECUTOR_SERVICE_LABEL:
             case EXECUTOR_SERVICE_LABEL2:
@@ -166,7 +166,7 @@ public class Threads extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXECUTOR_SERVICE_LABEL:
             case EXECUTOR_SERVICE_LABEL2:

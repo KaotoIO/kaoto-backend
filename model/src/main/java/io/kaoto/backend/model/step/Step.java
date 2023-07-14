@@ -35,7 +35,7 @@ public class Step extends Metadata {
     @JsonView(Views.Summary.class)
     private String group;
     @JsonView(Views.Complete.class)
-    private List<Parameter> parameters;
+    private List<Parameter<?>> parameters;
     @JsonView(Views.Complete.class)
     private List<String> required = new ArrayList<>();
     @JsonView(Views.Complete.class)
@@ -55,7 +55,7 @@ public class Step extends Metadata {
 
     //Used only for testing
     public Step(final String identifier, final String connector,
-                final String icon, final List<Parameter> parameters) {
+                final String icon, final List<Parameter<?>> parameters) {
         this();
         setId(identifier);
         setName(connector);
@@ -64,7 +64,7 @@ public class Step extends Metadata {
     }
 
     public Step(final String identifier, final String connector, final String icon,
-                final List<Parameter> parameters,
+                final List<Parameter<?>> parameters,
                 final String kind, final Step.Type type) {
         this();
         setId(identifier);
@@ -109,11 +109,11 @@ public class Step extends Metadata {
      * List of configurable parameters for this step.
      *
      */
-    public List<Parameter> getParameters() {
+    public List<Parameter<?>> getParameters() {
         return parameters;
     }
 
-    public void setParameters(final List<Parameter> parameters) {
+    public void setParameters(final List<Parameter<?>> parameters) {
         this.parameters = parameters;
     }
 
@@ -281,6 +281,7 @@ public class Step extends Metadata {
         if (!(o instanceof Step)) {
             return false;
         }
+
         Step step = (Step) o;
 
         if (getDescription() != null

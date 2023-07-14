@@ -40,7 +40,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
-                        final List<Parameter> parameters) {
+                        final List<Parameter<?>> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
         return yaml.dumpAs(new CamelRoute(
                         steps != null ? new ArrayList<>(steps) : List.of(),
@@ -59,19 +59,19 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     }
 
     @Override
-    public CustomResource parse(final String input) {
+    public CustomResource<?, ?> parse(final String input) {
         //We are not handling deployments here
         return null;
     }
 
     @Override
-    public Status getStatus(final CustomResource cr) {
+    public Status getStatus(final CustomResource<?, ?> cr) {
         //We are not handling deployments here
         return Status.Invalid;
     }
 
     @Override
-    public List<Class<? extends CustomResource>> supportedCustomResources() {
+    public List<Class<? extends CustomResource<?, ?>>> supportedCustomResources() {
         //We are not handling deployments here
         return Collections.emptyList();
     }

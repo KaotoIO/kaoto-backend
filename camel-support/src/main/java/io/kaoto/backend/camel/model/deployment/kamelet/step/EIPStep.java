@@ -46,7 +46,7 @@ public abstract class EIPStep implements Serializable {
         setId(step.getStepId());
     }
 
-    protected EIPStep(Map<String, Object> map) {
+    protected EIPStep(Map<?, ?> map) {
         if(map.containsKey("id")) {
             this.setId(String.valueOf(map.get("id")));
         }
@@ -78,7 +78,7 @@ public abstract class EIPStep implements Serializable {
         return res.orElse(null);
     }
 
-    protected abstract void assignAttribute(final Parameter parameter);
+    protected abstract void assignAttribute(final Parameter<?> parameter);
 
     protected void processBranches(final Step step, final StepCatalog catalog,
                          final KameletStepParserService kameletStepParserService) {
@@ -97,7 +97,7 @@ public abstract class EIPStep implements Serializable {
         return branch;
     }
 
-    protected abstract void assignProperty(final Parameter parameter);
+    protected abstract void assignProperty(final Parameter<?> parameter);
 
     public abstract Map<String, Object> getRepresenterProperties();
 

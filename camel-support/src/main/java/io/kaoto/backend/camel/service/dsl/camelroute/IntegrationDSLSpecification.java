@@ -3,7 +3,7 @@ package io.kaoto.backend.camel.service.dsl.camelroute;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.deployment.generator.GeneratorHelper;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
@@ -24,7 +24,7 @@ public class IntegrationDSLSpecification extends DSLSpecification {
     private static final String EIP_BRANCHES = "EIP-BRANCH";
 
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
-    private static final String VALIDATION_SCHEME = GeneratorHelper.loadResourceAsString(
+    private static final String VALIDATION_SCHEME = KamelHelper.loadResourceAsString(
             CamelRouteDeploymentGeneratorService.class,
             "integration.json").orElse("");
 

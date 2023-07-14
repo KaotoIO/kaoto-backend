@@ -75,7 +75,7 @@ public class ToDynamic extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case URI_LABEL:
                 this.setUri(String.valueOf(parameter.getValue()));
@@ -141,7 +141,7 @@ public class ToDynamic extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case URI_LABEL:
                 parameter.setValue(this.getUri());

@@ -32,7 +32,7 @@ public class Jq {
     }
 
     @SuppressWarnings("CPD-START")
-    public Jq(Map map) {
+    public Jq(Map<?, ?> map) {
         if (map.get(EXPRESSION_LABEL) != null) {
             setExpression(String.valueOf(map.get(EXPRESSION_LABEL)));
         }

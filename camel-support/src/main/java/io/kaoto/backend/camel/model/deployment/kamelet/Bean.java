@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ import java.util.Map;
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bean implements Serializable {
+    @Serial
     private static final long serialVersionUID = -4601560033032557024L;
 
     public Bean() {

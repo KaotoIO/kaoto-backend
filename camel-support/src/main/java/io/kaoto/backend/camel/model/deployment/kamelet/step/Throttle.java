@@ -112,7 +112,7 @@ public class Throttle extends Expression {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
             case CORRELATION_EXPRESSION_LABEL:
@@ -148,7 +148,7 @@ public class Throttle extends Expression {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
             case CORRELATION_EXPRESSION_LABEL:

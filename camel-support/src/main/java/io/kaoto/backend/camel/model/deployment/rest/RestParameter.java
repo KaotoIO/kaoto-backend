@@ -80,7 +80,7 @@ public class RestParameter implements Serializable {
         setExamples(examples);
     }
 
-    public RestParameter(Map<String, Object> map) {
+    public RestParameter(Map<?, ?> map) {
         if (map.containsKey(DATA_TYPE_LABEL) && map.get(DATA_TYPE_LABEL) != null) {
             setDataType(String.valueOf(map.get(DATA_TYPE_LABEL)));
         } else if (map.containsKey(DATA_TYPE_LABEL2) && map.get(DATA_TYPE_LABEL2) != null) {

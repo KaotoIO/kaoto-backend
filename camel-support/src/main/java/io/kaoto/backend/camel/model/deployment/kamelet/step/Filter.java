@@ -91,7 +91,7 @@ public class Filter extends EIPStep implements ConditionBlock {
 
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SIMPLE_LABEL:
                 parameter.setValue(this.getSimple());
@@ -111,7 +111,7 @@ public class Filter extends EIPStep implements ConditionBlock {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SIMPLE_LABEL:
                 this.setSimple(String.valueOf(parameter.getValue()));

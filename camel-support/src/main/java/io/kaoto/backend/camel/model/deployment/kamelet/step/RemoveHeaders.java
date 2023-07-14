@@ -60,7 +60,7 @@ public class RemoveHeaders extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case PATTERN_LABEL:
                 parameter.setValue(this.getPattern());
@@ -79,7 +79,7 @@ public class RemoveHeaders extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case PATTERN_LABEL:
                 this.setPattern(String.valueOf(parameter.getValue()));
@@ -89,7 +89,7 @@ public class RemoveHeaders extends EIPStep {
                 this.setExcludePattern(String.valueOf(parameter.getValue()));
                 break;
             case DESCRIPTION_LABEL:
-                this.setDescription((Map) parameter.getValue());
+                this.setDescription((Map<String, String>) parameter.getValue());
                 break;
             default:
                 break;

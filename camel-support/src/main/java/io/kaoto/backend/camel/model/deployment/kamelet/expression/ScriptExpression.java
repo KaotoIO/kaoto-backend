@@ -68,13 +68,13 @@ public class ScriptExpression extends EIPStep {
             setName(e.getName());
             setExpression(e.getExpression());
             setId(e.getId());
-        } else if (obj instanceof Map map) {
+        } else if (obj instanceof Map<?, ?> map) {
             setPropertiesFromMap(map, this);
         }
     }
 
     @SuppressWarnings("CPD-START")
-    protected void setPropertiesFromMap(final Map map, final ScriptExpression expression) {
+    protected void setPropertiesFromMap(final Map<?, ?> map, final ScriptExpression expression) {
         if (map.containsKey(GROOVY_LABEL) && map.get(GROOVY_LABEL) != null) {
             expression.setGroovy(parseLang(map.get(GROOVY_LABEL)));
         }
@@ -108,7 +108,7 @@ public class ScriptExpression extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case GROOVY_LABEL:
                 this.setGroovy(parameter.getValue());
@@ -133,7 +133,7 @@ public class ScriptExpression extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case GROOVY_LABEL:
                 parameter.setValue(this.groovy);
@@ -161,16 +161,16 @@ public class ScriptExpression extends EIPStep {
 
         Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getGroovy() != null) {
-            if (this.getGroovy() instanceof Groovy groovy) {
-                properties.put(GROOVY_LABEL, groovy.getRepresenterProperties());
+            if (this.getGroovy() instanceof Groovy g) {
+                properties.put(GROOVY_LABEL, g.getRepresenterProperties());
             } else {
                 properties.put(GROOVY_LABEL, this.getGroovy());
             }
         }
 
         if (this.getJavascript() != null) {
-            if (this.getJavascript() instanceof Javascript javascript) {
-                properties.put(JAVASCRIPT_LABEL, javascript.getRepresenterProperties());
+            if (this.getJavascript() instanceof Javascript j) {
+                properties.put(JAVASCRIPT_LABEL, j.getRepresenterProperties());
             } else {
                 properties.put(JAVASCRIPT_LABEL, this.getJavascript());
             }
@@ -211,7 +211,7 @@ public class ScriptExpression extends EIPStep {
     }
 
     public void setGroovy(final Object groovy) {
-        if (groovy instanceof Map map) {
+        if (groovy instanceof Map<?, ?> map) {
             this.groovy = new Groovy(map);
         } else {
             this.groovy = groovy;
@@ -223,7 +223,7 @@ public class ScriptExpression extends EIPStep {
     }
 
     public void setJavascript(final Object javascript) {
-        if (javascript instanceof Map map) {
+        if (javascript instanceof Map<?, ?> map) {
             this.javascript = new Javascript(map);
         } else {
             this.javascript = javascript;

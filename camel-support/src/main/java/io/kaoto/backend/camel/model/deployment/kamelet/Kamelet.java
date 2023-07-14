@@ -47,7 +47,7 @@ public final class Kamelet extends CustomResource<KameletSpec, KameletStatus> im
 
     public Kamelet(final List<Step> steps,
                    final Map<String, Object> metadata,
-                   final List<Parameter> parameters,
+                   final List<Parameter<?>> parameters,
                    final StepCatalog catalog) {
         this();
         new KamelPopulator(catalog).populateKamelet(this, metadata != null ? metadata : Map.of(),

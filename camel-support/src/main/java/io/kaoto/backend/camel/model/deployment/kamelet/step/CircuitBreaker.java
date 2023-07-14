@@ -123,7 +123,7 @@ public class CircuitBreaker extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case RESILIENCE_4_J_CONFIGURATION_LABEL2:
                 this.setResilience4jConfiguration((Map<String, String>) parameter.getValue());
@@ -144,7 +144,7 @@ public class CircuitBreaker extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case RESILIENCE_4_J_CONFIGURATION_LABEL2:
                 parameter.setValue(this.getResilience4jConfiguration());

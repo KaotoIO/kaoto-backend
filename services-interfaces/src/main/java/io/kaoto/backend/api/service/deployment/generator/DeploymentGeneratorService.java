@@ -33,7 +33,7 @@ public interface DeploymentGeneratorService {
      * If applies, the name will be the name used on the integration deployed.
      */
     @Deprecated
-    String parse(List<Step> steps, Map<String, Object> metadata, List<Parameter> parameters);
+    String parse(List<Step> steps, Map<String, Object> metadata, List<Parameter<?>> parameters);
 
 
     /*
@@ -54,7 +54,7 @@ public interface DeploymentGeneratorService {
      * Based on the source code, returns the resource to deploy.
      */
     @WithSpan
-    CustomResource parse(String input);
+    CustomResource<?, ?> parse(String input);
 
     /*
      * 🐱method getStatus: CustomResource
@@ -63,7 +63,7 @@ public interface DeploymentGeneratorService {
      * the supported types in #supportedCustomResources() .
      */
     @WithSpan
-    Status getStatus(CustomResource cr);
+    Status getStatus(CustomResource<?, ?> cr);
 
     /*
      * 🐱method supportedCustomResources: List<Class>
@@ -71,7 +71,7 @@ public interface DeploymentGeneratorService {
      * Returns the Java model classes that extend CustomResource and that are
      *  the types of custom resources supported in the cluster.
      */
-    List<Class<? extends CustomResource>> supportedCustomResources();
+    List<Class<? extends CustomResource<?, ?>>> supportedCustomResources();
 
     /*
      * 🐱method getResources: Deployment[]

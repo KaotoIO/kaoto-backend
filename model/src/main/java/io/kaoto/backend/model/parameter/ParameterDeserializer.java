@@ -1,26 +1,26 @@
 package io.kaoto.backend.model.parameter;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.json.JsonObject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.serializer.DeserializationContext;
 import jakarta.json.bind.serializer.JsonbDeserializer;
 import jakarta.json.stream.JsonParser;
-import java.lang.reflect.Type;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.lang.reflect.Type;
 
 /**
  * This is a workaround utility class until Quarkus supports full polymorphic
  * unmarshalling.
  */
 @RegisterForReflection
-public class ParameterDeserializer implements JsonbDeserializer<Parameter> {
+public class ParameterDeserializer implements JsonbDeserializer<Parameter<?>> {
 
     private static final Jsonb JSONB = JsonbBuilder.create();
 
     @Override
-    public Parameter deserialize(final JsonParser parser,
+    public Parameter<?> deserialize(final JsonParser parser,
                                  final DeserializationContext context,
                                  final Type rtType) {
 

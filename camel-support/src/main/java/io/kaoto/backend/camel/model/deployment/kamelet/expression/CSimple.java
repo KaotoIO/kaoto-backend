@@ -25,7 +25,7 @@ public class CSimple {
 
     }
 
-    public CSimple(Map map) {
+    public CSimple(Map<?, ?> map) {
         if (map.get(EXPRESSION_LABEL) != null) {
             setExpression(String.valueOf(map.get(EXPRESSION_LABEL)));
         }

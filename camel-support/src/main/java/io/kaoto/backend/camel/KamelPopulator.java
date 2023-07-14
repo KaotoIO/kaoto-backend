@@ -77,6 +77,7 @@ import org.jboss.logging.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -106,7 +107,7 @@ public class KamelPopulator {
 
     public static Expression getExpression(final Step step) {
         Expression expression = new Expression();
-        for (Parameter p : step.getParameters()) {
+        for (Parameter<?> p : step.getParameters()) {
             if (p.getValue() == null) {
                 continue;
             }
@@ -174,7 +175,7 @@ public class KamelPopulator {
             final Kamelet kamelet,
             final Map<String, Object> metadata,
             final List<Step> steps,
-            final List<Parameter> parameters) {
+            final List<Parameter<?>> parameters) {
 
 
         KameletSpec spec;
@@ -215,7 +216,7 @@ public class KamelPopulator {
         if (metadata.containsKey("definition")) {
             if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
-            } else if (metadata.get("definition") instanceof Map map) {
+            } else if (metadata.get("definition") instanceof Map<?, ?> map) {
                 Definition def = KamelHelper.JSON_MAPPER.convertValue(map, Definition.class);
                 kamelet.getSpec().setDefinition(def);
             }
@@ -271,7 +272,7 @@ public class KamelPopulator {
     }
 
     private void setSpecDefinition(final Kamelet kamelet,
-                                   final List<Parameter> parameters) {
+                                   final List<Parameter<?>> parameters) {
         if (kamelet.getSpec().getDefinition() == null) {
             kamelet.getSpec().setDefinition(new Definition());
             kamelet.getSpec().getDefinition().setTitle("");
@@ -342,8 +343,8 @@ public class KamelPopulator {
         }
     }
 
-    private void setParameters(final List<Parameter> parameters, final Definition def) {
-        for (Parameter p : parameters) {
+    private void setParameters(final List<Parameter<?>> parameters, final Definition def) {
+        for (Parameter<?> p : parameters) {
             //this will override anything that comes from the metadata set
             //which means there are edited changes
             Properties property = new Properties();
@@ -475,8 +476,10 @@ public class KamelPopulator {
             //Now we can work with the parameters list
             Step step = catalog.getReadOnlyCatalog().searchByID(s.getId());
             if (step != null) {
-                Collections.sort(step.getParameters());
-                for (Parameter p : step.getParameters()) {
+
+                step.getParameters().sort(Comparator.comparing(Parameter::getPathOrder));
+
+                for (Parameter<?> p : step.getParameters()) {
                     var value = values.get(p.getId());
                     if (p.isPath()) {
                         if (p.getPathOrder() == 0) {
@@ -494,7 +497,7 @@ public class KamelPopulator {
                         if (value != null && !p.getId().equalsIgnoreCase("step-id-kaoto")) {
                             if (typedValue != null && !typedValue.equals(p.getDefaultValue())) {
                                 params.put(p.getId(), typedValue);
-                            } else if (typedValue == null && value != null) {
+                            } else if (typedValue == null) {
                                 params.put(p.getId(), value);
                             }
                         }
@@ -701,7 +704,7 @@ public class KamelPopulator {
     }
 
     private void assignParameters(final Step step, final MarshalFlowStep marshal) {
-        for (Parameter p : step.getParameters()) {
+        for (Parameter<?> p : step.getParameters()) {
             if (null != p.getValue() && "dataformat".equalsIgnoreCase(p.getId())) {
                 marshal.setDataFormat(new DataFormat(p.getValue()));
             }

@@ -117,7 +117,7 @@ public class DeploymentsResource {
 
         boolean valid = false;
         for (var parser : parsers) {
-            for (Class<? extends CustomResource> c
+            for (Class<? extends CustomResource<?, ?>> c
                     : parser.supportedCustomResources()) {
                 try {
                     yamlMapper.readValue(crd, c);
@@ -158,15 +158,15 @@ public class DeploymentsResource {
             String type,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace) {
-        CustomResource cr = clusterService.get(namespace, name, type);
+
+        CustomResource<?, ?> cr = clusterService.get(namespace, name, type);
         if (cr == null) {
             throw new NotFoundException("Resource with name " + name + " not "
                     + "found.");
         }
 
         for (var parser : parsers) {
-            for (Class<? extends CustomResource> c
-                    : parser.supportedCustomResources()) {
+            for (Class<? extends CustomResource<?, ?>> c: parser.supportedCustomResources()) {
                 try {
                     Yaml yaml = new Yaml(new Constructor(c, new LoaderOptions()),
                             new KameletRepresenter());

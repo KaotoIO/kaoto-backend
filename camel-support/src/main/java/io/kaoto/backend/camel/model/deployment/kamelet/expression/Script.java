@@ -45,7 +45,7 @@ public class Script extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case GROOVY_LABEL:
                 this.setGroovy(String.valueOf(parameter.getValue()));
@@ -66,7 +66,7 @@ public class Script extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case GROOVY_LABEL:
                 parameter.setValue(this.groovy);

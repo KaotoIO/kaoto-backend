@@ -45,8 +45,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @ApplicationScoped
 public class ClusterService {
+    private static final Logger LOG = Logger.getLogger(ClusterService.class);
 
-    private Logger log = Logger.getLogger(ClusterService.class);
     private KubernetesClient kubernetesClient;
     private Instance<DSLSpecification> parsers;
     private ManagedExecutor managedExecutor;
@@ -100,20 +100,20 @@ public class ClusterService {
     @WithSpan
     public void start(final String input, final String namespace) {
         for (var parser : parsers) {
-            CustomResource binding = parser.getDeploymentGeneratorService().parse(input);
+            CustomResource<?, ?> binding = parser.getDeploymentGeneratorService().parse(input);
             if (binding != null) {
-                log.trace("This is a " + binding.getKind());
+                LOG.trace("This is a " + binding.getKind());
                 setName(binding, namespace);
                 try {
                     start(binding, namespace);
 
                     Span span = Span.current();
-                    if (span != null && binding != null) {
+                    if (span != null ) {
                         span.setAttribute("integration", binding.toString());
                     }
                     return;
                 } catch (KubernetesClientException e) {
-                    log.debug("Either the binding is not right or the CRD"
+                    LOG.debug("Either the binding is not right or the CRD"
                             + " is not valid: " + e.getMessage());
                 }
             }
@@ -123,7 +123,7 @@ public class ClusterService {
                 + "not supported.");
     }
 
-    private void setName(final CustomResource binding, final String namespace)
+    private void setName(final CustomResource<?, ?> binding, final String namespace)
             throws IllegalArgumentException {
         if (binding.getMetadata() == null) {
             binding.setMetadata(new ObjectMeta());
@@ -139,7 +139,10 @@ public class ClusterService {
     }
 
 
-    private void checkNoDuplicatedNames(final String namespace, final CustomResource binding, final Integer iterations)
+    private void checkNoDuplicatedNames(
+            final String namespace,
+            final CustomResource<?, ?> binding,
+            final Integer iterations)
             throws IllegalArgumentException {
         //This could lead to an infinite loop, very weird, but just in case
         if (iterations > 5) {
@@ -149,9 +152,9 @@ public class ClusterService {
         //check no other deployment has the same name already
         for (Deployment i : getResources(getNamespace(namespace))) {
             if (i.getName().equalsIgnoreCase(binding.getMetadata().getName())) {
-                log.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
+                LOG.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
                 binding.getMetadata().setName(binding.getMetadata().getName() + System.currentTimeMillis());
-                log.warn("Renaming to: " + binding.getMetadata().getName());
+                LOG.warn("Renaming to: " + binding.getMetadata().getName());
                 checkNoDuplicatedNames(namespace, binding, iterations + 1);
                 break;
             }
@@ -166,7 +169,7 @@ public class ClusterService {
      * Starts the given CustomResource.
      */
     @WithSpan
-    public void start(final CustomResource binding, final String namespace) {
+    public void start(final CustomResource<?, ?> binding, final String namespace) {
         ResourceDefinitionContext context =
                 new ResourceDefinitionContext.Builder()
                         .withNamespaced(true)
@@ -193,13 +196,13 @@ public class ClusterService {
      */
     @WithSpan
     public boolean stop(final String name, final String namespace, final String type) {
-        CustomResource cr = get(namespace, name, type);
+        CustomResource<?, ?> cr = get(namespace, name, type);
 
         if (cr == null) {
             throw new NotFoundException("Resource with name " + name + " not found.");
         }
 
-        log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
+        LOG.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
 
         return !kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace))
                 .withName(name).delete().isEmpty();
@@ -213,9 +216,9 @@ public class ClusterService {
      * Returns the given resource.
      */
     @WithSpan
-    public CustomResource get(final String namespace, final String name, final String type) {
+    public CustomResource<?, ?> get(final String namespace, final String name, final String type) {
 
-        CustomResource cr = null;
+        CustomResource<?, ?> cr = null;
         var crs = getResources(namespace);
 
         for (var resource : crs) {
@@ -284,7 +287,7 @@ public class ClusterService {
                             return ++n;
                         } catch (Exception e) {
                             if (!closed.get()) {
-                                log.error("Error reading log stream", e);
+                                LOG.error("Error reading log stream", e);
                                 emitter.fail(e);
                             } else {
                                 emitter.complete();
@@ -300,11 +303,11 @@ public class ClusterService {
                         try {
                             reader.close();
                         } catch (Exception e) {
-                            log.error("Error closing log stream", e);
+                            LOG.error("Error closing log stream", e);
                         }
                     });
         } catch (Exception e) {
-            log.error("Error watching log stream", e);
+            LOG.error("Error watching log stream", e);
         }
         return Multi.createFrom().nothing();
     }

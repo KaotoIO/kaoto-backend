@@ -67,7 +67,7 @@ public class RemovePropertyFlowStep implements FlowStep {
 
 
         if (res.isPresent()) {
-            for (Parameter p : res.get().getParameters()) {
+            for (Parameter<?> p : res.get().getParameters()) {
                 if (p.getId().equalsIgnoreCase(KameletStepParserService.NAME)) {
                     p.setValue(this.getRemovePropertyFlowStep().getName());
                 }

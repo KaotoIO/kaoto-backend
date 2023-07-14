@@ -86,7 +86,7 @@ public class IdempotentConsumer extends Expression {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
             case IDEMPOTENT_REPOSITORY_LABEL:
@@ -145,7 +145,7 @@ public class IdempotentConsumer extends Expression {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
             case IDEMPOTENT_REPOSITORY_LABEL:

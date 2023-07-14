@@ -22,7 +22,6 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +31,7 @@ import java.util.stream.Stream;
 @ApplicationScoped
 public class KameletDeploymentGeneratorService implements DeploymentGeneratorService {
     private static final Logger LOG = Logger.getLogger(KameletDeploymentGeneratorService.class);
+    private static final List<Class<? extends CustomResource<?, ?>>> CUSTOM_RESOURCES = List.of(Kamelet.class);
 
     private KameletStepParserService stepParserService;
 
@@ -45,7 +45,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     @Override
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
-                        final List<Parameter> parameters) {
+                        final List<Parameter<?>> parameters) {
         return getYAML(new Kamelet(
                         steps != null ? new ArrayList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
@@ -66,6 +66,11 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 metadata = parseResult;
             }
         }
+
+        if (route == null) {
+            throw new IllegalStateException("route cannot be null");
+        }
+
         if (metadata != null && metadata.getMetadata() != null) {
             if (route.getMetadata() == null) {
                 route.setMetadata(new LinkedHashMap<>());
@@ -75,7 +80,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
         return parse(route.getSteps(), route.getMetadata(), route.getParameters());
     }
 
-    public String getYAML(final CustomResource kamelet,
+    public String getYAML(final CustomResource<?, ?> kamelet,
                           final Representer representer) {
     Yaml yaml = new Yaml(
                 new Constructor(Kamelet.class, new LoaderOptions()),
@@ -84,7 +89,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
 
     @Override
-    public Status getStatus(final CustomResource cr) {
+    public Status getStatus(final CustomResource<?, ?> cr) {
         Status s = Status.Invalid;
         if (cr instanceof Kamelet kamelet
                 && kamelet.getStatus() != null) {
@@ -100,12 +105,12 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     }
 
     @Override
-    public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{Kamelet.class});
+    public List<Class<? extends CustomResource<?, ?>>> supportedCustomResources() {
+        return CUSTOM_RESOURCES;
     }
 
     @Override
-    public CustomResource parse(final String input) {
+    public CustomResource<?, ?> parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
                 return KamelHelper.YAML_MAPPER.readValue(input, Kamelet.class);

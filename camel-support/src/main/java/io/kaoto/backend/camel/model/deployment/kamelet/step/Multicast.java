@@ -136,7 +136,7 @@ public class Multicast extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         if (parameter.getValue() != null) {
             switch (parameter.getId()) {
                 case DESCRIPTION_LABEL:
@@ -243,7 +243,7 @@ public class Multicast extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case AGGREGATION_STRATEGY_LABEL:
             case AGGREGATION_STRATEGY_LABEL2:

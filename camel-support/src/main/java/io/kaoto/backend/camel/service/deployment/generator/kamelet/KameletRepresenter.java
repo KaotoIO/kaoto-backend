@@ -1,6 +1,5 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
@@ -102,7 +101,7 @@ public class KameletRepresenter extends Representer {
         customResource();
 
         //proper order sink steps and source
-        spec();
+        kameletSpec();
 
         //For each type of FlowStep or custom classes, create a representer
         addEIP();
@@ -114,9 +113,7 @@ public class KameletRepresenter extends Representer {
                     @Override
                     public Node representData(final Object data) {
 
-                        Map<String, Object> properties = KamelHelper.JSON_MAPPER_LAZY.convertValue(data,
-                                new TypeReference<Map<String, Object>>() {});
-
+                        Map<String, Object> properties = KamelHelper.asMap(data);
                         CustomResource<?, ?> cr = (CustomResource<?, ?>) data;
 
                         final var objectMeta = cr.getMetadata();
@@ -168,7 +165,7 @@ public class KameletRepresenter extends Representer {
                 });
     }
 
-    private void spec() {
+    private void kameletSpec() {
         //spec does not have the right order
 
         this.multiRepresenters.put(KameletBindingSpec.class,

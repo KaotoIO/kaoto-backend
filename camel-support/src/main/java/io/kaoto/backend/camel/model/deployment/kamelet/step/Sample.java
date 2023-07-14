@@ -63,7 +63,7 @@ public class Sample extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SAMPLE_PERIOD_LABEL:
             case SAMPLE_PERIOD_LABEL2:
@@ -83,7 +83,7 @@ public class Sample extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case SAMPLE_PERIOD_LABEL:
             case SAMPLE_PERIOD_LABEL2:

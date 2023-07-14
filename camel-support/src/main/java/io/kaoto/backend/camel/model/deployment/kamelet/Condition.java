@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @JsonDeserialize(
@@ -16,6 +17,7 @@ import java.io.Serializable;
         "reason", "message"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Condition implements Serializable {
+    @Serial
     private static final long serialVersionUID = 37865423743856387L;
 
     @JsonProperty("type")
@@ -30,6 +32,7 @@ public class Condition implements Serializable {
     private String reason;
     @JsonProperty("message")
     private String message;
+
     public Condition() {
         super();
     }

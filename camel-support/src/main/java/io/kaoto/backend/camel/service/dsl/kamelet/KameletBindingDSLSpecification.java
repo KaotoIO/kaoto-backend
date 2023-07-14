@@ -3,7 +3,7 @@ package io.kaoto.backend.camel.service.dsl.kamelet;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.deployment.generator.GeneratorHelper;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -22,7 +22,7 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
     public static final String KNATIVE = "KNATIVE";
     public static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
 
-    private static final String VALIDATION_SCHEME = GeneratorHelper.loadResourceAsString(
+    private static final String VALIDATION_SCHEME = KamelHelper.loadResourceAsString(
             KameletBindingDSLSpecification.class,
             "kameletbinding.json").orElse("");
 

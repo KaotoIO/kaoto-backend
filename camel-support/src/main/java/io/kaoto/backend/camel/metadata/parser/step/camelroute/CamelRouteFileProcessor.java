@@ -1,5 +1,6 @@
 package io.kaoto.backend.camel.metadata.parser.step.camelroute;
 
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.metadata.parser.JsonProcessFile;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.NumberParameter;
@@ -7,14 +8,13 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
-
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import org.jboss.logging.Logger;
+
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,18 +32,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     public static final String PROPERTIES = "properties";
     private static final String INVALID_TYPE = "invalid";
     private static final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
-    private static String DEFAULT_ICON_STRING;
 
-    static {
-        try {
-            DEFAULT_ICON_STRING =
-                    new String(CamelRouteFileProcessor.class.getResourceAsStream("default-icon.txt").readAllBytes(),
-                            StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            log.error("Couldn't find the default icon for camel routes.", e);
-        }
+    private static final String DEFAULT_ICON_STRING = KamelHelper.loadResourceAsString(
+            CamelRouteFileProcessor.class, "default-icon.txt").orElse("");
 
-    }
 
     @Override
     protected List<Step> parseInputStream(final Reader input) {
@@ -102,7 +94,6 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             final JsonObject json) {
         final String camelKind = "Camel-Connector";
         final String defaultGroup = "Camel-Component";
-        final String defaultIcon = DEFAULT_ICON_STRING;
 
         JsonObject component = json.getJsonObject(COMPONENT);
         JsonObject properties = json.getJsonObject(PROPERTIES);
@@ -112,9 +103,20 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String description = component.getString(DESCRIPTION);
         String type = getStepType(component);
 
-        List<Parameter> parameters = new ArrayList<>();
+        List<Parameter<?>> parameters = new ArrayList<>();
         final AtomicInteger i = new AtomicInteger(0);
         final var requiredProperties = new ArrayList<String>();
+
+        Map<String, Function<ParameterEntry, Parameter<?>>> typeToClassConversion = Map.of(
+                "string", CamelRouteFileProcessor::getStringParameter,
+                "duration", CamelRouteFileProcessor::getStringParameter,
+                "object", CamelRouteFileProcessor::getObjectParameter,
+                "integer", CamelRouteFileProcessor::getNumberParameter,
+                "long", CamelRouteFileProcessor::getNumberParameter,
+                "numeric", CamelRouteFileProcessor::getNumberParameter,
+                "boolean", CamelRouteFileProcessor::getBooleanParameter
+        );
+
         properties.entrySet().stream()
                 .forEachOrdered(entrySet -> {
                             final Map<String, String> parameterData = new LinkedHashMap<>();
@@ -124,22 +126,12 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                             jsonObject.forEach((key, value) ->
                                     parameterData.put(key, value.toString().replace("\"", "")));
 
-                            Map<String,
-                                    Function<ParameterEntry, Parameter>>
-                                    typeToClassConversion = Map.of(
-                                    "string", this::getStringParameter,
-                                    "duration", this::getStringParameter,
-                                    "object", this::getObjectParameter,
-                                    "integer", this::getNumberParameter,
-                                    "long", this::getNumberParameter,
-                                    "numeric", this::getNumberParameter,
-                                    "boolean", this::getBooleanParameter
-                            );
-
                             ParameterEntry entry = new ParameterEntry(entrySet.getKey(), parameterData);
 
-                            Parameter parsedParameter = typeToClassConversion
-                                    .getOrDefault(parameterData.get("type"), this::getObjectParameter)
+                            Parameter<?> parsedParameter = typeToClassConversion
+                                    .getOrDefault(
+                                            parameterData.get("type"),
+                                            CamelRouteFileProcessor::getObjectParameter)
                                     .apply(entry);
 
                             if ("path".equals(parameterData.get("kind"))) {
@@ -153,7 +145,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                                 }
                             }
 
-                            if(Boolean.valueOf(parameterData.getOrDefault("required", "false"))) {
+                            if(Boolean.parseBoolean(parameterData.getOrDefault("required", "false"))) {
                                 requiredProperties.add(entrySet.getKey());
                             }
 
@@ -166,7 +158,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         return new ParsedCamelComponentFromJson(
                 id,
                 camelKind,
-                defaultIcon,
+                DEFAULT_ICON_STRING,
                 title,
                 description,
                 defaultGroup,
@@ -176,10 +168,10 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private static void handleWeirdCases(String id, List<Parameter> parameters) {
+    private static void handleWeirdCases(String id, List<Parameter<?>> parameters) {
         //Here are the weird cases
         if ("avro".equalsIgnoreCase(id)) {
-            for (Parameter p : parameters) {
+            for (Parameter<?> p : parameters) {
                 if ("messageName".equalsIgnoreCase(p.getId())) {
                     p.setPathSeparator("/");
                     p.setPathOrder(3);
@@ -192,7 +184,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 }
             }
         } else if ("sftp".equalsIgnoreCase(id)) {
-            for (Parameter p : parameters) {
+            for (Parameter<?> p : parameters) {
                 if ("host".equalsIgnoreCase(p.getId())) {
                     p.setPathSeparator("//");
                     p.setPathOrder(0);
@@ -204,7 +196,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
                 }
             }
         } else if ("kamelet".equalsIgnoreCase(id)) {
-            for (Parameter p : parameters) {
+            for (Parameter<?> p : parameters) {
                 if ("routeId".equalsIgnoreCase(p.getId())) {
                     p.setPathSeparator("/");
                     break;
@@ -219,7 +211,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             parameter.setNullable(true);
             parameters.add(parameter);
         } else if ("netty-http".equalsIgnoreCase(id)) {
-            for (Parameter p : parameters) {
+            for (Parameter<?> p : parameters) {
                 if ("host".equalsIgnoreCase(p.getId())) {
                     p.setPathSeparator("://");
                 } else if ("path".equalsIgnoreCase(p.getId())) {
@@ -229,7 +221,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         }
     }
 
-    private StringParameter getStringParameter(final ParameterEntry parameter) {
+    private static StringParameter getStringParameter(final ParameterEntry parameter) {
         String id = parameter.key();
         Map<String, String> parameterData = parameter.value();
 
@@ -243,7 +235,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private NumberParameter getNumberParameter(final ParameterEntry parameter) {
+    private static NumberParameter getNumberParameter(final ParameterEntry parameter) {
         String id = parameter.key();
         Map<String, String> parameterData = parameter.value();
         Long value;
@@ -265,7 +257,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private ObjectParameter getObjectParameter(final ParameterEntry parameter) {
+    private static ObjectParameter getObjectParameter(final ParameterEntry parameter) {
         String id = parameter.key();
         Map<String, String> parameterData = parameter.value();
 
@@ -278,7 +270,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private BooleanParameter getBooleanParameter(final ParameterEntry parameter) {
+    private static BooleanParameter getBooleanParameter(final ParameterEntry parameter) {
         String id = parameter.key();
         Map<String, String> parameterData = parameter.value();
 
@@ -292,7 +284,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private String getStepType(final JsonObject component) {
+    private static String getStepType(final JsonObject component) {
         final boolean isCamelComponentSourceOnly = component.getBoolean("consumerOnly");
         final boolean isCamelComponentSinkOnly = component.getBoolean("producerOnly");
         final boolean canCamelComponentBeSourceAndSink = !isCamelComponentSourceOnly && !isCamelComponentSinkOnly;
@@ -364,7 +356,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             String description,
             String group,
             String type,
-            List<Parameter> parameters,
+            List<Parameter<?>> parameters,
             List<String> required
     ) {
     }

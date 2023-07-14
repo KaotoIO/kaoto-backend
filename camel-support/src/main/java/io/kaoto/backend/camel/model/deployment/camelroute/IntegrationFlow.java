@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class IntegrationFlow {
     private List<Step> steps;
-    private List<Parameter> parameters;
+    private List<Parameter<?>> parameters;
     private Map<String, Object> metadata;
 
     public List<Step> getSteps() {
@@ -27,12 +27,12 @@ public class IntegrationFlow {
         this.metadata = metadata;
     }
 
-    public List<Parameter> getParameters() {
+    public List<Parameter<?>> getParameters() {
         return parameters;
     }
 
     public void setParameters(
-            final List<Parameter> parameters) {
+            final List<Parameter<?>> parameters) {
         this.parameters = parameters;
     }
 

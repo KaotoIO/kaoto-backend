@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -24,6 +25,7 @@ import java.io.Serializable;
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KameletDefinitionProperty  implements Serializable {
+    @Serial
     private static final long serialVersionUID = -2212036216788957786L;
 
     @JsonProperty("title")

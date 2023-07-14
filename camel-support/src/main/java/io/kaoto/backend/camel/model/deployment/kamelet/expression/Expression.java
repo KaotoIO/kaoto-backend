@@ -125,7 +125,7 @@ public class Expression extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case CONSTANT_LABEL:
                 this.setConstant(String.valueOf(parameter.getValue()));
@@ -156,7 +156,7 @@ public class Expression extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case CONSTANT_LABEL:
                 parameter.setValue(this.constant);
@@ -256,7 +256,7 @@ public class Expression extends EIPStep {
     }
 
     public void setConstant(final Object constant) {
-        if (constant instanceof Map map) {
+        if (constant instanceof Map<?, ?> map) {
             this.constant = new CSimple(map);
         } else {
             this.constant = constant;
@@ -276,7 +276,7 @@ public class Expression extends EIPStep {
     }
 
     public void setSimple(final Object simple) {
-        if (simple instanceof Map map) {
+        if (simple instanceof Map<?, ?> map) {
             this.simple = new CSimple(map);
         } else {
             this.simple = simple;
@@ -288,7 +288,7 @@ public class Expression extends EIPStep {
     }
 
     public void setJsonpath(Object jsonpath) {
-        if (jsonpath instanceof Map map) {
+        if (jsonpath instanceof Map<?, ?> map) {
             this.jsonpath = new JsonPath(map);
         } else {
             this.jsonpath = jsonpath;
@@ -300,7 +300,7 @@ public class Expression extends EIPStep {
     }
 
     public void setJq(final Object jq) {
-        if (jq instanceof Map map) {
+        if (jq instanceof Map<?, ?> map) {
             this.jq = new Jq(map);
         } else {
             this.jq = jq;

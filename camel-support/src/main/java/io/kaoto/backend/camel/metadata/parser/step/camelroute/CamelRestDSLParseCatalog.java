@@ -68,7 +68,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         step.setDescription("This step represents a REST API.");
         step.setTitle(REST_DSL);
         step.setGroup(REST_DSL);
-        var parameters = new ArrayList<Parameter>();
+        var parameters = new ArrayList<Parameter<?>>();
         final var path =
                 new StringParameter(Rest.PATH_LABEL, "Path of the endpoint",
                         "Path where this endpoint is listening.", null, null, null,null, null);
@@ -98,7 +98,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         var step = new Step(Rest.CAMEL_REST_CONSUMES, Rest.CONSUMES_LABEL,
                 ICON, new ArrayList<>(), CAMEL_REST_ENDPOINT, Step.Type.MIDDLE);
 
-        var parameters = new ArrayList<Parameter>();
+        var parameters = new ArrayList<Parameter<?>>();
 
         var parameter = new StringParameter();
         parameter.setId(Rest.CONSUMES_LABEL);

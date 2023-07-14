@@ -49,7 +49,7 @@ public class JsonPath {
 
     }
 
-    public JsonPath(Map map) {
+    public JsonPath(Map<?, ?> map) {
 
         if (map.get(ALLOW_EASY_PREDICATE_LABEL) != null) {
             setAllowEasyPredicate(Boolean.valueOf(String.valueOf(map.get(ALLOW_EASY_PREDICATE_LABEL))));

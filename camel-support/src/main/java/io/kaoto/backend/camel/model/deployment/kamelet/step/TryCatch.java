@@ -105,8 +105,7 @@ public class TryCatch extends EIPStep {
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
         step.setBranches(new ArrayList<>());
-        var identifier = STEPS_LABEL;
-        step.getBranches().add(createBranch(identifier, this.getSteps(), kameletStepParserService));
+        step.getBranches().add(createBranch(STEPS_LABEL, this.getSteps(), kameletStepParserService));
         if (this.getDoCatch() != null) {
             int i = 1;
             for (DoCatch doC : this.getDoCatch()) {
@@ -143,11 +142,11 @@ public class TryCatch extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
     }
 
     public List<FlowStep> getSteps() {

@@ -113,7 +113,7 @@ public class Split extends Tokenizer {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         if (parameter.getValue() != null) {
             super.assignAttribute(parameter);
             switch (parameter.getId()) {
@@ -233,7 +233,7 @@ public class Split extends Tokenizer {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
             case TOKENIZE_LABEL:

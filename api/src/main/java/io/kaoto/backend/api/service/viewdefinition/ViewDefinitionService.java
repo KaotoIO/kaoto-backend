@@ -23,10 +23,9 @@ import java.util.List;
  */
 @ApplicationScoped
 public class ViewDefinitionService {
+    private static final Logger LOG = Logger.getLogger(ViewDefinitionService.class);
 
     private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
-
-    private Logger log = Logger.getLogger(ViewDefinitionService.class);
 
     /*
      * 🐱method viewsPerStepList: List[ViewDefinition]
@@ -39,7 +38,7 @@ public class ViewDefinitionService {
     public List<ViewDefinition> viewsPerStepList(final List<Step> steps) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var viewParser : getViewParsers()) {
-            log.trace("Using " + viewParser.getClass());
+            LOG.trace("Using " + viewParser.getClass());
             viewDefinitions.addAll(viewParser.parse(steps));
         }
 

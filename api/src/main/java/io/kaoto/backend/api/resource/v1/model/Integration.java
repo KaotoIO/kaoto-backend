@@ -17,7 +17,7 @@ public class Integration {
 
     private List<Step> steps = Collections.emptyList();
     private Map<String, Object> metadata = Collections.emptyMap();
-    private List<Parameter> parameters = Collections.emptyList();
+    private List<Parameter<?>> parameters = Collections.emptyList();
     private String dsl = null;
 
     /*
@@ -43,7 +43,7 @@ public class Integration {
      *
      *  Input parameters associated to this resource.
      */
-    public List<Parameter> getParameters() {
+    public List<Parameter<?>> getParameters() {
         return parameters;
     }
 
@@ -56,7 +56,7 @@ public class Integration {
     }
 
     public void setParameters(
-            final List<Parameter> parameters) {
+            final List<Parameter<?>> parameters) {
         this.parameters = parameters;
     }
 

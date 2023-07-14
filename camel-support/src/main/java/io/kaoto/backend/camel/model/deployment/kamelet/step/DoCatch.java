@@ -35,10 +35,11 @@ public class DoCatch implements Serializable {
             }
             list.forEach(v -> getExceptions().add(String.valueOf(v)));
         }
-        var onW = branch.getParameters().stream().filter(p -> p.getId().equalsIgnoreCase("on-when")).findAny();
-        if (onW.isPresent()) {
-            setOnWhen(new Expression(onW.get().getValue()));
-        }
+
+        branch.getParameters().stream()
+                .filter(p -> p.getId().equalsIgnoreCase("on-when"))
+                .findAny()
+                .ifPresent(parameter -> setOnWhen(new Expression(parameter.getValue())));
     }
 
     @JsonCreator

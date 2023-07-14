@@ -32,7 +32,7 @@ public class Process extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         if (parameter.getId().equalsIgnoreCase(REF_LABEL)) {
                 parameter.setValue(this.getRef());
         }
@@ -40,7 +40,7 @@ public class Process extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         if (parameter.getId().equalsIgnoreCase(REF_LABEL)) {
             this.setRef(String.valueOf(parameter.getValue()));
         }

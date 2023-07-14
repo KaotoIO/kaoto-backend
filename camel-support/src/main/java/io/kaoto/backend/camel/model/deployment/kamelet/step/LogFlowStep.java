@@ -34,7 +34,7 @@ public class LogFlowStep implements FlowStep {
         super();
         if (log instanceof LogStep logStep) {
             this.setLog(logStep);
-        } else if (log instanceof Map map) {
+        } else if (log instanceof Map<?, ?> map) {
             this.setLog(new LogStep(map));
         } else if (log != null) {
             this.setLog(new LogStep());

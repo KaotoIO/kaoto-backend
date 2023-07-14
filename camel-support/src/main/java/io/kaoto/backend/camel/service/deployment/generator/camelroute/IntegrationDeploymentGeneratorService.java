@@ -36,7 +36,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     private static final String EIP = "EIP";
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
-
+    private static final List<Class<? extends CustomResource<?,?>>> CUSTOM_RESOURCES = List.of(Integration.class);
     private static final Logger LOG = Logger.getLogger(IntegrationDeploymentGeneratorService.class);
 
     private IntegrationStepParserService stepParserService;
@@ -46,7 +46,11 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     private StepCatalog catalog;
 
     @Override
-    public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
+    public String parse(
+            final List<Step> steps,
+            final Map<String, Object> metadata,
+            final List<Parameter<?>> parameters) {
+
         List<IntegrationFlow> parsedList = new ArrayList<>();
         if (steps != null) {
             var parsed = new IntegrationFlow();
@@ -83,7 +87,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     }
 
     @Override
-    public CustomResource parse(final String input) {
+    public CustomResource<?, ?> parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
                 return KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
@@ -96,7 +100,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     }
 
     @Override
-    public DeploymentGeneratorService.Status getStatus(final CustomResource cr) {
+    public DeploymentGeneratorService.Status getStatus(final CustomResource<?, ?> cr) {
         DeploymentGeneratorService.Status s = DeploymentGeneratorService.Status.Invalid;
         if (cr instanceof Integration integration && integration.getStatus() != null) {
             switch (integration.getStatus().getPhase()) {
@@ -116,8 +120,8 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     }
 
     @Override
-    public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{Integration.class});
+    public List<Class<? extends CustomResource<?, ?>>> supportedCustomResources() {
+        return CUSTOM_RESOURCES;
     }
 
     @Override

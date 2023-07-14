@@ -65,7 +65,7 @@ public class TransformFlowStep implements FlowStep {
                 .findAny();
 
         if (res.isPresent()) {
-            for (Parameter p : res.get().getParameters()) {
+            for (Parameter<?> p : res.get().getParameters()) {
                 if (p.getId()
                         .equalsIgnoreCase(KameletStepParserService.NAME)) {
                     p.setValue(this.getTransform().getName());

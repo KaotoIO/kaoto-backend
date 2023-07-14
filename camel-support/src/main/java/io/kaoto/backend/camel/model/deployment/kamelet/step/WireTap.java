@@ -122,7 +122,7 @@ public class WireTap extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case COPY_LABEL:
                 this.setCopy(Boolean.valueOf(String.valueOf(parameter.getValue())));
@@ -170,7 +170,7 @@ public class WireTap extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case COPY_LABEL:
                 parameter.setValue(this.getCopy());

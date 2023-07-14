@@ -50,7 +50,7 @@ public interface StepParserService<T extends Step> {
      */
     class ParseResult<T> {
         private List<T> steps;
-        private List<Parameter> parameters;
+        private List<Parameter<?>> parameters;
         private Map<String, Object> metadata;
 
         public List<T> getSteps() {
@@ -69,12 +69,12 @@ public interface StepParserService<T extends Step> {
             this.metadata = metadata;
         }
 
-        public List<Parameter> getParameters() {
+        public List<Parameter<?>> getParameters() {
             return parameters;
         }
 
         public void setParameters(
-                final List<Parameter> parameters) {
+                final List<Parameter<?>> parameters) {
             this.parameters = parameters;
         }
 

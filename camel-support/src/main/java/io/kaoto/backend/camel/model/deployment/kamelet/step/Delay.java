@@ -43,7 +43,7 @@ public class Delay extends EIPStep {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXPRESSION_LABEL:
                 this.setExpression(new Expression(parameter.getValue()));
@@ -91,7 +91,7 @@ public class Delay extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case EXPRESSION_LABEL:
                 parameter.setValue(this.expression);

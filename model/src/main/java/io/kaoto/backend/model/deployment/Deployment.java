@@ -14,9 +14,9 @@ public class Deployment {
     private String namespace;
     private String type;
     @JsonIgnore
-    private CustomResource resource;
+    private CustomResource<?, ?> resource;
 
-    public Deployment(final CustomResource customResource, final Object status) {
+    public Deployment(final CustomResource<?, ?> customResource, final Object status) {
         this.setName(customResource.getMetadata().getName());
         this.setDate(customResource.getMetadata().getCreationTimestamp());
         this.setType(customResource.getKind());
@@ -37,11 +37,11 @@ public class Deployment {
 
 
     @JsonIgnore
-    public CustomResource getResource() {
+    public CustomResource<?, ?> getResource() {
         return resource;
     }
 
-    public void setResource(final CustomResource resource) {
+    public void setResource(final CustomResource<?, ?> resource) {
         this.resource = resource;
     }
 

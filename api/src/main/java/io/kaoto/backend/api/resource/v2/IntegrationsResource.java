@@ -7,12 +7,6 @@ import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.cache.CacheResult;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -23,11 +17,17 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * 🐱class IntegrationsResource
@@ -41,6 +41,7 @@ import java.util.Random;
 @ApplicationScoped
 public class IntegrationsResource {
     private static final Logger LOG = Logger.getLogger(IntegrationsResource.class);
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private DeploymentService deploymentService;
     private Instance<DSLSpecification> dslSpecifications;
@@ -146,14 +147,12 @@ public class IntegrationsResource {
             }
             //Make sure there is an id/name assigned to all flows
             if (!flow.getMetadata().containsKey(name)) {
-                Random random = new Random();
                 flow.getMetadata().put(name,
-                        flow.getDsl().toLowerCase().replaceAll(" ", "") + random.nextInt(99));
+                        flow.getDsl().toLowerCase().replaceAll(" ", "") + RANDOM.nextInt(99));
             }
             //Make sure it is unique
             if (usedIds.contains(flow.getMetadata().get(name))) {
-                Random random = new Random();
-                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + random.nextInt(99));
+                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + RANDOM.nextInt(99));
             }
             usedIds.add(String.valueOf(flow.getMetadata().get(name)));
         }

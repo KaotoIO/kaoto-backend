@@ -53,7 +53,7 @@ public class LogStep extends EIPStep {
         super(step);
     }
 
-    public LogStep(Map<String, Object> map) {
+    public LogStep(Map<?, ?> map) {
         super(map);
         if (map.containsKey(MESSAGE)) {
             this.setMessage(String.valueOf(map.get(MESSAGE)));
@@ -105,7 +105,7 @@ public class LogStep extends EIPStep {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case MESSAGE:
                 this.setMessage(parameter.getValue().toString());
@@ -134,7 +134,7 @@ public class LogStep extends EIPStep {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         switch (parameter.getId()) {
             case MESSAGE:
                 parameter.setValue(this.getMessage());

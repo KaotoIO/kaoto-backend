@@ -105,13 +105,13 @@ public class GenericViewDefinitionParserService
         boolean res = false;
         switch (c.getOperation()) {
             case SIZE_EQUALS:
-                res = steps != null && steps.size() == Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() == Integer.parseInt(c.getParameter());
                 break;
             case SIZE_GREATER_THAN:
-                res = steps != null && steps.size() > Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() > Integer.parseInt(c.getParameter());
                 break;
             case SIZE_SMALLER_THAN:
-                res = steps != null && steps.size() < Integer.valueOf(c.getParameter());
+                res = steps != null && steps.size() < Integer.parseInt(c.getParameter());
                 break;
             case CONTAINS_STEP_IDENTIFIER:
                 res = steps != null && containsStepIdentifier(steps, c, includeBranch);
@@ -142,7 +142,7 @@ public class GenericViewDefinitionParserService
             if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
                     res = containsStepIdentifier(b.getSteps(), c, true);
-                    if (res == true) {
+                    if (res) {
                         return true;
                     }
                 }
@@ -164,7 +164,7 @@ public class GenericViewDefinitionParserService
             if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
                     res = containsStepName(b.getSteps(), c, true);
-                    if (res == true) {
+                    if (res) {
                         return true;
                     }
                 }
@@ -186,7 +186,7 @@ public class GenericViewDefinitionParserService
             if (includeBranch && s.getBranches() != null) {
                 for (Branch b : s.getBranches()) {
                     res = containsStepType(b.getSteps(), c, true);
-                    if (res == true) {
+                    if (res) {
                         return true;
                     }
                 }

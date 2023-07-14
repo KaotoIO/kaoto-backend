@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class From extends UriFlowStep {
+    @Serial
     private static final long serialVersionUID = -4601560033032557024L;
 
     @JsonProperty("steps")

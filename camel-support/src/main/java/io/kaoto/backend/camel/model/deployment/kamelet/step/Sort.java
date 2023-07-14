@@ -77,7 +77,7 @@ public class Sort extends Expression {
     }
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         super.assignAttribute(parameter);
         switch (parameter.getId()) {
             case COMPARATOR_LABEL:
@@ -97,7 +97,7 @@ public class Sort extends Expression {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         switch (parameter.getId()) {
             case COMPARATOR_LABEL:

@@ -32,7 +32,7 @@ public class PollEnrich extends Enrich {
     }
 
     @Override
-    protected void assignProperty(final Parameter parameter) {
+    protected void assignProperty(final Parameter<?> parameter) {
         super.assignProperty(parameter);
         if (parameter.getId().equalsIgnoreCase(TIMEOUT_LABEL)) {
                 parameter.setValue(this.getTimeout());
@@ -41,7 +41,7 @@ public class PollEnrich extends Enrich {
 
 
     @Override
-    protected void assignAttribute(final Parameter parameter) {
+    protected void assignAttribute(final Parameter<?> parameter) {
         super.assignAttribute(parameter);
         if (parameter.getId().equalsIgnoreCase(TIMEOUT_LABEL)) {
             this.setTimeout(parameter.getValue().toString());
