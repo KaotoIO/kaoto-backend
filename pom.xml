@@ -35,8 +35,10 @@
         <checkstyle.version>10.12.1</checkstyle.version>
         <camel.version>4.0.0-RC1</camel.version>
         <camel-quarkus.version>3.0.0-RC1</camel-quarkus.version>
+        <camel-k-crds.version>1.12.1</camel-k-crds.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <quarkus-quinoa.version>2.0.6</quarkus-quinoa.version>
+        <quarkus-jgit.version>3.0.2</quarkus-jgit.version>
 
         <!-- Plugins-->
         <compiler-plugin.version>3.11.0</compiler-plugin.version>
@@ -91,15 +93,76 @@
                 <artifactId>camel-quarkus-xml-jaxb</artifactId>
                 <version>${camel-quarkus.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.camel.k</groupId>
+                <artifactId>camel-k-crds</artifactId>
+                <version>${camel-k-crds.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>${jaxb-api.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.quarkiverse.quinoa</groupId>
                 <artifactId>quarkus-quinoa</artifactId>
                 <version>${quarkus-quinoa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkiverse.jgit</groupId>
+                <artifactId>quarkus-jgit</artifactId>
+                <version>${quarkus-jgit.version}</version>
+            </dependency>
+
+            <!-- local -->
+
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>metadata</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>catalog</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>services-interfaces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>services-cluster</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>camel-support</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>api-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kaoto.backend</groupId>
+                <artifactId>cluster</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -184,6 +247,16 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>${exec-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>io.smallrye</groupId>
+                    <artifactId>smallrye-open-api-maven-plugin</artifactId>
+                    <version>${mallrye-open-api-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>io.swagger.codegen.v3</groupId>
+                    <artifactId>swagger-codegen-maven-plugin</artifactId>
+                    <version>${swagger-codegen-maven-plugin.version>}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
