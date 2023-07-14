@@ -14,7 +14,6 @@
         <dependency>
             <groupId>io.kaoto.backend</groupId>
             <artifactId>model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -42,7 +41,6 @@
                 <dependency>
                     <groupId>io.kaoto.backend</groupId>
                     <artifactId>camel-support</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
