@@ -1,20 +1,5 @@
 package io.kaoto.backend.camel.metadata.parser.step.kamelet;
 
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
-import io.kaoto.backend.model.Metadata;
-import io.kaoto.backend.model.step.Step;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
-import jakarta.inject.Inject;
-import org.apache.commons.io.IOUtils;
-import org.jboss.logging.Logger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,6 +14,22 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
+import io.kaoto.backend.model.Metadata;
+import io.kaoto.backend.model.step.Step;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.kubernetes.client.WithKubernetesTestServer;
+import jakarta.inject.Inject;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,7 +40,7 @@ class KameletParseCatalogTest {
 
     private static final String FILE_NAME = "camel-kamelets-3.20.2.jar";
 
-    private Logger log = Logger.getLogger(KameletParseCatalogTest.class);
+    private static final Logger LOG = Logger.getLogger(KameletParseCatalogTest.class);
 
     public KameletParseCatalog getParseCatalog() {
         return parseCatalog;
@@ -246,7 +247,7 @@ class KameletParseCatalogTest {
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
                 if (zipEntry.getName().contains("kamelets/") && zipEntry.getName().contains(".yaml")) {
-                    log.info(String.format("Loading Kamelet %s into cluster",
+                    LOG.info(String.format("Loading Kamelet %s into cluster",
                             zipEntry.getName().replaceFirst("kamelets/", "")));
                     final String content = IOUtils.toString(new InputStreamReader(zis));
                     kubernetesClient.resources(Kamelet.class)
@@ -258,7 +259,7 @@ class KameletParseCatalogTest {
                 zipEntry = zis.getNextEntry();
             }
         } catch (IOException e) {
-            log.error("Problem with processing zip file.", e);
+            LOG.error("Problem with processing zip file.", e);
         }
         return loadedResources;
     }

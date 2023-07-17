@@ -1,31 +1,5 @@
 package io.kaoto.backend.deployment;
 
-import com.google.common.base.Strings;
-import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
-import io.fabric8.kubernetes.client.dsl.LogWatch;
-import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
-import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationRepresenter;
-import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.NotFoundException;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -34,6 +8,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.context.ManagedExecutor;
+import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
+import com.google.common.base.Strings;
+
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientException;
+import io.fabric8.kubernetes.client.dsl.LogWatch;
+import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationRepresenter;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 /**
  * 🐱miniclass ClusterService (DeploymentsResource)
@@ -46,7 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ApplicationScoped
 public class ClusterService {
 
-    private Logger log = Logger.getLogger(ClusterService.class);
+    private static final Logger LOG = Logger.getLogger(ClusterService.class);
     private KubernetesClient kubernetesClient;
     private Instance<DSLSpecification> parsers;
     private ManagedExecutor managedExecutor;
@@ -102,7 +104,7 @@ public class ClusterService {
         for (var parser : parsers) {
             CustomResource binding = parser.getDeploymentGeneratorService().parse(input);
             if (binding != null) {
-                log.trace("This is a " + binding.getKind());
+                LOG.trace("This is a " + binding.getKind());
                 setName(binding, namespace);
                 try {
                     start(binding, namespace);
@@ -113,7 +115,7 @@ public class ClusterService {
                     }
                     return;
                 } catch (KubernetesClientException e) {
-                    log.debug("Either the binding is not right or the CRD"
+                    LOG.debug("Either the binding is not right or the CRD"
                             + " is not valid: " + e.getMessage());
                 }
             }
@@ -149,9 +151,9 @@ public class ClusterService {
         //check no other deployment has the same name already
         for (Deployment i : getResources(getNamespace(namespace))) {
             if (i.getName().equalsIgnoreCase(binding.getMetadata().getName())) {
-                log.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
+                LOG.warn("There is an existing deployment with the same name: " + binding.getMetadata().getName());
                 binding.getMetadata().setName(binding.getMetadata().getName() + System.currentTimeMillis());
-                log.warn("Renaming to: " + binding.getMetadata().getName());
+                LOG.warn("Renaming to: " + binding.getMetadata().getName());
                 checkNoDuplicatedNames(namespace, binding, iterations + 1);
                 break;
             }
@@ -199,7 +201,7 @@ public class ClusterService {
             throw new NotFoundException("Resource with name " + name + " not found.");
         }
 
-        log.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
+        LOG.trace("Going to delete a " + cr.getClass() + " in " + getNamespace(namespace) + " with name " + name);
 
         return !kubernetesClient.resources(cr.getClass()).inNamespace(getNamespace(namespace))
                 .withName(name).delete().isEmpty();
@@ -284,7 +286,7 @@ public class ClusterService {
                             return ++n;
                         } catch (Exception e) {
                             if (!closed.get()) {
-                                log.error("Error reading log stream", e);
+                                LOG.error("Error reading log stream", e);
                                 emitter.fail(e);
                             } else {
                                 emitter.complete();
@@ -300,11 +302,11 @@ public class ClusterService {
                         try {
                             reader.close();
                         } catch (Exception e) {
-                            log.error("Error closing log stream", e);
+                            LOG.error("Error closing log stream", e);
                         }
                     });
         } catch (Exception e) {
-            log.error("Error watching log stream", e);
+            LOG.error("Error watching log stream", e);
         }
         return Multi.createFrom().nothing();
     }

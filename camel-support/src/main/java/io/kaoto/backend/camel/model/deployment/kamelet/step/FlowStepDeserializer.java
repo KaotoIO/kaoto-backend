@@ -1,19 +1,21 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
-import org.jboss.logging.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
+import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 public class FlowStepDeserializer extends JsonDeserializer {
-    private final Logger log = Logger.getLogger(FlowStepDeserializer.class);
+    private static final Logger LOG = Logger.getLogger(FlowStepDeserializer.class);
 
     @Override
     public Object deserialize(
@@ -23,7 +25,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
             return deserializeFlowStep(n);
         } catch (Exception e) {
-            log.error("Error trying to deserialize step: " + e.getMessage());
+            LOG.error("Error trying to deserialize step: " + e.getMessage());
         }
 
         return new UriFlowStep();

@@ -38,7 +38,7 @@ import jakarta.inject.Inject;
 public class KameletBindingStepParserService implements StepParserService<Step> {
 
     private static final String[] ROOT_METADATA_NAMES = new String[] { "description" };
-    private Logger log = Logger.getLogger(KameletBindingStepParserService.class);
+    private static final Logger LOG = Logger.getLogger(KameletBindingStepParserService.class);
 
     private StepCatalog catalog;
 
@@ -136,7 +136,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
 
         try {
             if (bindingStep.getUri() != null) {
-                log.trace("Found uri component. Probably a Camel Conector.");
+                LOG.trace("Found uri component. Probably a Camel Conector.");
                 String uri = bindingStep.getUri();
                 step = catalog.getReadOnlyCatalog()
                         .searchByName(uri.substring(0, uri.indexOf(":")))
@@ -153,7 +153,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
                     setValuesOnParameters(step.get(), uri);
                 }
             } else if (bindingStep.getRef() != null) {
-                log.trace("Found ref component.");
+                LOG.trace("Found ref component.");
 
                 var name = bindingStep.getRef().getName();
                 var kind = bindingStep.getRef().getKind();
@@ -191,12 +191,12 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
             }
 
             if (step.isPresent()) {
-                log.trace("Found step " + step.get().getName() + " of kind " + step.get().getKind());
+                LOG.trace("Found step " + step.get().getName() + " of kind " + step.get().getKind());
                 setValuesOnParameters(step.get(), bindingStep.getProperties());
                 setValuesOnParameters(step.get(), bindingStep.getParameters());
             }
         } catch (Exception e) {
-            log.warn("Can't parse step -> " + e.getMessage());
+            LOG.warn("Can't parse step -> " + e.getMessage());
         }
         return step.orElse(null);
     }
@@ -216,7 +216,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
                 }
             }
             if (!valid) {
-                log.warn("There is an unknown property: " + c);
+                LOG.warn("There is an unknown property: " + c);
             }
         }
 

@@ -1,16 +1,19 @@
 package io.kaoto.backend.api.resource.v1;
 
-import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.api.service.deployment.DeploymentService;
-import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.api.service.language.LanguageService;
-import io.kaoto.backend.model.step.Step;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
+import io.kaoto.backend.api.resource.v1.model.Integration;
+import io.kaoto.backend.api.service.deployment.DeploymentService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.api.service.language.LanguageService;
+import io.kaoto.backend.model.step.Step;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -21,8 +24,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 🐱class IntegrationsResource
@@ -36,7 +37,7 @@ import java.util.List;
 @ApplicationScoped
 public class IntegrationsResource {
 
-    private Logger log = Logger.getLogger(IntegrationsResource.class);
+    private static final Logger LOG = Logger.getLogger(IntegrationsResource.class);
     private DeploymentService deploymentService;
     private Instance<DSLSpecification> dslSpecifications;
     private LanguageService languageService;
@@ -114,7 +115,7 @@ public class IntegrationsResource {
                     break;
                 }
             } catch (Exception e) {
-                log.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
+                LOG.warn("Parser " + stepParserService.getClass() + "threw an unexpected error.", e);
             }
         }
 
@@ -127,12 +128,12 @@ public class IntegrationsResource {
                         integration.setMetadata(parsed.getMetadata());
                         integration.setParameters(parsed.getParameters());
                         integration.setDsl(stepParserService.identifier());
-                        log.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
+                        LOG.warn("Gurl, the DSL you gave me is so wrong. This is a " + stepParserService.identifier()
                                 + " not a " + dsl);
                         break;
                     }
                 } catch (Exception e) {
-                    log.warn("Parser " + stepParserService.getClass()
+                    LOG.warn("Parser " + stepParserService.getClass()
                             + "threw an unexpected error.", e);
                 }
             }
@@ -178,7 +179,7 @@ public class IntegrationsResource {
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
-        log.error("Error processing deployment.", x);
+        LOG.error("Error processing deployment.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("Error processing deployment: " + x.getMessage())

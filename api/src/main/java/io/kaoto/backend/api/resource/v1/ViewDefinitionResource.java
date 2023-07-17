@@ -1,8 +1,7 @@
 package io.kaoto.backend.api.resource.v1;
 
-import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
-import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.view.ViewDefinition;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
@@ -12,6 +11,9 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
+import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
+import io.kaoto.backend.model.step.Step;
+import io.kaoto.backend.model.view.ViewDefinition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -20,7 +22,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 
 /**
  * 🐱class ViewDefinitionResource
@@ -47,7 +48,7 @@ import java.util.List;
 )
 public class ViewDefinitionResource {
 
-    private Logger log = Logger.getLogger(ViewDefinitionResource.class);
+    private static final Logger LOG = Logger.getLogger(ViewDefinitionResource.class);
 
     @Inject
     public void setViewDefinitionService(
@@ -77,7 +78,7 @@ public class ViewDefinitionResource {
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
-        log.error("Error processing views definitions.", x);
+        LOG.error("Error processing views definitions.", x);
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Error processing views definitions: "

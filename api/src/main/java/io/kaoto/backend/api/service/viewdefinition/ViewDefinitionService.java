@@ -1,16 +1,17 @@
 package io.kaoto.backend.api.service.viewdefinition;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jboss.logging.Logger;
+
 import io.kaoto.backend.api.service.viewdefinition.parser.ViewDefinitionParserService;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
-import org.jboss.logging.Logger;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -26,7 +27,7 @@ public class ViewDefinitionService {
 
     private Instance<ViewDefinitionParserService<ViewDefinition>> viewParsers;
 
-    private Logger log = Logger.getLogger(ViewDefinitionService.class);
+    private static final Logger LOG = Logger.getLogger(ViewDefinitionService.class);
 
     /*
      * 🐱method viewsPerStepList: List[ViewDefinition]
@@ -39,7 +40,7 @@ public class ViewDefinitionService {
     public List<ViewDefinition> viewsPerStepList(final List<Step> steps) {
         List<ViewDefinition> viewDefinitions = new ArrayList<>();
         for (var viewParser : getViewParsers()) {
-            log.trace("Using " + viewParser.getClass());
+            LOG.trace("Using " + viewParser.getClass());
             viewDefinitions.addAll(viewParser.parse(steps));
         }
 

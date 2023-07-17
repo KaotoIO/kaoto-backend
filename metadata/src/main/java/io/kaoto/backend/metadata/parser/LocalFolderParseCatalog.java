@@ -1,9 +1,5 @@
 package io.kaoto.backend.metadata.parser;
 
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.model.Metadata;
-import org.jboss.logging.Logger;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.model.Metadata;
 
 /**
  * 🐱class LocalFolderParseCatalog
@@ -23,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class LocalFolderParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
-    private Logger log = Logger.getLogger(LocalFolderParseCatalog.class);
+    private static final Logger LOG = Logger.getLogger(LocalFolderParseCatalog.class);
 
     private ProcessFile<T> yamlProcessFile;
 
@@ -34,22 +35,22 @@ public class LocalFolderParseCatalog<T extends Metadata>
     }
 
     private List<T> getFolderAndParse(final Path location) {
-        log.trace("Warming up repository in local folder" + uri);
+        LOG.trace("Warming up repository in local folder" + uri);
         List<T> metadataList =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd =
                 Collections.synchronizedList(new CopyOnWriteArrayList<>());
 
         //Walk the directory
-        log.trace("Parsing all files in the folder.");
+        LOG.trace("Parsing all files in the folder.");
         this.yamlProcessFile.setFutureMetadata(futureMd);
         this.yamlProcessFile.setMetadataList(metadataList);
         try {
             Files.walkFileTree(location, this.yamlProcessFile);
         } catch (IOException e) {
-            log.error("Error loading files from local folder.", e);
+            LOG.error("Error loading files from local folder.", e);
         }
-        log.trace("Found " + futureMd.size() + " elements.");
+        LOG.trace("Found " + futureMd.size() + " elements.");
         CompletableFuture.allOf(
                         futureMd.toArray(new CompletableFuture[0]))
                 .join();

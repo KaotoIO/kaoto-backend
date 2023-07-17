@@ -1,18 +1,5 @@
 package io.kaoto.backend.metadata.parser.view;
 
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.metadata.parser.GitParseCatalog;
-import io.kaoto.backend.metadata.parser.JarParseCatalog;
-import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
-import io.kaoto.backend.metadata.parser.YamlProcessFile;
-import io.kaoto.backend.model.view.ViewDefinition;
-import org.apache.commons.io.IOUtils;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.error.YAMLException;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
@@ -20,6 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
+
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.metadata.parser.GitParseCatalog;
+import io.kaoto.backend.metadata.parser.JarParseCatalog;
+import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
+import io.kaoto.backend.metadata.parser.YamlProcessFile;
+import io.kaoto.backend.model.view.ViewDefinition;
 
 /**
  * 🐱class ViewDefinitionParseCatalog
@@ -59,7 +60,7 @@ public final class ViewDefinitionParseCatalog {
 
 class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
 
-    private Logger log = Logger.getLogger(ViewDefinitionProcessFile.class);
+    private static final Logger LOG = Logger.getLogger(ViewDefinitionProcessFile.class);
 
     ViewDefinitionProcessFile() {
     }
@@ -75,7 +76,7 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
             ViewDefinition viewDefinition = yaml.load(content);
             return List.of(viewDefinition);
         } catch (YAMLException | IOException e) {
-            log.error("Error parsing ViewDefinition.", e);
+            LOG.error("Error parsing ViewDefinition.", e);
         }
 
         return List.of();

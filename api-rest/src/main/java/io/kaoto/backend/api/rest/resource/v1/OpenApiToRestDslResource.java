@@ -45,7 +45,7 @@ import jakarta.ws.rs.core.MediaType;
 )
 public class OpenApiToRestDslResource {
 
-    private Logger log = Logger.getLogger(OpenApiToRestDslResource.class);
+    private static final Logger LOG = Logger.getLogger(OpenApiToRestDslResource.class);
 
     @Inject
     private CamelRuntime camelRuntime;
@@ -69,7 +69,7 @@ public class OpenApiToRestDslResource {
         try {
             return mapper.readTree(input);
         } catch (Exception e) {
-            log.debug("Failed to parse input as JSON, trying YAML", e);
+            LOG.debug("Failed to parse input as JSON, trying YAML", e);
             Yaml loader = new Yaml(new SafeConstructor(new LoaderOptions()));
             Map map = loader.load(input);
             return mapper.convertValue(map, JsonNode.class);

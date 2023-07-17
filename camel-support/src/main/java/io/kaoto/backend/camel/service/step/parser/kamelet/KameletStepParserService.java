@@ -64,7 +64,7 @@ public class KameletStepParserService implements StepParserService<Step> {
     public static final String ROUTE_DESCRIPTION = "route-description";
     private static final String[] ROOT_METADATA_NAMES
             = new String[] { DESCRIPTION, "beans", "definition"};
-    private final Logger log = Logger.getLogger(KameletStepParserService.class);
+    private static final Logger LOG = Logger.getLogger(KameletStepParserService.class);
 
     private StepCatalog catalog;
 
@@ -273,7 +273,7 @@ public class KameletStepParserService implements StepParserService<Step> {
         try {
             return step.getStep(catalog, this, start, end);
         } catch (Exception e) {
-            log.warn("Can't parse step -> " + step, e);
+            LOG.warn("Can't parse step -> " + step, e);
         }
         return null;
     }

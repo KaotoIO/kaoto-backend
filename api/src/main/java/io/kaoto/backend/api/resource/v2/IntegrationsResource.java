@@ -42,7 +42,7 @@ import jakarta.ws.rs.core.Response;
 @ApplicationScoped
 public class IntegrationsResource {
 
-    private final Logger LOG = Logger.getLogger(IntegrationsResource.class);
+    private static final Logger LOG = Logger.getLogger(IntegrationsResource.class);
     private final SecureRandom random = new SecureRandom();
     private DeploymentService deploymentService;
     private Instance<DSLSpecification> dslSpecifications;

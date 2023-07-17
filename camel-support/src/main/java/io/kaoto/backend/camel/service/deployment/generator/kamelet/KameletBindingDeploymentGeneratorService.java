@@ -50,7 +50,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     @Inject
     private KameletBindingStepParserService stepParserService;
 
-    private Logger log = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
+    private static final Logger LOG = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Override
     public String parse(final List<Step> stepList,
@@ -191,7 +191,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                     s = DeploymentGeneratorService.Status.Building;
                     break;
                 default:
-                    log.warn("Detected unrecognized status " + binding.getStatus().getPhase());
+                    LOG.warn("Detected unrecognized status " + binding.getStatus().getPhase());
                     s = DeploymentGeneratorService.Status.Stopped;
             }
         }
@@ -231,7 +231,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, KameletBinding.class);
             } catch (Exception e) {
-                log.trace("Tried creating a kamelet binding and it didn't work.");
+                LOG.trace("Tried creating a kamelet binding and it didn't work.");
             }
         }
 
@@ -252,7 +252,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                 }
             }
         } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
+            LOG.warn("Error extracting the list of integrations.", e);
         }
 
         return res;
