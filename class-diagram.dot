@@ -125,8 +125,39 @@ viewsPerStepList:(&lt;Step[]&gt; DeploymentResourceYamlRequest):
 		
 		
 		]
+"KameletParseCatalog" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletParseCatalog</B></TD></TR>
+	
+</TABLE>>]
+
+	"KameletParseCatalog" -> "StepCatalogParser"
+
+		"KameletParseCatalog" -> "ParseCatalog" [
+		arrowhead=open, style=dashed
+		
+		
+		
+		]
 "CamelRoute" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>CamelRoute</B></TD></TR>
+	
+</TABLE>>]
+
+
+"Kamelet" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>Kamelet</B></TD></TR>
+	
+</TABLE>>]
+
+
+"KameletBinding" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>KameletBinding</B></TD></TR>
+	
+</TABLE>>]
+
+
+"SimplifiedKamelet" [ label = <<TABLE CELLSPACING="0">
+	<TR><TD><B>SimplifiedKamelet</B></TD></TR>
 	
 </TABLE>>]
 
@@ -186,37 +217,6 @@ generatesKind(&lt;String&gt; kind):Boolean
 </TABLE>>]
 
 	"ViewDefinitionCatalog" -> "AbstractCatalog"
-
-"KameletParseCatalog" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletParseCatalog</B></TD></TR>
-	
-</TABLE>>]
-
-	"KameletParseCatalog" -> "StepCatalogParser"
-
-		"KameletParseCatalog" -> "ParseCatalog" [
-		arrowhead=open, style=dashed
-		
-		
-		
-		]
-"Kamelet" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>Kamelet</B></TD></TR>
-	
-</TABLE>>]
-
-
-"KameletBinding" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>KameletBinding</B></TD></TR>
-	
-</TABLE>>]
-
-
-"SimplifiedKamelet" [ label = <<TABLE CELLSPACING="0">
-	<TR><TD><B>SimplifiedKamelet</B></TD></TR>
-	
-</TABLE>>]
-
 
 "MetadataCatalog" [ label = <<TABLE CELLSPACING="0">
 	<TR><TD><B>MetadataCatalog</B></TD></TR>

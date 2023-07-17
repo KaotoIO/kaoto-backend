@@ -110,7 +110,7 @@
 <polygon fill="black" stroke="black" points="1253,-541.81 1257.5,-551.81 1253,-546.81 1253,-551.81 1253,-551.81 1253,-551.81 1253,-546.81 1248.5,-551.81 1253,-541.81 1253,-541.81"/>
 </g>
 <!-- AbstractCatalog -->
-<g id="node15" class="node">
+<g id="node19" class="node">
 <title>AbstractCatalog</title>
 <polygon fill="none" stroke="black" points="1267,-407.5 1267,-428.5 1545,-428.5 1545,-407.5 1267,-407.5"/>
 <text text-anchor="start" x="1342.5" y="-415.3" font-family="Times,serif" font-weight="bold" font-size="14.00">AbstractCatalog</text>
@@ -123,7 +123,7 @@
 <polygon fill="none" stroke="black" points="1266,-331 1266,-430 1546,-430 1546,-331 1266,-331"/>
 </g>
 <!-- StepCatalog&#45;&gt;AbstractCatalog -->
-<g id="edge9" class="edge">
+<g id="edge11" class="edge">
 <title>StepCatalog&#45;&gt;AbstractCatalog</title>
 <path fill="none" stroke="black" d="M1271.46,-505.49C1288.89,-489.43 1316.08,-464.37 1341.47,-440.97"/>
 <polygon fill="none" stroke="black" points="1343.94,-443.45 1348.92,-434.1 1339.2,-438.31 1343.94,-443.45"/>
@@ -193,15 +193,55 @@
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M2237.62,-704.41C2260.05,-679.52 2305.56,-633.95 2355,-613 2484.74,-558.01 2530.25,-595.06 2670,-577 2728.09,-569.49 2791.3,-560.62 2848.49,-552.33"/>
 <polygon fill="black" stroke="black" points="2858.72,-550.85 2849.47,-556.74 2853.77,-551.57 2848.82,-552.28 2848.82,-552.28 2848.82,-552.28 2853.77,-551.57 2848.18,-547.83 2858.72,-550.85 2858.72,-550.85"/>
 </g>
-<!-- CamelRoute -->
+<!-- KameletParseCatalog -->
 <g id="node14" class="node">
+<title>KameletParseCatalog</title>
+<polygon fill="none" stroke="black" points="2374,-711.5 2374,-732.5 2551,-732.5 2551,-711.5 2374,-711.5"/>
+<text text-anchor="start" x="2377" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">KameletParseCatalog</text>
+<polygon fill="none" stroke="black" points="2372.5,-711 2372.5,-734 2551.5,-734 2551.5,-711 2372.5,-711"/>
+</g>
+<!-- KameletParseCatalog&#45;&gt;StepCatalogParser -->
+<g id="edge8" class="edge">
+<title>KameletParseCatalog&#45;&gt;StepCatalogParser</title>
+<path fill="none" stroke="black" d="M2461.83,-704.36C2461.56,-678.47 2461.05,-628.07 2460.64,-587.2"/>
+<polygon fill="none" stroke="black" points="2464.13,-586.99 2460.53,-577.03 2457.14,-587.06 2464.13,-586.99"/>
+</g>
+<!-- KameletParseCatalog&#45;&gt;ParseCatalog -->
+<g id="edge9" class="edge">
+<title>KameletParseCatalog&#45;&gt;ParseCatalog</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M2473.58,-704.42C2491.16,-679.95 2526.99,-635.42 2569,-613 2617.25,-587.25 2741.02,-564.36 2848.74,-548.31"/>
+<polygon fill="black" stroke="black" points="2858.78,-546.82 2849.54,-552.74 2853.83,-547.55 2848.88,-548.28 2848.88,-548.28 2848.88,-548.28 2853.83,-547.55 2848.23,-543.83 2858.78,-546.82 2858.78,-546.82"/>
+</g>
+<!-- CamelRoute -->
+<g id="node15" class="node">
 <title>CamelRoute</title>
 <polygon fill="none" stroke="black" points="3832,-711.5 3832,-732.5 3935,-732.5 3935,-711.5 3832,-711.5"/>
 <text text-anchor="start" x="3835" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">CamelRoute</text>
 <polygon fill="none" stroke="black" points="3830.5,-711 3830.5,-734 3935.5,-734 3935.5,-711 3830.5,-711"/>
 </g>
-<!-- MetadataCatalog -->
+<!-- Kamelet -->
 <g id="node16" class="node">
+<title>Kamelet</title>
+<polygon fill="none" stroke="black" points="3971,-711.5 3971,-732.5 4044,-732.5 4044,-711.5 3971,-711.5"/>
+<text text-anchor="start" x="3974" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Kamelet</text>
+<polygon fill="none" stroke="black" points="3969.5,-711 3969.5,-734 4044.5,-734 4044.5,-711 3969.5,-711"/>
+</g>
+<!-- KameletBinding -->
+<g id="node17" class="node">
+<title>KameletBinding</title>
+<polygon fill="none" stroke="black" points="4080,-711.5 4080,-732.5 4216,-732.5 4216,-711.5 4080,-711.5"/>
+<text text-anchor="start" x="4083" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">KameletBinding</text>
+<polygon fill="none" stroke="black" points="4079,-711 4079,-734 4217,-734 4217,-711 4079,-711"/>
+</g>
+<!-- SimplifiedKamelet -->
+<g id="node18" class="node">
+<title>SimplifiedKamelet</title>
+<polygon fill="none" stroke="black" points="4252,-711.5 4252,-732.5 4404,-732.5 4404,-711.5 4252,-711.5"/>
+<text text-anchor="start" x="4255" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">SimplifiedKamelet</text>
+<polygon fill="none" stroke="black" points="4251,-711 4251,-734 4405,-734 4405,-711 4251,-711"/>
+</g>
+<!-- MetadataCatalog -->
+<g id="node20" class="node">
 <title>MetadataCatalog</title>
 <polygon fill="none" stroke="black" points="1480,-215.5 1480,-236.5 1828,-236.5 1828,-215.5 1480,-215.5"/>
 <text text-anchor="start" x="1586" y="-223.3" font-family="Times,serif" font-weight="bold" font-size="14.00">MetadataCatalog</text>
@@ -215,7 +255,7 @@
 <polygon fill="none" stroke="black" points="1479,-125 1479,-238 1829,-238 1829,-125 1479,-125"/>
 </g>
 <!-- AbstractCatalog&#45;&gt;MetadataCatalog -->
-<g id="edge8" class="edge">
+<g id="edge10" class="edge">
 <title>AbstractCatalog&#45;&gt;MetadataCatalog</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M1472.13,-326.97C1502.43,-302.9 1538.66,-274.12 1570.78,-248.61"/>
 <polygon fill="black" stroke="black" points="1578.85,-242.19 1573.82,-251.94 1574.94,-245.3 1571.02,-248.41 1571.02,-248.41 1571.02,-248.41 1574.94,-245.3 1568.22,-244.89 1578.85,-242.19 1578.85,-242.19"/>
@@ -232,57 +272,17 @@
 <polygon fill="black" stroke="black" points="1654,-36.12 1658.5,-46.12 1654,-41.12 1654,-46.12 1654,-46.12 1654,-46.12 1654,-41.12 1649.5,-46.12 1654,-36.12 1654,-36.12"/>
 </g>
 <!-- ViewDefinitionCatalog -->
-<g id="node17" class="node">
+<g id="node21" class="node">
 <title>ViewDefinitionCatalog</title>
 <polygon fill="none" stroke="black" points="1340,-512.5 1340,-533.5 1522,-533.5 1522,-512.5 1340,-512.5"/>
 <text text-anchor="start" x="1343" y="-520.3" font-family="Times,serif" font-weight="bold" font-size="14.00">ViewDefinitionCatalog</text>
 <polygon fill="none" stroke="black" points="1339,-512 1339,-535 1523,-535 1523,-512 1339,-512"/>
 </g>
 <!-- ViewDefinitionCatalog&#45;&gt;AbstractCatalog -->
-<g id="edge10" class="edge">
+<g id="edge12" class="edge">
 <title>ViewDefinitionCatalog&#45;&gt;AbstractCatalog</title>
 <path fill="none" stroke="black" d="M1427.98,-505.49C1425.26,-490.12 1421.07,-466.5 1417.08,-443.99"/>
 <polygon fill="none" stroke="black" points="1420.52,-443.34 1415.33,-434.1 1413.63,-444.56 1420.52,-443.34"/>
-</g>
-<!-- KameletParseCatalog -->
-<g id="node18" class="node">
-<title>KameletParseCatalog</title>
-<polygon fill="none" stroke="black" points="2374,-711.5 2374,-732.5 2551,-732.5 2551,-711.5 2374,-711.5"/>
-<text text-anchor="start" x="2377" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">KameletParseCatalog</text>
-<polygon fill="none" stroke="black" points="2372.5,-711 2372.5,-734 2551.5,-734 2551.5,-711 2372.5,-711"/>
-</g>
-<!-- KameletParseCatalog&#45;&gt;StepCatalogParser -->
-<g id="edge11" class="edge">
-<title>KameletParseCatalog&#45;&gt;StepCatalogParser</title>
-<path fill="none" stroke="black" d="M2461.83,-704.36C2461.56,-678.47 2461.05,-628.07 2460.64,-587.2"/>
-<polygon fill="none" stroke="black" points="2464.13,-586.99 2460.53,-577.03 2457.14,-587.06 2464.13,-586.99"/>
-</g>
-<!-- KameletParseCatalog&#45;&gt;ParseCatalog -->
-<g id="edge12" class="edge">
-<title>KameletParseCatalog&#45;&gt;ParseCatalog</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M2473.58,-704.42C2491.16,-679.95 2526.99,-635.42 2569,-613 2617.25,-587.25 2741.02,-564.36 2848.74,-548.31"/>
-<polygon fill="black" stroke="black" points="2858.78,-546.82 2849.54,-552.74 2853.83,-547.55 2848.88,-548.28 2848.88,-548.28 2848.88,-548.28 2853.83,-547.55 2848.23,-543.83 2858.78,-546.82 2858.78,-546.82"/>
-</g>
-<!-- Kamelet -->
-<g id="node19" class="node">
-<title>Kamelet</title>
-<polygon fill="none" stroke="black" points="3971,-711.5 3971,-732.5 4044,-732.5 4044,-711.5 3971,-711.5"/>
-<text text-anchor="start" x="3974" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">Kamelet</text>
-<polygon fill="none" stroke="black" points="3969.5,-711 3969.5,-734 4044.5,-734 4044.5,-711 3969.5,-711"/>
-</g>
-<!-- KameletBinding -->
-<g id="node20" class="node">
-<title>KameletBinding</title>
-<polygon fill="none" stroke="black" points="4080,-711.5 4080,-732.5 4216,-732.5 4216,-711.5 4080,-711.5"/>
-<text text-anchor="start" x="4083" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">KameletBinding</text>
-<polygon fill="none" stroke="black" points="4079,-711 4079,-734 4217,-734 4217,-711 4079,-711"/>
-</g>
-<!-- SimplifiedKamelet -->
-<g id="node21" class="node">
-<title>SimplifiedKamelet</title>
-<polygon fill="none" stroke="black" points="4252,-711.5 4252,-732.5 4404,-732.5 4404,-711.5 4252,-711.5"/>
-<text text-anchor="start" x="4255" y="-719.3" font-family="Times,serif" font-weight="bold" font-size="14.00">SimplifiedKamelet</text>
-<polygon fill="none" stroke="black" points="4251,-711 4251,-734 4405,-734 4405,-711 4251,-711"/>
 </g>
 <!-- CatalogCollection -->
 <g id="node23" class="node">
