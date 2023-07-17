@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 @QuarkusTest
@@ -29,7 +28,7 @@ class InMemoryCatalogTest {
 
         List<Step> steps = new ArrayList<>();
         steps.add(new Step("id", "name",
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
 
         Assertions.assertTrue(catalog.store(steps));
 
@@ -43,13 +42,13 @@ class InMemoryCatalogTest {
         List<Step> steps = new ArrayList<>();
         final var connector = "connector";
         steps.add(new Step("id-1", connector,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         steps.add(new Step("id-2", connector,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         steps.add(new Step("id-3", connector,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         steps.add(new Step("id-4", "another-one",
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         Assertions.assertTrue(catalog.store(steps));
 
         Assertions.assertEquals(3,

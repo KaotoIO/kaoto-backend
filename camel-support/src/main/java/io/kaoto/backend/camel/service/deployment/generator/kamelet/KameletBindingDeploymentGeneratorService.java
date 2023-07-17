@@ -1,39 +1,40 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
-import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
-import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStepRef;
-import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Step;
-import io.opentelemetry.api.trace.Span;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
+import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStepRef;
+import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.api.trace.Span;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import static io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
 
@@ -57,7 +58,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
                         final List<Parameter> parameterList) {
 
         Map<String, Object> metadata = md != null ? new LinkedHashMap<>(md) : Map.of();
-        List<Step> steps = stepList != null ? new LinkedList<>(stepList) : List.of();
+        List<Step> steps = stepList != null ? new ArrayList<>(stepList) : List.of();
 
         KameletBindingSpec spec;
         var metaObject = new ObjectMeta();
@@ -84,7 +85,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
             spec = new KameletBindingSpec();
         }
 
-        spec.setSteps(new LinkedList<>());
+        spec.setSteps(new ArrayList<>());
 
         for (int i = 0; i < steps.size(); i++) {
             var step = steps.get(i);
@@ -239,7 +240,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
 
     @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
-        List<Deployment> res = new LinkedList<>();
+        List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(KameletBinding.class).inNamespace(namespace).list();
             for (CustomResource customResource : resources.getItems()) {

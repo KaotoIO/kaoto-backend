@@ -1,8 +1,8 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -45,14 +45,14 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
             if (field.has("from") || field.has("rest")) {
                 Flow flow = ctxt.readTreeAsValue(field, Flow.class);
                 if (answer.getFlows() == null) {
-                    answer.setFlows(new LinkedList<>());
+                    answer.setFlows(new ArrayList<>(1));
                 }
                 answer.getFlows().add(flow);
             } else if (field.has("beans")) {
                 CollectionType beansType = ctxt.getTypeFactory().constructCollectionType(List.class, Bean.class);
                 List<Bean> beans = ctxt.readTreeAsValue(field.get("beans"), beansType);
                 if (answer.getBeans() == null) {
-                    answer.setBeans(new LinkedList<>());
+                    answer.setBeans(new ArrayList<>(beans.size()));
                 }
                 answer.getBeans().addAll(beans);
             } else {

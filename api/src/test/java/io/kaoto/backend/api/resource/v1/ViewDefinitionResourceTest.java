@@ -1,27 +1,29 @@
 package io.kaoto.backend.api.resource.v1;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -59,7 +61,7 @@ class ViewDefinitionResourceTest {
 
     @Test
     void testViews() throws JsonProcessingException {
-        List<Step> steps = new LinkedList<Step>();
+        List<Step> steps = new ArrayList<>();
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("kamelet:source-START"));
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("log-producer"));
 

@@ -1,5 +1,17 @@
 package io.kaoto.backend.api.resource.v2;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
+
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
@@ -7,12 +19,6 @@ import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.cache.CacheResult;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -23,12 +29,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * 🐱class IntegrationsResource
@@ -138,7 +138,7 @@ public class IntegrationsResource {
     }
 
     private static void ensureUniqueNames(FlowsWrapper answer) {
-        List<String> usedIds = new LinkedList<>();
+        List<String> usedIds = new ArrayList<>();
         var name = "name";
         for (var flow : answer.flows()) {
             //Make sure we have a metadata set

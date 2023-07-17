@@ -1,26 +1,27 @@
 package io.kaoto.backend.api.service.deployment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+
 import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
-import org.jboss.logging.Logger;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 🐱miniclass DeploymentService (IntegrationsResource)
  * 🐱relationship compositionOf DSLSpecification, 0..N
- * 
+ *
  * 🐱section
  * Service to interact with the cluster. This is the utility class the
  * resource relies on to perform the operations.
@@ -45,7 +46,7 @@ public class DeploymentService {
                                          final Step[] stepArray) {
 
         List<Step> steps = Arrays.asList(stepArray);
-        List<Map<String, String>> res = new LinkedList<>();
+        List<Map<String, String>> res = new ArrayList<>();
         Map<String, Object> metadata = new HashMap<>();
         if (name != null && !name.isBlank()) {
             metadata.put("name", name);
@@ -116,7 +117,7 @@ public class DeploymentService {
      */
     @WithSpan
     public String crds(final List<Integration> integrationList, final Map<String, Object> metadata) {
-        List<StepParserService.ParseResult<Step>> integrations = new LinkedList<>();
+        List<StepParserService.ParseResult<Step>> integrations = new ArrayList<>();
         String dsl = null;
 
         for (Integration integration : integrationList) {

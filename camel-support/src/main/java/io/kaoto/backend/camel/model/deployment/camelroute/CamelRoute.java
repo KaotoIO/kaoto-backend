@@ -1,11 +1,17 @@
 package io.kaoto.backend.camel.model.deployment.camelroute;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
@@ -14,11 +20,6 @@ import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import io.kaoto.backend.camel.service.step.parser.camelroute.CamelRouteDeserializer;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.jboss.logging.Logger;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 🐱class CamelRoute
@@ -45,10 +46,10 @@ public class CamelRoute {
 
         //We have an empty flow, but don't show it empty
         if ((getBeans() == null || getBeans().isEmpty()) && f == null) {
-            setFlows(new LinkedList<>());
+            setFlows(new ArrayList<>());
             f = new Flow();
             f.setFrom(new From());
-            f.getFrom().setSteps(new LinkedList<>());
+            f.getFrom().setSteps(new ArrayList<>());
             getFlows().add(f);
         }
 
@@ -68,7 +69,7 @@ public class CamelRoute {
             return null;
         }
         final var flow = new KamelPopulator(catalog).getFlow(steps);
-        setFlows(new LinkedList<>());
+        setFlows(new ArrayList<>());
         Flow f = null;
         if (flow instanceof Rest) {
             //These are contextual variables in case the user is not using branches

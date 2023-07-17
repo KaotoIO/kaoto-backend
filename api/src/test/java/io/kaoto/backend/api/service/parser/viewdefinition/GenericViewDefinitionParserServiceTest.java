@@ -1,22 +1,21 @@
 package io.kaoto.backend.api.service.parser.viewdefinition;
 
-import io.kaoto.backend.model.step.Branch;
-import io.quarkus.test.junit.QuarkusTest;
-import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
-import io.kaoto.backend.api.service.viewdefinition.parser.GenericViewDefinitionParserService;
-import io.kaoto.backend.model.step.Step;
-import io.kaoto.backend.model.view.ConstraintOperation;
-import io.kaoto.backend.model.view.ViewDefinition;
-import io.kaoto.backend.model.view.ViewDefinitionConstraint;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
+import io.kaoto.backend.api.service.viewdefinition.parser.GenericViewDefinitionParserService;
+import io.kaoto.backend.model.step.Branch;
+import io.kaoto.backend.model.step.Step;
+import io.kaoto.backend.model.view.ConstraintOperation;
+import io.kaoto.backend.model.view.ViewDefinition;
+import io.kaoto.backend.model.view.ViewDefinitionConstraint;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import javax.swing.text.View;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @QuarkusTest
 class GenericViewDefinitionParserServiceTest {
@@ -43,7 +42,7 @@ class GenericViewDefinitionParserServiceTest {
 
     @Test
     void checkConstraintsBySize() {
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         List<ViewDefinition> views =
                 viewDefinitionParserService.parse(steps);
         Assertions.assertEquals(0, views.size());
@@ -65,7 +64,7 @@ class GenericViewDefinitionParserServiceTest {
 
     @Test
     void appliesToSize() {
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         ViewDefinition view = new ViewDefinition();
         view.setConstraints(new ArrayList<>());
         ViewDefinitionConstraint viewDefinitionConstraint =
@@ -105,7 +104,7 @@ class GenericViewDefinitionParserServiceTest {
         final String stepName = "test-name";
         final String stepId = "test-id";
 
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         Step step = new Step();
         step.setName(stepName);
         step.setId(stepId);
@@ -176,13 +175,13 @@ class GenericViewDefinitionParserServiceTest {
 
     @Test
     void appliesToBranchStep() {
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         Step choice = new Step();
         choice.setName("choice");
         choice.setType("choice");
         choice.setId("choice-1");
         choice.setKind("Kamelet");
-        choice.setBranches(new LinkedList());
+        choice.setBranches(new ArrayList<>());
         steps.add(choice);
 
         Step choiceSetBody = new Step();
@@ -260,13 +259,13 @@ class GenericViewDefinitionParserServiceTest {
 
     @Test
     void appliesToBranchStepIdentifier() {
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         Step choice = new Step();
         choice.setName("choice");
         choice.setType("choice");
         choice.setId("choice-1");
         choice.setKind("Kamelet");
-        choice.setBranches(new LinkedList());
+        choice.setBranches(new ArrayList<>());
         steps.add(choice);
 
         Step choiceSetBody = new Step();
@@ -291,13 +290,13 @@ class GenericViewDefinitionParserServiceTest {
 
     @Test
     void appliesToBranchStepType() {
-        List<Step> steps = new LinkedList<>();
+        List<Step> steps = new ArrayList<>();
         Step choice = new Step();
         choice.setName("choice");
         choice.setType("choice");
         choice.setId("choice-1");
         choice.setKind("Kamelet");
-        choice.setBranches(new LinkedList());
+        choice.setBranches(new ArrayList<>());
         steps.add(choice);
 
         Step choiceSetBody = new Step();

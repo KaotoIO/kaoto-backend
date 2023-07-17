@@ -1,34 +1,36 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
-import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Step;
-import io.opentelemetry.api.trace.Span;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Step;
+import io.opentelemetry.api.trace.Span;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class KameletDeploymentGeneratorService implements DeploymentGeneratorService {
@@ -48,9 +50,9 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
         return getYAML(new Kamelet(
-                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        steps != null ? new ArrayList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        parameters != null ? new LinkedList<>(parameters) : List.of(),
+                        parameters != null ? new ArrayList<>(parameters) : List.of(),
                         catalog),
                 new KameletRepresenter());
     }
@@ -120,7 +122,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
-        List<Deployment> res = new LinkedList<>();
+        List<Deployment> res = new ArrayList<>();
         try {
             final var resources = kclient.resources(Kamelet.class).inNamespace(namespace).list();
             for (CustomResource customResource : resources.getItems()) {

@@ -1,9 +1,9 @@
 package io.kaoto.backend.model.step;
 
-import io.kaoto.backend.model.parameter.Parameter;
-
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+
+import io.kaoto.backend.model.parameter.Parameter;
 
 /**
  * 🐱miniclass Branch (Step)
@@ -30,8 +30,8 @@ public class Branch {
         }
     }
 
-    private List<Step> steps = new LinkedList<>();
-    private List<Parameter> parameters = new LinkedList<>();
+    private List<Step> steps = new ArrayList<>();
+    private List<Parameter> parameters = new ArrayList<>();
     private String identifier;
     private String condition;
     private ConditionSyntax conditionSyntax = ConditionSyntax.SIMPLE;

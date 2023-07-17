@@ -1,21 +1,21 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletDSLSpecification;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import jakarta.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,7 +55,7 @@ class KameletDeploymentGeneratorServiceTest {
         step.setKind("Camel-Connector");
         step.setName("log");
         step.setId("log-action");
-        step.setParameters(new LinkedList<>());
+        step.setParameters(new ArrayList<>());
         Parameter<String> p = new StringParameter();
         p.setPath(true);
         p.setValue("loggerName");
@@ -98,7 +98,7 @@ class KameletDeploymentGeneratorServiceTest {
         step = new Step();
         step.setKind("EIP");
         step.setName("set-body");
-        step.setParameters(new LinkedList<>());
+        step.setParameters(new ArrayList<>());
         p = new StringParameter("constant", "constant", "",null, null, null, "default", null);
         p.setValue("Hello Llama");
         step.getParameters().add(p);

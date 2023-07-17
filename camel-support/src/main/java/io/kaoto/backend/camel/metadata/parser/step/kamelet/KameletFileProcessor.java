@@ -1,11 +1,25 @@
 package io.kaoto.backend.camel.metadata.parser.step.kamelet;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.error.YAMLException;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.kaoto.backend.metadata.parser.YamlProcessFile;
+
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.camel.model.deployment.kamelet.SimplifiedKamelet;
+import io.kaoto.backend.metadata.parser.YamlProcessFile;
 import io.kaoto.backend.model.parameter.ArrayParameter;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.IntegerParameter;
@@ -14,18 +28,6 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
-import org.apache.commons.io.IOUtils;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.error.YAMLException;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
     private final Logger log = Logger.getLogger(KameletFileProcessor.class);
@@ -121,7 +123,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
 
         step.setRequired(required);
 
-        step.setParameters(new LinkedList<>());
+        step.setParameters(new ArrayList<>());
 
         for (var property : properties.entrySet()) {
             Parameter p;
