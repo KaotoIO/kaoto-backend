@@ -1,18 +1,19 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.kaoto.backend.camel.KamelPopulator;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 @JsonDeserialize(using = LoadBalanceDeserializer.class)
 public class LoadBalanceFlowStep implements FlowStep {
@@ -36,7 +37,7 @@ public class LoadBalanceFlowStep implements FlowStep {
         }
 
         //The UI will want branches, but the DSL uses a list of steps
-        this.setSteps(new LinkedList<>());
+        this.setSteps(new ArrayList<>());
         if (step.getBranches() != null) {
             for (Branch b : step.getBranches()) {
                 for (var s : kameletPopulator.processSteps(b)) {
@@ -68,7 +69,7 @@ public class LoadBalanceFlowStep implements FlowStep {
         if (res != null) {
             assignParameters(res);
             int i = 1;
-            res.setBranches(new LinkedList<>());
+            res.setBranches(new ArrayList<>());
             for (var step : this.getSteps()) {
                 var b = new Branch();
                 b.setIdentifier(String.valueOf(i++));

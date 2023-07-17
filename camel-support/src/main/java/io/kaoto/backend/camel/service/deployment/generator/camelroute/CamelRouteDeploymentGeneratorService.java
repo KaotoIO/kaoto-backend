@@ -1,31 +1,32 @@
 package io.kaoto.backend.camel.service.deployment.generator.camelroute;
 
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.dsl.camelroute.CamelRouteDSLSpecification;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
-import io.kaoto.backend.model.parameter.Parameter;
-import io.kaoto.backend.model.step.Step;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
 
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
+import io.kaoto.backend.camel.service.dsl.camelroute.CamelRouteDSLSpecification;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.kaoto.backend.model.parameter.Parameter;
+import io.kaoto.backend.model.step.Step;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class CamelRouteDeploymentGeneratorService implements DeploymentGeneratorService {
@@ -42,7 +43,7 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
                         final List<Parameter> parameters) {
         Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
         return yaml.dumpAs(new CamelRoute(
-                        steps != null ? new LinkedList<>(steps) : List.of(),
+                        steps != null ? new ArrayList<>(steps) : List.of(),
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
                         catalog),
                 Tag.SEQ,

@@ -1,16 +1,15 @@
 package io.kaoto.backend.metadata.catalog;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.kaoto.backend.model.step.Step;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import io.kaoto.backend.model.step.Step;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class CatalogCollectionTest {
@@ -26,18 +25,18 @@ class CatalogCollectionTest {
         InMemoryCatalog<Step> ic = new InMemoryCatalog<>();
         steps.add(new Step("id-1",
                 "connector-1", "icon",
-                new LinkedList<>()));
+                new ArrayList<>()));
         steps.add(new Step("id-2", CONNECTOR_2,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
 
         ic = new InMemoryCatalog<>();
         steps.clear();
         steps.add(new Step("id-2", CONNECTOR_2,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         steps.add(new Step("id-3", CONNECTOR_2,
-                "icon", new LinkedList<>()));
+                "icon", new ArrayList<>()));
         ic.store(steps);
         catalogCollection.addCatalog(ic);
     }

@@ -1,17 +1,18 @@
 package io.kaoto.backend.camel.model.deployment.rest;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -134,7 +135,7 @@ public class HttpVerb implements Serializable {
             props.put("description", this.getDescription());
         }
         if (getParameterList() != null && !getParameterList().isEmpty()) {
-            var parameters = new LinkedList<Map<String, Object>>();
+            var parameters = new ArrayList<Map<String, Object>>();
             for (RestParameter p : this.getParameterList()) {
                 parameters.add(p.getRepresenterProperties());
             }

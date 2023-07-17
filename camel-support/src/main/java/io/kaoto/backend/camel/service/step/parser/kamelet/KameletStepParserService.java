@@ -1,8 +1,22 @@
 package io.kaoto.backend.camel.service.step.parser.kamelet;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -23,21 +37,8 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.util.StringUtil;
-import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
-import org.jboss.logging.Logger;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 🐱miniclass KameletStepParserService (StepParserService)
@@ -113,14 +114,11 @@ public class KameletStepParserService implements StepParserService<Step> {
 
     @Override
     public List<ParseResult<Step>> getParsedFlows(String input) {
-        var res = new LinkedList<ParseResult<Step>>();
         ParseResult<Step> parsedMeta = new ParseResult<>();
         parsedMeta.setParameters(new ArrayList<>());
         parsedMeta.setMetadata(new LinkedHashMap<>());
-        res.add(parsedMeta);
 
         var kamelet = deepParse(input);
-        res.add(kamelet);
         // move root metadata to a dedicated ParseResult to align with other DSLs
         parsedMeta.getMetadata().put("name", kamelet.getMetadata().get("name"));
         for (String metadataName : ROOT_METADATA_NAMES) {
@@ -128,7 +126,8 @@ public class KameletStepParserService implements StepParserService<Step> {
                 parsedMeta.getMetadata().put(metadataName, kamelet.getMetadata().remove(metadataName));
             }
         }
-        return res;
+
+        return List.of(parsedMeta, kamelet);
     }
 
     private void processParameters(final ParseResult<Step> res,
@@ -306,7 +305,7 @@ public class KameletStepParserService implements StepParserService<Step> {
         } else if (path.contains("?")) {
             path = path.substring(0, path.indexOf('?'));
         }
-        var pathParameters = new LinkedList<Parameter>();
+        var pathParameters = new ArrayList<Parameter>();
         pathParameters.addAll(step.getParameters().stream().parallel()
                 .filter(Objects::nonNull).filter(s -> s.isPath()).toList());
 
@@ -316,7 +315,7 @@ public class KameletStepParserService implements StepParserService<Step> {
             Collections.sort(pathParameters);
 
             Parameter previous = null;
-            List<String> pathParts = new LinkedList<>();
+            List<String> pathParts = new ArrayList<>();
             for (Parameter p : pathParameters) {
                 //To split, we will have to consider the path separator of the next path param,
                 // not of the current one

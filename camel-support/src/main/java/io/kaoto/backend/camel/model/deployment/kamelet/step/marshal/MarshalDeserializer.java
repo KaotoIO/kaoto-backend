@@ -1,5 +1,12 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step.marshal;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -8,15 +15,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
+
 import io.kaoto.backend.camel.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.dataformat.DataFormat;
-import org.jboss.logging.Logger;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class MarshalDeserializer extends JsonDeserializer {
     private final Logger log = Logger.getLogger(MarshalDeserializer.class);
@@ -31,7 +33,7 @@ public class MarshalDeserializer extends JsonDeserializer {
                 if (node instanceof ValueNode v) {
                     extractScalarValue(properties, e.getKey(), v);
                 } else if (node instanceof ArrayNode arrayNode) {
-                    List<Map<String, Object>> list = new LinkedList<>();
+                    List<Map<String, Object>> list = new ArrayList<>();
                     arrayNode.forEach(n -> {
                         Map<String, Object> map = new LinkedHashMap<>();
                         n.fields().forEachRemaining(f -> extractProperties(map, f));

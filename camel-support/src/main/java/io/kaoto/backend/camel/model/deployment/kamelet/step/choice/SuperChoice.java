@@ -1,19 +1,20 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step.choice;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.kaoto.backend.camel.KamelPopulator;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.EIPStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class SuperChoice extends EIPStep {
 
@@ -28,7 +29,7 @@ public class SuperChoice extends EIPStep {
     public SuperChoice(Step step, final KamelPopulator kameletPopulator) {
         super(step);
 
-        setChoice(new LinkedList<>());
+        setChoice(new ArrayList<>());
 
         if (step.getBranches() != null) {
             for (Branch b : step.getBranches()) {
@@ -68,7 +69,7 @@ public class SuperChoice extends EIPStep {
     @Override
     protected void processBranches(final Step step, final StepCatalog catalog,
                                    final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
+        step.setBranches(new ArrayList<>());
 
         if (getChoice() != null) {
             int i = 1;

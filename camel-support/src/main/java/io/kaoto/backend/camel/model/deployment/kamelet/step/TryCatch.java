@@ -1,9 +1,15 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.kaoto.backend.camel.KamelPopulator;
+
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.parameter.ArrayParameter;
@@ -11,11 +17,6 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class TryCatch extends EIPStep {
 
@@ -62,7 +63,7 @@ public class TryCatch extends EIPStep {
                     setSteps(kameletPopulator.processSteps(stepsBranch.get()));
                 }
             }
-            this.setDoCatch(new LinkedList<>());
+            this.setDoCatch(new ArrayList<>());
             step.getBranches().stream()
                     .filter(b -> !b.getIdentifier().equalsIgnoreCase(DO_FINALLY_LABEL)
                                     && !b.getIdentifier().equalsIgnoreCase(STEPS_LABEL))
@@ -82,7 +83,7 @@ public class TryCatch extends EIPStep {
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put(STEPS_LABEL, this.getSteps());
-        List<Map<String, Object>> doC = new LinkedList<>();
+        List<Map<String, Object>> doC = new ArrayList<>();
         if (this.getDoCatch() != null) {
             for (var doCatch : this.getDoCatch()) {
                 Map<String, Object> map = new LinkedHashMap<>();
@@ -104,14 +105,14 @@ public class TryCatch extends EIPStep {
     @Override
     public void processBranches(final Step step, final StepCatalog catalog,
                                 final KameletStepParserService kameletStepParserService) {
-        step.setBranches(new LinkedList<>());
+        step.setBranches(new ArrayList<>());
         var identifier = STEPS_LABEL;
         step.getBranches().add(createBranch(identifier, this.getSteps(), kameletStepParserService));
         if (this.getDoCatch() != null) {
             int i = 1;
             for (DoCatch doC : this.getDoCatch()) {
                 final var branch = createBranch(DO_CATCH_LABEL + "-" + i++, doC.getSteps(), kameletStepParserService);
-                branch.setParameters(new LinkedList<>());
+                branch.setParameters(new ArrayList<>());
                 setExceptions(doC, branch);
                 setOnWhen(doC, branch);
                 step.getBranches().add(branch);

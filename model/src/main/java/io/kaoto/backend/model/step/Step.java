@@ -1,14 +1,15 @@
 package io.kaoto.backend.model.step;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.model.parameter.Parameter;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * 🐱class Step
@@ -34,9 +35,9 @@ public class Step extends Metadata {
     @JsonView(Views.Summary.class)
     private String group;
     @JsonView(Views.Complete.class)
-    private LinkedList<Parameter> parameters;
+    private List<Parameter> parameters;
     @JsonView(Views.Complete.class)
-    private List<String> required = new LinkedList<>();
+    private List<String> required = new ArrayList<>();
     @JsonView(Views.Complete.class)
     private List<Branch> branches;
     @JsonView(Views.Summary.class)
@@ -54,7 +55,7 @@ public class Step extends Metadata {
 
     //Used only for testing
     public Step(final String identifier, final String connector,
-                final String icon, final LinkedList<Parameter> parameters) {
+                final String icon, final List<Parameter> parameters) {
         this();
         setId(identifier);
         setName(connector);
@@ -63,7 +64,7 @@ public class Step extends Metadata {
     }
 
     public Step(final String identifier, final String connector, final String icon,
-                final LinkedList<Parameter> parameters,
+                final List<Parameter> parameters,
                 final String kind, final Step.Type type) {
         this();
         setId(identifier);
@@ -108,11 +109,11 @@ public class Step extends Metadata {
      * List of configurable parameters for this step.
      *
      */
-    public LinkedList<Parameter> getParameters() {
+    public List<Parameter> getParameters() {
         return parameters;
     }
 
-    public void setParameters(final LinkedList<Parameter> parameters) {
+    public void setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
     }
 
@@ -312,7 +313,7 @@ public class Step extends Metadata {
     public Step clone() {
         Step step = (Step) super.clone();
 
-        step.setParameters(new LinkedList<>());
+        step.setParameters(new ArrayList<>());
         if (parameters != null) {
             for (var p : parameters) {
                 step.getParameters().add(p.clone());

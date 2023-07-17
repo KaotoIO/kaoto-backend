@@ -1,6 +1,13 @@
 package io.kaoto.backend.camel.model.deployment.camelroute;
 
-import static io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.camel.v1.IntegrationStatus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,20 +18,13 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Plural;
 import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
-import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.apache.camel.v1.IntegrationStatus;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import static io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService.DESCRIPTION_ANNO;
 
 
 /**
@@ -100,7 +100,7 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
 
     private void processBeans(List<Flow> flowList, List<Bean> beans) {
         Flow beansFlow  = new Flow();
-        beansFlow.setBeans(new LinkedList<>());
+        beansFlow.setBeans(new ArrayList<>());
         beansFlow.getBeans().addAll(beans);
         flowList.add(beansFlow);
     }

@@ -1,33 +1,35 @@
 package io.kaoto.backend.camel.service.deployment.generator.camelroute;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
-import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
-import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
 import io.kaoto.backend.camel.model.deployment.camelroute.IntegrationFlow;
+import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
+import io.kaoto.backend.model.deployment.Deployment;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.opentelemetry.api.trace.Span;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.jboss.logging.Logger;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -52,7 +54,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
 
     @Override
     public String parse(final List<Step> steps, final Map<String, Object> metadata, final List<Parameter> parameters) {
-        List<IntegrationFlow> parsedList = new LinkedList<>();
+        List<IntegrationFlow> parsedList = new ArrayList<>();
         if (steps != null) {
             var parsed = new IntegrationFlow();
             parsed.setSteps(steps);
@@ -67,7 +69,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
 
     @Override
     public String parse(List<StepParserService.ParseResult<Step>> flows) {
-        List<IntegrationFlow> parsedList = new LinkedList<>();
+        List<IntegrationFlow> parsedList = new ArrayList<>();
         Map<String, Object> metadata = null;
         for (var f : flows) {
             if (f.getSteps() != null) {
@@ -128,7 +130,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
 
     @Override
     public Collection<? extends Deployment> getResources(final String namespace, final KubernetesClient kclient) {
-        List<Deployment> res = new LinkedList<>();
+        List<Deployment> res = new ArrayList<>();
         try {
             String createdLabel = "camel.apache.org/created.by.kind";
             final var resources = kclient.resources(Integration.class).inNamespace(namespace).list();

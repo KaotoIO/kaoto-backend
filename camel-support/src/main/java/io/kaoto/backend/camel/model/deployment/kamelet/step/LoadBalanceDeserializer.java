@@ -1,16 +1,17 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jboss.logging.Logger;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 public class LoadBalanceDeserializer extends JsonDeserializer {
     private final Logger log = Logger.getLogger(LoadBalanceDeserializer.class);
@@ -19,7 +20,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
                               final DeserializationContext ctxt) {
         var step = new LoadBalanceFlowStep();
         step.setProperties(new HashMap<>());
-        step.setSteps(new LinkedList<>());
+        step.setSteps(new ArrayList<>());
 
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);

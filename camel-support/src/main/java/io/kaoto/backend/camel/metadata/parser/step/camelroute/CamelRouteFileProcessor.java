@@ -1,5 +1,17 @@
 package io.kaoto.backend.camel.metadata.parser.step.camelroute;
 
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import org.jboss.logging.Logger;
+
 import io.kaoto.backend.metadata.parser.JsonProcessFile;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.NumberParameter;
@@ -7,21 +19,10 @@ import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
-import org.jboss.logging.Logger;
-
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
 
@@ -112,9 +113,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         String description = component.getString(DESCRIPTION);
         String type = getStepType(component);
 
-        LinkedList<Parameter> parameters = new LinkedList<>();
+        List<Parameter> parameters = new ArrayList<>();
         final AtomicInteger i = new AtomicInteger(0);
-        final var requiredProperties = new LinkedList<String>();
+        final var requiredProperties = new ArrayList<String>();
         properties.entrySet().stream()
                 .forEachOrdered(entrySet -> {
                             final Map<String, String> parameterData = new LinkedHashMap<>();
@@ -176,7 +177,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
         );
     }
 
-    private static void handleWeirdCases(String id, LinkedList<Parameter> parameters) {
+    private static void handleWeirdCases(String id, List<Parameter> parameters) {
         //Here are the weird cases
         if ("avro".equalsIgnoreCase(id)) {
             for (Parameter p : parameters) {
@@ -364,7 +365,7 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
             String description,
             String group,
             String type,
-            LinkedList<Parameter> parameters,
+            List<Parameter> parameters,
             List<String> required
     ) {
     }
