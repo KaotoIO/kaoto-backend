@@ -21,7 +21,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.UnmarshalFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.dataformat.DataFormat;
 
 public class MarshalDeserializer extends JsonDeserializer {
-    private final Logger log = Logger.getLogger(MarshalDeserializer.class);
+    private static final Logger LOG = Logger.getLogger(MarshalDeserializer.class);
 
     private static void extractProperties(final Map<String, Object> properties,
                                           final Map.Entry<String, JsonNode> field) {
@@ -85,12 +85,12 @@ public class MarshalDeserializer extends JsonDeserializer {
                 extractProperties(dataFormat.getProperties(), field);
             }
             if (fields.hasNext()) {
-                log.error("Found a second data format on this marshal? "
+                LOG.error("Found a second data format on this marshal? "
                         + n.toPrettyString());
             }
 
         } catch (Exception e) {
-            log.debug("Error trying to deserialize step: " + e.getMessage());
+            LOG.debug("Error trying to deserialize step: " + e.getMessage());
         }
 
         return step;

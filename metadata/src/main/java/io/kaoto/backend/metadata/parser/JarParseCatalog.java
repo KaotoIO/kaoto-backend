@@ -1,10 +1,5 @@
 package io.kaoto.backend.metadata.parser;
 
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.model.Metadata;
-import org.apache.commons.io.IOUtils;
-import org.jboss.logging.Logger;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +14,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.model.Metadata;
+
 /**
  * 🐱class JarParseCatalog
  * 🐱inherits ParseCatalog
@@ -29,7 +30,7 @@ import java.util.zip.ZipInputStream;
 public class JarParseCatalog<T extends Metadata>
         implements ParseCatalog<T> {
 
-    private Logger log = Logger.getLogger(JarParseCatalog.class);
+    private static final Logger LOG = Logger.getLogger(JarParseCatalog.class);
 
     private final String url;
 
@@ -43,7 +44,7 @@ public class JarParseCatalog<T extends Metadata>
     }
 
     private List<T> getJarAndParse(final String url) {
-        log.trace("Warming up repository in " + url);
+        LOG.trace("Warming up repository in " + url);
         List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
         this.processFile.setFutureMetadata(futureMd);
@@ -65,12 +66,12 @@ public class JarParseCatalog<T extends Metadata>
                 zipEntry = zis.getNextEntry();
             }
 
-            log.trace("Found " + futureMd.size() + " elements.");
+            LOG.trace("Found " + futureMd.size() + " elements.");
             CompletableFuture.allOf(futureMd.toArray(new CompletableFuture[0])).join();
         } catch (FileNotFoundException e) {
-            log.error("No jar file found.", e);
+            LOG.error("No jar file found.", e);
         } catch (Exception e) {
-            log.error("Error trying to parse catalog.", e);
+            LOG.error("Error trying to parse catalog.", e);
         }
 
         return metadataList;
@@ -87,7 +88,7 @@ public class JarParseCatalog<T extends Metadata>
             final StringReader sr = new StringReader(content);
             CompletableFuture<Void> metadata =
                     CompletableFuture.runAsync(() -> metadataList.addAll(this.processFile.parseInputStream(sr)));
-            metadata.thenRun(() -> log.trace(zipEntry.getName() + " parsed, now generating metadata."));
+            metadata.thenRun(() -> LOG.trace(zipEntry.getName() + " parsed, now generating metadata."));
             futureMd.add(metadata);
         }
         return size;
@@ -103,19 +104,19 @@ public class JarParseCatalog<T extends Metadata>
                 URLConnection connection = remote.openConnection();
                 res = connection.getInputStream();
             } catch (IOException e) {
-                log.error("Error trying to access remote file.", e);
+                LOG.error("Error trying to access remote file.", e);
             }
         } else if (url.startsWith("resource://")) {
             try {
                 res = this.getClass().getResourceAsStream(url.substring(10));
             } catch (Exception e) {
-                log.error("We had issues accessing " + url);
+                LOG.error("We had issues accessing " + url);
             }
         } else {
             try {
                 res = this.getClass().getResourceAsStream(url);
             } catch (Exception e) {
-                log.error("We had issues accessing " + url);
+                LOG.error("We had issues accessing " + url);
             }
         }
 

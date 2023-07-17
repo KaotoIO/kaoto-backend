@@ -38,7 +38,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     public static final String REST_DSL = "REST DSL";
     protected static final String[] KINDS = {CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT};
     private static String ICON = null;
-    private Logger log = Logger.getLogger(CamelRestDSLParseCatalog.class);
+    private static final Logger LOG = Logger.getLogger(CamelRestDSLParseCatalog.class);
 
     @NotNull
     private static Step getRestParentStep() {
@@ -158,7 +158,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
                 try {
                     ICON = new String(this.getClass().getResourceAsStream("base64icon.txt").readAllBytes());
                 } catch (IOException e) {
-                    log.error("Couldn't load the icon file for REST DSL steps.");
+                    LOG.error("Couldn't load the icon file for REST DSL steps.");
                 }
             }
 

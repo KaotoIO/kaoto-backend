@@ -1,19 +1,20 @@
 package io.kaoto.backend.camel.service.dsl.kamelet;
 
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
-import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
-import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.jboss.logging.Logger;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -22,7 +23,7 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
     private static final String KAMELET = "KAMELET";
     public static final String KNATIVE = "KNATIVE";
     public static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
-    private Logger log = Logger.getLogger(KameletBindingDSLSpecification.class);
+    private static final Logger LOG = Logger.getLogger(KameletBindingDSLSpecification.class);
 
     private DeploymentGeneratorService deploymentGeneratorService;
 
@@ -33,7 +34,7 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
     }
 
     public String description() {
-        return "Kamelet Bindings are used to create simple integrations that link a start step to an end step " 
+        return "Kamelet Bindings are used to create simple integrations that link a start step to an end step "
                 + "with optional intermediate action steps.";
     }
 
@@ -45,7 +46,7 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
                     .getResourceAsStream("kameletbinding.json").readAllBytes());
             return schema;
         } catch (IOException e) {
-            log.error("Can't load Kamelet Binding DSL schema", e);
+            LOG.error("Can't load Kamelet Binding DSL schema", e);
         }
         return "";
     }

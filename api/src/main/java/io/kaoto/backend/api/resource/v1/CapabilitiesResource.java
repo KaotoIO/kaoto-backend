@@ -1,14 +1,14 @@
 package io.kaoto.backend.api.resource.v1;
 
-import io.kaoto.backend.api.resource.v1.model.Capabilities;
-import io.kaoto.backend.api.service.language.LanguageService;
-import io.kaoto.backend.deployment.ClusterService;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
+import io.kaoto.backend.api.resource.v1.model.Capabilities;
+import io.kaoto.backend.api.service.language.LanguageService;
+import io.kaoto.backend.deployment.ClusterService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -37,7 +37,7 @@ public class CapabilitiesResource {
     @ConfigProperty(name = "quarkus.application.version")
     private String version;
 
-    private Logger log = Logger.getLogger(CapabilitiesResource.class);
+    private static final Logger LOG = Logger.getLogger(CapabilitiesResource.class);
 
     private LanguageService languageService;
 
@@ -100,7 +100,7 @@ public class CapabilitiesResource {
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
-        log.error("Error getting capabilities.", x);
+        LOG.error("Error getting capabilities.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("Error parsing capabilities.")

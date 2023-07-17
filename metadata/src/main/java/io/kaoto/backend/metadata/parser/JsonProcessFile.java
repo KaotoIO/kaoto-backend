@@ -1,12 +1,13 @@
 package io.kaoto.backend.metadata.parser;
 
-import io.kaoto.backend.model.Metadata;
-import org.jboss.logging.Logger;
-
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.model.Metadata;
 
 public abstract class JsonProcessFile<T extends Metadata>
         extends ProcessFile<T> {
@@ -34,7 +35,7 @@ public abstract class JsonProcessFile<T extends Metadata>
                 "core"
             );
 
-    private Logger log = Logger.getLogger(JsonProcessFile.class);
+    private static final Logger LOG = Logger.getLogger(JsonProcessFile.class);
 
     @Override
     protected boolean isDesiredType(final String filename ) {
@@ -53,7 +54,7 @@ public abstract class JsonProcessFile<T extends Metadata>
             return FileVisitResult.SKIP_SUBTREE;
         }
 
-        log.trace("Visiting '" + name + "'");
+        LOG.trace("Visiting '" + name + "'");
         return FileVisitResult.CONTINUE;
     }
 }

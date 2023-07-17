@@ -39,7 +39,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     private StepCatalog catalog;
 
-    private Logger log = Logger.getLogger(KameletDeploymentGeneratorService.class);
+    private static final Logger LOG = Logger.getLogger(KameletDeploymentGeneratorService.class);
 
     public KameletDeploymentGeneratorService() {
     }
@@ -96,7 +96,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                     s = Status.Ready;
                     break;
                 default:
-                    log.warn("Detected unrecognized status " + kamelet.getStatus().getPhase());
+                    LOG.warn("Detected unrecognized status " + kamelet.getStatus().getPhase());
             }
         }
         return s;
@@ -114,7 +114,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
                 return yamlMapper.readValue(input, Kamelet.class);
             } catch (Exception e) {
-                log.trace("Tried creating a kamelet and it didn't work.");
+                LOG.trace("Tried creating a kamelet and it didn't work.");
             }
         }
         return null;
@@ -133,7 +133,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                 }
             }
         } catch (Exception e) {
-            log.warn("Error extracting the list of integrations.", e);
+            LOG.warn("Error extracting the list of integrations.", e);
         }
 
         return res;

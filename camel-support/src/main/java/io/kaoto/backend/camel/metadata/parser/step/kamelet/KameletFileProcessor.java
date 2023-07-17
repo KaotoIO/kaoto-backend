@@ -30,7 +30,7 @@ import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 
 public class KameletFileProcessor extends YamlProcessFile<Step> {
-    private final Logger log = Logger.getLogger(KameletFileProcessor.class);
+    private static final Logger LOG = Logger.getLogger(KameletFileProcessor.class);
 
     public KameletFileProcessor() {
         //Nothing needed here
@@ -99,7 +99,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
             }
             return List.of(step);
         } catch (IOException | YAMLException e) {
-            log.trace("Error parsing Kamelet.", e);
+            LOG.trace("Error parsing Kamelet.", e);
         }
 
         return List.of();

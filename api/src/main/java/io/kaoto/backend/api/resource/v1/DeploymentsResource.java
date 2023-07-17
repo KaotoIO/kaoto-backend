@@ -1,15 +1,7 @@
 package io.kaoto.backend.api.resource.v1;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.fabric8.kubernetes.client.CustomResource;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.deployment.ClusterService;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -20,6 +12,17 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.deployment.ClusterService;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -35,7 +38,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 
 /**
  * 🐱class DeploymentsResource
@@ -47,7 +49,7 @@ import java.util.List;
 @ApplicationScoped
 public class DeploymentsResource {
 
-    private Logger log = Logger.getLogger(DeploymentsResource.class);
+    private static final Logger LOG = Logger.getLogger(DeploymentsResource.class);
     private ClusterService clusterService;
     private Instance<DeploymentGeneratorService> parsers;
 
@@ -123,7 +125,7 @@ public class DeploymentsResource {
                     yamlMapper.readValue(crd, c);
                     valid = true;
                 } catch (Exception e) {
-                    log.trace("We tried to parse with " + c.getName() + " and"
+                    LOG.trace("We tried to parse with " + c.getName() + " and"
                             + " it didn't work.");
                 }
             }
@@ -172,7 +174,7 @@ public class DeploymentsResource {
                             new KameletRepresenter());
                     return yaml.dumpAsMap(cr);
                 } catch (Exception e) {
-                    log.trace("We tried to parse with " + c.getName() + " and"
+                    LOG.trace("We tried to parse with " + c.getName() + " and"
                             + " it didn't work.");
                 }
             }
@@ -237,7 +239,7 @@ public class DeploymentsResource {
 
     @ServerExceptionMapper
     public Response mapException(final Exception x) {
-        log.error("Error processing deployment.", x);
+        LOG.error("Error processing deployment.", x);
 
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("Error processing deployment: " + x.getMessage())
@@ -247,7 +249,7 @@ public class DeploymentsResource {
 
     @ServerExceptionMapper
     public Response mapException(final NotFoundException x) {
-        log.error("Error processing deployment.", x);
+        LOG.error("Error processing deployment.", x);
 
         return Response.status(Response.Status.NOT_FOUND)
                 .entity("Error processing deployment: " + x.getMessage())

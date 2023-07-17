@@ -1,32 +1,34 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
-import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.camel.model.deployment.rest.Rest;
-import io.kaoto.backend.model.step.Step;
-import io.quarkus.runtime.util.StringUtil;
-import org.jboss.logging.Logger;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jboss.logging.Logger;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
+import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.util.StringUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 /**
  * 🐱miniclass CamelRouteStepParserService (StepParserService)
  */
 @ApplicationScoped
 public class CamelRouteStepParserService implements StepParserService<Step> {
-    private Logger log = Logger.getLogger(CamelRouteStepParserService.class);
+    private static final Logger LOG = Logger.getLogger(CamelRouteStepParserService.class);
 
     private KameletStepParserService ksps;
 
@@ -128,7 +130,7 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
             return yamlMapper.readValue(input, CamelRoute.class);
         } catch (JsonProcessingException e) {
             //We don't care what happened, it is wrongly formatted and that's it
-            log.trace("Error trying to parse camel route.", e);
+            LOG.trace("Error trying to parse camel route.", e);
         }
         return null;
     }

@@ -1,20 +1,21 @@
 package io.kaoto.backend.camel.service.dsl.camelroute;
 
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationDeploymentGeneratorService;
-import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
-import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.jboss.logging.Logger;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationDeploymentGeneratorService;
+import io.kaoto.backend.camel.service.step.parser.camelroute.IntegrationStepParserService;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 @RegisterForReflection
@@ -25,7 +26,7 @@ public class IntegrationDSLSpecification extends DSLSpecification {
     private static final String EIP_BRANCHES = "EIP-BRANCH";
 
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
-    private Logger log = Logger.getLogger(IntegrationDSLSpecification.class);
+    private static final Logger LOG = Logger.getLogger(IntegrationDSLSpecification.class);
 
     private DeploymentGeneratorService deploymentGeneratorService;
 
@@ -53,7 +54,7 @@ public class IntegrationDSLSpecification extends DSLSpecification {
                     .getResourceAsStream("integration.json").readAllBytes());
             return schema;
         } catch (IOException e) {
-            log.error("Can't load Integration DSL schema", e);
+            LOG.error("Can't load Integration DSL schema", e);
         }
         return "";
     }

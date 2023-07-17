@@ -1,9 +1,5 @@
 package io.kaoto.backend.metadata.catalog;
 
-import io.kaoto.backend.metadata.MetadataCatalog;
-import io.kaoto.backend.model.Metadata;
-import org.jboss.logging.Logger;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.metadata.MetadataCatalog;
+import io.kaoto.backend.model.Metadata;
 
 /**
  * 🐱class InMemoryCatalog
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
 
     private Map<String, T> metadataCatalog = new HashMap<>();
-    private Logger log = Logger.getLogger(InMemoryCatalog.class);
+    private static final Logger LOG = Logger.getLogger(InMemoryCatalog.class);
 
     @Override
     public boolean store(final List<T> steps) {
@@ -36,7 +37,7 @@ public class InMemoryCatalog<T extends Metadata> implements MetadataCatalog<T> {
                         .parallel()
                         .filter(Objects::nonNull)
                         .collect(stepMapCollector)));
-        log.trace("Catalog now has " + metadataCatalog.size() + " elements.");
+        LOG.trace("Catalog now has " + metadataCatalog.size() + " elements.");
 
         return true;
     }

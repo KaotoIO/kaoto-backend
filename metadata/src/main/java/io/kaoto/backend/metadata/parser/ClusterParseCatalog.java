@@ -1,19 +1,20 @@
 package io.kaoto.backend.metadata.parser;
 
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.model.Metadata;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.jboss.logging.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.model.Metadata;
 
 /**
  * 🐱class ClusterParseCatalog
@@ -25,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> {
 
     private final Class<? extends CustomResource> cr;
-    private Logger log = Logger.getLogger(ClusterParseCatalog.class);
+    private static final Logger LOG = Logger.getLogger(ClusterParseCatalog.class);
 
     private String namespace;
 
@@ -46,7 +47,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
     }
 
     private List<T> getCRAndParse(final Class<? extends CustomResource> cr) {
-        log.trace("Warming up repository from cluster.");
+        LOG.trace("Warming up repository from cluster.");
 
         List<T> metadataList = Collections.synchronizedList(new CopyOnWriteArrayList<>());
         final List<CompletableFuture<Void>> futureMd = Collections.synchronizedList(new CopyOnWriteArrayList<>());
@@ -61,7 +62,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
             } else {
                 resources = kubernetesClient.resources(cr).inNamespace(namespace).list().getItems();
             }
-            log.info("Retrieved resources  in " + (System.currentTimeMillis() - time) + "ms.");
+            LOG.info("Retrieved resources  in " + (System.currentTimeMillis() - time) + "ms.");
 
             //For each custom resource, let's process it
             resources.stream().parallel().forEach(resource ->
@@ -74,18 +75,18 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                                     new StringReader(new Yaml(new Constructor(cr,
                                             new LoaderOptions())).dumpAsMap(resource))));
                         } catch (Throwable t) {
-                            log.trace("Couldn't parse the resource.", t);
+                            LOG.trace("Couldn't parse the resource.", t);
                         }
                     }))
             );
 
         } catch (Exception e) {
-            log.error("Error retrieving elements from cluster.", e);
+            LOG.error("Error retrieving elements from cluster.", e);
         }
 
         this.yamlProcessFile.setFutureMetadata(futureMd);
         this.yamlProcessFile.setMetadataList(metadataList);
-        log.trace("Found " + futureMd.size() + " elements.");
+        LOG.trace("Found " + futureMd.size() + " elements.");
         CompletableFuture.allOf(futureMd.toArray(new CompletableFuture[0])).join();
 
         return metadataList;

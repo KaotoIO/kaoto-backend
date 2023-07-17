@@ -1,8 +1,5 @@
 package io.kaoto.backend.metadata.parser;
 
-import io.kaoto.backend.model.Metadata;
-import org.jboss.logging.Logger;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +11,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.jboss.logging.Logger;
+
+import io.kaoto.backend.model.Metadata;
+
 /**
  * 🐱class ProcessFile
  * Helper class to walk around files to parse Metadata objects.
@@ -22,7 +23,7 @@ public abstract class ProcessFile<T extends Metadata> implements FileVisitor<Pat
 
     private List<T> metadataList;
     private List<CompletableFuture<Void>> futureMetadata;
-    private Logger log = Logger.getLogger(ProcessFile.class);
+    private static final Logger LOG = Logger.getLogger(ProcessFile.class);
 
     protected ProcessFile() {
     }
@@ -40,7 +41,7 @@ public abstract class ProcessFile<T extends Metadata> implements FileVisitor<Pat
             return FileVisitResult.SKIP_SUBTREE;
         }
 
-        log.trace("Visiting '" + name + "'");
+        LOG.trace("Visiting '" + name + "'");
         return FileVisitResult.CONTINUE;
     }
 
@@ -51,7 +52,7 @@ public abstract class ProcessFile<T extends Metadata> implements FileVisitor<Pat
 
         if (isDesiredType(f.getName())) {
             CompletableFuture<Void> metadata = CompletableFuture.runAsync(() -> metadataList.addAll(parseFile(f)));
-            metadata.thenRun(() -> log.trace(f.getName() + " parsed, now generating metadata."));
+            metadata.thenRun(() -> LOG.trace(f.getName() + " parsed, now generating metadata."));
             futureMetadata.add(metadata);
         }
 
@@ -74,7 +75,7 @@ public abstract class ProcessFile<T extends Metadata> implements FileVisitor<Pat
         try (FileReader fr = new FileReader(f)) {
             return parseInputStream(fr);
         } catch (IOException e) {
-            log.error("Skipping file as I can't read it: " + f.getName(), e);
+            LOG.error("Skipping file as I can't read it: " + f.getName(), e);
         }
         return List.of();
     }
