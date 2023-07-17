@@ -1,10 +1,10 @@
 package io.kaoto.backend.api.resource.v2;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -43,6 +43,7 @@ import jakarta.ws.rs.core.Response;
 public class IntegrationsResource {
 
     private final Logger LOG = Logger.getLogger(IntegrationsResource.class);
+    private final SecureRandom random = new SecureRandom();
     private DeploymentService deploymentService;
     private Instance<DSLSpecification> dslSpecifications;
 
@@ -137,7 +138,7 @@ public class IntegrationsResource {
         return answer;
     }
 
-    private static void ensureUniqueNames(FlowsWrapper answer) {
+    private void ensureUniqueNames(FlowsWrapper answer) {
         List<String> usedIds = new ArrayList<>();
         var name = "name";
         for (var flow : answer.flows()) {
@@ -147,14 +148,15 @@ public class IntegrationsResource {
             }
             //Make sure there is an id/name assigned to all flows
             if (!flow.getMetadata().containsKey(name)) {
-                Random random = new Random();
-                flow.getMetadata().put(name,
-                        flow.getDsl().toLowerCase().replaceAll(" ", "") + random.nextInt(99));
+                flow.getMetadata().put(
+                    name,
+                    flow.getDsl().toLowerCase().replaceAll(" ", "") + random.nextInt(99));
             }
             //Make sure it is unique
             if (usedIds.contains(flow.getMetadata().get(name))) {
-                Random random = new Random();
-                flow.getMetadata().put(name, String.valueOf(flow.getMetadata().get(name)) + random.nextInt(99));
+                flow.getMetadata().put(
+                    name,
+                    String.valueOf(flow.getMetadata().get(name)) + random.nextInt(99));
             }
             usedIds.add(String.valueOf(flow.getMetadata().get(name)));
         }
