@@ -1,13 +1,18 @@
 package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.api.resource.v1.model.Integration;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.ListAssert;
+import org.assertj.core.api.MapAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,130 +23,75 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @TestHTTPEndpoint(IntegrationsResource.class)
 class IntegrationsResourceTest {
-    @Test
-    void amqAmq() throws Exception {
-        String yaml = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/amq-amq.yaml").toURI()));
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"amq-amq.yaml", "amq-amq-multi.json"})
+    void amqAmq(String file) throws Exception {
+        String yaml = loadFileFromResources("../../resource/" + file);
+
+        String mediaType = file.contains("json") ? MediaType.APPLICATION_JSON : "text/yaml";
 
         var res = given()
                 .when()
-                .contentType("text/yaml")
+                .contentType(mediaType)
                 .body(yaml)
                 .post("?dsl=Camel Route")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        var flows = res.extract().body().as(FlowsWrapper.class).flows();
-        assertTrue(!flows.isEmpty());
-        var flow = flows.get(0);
-        assertEquals(2, flow.getSteps().size());
-        Step amq1 = flow.getSteps().get(0);
-        Step amq2 = flow.getSteps().get(1);
-        assertEquals("START", amq1.getType());
-        assertEquals("activemq", amq1.getName());
-        assertEquals("activemq", amq2.getName());
-        assertEquals("MIDDLE", amq2.getType());
-        assertTrue(amq1.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
-                        && parameter.getValue().toString().equalsIgnoreCase("queue")));
-        assertTrue(amq1.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
-                        && parameter.getValue().toString().equalsIgnoreCase("myQueueName")));
-        assertTrue(amq2.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
-                        && parameter.getValue().toString().equalsIgnoreCase("topic")));
-        assertTrue(amq2.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
-                        && parameter.getValue().toString().equalsIgnoreCase("anotherOne")));
-
-
-        String json = res.extract().body().asString();
-
-        res = given()
-                .when()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(json)
-                .post()
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-
-        assertThat(res.extract().body().asString()).isEqualToNormalizingNewlines(yaml);
-    }
-
-    @Test
-    void amqAmqFromJson() throws Exception {
-        String json = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/amq-amq-multi.json").toURI()));
-
-        var res = given()
-                .when()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(json)
-                .post()
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-
-        String yaml = res.extract().body().asString();
-
-        res = given()
-                .when()
-                .contentType("text/yaml")
-                .body(yaml)
-                .post("?dsl=Camel Route")
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+        if (file.contains("json")) {
+            res = given()
+                    .when()
+                    .contentType("text/yaml")
+                    .body(res.extract().body().asString())
+                    .post("?dsl=Camel Route")
+                    .then()
+                    .statusCode(Response.Status.OK.getStatusCode());
+        }
 
         var flows = res.extract().body().as(FlowsWrapper.class).flows();
-        assertTrue(!flows.isEmpty());
+        assertThat(flows).isNotEmpty();
         var flow = flows.get(0);
-        assertEquals(2, flow.getSteps().size());
+        assertThat(flow.getSteps()).hasSize(2);
         Step amq1 = flow.getSteps().get(0);
         Step amq2 = flow.getSteps().get(1);
-        assertEquals("START", amq1.getType());
-        assertEquals("activemq", amq1.getName());
-        assertEquals("activemq", amq2.getName());
-        assertEquals("MIDDLE", amq2.getType());
+        assertThat(amq1.getType()).isEqualTo("START");
+        assertThat(amq1.getName()).isEqualTo("activemq");
+        assertThat(amq2.getType()).isEqualTo("MIDDLE");
+        assertThat(amq1.getName()).isEqualTo("activemq");
 
-        assertTrue(amq1.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
-                        && parameter.getValue().toString().equalsIgnoreCase("topic")));
-        assertTrue(amq1.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
-                        && parameter.getValue() == null));
-        assertTrue(amq2.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationType")
-                        && parameter.getValue().toString().equalsIgnoreCase("queue")));
-        assertTrue(amq2.getParameters().stream()
-                .anyMatch(parameter -> parameter.getId().equalsIgnoreCase("destinationName")
-                        && parameter.getValue().toString().equalsIgnoreCase("sdfg")));
+        assertThat(amq1.getParameters()).anyMatch(parameter ->
+                parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("queue"));
+        assertThat(amq1.getParameters()).anyMatch(parameter ->
+                parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue().toString().equalsIgnoreCase("myQueueName"));
+        assertThat(amq2.getParameters()).anyMatch(parameter ->
+                parameter.getId().equalsIgnoreCase("destinationType")
+                        && parameter.getValue().toString().equalsIgnoreCase("topic"));
+        assertThat(amq2.getParameters()).anyMatch(parameter ->
+                parameter.getId().equalsIgnoreCase("destinationName")
+                        && parameter.getValue().toString().equalsIgnoreCase("anotherOne"));
     }
 
     @Test
     void newBranchStep() throws Exception {
-        String json =
-                Files.readString(Path.of(
-                        IntegrationsResourceTest.class.getResource("../../resource/new-branch-step-multi.json")
-                                .toURI()));
+        String json = loadFileFromResources("../../resource/new-branch-step-multi.json");
+
         var res = given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -155,8 +105,8 @@ class IntegrationsResourceTest {
 
     @Test
     void scriptStep() throws Exception {
-        String json = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/script-multi.json").toURI()));
+        String json = loadFileFromResources("../../resource/script-multi.json");
+
         var res = given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -175,21 +125,22 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flows = res.extract().body().as(FlowsWrapper.class).flows();
-        assertTrue(!flows.isEmpty());
+        assertThat(flows).isNotEmpty();
         var flow = flows.get(0);
-        assertEquals(2, flow.getSteps().size());
+        assertThat(flow.getSteps()).hasSize(2);
         Step script = flow.getSteps().get(1);
         var groovy = script.getParameters().stream().filter(p -> "groovy".equals(p.getId())).findAny();
-        assertTrue(groovy.isPresent());
-        assertEquals("some groovy script", groovy.get().getValue());
+        assertThat(groovy).isPresent();
+        assertThat(groovy.get().getValue()).isEqualTo("some groovy script");
+        assertThat(script.getParameters()).extracting(Parameter::getValue)
+                .as("Check that other scripts are null")
+                .containsExactlyInAnyOrder(null, null, null, "some groovy script");
     }
 
     @Test
     void expressionObject() throws Exception {
-        String yaml = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource(
-                                "../expression-object.yaml")
-                        .toURI()));
+        String yaml = loadFileFromResources("../expression-object.yaml");
+
         var res = given()
                 .when()
                 .contentType("text/yaml")
@@ -209,63 +160,93 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        List<Object> steps = (List<Object>) ((Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from")).get("steps");
-        assertEquals(20, steps.size());
-        var choice = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("choice");
-        var when0 = (Map<String, Object>) ((List<Object>) choice.get("when")).get(0);
-        assertExpression("choice", "simple", when0);
-        var delay = (Map<String, Object>) ((Map<String, Object>) steps.get(1)).get("delay");
-        assertExpression("delay", "simple", delay);
-        var drouter = (Map<String, Object>) ((Map<String, Object>) steps.get(2)).get("dynamic-router");
-        assertExpression("dynamic-router", "simple", drouter);
-        var enrich = (Map<String, Object>) ((Map<String, Object>) steps.get(3)).get("enrich");
-        assertExpression("enrich", "simple", enrich);
-        var filter = (Map<String, Object>) ((Map<String, Object>) steps.get(4)).get("filter");
-        assertExpression("filter", "simple", filter);
-        var penrich = (Map<String, Object>) ((Map<String, Object>) steps.get(5)).get("poll-enrich");
-        assertExpression("poll-enrich", "simple", penrich);
-        var rlist = (Map<String, Object>) ((Map<String, Object>) steps.get(6)).get("recipient-list");
-        assertExpression("recipient-list", "simple", rlist);
-        var resequence = (Map<String, Object>) ((Map<String, Object>) steps.get(7)).get("resequence");
-        assertExpression("resequence", "simple", resequence);
-        var rslip = (Map<String, Object>) ((Map<String, Object>) steps.get(8)).get("routing-slip");
-        assertExpression("routing-slip", "simple", rslip);
-        var script = (Map<String, Object>) ((Map<String, Object>) steps.get(9)).get("script");
-        assertExpression("script", "groovy", script);
-        var scall = (Map<String, Object>) ((Map<String, Object>) steps.get(10)).get("service-call");
-        assertExpression("service-call", "jsonpath", scall);
-        var sbody = (Map<String, Object>) ((Map<String, Object>) steps.get(11)).get("set-body");
-        assertExpression("set-body", "constant", sbody);
-        var sheader = (Map<String, Object>) ((Map<String, Object>) steps.get(12)).get("set-header");
-        assertExpression("set-header", "jq", sheader);
-        var sprop = (Map<String, Object>) ((Map<String, Object>) steps.get(13)).get("set-property");
-        assertExpression("set-property", "jq", sprop);
-        var sort = (Map<String, Object>) ((Map<String, Object>) steps.get(14)).get("sort");
-        assertExpression("sort", "simple", sort);
-        var split = (Map<String, Object>) ((Map<String, Object>) steps.get(15)).get("split");
-        assertExpression("split", "simple", split);
-        var throttle = (Map<String, Object>) ((Map<String, Object>) steps.get(16)).get("throttle");
-        assertExpression("throttle", "simple", throttle);
-        var transform = (Map<String, Object>) ((Map<String, Object>) steps.get(17)).get("transform");
-        assertExpression("transform", "jq", transform);
-        var validate = (Map<String, Object>) ((Map<String, Object>) steps.get(18)).get("validate");
-        assertExpression("validate", "simple", validate);
-        var dotry = (Map<String, Object>) ((Map<String, Object>) steps.get(19)).get("do-try");
-        var docatch0 = (Map<String, Object>) ((List<Object>) dotry.get("do-catch")).get(0);
-        var onwhen = (Map<String, Object>) docatch0.get("on-when");
-        assertExpression("on-when", "simple", onwhen);
+
+        ListAssert<Map> steps = assertThat(parsed.get(0)).asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("route").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("from").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("steps").asInstanceOf(InstanceOfAssertFactories.list(Map.class));
+        steps.hasSize(20);
+
+        var choiceExpression = getStepForAssertion(steps, "choice")
+                .extractingByKey("when").asInstanceOf(InstanceOfAssertFactories.LIST)
+                .first().asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("expression").asInstanceOf(InstanceOfAssertFactories.MAP);
+        assertExpressionInStep(choiceExpression, "choice", "simple", "choice");
+
+        // same structure for all of these
+        // step#syntax#expresion
+        for (String stepForTest : List.of(
+                "delay#simple#delay",
+                "dynamic-router#simple#dynamic-router-exp",
+                "enrich#simple#enrich-exp",
+                "filter#simple#filter-exp",
+                "poll-enrich#simple#poll-enrich-exp",
+                "recipient-list#simple#recipient-list-exp",
+                "resequence#simple#resequence-exp",
+                "routing-slip#simple#routing-slip-exp",
+                "script#groovy#script-exp",
+                "service-call#jsonpath#service-call-exp",
+                "set-body#constant#set-body-exp",
+                "set-header#jq#set-header-exp",
+                "set-property#jq#set-property-exp",
+                "sort#simple#sort-exp",
+                "split#simple#split-exp",
+                "throttle#simple#throttle-exp",
+                "transform#jq#transform-exp",
+                "validate#simple#validate-exp"
+        )) {
+            String[] parameters = stepForTest.split("#");
+            var stepExpression = getStepForAssertion(steps, parameters[0])
+                    .extractingByKey("expression").asInstanceOf(InstanceOfAssertFactories.MAP);
+            assertExpressionInStep(stepExpression, parameters[0], parameters[1], parameters[2]);
+        }
+
+        var onWhenExpression = getStepForAssertion(steps, "do-try")
+                .extractingByKey("do-catch").asInstanceOf(InstanceOfAssertFactories.list(Map.class))
+                .filteredOn(step -> step.containsKey("on-when"))
+                .hasSize(1).first().asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("on-when").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("expression").asInstanceOf(InstanceOfAssertFactories.MAP);
+        assertExpressionInStep(onWhenExpression, "on-when", "simple", "on-when");
     }
 
-    private void assertExpression(String name, String syntax, Map<String, Object> step) {
-        var nested = (Map<String, Object>) ((Map<String, Object>) step.get("expression")).get(syntax);
-        assertEquals(name, nested.get("expression"));
-        assertNull(nested.get("result-type"));
+    /**
+     * Return step element from steps collection according to step name
+     */
+    private MapAssert<Object, Object> getStepForAssertion(ListAssert<Map> steps, String stepName) {
+        return steps.as("Steps list should contains one step with name " + stepName)
+                .filteredOn(step -> step.containsKey(stepName)).hasSize(1)
+                .first().asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey(stepName).asInstanceOf(InstanceOfAssertFactories.MAP);
+    }
+
+    // @formatter:off
+    /**
+     * @param stepExpression - expects expression element only, e.g.
+     *  expression:
+     *    simple:
+     *      expression: choice
+     *
+     *  expects Map ["simple" -> Object]
+     */
+    // @formatter:on
+    private void assertExpressionInStep(MapAssert<Object, Object> stepExpression, String stepName,
+                                        String expectedSyntax, String expectedExpression) {
+        stepExpression
+                .as(String.format("Step %s should contain syntax %s", stepName, expectedSyntax))
+                .containsKey(expectedSyntax)
+                .extractingByKey(expectedSyntax).asInstanceOf(InstanceOfAssertFactories.MAP)
+                .as(String.format("Step %s should not contains result-type", stepName))
+                .doesNotContainKey("result-type")
+                .as(String.format("Step %s should contain expression %s", stepName, expectedExpression))
+                .containsKey("expression").extractingByKey("expression")
+                .isEqualTo(expectedExpression);
     }
 
     @Test
     void kameletUri() throws Exception {
-        String yaml = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/kamelet-uri.yaml").toURI()));
+        String yaml = loadFileFromResources("../../resource/kamelet-uri.yaml");
+
         var res = given()
                 .when()
                 .contentType("text/yaml")
@@ -285,14 +266,18 @@ class IntegrationsResourceTest {
 
         var yaml2 = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml2);
-        var uri = (String) ((Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from")).get("uri");
-        assertEquals("kamelet:telegram-source:test/", uri);
+
+        assertThat(parsed.get(0)).asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("route").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("from").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("uri").asString()
+                .isEqualTo("kamelet:telegram-source:test/");
     }
 
     @Test
     void uriLogStop() throws Exception {
-        String yaml = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/uri-log-stop.yaml").toURI()));
+        String yaml = loadFileFromResources("../../resource/uri-log-stop.yaml");
+
         var res = given()
                 .when()
                 .contentType("text/yaml")
@@ -302,25 +287,37 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flows = res.extract().body().as(FlowsWrapper.class).flows();
-        assertTrue(!flows.isEmpty());
+        assertThat(flows).isNotEmpty();
         var flow = flows.get(0);
+        assertThat(flow.getSteps()).hasSize(4);
+
+        var direct = flow.getSteps().get(0);
+        assertThat(direct.getName()).isEqualTo("direct");
+        assertThat(direct.getType()).isEqualTo("START");
+
         var filter = flow.getSteps().get(1);
-        var log = filter.getBranches().get(0).getSteps().get(0);
-        assertEquals("MIDDLE", log.getType());
+        assertThat(filter.getName()).isEqualTo("filter");
+        assertThat(filter.getBranches().get(0).getSteps()).hasSize(1);
+        assertThat(filter.getBranches().get(0).getSteps().get(0).getType()).isEqualTo("MIDDLE");
+        assertThat(filter.getBranches().get(0).getSteps().get(0).getName()).isEqualTo("log");
+
         var filter2 = flow.getSteps().get(2);
-        var stop = filter2.getBranches().get(0).getSteps().get(0);
-        assertEquals("stop", stop.getName());
+        assertThat(filter2.getName()).isEqualTo("filter");
+        assertThat(filter2.getBranches().get(0).getSteps()).hasSize(1);
         // @FIXME a workaround for https://github.com/KaotoIO/kaoto-ui/issues/1587
         // Fix StopFlowStep once above is implemented
-        assertEquals("MIDDLE", stop.getType());
+        assertThat(filter2.getBranches().get(0).getSteps().get(0).getType()).isEqualTo("MIDDLE");
+        assertThat(filter2.getBranches().get(0).getSteps().get(0).getName()).isEqualTo("stop");
+
         var log2 = flow.getSteps().get(3);
-        assertEquals("MIDDLE", log2.getType());
+        assertThat(log2.getName()).isEqualTo("log");
+        assertThat(log2.getType()).isEqualTo("MIDDLE");
     }
 
     @Test
     void noFrom() throws Exception {
-        String json = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/no-from-multi.json").toURI()));
+        String json = loadFileFromResources("../../resource/no-from-multi.json");
+
         var res = given()
                 .when()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -330,18 +327,25 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
         var yaml = res.extract().body().asString();
         List<Object> parsed = new Yaml().load(yaml);
-        var from = (Map) ((Map) ((Map) parsed.get(0)).get("route")).get("from");
-        var fromUri = (String) from.get("uri");
-        assertNull(fromUri);
-        var steps = (List<Object>) from.get("steps");
-        assertEquals(1, steps.size());
-        var to = (Map<String, Object>) ((Map<String, Object>) steps.get(0)).get("to");
-        assertEquals("log:", to.get("uri"));
+
+        MapAssert<Object, Object> from = assertThat(parsed.get(0)).asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("route").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("from").asInstanceOf(InstanceOfAssertFactories.MAP);
+
+        from.extractingByKey("uri").isNull();
+        from.extractingByKey("steps").asInstanceOf(InstanceOfAssertFactories.LIST)
+                .hasSize(1)
+                .first().asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("to").asInstanceOf(InstanceOfAssertFactories.MAP)
+                .extractingByKey("uri")
+                .isNotNull()
+                .isEqualTo("log:");
     }
+
     @Test
     void beans() throws Exception {
-        String yaml = Files.readString(Path.of(
-                IntegrationsResourceTest.class.getResource("../../resource/kamelet2.yaml").toURI()));
+        String yaml = loadFileFromResources("../../resource/kamelet2.yaml");
+
         var res = given()
                 .when()
                 .contentType("text/yaml")
@@ -350,20 +354,62 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
         var flows = res.extract().body().as(FlowsWrapper.class);
-        assertNotNull(flows);
+
+        assertThat(flows).isNotNull();
+        assertThat(flows.flows()).isNotEmpty();
         var flow = flows.flows().get(0);
-        assertNotNull(flow);
-        var beans = (List<Map<String, Object>>) flows.metadata().get("beans");
-        assertEquals(1, beans.size());
-        var bean = beans.get(0);
-        assertEquals(3, bean.size());
-        assertTrue(bean.containsKey("name"));
-        assertTrue(bean.containsKey("type"));
-        assertTrue(bean.containsKey("properties"));
-        var properties = (Map<String, String>) bean.get("properties");
-        assertEquals(2, properties.size());
-        assertTrue(properties.containsKey("remoteURI"));
-        assertTrue(properties.containsKey("secondProperty"));
+        assertThat(flow).isNotNull();
+        assertThat(flow.getSteps()).hasSize(2);
+
+        assertThat(flows.metadata().get("beans"))
+                .asInstanceOf(InstanceOfAssertFactories.LIST)
+                .hasSize(1)
+                .first()
+                .asInstanceOf(InstanceOfAssertFactories.MAP)
+                .hasSize(3)
+                .containsEntry("name", "connectionFactoryBean")
+                .containsEntry("type", "#class:org.apache.qpid.jms.JmsConnectionFactory")
+                .containsEntry("properties", Map.of(
+                        "remoteURI", "{{remoteURI}}",
+                        "secondProperty", "another"));
+    }
+
+    @Test
+    void kameletMetadata() throws Exception {
+        String yaml = loadFileFromResources("../../resource/kamelet2.yaml");
+
+        var res = given()
+                .when()
+                .contentType("text/yaml")
+                .body(yaml)
+                .post("?dsl=Kamelet")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+        var flows = res.extract().body().as(FlowsWrapper.class);
+
+        assertThat(flows.flows()).isNotEmpty();
+        var flow = flows.flows().get(0);
+        assertThat(flow).isNotNull();
+        assertThat(flow.getSteps()).hasSize(2);
+        assertThat(flow.getMetadata()).hasSize(6);
+        assertThat(flow.getMetadata().get("name")).asString().isEqualTo("jms-amqp-10-source");
+        assertThat(flow.getMetadata().get("dependencies"))
+                .asInstanceOf(InstanceOfAssertFactories.LIST)
+                .hasSize(3)
+                .containsExactlyInAnyOrder("camel:jms", "camel:amqp", "camel:kamelet");
+        assertThat(flow.getMetadata().get("labels"))
+                .asInstanceOf(InstanceOfAssertFactories.MAP)
+                .hasSize(2)
+                .containsEntry("camel.apache.org/kamelet.type", "source")
+                .containsEntry("camel.apache.org/requires.runtime", "camel-k");
+        assertThat(flow.getMetadata().get("annotations"))
+                .asInstanceOf(InstanceOfAssertFactories.MAP)
+                .hasSize(5)
+                .containsEntry("camel.apache.org/kamelet.support.level", "Stable")
+                .containsEntry("camel.apache.org/provider", "Apache Software Foundation")
+                .containsEntry("camel.apache.org/catalog.version", "4.0.0-SNAPSHOT")
+                .containsEntry("camel.apache.org/kamelet.group", "JMS")
+                .containsEntry("camel.apache.org/kamelet.namespace", "Messaging");
     }
 
     @ParameterizedTest
@@ -373,13 +419,13 @@ class IntegrationsResourceTest {
             "Integration#integration-multiroute.yaml", "Kamelet#jms-amqp-10-source.kamelet.yaml",
             "Integration#integration-no-step.yaml", "Integration#integration-with-beans.yaml",
             "Kamelet#beans.kamelet.yaml", "Kamelet#aws-cloudtrail.yaml",
-            "Kamelet#avro-serialize-action.kamelet.yaml", "Kamelet#google-bigquery-sink.kamelet.yaml"})
+            "Kamelet#avro-serialize-action.kamelet.yaml", "Kamelet#google-bigquery-sink.kamelet.yaml",
+            "Camel Route#amq-amq.yaml"})
     void roundTrip(String file) throws IOException {
 
         String[] parameters = file.split("#");
 
-        var route = new String(this.getClass().getResourceAsStream("../../resource/" + parameters[1]).readAllBytes(),
-                StandardCharsets.UTF_8);
+        var route = loadFileFromResources("../../resource/" + parameters[1]);
 
         //With no DSL parameter
         var res0 = given()
@@ -399,12 +445,12 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        assertEquals(res0.extract().body().asString(), res1.extract().body().asString());
+        assertThat(res0.extract().body().asString()).isEqualToNormalizingNewlines(res1.extract().body().asString());
 
         var flows = res1.extract().body().as(FlowsWrapper.class);
 
         for (var flow : flows.flows()) {
-            assertEquals(parameters[0], flow.getDsl());
+            assertThat(flow.getDsl()).isEqualTo(parameters[0]);
         }
 
         //Now let's try to recreate the source code
@@ -418,14 +464,14 @@ class IntegrationsResourceTest {
         var sourceCode = res2.extract().body().asString();
 
         //This should be the same as the original source code
-        assertThat(route).isEqualToNormalizingNewlines(sourceCode);
+        Object originalYaml = new Yaml().load(route);
+        Object sourceCodeYaml = new Yaml().load(sourceCode);
+        assertThat(originalYaml).isEqualTo(sourceCodeYaml);
     }
 
     @Test
     void uniqueName() throws IOException {
-        var route = new String(this.getClass()
-                        .getResourceAsStream("../../resource/route-repeated-names.yaml").readAllBytes(),
-                        StandardCharsets.UTF_8);
+        var route = loadFileFromResources("../../resource/route-repeated-names.yaml");
 
         //Should be the same as with DSL parameter
         var res1 = given()
@@ -437,12 +483,12 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flows = res1.extract().body().as(FlowsWrapper.class);
-        var ids = flows.flows().stream().collect(
-                Collectors.groupingBy(i -> i.getMetadata().get("name"), Collectors.counting()))
-                .entrySet();
-        assertEquals(flows.flows().size(), ids.size());
-        assertTrue(ids.stream().allMatch(id -> id.getValue() == 1l));
-        assertTrue(ids.stream().allMatch(id -> Pattern.matches( "([A-Za-z0-9])+", id.getKey().toString())));
+
+        assertThat(flows.flows())
+                .extracting(Integration::getMetadata)
+                .extracting(map -> map.get("name"))
+                .doesNotHaveDuplicates()
+                .allMatch(name -> Pattern.matches("([A-Za-z0-9])+", name.toString()));
 
         //Let's assign the same name to all flows
         var sameIdentifier = "sameIdentifier";
@@ -458,12 +504,13 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
         var yaml = res2.extract().body().asString();
 
-        Pattern pattern = Pattern.compile("  id: (.+)(?: \n\r|\n|\r)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(" {2}id: (.+)(?: \n\r|\n|\r)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(yaml);
-        assertTrue(matcher.find());
-        assertEquals("id: sameIdentifier", matcher.group(0).trim());
-        assertTrue(matcher.find());
-        assertNotEquals("id: sameIdentifier", matcher.group(0).trim());
+        assertThat(matcher.find()).isTrue();
+        assertThat(matcher.group(0).trim()).isEqualTo("id: sameIdentifier");
+        assertThat(matcher.find()).isTrue();
+        assertThat(matcher.group(0).trim()).isNotEqualTo("id: sameIdentifier");
+        assertThat(matcher.find()).isFalse();
     }
 
     @ParameterizedTest
@@ -475,8 +522,7 @@ class IntegrationsResourceTest {
 
         String[] parameters = file.split("#");
 
-        var route = new String(this.getClass().getResourceAsStream("../../resource/" + parameters[1]).readAllBytes(),
-                StandardCharsets.UTF_8);
+        var route = loadFileFromResources("../../resource/" + parameters[1]);
 
         //First, get the JSON object of the flow
         var res1 = given()
@@ -488,7 +534,7 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         var flows = res1.extract().body().as(FlowsWrapper.class);
-        assertTrue(!flows.flows().isEmpty());
+        assertThat(flows.flows()).isNotEmpty();
         var flow = flows.flows().get(0);
         var randomGeneratedName = "flow-" + System.currentTimeMillis();
         var randomGeneratedDesc = "Description " + System.currentTimeMillis();
@@ -526,27 +572,31 @@ class IntegrationsResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode());
 
         flows = res3.extract().body().as(FlowsWrapper.class);
-        assertTrue(!flows.flows().isEmpty());
+        assertThat(flows.flows()).isNotEmpty();
         flow = flows.flows().get(0);
-        assertNotNull(flow.getMetadata());
-        assertTrue(sourceCode.contains("description: " + randomGeneratedDesc));
+        assertThat(flow.getMetadata()).isNotNull();
+        assertThat(sourceCode).contains("description: " + randomGeneratedDesc);
 
         switch (parameters[0]) {
-            case "Kamelet":
-            case "Kamelet Binding":
-                assertEquals(randomGeneratedName, flows.metadata().get("name"));
-                assertEquals(randomGeneratedDesc, flows.metadata().get("description"));
-                assertTrue(sourceCode.contains("  name: " + randomGeneratedName));
-                break;
-            case "Integration":
-            case "Camel Route":
-                assertEquals(randomGeneratedName, flow.getMetadata().get("name"));
-                assertEquals(randomGeneratedDesc, flow.getMetadata().get("description"));
-                assertTrue(sourceCode.contains("    id: " + randomGeneratedName));
-                break;
-            default:
-                break;
+            case "Kamelet", "Kamelet Binding" -> {
+                assertThat(flows.metadata())
+                        .containsEntry("name", randomGeneratedName)
+                        .containsEntry("description", randomGeneratedDesc);
+                assertThat(sourceCode).contains("  name: " + randomGeneratedName);
+            }
+            case "Integration", "Camel Route" -> {
+                assertThat(flow.getMetadata())
+                        .containsEntry("name", randomGeneratedName)
+                        .containsEntry("description", randomGeneratedDesc);
+                assertThat(sourceCode).contains("    id: " + randomGeneratedName);
+            }
+            default -> {
+            }
         }
     }
 
+    private String loadFileFromResources(String path) throws IOException {
+        return new String(Objects.requireNonNull(this.getClass().getResourceAsStream(path), "File must exist")
+                .readAllBytes(), StandardCharsets.UTF_8);
+    }
 }
