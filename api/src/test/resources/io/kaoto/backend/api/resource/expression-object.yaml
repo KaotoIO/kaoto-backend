@@ -13,73 +13,73 @@
       - dynamic-router:
           expression:
             simple:
-              expression: dynamic-router
+              expression: dynamic-router-exp
       - enrich:
           expression:
             simple:
-              expression: enrich
+              expression: enrich-exp
       - filter:
           expression:
             simple:
-              expression: filter
+              expression: filter-exp
       - poll-enrich:
           expression:
             simple:
-              expression: poll-enrich
+              expression: poll-enrich-exp
       - recipient-list:
           expression:
             simple:
-              expression: recipient-list
+              expression: recipient-list-exp
       - resequence:
           expression:
             simple:
-              expression: resequence
+              expression: resequence-exp
       - routing-slip:
           expression:
             simple:
-              expression: routing-slip
+              expression: routing-slip-exp
       - script:
           expression:
             groovy:
-              expression: script
+              expression: script-exp
       - service-call:
           expression:
             jsonpath:
-              expression: service-call
+              expression: service-call-exp
       - set-body:
           expression:
             constant:
-              expression: set-body
+              expression: set-body-exp
       - set-header:
           name: header1
           expression:
             jq:
-              expression: set-header
+              expression: set-header-exp
       - set-property:
           name: prop1
           expression:
             jq:
-              expression: set-property
+              expression: set-property-exp
       - sort:
           expression:
             simple:
-              expression: sort
+              expression: sort-exp
       - split:
           expression:
             simple:
-              expression: split
+              expression: split-exp
       - throttle:
           expression:
             simple:
-              expression: throttle
+              expression: throttle-exp
       - transform:
           expression:
             jq:
-              expression: transform
+              expression: transform-exp
       - validate:
           expression:
             simple:
-              expression: validate
+              expression: validate-exp
       - do-try:
           steps: [ ]
           do-catch:
