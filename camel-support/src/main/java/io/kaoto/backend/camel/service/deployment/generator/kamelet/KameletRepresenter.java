@@ -13,6 +13,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.KameletTemplate;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.AggregateFlowStep;
+import io.kaoto.backend.camel.model.deployment.kamelet.step.BeanFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.ClaimCheckFlowStep;
@@ -253,6 +254,7 @@ public class KameletRepresenter extends Representer {
         // and making a mess?
         var eips = new Class[] {
                 AggregateFlowStep.class,
+                BeanFlowStep.class,
                 ClaimCheckFlowStep.class,
                 CircuitBreakerFlowStep.class,
                 ChoiceFlowStep.class,

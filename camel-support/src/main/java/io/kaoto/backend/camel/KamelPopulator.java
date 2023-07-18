@@ -28,6 +28,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.AggregateFlowStep;
+import io.kaoto.backend.camel.model.deployment.kamelet.step.BeanFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.ChoiceFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.CircuitBreakerFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.ClaimCheckFlowStep;
@@ -518,6 +519,9 @@ public class KamelPopulator {
             switch (step.getName()) {
                 case "aggregate":
                     flowStep = new AggregateFlowStep(step);
+                    break;
+                case "bean":
+                    flowStep = new BeanFlowStep(step);
                     break;
                 case "claim-check":
                     flowStep = new ClaimCheckFlowStep(step);
