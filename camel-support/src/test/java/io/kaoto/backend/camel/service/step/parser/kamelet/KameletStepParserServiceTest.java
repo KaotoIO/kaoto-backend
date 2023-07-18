@@ -236,7 +236,8 @@ class KameletStepParserServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"eip.kamelet.yaml", "jq.kamelet.yaml", "name.kamelet.yaml"})
+    @ValueSource(strings = {"eip.kamelet.yaml", "jq.kamelet.yaml", "name.kamelet.yaml",
+            "kafka-manual-commit-action.kamelet.yaml"})
     void checkRoundTrip(String resource) throws Exception {
         String kamelet = new String(Objects.requireNonNull(this.getClass().getResourceAsStream(resource))
                 .readAllBytes(), StandardCharsets.UTF_8);

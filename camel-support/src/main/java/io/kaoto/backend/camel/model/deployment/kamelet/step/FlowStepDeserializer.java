@@ -43,6 +43,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
         Map<String, Class> steps = new HashMap<>();
 
         steps.put("aggregate", AggregateFlowStep.class);
+        steps.put("bean", BeanFlowStep.class);
         steps.put("claim-check", ClaimCheckFlowStep.class);
         steps.put("claimCheck", ClaimCheckFlowStep.class);
         steps.put("circuitBreaker", CircuitBreakerFlowStep.class);

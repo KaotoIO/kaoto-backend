@@ -159,7 +159,7 @@ class KameletParseCatalogTest {
         ParseCatalog<Step> kameletParser = parseCatalog.getLocalFolder(Path.of(url.toURI()));
         List<Step> steps = kameletParser.parse().join().stream().filter(Objects::nonNull).toList();
 
-        assertEquals(8, steps.size());
+        assertEquals(9, steps.size());
     }
 
     @Test
