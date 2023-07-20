@@ -1,19 +1,21 @@
 package io.kaoto.backend.camel.service.deployment.generator.camelroute;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
-import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
-import io.kaoto.backend.camel.model.deployment.camelroute.IntegrationSpec;
-import io.kaoto.backend.camel.model.deployment.rest.Rest;
-import io.quarkus.runtime.util.StringUtil;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import io.kaoto.backend.camel.KamelHelper;
+import io.kaoto.backend.camel.model.deployment.camelroute.IntegrationSpec;
+import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
+import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
+import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.quarkus.runtime.util.StringUtil;
 
 public class IntegrationRepresenter extends KameletRepresenter {
 
@@ -28,8 +30,7 @@ public class IntegrationRepresenter extends KameletRepresenter {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        Map<String, Object> properties = mapper.convertValue(data,
+                        Map<String, Object> properties = KamelHelper.JSON_MAPPER.convertValue(data,
                                 new TypeReference<Map<String, Object>>() {});
                         properties.put("flows", ((IntegrationSpec) data).get_flows());
                         properties.remove("_flows");

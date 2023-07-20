@@ -14,9 +14,8 @@ import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.camel.model.deployment.kamelet.SimplifiedKamelet;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
@@ -46,9 +45,10 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 return List.of();
             }
 
-            var YAML_MAPPER = new ObjectMapper(new YAMLFactory())
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            SimplifiedKamelet kamelet = YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
+            SimplifiedKamelet kamelet = KamelHelper.YAML_MAPPER.readerFor(SimplifiedKamelet.class)
+                .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .readValue(yaml);
+
             Step step = new Step();
             step.setKind(kind);
 

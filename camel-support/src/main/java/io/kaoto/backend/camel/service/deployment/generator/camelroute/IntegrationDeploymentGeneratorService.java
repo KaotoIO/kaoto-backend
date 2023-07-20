@@ -10,14 +10,12 @@ import java.util.stream.Stream;
 
 import org.jboss.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
 import io.kaoto.backend.camel.model.deployment.camelroute.IntegrationFlow;
 import io.kaoto.backend.camel.service.deployment.generator.AbstractDeploymentGeneratorService;
@@ -93,8 +91,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-                return yamlMapper.readValue(input, Integration.class);
+                return KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating an integration and it didn't work.");
             }

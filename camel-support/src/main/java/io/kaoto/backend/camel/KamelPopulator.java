@@ -13,8 +13,6 @@ import org.apache.camel.v1alpha1.kameletspec.Definition;
 import org.apache.camel.v1alpha1.kameletspec.definition.Properties;
 import org.jboss.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.fabric8.kubernetes.api.model.AnyType;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -192,8 +190,7 @@ public class KamelPopulator {
             if (original_spec != null && original_spec instanceof KameletSpec ospec) {
                 spec = ospec;
             } else if (original_spec != null && original_spec instanceof Map ospec) {
-                ObjectMapper mapper = new ObjectMapper();
-                spec = mapper.convertValue(ospec, KameletSpec.class);
+                spec = KamelHelper.JSON_MAPPER.convertValue(ospec, KameletSpec.class);
             } else {
                 spec = new KameletSpec();
             }
@@ -216,8 +213,7 @@ public class KamelPopulator {
             if (metadata.get("definition") instanceof Definition def) {
                 kamelet.getSpec().setDefinition(def);
             } else if (metadata.get("definition") instanceof Map map) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                Definition def = objectMapper.convertValue(map, Definition.class);
+                Definition def = KamelHelper.JSON_MAPPER.convertValue(map, Definition.class);
                 kamelet.getSpec().setDefinition(def);
             }
         }
