@@ -48,6 +48,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     @Inject
     private KameletBindingStepParserService stepParserService;
 
+    private static final List<Class<? extends CustomResource>> SUPPORTED_RESOURCES = List.of(KameletBinding.class);
     private static final Logger LOG = Logger.getLogger(KameletBindingDeploymentGeneratorService.class);
 
     @Override
@@ -218,7 +219,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
 
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{KameletBinding.class});
+        return SUPPORTED_RESOURCES;
     }
 
     @Override

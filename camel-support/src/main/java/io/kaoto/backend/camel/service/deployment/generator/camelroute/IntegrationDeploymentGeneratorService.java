@@ -38,6 +38,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(CAMEL_CONNECTOR, EIP, EIP_BRANCHES);
 
+    private static final List<Class<? extends CustomResource>> SUPPORTED_RESOURCES = List.of(Integration.class);
     private static final Logger LOG = Logger.getLogger(IntegrationDeploymentGeneratorService.class);
 
     private IntegrationStepParserService stepParserService;
@@ -122,7 +123,7 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
 
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{Integration.class});
+        return SUPPORTED_RESOURCES;
     }
 
     @Override

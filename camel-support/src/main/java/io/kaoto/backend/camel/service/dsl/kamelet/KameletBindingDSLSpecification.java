@@ -1,15 +1,13 @@
 package io.kaoto.backend.camel.service.dsl.kamelet;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.logging.Logger;
-
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletBindingDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -23,7 +21,10 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
     private static final String KAMELET = "KAMELET";
     public static final String KNATIVE = "KNATIVE";
     public static final List<String> KINDS = Arrays.asList(KAMELET, KNATIVE);
-    private static final Logger LOG = Logger.getLogger(KameletBindingDSLSpecification.class);
+
+    private static final String SCHEMA = KamelHelper.loadResourceAsString(
+        KameletBindingDSLSpecification.class,
+        "kameletbinding.json").orElse("");
 
     private DeploymentGeneratorService deploymentGeneratorService;
 
@@ -41,14 +42,7 @@ public class KameletBindingDSLSpecification extends DSLSpecification {
 
     @Override
     public String validationSchema() {
-        try {
-            String schema = new String(KameletBindingDSLSpecification.class
-                    .getResourceAsStream("kameletbinding.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            LOG.error("Can't load Kamelet Binding DSL schema", e);
-        }
-        return "";
+        return SCHEMA;
     }
 
     @Override

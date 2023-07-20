@@ -96,7 +96,7 @@ public class KamelPopulator {
     public static final String JAVASCRIPT = "javascript";
     public static final String CAMEL_APACHE_ORG_KAMELET_ICON = "camel.apache.org/kamelet.icon";
     protected static final Logger log = Logger.getLogger(KamelPopulator.class);
-    private final String group = "camel.apache.org";
+    private static final String GROUP = "camel.apache.org";
 
     private StepCatalog catalog;
 
@@ -227,7 +227,7 @@ public class KamelPopulator {
 
         //override in case this is outdated from the graphic side
         Type type = defineType(steps);
-        kamelet.getMetadata().getLabels().put(group + "/kamelet.type", type.name());
+        kamelet.getMetadata().getLabels().put(GROUP + "/kamelet.type", type.name());
 
         String name = metadata.getOrDefault(NAME, "example-" + type.name()).toString();
         kamelet.getMetadata().setName(name);

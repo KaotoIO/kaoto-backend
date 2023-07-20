@@ -1,7 +1,6 @@
 package io.kaoto.backend.camel.service.step.parser.kamelet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,6 +63,10 @@ public class KameletStepParserService implements StepParserService<Step> {
     private static final String[] ROOT_METADATA_NAMES
             = new String[] { DESCRIPTION, "beans", "definition"};
     private static final Logger LOG = Logger.getLogger(KameletStepParserService.class);
+
+    private static final String[] KINDS = new String[] {
+        "Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"
+    };
 
     private StepCatalog catalog;
 
@@ -452,11 +455,15 @@ public class KameletStepParserService implements StepParserService<Step> {
 
     @Override
     public boolean appliesTo(final String yaml) {
-        String[] kinds = new String[]{"Kamelet", "Knative", "Camel-Connector", "EIP", "EIP-BRANCH"};
 
         Matcher matcher = PATTERN.matcher(yaml);
         if (!yaml.contains("kind: KameletBinding") && matcher.find()) {
-            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(1).trim()));
+            String match = matcher.group(1).trim();
+            for (String kind: KINDS) {
+                if (kind.equalsIgnoreCase(match)) {
+                    return true;
+                }
+            }
         }
 
         return false;
