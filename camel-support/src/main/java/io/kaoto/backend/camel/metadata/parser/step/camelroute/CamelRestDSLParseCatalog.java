@@ -1,15 +1,13 @@
 package io.kaoto.backend.camel.metadata.parser.step.camelroute;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.jboss.logging.Logger;
-
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.EmptyParseCatalog;
@@ -37,8 +35,10 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     public static final String CAMEL_REST_ENDPOINT = "CAMEL-REST-ENDPOINT";
     public static final String REST_DSL = "REST DSL";
     protected static final String[] KINDS = {CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT};
-    private static String ICON = null;
-    private static final Logger LOG = Logger.getLogger(CamelRestDSLParseCatalog.class);
+
+    private static final String ICON = KamelHelper.loadResourceAsString(
+        CamelRestDSLParseCatalog.class,
+        "base64icon").orElse("");
 
     @NotNull
     private static Step getRestParentStep() {
@@ -154,14 +154,6 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     class CamelRestDSLParser implements ParseCatalog<Step> {
         @Override
         public CompletableFuture<List<Step>> parse() {
-            if (ICON == null) {
-                try {
-                    ICON = new String(this.getClass().getResourceAsStream("base64icon.txt").readAllBytes());
-                } catch (IOException e) {
-                    LOG.error("Couldn't load the icon file for REST DSL steps.");
-                }
-            }
-
             List<Step> steps = new ArrayList<>();
             steps.add(getRestParentStep());
 

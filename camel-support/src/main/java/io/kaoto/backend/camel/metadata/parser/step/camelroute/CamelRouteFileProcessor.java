@@ -1,7 +1,6 @@
 package io.kaoto.backend.camel.metadata.parser.step.camelroute;
 
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.function.Function;
 
 import org.jboss.logging.Logger;
 
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.metadata.parser.JsonProcessFile;
 import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.NumberParameter;
@@ -33,18 +33,9 @@ public class CamelRouteFileProcessor extends JsonProcessFile<Step> {
     public static final String PROPERTIES = "properties";
     private static final String INVALID_TYPE = "invalid";
     private static final Logger log = Logger.getLogger(CamelRouteFileProcessor.class);
-    private static String DEFAULT_ICON_STRING;
-
-    static {
-        try {
-            DEFAULT_ICON_STRING =
-                    new String(CamelRouteFileProcessor.class.getResourceAsStream("default-icon.txt").readAllBytes(),
-                            StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            log.error("Couldn't find the default icon for camel routes.", e);
-        }
-
-    }
+    private static final String DEFAULT_ICON_STRING = KamelHelper.loadResourceAsString(
+        CamelRouteFileProcessor.class,
+        "default-icon.txt").orElse("");
 
     @Override
     protected List<Step> parseInputStream(final Reader input) {

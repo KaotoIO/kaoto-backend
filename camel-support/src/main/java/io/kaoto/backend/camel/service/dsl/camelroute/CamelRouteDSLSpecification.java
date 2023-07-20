@@ -1,14 +1,12 @@
 package io.kaoto.backend.camel.service.dsl.camelroute;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.logging.Logger;
-
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.metadata.parser.step.camelroute.CamelRestDSLParseCatalog;
 import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
 import io.kaoto.backend.camel.service.step.parser.camelroute.CamelRouteStepParserService;
@@ -28,8 +26,11 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
     private static final String EIP_BRANCHES = "EIP-BRANCH";
     private static final List<String> KINDS = Arrays.asList(
             CAMEL_CONNECTOR, EIP, EIP_BRANCHES, CAMEL_REST_DSL, CAMEL_REST_VERB, CAMEL_REST_ENDPOINT);
+    private static final Map<String, String> VOCABULARY = Map.of("stepsName", "Steps");
 
-    private static final Logger LOG = Logger.getLogger(CamelRouteDSLSpecification.class);
+    private static final String SCHEMA = KamelHelper.loadResourceAsString(
+        CamelRouteDeploymentGeneratorService.class,
+        "camel-yaml-dsl.json").orElse("");
 
     private DeploymentGeneratorService deploymentGeneratorService;
 
@@ -50,14 +51,7 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
 
     @Override
     public String validationSchema() {
-        try {
-            String schema = new String(CamelRouteDeploymentGeneratorService.class
-                    .getResourceAsStream("camel-yaml-dsl.json").readAllBytes());
-            return schema;
-        } catch (IOException e) {
-            LOG.error("Can't load Camel YAML DSL schema", e);
-        }
-        return "";
+        return SCHEMA;
     }
 
     @Override
@@ -72,7 +66,7 @@ public class CamelRouteDSLSpecification extends DSLSpecification {
 
     @Override
     public Map<String, String> getVocabulary() {
-        return Map.of("stepsName", "Steps");
+        return VOCABULARY;
     }
 
     @Override

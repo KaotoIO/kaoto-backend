@@ -1,7 +1,6 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +36,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     private StepCatalog catalog;
 
+    private static final List<Class<? extends CustomResource>> SUPPORTED_RESOURCES = List.of(Kamelet.class);
     private static final Logger LOG = Logger.getLogger(KameletDeploymentGeneratorService.class);
 
     public KameletDeploymentGeneratorService() {
@@ -102,7 +102,7 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
 
     @Override
     public List<Class<? extends CustomResource>> supportedCustomResources() {
-        return Arrays.asList(new Class[]{Kamelet.class});
+        return SUPPORTED_RESOURCES;
     }
 
     @Override

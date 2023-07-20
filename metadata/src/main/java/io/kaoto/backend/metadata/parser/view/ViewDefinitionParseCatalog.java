@@ -3,7 +3,6 @@ package io.kaoto.backend.metadata.parser.view;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,6 +60,8 @@ public final class ViewDefinitionParseCatalog {
 class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
 
     private static final Logger LOG = Logger.getLogger(ViewDefinitionProcessFile.class);
+    private static final String[] KINDS = new String[] {"generic", "step"};
+    private static final Pattern TYPE_PATTERN = Pattern.compile("[\r|\n]type:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
 
     ViewDefinitionProcessFile() {
     }
@@ -72,6 +73,7 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
             if (!appliesTo(content)) {
                 return List.of();
             }
+
             Yaml yaml = new Yaml(new Constructor(ViewDefinition.class, new LoaderOptions()));
             ViewDefinition viewDefinition = yaml.load(content);
             return List.of(viewDefinition);
@@ -83,12 +85,14 @@ class ViewDefinitionProcessFile extends YamlProcessFile<ViewDefinition> {
     }
 
     private boolean appliesTo(final String yaml) {
-        String[] kinds = new String[]{"generic", "step"};
-
-        Pattern pattern = Pattern.compile("[\r|\n]type:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(yaml);
+        Matcher matcher = TYPE_PATTERN.matcher(yaml);
         if (matcher.find()) {
-            return Arrays.stream(kinds).anyMatch(k -> k.equalsIgnoreCase(matcher.group(1).trim()));
+            String match = matcher.group(1).trim();
+            for (String kind : KINDS) {
+                if (kind.equals(match)) {
+                    return true;
+                }
+            }
         }
 
         return false;

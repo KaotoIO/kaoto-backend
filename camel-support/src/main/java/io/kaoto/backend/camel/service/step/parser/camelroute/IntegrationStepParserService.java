@@ -1,7 +1,6 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,10 @@ public class IntegrationStepParserService implements StepParserService<Step> {
 
     private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory())
         .registerModule(new SimpleModule().addDeserializer(Flow.class, new FlowDeserializer()));
+
+
+    private static final Pattern PATTERN = Pattern.compile("(kind:)(.+)(\r\n|\r|\n)", Pattern.CASE_INSENSITIVE);
+    private static final String[] KINDS = new String[]{"Integration"};
 
     private KameletStepParserService ksps;
 
@@ -182,13 +185,14 @@ public class IntegrationStepParserService implements StepParserService<Step> {
 
     @Override
     public boolean appliesTo(final String yaml) {
-        String[] kinds = new String[]{"Integration"};
-
-        Pattern pattern = Pattern.compile("(kind:)(.+)(\r\n|\r|\n)", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(yaml);
+        Matcher matcher = PATTERN.matcher(yaml);
         if (matcher.find()) {
-            return Arrays.stream(kinds).anyMatch(
-                    k -> k.equalsIgnoreCase(matcher.group(2).trim()));
+            String match = matcher.group(2).trim();
+            for (String kind: KINDS) {
+                if (kind.equalsIgnoreCase(match)) {
+                    return true;
+                }
+            }
         }
 
         return false;

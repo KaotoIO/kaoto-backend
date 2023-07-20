@@ -1,5 +1,11 @@
 package io.kaoto.backend.api.metadata.catalog;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.kaoto.backend.metadata.ParseCatalog;
@@ -8,15 +14,9 @@ import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import io.smallrye.config.ConfigMapping;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 🐱class StepCatalog
@@ -64,52 +64,59 @@ public class StepCatalog extends AbstractCatalog<Step> {
     private void addCluster(final List<ParseCatalog<Step>> catalogs,
                             final boolean clusterAvailable) {
         if (clusterAvailable) {
-            stepCatalogParsers.stream().parallel().forEach(parser -> catalogs.add(parser.getParserFromCluster()));
+            catalogs.addAll(
+                stepCatalogParsers.stream().parallel().map(StepCatalogParser::getParserFromCluster).toList()
+            );
         }
     }
 
     private void addGit(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         //For all git in the configuration
-        repository.git().orElse(Collections.emptyList()).stream().parallel()
+        List<ParseCatalog<Step>> items = repository.git().orElse(Collections.emptyList()).stream().parallel()
                 //Filter depending on the cluster
                 .filter(git -> !git.ifNoCluster() || !clusterAvailable)
                 //And call only the parsers that apply
-                .forEach(git -> stepCatalogParsers.stream().parallel()
-                        .forEach(parser -> {
-                            if (ALL.equalsIgnoreCase(git.kind()) || parser.generatesKind(git.kind())) {
-                                catalogs.add(parser.getParser(git.url(), git.tag()));
-                            }
-                        }));
+                .flatMap(git -> {
+                    return stepCatalogParsers.stream().parallel()
+                        .filter(parser -> ALL.equalsIgnoreCase(git.kind()) || parser.generatesKind(git.kind()))
+                        .map(parser -> parser.getParser(git.url(), git.tag()));
+                    }
+                ).toList();
+
+        catalogs.addAll(items);
 
     }
 
     private void addLocalFolder(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         //For all folders in the configuration
-        repository.localFolder().orElse(Collections.emptyList()).stream().parallel()
+        List<ParseCatalog<Step>> items = repository.localFolder().orElse(Collections.emptyList()).stream().parallel()
                 //Filter depending on the cluster
                 .filter(folder -> !folder.ifNoCluster() || !clusterAvailable)
                 //And call only the parsers that apply
-                .forEach(folder -> stepCatalogParsers.stream().parallel()
-                        .forEach(parser -> {
-                            if (ALL.equalsIgnoreCase(folder.kind()) || parser.generatesKind(folder.kind())) {
-                                File dir = new File(folder.url());
-                                catalogs.add(parser.getLocalFolder(dir.toPath()));
-                            }
-                        }));
+                .flatMap(folder -> stepCatalogParsers.stream().parallel()
+                    .filter(parser -> ALL.equalsIgnoreCase(folder.kind()) || parser.generatesKind(folder.kind()))
+                        .map(parser -> {
+                            File dir = new File(folder.url());
+                            return parser.getLocalFolder(dir.toPath());
+                        })
+                ).toList();
+
+        catalogs.addAll(items);
     }
 
     private void addZipJar(final List<ParseCatalog<Step>> catalogs, final boolean clusterAvailable) {
         //For all jars in the configuration
-        repository.jar().orElse(Collections.emptyList()).stream().parallel()
+        List<ParseCatalog<Step>> items = repository.jar().orElse(Collections.emptyList()).stream().parallel()
                 //Filter depending on the cluster
                 .filter(jar -> !jar.ifNoCluster() || !clusterAvailable)
                 //And call only the parsers that apply
-                .forEach(jar -> stepCatalogParsers.stream().parallel()
-                        .forEach(parser -> {
-                            if (ALL.equalsIgnoreCase(jar.kind()) || parser.generatesKind(jar.kind())) {
-                                catalogs.add(parser.getParser(jar.url()));
-                            }
-                        }));
+                .flatMap(jar -> stepCatalogParsers.stream().parallel()
+                    .filter(parser -> ALL.equalsIgnoreCase(jar.kind()) || parser.generatesKind(jar.kind()))
+                    .map(parser -> parser.getParser(jar.url()))
+                ).toList();
+
+        catalogs.addAll(items);
+
     }
 
     @Inject
