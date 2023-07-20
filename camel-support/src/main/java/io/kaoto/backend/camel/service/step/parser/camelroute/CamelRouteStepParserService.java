@@ -10,10 +10,9 @@ import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
@@ -125,9 +124,9 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
 
     private CamelRoute getCamelRoute(final String input) {
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory())
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            return yamlMapper.readValue(input, CamelRoute.class);
+            return KamelHelper.YAML_MAPPER.readerFor(CamelRoute.class)
+                .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .readValue(input);
         } catch (JsonProcessingException e) {
             //We don't care what happened, it is wrongly formatted and that's it
             LOG.trace("Error trying to parse camel route.", e);

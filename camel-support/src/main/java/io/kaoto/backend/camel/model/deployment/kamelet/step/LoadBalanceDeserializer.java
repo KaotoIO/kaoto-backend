@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoadBalanceDeserializer extends JsonDeserializer {
     private static final Logger LOG = Logger.getLogger(LoadBalanceDeserializer.class);
@@ -35,7 +34,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
                     field.getValue().elements().forEachRemaining(
                             s -> {
                                 try {
-                                    step.getSteps().add(flowStepDeserializer.deserializeFlowStep(s));
+                                    step.getSteps().add(flowStepDeserializer.deserializeFlowStep(jsonParser, s));
                                 } catch (JsonProcessingException e) {
                                     LOG.error("Couldn't deserialize step", e);
                                 }
@@ -43,7 +42,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
                 }
                 else {
                     step.getProperties().put(field.getKey(),
-                            new ObjectMapper().readValue(field.getValue().toPrettyString(), Map.class));
+                            jsonParser.getCodec().treeToValue(field.getValue(), Map.class));
                 }
             }
         } catch (Exception e) {

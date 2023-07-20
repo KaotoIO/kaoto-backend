@@ -1,15 +1,27 @@
 package io.kaoto.backend.camel.service.deployment.generator.kamelet;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.camel.v1alpha1.KameletBindingSpec;
+import org.apache.camel.v1alpha1.KameletSpec;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.Tag;
+
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.fabric8.kubernetes.client.CustomResource;
-import io.kaoto.backend.camel.service.deployment.generator.Representer;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
-import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletTemplate;
+import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Script;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.ScriptExpression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.AggregateFlowStep;
@@ -68,18 +80,7 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.WireTapFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.Choice;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.Otherwise;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.choice.SuperChoice;
-import org.apache.camel.v1alpha1.KameletBindingSpec;
-import org.apache.camel.v1alpha1.KameletSpec;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.Tag;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import io.kaoto.backend.camel.service.deployment.generator.Representer;
 
 public class KameletRepresenter extends Representer {
 
@@ -115,9 +116,7 @@ public class KameletRepresenter extends Representer {
                 new RepresentMap() {
                     @Override
                     public Node representData(final Object data) {
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                        Map<String, Object> properties = objectMapper.convertValue(data,
+                        Map<String, Object> properties = KamelHelper.JSON_MAPPER.convertValue(data,
                                 new TypeReference<Map<String, Object>>() {});
                         CustomResource cr = (CustomResource) data;
 
@@ -166,8 +165,6 @@ public class KameletRepresenter extends Representer {
 
     private void spec() {
         //spec does not have the right order
-        final var objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.multiRepresenters.put(KameletBindingSpec.class,
             new RepresentMap() {
                 @Override
@@ -181,7 +178,7 @@ public class KameletRepresenter extends Representer {
                     }
                     properties.put("sink", null);
                     properties.putAll(
-                            objectMapper.convertValue(data, new TypeReference<Map<String, Object>>() {}));
+                            KamelHelper.JSON_MAPPER.convertValue(data, new TypeReference<Map<String, Object>>() {}));
                     return representMapping(getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);
                 }
             });
@@ -193,7 +190,9 @@ public class KameletRepresenter extends Representer {
                         Map<String, Object> properties = new LinkedHashMap<>();
                         KameletSpec spec = (KameletSpec) data;
                         properties.putAll(
-                                new ObjectMapper().convertValue(data, new TypeReference<Map<String, Object>>() {}));
+                                KamelHelper.JSON_MAPPER.convertValue(
+                                    data,
+                                    new TypeReference<Map<String, Object>>() {}));
                         properties.put("template", spec.getTemplate());
                         return representMapping(
                                 getTag(data.getClass(), Tag.MAP), properties, DumperOptions.FlowStyle.AUTO);

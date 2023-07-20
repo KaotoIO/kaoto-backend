@@ -16,14 +16,12 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStepRef;
@@ -76,8 +74,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
             if (original_spec != null && original_spec instanceof KameletBindingSpec ospec) {
                 spec = ospec;
             } else if (original_spec != null && original_spec instanceof Map ospec) {
-                ObjectMapper mapper = new ObjectMapper();
-                spec = mapper.convertValue(ospec, KameletBindingSpec.class);
+                spec = KamelHelper.JSON_MAPPER.convertValue(ospec, KameletBindingSpec.class);
             } else {
                 spec = new KameletBindingSpec();
             }
@@ -228,8 +225,7 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
     public CustomResource parse(final String input) {
         if (stepParserService.appliesTo(input)) {
             try {
-                ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-                return yamlMapper.readValue(input, KameletBinding.class);
+                return KamelHelper.YAML_MAPPER.readValue(input, KameletBinding.class);
             } catch (Exception e) {
                 LOG.trace("Tried creating a kamelet binding and it didn't work.");
             }

@@ -1,20 +1,5 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.kaoto.backend.api.service.step.parser.StepParserService;
-import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
-import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
-import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
-import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
-import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.camel.model.deployment.rest.Rest;
-import io.kaoto.backend.model.step.Step;
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -24,6 +9,23 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
+import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
+import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
+import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
+import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
+import io.kaoto.backend.model.step.Step;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 /**
  * 🐱miniclass IntegrationStepParserService (StepParserService)
  */
@@ -31,7 +33,11 @@ import java.util.regex.Pattern;
 @RegisterForReflection
 public class IntegrationStepParserService implements StepParserService<Step> {
 
+    private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory())
+        .registerModule(new SimpleModule().addDeserializer(Flow.class, new FlowDeserializer()));
+
     private KameletStepParserService ksps;
+
 
     @Override
     public ParseResult<Step> deepParse(final String input) {
@@ -43,8 +49,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         ParseResult<Step> res = new ParseResult<>();
         List<Step> steps = new ArrayList<>();
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            Integration integration = yamlMapper.readValue(input, Integration.class);
+            Integration integration = KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
 
             ksps.processMetadata(res, integration.getMetadata());
             res.setParameters(new ArrayList<>());
@@ -91,11 +96,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         metadata.setParameters(new ArrayList<>());
         answer.add(metadata);
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            var module = new SimpleModule();
-            module.addDeserializer(Flow.class, new FlowDeserializer());
-            yamlMapper.registerModule(module);
-            Integration integration = yamlMapper.readValue(input, Integration.class);
+            Integration integration = YAML_MAPPER.readValue(input, Integration.class);
 
             ksps.processMetadata(metadata, integration.getMetadata());
 

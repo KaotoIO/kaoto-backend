@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
@@ -23,7 +22,7 @@ public class FlowStepDeserializer extends JsonDeserializer {
             final DeserializationContext deserializationContext) {
         try {
             JsonNode n = jsonParser.getCodec().readTree(jsonParser);
-            return deserializeFlowStep(n);
+            return deserializeFlowStep(jsonParser, n);
         } catch (Exception e) {
             LOG.error("Error trying to deserialize step: " + e.getMessage());
         }
@@ -31,10 +30,10 @@ public class FlowStepDeserializer extends JsonDeserializer {
         return new UriFlowStep();
     }
 
-    public FlowStep deserializeFlowStep(final JsonNode n) throws JsonProcessingException {
+    public FlowStep deserializeFlowStep(final JsonParser p, final JsonNode n) throws JsonProcessingException {
         for (var step : getFlowSteps().entrySet()) {
             if (n.get(step.getKey()) != null) {
-                return (FlowStep) new ObjectMapper().readValue(n.toPrettyString(), step.getValue());
+                return (FlowStep) p.getCodec().treeToValue(n, step.getValue());
             }
         }
 

@@ -1,5 +1,11 @@
 package io.kaoto.backend.api.metadata.catalog;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.jboss.logging.Logger;
+
 import io.kaoto.backend.metadata.MetadataCatalog;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.catalog.InMemoryCatalog;
@@ -7,11 +13,6 @@ import io.kaoto.backend.metadata.catalog.ReadOnlyCatalog;
 import io.kaoto.backend.model.Metadata;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.annotation.PostConstruct;
-import org.jboss.logging.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 🐱class AbstractCatalog
@@ -65,8 +66,10 @@ public abstract class AbstractCatalog<T extends Metadata> {
     public void warmUpCatalog() {
         log.debug("Warming up catalog.");
         final var time = System.currentTimeMillis();
-        final List<CompletableFuture<Boolean>> futureSteps = new ArrayList<>();
-        loadParsers().stream().parallel().forEach(parser -> futureSteps.add(addCatalog(parser)));
+        final List<CompletableFuture<Boolean>> futureSteps =
+            loadParsers().stream().parallel()
+                .map(this::addCatalog)
+                .toList();
 
         waitingForWarmUp = CompletableFuture.allOf(futureSteps.toArray(new CompletableFuture[0]));
         waitingForWarmUp

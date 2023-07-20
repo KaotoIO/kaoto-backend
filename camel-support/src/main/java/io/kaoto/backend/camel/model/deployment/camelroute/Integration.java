@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.apache.camel.v1.IntegrationStatus;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -19,6 +17,7 @@ import io.fabric8.kubernetes.model.annotation.Plural;
 import io.fabric8.kubernetes.model.annotation.Singular;
 import io.fabric8.kubernetes.model.annotation.Version;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
@@ -68,8 +67,7 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {
             this.setSpec(ospec);
         } else if (original_spec != null && original_spec instanceof Map ospec) {
-            ObjectMapper mapper = new ObjectMapper();
-            this.setSpec(mapper.convertValue(original_spec, IntegrationSpec.class));
+            this.setSpec(KamelHelper.JSON_MAPPER.convertValue(original_spec, IntegrationSpec.class));
         } else {
             this.setSpec(new IntegrationSpec());
         }

@@ -17,12 +17,11 @@ import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBindingStep;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
@@ -58,8 +57,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
         List<Step> steps = new ArrayList<>();
         Map<String, Object> md = new LinkedHashMap<>();
         try {
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            KameletBinding binding = yamlMapper.readValue(input, KameletBinding.class);
+            KameletBinding binding = KamelHelper.YAML_MAPPER.readValue(input, KameletBinding.class);
             processMetadata(md, binding.getMetadata());
             processSpec(steps, binding.getSpec());
 

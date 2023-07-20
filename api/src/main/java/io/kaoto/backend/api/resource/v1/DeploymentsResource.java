@@ -14,7 +14,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import io.fabric8.kubernetes.client.CustomResource;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
@@ -50,6 +50,11 @@ import jakarta.ws.rs.core.Response;
 public class DeploymentsResource {
 
     private static final Logger LOG = Logger.getLogger(DeploymentsResource.class);
+
+    private static final ObjectMapper YAML_MAPPER = YAMLMapper.builder()
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build();
+
     private ClusterService clusterService;
     private Instance<DeploymentGeneratorService> parsers;
 
@@ -111,18 +116,14 @@ public class DeploymentsResource {
 
     private String securityCheck(final String crd) {
 
-        ObjectMapper yamlMapper =
-                new ObjectMapper(new YAMLFactory())
-                    .configure(
-                            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                            false);
+
 
         boolean valid = false;
         for (var parser : parsers) {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
                 try {
-                    yamlMapper.readValue(crd, c);
+                    YAML_MAPPER.readValue(crd, c);
                     valid = true;
                 } catch (Exception e) {
                     LOG.trace("We tried to parse with " + c.getName() + " and"

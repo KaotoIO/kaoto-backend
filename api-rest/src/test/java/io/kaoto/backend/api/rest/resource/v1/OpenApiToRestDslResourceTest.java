@@ -9,14 +9,14 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 @TestHTTPEndpoint(OpenApiToRestDslResource.class)
 class OpenApiToRestDslResourceTest {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
     void jsonToYaml() throws Exception {
@@ -64,15 +65,14 @@ class OpenApiToRestDslResourceTest {
     }
 
     private void verifyYaml(String answer) throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
         var loader = new Yaml(new SafeConstructor(new LoaderOptions()));
         ArrayList list = loader.load(answer);
-        var actual = (ArrayNode) mapper.convertValue(list, JsonNode.class);
+        var actual = (ArrayNode) MAPPER.convertValue(list, JsonNode.class);
         list = loader.load(Files.readString(Path.of(
                 OpenApiToRestDslResourceTest.class.getResource(
                                 "restdsl-petstore.yaml")
                         .toURI())));
-        var expected = (ArrayNode) mapper.convertValue(list, JsonNode.class);
+        var expected = (ArrayNode) MAPPER.convertValue(list, JsonNode.class);
         assertThat(actual).isEqualTo(expected);
     }
 
