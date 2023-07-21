@@ -1,7 +1,24 @@
 #!/bin/bash
 
-git reset --hard 
-git pull
+#git reset --hard 
+#git pull
+
+echo "Enter version of Kaoto to release:"
+echo "Example: 1.0.0"
+read -r version
+
+git checkout -b release-$version
+
+echo "Do you want to push the generated branches to your fork? (y/n)"
+echo "Note: This will make it easier to create the pull requests later."
+read -r gitPush
+
+if [ "$gitPush" = "y" ];
+then
+  echo "Enter the name of the fork (git remote -v can help you here)"
+  echo "Example: upstream"
+  read -r gitFork
+fi
 
 echo "Do you want to download the latest zips of steps? (y/n)"
 echo "Note: This includes Apache Camel components, kamelets, and kaoto bridged camel components."
@@ -66,34 +83,38 @@ then
   git commit -m "chore(resources): Updating zip files with step catalog components."
 fi
 
-echo "Enter version of Kaoto to release:"
-echo "Example: 1.0.0"
-read -r version
-
 mvn versions:set -DnewVersion=$version
 git add .
 git commit -m "Updating to version $version"
-git tag v$version
 
-echo "Now we are going to test the new version."
-
-mvn install
+if [ "$gitPush" = "y" ];
+then
+  git push $gitFork
+fi
 
 echo "Enter new development version:"
 echo "(SNAPSHOT will be added automatically)"
 echo "Example: 1.0.1"
 read -r version2
 
+git checkout -b release-$version2
 mvn versions:set -DnewVersion="$version2"-SNAPSHOT
 git add .
 git commit -m "chore(release): Updating to version $version2-SNAPSHOT"
 
+if [ "$gitPush" = "y" ];
+then
+  git push $gitFork
+fi
+
 echo ""
-echo "Check the git log and if you like what you see, just do"
-echo "'git push' and 'git push --tags'."
-echo "This will trigger the release creation."
+echo "Check the git log and if you like what you see, create pull requests"
+echo "for both branches release-$version and release-$version2."
 echo ""
-echo "Then go to https://github.com/KaotoIO/kaoto-backend/releases/ to review"
+echo "Once the pull requests are merged, you can tag the version where release-$version is."
+echo "Creating the tag will trigger the release creation."
+echo ""
+echo "Finally, go to https://github.com/KaotoIO/kaoto-backend/releases/ to review"
 echo "the text of the release and publish it. "
 echo ""
 echo "Congratulations! Your job here is done."
