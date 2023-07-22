@@ -103,6 +103,15 @@
     </build>
 
     <profiles>
+        <!-- placeholder profile for jvm specific flags when building the container image -->
+        <profile>
+            <id>jvm</id>
+            <activation>
+                <property>
+                    <name>!native</name>
+                </property>
+            </activation>
+        </profile>
         <profile>
             <id>native</id>
             <activation>
