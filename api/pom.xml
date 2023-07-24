@@ -244,16 +244,16 @@
 
                 <quarkus.quinoa.package-manager-install>true</quarkus.quinoa.package-manager-install>
                 <quarkus.quinoa.package-manager-install.node-version>${node.version}</quarkus.quinoa.package-manager-install.node-version>
-                <quarkus.quinoa.package-manager-install.yarn-version>${yarn.version</quarkus.quinoa.package-manager-install.yarn-version>
+                <quarkus.quinoa.package-manager-install.yarn-version>${yarn.version}</quarkus.quinoa.package-manager-install.yarn-version>
 
                 <quarkus.quinoa.package-manager-command.prepend-binary>true</quarkus.quinoa.package-manager-command.prepend-binary>
                 <quarkus.quinoa.package-manager>yarn</quarkus.quinoa.package-manager>
                 <quarkus.quinoa.package-manager-command.install>install --mode=skip-build</quarkus.quinoa.package-manager-command.install>
-                <quarkus.quinoa.package-manager-command.build>run build</quarkus.quinoa.package-manager-command.build>
+                <quarkus.quinoa.package-manager-command.build>workspace @kaoto/kaoto-ui run build</quarkus.quinoa.package-manager-command.build>
                 <quarkus.quinoa.package-manager-command.build-env.KAOTO_API>.</quarkus.quinoa.package-manager-command.build-env.KAOTO_API>
 
                 <quarkus.quinoa.ui-dir>${project.build.directory}/ui</quarkus.quinoa.ui-dir>
-                <quarkus.quinoa.build-dir>${quarkus.quinoa.ui-dir}/dist</quarkus.quinoa.build-dir>
+                <quarkus.quinoa.build-dir>${quarkus.quinoa.ui-dir}/packages/kaoto-ui/dist</quarkus.quinoa.build-dir>
 
             </properties>
 
