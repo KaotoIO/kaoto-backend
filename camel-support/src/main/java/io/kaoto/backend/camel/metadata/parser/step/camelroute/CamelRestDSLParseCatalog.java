@@ -38,7 +38,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
 
     private static final String ICON = KamelHelper.loadResourceAsString(
         CamelRestDSLParseCatalog.class,
-        "base64icon").orElse("");
+        "base64icon.txt").orElse("");
 
     @NotNull
     private static Step getRestParentStep() {
