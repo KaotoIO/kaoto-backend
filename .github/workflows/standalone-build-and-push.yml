@@ -1,0 +1,105 @@
+name: Standalone Build And Push
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      alias:
+        required: true
+        type: string
+      backend-version:
+        required: true
+        type: string
+      frontend-version:
+        required: true
+        type: string
+    secrets:
+      docker-username:
+        required: true
+      docker-password:
+        required: true
+      quay-username:
+        required: true
+      quay-password:
+        required: true
+
+env:
+  KAOTO_TAG: ${{ inputs.tag }}
+  UI_TAG: ${{ inputs.frontend-version }}
+  API_TAG:  ${{ inputs.backend-version }}
+  MAVEN_ARGS: -V -ntp -Dhttp.keepAlive=false -DskipTests=true -e
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant:
+        - native
+        - jvm
+    steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        check-latest: true
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+      with:
+        repository: KaotoIO/kaoto-backend
+        ref: ${{ inputs.backend-version }}
+    - name: 'Build Container Image (${{ matrix.variant }})'
+      run: |
+        ./mvnw ${MAVEN_ARGS} clean install \
+          -Dpmd.skip=true \
+          -DskipTests \
+          -P${{ matrix.variant }} \
+          -Pcontainer-image \
+          -Pstandalone \
+          -Dkaoto.ui.branch=${{ inputs.frontend-version }} \
+          -Dquarkus.container-image.tag=${{ inputs.tag }}-${{ matrix.variant }} \
+          -Dquarkus.container-image.additional-tags=${{ inputs.alias }}-${{ matrix.variant }}
+    - name: Run built image
+      run: |
+        docker images
+        docker run -d --rm -p 8081:8081 --name kaoto-standalone kaotoio/standalone:${{ inputs.tag }}-${{ matrix.variant }}
+    - name: List running images
+      run: |
+        docker ps -a
+    - name: Check the deployed service URL
+      run: |
+        curl --fail -sv --retry 15 --retry-delay 1 --retry-all-errors http://localhost:8081/q/health
+
+    #
+    # DockerHub
+    #
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.docker-username }}
+        password: ${{ secrets.docker-password }}
+    - name: 'Push Images to DockerHub'
+      run: |
+        docker push docker.io/kaotoio/standalone --all-tags
+
+    #
+    # Quay
+    #
+    - name: Login to Quay.io
+      uses: docker/login-action@v2
+      with:
+        registry: quay.io
+        username: ${{ secrets.quay-username }}
+        password: ${{ secrets.quay-password }}
+    - name: Tag Quay images
+      run: |
+        docker tag kaotoio/standalone:${{ inputs.tag }}-${{ matrix.variant }} quay.io/kaotoio/standalone:${{ inputs.tag }}-${{ matrix.variant }}
+        docker tag kaotoio/standalone:${{ inputs.tag }}-${{ matrix.variant }} quay.io/kaotoio/standalone:${{ inputs.alias }}-${{ matrix.variant }}
+
+    - name: 'Push Images to Quay.io'
+      run: |
+        docker push quay.io/kaotoio/standalone --all-tags
