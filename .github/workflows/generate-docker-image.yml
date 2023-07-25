@@ -172,3 +172,21 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  standalone:
+    uses: ./.github/workflows/standalone-build-and-push.yml
+    needs:
+      - build
+      - build-for-mac
+      - docker-for-mac
+    if: ${{ github.event_name != 'pull_request' }}
+    with:
+      tag: "${{ github.ref_name }}-${{ github.sha }}"
+      alias: "latest"
+      frontend-version: main
+      backend-version: main
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-password: ${{ secrets.DOCKER_PASSWORD }}
+      quay-username: ${{ secrets.QUAY_USERNAME }}
+      quay-password: ${{ secrets.QUAY_PASSWORD }}

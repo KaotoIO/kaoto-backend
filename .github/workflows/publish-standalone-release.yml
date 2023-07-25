@@ -1,0 +1,28 @@
+name: Publish Standalone Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      backend-version:
+        required: true
+        type: string
+      frontend-version:
+        required: true
+        type: string
+      standalone-version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    uses: ./.github/workflows/standalone-build-and-push.yml
+    with:
+      tag: ${{ inputs.standalone-version }}
+      alias: "stable"
+      frontend-version: ${{ inputs.frontend-version }}
+      backend-version: ${{ inputs.backend-version }}
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-password: ${{ secrets.DOCKER_PASSWORD }}
+      quay-username: ${{ secrets.QUAY_USERNAME }}
+      quay-password: ${{ secrets.QUAY_PASSWORD }}
