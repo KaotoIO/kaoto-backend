@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"definition", "dependencies", "sources", "template", "types"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
-//@JsonSerialize(using = KameletSpecSerializer.class)
 public class KameletSpec extends org.apache.camel.v1alpha1.KameletSpec {
 
     @JsonProperty("template")
