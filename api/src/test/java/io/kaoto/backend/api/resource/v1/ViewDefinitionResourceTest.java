@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.kaoto.backend.model.view.ViewDefinition;
+import io.kaoto.backend.camel.KamelHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,8 +67,7 @@ class ViewDefinitionResourceTest {
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("kamelet:source-START"));
         steps.add(stepCatalog.getReadOnlyCatalog().searchByID("log-producer"));
 
-        final var mapper = new ObjectMapper();
-        final var json = mapper.writeValueAsString(steps);
+        final var json = KamelHelper.JSON_MAPPER.writeValueAsString(steps);
         ViewDefinition[] viewDefinitions = given()
                 .when().body(json)
                 .contentType(MediaType.APPLICATION_JSON).post()
@@ -105,7 +105,7 @@ class ViewDefinitionResourceTest {
                 .extract().body().as(Integration.class);
 
         ViewDefinition[] viewDefinitions = given()
-                .when().body((new ObjectMapper()).writeValueAsString(integration.getSteps()))
+                .when().body(KamelHelper.JSON_MAPPER.writeValueAsString(integration.getSteps()))
                 .contentType(MediaType.APPLICATION_JSON).post()
                 .then()
                 .log().body()

@@ -12,7 +12,7 @@ spec:
       from:
         uri: timer:tick
         parameters:
-          period: '5000'
+          period: 5000
         steps:
         - to:
             uri: activemq:queue:myQueue
@@ -24,7 +24,7 @@ spec:
       from:
         uri: timer:tick2
         parameters:
-          period: '5000'
+          period: 5000
         steps:
         - to:
             uri: activemq:queue:myQueue2

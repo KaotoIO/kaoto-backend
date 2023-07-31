@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.metadata.catalog.ViewDefinitionCatalog;
 import io.kaoto.backend.api.resource.v1.model.Integration;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletBindingStepParserService;
 import io.kaoto.backend.api.service.viewdefinition.ViewDefinitionService;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
@@ -157,10 +158,8 @@ class DeploymentServiceTest {
             }
         }
 
-        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-
-        KameletBinding res1 = yamlMapper.readValue(expectedStr, KameletBinding.class);
-        KameletBinding res2 = yamlMapper.readValue(result, KameletBinding.class);
+        KameletBinding res1 = KamelHelper.YAML_MAPPER.readValue(expectedStr, KameletBinding.class);
+        KameletBinding res2 = KamelHelper.YAML_MAPPER.readValue(result, KameletBinding.class);
 
         //spec does not have a good equals function, so we have to check manually
         assertEquals(res1.getMetadata(), res2.getMetadata());
@@ -206,8 +205,7 @@ class DeploymentServiceTest {
         var json = new String(this.getClass().getResourceAsStream("route-choice-null-condition.json").readAllBytes(),
                 StandardCharsets.UTF_8);
 
-        ObjectMapper m = new ObjectMapper();
-        Integration parsed = m.readValue(json, new TypeReference<>() {});
+        Integration parsed = KamelHelper.YAML_MAPPER.readValue(json, new TypeReference<>() {});
 
         var yaml2 = deploymentService.crd(parsed, "Camel Route");
         assertThat(yaml).isEqualToNormalizingNewlines(yaml2);

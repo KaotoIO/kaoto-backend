@@ -6,16 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.error.YAMLException;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
 
 import io.kaoto.backend.camel.KamelHelper;
+import org.apache.commons.io.IOUtils;
+import org.jboss.logging.Logger;
+
+
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletDefinitionProperty;
 import io.kaoto.backend.camel.model.deployment.kamelet.SimplifiedKamelet;
 import io.kaoto.backend.metadata.parser.YamlProcessFile;
@@ -45,10 +41,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 return List.of();
             }
 
-            SimplifiedKamelet kamelet = KamelHelper.YAML_MAPPER.readerFor(SimplifiedKamelet.class)
-                .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .readValue(yaml);
-
+            SimplifiedKamelet kamelet = KamelHelper.YAML_MAPPER.readValue(yaml, SimplifiedKamelet.class);
             Step step = new Step();
             step.setKind(kind);
 
@@ -98,7 +91,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
                 step = null;
             }
             return List.of(step);
-        } catch (IOException | YAMLException e) {
+        } catch (IOException e) {
             LOG.trace("Error parsing Kamelet.", e);
         }
 
@@ -106,14 +99,7 @@ public class KameletFileProcessor extends YamlProcessFile<Step> {
     }
 
     private String getKind(final String yaml) {
-        Pattern pattern = Pattern.compile(
-                "[\n|\r]kind:(.+)[\n|\r]", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(yaml);
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        } else {
-            return null;
-        }
+        return KamelHelper.getCRKind(yaml);
     }
 
     private void parseParameters(

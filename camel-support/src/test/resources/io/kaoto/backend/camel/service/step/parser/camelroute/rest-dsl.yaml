@@ -1,72 +1,72 @@
 - rest:
     path: /api/v3
     post:
-    - consumes: application/json,application/xml
+    - consumes: "application/json,application/xml"
       id: addPet
       uri: /pet
       param:
       - dataType: boolean
         defaultValue: false
-        name: verbose
         description: Verbose data
+        name: verbose
         required: false
         type: query
-      - name: body
-        description: Pet object that needs to be added to the store
+      - description: Pet object that needs to be added to the store
+        name: body
         required: true
         type: body
       to:
         uri: direct:addPet
     - consumes: application/x-www-form-urlencoded
       id: updatePetWithForm
-      uri: /pet/{petId}
+      uri: "/pet/{petId}"
       param:
       - dataType: integer
-        name: petId
         description: ID of pet that needs to be updated
+        name: petId
         required: true
         type: path
       - dataType: string
-        name: name
         description: Updated name of the pet
+        name: name
         required: true
         type: formData
       - dataType: string
-        name: status
         description: Updated status of the pet
+        name: status
         required: true
         type: formData
       to:
         uri: direct:updatePetWithForm
     - consumes: multipart/form-data
-      id: uploadFile
       produces: application/json
-      uri: /pet/{petId}/uploadImage
+      id: uploadFile
+      uri: "/pet/{petId}/uploadImage"
       param:
       - dataType: integer
-        name: petId
         description: ID of pet to update
+        name: petId
         required: true
         type: path
       - dataType: string
-        name: additionalMetadata
         description: Additional data to pass to server
+        name: additionalMetadata
         required: true
         type: formData
       - dataType: string
-        name: file
         description: file to upload
+        name: file
         required: true
         type: formData
       to:
         uri: direct:uploadFile
     - consumes: '*/*'
+      produces: "application/xml,application/json"
       id: placeOrder
-      produces: application/xml,application/json
       uri: /store/order
       param:
-      - name: body
-        description: order placed for purchasing the pet
+      - description: order placed for purchasing the pet
+        name: body
         required: true
         type: body
       to:
@@ -76,8 +76,8 @@
       uri: /user
       description: This can only be done by the logged in user.
       param:
-      - name: body
-        description: Created user object
+      - description: Created user object
+        name: body
         required: true
         type: body
       to:
@@ -86,8 +86,8 @@
       id: createUsersWithArrayInput
       uri: /user/createWithArray
       param:
-      - name: body
-        description: List of user object
+      - description: List of user object
+        name: body
         required: true
         type: body
       to:
@@ -96,83 +96,83 @@
       id: createUsersWithListInput
       uri: /user/createWithList
       param:
-      - name: body
-        description: List of user object
+      - description: List of user object
+        name: body
         required: true
         type: body
       to:
         uri: direct:createUsersWithListInput
     get:
-    - id: findPetsByStatus
-      produces: application/xml,application/json
+    - produces: "application/xml,application/json"
+      id: findPetsByStatus
       uri: /pet/findByStatus
       description: Multiple status values can be provided with comma separated strings
       param:
-      - arrayType: string
-        collectionFormat: multi
-        dataType: array
-        name: status
+      - dataType: array
         description: Status values that need to be considered for filter
+        name: status
         required: true
         type: query
+        arrayType: string
+        collectionFormat: multi
       to:
         uri: direct:findPetsByStatus
-    - id: findPetsByTags
-      produces: application/xml,application/json
+    - produces: "application/xml,application/json"
+      id: findPetsByTags
       uri: /pet/findByTags
       description: Muliple tags can be provided with comma separated strings.
       param:
-      - arrayType: string
-        collectionFormat: multi
-        dataType: array
-        name: tags
+      - dataType: array
         description: Tags to filter by
+        name: tags
         required: true
         type: query
+        arrayType: string
+        collectionFormat: multi
       to:
         uri: direct:findPetsByTags
-    - id: getPetById
-      produces: application/xml,application/json
-      uri: /pet/{petId}
+    - produces: "application/xml,application/json"
+      id: getPetById
+      uri: "/pet/{petId}"
       description: Returns a single pet
       param:
       - dataType: integer
-        name: petId
         description: ID of pet to return
+        name: petId
         required: true
         type: path
       to:
         uri: direct:getPetById
-    - id: getInventory
-      produces: application/json
+    - produces: application/json
+      id: getInventory
       uri: /store/inventory
       description: Returns a map of status codes to quantities
       to:
         uri: direct:getInventory
-    - id: getOrderById
-      produces: application/xml,application/json
-      uri: /store/order/{orderId}
+    - produces: "application/xml,application/json"
+      id: getOrderById
+      uri: "/store/order/{orderId}"
       description: For valid response try integer IDs with value >= 1 and <= 10.
       param:
       - dataType: integer
-        name: orderId
         description: ID of pet that needs to be fetched
+        name: orderId
         required: true
         type: path
       to:
         uri: direct:getOrderById
-    - id: loginUser
-      produces: application/xml,application/json
+    - produces: "application/xml,application/json"
+      id: loginUser
       uri: /user/login
       param:
       - dataType: string
-        name: username
         description: The user name for login
+        name: username
         required: true
         type: query
       - dataType: string
-        name: password
         description: The password for login in clear text
+        name: password
         required: true
         type: query
       to:
@@ -181,56 +181,56 @@
       uri: /user/logout
       to:
         uri: direct:logoutUser
-    - id: getUserByName
-      produces: application/xml,application/json
-      uri: /user/{username}
+    - produces: "application/xml,application/json"
+      id: getUserByName
+      uri: "/user/{username}"
       param:
       - dataType: string
-        name: username
         description: The name that needs to be fetched. Use user1 for testing.
+        name: username
         required: true
         type: path
       to:
         uri: direct:getUserByName
     delete:
     - id: deletePet
-      uri: /pet/{petId}
+      uri: "/pet/{petId}"
       param:
       - dataType: string
         name: api_key
         required: false
         type: header
       - dataType: integer
-        name: petId
         description: Pet id to delete
+        name: petId
         required: true
         type: path
       to:
         uri: direct:deletePet
     - id: deleteOrder
-      uri: /store/order/{orderId}
+      uri: "/store/order/{orderId}"
       description: For valid response try integer IDs with positive integer value.
       param:
       - dataType: integer
-        name: orderId
         description: ID of the order that needs to be deleted
+        name: orderId
         required: true
         type: path
       to:
         uri: direct:deleteOrder
     - id: deleteUser
-      uri: /user/{username}
+      uri: "/user/{username}"
       description: This can only be done by the logged in user.
       param:
       - dataType: string
-        name: username
         description: The name that needs to be deleted
+        name: username
         required: true
         type: path
       to:
         uri: direct:deleteUser
     put:
-    - consumes: application/json,application/xml
+    - consumes: "application/json,application/xml"
       id: updatePet
       uri: /pet
       param:
@@ -241,7 +241,7 @@
         uri: direct:updatePet
     - consumes: '*/*'
       id: updateUser
-      uri: /user/{username}
+      uri: "/user/{username}"
       param:
       - dataType: string
         name: username
@@ -256,4 +256,4 @@
     uri: direct:updatePet
     steps:
     - log:
-        message: ${body}
+        message: "${body}"

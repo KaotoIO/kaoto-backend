@@ -26,21 +26,21 @@ spec:
       - transacted:
           ref: required
       - loop:
-          constant: '3'
+          constant: 3
           copy: true
           steps:
           - saga:
               propagation: MANDATORY
               completion-mode: MANUAL
-              timeout: '500'
+              timeout: 500
               compensation:
                 uri: direct:compensation
               option:
               - key: o1
-                simple: ${body}
+                simple: "${body}"
               - key: o2
                 expression:
-                  simple: ${body}
+                  simple: "${body}"
               description:
                 text: SAGA powered step
                 lang: eng
@@ -48,7 +48,7 @@ spec:
               - to:
                   uri: direct:something
               - sample:
-                  sample-period: '1500'
+                  sample-period: 1500
                   message-frequency: 5
                   description:
                     text: Message Sampler
@@ -57,20 +57,20 @@ spec:
               groovy: some groovy script
           - delay:
               expression:
-                simple: ${body}
+                simple: "${body}"
               async-delayed: true
           - throw-exception:
               message: test
               exception-type: java.lang.IllegalArgumentException
           - routing-slip:
-              simple: ${body}
+              simple: "${body}"
               uri-delimiter: '|'
       - choice:
           when:
-          - simple: '{{?foo}}'
+          - simple: "{{?foo}}"
             steps:
             - dynamic-router:
-                simple: ${body}
+                simple: "${body}"
                 description:
                   text: Dynamic Routing
                   lang: eng
@@ -98,12 +98,12 @@ spec:
                 - to:
                     uri: dropbox:put
                     parameters:
-                      remotePath: '{{remotePath}}'
-                      clientIdentifier: '{{clientIdentifier}}'
-                      uploadMode: '{{uploadMode}}'
+                      remotePath: "{{remotePath}}"
+                      clientIdentifier: "{{clientIdentifier}}"
+                      uploadMode: "{{uploadMode}}"
                 - poll-enrich:
                     expression:
-                      simple: ${body}
+                      simple: "${body}"
                     aggregation-strategy: myStrategy
                 on-fallback:
                   steps:
@@ -123,7 +123,7 @@ spec:
                       uri: direct:somewhere
                       parameters:
                         bridgeErrorHandler: true
-          - simple: '{{?bar}}'
+          - simple: "{{?bar}}"
             steps:
             - unmarshal:
                 json:
@@ -132,10 +132,10 @@ spec:
                 simple: bar
                 name: property
             - split:
-                tokenize: ','
+                tokenize: ","
                 steps:
                 - process:
-                    ref: '{{myProcessor}}'
+                    ref: "{{myProcessor}}"
                 - remove-property:
                     name: property
             - multicast:
@@ -145,7 +145,7 @@ spec:
                 - pipeline:
                     steps:
                     - split:
-                        simple: ${body}
+                        simple: "${body}"
                         steps:
                         - marshal:
                             json: {}
@@ -155,28 +155,28 @@ spec:
                         operation: Get
                         key: foo
                         filter: header:(foo|bar)
-          - simple: '{{?baz}}'
+          - simple: "{{?baz}}"
             steps:
             - throttle:
-                simple: ${body}
+                simple: "${body}"
                 executor-service: myExecutor
                 async-delayed: true
                 caller-runs-when-rejected: false
                 reject-execution: true
             - recipient-list:
-                constant: direct:a,direct:b
+                constant: "direct:a,direct:b"
                 parallel-processing: true
                 stop-on-exception: true
             - remove-headers:
                 pattern: toRemove
                 exclude-pattern: toExclude
             - validate:
-                simple: ${body} == 100
+                simple: "${body} == 100"
             - resequence:
-                simple: ${in.header.seqnum}
+                simple: "${in.header.seqnum}"
                 stream-config:
-                  capacity: '5000'
-                  timeout: '4000'
+                  capacity: 5000
+                  timeout: 4000
                 steps:
                 - transform:
                     simple: baz
@@ -185,12 +185,12 @@ spec:
                     exclude-pattern: toExclude
             - load-balance:
                 weighted:
-                  distribution-ratio: 2,1
+                  distribution-ratio: "2,1"
                   round-robin: false
                 steps:
                 - aggregate:
                     correlation-expression:
-                      simple: ${header.StockSymbol}
+                      simple: "${header.StockSymbol}"
                     aggregation-strategy: myAggregatorStrategy
                     completion-size: 2
                 - service-call:
@@ -211,10 +211,10 @@ spec:
                 message: test
             - stop: {}
       - filter:
-          simple: '{{?foo}}'
+          simple: "{{?foo}}"
           steps:
           - idempotent-consumer:
-              simple: ${header.id}
+              simple: "${header.id}"
               idempotent-repository: myRepo
               steps:
               - set-body:
@@ -231,7 +231,7 @@ spec:
             - java.io.FileNotFoundException
             - java.io.IOException
             on-when:
-              simple: ${body.size()} == 1
+              simple: "${body.size()} == 1"
             steps:
             - log:
                 message: test
@@ -241,7 +241,7 @@ spec:
             steps:
             - enrich:
                 expression:
-                  simple: ${body}
+                  simple: "${body}"
             - to-d:
                 uri: direct
                 parameters:

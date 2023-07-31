@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -47,12 +44,16 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        return getYAML(new Kamelet(
-                        steps != null ? new ArrayList<>(steps) : List.of(),
-                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        parameters != null ? new ArrayList<>(parameters) : List.of(),
-                        catalog),
-                new KameletRepresenter());
+
+        try {
+            return KamelHelper.YAML_MAPPER.writeValueAsString(new Kamelet(
+                    steps != null ? new ArrayList<>(steps) : List.of(),
+                    metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                    parameters != null ? new ArrayList<>(parameters) : List.of(),
+                    catalog));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -74,14 +75,6 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
             route.getMetadata().putAll(metadata.getMetadata());
         }
         return parse(route.getSteps(), route.getMetadata(), route.getParameters());
-    }
-
-    public String getYAML(final CustomResource kamelet,
-                          final Representer representer) {
-    Yaml yaml = new Yaml(
-                new Constructor(Kamelet.class, new LoaderOptions()),
-                representer);
-        return yaml.dumpAsMap(kamelet);
     }
 
     @Override

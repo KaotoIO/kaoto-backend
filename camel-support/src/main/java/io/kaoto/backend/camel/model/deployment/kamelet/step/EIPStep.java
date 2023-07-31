@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
+import io.kaoto.backend.camel.model.deployment.kamelet.step.serializer.EIPStepSerializer;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Branch;
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
+@JsonSerialize(using = EIPStepSerializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class EIPStep implements Serializable {
     protected static final Logger log = Logger.getLogger(EIPStep.class);
@@ -116,4 +119,5 @@ public abstract class EIPStep implements Serializable {
         }
         return map;
     }
+
 }

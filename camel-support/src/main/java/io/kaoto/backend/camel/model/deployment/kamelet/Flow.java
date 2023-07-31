@@ -1,27 +1,20 @@
 package io.kaoto.backend.camel.model.deployment.kamelet;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.model.deployment.kamelet.serializer.FlowSerializer;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
+import io.kaoto.backend.camel.model.deployment.rest.Rest;
+import io.kaoto.backend.camel.service.step.parser.camelroute.FlowDeserializer;
 import org.apache.camel.v1.integrationspec.Flows;
 
+import java.util.List;
 
-/**
- * ```
- *   flow:
- *     from:
- *       uri: timer:tick
- *       parameters:
- *         period: "{{period}}"
- *       steps:
- *         - set-body:
- *             constant: "{{message}}"
- *         - to: kamelet:sink
- * ```
- */
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(using = FlowSerializer.class)
+@JsonDeserialize(using = FlowDeserializer.class)
 public class Flow extends Flows {
     private static final long serialVersionUID = -4601560033032557024L;
 

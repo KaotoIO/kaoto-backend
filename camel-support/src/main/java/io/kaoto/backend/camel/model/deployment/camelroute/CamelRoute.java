@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,7 +28,9 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonDeserialize(using = CamelRouteDeserializer.class)
+@JsonSerialize(using = CamelRouteSerializer.class)
 @RegisterForReflection
 public class CamelRoute {
 

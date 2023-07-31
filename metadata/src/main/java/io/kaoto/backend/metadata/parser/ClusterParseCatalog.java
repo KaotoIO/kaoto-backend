@@ -1,20 +1,19 @@
 package io.kaoto.backend.metadata.parser;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import io.fabric8.kubernetes.client.CustomResource;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.kaoto.backend.metadata.ParseCatalog;
+import io.kaoto.backend.model.Metadata;
+import org.jboss.logging.Logger;
+
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import io.fabric8.kubernetes.client.CustomResource;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.kaoto.backend.metadata.ParseCatalog;
-import io.kaoto.backend.model.Metadata;
 
 /**
  * 🐱class ClusterParseCatalog
@@ -27,6 +26,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
 
     private final Class<? extends CustomResource> cr;
     private static final Logger LOG = Logger.getLogger(ClusterParseCatalog.class);
+    private final ObjectMapper objectMapper;
 
     private String namespace;
 
@@ -44,6 +44,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
 
     public ClusterParseCatalog(final Class<? extends CustomResource> cr) {
         this.cr = cr;
+        objectMapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
     }
 
     private List<T> getCRAndParse(final Class<? extends CustomResource> cr) {
@@ -71,9 +72,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                     {
                         try {
                             metadataList.addAll(this.yamlProcessFile.parseInputStream(
-                                    // Yaml is not thread-safe, so it needs to be initialized here
-                                    new StringReader(new Yaml(new Constructor(cr,
-                                            new LoaderOptions())).dumpAsMap(resource))));
+                                    new StringReader(objectMapper.writeValueAsString(resource))));
                         } catch (Throwable t) {
                             LOG.trace("Couldn't parse the resource.", t);
                         }

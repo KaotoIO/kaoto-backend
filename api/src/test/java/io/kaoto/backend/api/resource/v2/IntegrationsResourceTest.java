@@ -2,8 +2,6 @@ package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -16,12 +14,9 @@ import org.assertj.core.api.MapAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -99,8 +94,6 @@ class IntegrationsResourceTest {
                 .post()
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class, new LoaderOptions()), new KameletRepresenter());
-        yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
 
     @Test

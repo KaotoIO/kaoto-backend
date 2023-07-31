@@ -1,17 +1,5 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
@@ -25,19 +13,18 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * 🐱miniclass IntegrationStepParserService (StepParserService)
  */
 @ApplicationScoped
 @RegisterForReflection
 public class IntegrationStepParserService implements StepParserService<Step> {
-
-    private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory())
-        .registerModule(new SimpleModule().addDeserializer(Flow.class, new FlowDeserializer()));
-
-
-    private static final Pattern PATTERN = Pattern.compile("(kind:)(.+)(\r\n|\r|\n)", Pattern.CASE_INSENSITIVE);
-    private static final String[] KINDS = new String[]{"Integration"};
 
     private KameletStepParserService ksps;
 
@@ -71,7 +58,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             if (integration.getSpec().get_flows() != null) {
                 integration.getSpec().get_flows().clear();
             }
-            ((Map<String, Object>)res.getMetadata().get("additionalProperties")).put("spec", integration.getSpec());
+            ((Map<String, Object>) res.getMetadata().get("additionalProperties")).put("spec", integration.getSpec());
             if (integration.getMetadata().getAnnotations().containsKey(KameletStepParserService.DESCRIPTION_ANNO)) {
                 res.getMetadata().put(KameletStepParserService.DESCRIPTION,
                         integration.getMetadata().getAnnotations().get(KameletStepParserService.DESCRIPTION_ANNO));
@@ -99,7 +86,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
         metadata.setParameters(new ArrayList<>());
         answer.add(metadata);
         try {
-            Integration integration = YAML_MAPPER.readValue(input, Integration.class);
+            Integration integration = KamelHelper.YAML_MAPPER.readValue(input, Integration.class);
 
             ksps.processMetadata(metadata, integration.getMetadata());
 
@@ -115,7 +102,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
             }
 
             //Let's store the spec to make sure we don't lose anything else
-            ((Map<String, Object>)metadata
+            ((Map<String, Object>) metadata
                     .getMetadata()
                     .get("additionalProperties"))
                     .put("spec", integration.getSpec());
@@ -185,17 +172,7 @@ public class IntegrationStepParserService implements StepParserService<Step> {
 
     @Override
     public boolean appliesTo(final String yaml) {
-        Matcher matcher = PATTERN.matcher(yaml);
-        if (matcher.find()) {
-            String match = matcher.group(2).trim();
-            for (String kind: KINDS) {
-                if (kind.equalsIgnoreCase(match)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+       return "Integration".equalsIgnoreCase(KamelHelper.getCRKind(yaml));
     }
 
     @Inject

@@ -2,10 +2,10 @@ package io.kaoto.backend.camel.model.deployment.kamelet.step.marshal;
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.MarshalFlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.dataformat.DataFormat;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 import io.quarkus.test.junit.QuarkusTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,19 +25,16 @@ class SerializationTest {
 
     @Test
     void yaml() throws JsonProcessingException {
-        Yaml yaml = new Yaml(
-                new Constructor(new LoaderOptions()),
-                new KameletRepresenter());
 
         ObjectReader reader = KamelHelper.YAML_MAPPER.readerFor(MarshalFlowStep.class)
             .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         var step = getMarshalFlowStep();
-        var yamlstring = yaml.dumpAsMap(step);
+        var yamlstring = KamelHelper.YAML_MAPPER.writeValueAsString(step);
         compareMarshalSteps(step, reader.readValue(yamlstring));
 
         step = getMarshalFlowStep2();
-        yamlstring = yaml.dumpAsMap(step);
+        yamlstring = KamelHelper.YAML_MAPPER.writeValueAsString(step);
         compareMarshalSteps(step, reader.readValue(yamlstring));
     }
 

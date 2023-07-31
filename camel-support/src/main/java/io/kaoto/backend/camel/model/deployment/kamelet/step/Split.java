@@ -1,5 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -61,36 +62,45 @@ public class Split extends Tokenizer {
     private String delimiter;
 
     @JsonProperty(AGGREGATION_STRATEGY_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_LABEL2)
     private Map<String, Object> aggregationStrategy;
 
     @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_METHOD_NAME_LABEL2)
     private String aggregationStrategyMethodName;
 
     @JsonProperty(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL2)
     private Boolean aggregationStrategyMethodAllowNull;
 
     @JsonProperty(PARALLEL_AGGREGATE_LABEL)
+    @JsonAlias(PARALLEL_AGGREGATE_LABEL2)
     private Boolean parallelAggregate;
 
     @JsonProperty(PARALLEL_PROCESSING_LABEL)
+    @JsonAlias(PARALLEL_PROCESSING_LABEL2)
     private Boolean parallelProcessing;
 
     @JsonProperty(STREAMING_LABEL)
     private Boolean streaming;
 
     @JsonProperty(STOP_ON_EXCEPTION_LABEL)
+    @JsonAlias(STOP_ON_EXCEPTION_LABEL2)
     private Boolean stopOnException;
 
     @JsonProperty(TIMEOUT_LABEL)
     private String timeout;
 
     @JsonProperty(EXECUTOR_SERVICE_LABEL)
+    @JsonAlias(EXECUTOR_SERVICE_LABEL2)
     private Map<String, Object> executorService;
 
     @JsonProperty(ON_PREPARE_LABEL)
+    @JsonAlias(ON_PREPARE_LABEL2)
     private Map<String, Object> onPrepare;
 
     @JsonProperty(SHARE_UNIT_OF_WORK_LABEL)
+    @JsonAlias(SHARE_UNIT_OF_WORK_LABEL2)
     private Boolean shareUnitOfWork;
 
     @JsonProperty(DESCRIPTION_LABEL)
@@ -118,7 +128,14 @@ public class Split extends Tokenizer {
             super.assignAttribute(parameter);
             switch (parameter.getId()) {
                 case TOKENIZE_LABEL:
-                    this.setTokenize(new Tokenizer(parameter.getValue()));
+                    var value = parameter.getValue();
+                    if (value instanceof Map) {
+                        if (((Map<?, ?>) value).containsKey(TOKENIZE_LABEL)) {
+                            this.setTokenize(new Tokenizer(((Map<?, ?>) value).get(TOKENIZE_LABEL)));
+                        }
+                    } else {
+                        this.setTokenize(new Tokenizer(value));
+                    }
                     break;
                 case DESCRIPTION_LABEL:
                     this.setDescription((Map<String, String>) parameter.getValue());

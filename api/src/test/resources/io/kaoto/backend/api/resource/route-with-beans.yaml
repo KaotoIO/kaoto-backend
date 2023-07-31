@@ -16,7 +16,7 @@
     type: org.postgresql.ds.PGSimpleDataSource
     properties:
       serverName: 127.0.0.1
-      portNumber: '5432'
+      portNumber: 5432
       databaseName: dvdrental
       user: user
       password: password

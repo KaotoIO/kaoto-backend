@@ -15,7 +15,7 @@ spec:
   - from:
       uri: timer:tick
       parameters:
-        period: '5000'
+        period: 5000
       steps:
       - to:
           uri: activemq:queue:myQueue
@@ -26,7 +26,7 @@ spec:
       type: org.postgresql.ds.PGSimpleDataSource
       properties:
         serverName: 127.0.0.1
-        portNumber: '5432'
+        portNumber: 5432
         databaseName: dvdrental
         user: user
         password: password

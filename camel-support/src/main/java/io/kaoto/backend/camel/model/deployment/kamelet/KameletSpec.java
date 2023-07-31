@@ -7,12 +7,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"definition", "dependencies", "sources", "template", "types"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
-@RegisterForReflection
+//@JsonSerialize(using = KameletSpecSerializer.class)
 public class KameletSpec extends org.apache.camel.v1alpha1.KameletSpec {
 
     @JsonProperty("template")

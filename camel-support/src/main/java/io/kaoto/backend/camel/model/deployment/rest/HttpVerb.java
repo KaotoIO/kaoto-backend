@@ -1,21 +1,22 @@
 package io.kaoto.backend.camel.model.deployment.rest;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonSerialize(using = HttpVerbSerializer.class)
 public class HttpVerb implements Serializable {
     private static final long serialVersionUID = 481836716282364509L;
 
@@ -115,35 +116,5 @@ public class HttpVerb implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> props = new LinkedHashMap<>();
-        if (this.getConsumes() != null) {
-            props.put("consumes", this.getConsumes());
-        }
-        if (this.getId() != null) {
-            props.put("id", this.getId());
-        }
-        if (this.getProduces() != null) {
-            props.put("produces", this.getProduces());
-        }
-        if (this.getUri() != null) {
-            props.put("uri", this.getUri());
-        }
-        if (this.getDescription() != null) {
-            props.put("description", this.getDescription());
-        }
-        if (getParameterList() != null && !getParameterList().isEmpty()) {
-            var parameters = new ArrayList<Map<String, Object>>();
-            for (RestParameter p : this.getParameterList()) {
-                parameters.add(p.getRepresenterProperties());
-            }
-            props.put("param", parameters);
-        }
-        if (this.getTo() != null) {
-            props.put("to", this.getTo().getRepresenterProperties().get("to"));
-        }
-        return props;
     }
 }

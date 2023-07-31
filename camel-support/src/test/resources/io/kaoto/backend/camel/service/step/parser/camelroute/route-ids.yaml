@@ -6,10 +6,10 @@
     steps:
     - log:
         id: log-5f36
-        message: ${body}
+        message: "${body}"
     - dynamic-router:
         id: dynamic-router-32
-        simple: ${body}
+        simple: "${body}"
     - set-header:
         id: set-header-23245
         simple: foo

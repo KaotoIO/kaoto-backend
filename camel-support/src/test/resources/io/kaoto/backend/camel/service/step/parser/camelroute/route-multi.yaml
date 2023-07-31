@@ -1,7 +1,7 @@
 - from:
     uri: timer:yaml
     parameters:
-      period: '1050'
+      period: 1050
     steps:
     - set-body:
         constant: Hello Camel K from yaml
@@ -10,10 +10,10 @@
     - to:
         uri: https://mycustom.url:42/with/things
 - from:
-    uri: file:{{customer.file.directory}}
+    uri: "file:{{customer.file.directory}}"
     steps:
     - to:
-        uri: sftp://{{sftphost}}:22/files/process
+        uri: "sftp://{{sftphost}}:22/files/process"
 - from:
     id: from-74c5
     uri: file:data
@@ -22,10 +22,10 @@
     steps:
     - log:
         id: log-5f36
-        message: ${body}
+        message: "${body}"
     - dynamic-router:
         id: dynamic-router-32
-        simple: ${body}
+        simple: "${body}"
     - set-header:
         id: set-header-23245
         simple: foo

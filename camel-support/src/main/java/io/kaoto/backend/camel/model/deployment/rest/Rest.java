@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -19,7 +20,6 @@ import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
 
 /**
@@ -40,7 +40,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  */
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@RegisterForReflection
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Rest extends From {
     protected static final Logger log = Logger.getLogger(Rest.class);
     private static final long serialVersionUID = 8685166491995899231L;

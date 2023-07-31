@@ -1,28 +1,19 @@
 package io.kaoto.backend.api.resource.v1;
 
-import java.util.List;
-
+import io.fabric8.kubernetes.client.CustomResource;
+import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
+import io.kaoto.backend.camel.KamelHelper;
+import io.kaoto.backend.deployment.ClusterService;
+import io.kaoto.backend.model.deployment.Deployment;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.NoCache;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-
-import io.fabric8.kubernetes.client.CustomResource;
-import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
-import io.kaoto.backend.deployment.ClusterService;
-import io.kaoto.backend.model.deployment.Deployment;
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -38,6 +29,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * 🐱class DeploymentsResource
@@ -50,10 +42,6 @@ import jakarta.ws.rs.core.Response;
 public class DeploymentsResource {
 
     private static final Logger LOG = Logger.getLogger(DeploymentsResource.class);
-
-    private static final ObjectMapper YAML_MAPPER = YAMLMapper.builder()
-        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        .build();
 
     private ClusterService clusterService;
     private Instance<DeploymentGeneratorService> parsers;
@@ -123,7 +111,7 @@ public class DeploymentsResource {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
                 try {
-                    YAML_MAPPER.readValue(crd, c);
+                    KamelHelper.YAML_MAPPER.readValue(crd, c);
                     valid = true;
                 } catch (Exception e) {
                     LOG.trace("We tried to parse with " + c.getName() + " and"
@@ -163,17 +151,14 @@ public class DeploymentsResource {
             @QueryParam("namespace") String namespace) {
         CustomResource cr = clusterService.get(namespace, name, type);
         if (cr == null) {
-            throw new NotFoundException("Resource with name " + name + " not "
-                    + "found.");
+            throw new NotFoundException("Resource with name " + name + " not found.");
         }
 
         for (var parser : parsers) {
             for (Class<? extends CustomResource> c
                     : parser.supportedCustomResources()) {
                 try {
-                    Yaml yaml = new Yaml(new Constructor(c, new LoaderOptions()),
-                            new KameletRepresenter());
-                    return yaml.dumpAsMap(cr);
+                    return KamelHelper.YAML_MAPPER.writeValueAsString(cr);
                 } catch (Exception e) {
                     LOG.trace("We tried to parse with " + c.getName() + " and"
                             + " it didn't work.");

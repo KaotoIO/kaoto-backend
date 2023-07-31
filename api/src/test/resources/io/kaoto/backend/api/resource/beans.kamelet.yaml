@@ -18,12 +18,12 @@ spec:
     - name: connectionFactoryBean
       type: '#class:org.apache.qpid.jms.JmsConnectionFactory'
       properties:
-        remoteURI: '{{remoteURI}}'
+        remoteURI: "{{remoteURI}}"
         secondProperty: another
     from:
       uri: jms:{{destinationType}}:{{destinationName}}
       parameters:
-        connectionFactory: '#bean:{{connectionFactoryBean}}'
+        connectionFactory: "#bean:{{connectionFactoryBean}}"
       steps:
       - to:
           uri: kamelet:sink

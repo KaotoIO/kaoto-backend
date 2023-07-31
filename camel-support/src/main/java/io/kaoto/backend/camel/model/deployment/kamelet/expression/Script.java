@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.EIPStep;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -14,10 +13,10 @@ import java.util.Map;
 @JsonPropertyOrder({"name", "groovy", "javascript", "expression"})
 @RegisterForReflection
 public class Script extends EIPStep {
-    public static final String GROOVY_LABEL = KameletRepresenter.GROOVY;
-    public static final String JAVASCRIPT_LABEL = KameletRepresenter.JAVASCRIPT;
-    public static final String EXPRESSION_LABEL = KameletRepresenter.EXPRESSION;
-    public static final String NAME_LABEL = KameletRepresenter.NAME;
+    public static final String GROOVY_LABEL = "groovy";
+    public static final String JAVASCRIPT_LABEL = "javascript";
+    public static final String EXPRESSION_LABEL = "expression";
+    public static final String NAME_LABEL = "name";
 
 
     private Object groovy;

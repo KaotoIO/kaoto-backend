@@ -8,18 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.nodes.Tag;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.deployment.generator.DeploymentGeneratorService;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.CamelRoute;
 import io.kaoto.backend.camel.service.dsl.camelroute.CamelRouteDSLSpecification;
 import io.kaoto.backend.model.deployment.Deployment;
@@ -41,13 +37,15 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
     public String parse(final List<Step> steps,
                         final Map<String, Object> metadata,
                         final List<Parameter> parameters) {
-        Yaml yaml = new Yaml(new Constructor(CamelRoute.class, new LoaderOptions()), new CamelRouteRepresenter());
-        return yaml.dumpAs(new CamelRoute(
-                        steps != null ? new ArrayList<>(steps) : List.of(),
-                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        catalog),
-                Tag.SEQ,
-                DumperOptions.FlowStyle.BLOCK);
+        final var camelRoute = new CamelRoute(
+                steps != null ? new ArrayList<>(steps) : List.of(),
+                metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                catalog);
+        try {
+            return KamelHelper.YAML_MAPPER.writeValueAsString(camelRoute);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
