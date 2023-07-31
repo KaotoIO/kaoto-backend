@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WithKubernetesTestServer
 class KameletParseCatalogTest {
 
-    private static final String FILE_NAME = "camel-kamelets-3.20.2.jar";
+    private static final String FILE_NAME = "camel-kamelets-3.21.0.jar";
 
     private static final Logger LOG = Logger.getLogger(KameletParseCatalogTest.class);
 
@@ -69,7 +69,7 @@ class KameletParseCatalogTest {
     @Test
     void getSteps() {
         ParseCatalog<Step> kameletParser =
-                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v0.5.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.21.0");
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -89,7 +89,7 @@ class KameletParseCatalogTest {
         assertEquals("Kamelet", step.getKind());
         assertEquals(Step.START, step.getType());
         Assertions.assertNotNull(step.getParameters());
-        assertEquals(8, step.getParameters().size());
+        assertEquals(11, step.getParameters().size());
         for (var p : step.getParameters()) {
             Assertions.assertNotNull(p.getType());
             Assertions.assertNotNull(p.getTitle());
@@ -192,11 +192,11 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.20.2");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.21.0");
         List<Step> stepsGit = kameletParserGit.parse().join();
 
         String jarUrl = "https://repo1.maven.org/maven2/org/apache/camel/"
-                + "kamelets/camel-kamelets/3.20.2/" + FILE_NAME;
+                + "kamelets/camel-kamelets/3.21.0/" + FILE_NAME;
 
         ParseCatalog<Step> kameletParserJar =
                 parseCatalog.getParser(

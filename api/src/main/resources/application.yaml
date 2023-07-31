@@ -7,7 +7,7 @@
   repository:
     step:
       jar:
-        - url: "resource://camel-kamelets-3.20.6.jar"
+        - url: "resource://camel-kamelets-3.21.0.jar"
           kind: "Kamelet"
         - url: "https://github.com/KaotoIO/camel-component-metadata/archive/refs/heads/main.zip"
         - url: "resource://camel-connectors-3.21.0.zip"
@@ -19,7 +19,7 @@
   repository:
     step:
       jar:
-        - url: "resource://camel-kamelets-3.20.6.jar"
+        - url: "resource://camel-kamelets-3.21.0.jar"
           if-no-cluster: true
           kind: "Kamelet"
         - url: "resource://camel-component-metadata.zip"

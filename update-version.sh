@@ -63,7 +63,7 @@ then
   
   echo "Downloading kamelets."
   echo "Enter kamelets version to use:"
-  echo "Example: 3.18.4"
+  echo "Example: 3.21.0"
   read -r versionKamelets
 
   path=$(pwd)
