@@ -1,10 +1,10 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.expression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.EIPStep;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -13,12 +13,13 @@ import java.util.Map;
 
 @JsonPropertyOrder({"name", "constant", "simple", "jq", "jsonpath", "expression"})
 @RegisterForReflection
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Expression extends EIPStep {
-    public static final String CONSTANT_LABEL = KameletRepresenter.CONSTANT;
-    public static final String SIMPLE_LABEL = KameletRepresenter.SIMPLE;
-    public static final String JQ_LABEL = KameletRepresenter.JQ;
+    public static final String CONSTANT_LABEL = "constant";
+    public static final String SIMPLE_LABEL = "simple";
+    public static final String JQ_LABEL = "jq";
     public static final String JSON_PATH_LABEL = "jsonpath";
-    public static final String NAME_LABEL = KameletRepresenter.NAME;
+    public static final String NAME_LABEL = "name";
 
     public static final String RESULT_TYPE = "result-type";
     public static final String RESULT_TYPE2 = "resultType";

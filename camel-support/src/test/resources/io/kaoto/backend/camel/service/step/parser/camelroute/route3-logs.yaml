@@ -4,4 +4,4 @@
     - set-body:
         constant: Hello Camel from yaml
     - log:
-        message: ${body}
+        message: "${body}"

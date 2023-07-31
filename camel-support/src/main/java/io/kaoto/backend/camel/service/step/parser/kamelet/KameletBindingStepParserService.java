@@ -87,7 +87,7 @@ public class KameletBindingStepParserService implements StepParserService<Step> 
     }
 
     public boolean appliesTo(final String yaml) {
-        return yaml.contains("kind: KameletBinding");
+        return "KameletBinding".equalsIgnoreCase(KamelHelper.getCRKind(yaml));
     }
 
     @Override

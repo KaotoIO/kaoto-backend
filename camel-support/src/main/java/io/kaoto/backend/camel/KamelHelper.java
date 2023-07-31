@@ -5,6 +5,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,18 +16,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import io.kaoto.backend.camel.model.deployment.kamelet.serializer.KameletBindingSpecSerializer;
+
 public final class KamelHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KamelHelper.class);
-
 
     public static final ObjectMapper JSON_MAPPER = JsonMapper.builder()
         .build();
 
     public static final ObjectMapper YAML_MAPPER = YAMLMapper.builder()
-        .build();
+            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+            .disable(YAMLGenerator.Feature.INDENT_ARRAYS)
+            .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build()
+            .registerModule(new SimpleModule()
+                    .addSerializer(KameletBindingSpec.class, new KameletBindingSpecSerializer()));
 
     private KamelHelper() {
         // final class
+    }
+
+    public static String getCRKind(String yaml) {
+        try {
+            return String.valueOf(YAML_MAPPER.readValue(yaml, java.util.Map.class).get("kind"));
+        } catch (Exception e) {
+            LOG.trace("Tried to get the kind of something that wasn't a Custom Resource?", e);
+            return null;
+        }
     }
 
     public static Optional<String> loadResourceAsString(Class<?> type, String resource) {

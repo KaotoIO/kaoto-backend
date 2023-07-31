@@ -1,5 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.expression;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -42,12 +44,15 @@ public class Tokenizer extends Expression {
     private String token;
 
     @JsonProperty(END_TOKEN_LABEL)
+    @JsonAlias(END_TOKEN_LABEL2)
     private String endToken;
 
     @JsonProperty(INHERIT_NAMESPACE_TAG_NAME_LABEL)
+    @JsonAlias(INHERIT_NAMESPACE_TAG_NAME_LABEL2)
     private String inheritNamespaceTagName;
 
     @JsonProperty(HEADER_NAME_LABEL)
+    @JsonAlias(HEADER_NAME_LABEL2)
     private String headerName;
 
     @JsonProperty(REGEX_LABEL)
@@ -57,15 +62,18 @@ public class Tokenizer extends Expression {
     private Boolean xml;
 
     @JsonProperty(INCLUDE_TOKENS_LABEL)
+    @JsonAlias(INCLUDE_TOKENS_LABEL2)
     private String includeTokens;
 
     @JsonProperty(GROUP_LABEL)
     private String group;
 
     @JsonProperty(GROUP_DELIMITER_LABEL)
+    @JsonAlias(GROUP_DELIMITER_LABEL2)
     private String groupDelimiter;
 
     @JsonProperty(SKIP_FIRST_LABEL)
+    @JsonAlias(SKIP_FIRST_LABEL2)
     private Boolean skipFirst;
 
     @JsonProperty(TRIM_LABEL)
@@ -75,16 +83,15 @@ public class Tokenizer extends Expression {
         //Needed for serialization
     }
 
-    public Tokenizer(Step step) {
+    public Tokenizer(final Step step) {
         super(step);
     }
 
-    public Tokenizer(String token) {
-        setToken(token);
-    }
-
-    public Tokenizer(Object obj) {
-        if (obj instanceof Tokenizer e) {
+    @JsonCreator
+    public Tokenizer(final Object obj) {
+        if (obj instanceof String t) {
+            setToken(t);
+        } else if (obj instanceof Tokenizer e) {
             setConstant(e.getConstant());
             setSimple(e.getSimple());
             setJq(e.getJq());

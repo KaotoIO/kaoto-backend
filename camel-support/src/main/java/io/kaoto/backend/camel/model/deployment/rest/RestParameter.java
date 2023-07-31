@@ -2,16 +2,17 @@ package io.kaoto.backend.camel.model.deployment.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RestParameter implements Serializable {
     private static final long serialVersionUID = -2303893619555604361L;
     public static final String DATA_TYPE_LABEL = "dataType";
@@ -201,41 +202,5 @@ public class RestParameter implements Serializable {
 
     public void setExamples(Object examples) {
         this.examples = examples;
-    }
-
-    public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> props = new LinkedHashMap<>();
-        if (this.getArrayType() != null) {
-            props.put(ARRAY_TYPE_LABEL, this.getArrayType());
-        }
-        if (this.getCollectionFormat() != null) {
-            props.put(COLLECTION_FORMAT_LABEL, this.getCollectionFormat());
-        }
-        if (this.getDataType() != null) {
-            props.put(DATA_TYPE_LABEL, this.getDataType());
-        }
-        if (this.getDefaultValue() != null) {
-            props.put(DEFAULT_VALUE_LABEL, this.getDefaultValue());
-        }
-        if (this.getName() != null) {
-            props.put(NAME_LABEL, this.getName());
-        }
-        if (this.getDescription() != null) {
-            props.put(DESCRIPTION_LABEL, this.getDescription());
-        }
-        if (this.getRequired() != null) {
-            props.put(REQUIRED_LABEL, this.getRequired());
-        }
-        if (this.getType() != null) {
-            props.put(TYPE_LABEL, this.getType());
-        }
-        if (this.getDataFormat() != null) {
-            props.put(DATA_FORMAT_LABEL, this.getDataFormat());
-        }
-        if (this.getExamples() != null) {
-            props.put(EXAMPLES_LABEL, this.getExamples());
-        }
-
-        return props;
     }
 }

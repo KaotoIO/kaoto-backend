@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.camelroute;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.camel.v1.integrationspec.Flows;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,6 +23,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @JsonPropertyOrder({"configuration","dependencies","flows","integrationKit","profile","replicas","repositories",
         "serviceAccountName","sources","template","traits"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
+@JsonSerialize(using = IntegrationSpecSerializer.class)
 @RegisterForReflection
 public class IntegrationSpec extends org.apache.camel.v1.IntegrationSpec {
     /**

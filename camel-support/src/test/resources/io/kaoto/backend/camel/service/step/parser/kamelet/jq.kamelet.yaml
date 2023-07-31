@@ -25,7 +25,7 @@ spec:
       uri: kamelet:source
       steps:
       - set-header:
-          jq: '{ field1, field3 }'
+          jq: "{ field1, field3 }"
           name: kafka.KEY
       - set-property:
           jq: .field3

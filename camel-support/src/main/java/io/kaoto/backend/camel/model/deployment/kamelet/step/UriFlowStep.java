@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Step;
 
@@ -77,7 +76,7 @@ public class UriFlowStep implements FlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(KameletRepresenter.URI, this.getUri());
+        properties.put("uri", this.getUri());
 
         if (this.getParameters() != null && !this.getParameters().isEmpty()) {
             //remove step-id-kaoto, it is not a real property
@@ -92,7 +91,7 @@ public class UriFlowStep implements FlowStep {
                 }
             }
             this.getParameters().remove("kaoto-parameters");
-            properties.put(KameletRepresenter.PARAMETERS, this.getParameters());
+            properties.put("parameters", this.getParameters());
         }
         if (this.getId() != null) {
             properties.put(ID, this.getId());

@@ -1,12 +1,12 @@
 - route:
     id: integration
-    description: ''
+    description: ""
     from:
       uri: timer:myTimer
       steps:
       - choice:
           when:
-          - simple: ${body}
+          - simple: "${body}"
             steps:
             - to:
                 uri: activemq:queue:myQueue

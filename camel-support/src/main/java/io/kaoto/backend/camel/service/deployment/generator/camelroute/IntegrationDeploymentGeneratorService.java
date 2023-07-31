@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jboss.logging.Logger;
 
 import io.fabric8.kubernetes.client.CustomResource;
@@ -59,11 +60,16 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
             parsed.setSteps(steps);
             parsedList.add(parsed);
         }
-        return kdgs.getYAML(new Integration(
+        var integration = new Integration(
                         parsedList,
                         metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        catalog),
-                new IntegrationRepresenter());
+                        catalog);
+
+        try {
+            return KamelHelper.YAML_MAPPER.writeValueAsString(integration);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -81,11 +87,15 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
                 metadata = f.getMetadata();
             }
         }
-        return kdgs.getYAML(new Integration(
-                        parsedList,
-                        metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
-                        catalog),
-                new IntegrationRepresenter());
+
+        try {
+            return KamelHelper.YAML_MAPPER.writeValueAsString(new Integration(
+                    parsedList,
+                    metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
+                    catalog));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

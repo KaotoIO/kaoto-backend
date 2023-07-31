@@ -9,10 +9,10 @@
         name: Authorization
         expression:
           simple:
-            expression: Bearer {{token}}
+            expression: "Bearer {{token}}"
     - set-header:
         simple:
-          expression: ${body}
+          expression: "${body}"
           result-type: long
     - to:
         uri: https://gitter.ems.host/_matrix/client/v3/sync
@@ -21,7 +21,7 @@
     - loop:
         expression:
           simple:
-            expression: 'true'
+            expression: "true"
         do-while: true
         steps:
         - remove-headers:
@@ -35,21 +35,23 @@
             name: Authorization
             expression:
               simple:
-                expression: Bearer {{token}}
+                expression: "Bearer {{token}}"
         - to-d:
-            uri: https://gitter.ems.host/_matrix/client/v3/sync?timeout=30000&filter={"account_data":{"not_types":["*"]},"room":{"account_data":{"not_types":["*"]},"rooms":["{{room}}"],"timeline":{"limit":1,"types":["m.room.message"]},"state":{"not_types":["*"]}}
-              }&since=${exchangeProperty.next_batch}&disableStreamCache=true
+            uri: "https://gitter.ems.host/_matrix/client/v3/sync?timeout=30000&filter={\"\
+              account_data\":{\"not_types\":[\"*\"]},\"room\":{\"account_data\":{\"\
+              not_types\":[\"*\"]},\"rooms\":[\"{{room}}\"],\"timeline\":{\"limit\"\
+              :1,\"types\":[\"m.room.message\"]},\"state\":{\"not_types\":[\"*\"]}}}&since=${exchangeProperty.next_batch}&disableStreamCache=true"
         - convert-body-to:
             type: String
         - choice:
             when:
-            - jsonpath: $['rooms']
+            - jsonpath: "$['rooms']"
               steps:
               - set-property:
                   name: backup-response
                   expression:
                     simple:
-                      expression: ${body}
+                      expression: "${body}"
               - set-header:
                   name: CamelJsltString
                   expression:
@@ -73,4 +75,4 @@
               - set-body:
                   expression:
                     simple:
-                      expression: ${exchangeProperty.backup-response}
+                      expression: "${exchangeProperty.backup-response}"

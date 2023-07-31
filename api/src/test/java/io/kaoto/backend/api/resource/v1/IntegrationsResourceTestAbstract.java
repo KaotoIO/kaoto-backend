@@ -2,7 +2,7 @@ package io.kaoto.backend.api.resource.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
-import io.kaoto.backend.camel.service.deployment.generator.kamelet.KameletRepresenter;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -13,12 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -181,10 +178,6 @@ abstract class IntegrationsResourceTestAbstract {
                 .post("?dsl=Camel Route")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        Yaml yaml = new Yaml(
-                new Constructor(KameletBinding.class, new LoaderOptions()),
-                new KameletRepresenter());
-        yaml.parse(new InputStreamReader(res.extract().body().asInputStream()));
     }
 
     @Test
@@ -393,7 +386,6 @@ abstract class IntegrationsResourceTestAbstract {
     @ParameterizedTest
     @MethodSource("provideTestResourcesForDslsTest")
     void dslsTest(String fileInResource, List<String> compatibleDsls) throws IOException, URISyntaxException {
-        ObjectMapper mapper = new ObjectMapper();
         String yaml1 = Files.readString(Path.of(
                 DeploymentsResourceTest.class.getResource(fileInResource).toURI()));
 
@@ -404,8 +396,8 @@ abstract class IntegrationsResourceTestAbstract {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        List<String> dsllist = mapper.readValue(dslsRes.extract().body().asString(),
-                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        List<String> dsllist = KamelHelper.YAML_MAPPER.readValue(dslsRes.extract().body().asString(),
+                KamelHelper.YAML_MAPPER.getTypeFactory().constructCollectionType(List.class, String.class));
         assertThat(dsllist).hasSize(getAllLanguages().size());
         assertThat(dsllist).hasSameElementsAs(getAllLanguages());
 
@@ -418,7 +410,7 @@ abstract class IntegrationsResourceTestAbstract {
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().body().asString();
 
-        Integration integration = mapper.readValue(integrationRes, Integration.class);
+        Integration integration = KamelHelper.YAML_MAPPER.readValue(integrationRes, Integration.class);
 
         dslsRes = given()
                 .when()
@@ -427,8 +419,8 @@ abstract class IntegrationsResourceTestAbstract {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        dsllist = mapper.readValue(dslsRes.extract().body().asString(),
-                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        dsllist = KamelHelper.YAML_MAPPER.readValue(dslsRes.extract().body().asString(),
+                KamelHelper.YAML_MAPPER.getTypeFactory().constructCollectionType(List.class, String.class));
         assertThat(dsllist).hasSize(getAllLanguages().size());
         assertThat(dsllist).hasSameElementsAs(getAllLanguages());
 
@@ -439,8 +431,8 @@ abstract class IntegrationsResourceTestAbstract {
                 .post("/dsls")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-        dsllist = mapper.readValue(dslsRes.extract().body().asString(),
-                mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+        dsllist = KamelHelper.YAML_MAPPER.readValue(dslsRes.extract().body().asString(),
+                KamelHelper.YAML_MAPPER.getTypeFactory().constructCollectionType(List.class, String.class));
         assertThat(dsllist).hasSize(compatibleDsls.size());
         assertThat(dsllist).containsExactlyInAnyOrderElementsOf(compatibleDsls);
     }
@@ -502,11 +494,8 @@ abstract class IntegrationsResourceTestAbstract {
                 .extract().body().asString();
 
 
-        Yaml yaml = new Yaml(
-                new Constructor(KameletBinding.class, new LoaderOptions()),
-                new KameletRepresenter());
-        KameletBinding original = yaml.load(yamlOriginal);
-        KameletBinding after = yaml.load(yamlAfter);
+        KameletBinding original = KamelHelper.YAML_MAPPER.readValue(yamlOriginal, KameletBinding.class);
+        KameletBinding after = KamelHelper.YAML_MAPPER.readValue(yamlAfter, KameletBinding.class);
 
         assertThat(after).as("Check that returned KameletBinding yaml will be same as original")
                 .isEqualTo(original);

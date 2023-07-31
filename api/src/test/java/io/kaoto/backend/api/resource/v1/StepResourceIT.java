@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.resource.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.RestAssured;
@@ -17,8 +18,7 @@ class StepResourceIT {
         ValidatableResponse response = RestAssured.given().get("/v1/steps").then().statusCode(200);
         
         String json = response.extract().body().asString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Step[] steps = objectMapper.readValue(json, Step[].class);
+        Step[] steps = KamelHelper.JSON_MAPPER.readValue(json, Step[].class);
         assertThat(steps).isNotEmpty();
         Condition<Step> weHaveCamelConnectors =
                 new Condition<>(value -> value.getKind().equalsIgnoreCase("Camel-Connector"),
@@ -40,8 +40,7 @@ class StepResourceIT {
         ValidatableResponse response = RestAssured.given().get("/v1/steps").then().statusCode(200);
 
         String json = response.extract().body().asString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Step[] steps = objectMapper.readValue(json, Step[].class);
+        Step[] steps = KamelHelper.JSON_MAPPER.readValue(json, Step[].class);
 
         assertThat(steps)
                 .allMatch(step -> step.getRequired() != null);

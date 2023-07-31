@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.CustomResource;
@@ -105,8 +103,11 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
 
         KameletBinding binding = new KameletBinding(spec, metaObject);
 
-        Yaml yaml = new Yaml(new Constructor(KameletBinding.class, new LoaderOptions()), new KameletRepresenter());
-        return yaml.dumpAsMap(binding);
+        try {
+            return KamelHelper.YAML_MAPPER.writeValueAsString(binding);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private KameletBindingStep createKameletBindingStep(final Step step) {

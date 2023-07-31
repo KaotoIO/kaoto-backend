@@ -1,7 +1,9 @@
 package io.kaoto.backend.api.resource.v1;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.camelroute.Integration;
 import io.kaoto.backend.camel.model.deployment.kamelet.Kamelet;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletBinding;
@@ -142,7 +144,7 @@ public abstract class DeploymentsResourceTestAbstract {
     }
 
     @Test
-    void getTest() {
+    void getTest() throws JsonProcessingException {
         given()
                 .queryParam("type", "KameletBinding")
                 .when()
@@ -157,13 +159,14 @@ public abstract class DeploymentsResourceTestAbstract {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().body().asString();
-        assertThat(resource)
-                .contains("kind: KameletBinding")
-                .contains("name: twitter-search-source");
+
+        var cr = KamelHelper.YAML_MAPPER.readValue(resource, KameletBinding.class);
+        assertThat(cr.getKind()).isEqualTo("KameletBinding");
+        assertThat(cr.getMetadata().getName()).isEqualTo(BINDING_NAME);
     }
 
     @Test
-    void getNamespaceQueryTest() {
+    void getNamespaceQueryTest() throws JsonProcessingException {
         createTestKameletBinding(OTHER_NAMESPACE);
         String differentTestKb = createDifferentTestKameletBinding(OTHER_NAMESPACE);
         given()
@@ -195,9 +198,9 @@ public abstract class DeploymentsResourceTestAbstract {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().response().asString();
-        assertThat(resource)
-                .contains("kind: KameletBinding")
-                .contains("name: twitter-search-source");
+        var cr = KamelHelper.YAML_MAPPER.readValue(resource, KameletBinding.class);
+        assertThat(cr.getKind()).isEqualTo("KameletBinding");
+        assertThat(cr.getMetadata().getName()).isEqualTo(BINDING_NAME);
 
         String kameletName = createTestKamelet(DEFAULT_NAMESPACE);
         resource = given()
@@ -208,7 +211,8 @@ public abstract class DeploymentsResourceTestAbstract {
                 .contentType("text/yaml")
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().response().asString();
-        assertThat(resource).contains("kind: Kamelet");
+        var cr2 = KamelHelper.YAML_MAPPER.readValue(resource, Kamelet.class);
+        assertThat(cr2.getKind()).isEqualTo("Kamelet");
     }
 
     @Test

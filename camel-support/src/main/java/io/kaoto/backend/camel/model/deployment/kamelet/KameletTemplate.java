@@ -5,30 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.model.deployment.kamelet.serializer.KameletTemplateSerializer;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.camel.v1alpha1.kameletspec.Template;
 
 import java.util.List;
 
-
-/**
- * ```
- *   flow:
- *     from:
- *       uri: timer:tick
- *       parameters:
- *         period: "{{period}}"
- *       steps:
- *         - set-body:
- *             constant: "{{message}}"
- *         - to: kamelet:sink
- * ```
- */
 @JsonPropertyOrder({"beans", "from"})
-@JsonDeserialize(
-        using = JsonDeserializer.None.class
-)
+@JsonDeserialize(using = JsonDeserializer.None.class)
+@JsonSerialize(using = KameletTemplateSerializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @RegisterForReflection
 public class KameletTemplate extends Template {
@@ -67,15 +54,27 @@ public class KameletTemplate extends Template {
         this.beans = beans;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public void setDescription(String description) { this.description = description; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public Flow getRoute() { return route; }
+    public Flow getRoute() {
+        return route;
+    }
 
-    public void setRoute(Flow route) { this.route = route; }
+    public void setRoute(Flow route) {
+        this.route = route;
+    }
 }

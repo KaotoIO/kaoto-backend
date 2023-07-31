@@ -1,7 +1,9 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @JsonPropertyOrder({"set-body"})
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SetBodyFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 7630089193555236497L;
@@ -38,6 +41,8 @@ public class SetBodyFlowStep implements FlowStep {
         setSetBody(setBody);
     }
 
+    @JsonProperty("setBody")
+    @JsonAlias("set-body")
     private Expression setBody;
 
     public Expression getSetBody() {

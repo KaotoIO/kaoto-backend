@@ -1,41 +1,35 @@
 package io.kaoto.backend.deployment;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.jboss.logging.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Strings;
-
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import io.fabric8.kubernetes.client.dsl.base.ResourceDefinitionContext;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
-import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationRepresenter;
 import io.kaoto.backend.model.deployment.Deployment;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.context.ManagedExecutor;
+import org.jboss.logging.Logger;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 🐱miniclass ClusterService (DeploymentsResource)
@@ -114,9 +108,8 @@ public class ClusterService {
                         span.setAttribute("integration", binding.toString());
                     }
                     return;
-                } catch (KubernetesClientException e) {
-                    LOG.debug("Either the binding is not right or the CRD"
-                            + " is not valid: " + e.getMessage());
+                } catch (Exception e) {
+                    LOG.debug("Either the binding is not right or the CRD is not valid: " + e.getMessage());
                 }
             }
         }
@@ -168,7 +161,7 @@ public class ClusterService {
      * Starts the given CustomResource.
      */
     @WithSpan
-    public void start(final CustomResource binding, final String namespace) {
+    public void start(final CustomResource binding, final String namespace) throws JsonProcessingException {
         ResourceDefinitionContext context =
                 new ResourceDefinitionContext.Builder()
                         .withNamespaced(true)
@@ -178,11 +171,9 @@ public class ClusterService {
                         .withVersion(binding.getVersion())
                         .build();
 
-        var constructor = new Constructor(binding.getClass(), new LoaderOptions());
-        Yaml yaml = new Yaml(constructor, new IntegrationRepresenter());
         kubernetesClient.genericKubernetesResources(context)
                 .inNamespace(getNamespace(namespace))
-                .load(new ByteArrayInputStream(yaml.dumpAsMap(binding).getBytes(StandardCharsets.UTF_8)))
+                .load(new ByteArrayInputStream(KamelHelper.YAML_MAPPER.writeValueAsBytes(binding)))
                 .create();
     }
 

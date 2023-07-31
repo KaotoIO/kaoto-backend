@@ -4,18 +4,18 @@
       uri: timer:yaml
       steps:
       - set-body:
-          simple: Timer fired ${header.CamelTimerCounter} times
+          simple: "Timer fired ${header.CamelTimerCounter} times"
       - log:
-          message: ${body}
+          message: "${body}"
 - route:
     id: route-identifier
     from:
       uri: timer:yaml
       steps:
       - set-body:
-          simple: Timer fired ${header.CamelTimerCounter} times
+          simple: "Timer fired ${header.CamelTimerCounter} times"
       - log:
-          message: ${body}
+          message: "${body}"
 - from:
     id: from-74c5
     uri: file:data
@@ -24,10 +24,10 @@
     steps:
     - log:
         id: log-5f36
-        message: ${body}
+        message: "${body}"
     - dynamic-router:
         id: dynamic-router-32
-        simple: ${body}
+        simple: "${body}"
     - set-header:
         id: set-header-23245
         simple: foo

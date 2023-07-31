@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step.choice;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @JsonPropertyOrder({"simple", "jq", "jsonpath", "expression", "steps"})
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Choice implements Serializable, ConditionBlock {
     @Serial
     private static final long serialVersionUID = -7206333633897407153L;
