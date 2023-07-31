@@ -1,7 +1,7 @@
 repository:
   step:
     jar:
-      - url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/3.20.2/camel-kamelets-3.20.2.jar"
+      - url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/3.21.0/camel-kamelets-3.21.0.jar"
       - url: "resource://camel-3.19.0.zip"
     git:
       -
