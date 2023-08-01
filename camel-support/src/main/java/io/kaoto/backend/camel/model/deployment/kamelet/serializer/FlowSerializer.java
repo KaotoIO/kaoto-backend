@@ -39,25 +39,23 @@ public class FlowSerializer extends StdSerializer<Flow> {
             if (flow.getDescription() != null) {
                 properties2.put(KamelHelper.DESCRIPTION, flow.getDescription());
             }
-            if (flow.getFrom() instanceof Rest) {
-                properties2.put("rest", flow.getFrom());
-            } else if (flow.getBeans() != null) {
-                properties2.put("beans", flow.getBeans());
-            } else {
-                properties2.put("from", flow.getFrom());
-            }
+            addMainFlowElement(flow, properties2);
             routeProperties.put("route", properties2);
 
         } else {
-            if (flow.getFrom() instanceof Rest) {
-                routeProperties.put("rest", flow.getFrom());
-            } else if (flow.getBeans() != null) {
-                routeProperties.put("beans", flow.getBeans());
-            } else {
-                routeProperties.put("from", flow.getFrom());
-            }
+            addMainFlowElement(flow, routeProperties);
         }
 
         return routeProperties;
+    }
+
+    private static void addMainFlowElement(Flow flow, Map<String, Object> routeProperties) {
+        if (flow.getFrom() instanceof Rest) {
+            routeProperties.put("rest", flow.getFrom());
+        } else if (flow.getBeans() != null) {
+            routeProperties.put("beans", flow.getBeans());
+        } else {
+            routeProperties.put("from", flow.getFrom());
+        }
     }
 }
