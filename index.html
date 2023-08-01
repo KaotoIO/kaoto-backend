@@ -785,44 +785,46 @@ This implementation models the steps as &quot;Using URI and parameters&quot;.</p
 </section>
 <section class='namespace' id='kameletbinding'>
 <h2><a href='#kameletbinding'>🔗</a>KameletBinding</h2>
-<p>Represents a Kamelet binding that can be deployed</p>
+<p>Represents a Kamelet binding that can be deployed
+&lt;p&gt;
+&lt;p&gt;</p>
 <pre><code>apiVersion: camel.apache.org/v1alpha1
 kind: KameletBinding
 metadata:
-   name: twitter-search-source-binding
+name: twitter-search-source-binding
 spec:
-    source:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: twitter-search-source
-        properties:
-            keywords: &quot;Apache Camel&quot;
-            apiKey: &quot;your own&quot;
-            apiKeySecret: &quot;your own&quot;
-            accessToken: &quot;your own&quot;
-            accessTokenSecret: &quot;your own&quot;
-    steps:
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: aws-translate-action
-        -
-            ref:
-                kind: Kamelet
-                apiVersion: camel.apache.org/v1alpha1
-                name: avro-deserialize-action
-    sink:
-        ref:
-            kind: Kamelet
-            apiVersion: camel.apache.org/v1alpha1
-            name: kafka-sink
-        properties:
-            brokers: &quot;The Brokers&quot;
-            password: &quot;The Password&quot;
-            topic: &quot;The Topic Names&quot;
-            username: &quot;The Username&quot;
+source:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: twitter-search-source
+properties:
+keywords: &quot;Apache Camel&quot;
+apiKey: &quot;your own&quot;
+apiKeySecret: &quot;your own&quot;
+accessToken: &quot;your own&quot;
+accessTokenSecret: &quot;your own&quot;
+steps:
+-
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: aws-translate-action
+-
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: avro-deserialize-action
+sink:
+ref:
+kind: Kamelet
+apiVersion: camel.apache.org/v1alpha1
+name: kafka-sink
+properties:
+brokers: &quot;The Brokers&quot;
+password: &quot;The Password&quot;
+topic: &quot;The Topic Names&quot;
+username: &quot;The Username&quot;
 </code></pre>
 
 
