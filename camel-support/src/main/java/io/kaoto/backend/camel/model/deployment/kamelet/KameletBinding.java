@@ -80,42 +80,46 @@ public final class KameletBinding extends org.apache.camel.v1alpha1.KameletBindi
         setMetadata(metadata);
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (!(o instanceof KameletBinding)) {
-            return false;
-        } else {
-            KameletBinding that = (KameletBinding) o;
-            if (!this.getMetadata().equals(that.getMetadata())) {
-                return false;
-            } else if (this.getSpec() != null && !equalsToSpec(that)) {
-                return false;
-            } else if (this.getSpec() == null && that.getSpec() != null) {
-                return false;
-            } else if (!Objects.equals(this.getStatus(), that.getStatus())) {
-                return false;
-            } else if (!Objects.equals(this.getFinalizers(), that.getFinalizers())) {
-                return false;
-            }
         }
-        return true;
+
+        if (!(o instanceof KameletBinding)) {
+            return false;
+        }
+        KameletBinding that = (KameletBinding) o;
+        if (!this.getMetadata().equals(that.getMetadata())) {
+            return false;
+        }
+
+        if (this.getSpec() != null && !equalsToSpec(that)
+                || this.getSpec() == null && that.getSpec() != null) {
+            return false;
+        }
+
+        if (!Objects.equals(this.getStatus(), that.getStatus())) {
+            return false;
+        }
+
+        return Objects.equals(this.getFinalizers(), that.getFinalizers());
     }
 
     private boolean equalsToSpec(KameletBinding that) {
         final var thisSpec = this.getSpec();
         final var thatSpec = that.getSpec();
-        if (!Objects.equals(thisSpec.getIntegration(), thatSpec.getIntegration())) {
+        if (!Objects.equals(thisSpec.getIntegration(), thatSpec.getIntegration())
+                || !equalsToSink(thisSpec.getSink(), thatSpec.getSink())
+                || !equalsToSource(thisSpec.getSource(), thatSpec.getSource())
+                || !Objects.equals(thisSpec.getReplicas(), thatSpec.getReplicas())
+                || !Objects.equals(thisSpec.getErrorHandler(), thatSpec.getErrorHandler())) {
             return false;
-        } else if (!equalsToSink(thisSpec.getSink(), thatSpec.getSink())) {
-            return false;
-        } else if (!equalsToSource(thisSpec.getSource(), thatSpec.getSource())) {
-            return false;
-        } else if (!Objects.equals(thisSpec.getSteps(), thatSpec.getSteps())) {
-            if (thisSpec.getSteps() == null || thatSpec.getSteps() == null) {
-                return false;
-            }
-            if (thisSpec.getSteps().size() != thatSpec.getSteps().size()) {
+        }
+
+        if (!Objects.equals(thisSpec.getSteps(), thatSpec.getSteps())) {
+            if (thisSpec.getSteps() == null || thatSpec.getSteps() == null
+                    || thisSpec.getSteps().size() != thatSpec.getSteps().size()) {
                 return false;
             }
             for (int i = 0; i < thisSpec.getSteps().size(); i++) {
@@ -125,156 +129,113 @@ public final class KameletBinding extends org.apache.camel.v1alpha1.KameletBindi
             }
         }
 
-        if (!Objects.equals(thisSpec.getReplicas(), thatSpec.getReplicas())) {
-            return false;
-        } else if (!Objects.equals(thisSpec.getErrorHandler(), thatSpec.getErrorHandler())) {
-            return false;
-        } else if (!Objects.equals(thisSpec.getServiceAccountName(), thatSpec.getServiceAccountName())) {
-            return false;
-        }
-        return true;
+        return Objects.equals(thisSpec.getServiceAccountName(), thatSpec.getServiceAccountName());
     }
+
     @SuppressWarnings("CPD-START")
     //Repetition here because the Sink, Source, and Steps classes era equivalent but Java doesn't know about that.
     private boolean equalsToSink(Sink thisSink, Sink thatSink) {
         if (thisSink != null) {
-            if (!Objects.equals(thisSink.getProperties(), thatSink.getProperties())) {
-                if (thisSink.getProperties() == null || thatSink.getProperties() == null) {
+            if (!Objects.equals(thisSink.getProperties(), thatSink.getProperties())
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisSink.getProperties().getAdditionalProperties(),
-                        thatSink.getProperties().getAdditionalProperties())) {
-                    return false;
-                }
+                    && (thisSink.getProperties() == null
+                    || thatSink.getProperties() == null
+                    || !Objects.equals(thisSink.getProperties().getAdditionalProperties(),
+                    thatSink.getProperties().getAdditionalProperties()))) {
+                return false;
+
             }
 
             if (!Objects.equals(thisSink.getRef(), thatSink.getRef())) {
                 var thisRef = thisSink.getRef();
                 var thatRef = thatSink.getRef();
-                if (thisRef == null || thatRef == null) {
+                if (thisRef == null || thatRef == null
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisRef.getKind(), thatRef.getKind())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getName(), thatRef.getName())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getUid(), thatRef.getUid())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
+                    || !Objects.equals(thisRef.getKind(), thatRef.getKind())
+                        || !Objects.equals(thisRef.getName(), thatRef.getName())
+                        || !Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())
+                        || !Objects.equals(thisRef.getUid(), thatRef.getUid())
+                        || !Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())
+                        || !Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())
+                        || !Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
                     return false;
                 }
             }
 
-            if (!Objects.equals(thisSink.getUri(), thatSink.getUri())) {
-                return false;
-            } else if (!Objects.equals(thisSink.getTypes(), thatSink.getTypes())) {
-                return false;
-            }
-            return true;
-        } else {
-            return thatSink == null;
+            return Objects.equals(thisSink.getUri(), thatSink.getUri()) &&
+                    Objects.equals(thisSink.getTypes(), thatSink.getTypes());
         }
+
+        return thatSink == null;
+
     }
+
     private boolean equalsToSource(Source thisSource, Source thatSource) {
         if (thisSource != null) {
-            if (!Objects.equals(thisSource.getProperties(), thatSource.getProperties())) {
-                if (thisSource.getProperties() == null || thatSource.getProperties() == null) {
+            if (!Objects.equals(thisSource.getProperties(), thatSource.getProperties())
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisSource.getProperties().getAdditionalProperties(),
-                        thatSource.getProperties().getAdditionalProperties())) {
-                    return false;
-                }
+                    && (thisSource.getProperties() == null || thatSource.getProperties() == null
+                    || !Objects.equals(thisSource.getProperties().getAdditionalProperties(),
+                    thatSource.getProperties().getAdditionalProperties()))) {
+                return false;
             }
 
             if (!Objects.equals(thisSource.getRef(), thatSource.getRef())) {
                 var thisRef = thisSource.getRef();
                 var thatRef = thatSource.getRef();
-                if (thisRef == null || thatRef == null) {
+                if (thisRef == null || thatRef == null
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisRef.getKind(), thatRef.getKind())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getName(), thatRef.getName())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getUid(), thatRef.getUid())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
+                    || !Objects.equals(thisRef.getKind(), thatRef.getKind())
+                        || !Objects.equals(thisRef.getName(), thatRef.getName())
+                        || !Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())
+                        || !Objects.equals(thisRef.getUid(), thatRef.getUid())
+                        || !Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())
+                        || !Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())
+                        || !Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
                     return false;
                 }
             }
 
-            if (!Objects.equals(thisSource.getUri(), thatSource.getUri())) {
-                return false;
-            } else if (!Objects.equals(thisSource.getTypes(), thatSource.getTypes())) {
-                return false;
-            }
-            return true;
-        } else {
-            return thatSource == null;
+            return Objects.equals(thisSource.getUri(), thatSource.getUri()) && Objects.equals(thisSource.getTypes(),
+                    thatSource.getTypes());
+
         }
+
+        return thatSource == null;
+
     }
+
     private boolean equalsToStep(Steps thisSteps, Steps thatSteps) {
         if (thisSteps != null) {
-            if (!Objects.equals(thisSteps.getProperties(), thatSteps.getProperties())) {
-                if (thisSteps.getProperties() == null || thatSteps.getProperties() == null) {
+            if (!Objects.equals(thisSteps.getProperties(), thatSteps.getProperties())
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisSteps.getProperties().getAdditionalProperties(),
-                        thatSteps.getProperties().getAdditionalProperties())) {
-                    return false;
-                }
+                    && (thisSteps.getProperties() == null || thatSteps.getProperties() == null
+                    || !Objects.equals(thisSteps.getProperties().getAdditionalProperties(),
+                    thatSteps.getProperties().getAdditionalProperties()))) {
+                return false;
             }
             if (!Objects.equals(thisSteps.getRef(), thatSteps.getRef())) {
                 var thisRef = thisSteps.getRef();
                 var thatRef = thatSteps.getRef();
-                if (thisRef == null || thatRef == null) {
+                if (thisRef == null || thatRef == null
                     //Objects.equals should have checked both null already
-                    return false;
-                }
-                if (!Objects.equals(thisRef.getKind(), thatRef.getKind())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getName(), thatRef.getName())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getUid(), thatRef.getUid())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())) {
-                    return false;
-                } else if (!Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
+                    || !Objects.equals(thisRef.getKind(), thatRef.getKind())
+                        || !Objects.equals(thisRef.getName(), thatRef.getName())
+                        || !Objects.equals(thisRef.getApiVersion(), thatRef.getApiVersion())
+                        || !Objects.equals(thisRef.getUid(), thatRef.getUid())
+                        || !Objects.equals(thisRef.getNamespace(), thatRef.getNamespace())
+                        || !Objects.equals(thisRef.getFieldPath(), thatRef.getFieldPath())
+                        || !Objects.equals(thisRef.getResourceVersion(), thatRef.getResourceVersion())) {
                     return false;
                 }
             }
 
-            if (!Objects.equals(thisSteps.getUri(), thatSteps.getUri())) {
-                return false;
-            } else if (!Objects.equals(thisSteps.getTypes(), thatSteps.getTypes())) {
-                return false;
-            }
-            return true;
-        } else {
-            return thatSteps == null;
+            return Objects.equals(thisSteps.getUri(), thatSteps.getUri())
+                    && Objects.equals(thisSteps.getTypes(), thatSteps.getTypes());
+
         }
+        return thatSteps == null;
+
     }
 
     @Override
