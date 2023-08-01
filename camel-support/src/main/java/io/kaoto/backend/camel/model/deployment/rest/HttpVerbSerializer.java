@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.rest;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.kaoto.backend.camel.KamelHelper;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -32,7 +33,7 @@ public class HttpVerbSerializer extends StdSerializer<HttpVerb> {
             props.put("uri", data.getUri());
         }
         if (data.getDescription() != null) {
-            props.put("description", data.getDescription());
+            props.put(KamelHelper.DESCRIPTION, data.getDescription());
         }
         if (data.getParameterList() != null && !data.getParameterList().isEmpty()) {
             props.put("param", data.getParameterList());

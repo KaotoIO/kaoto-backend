@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.kamelet.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.kaoto.backend.camel.KamelHelper;
 import org.apache.camel.v1alpha1.KameletBindingSpec;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class KameletBindingSpecSerializer extends StdSerializer<KameletBindingSp
         //Ordering
         properties.put("source", data.getSource());
         if (data.getSteps() != null) {
-            properties.put("steps", data.getSteps());
+            properties.put(KamelHelper.STEPS, data.getSteps());
         }
         properties.put("sink", data.getSink());
 

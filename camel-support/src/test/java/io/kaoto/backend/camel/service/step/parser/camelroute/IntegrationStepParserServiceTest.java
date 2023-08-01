@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.deployment.generator.camelroute.IntegrationDeploymentGeneratorService;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.model.step.Step;
@@ -56,7 +57,7 @@ class IntegrationStepParserServiceTest {
                 .hasSize(3)
                 .extracting(Step::getName)
                 .containsExactly("timer", "activemq", "log");
-        assertThat(parsed.getMetadata().get("name")).isEqualTo("Easy integration example");
+        assertThat(parsed.getMetadata().get(KamelHelper.NAME)).isEqualTo("Easy integration example");
         assertThat(parsed.getParameters()).isEmpty();
         var yaml = deploymentService.parse(parsed.getSteps(), parsed.getMetadata(), parsed.getParameters());
         assertThat(yaml).isEqualToNormalizingNewlines(integration);
@@ -72,16 +73,19 @@ class IntegrationStepParserServiceTest {
         var metadata = parsed.get(0);
         assertThat(metadata.getSteps()).isNull();
         assertThat(metadata.getParameters()).isEmpty();
-        assertThat(metadata.getMetadata()).containsEntry("name", "multiroute-integration-example");
-        assertThat(metadata.getMetadata()).containsEntry("description", "The multiple route integration CRD example");
+        assertThat(metadata.getMetadata()).containsEntry(KamelHelper.NAME, "multiroute-integration-example");
+        assertThat(metadata.getMetadata()).containsEntry(KamelHelper.DESCRIPTION,
+                "The multiple route integration CRD example");
         var flow1 = parsed.get(1);
-        assertThat(flow1.getMetadata()).containsEntry("name", "timer-amq-log");
-        assertThat(flow1.getMetadata()).containsEntry("description", "The 1st Timer to ActiveMQ to Log Route");
+        assertThat(flow1.getMetadata()).containsEntry(KamelHelper.NAME, "timer-amq-log");
+        assertThat(flow1.getMetadata()).containsEntry(KamelHelper.DESCRIPTION,
+                "The 1st Timer to ActiveMQ to Log Route");
         assertThat(flow1.getParameters()).isEmpty();
         assertThat(flow1.getSteps()).extracting(Step::getName).containsExactly("timer", "activemq", "log");
         var flow2 = parsed.get(2);
-        assertThat(flow2.getMetadata()).containsEntry("name", "timer-amq-log2");
-        assertThat(flow2.getMetadata()).containsEntry("description", "The 2nd Timer to ActiveMQ to Log Route");
+        assertThat(flow2.getMetadata()).containsEntry(KamelHelper.NAME, "timer-amq-log2");
+        assertThat(flow2.getMetadata()).containsEntry(KamelHelper.DESCRIPTION,
+                "The 2nd Timer to ActiveMQ to Log Route");
         assertThat(flow2.getParameters()).isEmpty();
         assertThat(flow2.getSteps()).extracting(Step::getName).containsExactly("timer", "activemq", "log");
         var yaml = deploymentService.parse(parsed);
@@ -103,7 +107,7 @@ class IntegrationStepParserServiceTest {
                 .extracting(Step::getName)
                 .containsExactly("timer", "activemq", "log");
         var metadata = parsed.get(0);
-        assertThat(metadata.getMetadata().get("name")).isEqualTo("integration.with.beans");
+        assertThat(metadata.getMetadata().get(KamelHelper.NAME)).isEqualTo("integration.with.beans");
         List<Bean> beans = (List) metadata.getMetadata().get("beans");
         assertThat(beans)
                 .hasSize(2)
@@ -135,7 +139,7 @@ class IntegrationStepParserServiceTest {
         var metadata = parsed.get(0);
         assertThat(metadata.getSteps()).isNull();
         assertThat(metadata.getParameters()).isEmpty();
-        assertThat(metadata.getMetadata().get("name")).isEqualTo("integration-no-step");
+        assertThat(metadata.getMetadata().get(KamelHelper.NAME)).isEqualTo("integration-no-step");
         var yaml = deploymentService.parse(parsed);
         assertThat(yaml).isEqualToNormalizingNewlines(input);
     }

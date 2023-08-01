@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 
 public class Saga extends EIPStep {
-    public static final String STEPS_LABEL = "steps";
+    public static final String STEPS_LABEL = KamelHelper.STEPS;
 
     public static final String SAGA_SERVICE_LABEL = "saga-service";
     public static final String SAGA_SERVICE_LABEL2 = "sagaService";
@@ -31,7 +32,7 @@ public class Saga extends EIPStep {
 
     public static final String OPTION_LABEL = "option";
 
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
     private List<FlowStep> steps;
 

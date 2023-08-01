@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.kaoto.backend.camel.KamelHelper;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -48,7 +49,7 @@ public class Rest extends From {
     public static final String PRODUCES_LABEL = "produces";
     public static final String URI_LABEL = "uri";
     public static final String ID_LABEL = "id";
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
     public static final String PATH_LABEL = "path";
     public static final String GET_LABEL = "get";
     public static final String HEAD_LABEL = "head";

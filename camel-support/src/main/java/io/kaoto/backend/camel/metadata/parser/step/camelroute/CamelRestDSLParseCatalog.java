@@ -115,7 +115,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         var oparameter = new ObjectParameter();
         oparameter.setId(Rest.PARAM_LABEL);
         oparameter.setDescription("Parameters of the endpoint.");
-        oparameter.setTitle("Parameters");
+        oparameter.setTitle(KamelHelper.PARAMETERS);
         parameters.add(oparameter);
 
         step.setParameters(parameters);

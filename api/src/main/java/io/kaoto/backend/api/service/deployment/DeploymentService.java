@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.kaoto.backend.camel.KamelHelper;
 import org.jboss.logging.Logger;
 
 import io.kaoto.backend.api.resource.v1.model.Integration;
@@ -49,7 +50,7 @@ public class DeploymentService {
         List<Map<String, String>> res = new ArrayList<>();
         Map<String, Object> metadata = new HashMap<>();
         if (name != null && !name.isBlank()) {
-            metadata.put("name", name);
+            metadata.put(KamelHelper.NAME, name);
         }
 
         for (DSLSpecification parser : getParsers()) {

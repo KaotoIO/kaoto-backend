@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class Filter extends EIPStep implements ConditionBlock {
 
-    public static final String STEPS_LABEL = "steps";
+    public static final String STEPS_LABEL = KamelHelper.STEPS;
     public static final String SIMPLE_LABEL = "simple";
     public static final String JQ_LABEL = "jq";
     public static final String JSONPATH_LABEL = "jsonpath";

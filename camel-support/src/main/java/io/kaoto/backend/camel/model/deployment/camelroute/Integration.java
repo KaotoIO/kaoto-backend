@@ -54,14 +54,15 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
     public Integration(
             final List<IntegrationFlow> flowList, final Map<String, Object> metadata, final StepCatalog catalog) {
         this.setMetadata(new ObjectMeta());
-        this.getMetadata().setName(metadata.getOrDefault("name", "").toString());
+        this.getMetadata().setName(metadata.getOrDefault(KamelHelper.NAME, "").toString());
         this.getMetadata().setAdditionalProperties(
                 (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
         this.getMetadata().setAnnotations(
                 (Map<String, String>) metadata.getOrDefault("annotations", new LinkedHashMap<>()));
         this.getMetadata().setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
-        if (metadata.containsKey("description")) {
-            this.getMetadata().getAnnotations().put(DESCRIPTION_ANNO, String.valueOf(metadata.get("description")));
+        if (metadata.containsKey(KamelHelper.DESCRIPTION)) {
+            this.getMetadata().getAnnotations().put(DESCRIPTION_ANNO,
+                    String.valueOf(metadata.get(KamelHelper.DESCRIPTION)));
         }
         var original_spec = getMetadata().getAdditionalProperties().remove("spec");
         if (original_spec != null && original_spec instanceof IntegrationSpec ospec) {
@@ -83,14 +84,14 @@ public final class Integration extends CustomResource<IntegrationSpec, Integrati
         var flow = new Flow();
         flow.setFrom(new KamelPopulator(catalog).getFlow(iflow.getSteps()));
         if (iflow.getMetadata() != null) {
-            if (iflow.getMetadata().get("name") != null) {
-                flow.setId(iflow.getMetadata().get("name").toString());
+            if (iflow.getMetadata().get(KamelHelper.NAME) != null) {
+                flow.setId(iflow.getMetadata().get(KamelHelper.NAME).toString());
             }
             if (iflow.getMetadata().get("route-configuration-id") != null) {
                 flow.setRouteConfigurationId(iflow.getMetadata().get("route-configuration-id").toString());
             }
-            if (iflow.getMetadata().get("description") != null) {
-                flow.setDescription(iflow.getMetadata().get("description").toString());
+            if (iflow.getMetadata().get(KamelHelper.DESCRIPTION) != null) {
+                flow.setDescription(iflow.getMetadata().get(KamelHelper.DESCRIPTION).toString());
             }
         }
         flowList.add(flow);

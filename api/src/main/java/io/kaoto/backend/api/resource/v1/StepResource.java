@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.kaoto.backend.api.service.deployment.DeploymentService;
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
 import io.kaoto.backend.api.service.step.StepService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.Metadata;
 import io.kaoto.backend.model.jsonviews.Views;
 import io.kaoto.backend.model.step.Step;
@@ -120,7 +121,7 @@ public class StepResource {
             span.setAttribute("steps.kind", kind);
             span.setAttribute("steps.limit", limit != null ? limit.toString() : "null");
             span.setAttribute("steps.start", start != null ? start.toString() : "null");
-            registry.gauge("steps", allSteps.size());
+            registry.gauge(KamelHelper.STEPS, allSteps.size());
         }
 
         if (start != null && start > 0) {
@@ -215,7 +216,7 @@ public class StepResource {
     public Collection<Step> stepsByName(
             final @Parameter(description = "Name of the steps we want to "
                     + "retrieve.")
-            @PathParam("name") String name) {
+            @PathParam(KamelHelper.NAME) String name) {
         return stepService.stepsByName(name);
     }
 

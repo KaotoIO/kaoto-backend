@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
@@ -44,7 +45,7 @@ public class DoCatch implements Serializable {
 
     @JsonCreator
     public DoCatch(
-            final @JsonProperty("steps") List<FlowStep> steps,
+            final @JsonProperty(KamelHelper.STEPS) List<FlowStep> steps,
             final @JsonProperty("exception") List<String> exceptions,
             final @JsonProperty("on-when") Expression onWhen,
             final @JsonProperty("onWhen") Expression onWhen2) {

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Step;
@@ -22,7 +23,7 @@ public class UriFlowStep implements FlowStep {
     @Serial
     private static final long serialVersionUID = 3379417696583645440L;
     public static final String ID = "id";
-    public static final String PARAMETERS = "parameters";
+    public static final String PARAMETERS = KamelHelper.PARAMETERS;
     public static final String URI = "uri";
 
     @JsonCreator
@@ -91,7 +92,7 @@ public class UriFlowStep implements FlowStep {
                 }
             }
             this.getParameters().remove("kaoto-parameters");
-            properties.put("parameters", this.getParameters());
+            properties.put(KamelHelper.PARAMETERS, this.getParameters());
         }
         if (this.getId() != null) {
             properties.put(ID, this.getId());

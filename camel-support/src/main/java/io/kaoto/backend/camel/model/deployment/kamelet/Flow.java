@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.serializer.FlowSerializer;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
@@ -24,7 +25,7 @@ public class Flow extends Flows {
     @JsonProperty("route-configuration-id")
     private String routeConfigurationId;
 
-    @JsonProperty("description")
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     @JsonProperty("from")

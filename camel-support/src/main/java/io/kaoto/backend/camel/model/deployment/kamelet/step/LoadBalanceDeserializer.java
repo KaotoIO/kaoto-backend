@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.kaoto.backend.camel.KamelHelper;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -30,7 +31,7 @@ public class LoadBalanceDeserializer extends JsonDeserializer {
             final var fields = jsonNode.fields();
             while (fields.hasNext()) {
                 var field = fields.next();
-                if (field.getKey().equalsIgnoreCase("steps")) {
+                if (field.getKey().equalsIgnoreCase(KamelHelper.STEPS)) {
                     field.getValue().elements().forEachRemaining(
                             s -> {
                                 try {

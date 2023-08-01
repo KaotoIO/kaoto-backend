@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -69,7 +70,7 @@ public class Aggregate extends EIPStep {
     public static final String FORCE_COMPLETION_ON_STOP1 = "force-completion-on-stop";
     public static final String COMPLETE_ALL_ON_STOP = "completeAllOnStop";
     public static final String COMPLETE_ALL_ON_STOP1 = "complete-all-on-stop";
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
     @JsonProperty("correlation-expression")
     private Expression correlationExpression;
@@ -152,7 +153,7 @@ public class Aggregate extends EIPStep {
     @JsonProperty("complete-all-on-stop")
     private Boolean completeAllOnStop;
 
-    @JsonProperty("description")
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     public Aggregate() {

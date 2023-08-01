@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
@@ -39,7 +40,7 @@ public class WireTap extends EIPStep {
 
     public static final String DESCRIPTION_LABEL = "description";
 
-    public static final String PARAMETERS_LABEL = "parameters";
+    public static final String PARAMETERS_LABEL = KamelHelper.PARAMETERS;
     public static final String URI_LABEL = "uri";
 
     private UriFlowStep uri;

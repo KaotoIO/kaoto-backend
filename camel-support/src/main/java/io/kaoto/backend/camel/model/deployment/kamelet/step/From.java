@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.serializer.FromSerializer;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@JsonPropertyOrder({"steps"})
+@JsonPropertyOrder({KamelHelper.STEPS})
 @JsonDeserialize(using = JsonDeserializer.None.class)
 @JsonSerialize(using = FromSerializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,7 +23,7 @@ import java.util.Map;
 public class From extends UriFlowStep {
     private static final long serialVersionUID = -4601560033032557024L;
 
-    @JsonProperty("steps")
+    @JsonProperty(KamelHelper.STEPS)
     private List<FlowStep> steps;
 
     public List<FlowStep> getSteps() {
@@ -37,7 +38,7 @@ public class From extends UriFlowStep {
     @Override
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getRepresenterProperties();
-        properties.put("steps", this.getSteps());
+        properties.put(KamelHelper.STEPS, this.getSteps());
         return properties;
     }
 }
