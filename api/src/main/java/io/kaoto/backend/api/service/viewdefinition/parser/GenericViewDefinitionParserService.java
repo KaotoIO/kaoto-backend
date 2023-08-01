@@ -5,9 +5,9 @@ import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
 import io.kaoto.backend.model.view.ViewDefinition;
 import io.kaoto.backend.model.view.ViewDefinitionConstraint;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -135,7 +135,7 @@ public class GenericViewDefinitionParserService
                                            final boolean includeBranch) {
         boolean res = false;
         for (Step s : steps) {
-            if (s.getId().equalsIgnoreCase(c.getParameter())) {
+            if (s.getId() != null && s.getId().equalsIgnoreCase(c.getParameter())) {
                 res = true;
                 break;
             }

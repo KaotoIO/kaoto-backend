@@ -17,6 +17,8 @@ import io.kaoto.backend.model.view.ViewDefinitionConstraint;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @QuarkusTest
 class GenericViewDefinitionParserServiceTest {
 
@@ -45,21 +47,36 @@ class GenericViewDefinitionParserServiceTest {
         List<Step> steps = new ArrayList<>();
         List<ViewDefinition> views =
                 viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(0, views.size());
+        assertThat(views).isNotNull().isEmpty();
 
-        steps.add(new Step());
+        steps.add(new Step("id-1",
+                "connector-1", "icon",
+                new ArrayList<>()));
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(0, views.size());
+        assertThat(views).isNotNull().isEmpty();
 
-        Step s = new Step();
+        Step s = new Step("id-2",
+                "connector-1", "icon",
+                new ArrayList<>());
         s.setKind("KAMELET");
         steps.add(s);
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(2, views.size());
+        assertThat(views).isNotNull().hasSize(2);
 
-        steps.add(new Step());
+        steps.add(new Step("id-3",
+                "connector-1", "icon",
+                new ArrayList<>()));
         views = viewDefinitionParserService.parse(steps);
-        Assertions.assertEquals(2, views.size());
+        assertThat(views).isNotNull().hasSize(2);
+    }
+
+    @Test
+    // reproducer for gh-819
+    void checkStepIdIsNull() {
+        List<Step> steps = new ArrayList<>();
+        steps.add(new Step());
+        List<ViewDefinition> views = viewDefinitionParserService.parse(steps);
+        assertThat(views).isNotNull().isEmpty();
     }
 
     @Test
