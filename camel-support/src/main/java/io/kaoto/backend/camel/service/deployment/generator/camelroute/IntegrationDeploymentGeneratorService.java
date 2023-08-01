@@ -68,7 +68,8 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
         try {
             return KamelHelper.YAML_MAPPER.writeValueAsString(integration);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOG.debug("Couldn't parse this integration. ", e);
+            return null;
         }
     }
 
@@ -94,7 +95,8 @@ public class IntegrationDeploymentGeneratorService extends AbstractDeploymentGen
                     metadata != null ? new LinkedHashMap<>(metadata) : Map.of(),
                     catalog));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOG.debug("Couldn't write this integration. ", e);
+            return null;
         }
     }
 

@@ -106,7 +106,8 @@ public class KameletBindingDeploymentGeneratorService extends AbstractDeployment
         try {
             return KamelHelper.YAML_MAPPER.writeValueAsString(binding);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOG.debug("Couldn't parse this binding. ", e);
+            return null;
         }
     }
 
