@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import org.apache.camel.v1alpha1.kameletbindingspec.Sink;
 import org.apache.camel.v1alpha1.kameletbindingspec.Source;
 import org.apache.camel.v1alpha1.kameletbindingspec.Steps;
@@ -20,7 +21,7 @@ public final class KameletBindingStep {
     @JsonProperty("properties")
     private Map<String, Object> properties = new HashMap<>();
 
-    @JsonProperty("parameters")
+    @JsonProperty(KamelHelper.PARAMETERS)
     private Map<String, Object> parameters = new HashMap<>();
 
     public KameletBindingStep() {

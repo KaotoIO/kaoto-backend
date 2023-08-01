@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.ConditionBlock;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@JsonPropertyOrder({"simple", "jq", "jsonpath", "expression", "steps"})
+@JsonPropertyOrder({"simple", "jq", "jsonpath", "expression", KamelHelper.STEPS})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Choice implements Serializable, ConditionBlock {
@@ -30,7 +31,7 @@ public class Choice implements Serializable, ConditionBlock {
     @JsonProperty("expression")
     private Expression expression;
 
-    @JsonProperty("steps")
+    @JsonProperty(KamelHelper.STEPS)
     private List<FlowStep> steps;
 
     public List<FlowStep> getSteps() {

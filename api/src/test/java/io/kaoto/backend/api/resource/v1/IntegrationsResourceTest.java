@@ -2,6 +2,7 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.api.service.language.LanguageService;
+import io.kaoto.backend.camel.KamelHelper;
 import io.quarkus.test.junit.QuarkusTest;
 
 import jakarta.inject.Inject;
@@ -30,6 +31,6 @@ public class IntegrationsResourceTest extends IntegrationsResourceTestAbstract {
     @Override
     protected List<String> getAllLanguages() {
         return languageService.getAll().stream().map(language ->
-                String.valueOf(language.get("name"))).collect(Collectors.toList());
+                String.valueOf(language.get(KamelHelper.NAME))).collect(Collectors.toList());
     }
 }

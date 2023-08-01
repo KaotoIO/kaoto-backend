@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.service.step.parser.kamelet;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletDSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.metadata.ParseCatalog;
@@ -99,7 +100,7 @@ class KameletStepParserServiceTest {
         assertEquals("Preview", annotations.get("camel.apache.org/kamelet.support.level"));
         assertEquals("sink", labels.get("camel.apache.org/kamelet.type"));
         assertEquals("Dropbox", annotations.get("camel.apache.org/kamelet.group"));
-        assertEquals("dropbox-sink", parsed.getMetadata().get("name"));
+        assertEquals("dropbox-sink", parsed.getMetadata().get(KamelHelper.NAME));
 
         assertNotNull(parsed.getSteps());
         assertFalse(parsed.getSteps().isEmpty());
@@ -205,8 +206,8 @@ class KameletStepParserServiceTest {
         assertTrue(parsed.getMetadata().containsKey("labels"));
         assertTrue(parsed.getMetadata().containsKey("annotations"));
         assertTrue(parsed.getMetadata().containsKey("additionalProperties"));
-        assertTrue(parsed.getMetadata().containsKey("name"));
-        for (String key : new String[]{"labels", "annotations", "additionalProperties", "name"}) {
+        assertTrue(parsed.getMetadata().containsKey(KamelHelper.NAME));
+        for (String key : new String[]{"labels", "annotations", "additionalProperties", KamelHelper.NAME}) {
             assertEquals(parsed.getMetadata().get(key), parsed2.getMetadata().get(key));
         }
 
@@ -262,8 +263,8 @@ class KameletStepParserServiceTest {
         var parsedMeta = parsedList.get(0);
         assertThat(parsedMeta.getSteps()).isNull();
         var metadata = parsedMeta.getMetadata();
-        assertThat(metadata).containsEntry("name", "test-kamelet")
-                .containsEntry("description", "metadata annotations kaoto.io/description");
+        assertThat(metadata).containsEntry(KamelHelper.NAME, "test-kamelet")
+                .containsEntry(KamelHelper.DESCRIPTION, "metadata annotations kaoto.io/description");
         Definition definition = (Definition) metadata.get("definition");
         assertThat(definition.getTitle()).isEqualTo("test-kamelet definition title");
         assertThat(definition.getDescription()).isEqualTo("test-kamelet definition description");
@@ -271,8 +272,8 @@ class KameletStepParserServiceTest {
         assertNotNull(parsedFlow);
         assertTrue(dslSpecification.appliesTo(parsedFlow.getSteps()));
         var flowMeta = parsedFlow.getMetadata();
-        assertThat(flowMeta).containsEntry("name", "test-kamelet")
-                .doesNotContainKey("description")
+        assertThat(flowMeta).containsEntry(KamelHelper.NAME, "test-kamelet")
+                .doesNotContainKey(KamelHelper.DESCRIPTION)
                 .containsEntry("template-id", "test-kamelet-template-id")
                 .containsEntry("template-description", "test-kamelet template description")
                 .containsEntry("route-id", "test-kamelet-template-route-id")
@@ -291,8 +292,8 @@ class KameletStepParserServiceTest {
         String parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
         assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
 
-        parsedList.get(0).getMetadata().remove("name");
-        parsedList.get(0).getMetadata().remove("description");
+        parsedList.get(0).getMetadata().remove(KamelHelper.NAME);
+        parsedList.get(0).getMetadata().remove(KamelHelper.DESCRIPTION);
         parsedString = dslSpecification.getDeploymentGeneratorService().parse(parsedList);
         assertThat(parsedString).isEqualToNormalizingNewlines(kamelet);
 

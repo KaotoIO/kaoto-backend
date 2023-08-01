@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
@@ -20,7 +21,7 @@ import io.kaoto.backend.model.step.Step;
 
 public class TryCatch extends EIPStep {
 
-    public static final String STEPS_LABEL = "steps";
+    public static final String STEPS_LABEL = KamelHelper.STEPS;
 
     public static final String DO_CATCH_LABEL = "do-catch";
     public static final String DO_CATCH_LABEL2 = "doCatch";

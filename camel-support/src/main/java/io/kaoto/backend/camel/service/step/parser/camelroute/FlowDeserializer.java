@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.Bean;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
@@ -37,8 +38,8 @@ public class FlowDeserializer extends StdDeserializer<Flow> {
         if (((ObjectNode) root).has("route-configuration-id")) {
             flow.setRouteConfigurationId(((ObjectNode) root).get("route-configuration-id").asText());
         }
-        if (((ObjectNode) root).has("description")) {
-            flow.setDescription(((ObjectNode) root).get("description").asText());
+        if (((ObjectNode) root).has(KamelHelper.DESCRIPTION)) {
+            flow.setDescription(((ObjectNode) root).get(KamelHelper.DESCRIPTION).asText());
         }
         if (((ObjectNode) root).has("from")) {
             var from = ctxt.readTreeAsValue((JsonNode) root.get("from"), From.class);

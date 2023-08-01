@@ -2,6 +2,7 @@ package io.kaoto.backend.api.resource.v2;
 
 import io.kaoto.backend.api.resource.model.FlowsWrapper;
 import io.kaoto.backend.api.resource.v1.model.Integration;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -360,7 +361,7 @@ class IntegrationsResourceTest {
                 .first()
                 .asInstanceOf(InstanceOfAssertFactories.MAP)
                 .hasSize(3)
-                .containsEntry("name", "connectionFactoryBean")
+                .containsEntry(KamelHelper.NAME, "connectionFactoryBean")
                 .containsEntry("type", "#class:org.apache.qpid.jms.JmsConnectionFactory")
                 .containsEntry("properties", Map.of(
                         "remoteURI", "{{remoteURI}}",
@@ -385,7 +386,7 @@ class IntegrationsResourceTest {
         assertThat(flow).isNotNull();
         assertThat(flow.getSteps()).hasSize(2);
         assertThat(flow.getMetadata()).hasSize(6);
-        assertThat(flow.getMetadata().get("name")).asString().isEqualTo("jms-amqp-10-source");
+        assertThat(flow.getMetadata().get(KamelHelper.NAME)).asString().isEqualTo("jms-amqp-10-source");
         assertThat(flow.getMetadata().get("dependencies"))
                 .asInstanceOf(InstanceOfAssertFactories.LIST)
                 .hasSize(3)
@@ -479,13 +480,13 @@ class IntegrationsResourceTest {
 
         assertThat(flows.flows())
                 .extracting(Integration::getMetadata)
-                .extracting(map -> map.get("name"))
+                .extracting(map -> map.get(KamelHelper.NAME))
                 .doesNotHaveDuplicates()
                 .allMatch(name -> Pattern.matches("([A-Za-z0-9])+", name.toString()));
 
         //Let's assign the same name to all flows
         var sameIdentifier = "sameIdentifier";
-        flows.flows().forEach(i -> i.getMetadata().put("name", sameIdentifier));
+        flows.flows().forEach(i -> i.getMetadata().put(KamelHelper.NAME, sameIdentifier));
 
         //Now let's try to recreate the source code
         var res2 = given()
@@ -532,18 +533,18 @@ class IntegrationsResourceTest {
         var randomGeneratedName = "flow-" + System.currentTimeMillis();
         var randomGeneratedDesc = "Description " + System.currentTimeMillis();
         if ("Kamelet".equals(parameters[0]) || "KameletBinding".equals(parameters[0])) {
-            randomGeneratedName += flows.metadata().get("name");
-            flows.metadata().put("name", randomGeneratedName);
-            flows.metadata().put("description", randomGeneratedDesc);
+            randomGeneratedName += flows.metadata().get(KamelHelper.NAME);
+            flows.metadata().put(KamelHelper.NAME, randomGeneratedName);
+            flows.metadata().put(KamelHelper.DESCRIPTION, randomGeneratedDesc);
         } else {
             if (flow.getMetadata() != null) {
-                randomGeneratedName += flow.getMetadata().get("name");
+                randomGeneratedName += flow.getMetadata().get(KamelHelper.NAME);
             }
             if (flow.getMetadata() == null) {
                 flow.setMetadata(new LinkedHashMap<>());
             }
-            flow.getMetadata().put("name", randomGeneratedName);
-            flow.getMetadata().put("description", randomGeneratedDesc);
+            flow.getMetadata().put(KamelHelper.NAME, randomGeneratedName);
+            flow.getMetadata().put(KamelHelper.DESCRIPTION, randomGeneratedDesc);
         }
         //Now let's try to recreate the source code
         var res2 = given()
@@ -573,14 +574,14 @@ class IntegrationsResourceTest {
         switch (parameters[0]) {
             case "Kamelet", "Kamelet Binding" -> {
                 assertThat(flows.metadata())
-                        .containsEntry("name", randomGeneratedName)
-                        .containsEntry("description", randomGeneratedDesc);
+                        .containsEntry(KamelHelper.NAME, randomGeneratedName)
+                        .containsEntry(KamelHelper.DESCRIPTION, randomGeneratedDesc);
                 assertThat(sourceCode).contains("  name: " + randomGeneratedName);
             }
             case "Integration", "Camel Route" -> {
                 assertThat(flow.getMetadata())
-                        .containsEntry("name", randomGeneratedName)
-                        .containsEntry("description", randomGeneratedDesc);
+                        .containsEntry(KamelHelper.NAME, randomGeneratedName)
+                        .containsEntry(KamelHelper.DESCRIPTION, randomGeneratedDesc);
                 assertThat(sourceCode).contains("    id: " + randomGeneratedName);
             }
             default -> {

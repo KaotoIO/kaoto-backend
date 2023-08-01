@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.kamelet.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.Flow;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import io.quarkus.runtime.util.StringUtil;
@@ -36,7 +37,7 @@ public class FlowSerializer extends StdSerializer<Flow> {
                 properties2.put("route-configuration-id", flow.getRouteConfigurationId());
             }
             if (flow.getDescription() != null) {
-                properties2.put("description", flow.getDescription());
+                properties2.put(KamelHelper.DESCRIPTION, flow.getDescription());
             }
             if (flow.getFrom() instanceof Rest) {
                 properties2.put("rest", flow.getFrom());

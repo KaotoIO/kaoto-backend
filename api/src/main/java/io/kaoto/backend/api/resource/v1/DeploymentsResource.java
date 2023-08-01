@@ -93,7 +93,7 @@ public class DeploymentsResource {
                     + "as a custom resource.")
     public String start(
             final @RequestBody String crd,
-            final @Parameter(description = "Name of the resource to start.") @PathParam("name") String name,
+            final @Parameter(description = "Name of the resource to start.") @PathParam(KamelHelper.NAME) String name,
             final @Parameter(description = "Namespace of the cluster where we want to deploy it.")
             @QueryParam("namespace") String namespace) {
 
@@ -143,7 +143,7 @@ public class DeploymentsResource {
     @Operation(summary = "Get CRD",
             description = "Returns the custom resource identified by name.")
     public String resource(
-            final @Parameter(description = "Name of the resource to get.") @PathParam("name")
+            final @Parameter(description = "Name of the resource to get.") @PathParam(KamelHelper.NAME)
             String name,
             final @Parameter(description = "Type of the resource to get", required = true) @NotNull @QueryParam("type")
             String type,
@@ -185,7 +185,7 @@ public class DeploymentsResource {
     @Operation(summary = "Stop/Remove",
             description = "Remove the resource identified by name.")
     public boolean stop(
-            final @Parameter(description = "Name of the resource to get.") @PathParam("name")
+            final @Parameter(description = "Name of the resource to get.") @PathParam(KamelHelper.NAME)
             String name,
             final @Parameter(description = "Type of the resource to get", required = true) @NotNull @QueryParam("type")
             String type,
@@ -211,7 +211,7 @@ public class DeploymentsResource {
     @Blocking
     public Multi<String> logs(
             final @Parameter(description = "Name of the resource of which logs should be retrieved.")
-            @PathParam("name") String name,
+            @PathParam(KamelHelper.NAME) String name,
             final @Parameter(description = "Namespace of the cluster where the resource is running.")
             @QueryParam("namespace") String namespace,
             final @Parameter(description = "The log we want is of this DSL type.")

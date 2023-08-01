@@ -3,6 +3,7 @@ package io.kaoto.backend.api.resource.v1;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.kaoto.backend.camel.KamelHelper;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -170,7 +171,7 @@ public class IntegrationsResource {
 
         if (dsls.isEmpty()) {
             for (var l : languageService.getAll()) {
-                dsls.add(String.valueOf(l.get("name")));
+                dsls.add(String.valueOf(l.get(KamelHelper.NAME)));
             }
         }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.camel.KamelHelper;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -29,7 +30,7 @@ import java.util.Map;
  value: 'org.postgresql.Driver'
  * ```
  */
-@JsonPropertyOrder({"name", "type", "properties", "property"  })
+@JsonPropertyOrder({KamelHelper.NAME, "type", "properties", "property"  })
 @JsonDeserialize(
         using = JsonDeserializer.None.class
 )
@@ -41,7 +42,7 @@ public class Bean implements Serializable {
         super();
     }
 
-    @JsonProperty("name")
+    @JsonProperty(KamelHelper.NAME)
     private String name;
     @JsonProperty("type")
     private String type;

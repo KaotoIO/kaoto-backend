@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.kamelet.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.KameletTemplate;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class KameletTemplateSerializer extends StdSerializer<KameletTemplate> {
             properties.put("id", template.getId());
         }
         if (template.getDescription() != null) {
-            properties.put("description", template.getDescription());
+            properties.put(KamelHelper.DESCRIPTION, template.getDescription());
         }
         if (template.getBeans() != null) {
             properties.put("beans", template.getBeans());

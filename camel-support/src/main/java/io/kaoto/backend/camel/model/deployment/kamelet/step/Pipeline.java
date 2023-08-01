@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 
 public class Pipeline extends EIPStep {
-    public static final String STEPS_LABEL = "steps";
+    public static final String STEPS_LABEL = KamelHelper.STEPS;
 
     @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;

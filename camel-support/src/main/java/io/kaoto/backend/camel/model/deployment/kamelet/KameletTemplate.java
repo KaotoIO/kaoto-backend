@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.serializer.KameletTemplateSerializer;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -30,7 +31,7 @@ public class KameletTemplate extends Template {
     @JsonProperty("id")
     private String id;
 
-    @JsonProperty("description")
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     public KameletTemplate() {

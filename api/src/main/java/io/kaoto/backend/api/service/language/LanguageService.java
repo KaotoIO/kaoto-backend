@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.language;
 
 import io.kaoto.backend.api.service.dsl.DSLSpecification;
+import io.kaoto.backend.camel.KamelHelper;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -78,8 +79,8 @@ public class LanguageService {
                                                final String description) {
         res.computeIfAbsent(key, k -> {
             final var language = new HashMap<String, Object>();
-            language.put("description", description);
-            language.put("name", k);
+            language.put(KamelHelper.DESCRIPTION, description);
+            language.put(KamelHelper.NAME, k);
             return language;
         });
         return res.get(key);

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
@@ -53,7 +54,7 @@ public class LoadBalanceFlowStep implements FlowStep {
         Map<String, Object> step = new HashMap<>();
         Map<String, Object> values = new HashMap<>();
         values.putAll(getProperties());
-        values.put("steps", this.getSteps());
+        values.put(KamelHelper.STEPS, this.getSteps());
         step.put(LOAD_BALANCE_LABEL, values);
         return step;
     }

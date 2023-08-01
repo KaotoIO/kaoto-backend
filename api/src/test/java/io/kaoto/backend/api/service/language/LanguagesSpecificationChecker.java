@@ -1,5 +1,6 @@
 package io.kaoto.backend.api.service.language;
 
+import io.kaoto.backend.camel.KamelHelper;
 import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Assertions;
 
@@ -20,11 +21,11 @@ public class LanguagesSpecificationChecker {
         assertThat(dsls)
                 .as("Check all supported DSLs")
                 .hasSize(4)
-                .extracting(map -> String.valueOf(map.get("name")))
+                .extracting(map -> String.valueOf(map.get(KamelHelper.NAME)))
                 .containsExactlyInAnyOrder("Integration", "Camel Route", "Kamelet", "KameletBinding");
 
         for (var language : dsls) {
-            switch (String.valueOf(language.get("name"))) {
+            switch (String.valueOf(language.get(KamelHelper.NAME))) {
                 case "KameletBinding" -> {
                     new LanguageSpecificationChecker(language)
                             .checkInput("true")
@@ -82,7 +83,7 @@ public class LanguagesSpecificationChecker {
                             .checkVocabulary(Map.of("stepsName", "Steps"));
                 }
                 default -> Assertions.fail(
-                        "Unrecognized DSL name '" + language.get("name") +
+                        "Unrecognized DSL name '" + language.get(KamelHelper.NAME) +
                                 "', please provide test case for it in LanguageSpecificationChecker");
             }
         }
@@ -96,7 +97,7 @@ public class LanguagesSpecificationChecker {
 
         LanguageSpecificationChecker(Map<String, Object> language) {
             this.language = language;
-            this.languageName = String.valueOf(language.get("name"));
+            this.languageName = String.valueOf(language.get(KamelHelper.NAME));
         }
 
 
@@ -167,7 +168,7 @@ public class LanguagesSpecificationChecker {
         }
 
         public LanguageSpecificationChecker checkDescription(String desiredDescription) {
-            ObjectAssert<Object> assertion = assertThat(language.get("description"))
+            ObjectAssert<Object> assertion = assertThat(language.get(KamelHelper.DESCRIPTION))
                     .as(String.format("Check description value in %s language specification", languageName));
             if (desiredDescription == null) {
                 assertion.isNull();

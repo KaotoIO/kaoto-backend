@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.kaoto.backend.camel.KamelHelper;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -140,25 +141,24 @@ public class IntegrationsResource {
 
     private void ensureUniqueNames(FlowsWrapper answer) {
         List<String> usedIds = new ArrayList<>();
-        var name = "name";
         for (var flow : answer.flows()) {
             //Make sure we have a metadata set
             if (flow.getMetadata() == null) {
                 flow.setMetadata(new LinkedHashMap<>());
             }
             //Make sure there is an id/name assigned to all flows
-            if (!flow.getMetadata().containsKey(name)) {
+            if (!flow.getMetadata().containsKey(KamelHelper.NAME)) {
                 flow.getMetadata().put(
-                    name,
+                        KamelHelper.NAME,
                     flow.getDsl().toLowerCase().replaceAll(" ", "") + random.nextInt(99));
             }
             //Make sure it is unique
-            if (usedIds.contains(flow.getMetadata().get(name))) {
+            if (usedIds.contains(flow.getMetadata().get(KamelHelper.NAME))) {
                 flow.getMetadata().put(
-                    name,
-                    String.valueOf(flow.getMetadata().get(name)) + random.nextInt(99));
+                        KamelHelper.NAME,
+                    String.valueOf(flow.getMetadata().get(KamelHelper.NAME)) + random.nextInt(99));
             }
-            usedIds.add(String.valueOf(flow.getMetadata().get(name)));
+            usedIds.add(String.valueOf(flow.getMetadata().get(KamelHelper.NAME)));
         }
     }
 

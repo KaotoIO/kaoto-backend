@@ -21,6 +21,12 @@ import io.kaoto.backend.camel.model.deployment.kamelet.serializer.KameletBinding
 public final class KamelHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KamelHelper.class);
 
+    //Some common constants
+    public final static String STEPS = "steps";
+    public final static String DESCRIPTION = "description";
+    public final static String PARAMETERS = "parameters";
+    public final static String NAME = "name";
+
     public static final ObjectMapper JSON_MAPPER = JsonMapper.builder()
         .build();
 

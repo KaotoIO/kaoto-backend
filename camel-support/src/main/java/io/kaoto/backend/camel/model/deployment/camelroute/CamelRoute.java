@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.KamelHelper;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -57,14 +58,14 @@ public class CamelRoute {
             getFlows().add(f);
         }
 
-        if (f != null && metadata.containsKey("name")) {
-            f.setId(String.valueOf(metadata.get("name")));
+        if (f != null && metadata.containsKey(KamelHelper.NAME)) {
+            f.setId(String.valueOf(metadata.get(KamelHelper.NAME)));
         }
         if (f != null && metadata.containsKey("route-configuration-id")) {
             f.setRouteConfigurationId(String.valueOf(metadata.get("route-configuration-id")));
         }
-        if (f != null && metadata.containsKey("description")) {
-            f.setDescription(String.valueOf(metadata.get("description")));
+        if (f != null && metadata.containsKey(KamelHelper.DESCRIPTION)) {
+            f.setDescription(String.valueOf(metadata.get(KamelHelper.DESCRIPTION)));
         }
     }
 

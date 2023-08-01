@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
@@ -17,12 +18,12 @@ import io.kaoto.backend.model.step.Step;
 
 public class CircuitBreaker extends EIPStep {
 
-    public static final String STEPS_LABEL = "steps";
+    public static final String STEPS_LABEL = KamelHelper.STEPS;
     public static final String ON_FALLBACK_LABEL = "on-fallback";
     public static final String RESILIENCE_4_J_CONFIGURATION_LABEL = "resilience-4j-configuration";
     public static final String FAULT_TOLERANCE_CONFIGURATION_LABEL = "fault-tolerance-configuration";
     public static final String CONFIGURATION_LABEL = "configuration";
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
     public static final String RESILIENCE_4_J_CONFIGURATION_LABEL2 = "resilience4jConfiguration";
     public static final String FAULT_TOLERANCE_CONFIGURATION_LABEL2 = "faultToleranceConfiguration";
 

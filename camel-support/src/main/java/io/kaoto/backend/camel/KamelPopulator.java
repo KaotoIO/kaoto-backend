@@ -90,7 +90,7 @@ public class KamelPopulator {
     public static final String SIMPLE = "simple";
     public static final String JQ = "jq";
     public static final String CONSTANT = "constant";
-    public static final String NAME = "name";
+    public static final String NAME = KamelHelper.NAME;
     public static final String EXPRESSION = "expression";
     public static final String GROOVY = "groovy";
     public static final String JAVASCRIPT = "javascript";
@@ -160,7 +160,7 @@ public class KamelPopulator {
         } else if (to instanceof Map map) {
             UriFlowStep uri = new UriFlowStep();
             uri.setUri(map.getOrDefault("uri", "").toString());
-            var parameters = (Map<String, String>) map.getOrDefault("parameters", Collections.emptyMap());
+            var parameters = (Map<String, String>) map.getOrDefault(KamelHelper.PARAMETERS, Collections.emptyMap());
             if (parameters != null && !parameters.isEmpty()) {
                 uri.setParameters(new LinkedHashMap<>(parameters));
             }
@@ -186,7 +186,7 @@ public class KamelPopulator {
                     (Map<String, Object>) metadata.getOrDefault("additionalProperties", Collections.emptyMap()));
             var original_spec = metadata.remove("spec");
             metaObject.setLabels((Map<String, String>) metadata.getOrDefault("labels", Collections.emptyMap()));
-            metaObject.setName(String.valueOf(metadata.getOrDefault("name", "")));
+            metaObject.setName(String.valueOf(metadata.getOrDefault(KamelHelper.NAME, "")));
             if (original_spec != null && original_spec instanceof KameletSpec ospec) {
                 spec = ospec;
             } else if (original_spec != null && original_spec instanceof Map ospec) {

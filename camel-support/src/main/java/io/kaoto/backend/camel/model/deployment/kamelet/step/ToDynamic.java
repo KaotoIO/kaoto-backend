@@ -2,6 +2,7 @@ package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -26,9 +27,8 @@ public class ToDynamic extends EIPStep {
     public static final String AUTO_START_COMPONENTS_LABEL2 = "autoStartComponents";
     public static final String AUTO_START_COMPONENTS_LABEL = "auto-start-components";
 
-    public static final String DESCRIPTION_LABEL = "description";
-
-    public static final String PARAMETERS_LABEL = "parameters";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
+    public static final String PARAMETERS_LABEL = KamelHelper.PARAMETERS;
 
     private String uri;
     private String pattern;

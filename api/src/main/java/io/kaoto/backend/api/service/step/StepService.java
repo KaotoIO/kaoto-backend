@@ -1,6 +1,7 @@
 package io.kaoto.backend.api.service.step;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.step.Step;
 
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
@@ -48,7 +49,7 @@ public class StepService {
      *
      */
     @WithSpan
-    public Collection<Step> stepsByName(@SpanAttribute(value = "name") final String name) {
+    public Collection<Step> stepsByName(@SpanAttribute(value = KamelHelper.NAME) final String name) {
         return catalog.getReadOnlyCatalog().searchByName(name);
     }
 

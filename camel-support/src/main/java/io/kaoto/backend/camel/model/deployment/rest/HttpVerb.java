@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
@@ -31,7 +32,7 @@ public class HttpVerb implements Serializable {
 
     @JsonProperty("uri")
     private String uri;
-    @JsonProperty("description")
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     @JsonProperty("param")
@@ -45,7 +46,7 @@ public class HttpVerb implements Serializable {
                          final @JsonProperty("produces") String produces,
                          final @JsonProperty("id") String id,
                          final @JsonProperty("uri") String uri,
-                         final @JsonProperty("description") String description,
+                         final @JsonProperty(KamelHelper.DESCRIPTION) String description,
                          final @JsonProperty("param") List<RestParameter> parameterList,
                          final @JsonProperty("to") FlowStep to) {
         this();

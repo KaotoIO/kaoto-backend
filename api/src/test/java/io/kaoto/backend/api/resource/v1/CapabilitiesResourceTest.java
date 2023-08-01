@@ -2,7 +2,6 @@ package io.kaoto.backend.api.resource.v1;
 
 import io.kaoto.backend.api.resource.v1.model.Capabilities;
 import io.kaoto.backend.camel.service.deployment.generator.camelroute.CamelRouteDeploymentGeneratorService;
-import io.kaoto.backend.camel.metadata.parser.step.camelroute.CamelRouteFileProcessor;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletBindingDSLSpecification;
 import io.kaoto.backend.camel.service.dsl.kamelet.KameletDSLSpecification;
 import io.quarkus.test.common.http.TestHTTPEndpoint;

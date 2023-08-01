@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.kaoto.backend.camel.KamelHelper;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -25,8 +26,8 @@ public class RestParameter implements Serializable {
     public static final String COLLECTION_FORMAT_LABEL2 = "collection-format";
     public static final String DATA_FORMAT_LABEL = "dataFormat";
     public static final String DATA_FORMAT_LABEL2 = "data-format";
-    public static final String DESCRIPTION_LABEL = "description";
-    public static final String NAME_LABEL = "name";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
+    public static final String NAME_LABEL = KamelHelper.NAME;
     public static final String REQUIRED_LABEL = "required";
     public static final String TYPE_LABEL = "type";
     public static final String EXAMPLES_LABEL = "examples";
