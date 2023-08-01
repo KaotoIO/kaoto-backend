@@ -23,11 +23,14 @@ import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class CamelRouteDeploymentGeneratorService implements DeploymentGeneratorService {
 
     private StepCatalog catalog;
+    private static final Logger LOG = LoggerFactory.getLogger(CamelRouteDeploymentGeneratorService.class);
 
     public CamelRouteDeploymentGeneratorService() {
         //Empty for injection
@@ -44,7 +47,8 @@ public class CamelRouteDeploymentGeneratorService implements DeploymentGenerator
         try {
             return KamelHelper.YAML_MAPPER.writeValueAsString(camelRoute);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOG.debug("Couldn't parse this camel route. ", e);
+            return null;
         }
     }
 

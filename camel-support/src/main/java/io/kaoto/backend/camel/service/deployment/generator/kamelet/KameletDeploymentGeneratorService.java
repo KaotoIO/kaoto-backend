@@ -52,7 +52,8 @@ public class KameletDeploymentGeneratorService implements DeploymentGeneratorSer
                     parameters != null ? new ArrayList<>(parameters) : List.of(),
                     catalog));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOG.debug("Couldn't write this kamelet. ", e);
+            return null;
         }
     }
 
