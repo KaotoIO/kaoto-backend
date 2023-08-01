@@ -12,7 +12,7 @@ repository:
     git:
       -
         url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog.git"
-        tag: "test-202302"
+        tag: "main"
 
 crd:
   default: "KameletBinding"

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.kaoto.backend.model.view.ViewDefinition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 
 @QuarkusTest
 @TestHTTPEndpoint(ViewDefinitionResource.class)
@@ -67,15 +68,17 @@ class ViewDefinitionResourceTest {
 
         final var mapper = new ObjectMapper();
         final var json = mapper.writeValueAsString(steps);
-        var res = given()
+        ViewDefinition[] viewDefinitions = given()
                 .when().body(json)
                 .contentType(MediaType.APPLICATION_JSON).post()
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
-        res.body("$.size()", is(1));
-        assertEquals(res.extract().path("type"), Arrays.asList(new String[]{
-                "generic"}));
-
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(ViewDefinition[].class);
+        assertThat(viewDefinitions)
+                .isNotEmpty()
+                .hasSize(1)
+                .extracting(ViewDefinition::getType)
+                .containsExactlyInAnyOrder("generic");
     }
 
     @Test
@@ -101,15 +104,17 @@ class ViewDefinitionResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().body().as(Integration.class);
 
-        var res = given()
+        ViewDefinition[] viewDefinitions = given()
                 .when().body((new ObjectMapper()).writeValueAsString(integration.getSteps()))
                 .contentType(MediaType.APPLICATION_JSON).post()
                 .then()
                 .log().body()
-                .statusCode(Response.Status.OK.getStatusCode());
-        res.body("$.size()", is(4));
-        assertEquals(res.extract().path("type"), Arrays.asList(new String[]{
-                "step", "step", "generic", "step"}));
-
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(ViewDefinition[].class);
+        assertThat(viewDefinitions)
+                .isNotEmpty()
+                .hasSize(4)
+                .extracting(ViewDefinition::getType)
+                .containsExactlyInAnyOrder("step", "step", "generic", "step");
     }
 }
