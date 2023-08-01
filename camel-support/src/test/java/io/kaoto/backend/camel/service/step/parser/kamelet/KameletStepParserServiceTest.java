@@ -39,6 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @QuarkusTest
 class KameletStepParserServiceTest {
 
+    private static final String VERSION = "3.21.0";
+
     private static String kamelet;
     private static String incomplete;
     private static String beansKamelet;
@@ -76,7 +78,7 @@ class KameletStepParserServiceTest {
 
         if (catalog.getReadOnlyCatalog().searchByID("log-producer") == null) {
             String camelGit = "https://github.com/apache/camel/"
-                    + "archive/refs/tags/camel-3.18.2.zip";
+                    + "archive/refs/tags/camel-" + VERSION + ".zip";
 
             ParseCatalog<Step> camelParser = parseCatalog.getParser(camelGit);
             List<Step> steps = camelParser.parse().join();

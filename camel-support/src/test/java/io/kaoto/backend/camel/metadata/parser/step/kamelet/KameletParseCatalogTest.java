@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -38,7 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WithKubernetesTestServer
 class KameletParseCatalogTest {
 
-    private static final String FILE_NAME = "camel-kamelets-3.21.0.jar";
+    private static final String FILE_NAME = "camel-kamelets-%s.jar";
+
+    private static final String VERSION = "3.21.0";
 
     private static final Logger LOG = Logger.getLogger(KameletParseCatalogTest.class);
 
@@ -69,7 +72,7 @@ class KameletParseCatalogTest {
     @Test
     void getSteps() {
         ParseCatalog<Step> kameletParser =
-                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.21.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v" + VERSION);
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         List<Step> steps = kameletParser.parse().join();
@@ -192,11 +195,11 @@ class KameletParseCatalogTest {
     void compareJarAndGit() {
 
         ParseCatalog<Step> kameletParserGit =
-                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v3.21.0");
+                parseCatalog.getParser("https://github.com/apache/camel-kamelets.git", "v" + VERSION);
         List<Step> stepsGit = kameletParserGit.parse().join();
 
         String jarUrl = "https://repo1.maven.org/maven2/org/apache/camel/"
-                + "kamelets/camel-kamelets/3.21.0/" + FILE_NAME;
+                + "kamelets/camel-kamelets/" + VERSION + "/" + getFileName();
 
         ParseCatalog<Step> kameletParserJar =
                 parseCatalog.getParser(
@@ -213,7 +216,7 @@ class KameletParseCatalogTest {
 
     @Test
     void loadFromLocalZip() {
-        String camelZip = "resource://" + FILE_NAME;
+        String camelZip = "resource://" + getFileName();
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
 
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
@@ -233,7 +236,7 @@ class KameletParseCatalogTest {
     @Test
 //    @Timeout(value = 200, unit = TimeUnit.MILLISECONDS)
     void testSpeed() {
-        String camelZip = "resource://" + FILE_NAME;
+        String camelZip = "resource://" + getFileName();
         InMemoryCatalog<Step> catalog = new InMemoryCatalog<>();
         ParseCatalog<Step> camelParser = parseCatalog.getParser(camelZip);
         List<Step> steps = camelParser.parse().join();
@@ -243,7 +246,7 @@ class KameletParseCatalogTest {
     public int loadAllKameletsFromResourcesIntoCluster() {
         int loadedResources = 0;
         try (ZipInputStream zis = new ZipInputStream(
-                Objects.requireNonNull(this.getClass().getResourceAsStream("/" + FILE_NAME)))) {
+                Objects.requireNonNull(this.getClass().getResourceAsStream("/" + getFileName())))) {
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
                 if (zipEntry.getName().contains("kamelets/") && zipEntry.getName().contains(".yaml")) {
@@ -262,5 +265,9 @@ class KameletParseCatalogTest {
             LOG.error("Problem with processing zip file.", e);
         }
         return loadedResources;
+    }
+
+    private static String getFileName() {
+        return String.format(FILE_NAME, VERSION);
     }
 }
