@@ -53,7 +53,18 @@ For more information and all configuration properties, see [Quarkus OpenTelemetr
 For proper functionality with the Kaoto-ui, it is necessary to set `quarkus.http.cors.origins` configuration property with Kaoto-ui URL(s).
 For more information and all configuration properties, see [Quarkus HTTP Reference](https://quarkus.io/guides/http-reference#quarkus-vertx-http-config-group-cors-cors-config_configuration)
 > **_NOTE:_** When you run Kaoto-backend in the dev mode, all origins are accepted. (`origins: /.*/`)
- 
+
+### Steps catalog resources
+
+Actual versions:
+*   Kaoto camel components: **94ef243f574ad42b85dafe59b3d36858c47fcd38**
+*   Kaoto view definitions: **94aae37dee4356d51ac34bfb757eb43a85ad2c0a**
+*   Camel-connectors: **3.21.0**
+*   Camel-connectors: **3.21.0**
+
+#### Updating step resources
+The repository contains steps repositories zip files which are bundled with Kaoto-backend during building.
+For upgrading those resources, run `update-resources.sh` script. 
 
 ## Developing Kaoto
 
@@ -65,8 +76,8 @@ The API static swagger documentation is on  https://kaotoio.github.io/kaoto-back
 
 You have to install in your machine
 
-* Maven >= 3.6
-* JDK >= 17
+*   Maven >= 3.6
+*   JDK >= 17
 
 ### Building 
 
