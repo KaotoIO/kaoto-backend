@@ -1,12 +1,9 @@
 repository:
   step:
     jar:
-      - url: "https://repo1.maven.org/maven2/org/apache/camel/kamelets/camel-kamelets/3.21.0/camel-kamelets-3.21.0.jar"
-      - url: "resource://camel-3.19.0.zip"
-    git:
-      -
-        url: "https://github.com/KaotoIO/camel-component-metadata.git"
-        tag: "main"
+      - url: "resource://camel-kamelets-3.21.0.jar"
+      - url: "resource://camel-connectors-3.21.0.zip"
+      - url: "resource://camel-component-metadata.zip"
   viewdefinition:
     jar:
-      - url: "https://github.com/KaotoIO/kaoto-viewdefinition-catalog/archive/refs/tags/test.zip"
+      - url: "resource://view-definition.zip"

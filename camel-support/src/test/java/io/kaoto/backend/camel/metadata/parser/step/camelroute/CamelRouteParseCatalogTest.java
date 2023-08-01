@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @QuarkusTest
 class CamelRouteParseCatalogTest {
 
-    public static final String CAMEL_ZIP = "resource://camel-3.19.0.zip";
+    public static final String CAMEL_ZIP = "resource://camel-connectors-3.21.0.zip";
 
     @Inject
     public void setParseCatalog(final CamelRouteParseCatalog parseCatalog) {
