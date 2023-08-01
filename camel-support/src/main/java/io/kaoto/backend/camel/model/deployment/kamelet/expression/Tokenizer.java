@@ -3,6 +3,7 @@ package io.kaoto.backend.camel.model.deployment.kamelet.expression;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 import io.quarkus.runtime.annotations.RegisterForReflection;
@@ -92,58 +93,29 @@ public class Tokenizer extends Expression {
         if (obj instanceof String t) {
             setToken(t);
         } else if (obj instanceof Tokenizer e) {
-            setConstant(e.getConstant());
-            setSimple(e.getSimple());
-            setJq(e.getJq());
-
-            this.setToken(e.getToken());
-            this.setEndToken(e.getEndToken());
-            this.setInheritNamespaceTagName(e.getInheritNamespaceTagName());
-            this.setHeaderName(e.getHeaderName());
-            this.setRegex(e.getRegex());
-            this.setXml(e.getXml());
-            this.setIncludeTokens(e.getIncludeTokens());
-            this.setGroup(e.getGroup());
-            this.setGroupDelimiter(e.getGroupDelimiter());
-            this.setSkipFirst(e.getSkipFirst());
-            this.setTrim(e.getTrim());
+            copyFrom(e);
         } else if (obj instanceof Map map) {
-            if (map.containsKey(TOKEN_LABEL) && map.get(TOKEN_LABEL) != null) {
-                setToken(map.get(TOKEN_LABEL).toString());
-            }
-            if (map.containsKey(END_TOKEN_LABEL) && map.get(END_TOKEN_LABEL) != null) {
-                setEndToken(map.get(END_TOKEN_LABEL).toString());
-            }
-            if (map.containsKey(INHERIT_NAMESPACE_TAG_NAME_LABEL)
-                    && map.get(INHERIT_NAMESPACE_TAG_NAME_LABEL) != null) {
-                setInheritNamespaceTagName(map.get(INHERIT_NAMESPACE_TAG_NAME_LABEL).toString());
-            }
-            if (map.containsKey(HEADER_NAME_LABEL) && map.get(HEADER_NAME_LABEL) != null) {
-                setHeaderName(map.get(HEADER_NAME_LABEL).toString());
-            }
-            if (map.containsKey(REGEX_LABEL) && map.get(REGEX_LABEL) != null) {
-                setRegex(Boolean.valueOf(map.get(REGEX_LABEL).toString()));
-            }
-            if (map.containsKey(XML_LABEL) && map.get(XML_LABEL) != null) {
-                setXml(Boolean.valueOf(map.get(REGEX_LABEL).toString()));
-            }
-            if (map.containsKey(INCLUDE_TOKENS_LABEL) && map.get(INCLUDE_TOKENS_LABEL) != null) {
-                setIncludeTokens(map.get(INCLUDE_TOKENS_LABEL).toString());
-            }
-            if (map.containsKey(GROUP_LABEL) && map.get(GROUP_LABEL) != null) {
-                setGroup(map.get(GROUP_LABEL).toString());
-            }
-            if (map.containsKey(GROUP_DELIMITER_LABEL) && map.get(GROUP_DELIMITER_LABEL) != null) {
-                setGroupDelimiter(map.get(GROUP_DELIMITER_LABEL).toString());
-            }
-            if (map.containsKey(SKIP_FIRST_LABEL) && map.get(SKIP_FIRST_LABEL) != null) {
-                setSkipFirst(Boolean.valueOf(map.get(REGEX_LABEL).toString()));
-            }
-            if (map.containsKey(TRIM_LABEL) && map.get(TRIM_LABEL) != null) {
-                setTrim(Boolean.valueOf(map.get(REGEX_LABEL).toString()));
-            }
+            copyFrom(KamelHelper.GENERIC_MAPPER.convertValue(map, Tokenizer.class));
             setPropertiesFromMap(map, this);
         }
+    }
+
+    private void copyFrom(Tokenizer e) {
+        setConstant(e.getConstant());
+        setSimple(e.getSimple());
+        setJq(e.getJq());
+
+        this.setToken(e.getToken());
+        this.setEndToken(e.getEndToken());
+        this.setInheritNamespaceTagName(e.getInheritNamespaceTagName());
+        this.setHeaderName(e.getHeaderName());
+        this.setRegex(e.getRegex());
+        this.setXml(e.getXml());
+        this.setIncludeTokens(e.getIncludeTokens());
+        this.setGroup(e.getGroup());
+        this.setGroupDelimiter(e.getGroupDelimiter());
+        this.setSkipFirst(e.getSkipFirst());
+        this.setTrim(e.getTrim());
     }
 
     @Override

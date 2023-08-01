@@ -22,10 +22,10 @@ public final class KamelHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KamelHelper.class);
 
     //Some common constants
-    public final static String STEPS = "steps";
-    public final static String DESCRIPTION = "description";
-    public final static String PARAMETERS = "parameters";
-    public final static String NAME = "name";
+    public static final String STEPS = "steps";
+    public static final String DESCRIPTION = "description";
+    public static final String PARAMETERS = "parameters";
+    public static final String NAME = "name";
 
     public static final ObjectMapper JSON_MAPPER = JsonMapper.builder()
         .build();
@@ -38,6 +38,8 @@ public final class KamelHelper {
         .build()
             .registerModule(new SimpleModule()
                     .addSerializer(KameletBindingSpec.class, new KameletBindingSpecSerializer()));
+
+    public static final ObjectMapper GENERIC_MAPPER = new ObjectMapper();
 
     private KamelHelper() {
         // final class
