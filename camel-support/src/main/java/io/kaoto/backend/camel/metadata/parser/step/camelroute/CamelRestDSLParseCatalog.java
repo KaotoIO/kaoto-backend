@@ -1,23 +1,25 @@
 package io.kaoto.backend.camel.metadata.parser.step.camelroute;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.rest.Rest;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.EmptyParseCatalog;
 import io.kaoto.backend.metadata.parser.ProcessFile;
+import io.kaoto.backend.model.parameter.ArrayParameter;
+import io.kaoto.backend.model.parameter.BooleanParameter;
 import io.kaoto.backend.model.parameter.ObjectParameter;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.parameter.StringParameter;
 import io.kaoto.backend.model.step.Step;
 import io.smallrye.common.constraint.NotNull;
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 🐱class CamelRestDSLParseCatalog
@@ -54,10 +56,64 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
                 new StringParameter(Rest.PATH_LABEL, "Path of the endpoint",
                         "Path where this endpoint is listening.", null, null, null,null, null);
         parameters.add(path);
-        final var description =
-                new StringParameter(Rest.DESCRIPTION_LABEL, "Description of the endpoint",
-                        "Human readable description of this endpoint.", null, null, null,null, null);
-        parameters.add(description);
+
+        var bparameter = new BooleanParameter();
+        bparameter.setId(Rest.SKIP_BINDING_ON_ERROR_CODE_LABEL);
+        bparameter.setDescription("Should we skip the binding on error?");
+        bparameter.setTitle("Skip binding on error code");
+        parameters.add(bparameter);
+
+        bparameter = new BooleanParameter();
+        bparameter.setId(Rest.API_DOCS_LABEL);
+        bparameter.setDescription("Does it have API DOCS?");
+        bparameter.setTitle("API DOCS");
+        parameters.add(bparameter);
+
+        bparameter = new BooleanParameter();
+        bparameter.setId(Rest.CLIENT_REQUEST_VALIDATION_LABEL);
+        bparameter.setDescription("Request validation from the client?");
+        bparameter.setTitle("Client Request Validation");
+        parameters.add(bparameter);
+
+        bparameter = new BooleanParameter();
+        bparameter.setId(Rest.ENABLE_CORS_LABEL);
+        bparameter.setDescription("This configuration allows you to specify if you can query this API from outside " +
+                "your domain.");
+        bparameter.setTitle("Enable CORS");
+        parameters.add(bparameter);
+
+        var parameter = new StringParameter();
+        parameter.setId(Rest.BINDING_MODE_LABEL);
+        parameter.setDescription("Binding Mode");
+        parameter.setEnum(new String[]{ "off", "auto", "json", "xml", "json_xml" });
+        parameter.setExamples(new String[]{ "auto" });
+        parameter.setTitle("Binding Mode");
+        parameters.add(parameter);
+
+        parameter = new StringParameter();
+        parameter.setId(Rest.ID_LABEL);
+        parameter.setDescription("Identifier of this REST definition.");
+        parameter.setTitle("Identifier (ID)");
+        parameters.add(parameter);
+
+        parameter = new StringParameter();
+        parameter.setId(Rest.TAG_LABEL);
+        parameter.setDescription("Tag for this REST definition.");
+        parameter.setTitle("Tag");
+        parameters.add(parameter);
+
+        var oparameter = new ObjectParameter();
+        oparameter.setId(Rest.SECURITY_DEFINITIONS_LABEL);
+        oparameter.setDescription("Security definitions.");
+        oparameter.setTitle("Security Definitions");
+        parameters.add(oparameter);
+
+        var aparameter = new ArrayParameter();
+        aparameter.setId(Rest.SECURITY_REQUIREMENTS_LABEL);
+        aparameter.setDescription("Security requirements.");
+        aparameter.setTitle("Security Requirements");
+        parameters.add(aparameter);
+
         step.setParameters(parameters);
         return step;
     }
@@ -107,7 +163,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         parameters.add(parameter);
 
         parameter = new StringParameter();
-        parameter.setId(Rest.DESCRIPTION_LABEL);
+        parameter.setId(KamelHelper.DESCRIPTION);
         parameter.setDescription("Description of the endpoint.");
         parameter.setTitle("Description");
         parameters.add(parameter);

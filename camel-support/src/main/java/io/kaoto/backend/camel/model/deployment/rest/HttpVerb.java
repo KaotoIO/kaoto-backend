@@ -3,8 +3,6 @@ package io.kaoto.backend.camel.model.deployment.rest;
 import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -15,7 +13,6 @@ import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonSerialize(using = HttpVerbSerializer.class)
 public class HttpVerb implements Serializable {
@@ -41,26 +38,8 @@ public class HttpVerb implements Serializable {
     @JsonProperty("to")
     private FlowStep to;
 
-    @JsonCreator
-    public HttpVerb(final @JsonProperty("consumes") String consumes,
-                         final @JsonProperty("produces") String produces,
-                         final @JsonProperty("id") String id,
-                         final @JsonProperty("uri") String uri,
-                         final @JsonProperty(KamelHelper.DESCRIPTION) String description,
-                         final @JsonProperty("param") List<RestParameter> parameterList,
-                         final @JsonProperty("to") FlowStep to) {
-        this();
-        setConsumes(consumes);
-        setProduces(produces);
-        setId(id);
-        setUri(uri);
-        setParameterList(parameterList);
-        setTo(to);
-        setDescription(description);
-    }
-
     public HttpVerb() {
-
+        //Need for serialization
     }
 
     public String getConsumes() {

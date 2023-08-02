@@ -60,6 +60,9 @@ public class CamelRoute {
 
         if (f != null && metadata.containsKey(KamelHelper.NAME)) {
             f.setId(String.valueOf(metadata.get(KamelHelper.NAME)));
+            if (f.getFrom() instanceof Rest rest) {
+                rest.setId(String.valueOf(metadata.get(KamelHelper.NAME)));
+            }
         }
         if (f != null && metadata.containsKey("route-configuration-id")) {
             f.setRouteConfigurationId(String.valueOf(metadata.get("route-configuration-id")));

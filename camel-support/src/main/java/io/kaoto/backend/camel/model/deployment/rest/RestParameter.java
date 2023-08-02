@@ -1,7 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.rest;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -12,7 +11,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RestParameter implements Serializable {
     private static final long serialVersionUID = -2303893619555604361L;
@@ -32,97 +30,64 @@ public class RestParameter implements Serializable {
     public static final String TYPE_LABEL = "type";
     public static final String EXAMPLES_LABEL = "examples";
 
+    @JsonProperty(DATA_TYPE_LABEL)
+    @JsonAlias(DATA_TYPE_LABEL2)
     private String dataType;
 
+    @JsonProperty(DEFAULT_VALUE_LABEL)
+    @JsonAlias(DEFAULT_VALUE_LABEL2)
     private Object defaultValue;
 
+    @JsonProperty(DESCRIPTION_LABEL)
     private String description;
 
+    @JsonProperty(NAME_LABEL)
     private String name;
 
+    @JsonProperty(REQUIRED_LABEL)
     private Boolean required;
+
+    @JsonProperty(TYPE_LABEL)
 
     private String type;
 
+    @JsonProperty(ARRAY_TYPE_LABEL)
+    @JsonAlias(ARRAY_TYPE_LABEL2)
+
     private String arrayType;
 
+    @JsonProperty(COLLECTION_FORMAT_LABEL)
+    @JsonAlias(COLLECTION_FORMAT_LABEL2)
     private String collectionFormat;
 
+    @JsonProperty(DATA_FORMAT_LABEL)
+    @JsonAlias(DATA_FORMAT_LABEL2)
     private String dataFormat;
 
+    @JsonProperty(EXAMPLES_LABEL)
     private Object examples;
 
 
-    @JsonCreator
-    public RestParameter(final @JsonProperty(DATA_TYPE_LABEL2) String dataType,
-                         final @JsonProperty(DATA_TYPE_LABEL) String dataType2,
-                         final @JsonProperty(DEFAULT_VALUE_LABEL2) Object defaultValue,
-                         final @JsonProperty(DEFAULT_VALUE_LABEL) Object defaultValue2,
-                         final @JsonProperty(DESCRIPTION_LABEL) String description,
-                         final @JsonProperty(NAME_LABEL) String name,
-                         final @JsonProperty(REQUIRED_LABEL) Boolean required,
-                         final @JsonProperty(TYPE_LABEL) String type,
-                         final @JsonProperty(ARRAY_TYPE_LABEL2) String arrayType,
-                         final @JsonProperty(ARRAY_TYPE_LABEL) String arrayType2,
-                         final @JsonProperty(COLLECTION_FORMAT_LABEL2) String collectionFormat,
-                         final @JsonProperty(COLLECTION_FORMAT_LABEL) String collectionFormat2,
-                         final @JsonProperty(DATA_FORMAT_LABEL2) String dataFormat,
-                         final @JsonProperty(DATA_FORMAT_LABEL) String dataFormat2,
-                         final @JsonProperty(EXAMPLES_LABEL) Object examples) {
+    public RestParameter() {
+    //Needed for serialization
+    }
+
+    public RestParameter(final RestParameter that) {
         super();
-        setDataType(dataType != null ? dataType : dataType2);
-        setDefaultValue(defaultValue != null ? defaultValue : defaultValue2);
-        setDescription(description);
-        setName(name);
-        setRequired(required);
-        setType(type);
-        setArrayType(arrayType != null ? arrayType : arrayType2);
-        setCollectionFormat(collectionFormat != null ? collectionFormat : collectionFormat2);
-        setDataFormat(dataFormat != null ? dataFormat : dataFormat2);
-        setExamples(examples);
+        setDataType(that.getDataType());
+        setDefaultValue(that.getDefaultValue());
+        setDescription(that.getDescription());
+        setName(that.getName());
+        setRequired(that.getRequired());
+        setType(that.getType());
+        setArrayType(that.getArrayType());
+        setCollectionFormat(that.getCollectionFormat());
+        setDataFormat(that.getDataFormat());
+        setExamples(that.getExamples());
     }
 
     public RestParameter(Map<String, Object> map) {
-        if (map.containsKey(DATA_TYPE_LABEL) && map.get(DATA_TYPE_LABEL) != null) {
-            setDataType(String.valueOf(map.get(DATA_TYPE_LABEL)));
-        } else if (map.containsKey(DATA_TYPE_LABEL2) && map.get(DATA_TYPE_LABEL2) != null) {
-            setDataType(String.valueOf(map.get(DATA_TYPE_LABEL2)));
-        }
-        if (map.containsKey(DEFAULT_VALUE_LABEL) && map.get(DEFAULT_VALUE_LABEL) != null) {
-            setDefaultValue(map.get(DEFAULT_VALUE_LABEL));
-        } else if (map.containsKey(DEFAULT_VALUE_LABEL2) && map.get(DEFAULT_VALUE_LABEL2) != null) {
-            setDefaultValue(map.get(DEFAULT_VALUE_LABEL2));
-        }
-        if (map.containsKey(ARRAY_TYPE_LABEL) && map.get(ARRAY_TYPE_LABEL) != null) {
-            setArrayType(String.valueOf(map.get(ARRAY_TYPE_LABEL)));
-        } else if (map.containsKey(ARRAY_TYPE_LABEL2) && map.get(ARRAY_TYPE_LABEL2) != null) {
-            setArrayType(String.valueOf(map.get(ARRAY_TYPE_LABEL2)));
-        }
-        if (map.containsKey(COLLECTION_FORMAT_LABEL) && map.get(COLLECTION_FORMAT_LABEL) != null) {
-            setCollectionFormat(String.valueOf(map.get(COLLECTION_FORMAT_LABEL)));
-        } else if (map.containsKey(COLLECTION_FORMAT_LABEL2) && map.get(COLLECTION_FORMAT_LABEL2) != null) {
-            setCollectionFormat(String.valueOf(map.get(COLLECTION_FORMAT_LABEL2)));
-        }
-        if (map.containsKey(DATA_FORMAT_LABEL) && map.get(DATA_FORMAT_LABEL) != null) {
-            setDataFormat(String.valueOf(map.get(DATA_FORMAT_LABEL)));
-        } else if (map.containsKey(DATA_FORMAT_LABEL2) && map.get(DATA_FORMAT_LABEL2) != null) {
-            setDataFormat(String.valueOf(map.get(DATA_FORMAT_LABEL2)));
-        }
-        if (map.containsKey(DESCRIPTION_LABEL) && map.get(DESCRIPTION_LABEL) != null) {
-            setDescription(String.valueOf(map.get(DESCRIPTION_LABEL)));
-        }
-        if (map.containsKey(NAME_LABEL) && map.get(NAME_LABEL) != null) {
-            setName(String.valueOf(map.get(NAME_LABEL)));
-        }
-        if (map.containsKey(REQUIRED_LABEL) && map.get(REQUIRED_LABEL) != null) {
-            setRequired(Boolean.valueOf(String.valueOf(map.get(REQUIRED_LABEL))));
-        }
-        if (map.containsKey(TYPE_LABEL) && map.get(TYPE_LABEL) != null) {
-            setType(String.valueOf(map.get(TYPE_LABEL)));
-        }
-        if (map.containsKey(EXAMPLES_LABEL) && map.get(EXAMPLES_LABEL) != null) {
-            setExamples(map.get(EXAMPLES_LABEL));
-        }
+        this(KamelHelper.GENERIC_MAPPER.convertValue(map, RestParameter.class));
     }
 
     public String getDataType() {
