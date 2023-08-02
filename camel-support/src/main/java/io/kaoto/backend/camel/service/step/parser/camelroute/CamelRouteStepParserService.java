@@ -89,6 +89,11 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
                     res.setMetadata(new LinkedHashMap<>());
                 }
                 res.getMetadata().put(KamelHelper.NAME, flow.getId());
+            } else if (flow.getRest() != null && flow.getRest().getId() != null) {
+                if (res.getMetadata() == null) {
+                    res.setMetadata(new LinkedHashMap<>());
+                }
+                res.getMetadata().put(KamelHelper.NAME, flow.getRest().getId());
             }
             if (!StringUtil.isNullOrEmpty(flow.getRouteConfigurationId())) {
                 if (res.getMetadata() == null) {

@@ -1,26 +1,24 @@
 package io.kaoto.backend.camel.model.deployment.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import io.kaoto.backend.camel.KamelHelper;
-import org.jboss.logging.Logger;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.step.From;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Branch;
 import io.kaoto.backend.model.step.Step;
+import org.jboss.logging.Logger;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -43,13 +41,10 @@ import io.kaoto.backend.model.step.Step;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Rest extends From {
-    protected static final Logger log = Logger.getLogger(Rest.class);
-    private static final long serialVersionUID = 8685166491995899231L;
     public static final String CONSUMES_LABEL = "consumes";
     public static final String PRODUCES_LABEL = "produces";
     public static final String URI_LABEL = "uri";
     public static final String ID_LABEL = "id";
-    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
     public static final String PATH_LABEL = "path";
     public static final String GET_LABEL = "get";
     public static final String HEAD_LABEL = "head";
@@ -63,7 +58,16 @@ public class Rest extends From {
     public static final String PARAM_LABEL = "param";
     public static final String CAMEL_REST_CONSUMES = "CAMEL-REST-CONSUMES";
     public static final String CAMEL_REST_DSL = "CAMEL-REST-DSL";
-
+    public static final String API_DOCS_LABEL = "api-docs";
+    public static final String BINDING_MODE_LABEL = "binding-mode";
+    public static final String CLIENT_REQUEST_VALIDATION_LABEL = "client-request-validation";
+    public static final String ENABLE_CORS_LABEL = "enable-cors";
+    public static final String SKIP_BINDING_ON_ERROR_CODE_LABEL = "skip-binding-on-error-code";
+    public static final String TAG_LABEL = "tag";
+    public static final String SECURITY_DEFINITIONS_LABEL = "security-definitions";
+    public static final String SECURITY_REQUIREMENTS_LABEL = "security-requirements";
+    protected static final Logger log = Logger.getLogger(Rest.class);
+    private static final long serialVersionUID = 8685166491995899231L;
     @JsonProperty(PATH_LABEL)
     private String path;
     @JsonProperty(GET_LABEL)
@@ -85,48 +89,73 @@ public class Rest extends From {
     @JsonProperty(PATCH_LABEL)
     private List<HttpVerb> patch;
 
-    @JsonProperty(DESCRIPTION_LABEL)
-    private String description;
+    @JsonProperty(API_DOCS_LABEL)
+    @JsonAlias("apiDocs")
+    private Boolean apiDocs;
+
+    @JsonProperty(BINDING_MODE_LABEL)
+    @JsonAlias("bindingMode")
+    private String bindingMode;
+
+    @JsonProperty(CLIENT_REQUEST_VALIDATION_LABEL)
+    @JsonAlias("clientRequestValidation")
+    private Boolean clientRequestValidation;
+
+    @JsonProperty(ENABLE_CORS_LABEL)
+    @JsonAlias("enableCors")
+    private Boolean enableCors;
+
+    @JsonProperty(SKIP_BINDING_ON_ERROR_CODE_LABEL)
+    @JsonAlias("skipBindingOnErrorCode")
+    private Boolean skipBindingOnErrorCode;
+
+    @JsonProperty(ID_LABEL)
+    private String id;
+
+    @JsonProperty(TAG_LABEL)
+    private String tag;
+
+    @JsonProperty(SECURITY_DEFINITIONS_LABEL)
+    @JsonAlias("securityDefinitions")
+    private Object securityDefinitions;
+
+    @JsonProperty(SECURITY_REQUIREMENTS_LABEL)
+    @JsonAlias("securityRequirements")
+    private Object[] securityRequirements;
+
+
     private KamelPopulator kamelPopulator;
 
-
     public Rest() {
-        //empty for serialization
-    }
-
-    @JsonCreator
-    public Rest(final @JsonProperty(PATH_LABEL) String path,
-                         final @JsonProperty(GET_LABEL) List<HttpVerb> get,
-                         final @JsonProperty(HEAD_LABEL) List<HttpVerb> head,
-                         final @JsonProperty(POST_LABEL) List<HttpVerb> post,
-                         final @JsonProperty(PUT_LABEL) List<HttpVerb> put,
-                         final @JsonProperty(DELETE_LABEL) List<HttpVerb> delete,
-                         final @JsonProperty(CONNECT_LABEL) List<HttpVerb> connect,
-                         final @JsonProperty(TRACE_LABEL) List<HttpVerb> trace,
-                         final @JsonProperty(PATCH_LABEL) List<HttpVerb> patch,
-                         final @JsonProperty(DESCRIPTION_LABEL) String description) {
-        super();
-        setPath(path);
-        setGet(get);
-        setHead(head);
-        setPost(post);
-        setPut(put);
-        setDelete(delete);
-        setConnect(connect);
-        setTrace(trace);
-        setPatch(patch);
-        setDescription(description);
+        //Needed for serialization
     }
 
     public Rest(Step parentStep, StepCatalog catalog) {
-        this();
         kamelPopulator = new KamelPopulator(catalog);
 
         for (var parameter : parentStep.getParameters()) {
-            if (PATH_LABEL.equalsIgnoreCase(parameter.getId())) {
-                this.setPath(String.valueOf(parameter.getValue()));
-            } else if (DESCRIPTION_LABEL.equalsIgnoreCase(parameter.getId()) && parameter.getValue() != null) {
-                this.setDescription(String.valueOf(parameter.getValue()));
+            if (parameter.getValue() != null) {
+                if (PATH_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setPath(String.valueOf(parameter.getValue()));
+                } else if (Rest.SKIP_BINDING_ON_ERROR_CODE_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setSkipBindingOnErrorCode(Boolean.valueOf(String.valueOf(parameter.getValue())));
+                } else if (Rest.API_DOCS_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setApiDocs(Boolean.valueOf(String.valueOf(parameter.getValue())));
+                } else if (Rest.CLIENT_REQUEST_VALIDATION_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setClientRequestValidation(Boolean.valueOf(String.valueOf(parameter.getValue())));
+                } else if (Rest.ENABLE_CORS_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setEnableCors(Boolean.valueOf(String.valueOf(parameter.getValue())));
+                } else if (Rest.BINDING_MODE_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setBindingMode(String.valueOf(parameter.getValue()));
+                } else if (Rest.ID_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setId(String.valueOf(parameter.getValue()));
+                } else if (Rest.TAG_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setTag(String.valueOf(parameter.getValue()));
+                } else if (Rest.SECURITY_DEFINITIONS_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setSecurityDefinitions(parameter.getValue());
+                } else if (Rest.SECURITY_REQUIREMENTS_LABEL.equalsIgnoreCase(parameter.getId())) {
+                    this.setSecurityRequirements((Object[]) parameter.getValue());
+                }
             }
         }
 
@@ -290,12 +319,78 @@ public class Rest extends From {
         this.patch = patch;
     }
 
-    public String getDescription() {
-        return description;
+    public Boolean getApiDocs() {
+        return apiDocs;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setApiDocs(Boolean apiDocs) {
+        this.apiDocs = apiDocs;
+    }
+
+    public String getBindingMode() {
+        return bindingMode;
+    }
+
+    public void setBindingMode(String bindingMode) {
+        this.bindingMode = bindingMode;
+    }
+
+    public Boolean getClientRequestValidation() {
+        return clientRequestValidation;
+    }
+
+    public void setClientRequestValidation(Boolean clientRequestValidation) {
+        this.clientRequestValidation = clientRequestValidation;
+    }
+
+    public Boolean getEnableCors() {
+        return enableCors;
+    }
+
+    public void setEnableCors(Boolean enableCors) {
+        this.enableCors = enableCors;
+    }
+
+    public Boolean getSkipBindingOnErrorCode() {
+        return skipBindingOnErrorCode;
+    }
+
+    public void setSkipBindingOnErrorCode(Boolean skipBindingOnErrorCode) {
+        this.skipBindingOnErrorCode = skipBindingOnErrorCode;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public Object getSecurityDefinitions() {
+        return securityDefinitions;
+    }
+
+    public void setSecurityDefinitions(Object securityDefinitions) {
+        this.securityDefinitions = securityDefinitions;
+    }
+
+    public Object[] getSecurityRequirements() {
+        return securityRequirements;
+    }
+
+    public void setSecurityRequirements(Object[] securityRequirements) {
+        this.securityRequirements = securityRequirements;
     }
 
     private List<HttpVerb> populateVerb(final Step step, final List<HttpVerb> httpVerbList) {
@@ -320,15 +415,15 @@ public class Rest extends From {
                     httpVerb.setConsumes(String.valueOf(p.getValue()));
                 } else if (p.getId().equalsIgnoreCase(PRODUCES_LABEL)) {
                     httpVerb.setProduces(String.valueOf(p.getValue()));
+                }  else if (p.getId().equalsIgnoreCase(KamelHelper.DESCRIPTION)) {
+                    httpVerb.setDescription(String.valueOf(p.getValue()));
                 } else if (p.getId().equalsIgnoreCase(ID_LABEL)) {
                     httpVerb.setId(String.valueOf(p.getValue()));
                 } else if (p.getId().equalsIgnoreCase(URI_LABEL)) {
                     httpVerb.setUri(String.valueOf(p.getValue()));
-                } else if (p.getId().equalsIgnoreCase(DESCRIPTION_LABEL)) {
-                    httpVerb.setDescription(String.valueOf(p.getValue()));
                 } else if (PARAM_LABEL.equalsIgnoreCase(p.getId())) {
                     httpVerb.setParameterList(new ArrayList<>());
-                    for (var value : (List)p.getValue()) {
+                    for (var value : (List) p.getValue()) {
                         if (value instanceof RestParameter restParameter) {
                             httpVerb.getParameterList().add(restParameter);
                         } else if (value instanceof Map map) {
@@ -350,9 +445,37 @@ public class Rest extends From {
     }
 
     public Map<String, Object> getRepresenterProperties() {
-        Map<String, Object> props = new HashMap<>();
+        Map<String, Object> props = new LinkedHashMap<>();
 
+        if (this.getId() != null) {
+            props.put(ID, this.getId());
+        }
         props.put(PATH_LABEL, this.getPath());
+
+        if (this.getApiDocs() != null) {
+            props.put(API_DOCS_LABEL, this.getApiDocs());
+        }
+        if (this.getBindingMode() != null) {
+            props.put(BINDING_MODE_LABEL, this.getBindingMode());
+        }
+        if (this.getClientRequestValidation() != null) {
+            props.put(CLIENT_REQUEST_VALIDATION_LABEL, this.getClientRequestValidation());
+        }
+        if (this.getEnableCors() != null) {
+            props.put(ENABLE_CORS_LABEL, this.getEnableCors());
+        }
+        if (this.getSkipBindingOnErrorCode() != null) {
+            props.put(SKIP_BINDING_ON_ERROR_CODE_LABEL, this.getSkipBindingOnErrorCode());
+        }
+        if (this.getTag() != null) {
+            props.put(TAG_LABEL, this.getTag());
+        }
+        if (this.getSecurityDefinitions() != null) {
+            props.put(SECURITY_DEFINITIONS_LABEL, this.getSecurityDefinitions());
+        }
+        if (this.getSecurityRequirements() != null) {
+            props.put(SECURITY_REQUIREMENTS_LABEL, this.getSecurityRequirements());
+        }
 
         if (this.getGet() != null) {
             props.put(GET_LABEL, this.getGet());
@@ -380,9 +503,6 @@ public class Rest extends From {
         }
         if (this.getPatch() != null) {
             props.put(PATCH_LABEL, this.getPatch());
-        }
-        if (this.getDescription() != null) {
-            props.put(DESCRIPTION_LABEL, this.getDescription());
         }
 
         return props;
@@ -429,8 +549,24 @@ public class Rest extends From {
         for (var param : rest.getParameters()) {
             if (PATH_LABEL.equalsIgnoreCase(param.getId())) {
                 param.setValue(this.getPath());
-            } else if (DESCRIPTION_LABEL.equalsIgnoreCase(param.getId())) {
-                param.setValue(this.getDescription());
+            } else if (Rest.SKIP_BINDING_ON_ERROR_CODE_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getSkipBindingOnErrorCode());
+            } else if (Rest.API_DOCS_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getApiDocs());
+            } else if (Rest.CLIENT_REQUEST_VALIDATION_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getClientRequestValidation());
+            } else if (Rest.ENABLE_CORS_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getEnableCors());
+            } else if (Rest.BINDING_MODE_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getBindingMode());
+            } else if (Rest.ID_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getId());
+            } else if (Rest.TAG_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getTag());
+            } else if (Rest.SECURITY_DEFINITIONS_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getSecurityDefinitions());
+            } else if (Rest.SECURITY_REQUIREMENTS_LABEL.equalsIgnoreCase(param.getId())) {
+                param.setValue(this.getSecurityRequirements());
             }
         }
 
@@ -470,7 +606,7 @@ public class Rest extends From {
                 } else if (param.getId().equalsIgnoreCase(ID_LABEL)
                         && endpoint.getId() != null) {
                     param.setValue(endpoint.getId());
-                } else if (param.getId().equalsIgnoreCase(DESCRIPTION_LABEL)
+                } else if (param.getId().equalsIgnoreCase(KamelHelper.DESCRIPTION)
                         && endpoint.getDescription() != null) {
                     param.setValue(endpoint.getDescription());
                 } else if (param.getId().equalsIgnoreCase(PARAM_LABEL)

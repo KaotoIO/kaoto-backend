@@ -439,7 +439,8 @@ class IntegrationsResourceTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        assertThat(res0.extract().body().asString()).isEqualToNormalizingNewlines(res1.extract().body().asString());
+        assertThat(res0.extract().body().asPrettyString())
+                .isEqualToNormalizingNewlines(res1.extract().body().asPrettyString());
 
         var flows = res1.extract().body().as(FlowsWrapper.class);
 
@@ -569,7 +570,10 @@ class IntegrationsResourceTest {
         assertThat(flows.flows()).isNotEmpty();
         flow = flows.flows().get(0);
         assertThat(flow.getMetadata()).isNotNull();
-        assertThat(sourceCode).contains("description: " + randomGeneratedDesc);
+        //REST don't have description
+        if (!flow.getSteps().get(0).getName().equalsIgnoreCase("REST")) {
+            assertThat(sourceCode).contains("description: " + randomGeneratedDesc);
+        }
 
         switch (parameters[0]) {
             case "Kamelet", "Kamelet Binding" -> {
@@ -580,8 +584,12 @@ class IntegrationsResourceTest {
             }
             case "Integration", "Camel Route" -> {
                 assertThat(flow.getMetadata())
-                        .containsEntry(KamelHelper.NAME, randomGeneratedName)
+                        .containsEntry(KamelHelper.NAME, randomGeneratedName);
+                //REST don't have description
+                if (!flow.getSteps().get(0).getName().equalsIgnoreCase("REST")) {
+                    assertThat(flow.getMetadata())
                         .containsEntry(KamelHelper.DESCRIPTION, randomGeneratedDesc);
+                }
                 assertThat(sourceCode).contains("    id: " + randomGeneratedName);
             }
             default -> {
