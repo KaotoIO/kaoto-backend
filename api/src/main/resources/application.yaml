@@ -33,6 +33,9 @@ crd:
   default: "KameletBinding"
 
 quarkus:
+  # explicitly set prod profile for native testing (on GitHub workflows, it used dev)
+  test:
+    native-image-profile: prod
   index-dependency:
     camelkcrd:
       group-id: org.apache.camel.k
