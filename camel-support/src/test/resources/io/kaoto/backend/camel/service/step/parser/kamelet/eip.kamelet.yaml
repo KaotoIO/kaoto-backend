@@ -193,6 +193,10 @@ spec:
                       simple: "${header.StockSymbol}"
                     aggregation-strategy: myAggregatorStrategy
                     completion-size: 2
+                    steps:
+                    - log:
+                        id: log-2fdd
+                        message: "${body}"
                 - service-call:
                     name: sc
                     static-service-discovery:

@@ -513,9 +513,6 @@ public class KamelPopulator {
             flowStep = getCamelConnector(step, to);
         } else if ("EIP".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
-                case "aggregate":
-                    flowStep = new AggregateFlowStep(step);
-                    break;
                 case "bean":
                     flowStep = new BeanFlowStep(step);
                     break;
@@ -624,6 +621,9 @@ public class KamelPopulator {
             }
         } else if ("EIP-BRANCH".equalsIgnoreCase(step.getKind())) {
             switch (step.getName()) {
+                case "aggregate":
+                    flowStep = new AggregateFlowStep(step, this);
+                    break;
                 case "circuit-breaker":
                     flowStep = new CircuitBreakerFlowStep(step, this);
                     break;

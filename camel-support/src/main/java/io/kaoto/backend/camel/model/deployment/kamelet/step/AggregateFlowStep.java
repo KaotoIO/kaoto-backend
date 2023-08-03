@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelPopulator;
 import io.kaoto.backend.camel.model.deployment.kamelet.FlowStep;
 import io.kaoto.backend.camel.service.step.parser.kamelet.KameletStepParserService;
 import io.kaoto.backend.model.step.Step;
@@ -32,8 +33,8 @@ public class AggregateFlowStep implements FlowStep {
     public AggregateFlowStep() {
     }
 
-    public AggregateFlowStep(Step step) {
-        setAggregate(new Aggregate(step));
+    public AggregateFlowStep(final Step step, final KamelPopulator kameletPopulator) {
+        setAggregate(new Aggregate(step, kameletPopulator));
     }
 
     @Override
