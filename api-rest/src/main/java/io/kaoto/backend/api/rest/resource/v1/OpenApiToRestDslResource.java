@@ -17,9 +17,10 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.apicurio.datamodels.Library;
-import io.apicurio.datamodels.openapi.models.OasDocument;
+import io.apicurio.datamodels.models.openapi.OpenApiDocument;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -60,8 +61,8 @@ public class OpenApiToRestDslResource {
     public String generate(
             final @RequestBody String spec) throws Exception {
         var camelContext = camelRuntime.getCamelContext();
-        var jacksonNode = readOpenApiSpec(spec);
-        OasDocument specDoc = (OasDocument) Library.readDocument(jacksonNode);
+        var jacksonNode = (ObjectNode) readOpenApiSpec(spec);
+        OpenApiDocument specDoc = (OpenApiDocument) Library.readDocument(jacksonNode);
         return RestDslGenerator.toYaml(specDoc).generate(camelContext);
     }
 
