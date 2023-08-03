@@ -114,6 +114,10 @@ spec:
                   simple: "${header.StockSymbol}"
                 aggregation-strategy: myAggregatorStrategy
                 completion-size: 2
+                steps:
+                - log:
+                    id: log-2fdd
+                    message: "${body}"
             - load-balance:
                 weighted:
                   distribution-ratio: "2,1"

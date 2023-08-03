@@ -57,7 +57,7 @@ For more information and all configuration properties, see [Quarkus HTTP Referen
 ### Steps catalog resources
 
 **Actual versions of resources:**
-*   Kaoto camel components: **94ef243f574ad42b85dafe59b3d36858c47fcd38**
+*   Kaoto camel components: **3ee2af43623923a5c5e09df6f3f70657e1ccd09f**
 *   Kaoto view definitions: **94aae37dee4356d51ac34bfb757eb43a85ad2c0a**
 *   Camel-connectors: **3.21.0**
 *   Camel-connectors: **3.21.0**
