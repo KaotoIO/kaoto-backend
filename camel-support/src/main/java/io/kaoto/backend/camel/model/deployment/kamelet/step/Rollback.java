@@ -1,5 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -17,10 +18,15 @@ public class Rollback extends EIPStep {
 
     public static final String MESSAGE_LABEL = "message";
 
+    @JsonProperty(MARK_ROLLBACK_ONLY_LABEL)
+    @JsonAlias(MARK_ROLLBACK_ONLY_LABEL2)
     private Boolean markRollbackOnly;
 
+    @JsonProperty(MARK_ROLLBACK_ONLY_LAST_LABEL)
+    @JsonAlias(MARK_ROLLBACK_ONLY_LAST_LABEL2)
     private Boolean markRollbackOnlyLast;
 
+    @JsonProperty(MESSAGE_LABEL)
     private String message;
 
 
@@ -28,17 +34,6 @@ public class Rollback extends EIPStep {
          //Needed for serialization
     }
 
-    public Rollback(final @JsonProperty(MARK_ROLLBACK_ONLY_LABEL) Boolean markRollbackOnly,
-                    final @JsonProperty(MARK_ROLLBACK_ONLY_LABEL2) Boolean markRollbackOnly2,
-                    final @JsonProperty(MARK_ROLLBACK_ONLY_LAST_LABEL) Boolean markRollbackOnlyLast,
-                    final @JsonProperty(MARK_ROLLBACK_ONLY_LAST_LABEL2) Boolean markRollbackOnlyLast2,
-                    final @JsonProperty(MESSAGE_LABEL) String message,
-                    final @JsonProperty("id") String id) {
-        setMarkRollbackOnly(markRollbackOnly != null ? markRollbackOnly : markRollbackOnly2);
-        setMarkRollbackOnlyLast(markRollbackOnlyLast != null ? markRollbackOnlyLast : markRollbackOnlyLast2);
-        setMessage(message);
-        setId(id);
-    }
     public Rollback(Step step) {
         super(step);
     }

@@ -1,6 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
@@ -30,13 +30,32 @@ public class ToDynamic extends EIPStep {
     public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
     public static final String PARAMETERS_LABEL = KamelHelper.PARAMETERS;
 
+    @JsonProperty(URI_LABEL)
     private String uri;
+
+    @JsonProperty(PATTERN_LABEL)
     private String pattern;
+
+    @JsonProperty(CACHE_SIZE_LABEL)
+    @JsonAlias(CACHE_SIZE_LABEL2)
     private Integer cacheSize;
+
+    @JsonProperty(IGNORE_INVALID_ENDPOINTS_LABEL)
+    @JsonAlias(IGNORE_INVALID_ENDPOINTS_LABEL2)
     private Boolean ignoreInvalidEndpoints;
+
+    @JsonProperty(ALLOW_OPTIMISED_COMPONENTS_LABEL)
+    @JsonAlias(ALLOW_OPTIMISED_COMPONENTS_LABEL2)
     private Boolean allowOptimisedComponents;
+
+    @JsonProperty(AUTO_START_COMPONENTS_LABEL)
+    @JsonAlias(AUTO_START_COMPONENTS_LABEL2)
     private Boolean autoStartComponents;
+
+    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
+
+    @JsonProperty(PARAMETERS_LABEL)
     private Map<String, Object> parameters;
 
     public ToDynamic() {
@@ -45,33 +64,6 @@ public class ToDynamic extends EIPStep {
 
     public ToDynamic(Step step) {
         super(step);
-    }
-
-    @JsonCreator
-    public ToDynamic(final @JsonProperty(URI_LABEL) String uri,
-                     final @JsonProperty(PATTERN_LABEL) String pattern,
-                     final @JsonProperty(CACHE_SIZE_LABEL) Integer cacheSize,
-                     final @JsonProperty(CACHE_SIZE_LABEL2) Integer cacheSize2,
-                     final @JsonProperty(IGNORE_INVALID_ENDPOINTS_LABEL) Boolean ignoreInvalidEndpoints,
-                     final @JsonProperty(IGNORE_INVALID_ENDPOINTS_LABEL2) Boolean ignoreInvalidEndpoints2,
-                     final @JsonProperty(ALLOW_OPTIMISED_COMPONENTS_LABEL) Boolean allowOptimisedComponents,
-                     final @JsonProperty(ALLOW_OPTIMISED_COMPONENTS_LABEL2) Boolean allowOptimisedComponents2,
-                     final @JsonProperty(AUTO_START_COMPONENTS_LABEL) Boolean autoStartComponents,
-                     final @JsonProperty(AUTO_START_COMPONENTS_LABEL2) Boolean autoStartComponents2,
-                     final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                     final @JsonProperty(PARAMETERS_LABEL) Map<String, Object> parameters,
-                     final @JsonProperty("id") String id) {
-        super();
-        setUri(uri);
-        setPattern(pattern);
-        setCacheSize(cacheSize != null ? cacheSize : cacheSize2);
-        setIgnoreInvalidEndpoints(ignoreInvalidEndpoints != null ? ignoreInvalidEndpoints : ignoreInvalidEndpoints2);
-        setAllowOptimisedComponents(allowOptimisedComponents != null ? allowOptimisedComponents :
-                allowOptimisedComponents2);
-        setAutoStartComponents(autoStartComponents != null ? autoStartComponents : autoStartComponents2);
-        setDescription(description);
-        setParameters(parameters);
-        setId(id);
     }
 
     @Override

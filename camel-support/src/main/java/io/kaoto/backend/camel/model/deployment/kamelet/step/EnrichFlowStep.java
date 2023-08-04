@@ -1,6 +1,5 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -20,10 +19,8 @@ public class EnrichFlowStep implements FlowStep {
 
     public static final String LABEL = "enrich";
 
-    @JsonCreator
-    public EnrichFlowStep(final @JsonProperty(LABEL) Enrich enrich) {
-        setEnrich(enrich);
-    }
+    @JsonProperty(LABEL)
+    private Enrich enrich;
 
     public EnrichFlowStep() {
         //Needed for serialization
@@ -32,8 +29,6 @@ public class EnrichFlowStep implements FlowStep {
     public EnrichFlowStep(Step step) {
         setEnrich(new Enrich(step));
     }
-
-    private Enrich enrich;
 
     @Override
     public Map<String, Object> getRepresenterProperties() {

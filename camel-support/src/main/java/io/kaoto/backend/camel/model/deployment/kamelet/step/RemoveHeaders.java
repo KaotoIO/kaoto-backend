@@ -1,6 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -14,12 +16,14 @@ public class RemoveHeaders extends EIPStep {
     public static final String EXCLUDE_PATTERN_LABEL = "exclude-pattern";
     public static final String EXCLUDE_PATTERN_LABEL2 = "excludePattern";
 
-    public static final String DESCRIPTION_LABEL = "description";
-
+    @JsonProperty(PATTERN_LABEL)
     private String pattern;
 
+    @JsonProperty(EXCLUDE_PATTERN_LABEL)
+    @JsonAlias(EXCLUDE_PATTERN_LABEL2)
     private String excludePattern;
 
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private Map<String, String> description;
 
 
@@ -27,16 +31,6 @@ public class RemoveHeaders extends EIPStep {
          //Needed for serialization
     }
 
-    public RemoveHeaders(final @JsonProperty(PATTERN_LABEL) String pattern,
-                         final @JsonProperty(EXCLUDE_PATTERN_LABEL)  String excludePattern,
-                         final @JsonProperty(EXCLUDE_PATTERN_LABEL2) String excludePattern2,
-                         final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                         final @JsonProperty("id") String id) {
-        setPattern(pattern);
-        setExcludePattern(excludePattern != null ? excludePattern : excludePattern2);
-        setDescription(description);
-        setId(id);
-    }
 
     public RemoveHeaders(Step step) {
         super(step);
@@ -54,7 +48,7 @@ public class RemoveHeaders extends EIPStep {
         }
 
         if (this.description != null) {
-            properties.put(DESCRIPTION_LABEL, this.description);
+            properties.put(KamelHelper.DESCRIPTION, this.description);
         }
         return properties;
     }
@@ -69,7 +63,7 @@ public class RemoveHeaders extends EIPStep {
             case EXCLUDE_PATTERN_LABEL2:
                 parameter.setValue(this.getExcludePattern());
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 parameter.setValue(this.getDescription());
                 break;
             default:
@@ -88,7 +82,7 @@ public class RemoveHeaders extends EIPStep {
             case EXCLUDE_PATTERN_LABEL2:
                 this.setExcludePattern(String.valueOf(parameter.getValue()));
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 this.setDescription((Map) parameter.getValue());
                 break;
             default:

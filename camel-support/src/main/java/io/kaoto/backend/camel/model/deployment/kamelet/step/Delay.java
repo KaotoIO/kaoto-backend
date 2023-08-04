@@ -1,6 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.model.deployment.kamelet.expression.Expression;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
@@ -16,18 +18,21 @@ public class Delay extends EIPStep {
     public static final String CALLER_RUNS_WHEN_REJECTED_LABEL2 = "caller-runs-when-rejected";
     public static final String EXECUTOR_SERVICE_LABEL = "executorService";
     public static final String EXECUTOR_SERVICE_LABEL2 = "executor-service";
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
     @JsonProperty(EXPRESSION_LABEL)
     private Expression expression;
 
     @JsonProperty(ASYNC_DELAYED_LABEL2)
+    @JsonAlias(ASYNC_DELAYED_LABEL2)
     private Boolean asyncDelayed;
 
     @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL2)
+    @JsonAlias(CALLER_RUNS_WHEN_REJECTED_LABEL)
     private Boolean callerRunsWhenRejected;
 
     @JsonProperty(EXECUTOR_SERVICE_LABEL2)
+    @JsonAlias(EXECUTOR_SERVICE_LABEL)
     private Map<String, String> executorService;
 
     @JsonProperty(DESCRIPTION_LABEL)

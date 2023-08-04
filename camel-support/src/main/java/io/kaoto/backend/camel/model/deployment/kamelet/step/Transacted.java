@@ -11,6 +11,7 @@ public class Transacted extends EIPStep {
 
     public static final String REF_LABEL = "ref";
 
+    @JsonProperty(REF_LABEL)
     private String ref;
 
 
@@ -20,13 +21,6 @@ public class Transacted extends EIPStep {
 
     public Transacted(Step step) {
         super(step);
-    }
-
-    public Transacted(final @JsonProperty(REF_LABEL) String ref,
-                      final @JsonProperty("id") String id) {
-        super();
-        setRef(ref);
-        setId(id);
     }
 
     @Override

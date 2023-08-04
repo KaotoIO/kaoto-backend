@@ -1,7 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -14,34 +15,25 @@ public class BeanStep extends EIPStep {
     public static final String BEAN_TYPE_LABEL = "beanType";
     public static final String BEAN_TYPE_LABEL2 = "bean-type";
     public static final String SCOPE_LABEL = "scope";
-    public static final String DESCRIPTION_LABEL = "description";
     public static final String ID_LABEL = "id";
 
+    @JsonProperty(REF_LABEL)
     private String ref;
 
+    @JsonProperty(METHOD_LABEL)
     private String method;
 
+    @JsonProperty(BEAN_TYPE_LABEL)
+    @JsonAlias(BEAN_TYPE_LABEL2)
     private String beanType;
+
+     @JsonProperty(SCOPE_LABEL)
     private String scope;
+
+     @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     public BeanStep() {
-    }
-
-    @JsonCreator
-    public BeanStep(final @JsonProperty(REF_LABEL) String ref,
-                    final @JsonProperty(METHOD_LABEL) String method,
-                    final @JsonProperty(BEAN_TYPE_LABEL) String beanType,
-                    final @JsonProperty(BEAN_TYPE_LABEL2) String beanType2,
-                    final @JsonProperty(SCOPE_LABEL) String scope,
-                    final @JsonProperty(DESCRIPTION_LABEL) String description,
-                    final @JsonProperty(ID_LABEL) String id) {
-        setRef(ref);
-        setMethod(method);
-        setDescription(description);
-        setBeanType(beanType != null ? beanType : beanType2);
-        setScope(scope);
-        setId(id);
     }
 
     public BeanStep(Step step) {
@@ -59,8 +51,8 @@ public class BeanStep extends EIPStep {
         if (map.containsKey(SCOPE_LABEL)) {
             this.setScope(String.valueOf(map.get(SCOPE_LABEL)));
         }
-        if (map.containsKey(DESCRIPTION_LABEL)) {
-            this.setDescription(String.valueOf(map.get(DESCRIPTION_LABEL)));
+        if (map.containsKey(KamelHelper.DESCRIPTION)) {
+            this.setDescription(String.valueOf(map.get(KamelHelper.DESCRIPTION)));
         }
         if (map.containsKey(ID_LABEL)) {
             this.setId(String.valueOf(map.get(ID_LABEL)));
@@ -89,7 +81,7 @@ public class BeanStep extends EIPStep {
             properties.put(BEAN_TYPE_LABEL, this.getBeanType());
         }
         if (this.getDescription() != null) {
-            properties.put(DESCRIPTION_LABEL, this.getDescription());
+            properties.put(KamelHelper.DESCRIPTION, this.getDescription());
         }
         return properties;
     }
@@ -111,7 +103,7 @@ public class BeanStep extends EIPStep {
             case BEAN_TYPE_LABEL2:
                 this.setBeanType(parameter.getValue().toString());
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 this.setDescription(parameter.getValue().toString());
                 break;
             case ID_LABEL:
@@ -140,7 +132,7 @@ public class BeanStep extends EIPStep {
             case ID_LABEL:
                 parameter.setValue(this.getId());
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 parameter.setValue(this.getDescription());
                 break;
             default:
