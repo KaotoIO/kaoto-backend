@@ -180,8 +180,14 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
     }
 
     @Override
-    public ParseCatalog<Step> getParser(String url) {
+    public ParseCatalog<Step> getParser() {
         return new CamelRestDSLParser();
+    }
+
+    @Override
+    public ParseCatalog<Step> getParser(String url) {
+        //We are not expecting to get anything from here
+        return new EmptyParseCatalog<>();
     }
 
     @Override

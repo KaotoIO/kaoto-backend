@@ -41,6 +41,7 @@ class KameletParseCatalogTest {
 
     private static final String FILE_NAME = "camel-kamelets-%s.jar";
 
+    //don't rename, update-resources.sh script uses/updates this
     private static final String VERSION = "3.21.0";
 
     private static final Logger LOG = Logger.getLogger(KameletParseCatalogTest.class);

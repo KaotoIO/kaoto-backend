@@ -39,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @QuarkusTest
 class KameletStepParserServiceTest {
 
+    //don't rename, update-resources.sh script uses/updates this
     private static final String VERSION = "3.21.0";
 
     private static String kamelet;

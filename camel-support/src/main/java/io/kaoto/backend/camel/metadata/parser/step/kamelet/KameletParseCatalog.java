@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kaoto.backend.api.metadata.catalog.StepCatalogParser;
 import io.kaoto.backend.metadata.ParseCatalog;
 import io.kaoto.backend.metadata.parser.ClusterParseCatalog;
+import io.kaoto.backend.metadata.parser.EmptyParseCatalog;
 import io.kaoto.backend.metadata.parser.GitParseCatalog;
 import io.kaoto.backend.metadata.parser.JarParseCatalog;
 import io.kaoto.backend.metadata.parser.LocalFolderParseCatalog;
@@ -46,6 +47,12 @@ public final class KameletParseCatalog implements StepCatalogParser {
         ParseCatalog<Step> parseCatalog = new GitParseCatalog<>(url, tag);
         parseCatalog.setFileVisitor(kameletFileProcessor);
         return parseCatalog;
+    }
+
+    @Override
+    public ParseCatalog<Step> getParser() {
+        //We are not expecting to get Kamelets from memory
+        return new EmptyParseCatalog<>();
     }
 
     @Override

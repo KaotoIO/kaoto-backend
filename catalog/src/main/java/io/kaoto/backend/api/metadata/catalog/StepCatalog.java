@@ -17,6 +17,7 @@ import io.smallrye.config.ConfigMapping;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
  * 🐱class StepCatalog
@@ -28,6 +29,10 @@ import jakarta.inject.Inject;
 @Startup
 @ApplicationScoped
 public class StepCatalog extends AbstractCatalog<Step> {
+
+    @ConfigProperty(name = "kaoto.step.catalog.include.inmemory.catalogs",
+            defaultValue = "true")
+    boolean includeInMemoryCatalogs;
 
     public static final String ALL = "all";
     private StepRepository repository;
@@ -45,7 +50,7 @@ public class StepCatalog extends AbstractCatalog<Step> {
         addZipJar(catalogs, clusterAvailable);
         addLocalFolder(catalogs, clusterAvailable);
         addGit(catalogs, clusterAvailable);
-
+        if (includeInMemoryCatalogs) addInMemoryParsers(catalogs);
         return catalogs;
     }
 
@@ -95,10 +100,10 @@ public class StepCatalog extends AbstractCatalog<Step> {
                 //And call only the parsers that apply
                 .flatMap(folder -> stepCatalogParsers.stream().parallel()
                     .filter(parser -> ALL.equalsIgnoreCase(folder.kind()) || parser.generatesKind(folder.kind()))
-                        .map(parser -> {
-                            File dir = new File(folder.url());
-                            return parser.getLocalFolder(dir.toPath());
-                        })
+                    .map(parser -> {
+                        File dir = new File(folder.url());
+                        return parser.getLocalFolder(dir.toPath());
+                    })
                 ).toList();
 
         catalogs.addAll(items);
@@ -117,6 +122,12 @@ public class StepCatalog extends AbstractCatalog<Step> {
 
         catalogs.addAll(items);
 
+    }
+
+    private void addInMemoryParsers(final List<ParseCatalog<Step>> catalogs) {
+        List<ParseCatalog<Step>> items = stepCatalogParsers.stream().parallel().map(StepCatalogParser::getParser)
+                .toList();
+        catalogs.addAll(items);
     }
 
     @Inject

@@ -60,7 +60,7 @@ For more information and all configuration properties, see [Quarkus HTTP Referen
 *   Kaoto camel components: **3ee2af43623923a5c5e09df6f3f70657e1ccd09f**
 *   Kaoto view definitions: **94aae37dee4356d51ac34bfb757eb43a85ad2c0a**
 *   Camel-connectors: **3.21.0**
-*   Camel-connectors: **3.21.0**
+*   Camel-kamelets: **3.21.0**
 
 #### Updating step resources
 The repository contains steps repositories zip files which are bundled with Kaoto-backend during building.
