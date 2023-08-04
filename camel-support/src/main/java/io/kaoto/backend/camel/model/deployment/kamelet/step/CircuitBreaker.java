@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -20,6 +20,7 @@ public class CircuitBreaker extends EIPStep {
 
     public static final String STEPS_LABEL = KamelHelper.STEPS;
     public static final String ON_FALLBACK_LABEL = "on-fallback";
+    public static final String ON_FALLBACK_LABEL2 = "onFallback";
     public static final String RESILIENCE_4_J_CONFIGURATION_LABEL = "resilience-4j-configuration";
     public static final String FAULT_TOLERANCE_CONFIGURATION_LABEL = "fault-tolerance-configuration";
     public static final String CONFIGURATION_LABEL = "configuration";
@@ -31,12 +32,15 @@ public class CircuitBreaker extends EIPStep {
     private List<FlowStep> steps;
 
     @JsonProperty(ON_FALLBACK_LABEL)
+    @JsonAlias(ON_FALLBACK_LABEL2)
     private GenericFlowWithSteps onFallback;
 
     @JsonProperty(RESILIENCE_4_J_CONFIGURATION_LABEL)
+    @JsonAlias(RESILIENCE_4_J_CONFIGURATION_LABEL2)
     private Map<String, String> resilience4jConfiguration;
 
     @JsonProperty(FAULT_TOLERANCE_CONFIGURATION_LABEL)
+    @JsonAlias(FAULT_TOLERANCE_CONFIGURATION_LABEL2)
     private Map<String, String> faultToleranceConfiguration;
 
     @JsonProperty(CONFIGURATION_LABEL)
@@ -49,24 +53,6 @@ public class CircuitBreaker extends EIPStep {
         super();
     }
 
-    @JsonCreator
-    public CircuitBreaker(
-            final @JsonProperty(STEPS_LABEL) List<FlowStep> steps,
-            final @JsonProperty(ON_FALLBACK_LABEL) GenericFlowWithSteps onFallback,
-            final @JsonProperty(RESILIENCE_4_J_CONFIGURATION_LABEL) Map<String, String>  resilience4jConfiguration,
-            final @JsonProperty(FAULT_TOLERANCE_CONFIGURATION_LABEL) Map<String, String>  faultToleranceConfiguration,
-            final @JsonProperty(CONFIGURATION_LABEL) String configuration,
-            final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-            final @JsonProperty("id") String id) {
-        super();
-        setSteps(steps);
-        setOnFallback(onFallback);
-        setResilience4jConfiguration(resilience4jConfiguration);
-        setFaultToleranceConfiguration(faultToleranceConfiguration);
-        setConfiguration(configuration);
-        setDescription(description);
-        setId(id);
-    }
 
     public CircuitBreaker(final Step step, final KamelPopulator kameletPopulator) {
         super(step);

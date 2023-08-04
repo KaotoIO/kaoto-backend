@@ -9,7 +9,7 @@ class TryCatchTest {
 
     @Test
     void noFinally() throws Exception {
-        var tryCatch = new TryCatch(null, null, null, null, null, null);
+        var tryCatch = new TryCatch();
         assertNotNull(tryCatch.getRepresenterProperties());
     }
 }

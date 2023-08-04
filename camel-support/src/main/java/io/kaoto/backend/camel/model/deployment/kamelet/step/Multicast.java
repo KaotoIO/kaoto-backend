@@ -1,6 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
@@ -52,77 +52,53 @@ public class Multicast extends EIPStep {
     public static final String SHARE_UNIT_OF_WORK_LABEL = "shareUnitOfWork";
     public static final String SHARE_UNIT_OF_WORK_LABEL2 = "share-init-of-work";
 
+    @JsonProperty(AGGREGATION_STRATEGY_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_LABEL2)
     private Map<String, Object> aggregationStrategy;
 
+    @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_METHOD_NAME_LABEL2)
     private String aggregationStrategyMethodName;
 
+    @JsonProperty(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL2)
     private Boolean aggregationStrategyMethodAllowNull;
 
+    @JsonProperty(PARALLEL_AGGREGATE_LABEL)
+    @JsonAlias(PARALLEL_AGGREGATE_LABEL2)
     private Boolean parallelAggregate;
 
+    @JsonProperty(PARALLEL_PROCESSING_LABEL)
+    @JsonAlias(PARALLEL_PROCESSING_LABEL2)
     private Boolean parallelProcessing;
 
+    @JsonProperty(STREAMING_LABEL)
     private Boolean streaming;
 
+    @JsonProperty(STOP_ON_EXCEPTION_LABEL)
+    @JsonAlias(STOP_ON_EXCEPTION_LABEL2)
     private Boolean stopOnException;
 
+    @JsonProperty(TIMEOUT_LABEL)
     private String timeout;
 
+    @JsonProperty(EXECUTOR_SERVICE_LABEL)
+    @JsonAlias(EXECUTOR_SERVICE_LABEL2)
     private Map<String, Object> executorService;
 
+    @JsonProperty(ON_PREPARE_LABEL)
+    @JsonAlias(ON_PREPARE_LABEL2)
     private Map<String, Object> onPrepare;
 
+    @JsonProperty(SHARE_UNIT_OF_WORK_LABEL)
+    @JsonAlias(SHARE_UNIT_OF_WORK_LABEL2)
     private Boolean shareUnitOfWork;
 
+    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
 
+    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
-
-
-    @JsonCreator
-    public Multicast(final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                     final @JsonProperty(STEPS_LABEL) List<FlowStep> steps,
-                     final @JsonProperty(AGGREGATION_STRATEGY_LABEL) Map<String, Object> aggregationStrategy,
-                     final @JsonProperty(AGGREGATION_STRATEGY_LABEL2) Map<String, Object> aggregationStrategy2,
-                     final @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL) String aggregationStrategyMethodName,
-                     final @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL2) String aggregationStrategyMethodName2,
-                     final @JsonProperty(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL)
-                         Boolean aggregationStrategyMethodAllowNull,
-                     final @JsonProperty(AGGREGATION_STRATEGY_METHOD_ALLOW_NULL_LABEL2)
-                         Boolean aggregationStrategyMethodAllowNull2,
-                     final @JsonProperty(PARALLEL_AGGREGATE_LABEL) Boolean parallelAggregate,
-                     final @JsonProperty(PARALLEL_AGGREGATE_LABEL2) Boolean parallelAggregate2,
-                     final @JsonProperty(PARALLEL_PROCESSING_LABEL) Boolean parallelProcessing,
-                     final @JsonProperty(PARALLEL_PROCESSING_LABEL2) Boolean parallelProcessing2,
-                     final @JsonProperty(STREAMING_LABEL) Boolean streaming,
-                     final @JsonProperty(STOP_ON_EXCEPTION_LABEL2) Boolean stopOnException,
-                     final @JsonProperty(STOP_ON_EXCEPTION_LABEL) Boolean stopOnException2,
-                     final @JsonProperty(TIMEOUT_LABEL) String timeout,
-                     final @JsonProperty(EXECUTOR_SERVICE_LABEL) Map<String, Object> executorService,
-                     final @JsonProperty(EXECUTOR_SERVICE_LABEL2) Map<String, Object> executorService2,
-                     final @JsonProperty(ON_PREPARE_LABEL) Map<String, Object> onPrepare,
-                     final @JsonProperty(ON_PREPARE_LABEL2) Map<String, Object> onPrepare2,
-                     final @JsonProperty(SHARE_UNIT_OF_WORK_LABEL) Boolean shareUnitOfWork,
-                     final @JsonProperty(SHARE_UNIT_OF_WORK_LABEL2) Boolean shareUnitOfWork2,
-                     final @JsonProperty("id") String id) {
-        super();
-        setDescription(description);
-        setSteps(steps);
-        setAggregationStrategy(aggregationStrategy != null ? aggregationStrategy : aggregationStrategy2);
-        setAggregationStrategyMethodName(aggregationStrategyMethodName != null ? aggregationStrategyMethodName :
-                aggregationStrategyMethodName2);
-        setAggregationStrategyMethodAllowNull(aggregationStrategyMethodAllowNull != null ?
-                aggregationStrategyMethodAllowNull : aggregationStrategyMethodAllowNull2);
-        setParallelAggregate(parallelAggregate != null ? parallelAggregate : parallelAggregate2);
-        setParallelProcessing(parallelProcessing != null ? parallelProcessing : parallelProcessing2);
-        setStreaming(streaming);
-        setStopOnException(stopOnException != null ? stopOnException : stopOnException2);
-        setTimeout(timeout);
-        setExecutorService(executorService != null ? executorService : executorService2);
-        setOnPrepare(onPrepare != null ? onPrepare : onPrepare2);
-        setShareUnitOfWork(shareUnitOfWork != null ? shareUnitOfWork : shareUnitOfWork2);
-        setId(id);
-    }
 
     public Multicast() {
         //Needed for serialization

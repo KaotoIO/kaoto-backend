@@ -1,7 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -9,9 +10,6 @@ import java.util.Map;
 
 
 public class Threads extends EIPStep {
-
-
-    public static final String DESCRIPTION_LABEL = "description";
 
     public static final String EXECUTOR_SERVICE_LABEL = "executorService";
     public static final String EXECUTOR_SERVICE_LABEL2 = "executor-service";
@@ -44,68 +42,52 @@ public class Threads extends EIPStep {
     public static final String CALLER_RUNS_WHEN_REJECTED_LABEL2 = "caller-runs-when-rejected";
 
 
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private Map<String, String> description;
 
+    @JsonProperty(EXECUTOR_SERVICE_LABEL)
+    @JsonAlias(EXECUTOR_SERVICE_LABEL2)
     private Map<String, Object> executorService;
 
+    @JsonProperty(POOL_SIZE_LABEL)
+    @JsonAlias(POOL_SIZE_LABEL2)
     private Integer poolSize;
 
+    @JsonProperty(MAX_POOL_SIZE_LABEL)
+    @JsonAlias(MAX_POOL_SIZE_LABEL2)
     private Integer maxPoolSize;
 
+    @JsonProperty(KEEP_ALIVE_TIME_LABEL)
+    @JsonAlias(KEEP_ALIVE_TIME_LABEL2)
     private Long keepAliveTime;
 
+    @JsonProperty(TIME_UNIT_LABEL)
+    @JsonAlias(TIME_UNIT_LABEL2)
     private String timeUnit;
 
+    @JsonProperty(MAX_QUEUE_SIZE_LABEL)
+    @JsonAlias(MAX_QUEUE_SIZE_LABEL2)
     private Integer maxQueueSize;
 
+    @JsonProperty(ALLOW_CORE_THREAD_TIME_OUT_LABEL)
+    @JsonAlias(ALLOW_CORE_THREAD_TIME_OUT_LABEL2)
     private Boolean allowCoreThreadTimeOut;
 
+    @JsonProperty(THREAD_NAME_LABEL)
+    @JsonAlias(THREAD_NAME_LABEL2)
     private String threadName;
 
+    @JsonProperty(REJECTED_POLICY_LABEL)
+    @JsonAlias(REJECTED_POLICY_LABEL2)
     private String rejectedPolicy;
 
+    @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL)
+    @JsonAlias(CALLER_RUNS_WHEN_REJECTED_LABEL2)
     private String callerRunsWhenRejected;
 
 
     public Threads() {
         //Needed for serialization
-    }
-
-    @JsonCreator
-    public Threads(final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                   final @JsonProperty(EXECUTOR_SERVICE_LABEL) Map<String, Object> executorService,
-                   final @JsonProperty(EXECUTOR_SERVICE_LABEL2) Map<String, Object> executorService2,
-                   final @JsonProperty(POOL_SIZE_LABEL) Integer poolSize,
-                   final @JsonProperty(POOL_SIZE_LABEL2) Integer poolSize2,
-                   final @JsonProperty(MAX_POOL_SIZE_LABEL) Integer maxPoolSize,
-                   final @JsonProperty(MAX_POOL_SIZE_LABEL2) Integer maxPoolSize2,
-                   final @JsonProperty(KEEP_ALIVE_TIME_LABEL) Long keepAliveTime,
-                   final @JsonProperty(KEEP_ALIVE_TIME_LABEL2) Long keepAliveTime2,
-                   final @JsonProperty(TIME_UNIT_LABEL) String timeUnit,
-                   final @JsonProperty(TIME_UNIT_LABEL2) String timeUnit2,
-                   final @JsonProperty(MAX_QUEUE_SIZE_LABEL) Integer maxQueueSize,
-                   final @JsonProperty(MAX_QUEUE_SIZE_LABEL2) Integer maxQueueSize2,
-                   final @JsonProperty(ALLOW_CORE_THREAD_TIME_OUT_LABEL) Boolean allowCoreThreadTimeOut,
-                   final @JsonProperty(ALLOW_CORE_THREAD_TIME_OUT_LABEL2) Boolean allowCoreThreadTimeOut2,
-                   final @JsonProperty(THREAD_NAME_LABEL) String threadName,
-                   final @JsonProperty(THREAD_NAME_LABEL2) String threadName2,
-                   final @JsonProperty(REJECTED_POLICY_LABEL) String rejectedPolicy,
-                   final @JsonProperty(REJECTED_POLICY_LABEL2) String rejectedPolicy2,
-                   final @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL) String callerRunsWhenRejected,
-                   final @JsonProperty(CALLER_RUNS_WHEN_REJECTED_LABEL2) String callerRunsWhenRejected2,
-                   final @JsonProperty("id") String id) {
-        setDescription(description);
-        setExecutorService(executorService != null ? executorService : executorService2);
-        setPoolSize(poolSize != null ? poolSize : poolSize2);
-        setMaxPoolSize(maxPoolSize != null ? maxPoolSize : maxPoolSize2);
-        setKeepAliveTime(keepAliveTime != null ? keepAliveTime : keepAliveTime2);
-        setTimeUnit(timeUnit != null ? timeUnit : timeUnit2);
-        setMaxQueueSize(maxQueueSize != null ? maxQueueSize : maxQueueSize2);
-        setAllowCoreThreadTimeOut(allowCoreThreadTimeOut != null ? allowCoreThreadTimeOut : allowCoreThreadTimeOut2);
-        setThreadName(threadName != null ? threadName : threadName2);
-        setRejectedPolicy(rejectedPolicy != null ? rejectedPolicy : rejectedPolicy2);
-        setCallerRunsWhenRejected(callerRunsWhenRejected != null ? callerRunsWhenRejected : callerRunsWhenRejected2);
-        setId(id);
     }
 
 
@@ -157,7 +139,7 @@ public class Threads extends EIPStep {
             case CALLER_RUNS_WHEN_REJECTED_LABEL2:
                 this.setCallerRunsWhenRejected(String.valueOf(parameter.getValue()));
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 this.setDescription((Map<String, String>) parameter.getValue());
                 break;
             default:
@@ -208,7 +190,7 @@ public class Threads extends EIPStep {
             case CALLER_RUNS_WHEN_REJECTED_LABEL2:
                 parameter.setValue(this.getCallerRunsWhenRejected());
                 break;
-            case DESCRIPTION_LABEL:
+            case KamelHelper.DESCRIPTION:
                 parameter.setValue(this.getDescription());
                 break;
             default:
@@ -220,7 +202,7 @@ public class Threads extends EIPStep {
     public Map<String, Object> getRepresenterProperties() {
         Map<String, Object> properties = super.getDefaultRepresenterProperties();
         if (this.getDescription() != null) {
-            properties.put(DESCRIPTION_LABEL, this.getDescription());
+            properties.put(KamelHelper.DESCRIPTION, this.getDescription());
         }
         if (this.getExecutorService() != null) {
             properties.put(EXECUTOR_SERVICE_LABEL2, this.getExecutorService());

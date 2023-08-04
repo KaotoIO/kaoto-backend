@@ -1,7 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -12,41 +13,32 @@ public class LogStep extends EIPStep {
     public static final String MESSAGE = "message";
     public static final String MARKER = "marker";
     public static final String LOGGER = "logger";
-    public static final String DESCRIPTION = "description";
     public static final String LOGGING_LEVEL = "logging-level";
     public static final String LOG_NAME = "log-name";
     public static final String LOGGING_LEVEL1 = "loggingLevel";
     public static final String LOG_NAME1 = "logName";
 
+    @JsonProperty(MESSAGE)
     private String message;
 
+    @JsonProperty(LOGGING_LEVEL)
+    @JsonAlias(LOGGING_LEVEL1)
     private String loggingLevel;
 
+    @JsonProperty(LOG_NAME)
+    @JsonAlias(LOG_NAME1)
     private String logName;
+
+    @JsonProperty(MARKER)
     private String marker;
+
+    @JsonProperty(LOGGER)
     private String logger;
+
+    @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
     public LogStep() {
-    }
-
-    @JsonCreator
-    public LogStep(final @JsonProperty(MESSAGE) String message,
-                final @JsonProperty(MARKER) String marker,
-                final @JsonProperty(LOGGER) String logger,
-                final @JsonProperty(DESCRIPTION) String description,
-                final @JsonProperty(LOGGING_LEVEL) String loggingLevel,
-                final @JsonProperty(LOG_NAME) String logName,
-                final @JsonProperty(LOGGING_LEVEL1) String loggingLevel2,
-                final @JsonProperty(LOG_NAME1) String logName2,
-                final @JsonProperty("id") String id) {
-        setMessage(message);
-        setMarker(marker);
-        setLogger(logger);
-        setDescription(description);
-        setLoggingLevel(loggingLevel != null ? loggingLevel : loggingLevel2);
-        setLogName(logName != null ? logName : logName2);
-        setId(id);
     }
 
     public LogStep(Step step) {
@@ -64,8 +56,8 @@ public class LogStep extends EIPStep {
         if (map.containsKey(LOGGER)) {
             this.setLogger(String.valueOf(map.get(LOGGER)));
         }
-        if (map.containsKey(DESCRIPTION)) {
-            this.setDescription(String.valueOf(map.get(DESCRIPTION)));
+        if (map.containsKey(KamelHelper.DESCRIPTION)) {
+            this.setDescription(String.valueOf(map.get(KamelHelper.DESCRIPTION)));
         }
         if (map.containsKey(LOGGING_LEVEL)) {
             this.setLoggingLevel(String.valueOf(map.get(LOGGING_LEVEL)));
@@ -98,7 +90,7 @@ public class LogStep extends EIPStep {
             properties.put(LOGGER, this.getLogger());
         }
         if (this.description != null) {
-            properties.put(DESCRIPTION, this.getDescription());
+            properties.put(KamelHelper.DESCRIPTION, this.getDescription());
         }
         return properties;
     }
@@ -124,7 +116,7 @@ public class LogStep extends EIPStep {
             case LOGGER:
                 this.setLogger(parameter.getValue().toString());
                 break;
-            case DESCRIPTION:
+            case KamelHelper.DESCRIPTION:
                 this.setDescription(parameter.getValue().toString());
                 break;
             default:
@@ -153,7 +145,7 @@ public class LogStep extends EIPStep {
             case LOGGER:
                 parameter.setValue(this.getLogger());
                 break;
-            case DESCRIPTION:
+            case KamelHelper.DESCRIPTION:
                 parameter.setValue(this.getDescription());
                 break;
             default:

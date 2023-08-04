@@ -1,5 +1,6 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.KamelPopulator;
@@ -34,49 +35,38 @@ public class Saga extends EIPStep {
 
     public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
+    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
 
+    @JsonProperty(SAGA_SERVICE_LABEL)
+    @JsonAlias(SAGA_SERVICE_LABEL2)
     private Map<String, Object> sagaService;
 
+    @JsonProperty(PROPAGATION_LABEL)
     private String propagation;
 
+    @JsonProperty(COMPLETION_MODE_LABEL)
+    @JsonAlias(COMPLETION_MODE_LABEL2)
     private String completionMode;
 
+    @JsonProperty(TIMEOUT_LABEL)
     private String timeout;
 
+    @JsonProperty(COMPENSATION_LABEL)
     private Object compensation;
 
+    @JsonProperty(COMPLETION_LABEL)
     private Object completion;
 
+    @JsonProperty(OPTION_LABEL)
     private Object option;
 
+    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
 
 
     public Saga() {
         //Needed for serialization
-    }
-
-    public Saga(final @JsonProperty(SAGA_SERVICE_LABEL) Map<String, Object> sagaService,
-                final @JsonProperty(SAGA_SERVICE_LABEL2) Map<String, Object> sagaService2,
-                final @JsonProperty(PROPAGATION_LABEL) String propagation,
-                final @JsonProperty(COMPLETION_MODE_LABEL) String completionMode,
-                final @JsonProperty(COMPLETION_MODE_LABEL2) String completionMode2,
-                final @JsonProperty(TIMEOUT_LABEL) String timeout,
-                final @JsonProperty(COMPENSATION_LABEL) Object compensation,
-                final @JsonProperty(COMPLETION_LABEL) Object completion,
-                final @JsonProperty(OPTION_LABEL) Object option,
-                final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                final @JsonProperty("id") String id) {
-        setSagaService(sagaService != null ? sagaService : sagaService2);
-        setPropagation(propagation);
-        setCompletionMode(completionMode != null ? completionMode : completionMode2);
-        setTimeout(timeout);
-        setCompensation(compensation);
-        setCompletion(completion);
-        setOption(option);
-        setDescription(description);
-        setId(id);
     }
 
 

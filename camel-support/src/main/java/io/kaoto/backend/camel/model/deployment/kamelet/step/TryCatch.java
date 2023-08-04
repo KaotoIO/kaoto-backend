@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
@@ -29,27 +29,19 @@ public class TryCatch extends EIPStep {
     public static final String DO_FINALLY_LABEL = "do-finally";
     public static final String DO_FINALLY_LABEL2 = "doFinally";
 
+    @JsonProperty(STEPS_LABEL)
     private List<FlowStep> steps;
+
+    @JsonProperty(DO_CATCH_LABEL)
+    @JsonAlias(DO_CATCH_LABEL2)
     private List<DoCatch> doCatch;
+
+    @JsonProperty(DO_FINALLY_LABEL)
+    @JsonAlias(DO_FINALLY_LABEL2)
     private GenericFlowWithSteps doFinally;
 
     public TryCatch() {
         super();
-    }
-
-    @JsonCreator
-    public TryCatch(
-            final @JsonProperty(STEPS_LABEL) List<FlowStep> steps,
-            final @JsonProperty(DO_CATCH_LABEL) List<DoCatch> doCatch,
-            final @JsonProperty(DO_CATCH_LABEL2) List<DoCatch> doCatch2,
-            final @JsonProperty(DO_FINALLY_LABEL) GenericFlowWithSteps doFinally,
-            final @JsonProperty(DO_FINALLY_LABEL2) GenericFlowWithSteps doFinally2,
-            final @JsonProperty("id") String id) {
-        super();
-        setSteps(steps);
-        setDoCatch(doCatch != null ? doCatch : doCatch2);
-        setDoFinally(doFinally != null ? doFinally : doFinally2);
-        setId(id);
     }
 
     public TryCatch(final Step step, final KamelPopulator kameletPopulator) {

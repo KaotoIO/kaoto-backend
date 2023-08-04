@@ -1,6 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -15,29 +17,22 @@ public class Sample extends EIPStep {
     public static final String MESSAGE_FREQUENCY_LABEL = "message-frequency";
     public static final String MESSAGE_FREQUENCY_LABEL2 = "messageFrequency";
 
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
+    @JsonProperty(SAMPLE_PERIOD_LABEL)
+    @JsonAlias(SAMPLE_PERIOD_LABEL2)
     private String samplePeriod;
 
+    @JsonProperty(MESSAGE_FREQUENCY_LABEL)
+    @JsonAlias(MESSAGE_FREQUENCY_LABEL2)
     private Long messageFrequency;
 
+    @JsonProperty(DESCRIPTION_LABEL)
     private Map<String, String> description;
 
 
     public Sample() {
          //Needed for serialization
-    }
-
-    public Sample(final @JsonProperty(SAMPLE_PERIOD_LABEL) String samplePeriod,
-                  final @JsonProperty(SAMPLE_PERIOD_LABEL2) String samplePeriod2,
-                  final @JsonProperty(MESSAGE_FREQUENCY_LABEL)  Long messageFrequency,
-                  final @JsonProperty(MESSAGE_FREQUENCY_LABEL2) Long messageFrequency2,
-                  final @JsonProperty(DESCRIPTION_LABEL) Map<String, String> description,
-                  final @JsonProperty("id") String id) {
-        setDescription(description);
-        setSamplePeriod(samplePeriod != null ? samplePeriod : samplePeriod2);
-        setMessageFrequency(messageFrequency != null ? messageFrequency : messageFrequency2);
-        setId(id);
     }
 
     public Sample(Step step) {

@@ -1,6 +1,8 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -9,7 +11,7 @@ import java.util.Map;
 
 public class ClaimCheck extends EIPStep {
 
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
     public static final String OPERATION_LABEL = "operation";
     public static final String KEY_LABEL = "key";
     public static final String FILTER_LABEL = "filter";
@@ -28,9 +30,11 @@ public class ClaimCheck extends EIPStep {
     private String filter;
 
     @JsonProperty(AGGREGATION_STRATEGY_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_LABEL2)
     private String aggregationStrategy;
 
     @JsonProperty(AGGREGATION_STRATEGY_METHOD_NAME_LABEL)
+    @JsonAlias(AGGREGATION_STRATEGY_METHOD_NAME_LABEL2)
     private String aggregationStrategyMethodName;
 
     @JsonProperty(DESCRIPTION_LABEL)

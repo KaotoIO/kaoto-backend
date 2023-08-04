@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.model.deployment.kamelet.step;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.model.parameter.Parameter;
 import io.kaoto.backend.model.step.Step;
 
@@ -12,7 +13,7 @@ public class ConvertBodyTo extends EIPStep {
     public static final String TYPE_LABEL = "type";
     public static final String MANDATORY_LABEL = "mandatory";
     public static final String CHARSET_LABEL = "charset";
-    public static final String DESCRIPTION_LABEL = "description";
+    public static final String DESCRIPTION_LABEL = KamelHelper.DESCRIPTION;
 
     @JsonProperty(TYPE_LABEL)
     private String type;
