@@ -16,6 +16,15 @@ public interface StepCatalogParser {
 
     /*
      * 🐱method getParser : ParseCatalog
+     *
+     * Loads all the elements from memory(code).
+     *
+     */
+    @WithSpan
+    ParseCatalog<Step> getParser();
+
+    /*
+     * 🐱method getParser : ParseCatalog
      * 🐱param url : String
      *
      * Loads all the elements on the given url.

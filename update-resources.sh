@@ -58,8 +58,8 @@ then
   read -r versionCamel
 
   echo "Removing old zip files"
-  git rm api/src/main/resources/camel-connectors-*.jar
-  git rm camel-support/src/test/resources/camel-connectors-*.jar
+  git rm api/src/main/resources/camel-connectors-*.zip
+  git rm camel-support/src/test/resources/camel-connectors-*.zip
 
   echo "Preparing zip file with camel component metadata"
   cd /tmp || exit 1
@@ -86,12 +86,14 @@ then
   sed -i 's/camel-connectors-.*/camel-connectors-'"$versionCamel"'.zip"/g' camel-support/src/test/resources/application.yaml
   sed -i 's/camel-connectors-.*/camel-connectors-'"$versionCamel"'.zip";/g' camel-support/src/test/java/io/kaoto/backend/camel/metadata/parser/step/camelroute/CamelRouteParseCatalogTest.java
   sed -i 's/VERSION = ".*/VERSION = "'"$versionCamel"'";/g' camel-support/src/test/java/io/kaoto/backend/camel/service/step/parser/kamelet/KameletStepParserServiceTest.java
+  sed -i 's/CAMEL_CONNECTORS_VERSION = ".*/CAMEL_CONNECTORS_VERSION = "'"$versionCamel"'";/g' camel-support/src/test/java/io/kaoto/backend/api/metadata/catalog/StepCatalogTest.java
 
   git add api/src/main/resources/resources-config.json api/src/main/resources/application.yaml \
   api/src/test/resources/application.yaml camel-support/src/test/resources/application.yaml \
   camel-support/src/test/java/io/kaoto/backend/camel/metadata/parser/step/camelroute/CamelRouteParseCatalogTest.java \
   camel-support/src/main/resources/io/kaoto/backend/camel/service/deployment/generator/camelroute/camel-yaml-dsl.json \
-  camel-support/src/test/java/io/kaoto/backend/camel/service/step/parser/kamelet/KameletStepParserServiceTest.java
+  camel-support/src/test/java/io/kaoto/backend/camel/service/step/parser/kamelet/KameletStepParserServiceTest.java \
+  camel-support/src/test/java/io/kaoto/backend/api/metadata/catalog/StepCatalogTest.java
 
   echo "Updating version info in Readme"
   sed -i 's/Camel-connectors: \*\*.*/Camel-connectors: \*\*'"$versionCamel"'\*\*/g' README.md
@@ -105,7 +107,7 @@ read -r download
 if [ "$download" = "y" ];
 then
   echo "Downloading kamelets."
-  echo "Enter kamelets version to use (tag in apache/camel-kamelets repo):"
+  echo "Enter kamelets version to use (tag without 'v' in apache/camel-kamelets repo):"
   echo "Example: 3.21.0"
   read -r versionKamelets
 
@@ -136,19 +138,27 @@ then
   sed -i 's/camel-kamelets-.*/camel-kamelets-'"$versionKamelets"'.jar"/g' api/src/test/resources/application.yaml
   sed -i 's/camel-kamelets-.*/camel-kamelets-'"$versionKamelets"'.jar"/g' camel-support/src/test/resources/application.yaml
   sed -i 's/VERSION = ".*/VERSION = "'"$versionKamelets"'";/g' camel-support/src/test/java/io/kaoto/backend/camel/metadata/parser/step/kamelet/KameletParseCatalogTest.java
+  sed -i 's/KAMELET_VERSION = ".*/KAMELET_VERSION = "'"$versionKamelets"'";/g' camel-support/src/test/java/io/kaoto/backend/api/metadata/catalog/StepCatalogTest.java
 
   git add api/src/main/resources/resources-config.json api/src/main/resources/application.yaml \
   api/src/test/resources/application.yaml camel-support/src/test/resources/application.yaml \
-  camel-support/src/test/java/io/kaoto/backend/camel/metadata/parser/step/kamelet/KameletParseCatalogTest.java
+  camel-support/src/test/java/io/kaoto/backend/camel/metadata/parser/step/kamelet/KameletParseCatalogTest.java \
+  camel-support/src/test/java/io/kaoto/backend/api/metadata/catalog/StepCatalogTest.java
 
   echo "Updating version info in Readme"
-  sed -i 's/Camel-kamelets: \*\*.*/Camel-connectors: \*\*'"$versionKamelets"'\*\*/g' README.md
+  sed -i 's/Camel-kamelets: \*\*.*/Camel-kamelets: \*\*'"$versionKamelets"'\*\*/g' README.md
   git add README.md
 
   rm -rf /tmp/kamelets
 fi
 
-echo "All resources were updated successfully! Do you want to create commit? (y/n)"
+echo "All resources were updated successfully!"
+
+Yellow='\033[1;33m'
+NC='\033[0m'
+echo -e "${Yellow}[WARNING] If updated resources are adding some new steps, you will need to update the number of steps manually in test classes (StepCatalogTest, StepResourceTestAbstract)${NC}"
+
+echo "Do you want to create commit automatically? (y/n)"
 read -r download
 if [ "$download" = "y" ];
 then
