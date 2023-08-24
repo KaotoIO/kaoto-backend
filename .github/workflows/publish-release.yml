@@ -134,7 +134,10 @@ jobs:
           disk-root: "C:"
         if: ${{ matrix.os == 'windows-latest' }}
       - name: 🤳 Build Native Quarkus
-        run:  mvn -B install -Pstandalone -Pnative -DskipTests -Dquarkus.native.native-image-xmx=5g
+        # Until https://github.com/PowerShell/PowerShell/issues/6291 is done, we cannot use -Dquarkus.native.native-image-xmx=5g
+        run: mvn install -Pnative -DskipTests
+        env:
+          QUARKUS_NATIVE_NATIVE_IMAGE_XMX: "5g"
       - name: 🛂 Find the version - non-Windows
         run: 'echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
         if: ${{ matrix.os != 'windows-latest' }}
