@@ -73,3 +73,14 @@ The commit contains the following structural elements, to communicate intent to 
 Additional types are not mandated by the Conventional Commits specification, and have no implicit effect in Semantic Versioning 
 (unless they include a BREAKING CHANGE). A scope may be provided to a commit’s type, to provide additional contextual information and 
 is contained within parenthesis, e.g., `feat(parser): add ability to parse arrays`.
+
+## How to release
+
+  * Launch `update-version.sh` script. I recommend to not update the `sources` of embedded artifacts at this step to separate concerns of commits and PRs.
+  * Create Pull Requests from the branches created locally
+  * When the one with non SNAPSHOT version is merged, create a release in GitHub
+
+Note: you might also want to release the standalone version after a backend release:
+
+  * Do a release of kaoto-ui if needed
+  * Go to GitHub Action [Publish Standalone Release](https://github.com/KaotoIO/kaoto-backend/actions/workflows/publish-standalone-release.yml) and provide parameters asked.
