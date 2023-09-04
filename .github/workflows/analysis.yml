@@ -12,7 +12,7 @@ jobs:
     name: 👩🏼‍🏭 Build 👩🏼‍🏭
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: 🥸 Set up JDK
@@ -52,7 +52,7 @@ jobs:
           - os: windows-latest
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
@@ -101,7 +101,7 @@ jobs:
           - os: windows-latest
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:

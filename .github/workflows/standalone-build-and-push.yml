@@ -47,7 +47,7 @@ jobs:
         java-version: 17
         check-latest: true
     - name: 'Checkout'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: KaotoIO/kaoto-backend
         ref: ${{ inputs.backend-version }}

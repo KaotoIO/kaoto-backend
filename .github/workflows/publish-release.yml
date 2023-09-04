@@ -23,7 +23,7 @@ jobs:
             file: -runner
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -112,7 +112,7 @@ jobs:
             file: -runner
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
@@ -158,7 +158,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗄️ Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:
