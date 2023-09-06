@@ -55,8 +55,6 @@ class CamelRestDSLStepParserServiceTest {
         for (var flow : flows) {
             assertTrue(camelRestDSLSpecification.appliesTo(flow.getSteps()));
             assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
-//            assertTrue(flow.getMetadata() == null || flow.getMetadata().isEmpty());
-            assertFalse(flow.getSteps().isEmpty());
         }
         var yaml = camelRestDSLSpecification.getDeploymentGeneratorService().parse(flows);
         assertThat(yaml).isEqualToNormalizingNewlines(route);

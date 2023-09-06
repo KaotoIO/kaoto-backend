@@ -137,7 +137,6 @@ class CamelRouteStepParserServiceTest {
         for (var flow : flows) {
             assertTrue(camelRouteDSLSpecification.appliesTo(flow.getSteps()));
             assertTrue(flow.getParameters() == null || flow.getParameters().isEmpty());
-            assertFalse(flow.getSteps().isEmpty());
         }
 
         assertThat(route)

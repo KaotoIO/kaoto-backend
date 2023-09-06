@@ -1,3 +1,14 @@
+- route-configuration:
+    id: yamlError
+    on-exception:
+    - on-exception:
+        handled:
+          constant: true
+        exception:
+        - java.lang.Exception
+        steps:
+        - log:
+            message: "YAML WARN ${exception.message}"
 - route:
     route-configuration-id: yamlError
     from:

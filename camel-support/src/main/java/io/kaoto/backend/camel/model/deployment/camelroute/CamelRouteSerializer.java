@@ -29,6 +29,16 @@ class CamelRouteSerializer extends StdSerializer<CamelRoute> {
             beans.put("beans", route.getBeans());
             properties.add(beans);
         }
+        if (route.getRouteConfiguration() != null) {
+            Map<String, Object> config = new LinkedHashMap<>();
+            config.put("route-configuration", route.getRouteConfiguration());
+            properties.add(config);
+        }
+        if (route.getRestConfiguration() != null) {
+            Map<String, Object> config = new LinkedHashMap<>();
+            config.put("rest-configuration", route.getRestConfiguration());
+            properties.add(config);
+        }
         jsonGenerator.writeObject(properties);
     }
 

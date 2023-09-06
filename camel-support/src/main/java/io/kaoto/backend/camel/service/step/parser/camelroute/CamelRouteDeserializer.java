@@ -55,6 +55,16 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
                     answer.setBeans(new ArrayList<>(beans.size()));
                 }
                 answer.getBeans().addAll(beans);
+            }  else if (field.has("route-configuration")) {
+                Object config = ctxt.readTreeAsValue(field.get("route-configuration"), Object.class);
+                if (answer.getRouteConfiguration() == null) {
+                    answer.setRouteConfiguration(config);
+                }
+            }   else if (field.has("rest-configuration")) {
+                Object config = ctxt.readTreeAsValue(field.get("rest-configuration"), Object.class);
+                if (answer.getRestConfiguration() == null) {
+                    answer.setRestConfiguration(config);
+                }
             } else {
                 throw new IOException("'" + field.fields().next().getKey()
                         + "' is not supported as a root element of Camel Route");

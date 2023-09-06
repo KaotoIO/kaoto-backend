@@ -172,7 +172,7 @@ class KameletBindingStepParserServiceTest {
         List<StepParserService.ParseResult<Step>> parsed
                 = dslSpecification.getStepParserService().getParsedFlows(input);
         assertThat(parsed).hasSize(2);
-        assertThat(parsed.get(0).getSteps()).isNull();
+        assertThat(parsed.get(0).getSteps()).isNullOrEmpty();
         var metadata = parsed.get(0).getMetadata();
         assertThat(metadata.get("name")).isEqualTo("name-desc");
         assertThat(metadata.get("description")).isEqualTo("The name-desc KameletBinding description");

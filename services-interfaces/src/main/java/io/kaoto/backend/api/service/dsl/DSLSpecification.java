@@ -73,7 +73,7 @@ public abstract class DSLSpecification {
      */
     @Deprecated
     public boolean appliesTo(final List<Step> steps) {
-        return steps.stream().filter(Objects::nonNull)
+        return steps == null || steps.stream().filter(Objects::nonNull)
                 .allMatch(s -> getKinds().stream().anyMatch(Predicate.isEqual(s.getKind().toUpperCase())));
     }
 
