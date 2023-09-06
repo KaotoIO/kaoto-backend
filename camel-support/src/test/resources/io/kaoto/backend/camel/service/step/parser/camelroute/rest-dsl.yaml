@@ -1,3 +1,8 @@
+- rest-configuration:
+    component: servlet
+    bindingMode: auto
+    inlineRoutes: true
+    apiComponent: openapi
 - rest:
     id: camelroute30
     path: /api/v3

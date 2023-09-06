@@ -49,7 +49,7 @@ public interface StepParserService<T extends Step> {
      *
      */
     class ParseResult<T> {
-        private List<T> steps;
+        private List<T> steps = null;
         private List<Parameter> parameters;
         private Map<String, Object> metadata;
 

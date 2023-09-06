@@ -71,7 +71,7 @@ class IntegrationStepParserServiceTest {
         var parsed = service.getParsedFlows(input);
         assertThat(parsed).hasSize(3);
         var metadata = parsed.get(0);
-        assertThat(metadata.getSteps()).isNull();
+        assertThat(metadata.getSteps()).isNullOrEmpty();
         assertThat(metadata.getParameters()).isEmpty();
         assertThat(metadata.getMetadata()).containsEntry(KamelHelper.NAME, "multiroute-integration-example");
         assertThat(metadata.getMetadata()).containsEntry(KamelHelper.DESCRIPTION,
@@ -137,7 +137,7 @@ class IntegrationStepParserServiceTest {
         var parsed = service.getParsedFlows(input);
         assertThat(parsed).hasSize(2);
         var metadata = parsed.get(0);
-        assertThat(metadata.getSteps()).isNull();
+        assertThat(metadata.getSteps()).isNullOrEmpty();
         assertThat(metadata.getParameters()).isEmpty();
         assertThat(metadata.getMetadata().get(KamelHelper.NAME)).isEqualTo("integration-no-step");
         var yaml = deploymentService.parse(parsed);

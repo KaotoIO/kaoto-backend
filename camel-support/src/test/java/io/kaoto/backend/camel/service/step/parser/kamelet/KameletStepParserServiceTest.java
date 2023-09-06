@@ -176,7 +176,7 @@ class KameletStepParserServiceTest {
                 dslSpecification.getStepParserService().getParsedFlows(beansKamelet);
         assertEquals(2, parsed.size());
         var meta = parsed.get(0);
-        assertThat(meta.getSteps()).isNull();
+        assertThat(meta.getSteps()).isNullOrEmpty();
         List<Bean> beans = (List<Bean>) meta.getMetadata().get("beans");
         assertThat(beans).hasSize(1);
         assertThat(beans.get(0).getName()).isEqualTo("connectionFactoryBean");
@@ -264,7 +264,7 @@ class KameletStepParserServiceTest {
                 = dslSpecification.getStepParserService().getParsedFlows(kamelet);
         assertThat(parsedList).hasSize(2);
         var parsedMeta = parsedList.get(0);
-        assertThat(parsedMeta.getSteps()).isNull();
+        assertThat(parsedMeta.getSteps()).isNullOrEmpty();
         var metadata = parsedMeta.getMetadata();
         assertThat(metadata).containsEntry(KamelHelper.NAME, "test-kamelet")
                 .containsEntry(KamelHelper.DESCRIPTION, "metadata annotations kaoto.io/description");

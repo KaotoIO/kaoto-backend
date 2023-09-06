@@ -48,6 +48,7 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
 
         try {
             CamelRoute route = getCamelRoute(input);
+            processConfigs(route, resultList);
             processFlows(route, resultList);
             processBeans(route, resultList);
         } catch (Exception e) {
@@ -120,6 +121,21 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
         metadata.put("beans", route.getBeans());
         res.setMetadata(metadata);
         resultList.add(res);
+    }
+
+    private void processConfigs(CamelRoute route, List<ParseResult<Step>> resultList) {
+        ParseResult<Step> res = new ParseResult<>();
+        Map<String, Object> metadata = new LinkedHashMap<>();
+        if (route.getRestConfiguration() != null) {
+            metadata.put("rest-configuration", route.getRestConfiguration());
+        }
+        if (route.getRouteConfiguration() != null) {
+            metadata.put("route-configuration", route.getRouteConfiguration());
+        }
+        res.setMetadata(metadata);
+        if (!res.getMetadata().isEmpty()) {
+            resultList.add(res);
+        }
     }
 
     @Override

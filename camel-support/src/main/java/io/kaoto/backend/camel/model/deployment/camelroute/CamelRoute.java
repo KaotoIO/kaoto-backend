@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kaoto.backend.camel.KamelHelper;
@@ -41,16 +42,26 @@ public class CamelRoute {
     @JsonProperty("beans")
     private List<Bean> beans;
 
+    @JsonProperty("route-configuration")
+    @JsonAlias("routeConfiguration")
+    private Object routeConfiguration;
+
+    @JsonProperty("rest-configuration")
+    @JsonAlias("restConfiguration")
+    private Object restConfiguration;
+
     public CamelRoute() {
         super();
     }
 
     public CamelRoute(final List<Step> steps, final Map<String, Object> metadata, final StepCatalog catalog) {
         Flow f = processFlows(steps, catalog);
+        processConfigs(metadata);
         processBeans(metadata);
 
         //We have an empty flow, but don't show it empty
-        if ((getBeans() == null || getBeans().isEmpty()) && f == null) {
+        if ((getBeans() == null || getBeans().isEmpty()) && f == null
+                && getRestConfiguration() == null && getRouteConfiguration() == null) {
             setFlows(new ArrayList<>());
             f = new Flow();
             f.setFrom(new From());
@@ -120,6 +131,15 @@ public class CamelRoute {
         }
     }
 
+    private void processConfigs(final Map<String, Object> metadata) {
+        if (metadata != null && metadata.containsKey("route-configuration")) {
+            setRouteConfiguration(metadata.get("route-configuration"));
+        }
+        if (metadata != null && metadata.containsKey("rest-configuration")) {
+            setRestConfiguration(metadata.get("rest-configuration"));
+        }
+    }
+
     public List<Flow> getFlows() {
         return flows;
     }
@@ -132,4 +152,19 @@ public class CamelRoute {
 
     public void setBeans(List<Bean> beans) { this.beans = beans; }
 
+    public Object getRouteConfiguration() {
+        return routeConfiguration;
+    }
+
+    public void setRouteConfiguration(Object routeConfiguration) {
+        this.routeConfiguration = routeConfiguration;
+    }
+
+    public Object getRestConfiguration() {
+        return restConfiguration;
+    }
+
+    public void setRestConfiguration(Object restConfiguration) {
+        this.restConfiguration = restConfiguration;
+    }
 }
