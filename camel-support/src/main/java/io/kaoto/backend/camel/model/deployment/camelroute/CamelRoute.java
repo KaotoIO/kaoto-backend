@@ -132,11 +132,21 @@ public class CamelRoute {
     }
 
     private void processConfigs(final Map<String, Object> metadata) {
-        if (metadata != null && metadata.containsKey("route-configuration")) {
+        if (metadata == null) {
+            return;
+        }
+
+        if (metadata.containsKey("route-configuration")) {
             setRouteConfiguration(metadata.get("route-configuration"));
         }
-        if (metadata != null && metadata.containsKey("rest-configuration")) {
+        if (metadata.containsKey("routeConfiguration")) {
+            setRouteConfiguration(metadata.get("routeConfiguration"));
+        }
+        if (metadata.containsKey("rest-configuration")) {
             setRestConfiguration(metadata.get("rest-configuration"));
+        }
+        if (metadata.containsKey("restConfiguration")) {
+            setRestConfiguration(metadata.get("restConfiguration"));
         }
     }
 
