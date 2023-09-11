@@ -1,4 +1,4 @@
-- route-configuration:
+- routeConfiguration:
     id: yamlError
     on-exception:
     - on-exception:

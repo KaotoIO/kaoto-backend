@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
@@ -55,13 +56,17 @@ public class CamelRouteDeserializer extends StdDeserializer<CamelRoute> {
                     answer.setBeans(new ArrayList<>(beans.size()));
                 }
                 answer.getBeans().addAll(beans);
-            }  else if (field.has("route-configuration")) {
-                Object config = ctxt.readTreeAsValue(field.get("route-configuration"), Object.class);
+            } else if (field.has("routeConfiguration") || field.has("route-configuration")) {
+                JsonNode routeConfig = Objects.requireNonNullElse(
+                        field.get("routeConfiguration"), field.get("route-configuration"));
+                Object config = ctxt.readTreeAsValue(routeConfig, Object.class);
                 if (answer.getRouteConfiguration() == null) {
                     answer.setRouteConfiguration(config);
                 }
-            }   else if (field.has("rest-configuration")) {
-                Object config = ctxt.readTreeAsValue(field.get("rest-configuration"), Object.class);
+            } else if (field.has("restConfiguration") || field.has("rest-configuration")) {
+                JsonNode restConfig = Objects.requireNonNullElse(field.get("restConfiguration"),
+                        field.get("rest-configuration"));
+                Object config = ctxt.readTreeAsValue(restConfig, Object.class);
                 if (answer.getRestConfiguration() == null) {
                     answer.setRestConfiguration(config);
                 }

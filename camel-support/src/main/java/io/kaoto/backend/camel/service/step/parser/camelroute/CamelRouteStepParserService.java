@@ -127,10 +127,10 @@ public class CamelRouteStepParserService implements StepParserService<Step> {
         ParseResult<Step> res = new ParseResult<>();
         Map<String, Object> metadata = new LinkedHashMap<>();
         if (route.getRestConfiguration() != null) {
-            metadata.put("rest-configuration", route.getRestConfiguration());
+            metadata.put("restConfiguration", route.getRestConfiguration());
         }
         if (route.getRouteConfiguration() != null) {
-            metadata.put("route-configuration", route.getRouteConfiguration());
+            metadata.put("routeConfiguration", route.getRouteConfiguration());
         }
         res.setMetadata(metadata);
         if (!res.getMetadata().isEmpty()) {
