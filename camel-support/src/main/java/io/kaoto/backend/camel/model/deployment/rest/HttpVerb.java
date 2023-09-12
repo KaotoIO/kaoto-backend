@@ -27,8 +27,8 @@ public class HttpVerb implements Serializable {
     @JsonProperty("id")
     private String id;
 
-    @JsonProperty("uri")
-    private String uri;
+    @JsonProperty("path")
+    private String path;
     @JsonProperty(KamelHelper.DESCRIPTION)
     private String description;
 
@@ -58,12 +58,12 @@ public class HttpVerb implements Serializable {
         this.id = id;
     }
 
-    public String getUri() {
-        return uri;
+    public String getPath() {
+        return path;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public List<RestParameter> getParameterList() {

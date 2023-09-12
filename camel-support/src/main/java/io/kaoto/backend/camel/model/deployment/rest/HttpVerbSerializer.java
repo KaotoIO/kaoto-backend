@@ -29,8 +29,8 @@ public class HttpVerbSerializer extends StdSerializer<HttpVerb> {
         if (data.getId() != null) {
             props.put("id", data.getId());
         }
-        if (data.getUri() != null) {
-            props.put("uri", data.getUri());
+        if (data.getPath() != null) {
+            props.put("path", data.getPath());
         }
         if (data.getDescription() != null) {
             props.put(KamelHelper.DESCRIPTION, data.getDescription());

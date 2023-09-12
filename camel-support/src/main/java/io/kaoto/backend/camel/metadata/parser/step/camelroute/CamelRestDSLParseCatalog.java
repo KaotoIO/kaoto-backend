@@ -156,7 +156,7 @@ public class CamelRestDSLParseCatalog implements StepCatalogParser {
         parameters.add(parameter);
 
         parameter = new StringParameter();
-        parameter.setId(Rest.URI_LABEL);
+        parameter.setId(Rest.PATH_LABEL);
         parameter.setDescription("Uri path of this endpoint");
         parameter.setTitle("Uri Path");
         parameter.setDefaultValue("/");
