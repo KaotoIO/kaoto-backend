@@ -43,7 +43,6 @@ import java.util.Map;
 public class Rest extends From {
     public static final String CONSUMES_LABEL = "consumes";
     public static final String PRODUCES_LABEL = "produces";
-    public static final String URI_LABEL = "uri";
     public static final String ID_LABEL = "id";
     public static final String PATH_LABEL = "path";
     public static final String GET_LABEL = "get";
@@ -419,8 +418,8 @@ public class Rest extends From {
                     httpVerb.setDescription(String.valueOf(p.getValue()));
                 } else if (p.getId().equalsIgnoreCase(ID_LABEL)) {
                     httpVerb.setId(String.valueOf(p.getValue()));
-                } else if (p.getId().equalsIgnoreCase(URI_LABEL)) {
-                    httpVerb.setUri(String.valueOf(p.getValue()));
+                } else if (p.getId().equalsIgnoreCase(PATH_LABEL)) {
+                    httpVerb.setPath(String.valueOf(p.getValue()));
                 } else if (PARAM_LABEL.equalsIgnoreCase(p.getId())) {
                     httpVerb.setParameterList(new ArrayList<>());
                     for (var value : (List) p.getValue()) {
@@ -589,7 +588,7 @@ public class Rest extends From {
     private Branch createBranchConsumes(StepCatalog catalog, KameletStepParserService ksps,
                                         HttpVerb endpoint) {
         Branch b = new Branch();
-        b.setIdentifier(endpoint.getUri() + " " + endpoint.getConsumes());
+        b.setIdentifier(endpoint.getPath() + " " + endpoint.getConsumes());
         var step = catalog.getReadOnlyCatalog().searchByID(Rest.CAMEL_REST_CONSUMES);
         if (step != null) {
             b.getSteps().add(step);
@@ -600,9 +599,9 @@ public class Rest extends From {
                 } else if (param.getId().equalsIgnoreCase(PRODUCES_LABEL)
                         && endpoint.getProduces() != null) {
                     param.setValue(endpoint.getProduces());
-                } else if (param.getId().equalsIgnoreCase(URI_LABEL)
-                        && endpoint.getUri() != null) {
-                    param.setValue(endpoint.getUri());
+                } else if (param.getId().equalsIgnoreCase(PATH_LABEL)
+                        && endpoint.getPath() != null) {
+                    param.setValue(endpoint.getPath());
                 } else if (param.getId().equalsIgnoreCase(ID_LABEL)
                         && endpoint.getId() != null) {
                     param.setValue(endpoint.getId());

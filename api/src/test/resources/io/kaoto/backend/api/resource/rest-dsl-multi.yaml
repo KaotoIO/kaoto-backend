@@ -4,7 +4,7 @@
     post:
     - consumes: application/json,application/xml
       id: addPet
-      uri: /pet
+      path: /pet
       param:
       - dataType: boolean
         defaultValue: false
@@ -20,7 +20,7 @@
         uri: direct:addPet
     - consumes: application/x-www-form-urlencoded
       id: updatePetWithForm
-      uri: /pet/{petId}
+      path: /pet/{petId}
       param:
       - dataType: integer
         name: petId
@@ -42,7 +42,7 @@
     - consumes: multipart/form-data
       id: uploadFile
       produces: application/json
-      uri: /pet/{petId}/uploadImage
+      path: /pet/{petId}/uploadImage
       param:
       - dataType: integer
         name: petId
@@ -64,7 +64,7 @@
     - consumes: '*/*'
       id: placeOrder
       produces: application/xml,application/json
-      uri: /store/order
+      path: /store/order
       param:
       - name: body
         description: order placed for purchasing the pet
@@ -74,7 +74,7 @@
         uri: direct:placeOrder
     - consumes: '*/*'
       id: createUser
-      uri: /user
+      path: /user
       description: This can only be done by the logged in user.
       param:
       - name: body
@@ -85,7 +85,7 @@
         uri: direct:createUser
     - consumes: '*/*'
       id: createUsersWithArrayInput
-      uri: /user/createWithArray
+      path: /user/createWithArray
       param:
       - name: body
         description: List of user object
@@ -95,7 +95,7 @@
         uri: direct:createUsersWithArrayInput
     - consumes: '*/*'
       id: createUsersWithListInput
-      uri: /user/createWithList
+      path: /user/createWithList
       param:
       - name: body
         description: List of user object
@@ -106,7 +106,7 @@
     get:
     - id: findPetsByStatus
       produces: application/xml,application/json
-      uri: /pet/findByStatus
+      path: /pet/findByStatus
       description: Multiple status values can be provided with comma separated strings
       param:
       - arrayType: string
@@ -120,7 +120,7 @@
         uri: direct:findPetsByStatus
     - id: findPetsByTags
       produces: application/xml,application/json
-      uri: /pet/findByTags
+      path: /pet/findByTags
       description: Muliple tags can be provided with comma separated strings.
       param:
       - arrayType: string
@@ -134,7 +134,7 @@
         uri: direct:findPetsByTags
     - id: getPetById
       produces: application/xml,application/json
-      uri: /pet/{petId}
+      path: /pet/{petId}
       description: Returns a single pet
       param:
       - dataType: integer
@@ -146,13 +146,13 @@
         uri: direct:getPetById
     - id: getInventory
       produces: application/json
-      uri: /store/inventory
+      path: /store/inventory
       description: Returns a map of status codes to quantities
       to:
         uri: direct:getInventory
     - id: getOrderById
       produces: application/xml,application/json
-      uri: /store/order/{orderId}
+      path: /store/order/{orderId}
       description: For valid response try integer IDs with value >= 1 and <= 10.
       param:
       - dataType: integer
@@ -164,7 +164,7 @@
         uri: direct:getOrderById
     - id: loginUser
       produces: application/xml,application/json
-      uri: /user/login
+      path: /user/login
       param:
       - dataType: string
         name: username
@@ -179,12 +179,12 @@
       to:
         uri: direct:loginUser
     - id: logoutUser
-      uri: /user/logout
+      path: /user/logout
       to:
         uri: direct:logoutUser
     - id: getUserByName
       produces: application/xml,application/json
-      uri: /user/{username}
+      path: /user/{username}
       param:
       - dataType: string
         name: username
@@ -195,7 +195,7 @@
         uri: direct:getUserByName
     delete:
     - id: deletePet
-      uri: /pet/{petId}
+      path: /pet/{petId}
       param:
       - dataType: string
         name: api_key
@@ -209,7 +209,7 @@
       to:
         uri: direct:deletePet
     - id: deleteOrder
-      uri: /store/order/{orderId}
+      path: /store/order/{orderId}
       description: For valid response try integer IDs with positive integer value.
       param:
       - dataType: integer
@@ -220,7 +220,7 @@
       to:
         uri: direct:deleteOrder
     - id: deleteUser
-      uri: /user/{username}
+      path: /user/{username}
       description: This can only be done by the logged in user.
       param:
       - dataType: string
@@ -233,7 +233,7 @@
     put:
     - consumes: application/json,application/xml
       id: updatePet
-      uri: /pet
+      path: /pet
       param:
       - name: body
         required: true
@@ -242,7 +242,7 @@
         uri: direct:updatePet
     - consumes: '*/*'
       id: updateUser
-      uri: /user/{username}
+      path: /user/{username}
       param:
       - dataType: string
         name: username
