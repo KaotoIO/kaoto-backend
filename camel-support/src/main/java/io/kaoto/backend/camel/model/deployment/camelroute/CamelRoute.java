@@ -176,5 +176,18 @@ public class CamelRoute {
 
     public void setRestConfiguration(Object restConfiguration) {
         this.restConfiguration = restConfiguration;
+        if (!(restConfiguration instanceof Map)) {
+            return;
+        }
+        // YAML 1.1 assumes "off" to be a boolean "false", restore it as a string
+        var map = (Map<String, Object>) restConfiguration;
+        var camelBindingMode = map.get("bindingMode");
+        if (camelBindingMode instanceof Boolean && !((Boolean) camelBindingMode)) {
+            map.put("bindingMode", "off");
+        }
+        var kebabBindingMode = map.get("binding-mode");
+        if (kebabBindingMode instanceof Boolean && !((Boolean) camelBindingMode)) {
+            map.put("binding-mode", "off");
+        }
     }
 }
