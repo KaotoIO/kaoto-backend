@@ -1,6 +1,7 @@
 package io.kaoto.backend.camel.service.step.parser.camelroute;
 
 import io.kaoto.backend.api.metadata.catalog.StepCatalog;
+import io.kaoto.backend.camel.KamelHelper;
 import io.kaoto.backend.camel.service.dsl.camelroute.CamelRouteDSLSpecification;
 import io.kaoto.backend.api.service.step.parser.StepParserService;
 import io.kaoto.backend.model.step.Step;
@@ -12,6 +13,7 @@ import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,5 +61,22 @@ class CamelRestDSLStepParserServiceTest {
         var yaml = camelRestDSLSpecification.getDeploymentGeneratorService().parse(flows);
         assertThat(yaml).isEqualToNormalizingNewlines(route);
         assertTrue(camelRestDSLSpecification.getDeploymentGeneratorService().supportedCustomResources().isEmpty());
+    }
+
+    @Test
+    void bindingModeOff() throws Exception {
+        var route = new String(this.getClass().getResourceAsStream("rest-dsl-bindingMode-off.yaml").readAllBytes(),
+                StandardCharsets.UTF_8);
+        assertTrue(camelRestDSLSpecification.getStepParserService().appliesTo(route));
+        List<StepParserService.ParseResult<Step>> flows =
+                camelRestDSLSpecification.getStepParserService().getParsedFlows(route);
+        var yaml = camelRestDSLSpecification.getDeploymentGeneratorService().parse(flows);
+        var restConfiguration = KamelHelper.YAML_MAPPER
+                .readValue(yaml, java.util.List.class).stream()
+                .filter(e -> ((Map)e).containsKey("restConfiguration"))
+                .map(e -> ((Map)e).get("restConfiguration"))
+                .findFirst()
+                .get();
+        assertThat(((Map)restConfiguration).get("bindingMode")).isEqualTo("off");
     }
 }
