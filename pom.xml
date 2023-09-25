@@ -33,7 +33,7 @@
         <!-- Shared dependencies -->
         <assertj.version>3.24.2</assertj.version>
         <checkstyle.version>10.12.3</checkstyle.version>
-        <camel.version>4.0.0</camel.version>
+        <camel.version>4.0.1</camel.version>
         <camel-quarkus.version>3.2.0</camel-quarkus.version>
         <camel-k-crds.version>2.0.1</camel-k-crds.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
