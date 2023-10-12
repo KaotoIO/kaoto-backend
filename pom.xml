@@ -38,7 +38,7 @@
         <camel-k-crds.version>2.0.1</camel-k-crds.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <quarkus-quinoa.version>2.1.0</quarkus-quinoa.version>
-        <quarkus-jgit.version>3.0.4</quarkus-jgit.version>
+        <quarkus-jgit.version>3.0.5</quarkus-jgit.version>
 
         <!-- Plugins-->
         <compiler-plugin.version>3.11.0</compiler-plugin.version>
@@ -256,7 +256,7 @@
                 <plugin>
                     <groupId>io.swagger.codegen.v3</groupId>
                     <artifactId>swagger-codegen-maven-plugin</artifactId>
-                    <version>${swagger-codegen-maven-plugin.version>}</version>
+                    <version>${swagger-codegen-maven-plugin.version&gt;}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
