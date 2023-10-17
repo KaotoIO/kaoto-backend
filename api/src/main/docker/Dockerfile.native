@@ -17,7 +17,7 @@
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.6
 
 ENV NAMESPACE='default'
-ENV CATALOG_NAMESPACE=''
+ENV CATALOG_NAMESPACE='false'
 
 WORKDIR /work/
 RUN chown 1001 /work \
