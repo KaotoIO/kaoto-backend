@@ -59,11 +59,13 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
             var time = System.currentTimeMillis();
             //if the backend is deployed cluster-wide
             if ("false".equals(namespace) || "".equals(namespace)) {
+                LOG.tracef("Namespace filtering disabled (%s): Retrieving resources from all namespaces.", namespace);
                 resources = kubernetesClient.resources(cr).inAnyNamespace().list().getItems();
             } else {
+                LOG.tracef("Namespace filtering enabled (%s): Retrieving resources from %s.", namespace);
                 resources = kubernetesClient.resources(cr).inNamespace(namespace).list().getItems();
             }
-            LOG.info("Retrieved resources  in " + (System.currentTimeMillis() - time) + "ms.");
+            LOG.infof("Retrieved %s resources in %s ms.", resources.size(), System.currentTimeMillis() - time);
 
             //For each custom resource, let's process it
             resources.stream().parallel().forEach(resource ->
@@ -71,6 +73,7 @@ public class ClusterParseCatalog<T extends Metadata> implements ParseCatalog<T> 
                     futureMd.add(CompletableFuture.runAsync(() ->
                     {
                         try {
+                            LOG.tracef("Adding an entry: %s", resource.getMetadata().getName());
                             metadataList.addAll(this.yamlProcessFile.parseInputStream(
                                     new StringReader(objectMapper.writeValueAsString(resource))));
                         } catch (Throwable t) {
